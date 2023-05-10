@@ -345,11 +345,11 @@ public class MangeRebaseImpl implements MangeRebaseService {
             rebase.setUnlockedAmount(uAmount);
             rebase.setStatus(allocationData.get(i).getStatus());
             rebase.setAmountType(allocationData.get(i).getAmountType());
-            ContigentBill expenditure = contigentBillRepository.findExpAndCbDate(unit, finYear, allocationData.get(i).getSubHead());
-            if (expenditure != null) {
-                double eAmount = Double.parseDouble(expenditure.getProgressiveAmount());
+            List<ContigentBill> expenditure = contigentBillRepository.findExpAndCbDate(unit, finYear, allocationData.get(i).getSubHead());
+            if (expenditure.size()>0) {
+                double eAmount = Double.parseDouble(expenditure.get(0).getProgressiveAmount());
                 rebase.setExpenditureAmount(eAmount);
-                rebase.setLastCbDate(expenditure.getCbDate());
+                rebase.setLastCbDate(expenditure.get(0).getCbDate());
                 rebase.setAllcAmntSubtrctExpnAmunt(aAmount*amountUnit-eAmount);
             }else{
                 rebase.setExpenditureAmount(0);
