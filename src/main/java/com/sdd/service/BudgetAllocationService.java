@@ -75,4 +75,6 @@ public interface BudgetAllocationService {
 
 	ApiResponse<BudgetAllocationSaveResponse> approveRivisonBudgetOrReject(BudgetApproveRequest budgetApproveRequest);
 
+	ApiResponse<List<CgUnitResponse>> getAllCgUnitData();
+
 }

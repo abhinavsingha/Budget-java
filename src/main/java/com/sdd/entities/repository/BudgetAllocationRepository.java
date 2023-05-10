@@ -24,8 +24,7 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
     BudgetAllocation findByAllocationIdAndIsFlag(String transactionId, String s);
 
     List<BudgetAllocation>findBySubHeadAndFinYearAndIsFlag(String subHeadId, String finYear, String isFalg);
-    List<BudgetAllocation>findBySubHeadAAndAllocationTypeIdAndIsFlag(String subHeadId, String allocaationTypeId, String isFalg);
-
+    List<BudgetAllocation>findBySubHeadAndAllocationTypeIdAndIsFlag(String subHeadId, String allocationType, String isFalg);
     @Query(value="select SUB_HEAD from budgetallocation where FIN_YEAR=:finYearId and ALLOCATION_TYPE_ID=:allocationTypeId  group by SUB_HEAD",nativeQuery = true)
     List<String> findSubHead(String finYearId,String allocationTypeId);
 

@@ -1653,7 +1653,7 @@ public class MangeReportImpl implements MangeReportService {
             String unit = "";
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAAndAllocationTypeIdAndIsFlag(subHeadId, allocationType,"0");
+                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlag(subHeadId, allocationType,"0");
                 if (reportDetails.size() <= 0) {
                     return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                     }, "RECORD NOT FOUND OR EMPTY", HttpStatus.OK.value());
@@ -2098,7 +2098,7 @@ public class MangeReportImpl implements MangeReportService {
             Double s2=0.0;
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAAndAllocationTypeIdAndIsFlag(subHeadId, allocationType,"0");
+                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlag(subHeadId, allocationType,"0");
                 if (reportDetails.size() <= 0) {
                     return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                     }, "RECORD NOT FOUND OR EMPTY", HttpStatus.OK.value());
@@ -2545,7 +2545,7 @@ public class MangeReportImpl implements MangeReportService {
             String unit = "";
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation>  reportDetails = budgetAllocationRepository.findBySubHeadAAndAllocationTypeIdAndIsFlag(subHeadId, allocationType,"0");
+                List<BudgetAllocation>  reportDetails = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlag(subHeadId, allocationType,"0");
                 if (reportDetails.size() <= 0) {
                     return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                     }, "RECORD NOT FOUND OR EMPTY", HttpStatus.OK.value());
@@ -2962,7 +2962,7 @@ public class MangeReportImpl implements MangeReportService {
             String unit = "";
             for(String val : rowData){
                 String subHeadId=val;
-                List<BudgetAllocation>  reportDetails = budgetAllocationRepository.findBySubHeadAAndAllocationTypeIdAndIsFlag(subHeadId,allocationType,"0");
+                List<BudgetAllocation>  reportDetails = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlag(subHeadId,allocationType,"0");
                 if(reportDetails.size()<=0){
                     return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>> () {
                     },"RECORD NOT FOUND OR EMPTY",HttpStatus.OK.value());

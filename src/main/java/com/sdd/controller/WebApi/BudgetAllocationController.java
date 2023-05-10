@@ -4,6 +4,7 @@ package com.sdd.controller.WebApi;
 import com.sdd.entities.*;
 import com.sdd.request.*;
 import com.sdd.response.*;
+
 import com.sdd.service.BudgetAllocationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,6 @@ import java.util.List;
 @RequestMapping("/budgetAllocation")
 @Slf4j
 public class BudgetAllocationController {
-
 
     @Autowired
     private BudgetAllocationService budgetAllocationService;
@@ -220,6 +220,11 @@ public class BudgetAllocationController {
     @GetMapping("/getAllRevisionGroupId/{groupId}")
     public ResponseEntity<ApiResponse<BudgetAllocationResponse>> getAllRevisionGroupId(@PathVariable("groupId") String groupId) {
         return new ResponseEntity<>(budgetAllocationService.getAllRevisionGroupId(groupId), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllCgUnitData")
+    public ResponseEntity<ApiResponse<List<CgUnitResponse>>> getAllCgUnitData() {
+        return new ResponseEntity<>(budgetAllocationService.getAllCgUnitData(), HttpStatus.OK);
     }
 
 }
