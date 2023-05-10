@@ -10,7 +10,12 @@
         .header {
             text-align: center;
         }
-
+        .bbtm{
+             border-bottom: 1px solid transparent !important;
+         }
+        .brtm{
+            border-right: 1px solid transparent !important;
+        }
         .table {
             display: flex;
         }
@@ -29,14 +34,10 @@
         .them.themed {
             border: 1px solid black;
             border-collapse: collapse;
+            padding-left: 8px;
+            padding-right: 8px;
         }
 
-
-        .sign {
-            float: right;
-            padding-right: 100px;
-            padding-top: 50px;
-        }
 
         .count {
             text-align: center;
@@ -59,10 +60,13 @@
         }
         .sign {
             float: right;
-            padding-right: 100px;
-            padding-top: 50px;
+            padding-right: 20px;
+            padding-top: 20px;
+            width:27%;
         }
-
+        .sign ul li{
+            margin-bottom: 10px;
+        }
         .count {
             text-align: center;
             padding-top: 200px;
@@ -84,8 +88,9 @@
         }
         .date {
             float: left;
-            padding-right: 100px;
-            padding-top: 50px;
+            padding-left: 20px;
+            padding-top: 20px;
+            width:45%;
         }
 
         .count {
@@ -130,10 +135,15 @@
                         <td style="border-right: 2px solid #000000" height="41" align="left" valign="middle" class="the"><b>S.L</b></td>
                         <td class="the"><b>Unit</b></td>
                         <td class="the"><b>Allocation Type</b></td>
-                        <td class="the"><b>Amount (in Crore)</b></td>
+                        <td class="the"><b>Amount (in ${amountType_placeholder})</b></td>
                     </tr>
                 ${data_placeholder}
-
+                    <tr>
+                        <td height="41" align="left" valign="middle" class="the brtm" style=" border-right: 1px solid transparent !important;"><b>Total</b></td>
+                        <td class="the brtm" style=" border-right: 1px solid transparent !important;"></td>
+                        <td class="the"></td>
+                        <td class="the"><b> ${total_placeholder}</b></td>
+                    </tr>
 
 
             </tbody>
@@ -141,11 +151,11 @@
 
         </table>
         <div class="sign">
-            <div class="div1">${name_placeholder}</div>
-            <br></br>
-            <div class="div2">${unit_placeholder}</div>
-            <br></br>
-            <div class="div3">${rank_placeholder}</div>
+            <ul style="list-style: none; margin-top: 0;">
+                <li>${name_placeholder}</li>
+                <li>${unit_placeholder}</li>
+                <li>${rank_placeholder}</li>
+            </ul>
 
         </div>
         <div class="date">

@@ -15,6 +15,9 @@
 .brtm{
 	border-right: 1px solid transparent !important;
 }
+.bold{
+	font-weight: bold;
+}
 .wrapper{
 	width: 70%;
 	margin: 100px auto;
@@ -180,10 +183,11 @@ th {
       -webkit-overflow-scrolling: touch
     }
 .sign {
-	float: right;
-	padding-right: 100px;
-	padding-top: 50px;
-}
+		 float: right;
+		 padding-right: 20px;
+		 padding-top: 20px;
+		 width:27%;
+	 }
 
 .count {
 	text-align: center;
@@ -206,8 +210,9 @@ th {
 }
 .date {
 	float: left;
-	padding-right: 100px;
-	padding-top: 50px;
+	padding-left: 20px;
+	padding-top: 20px;
+	width:45%;
 }
 
 .count {
@@ -238,13 +243,13 @@ th {
 </head>
 <body>
 <div class="wrapper"> 
-	<h2 style="text-align: center;">RE ALLOCATION REPORT</h2><br></br>
+	<h2 style="text-align: center;">${allocaType_placeholder} ALLOCATION REPORT</h2><br></br>
 	<table class="dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%">
 		<thead>
 			<tr>
-				<th class="dcf-txt-center bbtm" scope="col">CGCs/RHQs/ADG(P) Directorates at CGHQ</th>
+				<th class="dcf-txt-center bbtm" scope="col">UNIT</th>
 				<th scope="col"></th>
-				<th class="dcf-txt-center" scope="col">RE ${finYear_placeholder}  Allocation</th>
+				<th class="dcf-txt-center" scope="col">${allocaType_placeholder} ${finYear_placeholder}  Allocation</th>
 				<th scope="col"></th>
 			</tr>
 		</thead>
@@ -252,9 +257,9 @@ th {
 
 			<tr>
 				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ"></td>
-				<td class="dcf-txt-center brtm bold">Existing</td>
-				<td class="dcf-txt-center brtm bold" data-label="BE 2022-23 Allocation">Additional/Withdrawal</td>
-				<td class="dcf-txt-center bold">Revised</td>
+				<td class="dcf-txt-center brtm bold">Existing Amount (in ${amountType_placeholder})</td>
+				<td class="dcf-txt-center brtm bold" data-label="RE 2022-23 Allocation">Additional/Withdrawal (in ${amountType_placeholder})</td>
+				<td class="dcf-txt-center bold">Revised (in ${amountType_placeholder})</td>
 			</tr>
 
 			${data_placeholder}
@@ -262,12 +267,11 @@ th {
 		</tbody>
 	</table>
 	<div class="sign">
-		<div class="div1">${name_placeholder}</div>
-		<br></br>
-		<div class="div2">${unit_placeholder}</div>
-		<br></br>
-		<div class="div3">${rank_placeholder}</div>
-
+		<ul style="list-style: none; margin-top: 0;">
+			<li>${name_placeholder}</li>
+			<li>${unit_placeholder}</li>
+			<li>${rank_placeholder}</li>
+		</ul>
 	</div>
 	<div class="date">
 		Date-${date_placeholder}
