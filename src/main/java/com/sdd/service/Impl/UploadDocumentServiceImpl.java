@@ -10,8 +10,10 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.html.simpleparser.HTMLWorker;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.sdd.entities.Authority;
 import com.sdd.entities.ContigentBill;
 import com.sdd.entities.FileUpload;
+import com.sdd.entities.repository.AuthorityRepository;
 import com.sdd.entities.repository.ContigentBillRepository;
 import com.sdd.entities.repository.FileUploadRepository;
 import com.sdd.exception.SDDException;
@@ -58,6 +60,9 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
 
     @Autowired
     private ContigentBillRepository contigentBillRepository;
+
+    @Autowired
+    private AuthorityRepository authorityRepository;
 
     @Autowired
     private HeaderUtils headerUtils;
@@ -146,21 +151,32 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
         if (type == null || type.isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TYPE CAN NOT BE BLANK");
         }
-        if(type=="CB") {
+        if(type.equalsIgnoreCase("CB")) {
             List<ContigentBill> cbdata = contigentBillRepository.findByAuthGroupIdAndIsFlag(authGoupId, "0");
             if(cbdata.size()>0) {
-                fileUpload.setPathURL(cbdata.get(0).getCbFilePath());
-                fileUpload.setUploadID(cbdata.get(0).getInvoiceUploadId());
-            }
-            fileUpload.setPathURL(null);
-        }
-        else if(type=="BG"){
+                String fileId=cbdata.get(0).getCbFilePath();
+                FileUpload fileUp = fileUploadRepository.findByUploadID(fileId);
+                if(fileUp!=null) {
+                    fileUpload.setPathURL(fileUp.getPathURL());
+                }else
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FILE NOT FOUND");
+            }else
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "RECORD NOT FOUND");
 
         }
-        else if(type=="BR"){
-
+        else if(type.equalsIgnoreCase("BG") ||type.equalsIgnoreCase("BR")){
+            List<Authority> authData=authorityRepository.findByAuthGroupId(authGoupId);
+            if(authData.size()>0) {
+                String fId=authData.get(0).getDocId();
+                FileUpload fileUp = fileUploadRepository.findByUploadID(fId);
+                if(fileUp!=null) {
+                    fileUpload.setPathURL(fileUp.getPathURL());
+                }else
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FILE NOT FOUND");
+            }else
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "RECORD NOT FOUND");
         }
-        //FileUpload fileUpload = fileUploadRepository.findByUploadID(fileId);
+
         return ResponseUtils.createSuccessResponse(fileUpload, new TypeReference<FileUpload>() {
         });
     }
