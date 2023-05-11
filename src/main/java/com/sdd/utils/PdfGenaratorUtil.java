@@ -1005,6 +1005,9 @@ public class PdfGenaratorUtil {
                 "<title>Document</title>" +
                 "</head>" +
                 "<style>" +
+                "body {" +
+                "font-size:14px;" +
+                "}"+
                 ".header {" +
                 "text-align: center;" +
                 "}" + ".table {" +

@@ -356,13 +356,13 @@ public class MangeReportImpl implements MangeReportService {
                 expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
             }
         }
-        Authority authorityDetails= authorityRepository.findByAuthorityId(cbData.getAuthGroupId());
+        List<Authority> authorityDetails= authorityRepository.findByAuthGroupId(cbData.getAuthGroupId());
         CgUnit unit = cgUnitRepository.findByUnit(cbData.getCbUnitId());
         BudgetHead budgetHead = subHeadRepository.findByBudgetCodeId(cbData.getBudgetHeadID());
         HrData approverId = hrDataRepository.findByPidAndIsActive(approverCbPId, "1");
         HrData verifer = hrDataRepository.findByPidAndIsActive(veriferCbPId, "1");
 
-        cbReportResponse.setAuthorityDetails(authorityDetails);
+        cbReportResponse.setAuthorityDetails(authorityDetails.get(0));
         cbReportResponse.setApprover(approverId);
         cbReportResponse.setVerifer(verifer);
 
