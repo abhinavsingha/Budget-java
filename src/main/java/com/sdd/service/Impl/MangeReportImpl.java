@@ -368,14 +368,14 @@ public class MangeReportImpl implements MangeReportService {
 
         cbReportResponse.setOnAccountData(cbData.getOnAccountOf());
         cbReportResponse.setOnAurthyData(cbData.getAuthorityDetails());
-        cbReportResponse.setExpenditureAmount(String.format("%f", expenditure));
-        cbReportResponse.setCurrentBillAmount(String.format("%f", Double.parseDouble(cbData.getCbAmount())));
-        cbReportResponse.setAllocatedAmount(String.format("%f", allocationAmount));
+        cbReportResponse.setExpenditureAmount(String.format("%.2f", expenditure));
+        cbReportResponse.setCurrentBillAmount(String.format("%.2f", Double.parseDouble(cbData.getCbAmount())));
+        cbReportResponse.setAllocatedAmount(String.format("%.2f", allocationAmount));
         cbReportResponse.setCbData(cbData);
         cbReportResponse.setUnitData(unit);
         cbReportResponse.setBudgetHead(budgetHead);
-        cbReportResponse.setBalanceAmount(String.format("%f", (balanceAmount - expenditure)));
-        cbReportResponse.setRemeningAmount(String.format("%f", ((balanceAmount - Double.parseDouble(cbData.getCbAmount())))));
+        cbReportResponse.setBalanceAmount(String.format("%.2f", (balanceAmount - expenditure)));
+        cbReportResponse.setRemeningAmount(String.format("%.2f", ((balanceAmount - Double.parseDouble(cbData.getCbAmount())))));
 
         String hindiAmount = ConverterUtils.convert(Long.parseLong(cbData.getCbAmount()));
         cbReportResponse.setHindiAmount(hindiAmount);

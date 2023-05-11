@@ -1010,7 +1010,11 @@ public class PdfGenaratorUtil {
                 "}" + ".table {" +
                 "display: flex;" +
                 "}" + ".float {" +
-                "float: right;" + "}" + ".auth {" +
+                "float: right;" + "}" +
+                ".float-left{\n" +
+                "        float: left;\n" +
+                "    }"+
+                ".auth {" +
                 "padding-left: 72px;" +
                 "}" + ".table2," +
                 ".the," +
@@ -1032,6 +1036,11 @@ public class PdfGenaratorUtil {
                 ".table4{" +
                 "padding-top: 15px;" +
                 "}" +
+                ".top-bar{\n" +
+                "        display: flow-root;\n" +
+                "        margin-bottom: 20px;\n" +
+                "    }"+
+
                 ".wrap{" +
                 "width:80%;" +
                 "margin: 100px auto;" +
