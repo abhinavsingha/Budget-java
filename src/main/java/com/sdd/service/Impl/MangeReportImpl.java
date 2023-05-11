@@ -1722,7 +1722,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String filePath = folder.getAbsolutePath() + "/" + "be-allocation-report.pdf";
+            String filePath = folder.getAbsolutePath() + "/" +type.getAllocDesc()+"_allocation-report.pdf";
             File file = new File(filePath);
             generatePdf(htmlContent, file.getAbsolutePath());
             //generatePdf(htmlContent, filepath);
@@ -2120,7 +2120,11 @@ public class MangeReportImpl implements MangeReportService {
                     for (Integer k = 0; k < units.size(); k++) {
                         if (units.get(k).getUnit().equalsIgnoreCase(row.getToUnit())) {
                             amount = Double.valueOf(row.getAllocationAmount());
-                            revisedAmount = Double.valueOf(row.getRevisedAmount());
+                            if(row.getRevisedAmount()!=null){
+                                revisedAmount = Double.valueOf(row.getRevisedAmount());
+                            }else
+                                revisedAmount=0.0;
+
                             AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
                             if (amountTypeObj == null) {
                                 return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -2138,25 +2142,36 @@ public class MangeReportImpl implements MangeReportService {
                             sb.append("<tr>");
                             sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(unitN.getDescr())).append("</td>");
                             sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(finAmount)))).append("</td>");
-                            if (reAmount < 0)
+                            if (reAmount<0)
                                 sb.append("<td class=\"the\">(-)").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(s2)))).append("</td>");
-                            else
+                            else if(reAmount>0)
                                 sb.append("<td class=\"the\"> (+)").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(reAmount)))).append("</td>");
+                            else
+                                sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(reAmount)))).append("</td>");
                             sb.append("<td class=\"the\">").append(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Double.toString(finAmount)) + Float.parseFloat(Double.toString(reAmount))))))).append("</td>");
                             sb.append("</tr>");
                             sumExisting += Float.parseFloat(new BigDecimal(Double.toString(finAmount)).toPlainString());
                             sumRE += Float.parseFloat(new BigDecimal(Double.toString(reAmount)).toPlainString());
+
                         }
                     }
                 }
                 total = sumExisting + sumRE;
+                Double ss2=0.0;
+                String ss=Float.toString(sumRE);
+                if(ss.contains("-")) {
+                    String ss1 = ss.replace("-", "");
+                    ss2 = Double.parseDouble(ss1);
+                }
                 sb.append("<tr>");
                 sb.append("<td class=\"the bold\">").append("Total").append("</td>");
                 sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(sumExisting))).append("</td>");
                 if(sumRE<0)
-                    sb.append("<td class=\"the bold\">(-)").append(String.format("%1$0,1.4f", new BigDecimal(sumRE))).append("</td>");
-                else
+                    sb.append("<td class=\"the bold\">(-)").append(String.format("%1$0,1.4f", new BigDecimal(ss2))).append("</td>");
+                else if(sumRE>0)
                     sb.append("<td class=\"the bold\">(+)").append(String.format("%1$0,1.4f", new BigDecimal(sumRE))).append("</td>");
+                else
+                sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(sumRE))).append("</td>");
                 sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(total))).append("</td>");
                 sb.append("</tr>");
             }
@@ -2179,7 +2194,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String filePath = folder.getAbsolutePath() + "/" + "re-allocation-report.pdf";
+            String filePath = folder.getAbsolutePath() + "/" +allocType+"_allocation-report.pdf";
             File file = new File(filePath);
             generatePdf(htmlContent, file.getAbsolutePath());
             //generatePdf(htmlContent, filepath);
@@ -2997,7 +3012,10 @@ public class MangeReportImpl implements MangeReportService {
                             }else {
                                 eAmount = Double.parseDouble(expenditure.get(0).getProgressiveAmount());
                             }
+                            if(finAmount!=0)
                             expnAmount=eAmount*100/finAmount;
+                            else
+                                expnAmount=0.0;
                             BudgetHead bHead=subHeadRepository.findByBudgetCodeId(subHeadId);
                             CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
                             sb.append("<tr>");
@@ -3063,7 +3081,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String filePath = folder.getAbsolutePath() + "/" + "coast-gaurd-budget-report.pdf";
+            String filePath = folder.getAbsolutePath() + "/" + type.getAllocDesc()+"_coast-gaurd-budget-report.pdf";
             File file = new File(filePath);
             generatePdf(htmlContent, file.getAbsolutePath());
             //generatePdf(htmlContent, filepath);
