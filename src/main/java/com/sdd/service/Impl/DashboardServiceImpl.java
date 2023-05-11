@@ -7,38 +7,26 @@ import com.sdd.entities.*;
 import com.sdd.entities.repository.*;
 import com.sdd.exception.SDDException;
 import com.sdd.jwt.HeaderUtils;
-import com.sdd.jwt.JwtUtils;
 import com.sdd.jwtParse.TokenParseData;
-import com.sdd.request.BudgetAllocationReportRequest;
-import com.sdd.request.BudgetAllocationSubRequest;
-import com.sdd.request.BudgetAllocationUpdateSubRequest;
 import com.sdd.request.DashBoardRequest;
 import com.sdd.response.*;
-import com.sdd.service.ContingentService;
 import com.sdd.service.DashBoardService;
-import com.sdd.utils.ConverterUtils;
 import com.sdd.utils.HelperUtils;
 import com.sdd.utils.ResponseUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -47,46 +35,31 @@ public class DashboardServiceImpl implements DashBoardService {
 
 
     @Autowired
-    private ContigentBillRepository contigentBillRepository;
-
-    @Autowired
-    private HeaderUtils headerUtils;
-
-    @Autowired
     CurrentStateRepository currentStateRepository;
-
     @Autowired
     AmountUnitRepository amountUnitRepository;
-
     @Autowired
     AllocationRepository allocationRepository;
-
-
     @Autowired
     MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
-
     @Autowired
     SubHeadRepository subHeadRepository;
-
-    @Autowired
-    private HrDataRepository hrDataRepository;
-
     @Autowired
     CgUnitRepository cgUnitRepository;
-
     @Autowired
     RoleRepository roleRepository;
-
     @Autowired
     BudgetFinancialYearRepository budgetFinancialYearRepository;
-
     @Autowired
     BudgetAllocationDetailsRepository budgetAllocationDetailsRepository;
-
-
     @Autowired
     BudgetAllocationRepository budgetAllocationRepository;
-
+    @Autowired
+    private ContigentBillRepository contigentBillRepository;
+    @Autowired
+    private HeaderUtils headerUtils;
+    @Autowired
+    private HrDataRepository hrDataRepository;
 
     @Override
     public ApiResponse<DashBoardResponse> getDashBoardData(DashBoardRequest dashBoardRequest) {
@@ -424,7 +397,7 @@ public class DashboardServiceImpl implements DashBoardService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.");
         }
 
-        StringBuilder roledata = new StringBuilder("");
+        StringBuilder roledata = new StringBuilder();
 
         String[] getRoleData = hrDataCheck.getRoleId().split(",");
         for (Integer n = 0; n < getRoleData.length; n++) {
@@ -521,15 +494,12 @@ public class DashboardServiceImpl implements DashBoardService {
 
             hrDataCheck.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             hrDataCheck.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-
             String[] getRoleData = null;
             if (hrDataCheck.getRoleId() == null) {
                 getRoleData = "113".split(",");
             } else {
                 getRoleData = hrDataCheck.getRoleId().split(",");
             }
-
-
             List<Role> setAllRole = new ArrayList<>();
             for (Integer n = 0; n < getRoleData.length; n++) {
                 Role getRole = roleRepository.findByRoleId(getRoleData[n]);
@@ -539,7 +509,6 @@ public class DashboardServiceImpl implements DashBoardService {
                 setAllRole.add(getRole);
             }
             hradataResponse.setRole(setAllRole);
-
         }
 
         CurrntStateType stateList = currentStateRepository.findByIsFlag("1");
@@ -550,20 +519,13 @@ public class DashboardServiceImpl implements DashBoardService {
             AllocationType allocationType = allocationRepository.findByAllocTypeId(stateList.getStateId());
             dashBoardResponse.setAllocationType(allocationType);
         }
-
         dashBoardResponse.setUserDetails(hradataResponse);
-
-
         List<MangeInboxOutbox> inboxOutboxesList = new ArrayList<MangeInboxOutbox>();
-
         String getCurrentRole = "";
         try {
             getCurrentRole = hrDataCheck.getRoleId().split(",")[0];
         } catch (Exception e) {
-
         }
-
-
         List<InboxOutBoxSubResponse> inboxList = new ArrayList<InboxOutBoxSubResponse>();
         List<InboxOutBoxSubResponse> outBoxList = new ArrayList<InboxOutBoxSubResponse>();
 
@@ -595,13 +557,10 @@ public class DashboardServiceImpl implements DashBoardService {
                     if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
                         InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                         MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-
                         inboxList.add(data);
-
                     } else {
                         InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                         MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-
                         outBoxList.add(data);
                     }
                 }
@@ -609,63 +568,68 @@ public class DashboardServiceImpl implements DashBoardService {
         } else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB");
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
-
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                     MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-
                     inboxList.add(data);
-
                 } else {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                     MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-
                     outBoxList.add(data);
                 }
-
             }
         } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB");
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
-
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("VE")) {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                     MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-
                     inboxList.add(data);
-
                 } else {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                     MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-
                     outBoxList.add(data);
                 }
-
             }
         } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB");
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
-
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("AP")) {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                     MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-
                     inboxList.add(data);
-
                 } else {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                     MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-
                     outBoxList.add(data);
                 }
-
             }
         }
-
         dashBoardResponse.setInbox(inboxList.size() + "");
         dashBoardResponse.setOutBox(outBoxList.size() + "");
         return ResponseUtils.createSuccessResponse(dashBoardResponse, new TypeReference<DashBoardResponse>() {
         });
+    }
+
+    @Override
+    public ApiResponse<List<DashBoardExprnditureResponse>> getSubHeadWiseExpenditureByUnitIdFinYearIdAllocationTypeIdSubHeadTypeId(String unitId, String finYearId, String subHeadTypeId, String allocationTypeId) {
+        List<DashBoardExprnditureResponse> asd = new ArrayList<>();
+        DashBoardExprnditureResponse response = new DashBoardExprnditureResponse();
+
+
+        List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(unitId);
+        if (unitList.size() > 0) {
+            for (CgUnit cgUnit : unitList) {
+
+            }
+        }
+
+
+        response.setAllocatedAmount(unitId);
+        asd.add(response);
+        return ResponseUtils.createSuccessResponse(asd, new TypeReference<List<DashBoardExprnditureResponse>>() {
+        });
+//        return null;
     }
 
 

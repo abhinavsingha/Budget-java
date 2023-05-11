@@ -3,6 +3,7 @@ package com.sdd.service;
 import com.sdd.entities.AmountUnit;
 import com.sdd.request.DashBoardRequest;
 import com.sdd.response.ApiResponse;
+import com.sdd.response.DashBoardExprnditureResponse;
 import com.sdd.response.DashBoardResponse;
 import com.sdd.response.UiResponse;
 
@@ -21,4 +22,7 @@ public interface DashBoardService {
     ApiResponse<List<AmountUnit>> getAllAmountUnit();
 
     ApiResponse<DashBoardResponse> updateInboxOutBox();
+
+
+    ApiResponse<List<DashBoardExprnditureResponse>> getSubHeadWiseExpenditureByUnitIdFinYearIdAllocationTypeIdSubHeadTypeId(String unitId,String finYearId,String subHeadTypeId,String allocationTypeId);
 }
