@@ -990,7 +990,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String filePath = folder.getAbsolutePath() + "/" + "allocation-unit-wise-report.pdf";
+            String filePath = folder.getAbsolutePath() + "/"+"allocation-unit-wise-report.pdf";
             File file = new File(filePath);
             generatePdf(htmlContent, file.getAbsolutePath());
 
@@ -1717,12 +1717,12 @@ public class MangeReportImpl implements MangeReportService {
             htmlContent = htmlContent.replace("${allocationType_placeholder}", StringEscapeUtils.escapeHtml4(type.getAllocDesc()));
 
             htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
-            String filepath = HelperUtils.FILEPATH + "/be-allocation-report.pdf";
+            String filepath = HelperUtils.FILEPATH + "/"+type.getAllocDesc()+"_allocation-report.pdf";
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String filePath = folder.getAbsolutePath() + "/" +type.getAllocDesc()+"_allocation-report.pdf";
+            String filePath = folder.getAbsolutePath() +"/"+type.getAllocDesc()+"_allocation-report.pdf";
             File file = new File(filePath);
             generatePdf(htmlContent, file.getAbsolutePath());
             //generatePdf(htmlContent, filepath);
@@ -2189,12 +2189,12 @@ public class MangeReportImpl implements MangeReportService {
 
 
             htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
-            String filepath = HelperUtils.FILEPATH + "/re-allocation-report.pdf";
+            String filepath = HelperUtils.FILEPATH + "/"+allocType+"_allocation-report.pdf";
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String filePath = folder.getAbsolutePath() + "/" +allocType+"_allocation-report.pdf";
+            String filePath = folder.getAbsolutePath() +"/"+allocType+"_allocation-report.pdf";
             File file = new File(filePath);
             generatePdf(htmlContent, file.getAbsolutePath());
             //generatePdf(htmlContent, filepath);
@@ -3076,7 +3076,7 @@ public class MangeReportImpl implements MangeReportService {
             htmlContent = htmlContent.replace("${allocationType_placeholder}",StringEscapeUtils.escapeHtml4(type.getAllocDesc()));
 
             htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
-            String filepath=HelperUtils.FILEPATH+"/coast-gaurd-budget-report.pdf";
+            String filepath=HelperUtils.FILEPATH+"/"+ type.getAllocDesc()+"_coast-gaurd-budget-report.pdf";
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
