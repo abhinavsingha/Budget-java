@@ -10,7 +10,9 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.html.simpleparser.HTMLWorker;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.sdd.entities.ContigentBill;
 import com.sdd.entities.FileUpload;
+import com.sdd.entities.repository.ContigentBillRepository;
 import com.sdd.entities.repository.FileUploadRepository;
 import com.sdd.exception.SDDException;
 import com.sdd.jwt.HeaderUtils;
@@ -53,6 +55,9 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
 
     @Autowired
     private FileUploadRepository fileUploadRepository;
+
+    @Autowired
+    private ContigentBillRepository contigentBillRepository;
 
     @Autowired
     private HeaderUtils headerUtils;
@@ -128,6 +133,39 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
         String fileExtention = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.'));
         return fileExtention;
     }
+
+    @Override
+    public ApiResponse<FileUpload> getApprovedFilePath(String authGoupId,String type) {
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+
+        FileUpload fileUpload = new FileUpload();
+        if (authGoupId == null || authGoupId.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AUTH_GROUP ID CAN NOT BE BLANK");
+        }
+        if (type == null || type.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TYPE CAN NOT BE BLANK");
+        }
+        if(type=="CB") {
+            List<ContigentBill> cbdata = contigentBillRepository.findByAuthGroupIdAndIsFlag(authGoupId, "0");
+            if(cbdata.size()>0) {
+                fileUpload.setPathURL(cbdata.get(0).getCbFilePath());
+                fileUpload.setUploadID(cbdata.get(0).getInvoiceUploadId());
+            }
+            fileUpload.setPathURL(null);
+        }
+        else if(type=="BG"){
+
+        }
+        else if(type=="BR"){
+
+        }
+        //FileUpload fileUpload = fileUploadRepository.findByUploadID(fileId);
+        return ResponseUtils.createSuccessResponse(fileUpload, new TypeReference<FileUpload>() {
+        });
+    }
+
+
 
 }
 

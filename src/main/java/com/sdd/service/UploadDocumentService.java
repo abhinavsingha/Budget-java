@@ -15,5 +15,8 @@ public interface UploadDocumentService {
 
     ApiResponse<FileUpload> getFilePath(String fileId);
 
+    ApiResponse<FileUpload> getApprovedFilePath(String authGoupId,String type);
+
+
 
 }

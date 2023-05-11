@@ -47,6 +47,10 @@ public class FileUploadController {
 		return new ResponseEntity<>(uploadDocumentService.getFilePath(fileId), HttpStatus.OK);
 	}
 
+	@GetMapping("/getApprovedFilePath/{authGoupId}/{type}")
+	public ResponseEntity<ApiResponse<FileUpload>> getApprovedFilePath(@PathVariable(value = "authGoupId") String authGoupId ,@PathVariable(value = "type") String type) throws IOException {
+		return new ResponseEntity<>(uploadDocumentService.getApprovedFilePath(authGoupId,type), HttpStatus.OK);
+	}
 
 
 }
