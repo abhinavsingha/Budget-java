@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8"></meta>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+    <title>Unit Wise Allocation Report</title>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .table {
+            display: flex;
+        }
+
+        .float {
+            float: right;
+
+        }
+
+        .auth {
+            padding-left: 72px;
+        }
+
+        .table2,
+        .the,
+        .them.themed {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+
+        .sign {
+            float: right;
+            padding-right: 100px;
+            padding-top: 50px;
+        }
+
+        .count {
+            text-align: center;
+            padding-top: 200px;
+        }
+
+        .table3 {
+            padding-top: 55px;
+        }
+
+        .tab {
+            padding-left: 85px;
+        }
+        .table4{
+            padding-top: 15px;
+        }
+        .wrap{
+            width:70%;
+            margin: 100px auto;
+        }
+        .sign {
+            float: right;
+            padding-right: 100px;
+            padding-top: 50px;
+        }
+
+        .count {
+            text-align: center;
+            padding-top: 200px;
+        }
+
+        .table3 {
+            padding-top: 55px;
+        }
+
+        .tab {
+            padding-left: 85px;
+        }
+        .table4{
+            padding-top: 15px;
+        }
+        .wrap{
+            width:70%;
+            margin: 100px auto;
+        }
+        .date {
+            float: left;
+            padding-right: 100px;
+            padding-top: 50px;
+        }
+
+        .count {
+            text-align: center;
+            padding-top: 200px;
+        }
+
+        .table3 {
+            padding-top: 55px;
+        }
+
+        .tab {
+            padding-left: 85px;
+        }
+        .table4{
+            padding-top: 15px;
+        }
+        .wrap{
+            width:70%;
+            margin: 100px auto;
+        }
+    </style>
+</head>
+<body>
+<!--header-->
+<div class="wrap">
+    <div class="header"> <strong>UNIT WISE ALLOCATION REPORT</strong></div>
+    <br></br>
+    <table style="width:100%" class="table2">
+        <tbody>
+        <tr>
+        <tr>
+            <td colspan="2" rowspan="2" height="60" align="center" valign="middle" class="the"><b>Financial Year : ${finYear_placeholder}</b></td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center" valign="middle" class="the"><b>Unit: ${unitName_placeholder}</b></td>
+        </tr>
+        <tr>
+            <td height="41" align="left" valign="middle" class="the"><b>S.L</b></td>
+            <td class="the"><b>Sub Head</b></td>
+            <td class="the"><b>Allocation Type</b></td>
+            <td class="the"><b>Amount (in Crore)</b></td>
+        </tr>
+        ${data_placeholder}
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="sign">
+        <div class="div1">${name_placeholder}</div>
+        <br></br>
+        <div class="div2">${unit_placeholder}</div>
+        <br></br>
+        <div class="div3">${rank_placeholder}</div>
+
+    </div>
+    <div class="date">
+        Date-${date_placeholder}
+    </div>
+</div>
+</body>
+</html>

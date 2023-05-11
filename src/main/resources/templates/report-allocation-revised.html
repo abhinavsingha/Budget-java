@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Report</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<style>
+.bold{
+	font-weight: bold !important;
+}
+.bbtm{
+	border-bottom: 1px solid transparent !important;
+}
+.brtm{
+	border-right: 1px solid transparent !important;
+}
+.wrapper{
+	width: 70%;
+	margin: 100px auto;
+}
+
+:root {
+    --bg-table-stripe: #f6f6f5;
+    --b-table: #e3e3e2;
+    --caption: #242423;
+}
+
+table {
+    background-color: transparent;
+    border-collapse:collapse;
+  	font-family: Arial, Helvetica, sans-serif
+}
+
+th {
+    text-align:left
+}
+
+.dcf-txt-center {
+      text-align: center!important
+    }
+
+    .dcf-txt-left {
+      text-align: left!important
+    }
+
+    .dcf-txt-right {
+      text-align: right!important
+    }
+    
+.dcf-table caption {
+      color: var(--caption);
+      font-size: 1.13em;
+      font-weight: 700;
+      padding-bottom: .56rem
+    }
+
+    .dcf-table thead {
+      font-size: .84em
+    }
+
+    .dcf-table tbody {
+      border-bottom: 1px solid var(--b-table);
+      border-top: 1px solid var(--b-table);
+      font-size: .84em
+    }
+
+    .dcf-table tfoot {
+      font-size: .84em
+    }
+
+    .dcf-table td, .dcf-table th {
+      padding-right: 1.78em
+    }
+
+    .dcf-table-bordered, .dcf-table-bordered td, .dcf-table-bordered th {
+      border: 1px solid var(--b-table)
+    }
+
+    .dcf-table-bordered td, .dcf-table-bordered th, .dcf-table-striped td, .dcf-table-striped th {
+      padding-left: 1em;
+      padding-right: 1em
+    }
+
+    .dcf-table-bordered tr:not(:last-child), .dcf-table-striped tr:not(:last-child) {
+      border-bottom: 1px solid var(--b-table)
+    }
+
+    .dcf-table-striped tbody tr:nth-of-type(2n) {
+      background-color: transparent;
+    }
+
+    .dcf-table thead td, .dcf-table thead th {
+      padding-bottom: .75em;
+      vertical-align: bottom
+    }
+
+    .dcf-table tbody td, .dcf-table tbody th, .dcf-table tfoot td, .dcf-table tfoot th {
+      padding-top: .75em;
+      vertical-align: top
+    }
+
+    .dcf-table tbody td, .dcf-table tbody th {
+      padding-bottom: .75em
+    }
+
+    .dcf-table-bordered thead th {
+      padding-top: 1.33em
+    }
+
+    .dcf-wrapper-table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      left: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
+      padding-bottom: 1em;
+      position: relative;
+      right: 50%;
+      width: 100vw
+    }
+
+    @media only screen and (max-width:42.09em) {
+      .dcf-table-responsive thead {
+        clip: rect(0 0 0 0);
+        -webkit-clip-path: inset(50%);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        width: 1px;
+        white-space: nowrap
+      }
+      .dcf-table-responsive tr {
+        display: block
+      }
+      .dcf-table-responsive td {
+        -webkit-column-gap: 3.16vw;
+        -moz-column-gap: 3.16vw;
+        column-gap: 3.16vw;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        text-align: left!important
+      }
+      .dcf-table-responsive.dcf-table-bordered, .dcf-table-responsive.dcf-table-bordered thead th {
+        border-width: 0
+      }
+      .dcf-table-responsive.dcf-table-bordered tbody td {
+        border-top-width: 0
+      }
+      .dcf-table-responsive:not(.dcf-table-bordered) tbody tr {
+        padding-bottom: .75em
+      }
+      .dcf-table-responsive:not(.dcf-table-bordered) tbody td {
+        padding-bottom: 0
+      }
+      .dcf-table-responsive:not(.dcf-table-bordered):not(.dcf-table-striped) tbody td {
+        padding-right: 0
+      }
+      .dcf-table-responsive.dcf-table-bordered tbody tr:last-child td:last-child {
+        border-bottom-width: 0
+      }
+      .dcf-table-responsive tbody td:before {
+        content: attr(data-label);
+        float: left;
+        font-weight: 700;
+        padding-right: 1.78em
+      }
+    }
+
+.dcf-overflow-x-auto {
+      overflow-x: auto!important;
+      -webkit-overflow-scrolling: touch
+    }
+    
+.dcf-w-100\% {
+  width: 100%!important;
+		}
+.sign {
+	float: right;
+	padding-right: 100px;
+	padding-top: 50px;
+}
+
+.count {
+	text-align: center;
+	padding-top: 200px;
+}
+
+.table3 {
+	padding-top: 55px;
+}
+
+.tab {
+	padding-left: 85px;
+}
+.table4{
+	padding-top: 15px;
+}
+.wrap{
+	width:70%;
+	margin: 100px auto;
+}
+.date {
+	float: left;
+	padding-right: 100px;
+	padding-top: 50px;
+}
+
+.count {
+	text-align: center;
+	padding-top: 200px;
+}
+
+.table3 {
+	padding-top: 55px;
+}
+
+.tab {
+	padding-left: 85px;
+}
+.table4{
+	padding-top: 15px;
+}
+.wrap{
+	width:70%;
+	margin: 100px auto;
+}
+    
+</style>
+</head>
+<body>
+<div class="wrapper"> 
+	<table class="dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%">
+		<thead>
+			<tr>
+				<th class="dcf-txt-center bbtm" scope="col">CGCs/RHQs/ADG(P) Directorates at CGHQ</th>
+				<th scope="col"></th>
+				<th class="dcf-txt-center" scope="col">BE 2022-23 Allocation</th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ"></td>
+				<td class="dcf-txt-center brtm bold">Existing</td>
+				<td class="dcf-txt-center brtm bold" data-label="BE 2022-23 Allocation">Additional/Withdrawal</td>
+				<td class="dcf-txt-center bold">Revised</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ" class="bold brtm">Supplies and Material (0/041/09)'</td>
+				<td class="brtm"></td>
+				<td data-label="BE 2022-23 Allocation" class="brtm"></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">CGWS</td>
+				<td class="dcf-txt-right">136387</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">136387</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">CGES</td>
+				<td class="dcf-txt-right">0</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">0</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">RHQ(W)</td>
+				<td class="dcf-txt-right">0</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">0</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">RHQ (E )</td>
+				<td class="dcf-txt-right">1200</td>
+				<td class="dcf-txt-right" data-label="BE 2022-23 Allocation">(+)20</td>
+				<td class="dcf-txt-right">1200</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">RHQ (A &amp;N )</td>
+				<td class="dcf-txt-right">1000</td>
+				<td class="dcf-txt-right" data-label="BE 2022-23 Allocation">(+)20</td>
+				<td class="dcf-txt-right">1000</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">RHQ (NW )</td>
+				<td class="dcf-txt-right">900</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">900</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">RHQ (NE)</td>
+				<td class="dcf-txt-right">578</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">578</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">PD (LOG)</td>
+				<td class="dcf-txt-right">2465</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">3556</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">PD (AA )</td>
+				<td class="dcf-txt-right">525</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">525</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">CGS (D )</td>
+				<td class="dcf-txt-right">425</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">425</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">JD (GUNNERY)</td>
+				<td class="dcf-txt-right">0</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">0</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">ADG (P )</td>
+				<td class="dcf-txt-right">325</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">325</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ" class="bold">TOTAL </td>
+				<td class="dcf-txt-right bold">545343</td>
+				<td class="dcf-txt-right bold" data-label="BE 2022-23 Allocation">(+)50</td>
+				<td class="dcf-txt-right bold">64644</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ" class="bold brtm">MINOR WORKS (0/041/12)'</td>
+				<td class="brtm"></td>
+				<td data-label="BE 2022-23 Allocation" class="brtm"></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">CGWS</td>
+				<td class="dcf-txt-right">10</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">10</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">CGES</td>
+				<td class="dcf-txt-right">40</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">40</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">RHQ(W)</td>
+				<td class="dcf-txt-right">2600</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">2600</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">RHQ (E )</td>
+				<td class="dcf-txt-right">1350</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">1350</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">RHQ (A &amp;N )</td>
+				<td class="dcf-txt-right">725</td>
+				<td class="dcf-txt-right" data-label="BE 2022-23 Allocation">(+)20</td>
+				<td class="dcf-txt-right">725</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">RHQ (NW )</td>
+				<td class="dcf-txt-right">625</td>
+				<td class="dcf-txt-right" data-label="BE 2022-23 Allocation">(+)20</td>
+				<td class="dcf-txt-right">625</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">RHQ (NE )</td>
+				<td class="dcf-txt-right">575</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">575</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">PD (AS )</td>
+				<td class="dcf-txt-right">990</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">889</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">PD (AA )</td>
+				<td class="dcf-txt-right">45</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">45</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">PD (AM )</td>
+				<td class="dcf-txt-right">4534</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">3453</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">PD (FM )</td>
+				<td class="dcf-txt-right">45</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">345</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">PD (LOG )</td>
+				<td class="dcf-txt-right">13</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">13</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">PD (I&amp;W )</td>
+				<td class="dcf-txt-right">1.5</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">1.5</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">PD (OPS )/CM </td>
+				<td class="dcf-txt-right">1.5</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">1.5</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">JD (GUNNERY)</td>
+				<td class="dcf-txt-right">400</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">400</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ">ADG (P )</td>
+				<td class="dcf-txt-right">100</td>
+				<td data-label="BE 2022-23 Allocation"></td>
+				<td class="dcf-txt-right">100</td>
+			</tr>
+			<tr>
+				<td data-label="CGCs/RHQs/ADG(P) Directorates at CGHQ" class="bold">Total </td>
+				<td class="dcf-txt-right bold">7899</td>
+				<td class="dcf-txt-right bold" data-label="BE 2022-23 Allocation">7899</td>
+				<td class="dcf-txt-right bold">7899</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="sign">
+		<div class="div1">${name_placeholder}</div>
+		<br></br>
+		<div class="div2">${unit_placeholder}</div>
+		<br></br>
+		<div class="div3">${rank_placeholder}</div>
+
+	</div>
+	<div class="date">
+		Date-${date_placeholder}
+	</div>
+</div>
+
+</body>
+</html>
