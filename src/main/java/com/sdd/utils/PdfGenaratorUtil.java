@@ -1037,9 +1037,12 @@ public class PdfGenaratorUtil {
                 "margin: 100px auto;" +
                 "}" +
                 "</style>" + "<body>" +
-                "<!--header-->" +
-                "<div class=wrap>" +
-                "<div class=header> <strong>CONTINGENT BILL</strong></div>" +
+                "    <div class=\"wrap\">\n" +
+                "        <div class=\"top-bar\">\n" +
+                "        <div class=\"float-left\">Contingent Bill No. <strong>"+cbReportResponse.getCbData().getCbNo()+"</strong></div>\n" +
+                "        <div class=\"float\">Dated: <strong>"+cbReportResponse.getCbData().getCbDate()+"</strong></div>\n" +
+                "        </div>\n" +
+                "        <div class=\"header\"> <strong>CONTINGENT BILL</strong></div>" +
                 "<div class=expenditure>" +
                 "<p>" + cbReportResponse.getOnAccountData() + "</u></b></span></p>" +
                 "</div>" +
@@ -1061,7 +1064,7 @@ public class PdfGenaratorUtil {
                 "</div>" +
                 "<br>" +
                 "<div class=auth>" +
-                "(b) " + cbReportResponse.getUnitData().getDescr() + " Sanction No. <span> <b><u>" + cbReportResponse.getCbData().getCbNo() + "</u></b> </span>" +
+                "(b) " + cbReportResponse.getUnitData().getDescr() + " Sanction No. <span> <b><u>" + cbReportResponse.getAuthorityDetails().getAuthority() + "</u></b> </span>" +
                 "</div>" +
                 "<br>" +
                 "<table class=table2 style=width:100%>" +

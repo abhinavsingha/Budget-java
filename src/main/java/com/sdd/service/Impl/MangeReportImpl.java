@@ -46,6 +46,9 @@ public class MangeReportImpl implements MangeReportService {
     BudgetFinancialYearRepository budgetFinancialYearRepository;
 
     @Autowired
+    AuthorityRepository authorityRepository;
+
+    @Autowired
     AllocationRepository allocationRepository;
 
 
@@ -353,12 +356,13 @@ public class MangeReportImpl implements MangeReportService {
                 expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
             }
         }
-
+        Authority authorityDetails= authorityRepository.findByAuthorityId(cbData.getAuthGroupId());
         CgUnit unit = cgUnitRepository.findByUnit(cbData.getCbUnitId());
         BudgetHead budgetHead = subHeadRepository.findByBudgetCodeId(cbData.getBudgetHeadID());
         HrData approverId = hrDataRepository.findByPidAndIsActive(approverCbPId, "1");
         HrData verifer = hrDataRepository.findByPidAndIsActive(veriferCbPId, "1");
 
+        cbReportResponse.setAuthorityDetails(authorityDetails);
         cbReportResponse.setApprover(approverId);
         cbReportResponse.setVerifer(verifer);
 

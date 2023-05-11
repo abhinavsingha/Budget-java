@@ -396,7 +396,9 @@ public class ContingentServiceImpl implements ContingentService {
             if (contingentBillSaveRequest.getCbAmount() == null || contingentBillSaveRequest.getCbAmount().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB AMOUNT CAN NOT BE BLANK");
             }
-
+            if (contingentBillSaveRequest.getProgressiveAmount() == null || contingentBillSaveRequest.getProgressiveAmount().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "PROGRESSIVE AMOUNT CAN NOT BE BLANK");
+            }
             if (contingentBillSaveRequest.getCbDate() == null || contingentBillSaveRequest.getCbDate().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB DATE CAN NOT BE BLANK");
             }

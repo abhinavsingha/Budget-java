@@ -29,4 +29,6 @@ public class CbReportResponse {
     private HrData approver;
     private HrData verifer;
 
+    private Authority authorityDetails;
+
 }
