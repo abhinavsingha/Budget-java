@@ -1019,7 +1019,6 @@ public class MangeReportImpl implements MangeReportService {
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
-
         if (req.getSubHeadId() == null || req.getSubHeadId().isEmpty()) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "SUBHEAD ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
@@ -1049,7 +1048,6 @@ public class MangeReportImpl implements MangeReportService {
         if (dBunit.equalsIgnoreCase("D(Budget)")) {
             units = cgUnitRepository.findAllByOrderByDescrAsc();
         } else {
-
             if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
             units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
             } else {
@@ -1324,7 +1322,6 @@ public class MangeReportImpl implements MangeReportService {
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
-
         if (finYearId == null || finYearId.isEmpty()) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "FINANCIAL YEAR CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
@@ -1333,7 +1330,6 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "ALLOCATION TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
-
         if (amountTypeId == null || amountTypeId.isEmpty()) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
@@ -1345,7 +1341,6 @@ public class MangeReportImpl implements MangeReportService {
         }
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
         AllocationType type=allocationRepository.findByAllocTypeId(allocationType);
-
 
         CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
         if (cgUnit == null) {
@@ -2238,7 +2233,6 @@ public class MangeReportImpl implements MangeReportService {
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
-
         if (finYearId == null || finYearId.isEmpty()) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "FINANCIAL YEAR CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
@@ -2247,7 +2241,6 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "ALLOCATION TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
-
         if (amountTypeId == null || amountTypeId.isEmpty()) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
