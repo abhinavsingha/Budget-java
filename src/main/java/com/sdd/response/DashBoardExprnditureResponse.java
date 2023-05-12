@@ -7,23 +7,19 @@ import com.sdd.entities.CgUnit;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
-
 public class DashBoardExprnditureResponse {
 
+  CgUnit cgUnit;
 
-    CgUnit cgUnit;
+  BudgetFinancialYear budgetFinancialYear;
 
-    BudgetFinancialYear budgetFinancialYear;
+  BudgetHead budgetHead;
 
-    BudgetHead budgetHead;
+  String allocatedAmount;
 
-    String allocatedAmount;
+  String expenditureAmount;
 
-    String expenditureAmount;
-
-    String lastCBDate;
-
+  String lastCBDate;
 }

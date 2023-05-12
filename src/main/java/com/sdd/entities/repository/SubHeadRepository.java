@@ -9,10 +9,17 @@ import java.util.List;
 public interface SubHeadRepository extends JpaRepository<BudgetHead, Long> {
 
 
-    BudgetHead findByBudgetCodeIdAndSubHeadTypeIdOrderBySerialNumberAsc(String subHead,String subHeadType);
+    BudgetHead findByBudgetCodeIdAndSubHeadTypeIdOrderBySerialNumberAsc(String subHead, String subHeadType);
+
     BudgetHead findByBudgetCodeIdOrderBySerialNumberAsc(String subHead);
+
     BudgetHead findByBudgetCodeId(String subHead);
-    List<BudgetHead> findByMajorHeadAndSubHeadTypeIdOrderBySerialNumberAsc(String majorHead,String subHeadType);
+
+    List<BudgetHead> findByMajorHeadAndSubHeadTypeIdOrderBySerialNumberAsc(String majorHead, String subHeadType);
+
+    List<BudgetHead> findBySubHeadTypeIdOrderBySerialNumberAsc(String subHeadType);
+
     List<BudgetHead> findByMajorHeadOrderBySerialNumberAsc(String majorHead);
+
     List<BudgetHead> findAllByOrderBySerialNumberAsc();
 }

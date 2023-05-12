@@ -12,13 +12,18 @@ public interface CgUnitRepository extends JpaRepository<CgUnit, Long> {
 
     CgUnit findByUnit(String cbUnit);
 
-    @Query(value="SELECT DESCR FROM cgunit where UNIT=:unitId",nativeQuery = true)
+    @Query(value = "SELECT DESCR FROM cgunit where UNIT=:unitId", nativeQuery = true)
     String findUnitName(String unitId);
 
     List<CgUnit> findAllByOrderByDescrAsc();
-    List<CgUnit> findByPurposeCodeOrPurposeCodeOrderByDescrAsc(String purpose,String purpose1);
+
+    List<CgUnit> findByPurposeCodeOrPurposeCodeOrderByDescrAsc(String purpose, String purpose1);
+
     List<CgUnit> findBySubUnitOrderByDescrAsc(String subUnit);
+
     List<CgUnit> findByPurposeCodeOrderByDescrAsc(String purpose);
+
+    List<CgUnit> findByBudGroupUnitLike(String unitId);
 
 //    CgUnit findByUnit(String authorityUnit);
 }

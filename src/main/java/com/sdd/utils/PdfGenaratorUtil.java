@@ -995,7 +995,12 @@ public class PdfGenaratorUtil {
         Assert.notNull(templateName, "The templateName can not be null");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = dateFormat.format(cbReportResponse.getCbData().getCbDate());
-
+        Float bill=(Float.parseFloat(cbReportResponse.getCurrentBillAmount()));
+        bill=bill*100/118;
+        String billFormat=String.format("%.2f", bill);
+        bill=Float.parseFloat(billFormat);
+        Float gst=(Float.parseFloat(cbReportResponse.getCurrentBillAmount()));
+        gst=gst-bill;
 
         String html = "<!DOCTYPE html>" +
                 "<html lang=en>" + "<head>" +
@@ -1048,11 +1053,18 @@ public class PdfGenaratorUtil {
                 "width:80%;" +
                 "margin: 100px auto;" +
                 "}" +
+                " .th {\n" +
+                "            text-align:left;\n" +
+                "            border: 1px solid #242423 ;\n" +
+                "        }\n" +
+                "        .td{\n" +
+                "            border: 1px solid #242423 ;\n" +
+                "        }"+
                 "</style>" + "<body>" +
                 "    <div class=\"wrap\">\n" +
                 "        <div class=\"top-bar\">\n" +
                 "        <div class=\"float-left\">Contingent Bill No. <strong>"+cbReportResponse.getCbData().getCbNo()+"</strong></div>\n" +
-                "        <div class=\"float\">Dated: <strong>"+dateString+"</strong></div>\n" +
+                "        <div class=\"float\">Dated: <strong>"+date(dateString)+"</strong></div>\n" +
                 "        </div>\n" +
                 "        <div class=\"header\"> <strong>CONTINGENT BILL</strong></div>" +
                 "<div class=expenditure>" +
@@ -1060,16 +1072,16 @@ public class PdfGenaratorUtil {
                 "</div>" +
                 "<table class=table1 style=width:100%>" +
                 "<tr>" +
-                "<td>Total Amount/ Budget alloted</td>" +
-                "<td> ₹ " + cbReportResponse.getAllocatedAmount() + "</td>" +
+                "<td >Total Amount/ Budget alloted</td>" +
+                "<td > (INR) " + cbReportResponse.getAllocatedAmount() + "</td>" +
                 "  " +
                 "</tr>" +
                 "<tr>" +
-                "<td>Progressive expenditure including this bill</td>" +
-                "<td> ₹ " + cbReportResponse.getExpenditureAmount() + "</td>" + "</tr>" +
+                "<td >Progressive expenditure including this bill</td>" +
+                "<td > (INR) " + cbReportResponse.getExpenditureAmount() + "</td>" + "</tr>" +
                 "<tr>" +
-                "<td>Balance amount</td>" +
-                "<td> ₹ " + cbReportResponse.getRemeningAmount() + "</td>" +
+                "<td >Balance amount</td>" +
+                "<td > (INR) " + cbReportResponse.getRemeningAmount() + "</td>" +
                 "</tr>" +
                 "</table>" + "<br>" + "<div class=authority>" +
                 "Authority: (a) " + cbReportResponse.getOnAurthyData() + "" +
@@ -1081,19 +1093,21 @@ public class PdfGenaratorUtil {
                 "<br>" +
                 "<table class=table2 style=width:100%>" +
                 "<tr class=>" +
-                "<th class=them the>Sr.</th>" +
-                "<th class=them the>Details of Expenditure</th>" +
-                "<th class=them the>Amount()</th>" +
+                "<th class=th>Sr.</th>" +
+                "<th class=th>Details of Expenditure</th>" +
+                "<th class=th>Amount (in INR)</th>" +
                 "</tr>" +
                 "<tr class=>" +
-                "<td class=themed the>01</td>" +
-                "<td class=themed the>Expenditure incurred towards quaterly payment for the 3rd otr from 01 Sep 22 to 30" +
+                "<td class=td>01</td>" +
+                "<td class=td>Expenditure incurred towards quaterly payment for the 3rd otr from 01 Sep 22 to 30" +
                 "Nov 22 in respect" +
                 "of Hirring of Designer/Developer IT Manpower <span>(Project-SDOT)</span> through <span>" + cbReportResponse.getCbData().getVendorName() + " </span>vibe Invoiice/bill <span>" + cbReportResponse.getCbData().getInvoiceNO() + "</span>Dated <span>" + cbReportResponse.getCbData().getInvoiceDate() + "</span> </td>" +
-                "<td class=themed the> ₹ " + cbReportResponse.getCurrentBillAmount() + "</td>" +
+                "<td class=td> (INR) " + bill.toString() + "</td>" +
                 "</tr>" +
+                "<tr><td class=td></td><td class = td style=\"text-align: right\">GST 18%</td><td class=td> (INR)"+String.format("%.2f", gst)+"</td></tr>"+
+                "<tr><td class=td></td><td class = td style=\"text-align: right\">TOTAL</td><td class=td>  (INR)"+cbReportResponse.getCurrentBillAmount()+"</td></tr>"+
                 "<tr>" +
-                "<td class=themed the colspan=3> Amount in words (Ruppess <span><b><u>" + convertDecimaltoString(cbReportResponse.getCurrentBillAmount()) + " only)</u></b></span> (Including GST)</td></tr>" + "</table>" +
+                "<td class=td colspan=3> Amount in words (Ruppess <span><b><u>" + convertDecimaltoString(cbReportResponse.getCurrentBillAmount()) + " only)</u></b></span> (Including GST)</td></tr>" + "</table>" +
                 "<br>" +
                 "<div class=certify>" +
                 "<u>Certify that:-</u>" +
@@ -1126,7 +1140,7 @@ public class PdfGenaratorUtil {
                 "<th>File No. <span><b><u>" + cbReportResponse.getCbData().getFileID() + "</u></b></span></th>" +
                 "</tr>" +
                 "<tr>" +
-                "<th>Date <span><b><u>" + cbReportResponse.getCbData().getFileDate() + "</u></b></span></th>" + "</tr>" +
+                "<th>Date <span><b><u>" + date(cbReportResponse.getCbData().getFileDate()) + "</u></b></span></th>" + "</tr>" +
                 "</table>" +
                 "</div>" + "</body>" + "</html>";
 
@@ -1148,7 +1162,14 @@ public class PdfGenaratorUtil {
         outputStream.close();
 
     }
+    public static String date(String dateInput) throws Exception {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = inputFormat.parse(dateInput);
+        String output = outputFormat.format(date);
 
+        return output;
+    }
 
     public void createPdfSample(String templateName, Map map, File outputFile) throws Exception {
         Assert.notNull(templateName, "The templateName can not be null");
