@@ -375,7 +375,7 @@ public class MangeReportImpl implements MangeReportService {
         cbReportResponse.setUnitData(unit);
         cbReportResponse.setBudgetHead(budgetHead);
         cbReportResponse.setBalanceAmount(String.format("%.2f", (balanceAmount - expenditure)));
-        cbReportResponse.setRemeningAmount(String.format("%.2f", ((balanceAmount - Double.parseDouble(cbData.getCbAmount())))));
+        cbReportResponse.setRemeningAmount(String.format("%.2f", ((allocationAmount - expenditure))));
 
         String hindiAmount = ConverterUtils.convert(Long.parseLong(cbData.getCbAmount()));
         cbReportResponse.setHindiAmount(hindiAmount);
@@ -2171,7 +2171,7 @@ public class MangeReportImpl implements MangeReportService {
                 else if(sumRE>0)
                     sb.append("<td class=\"the bold\">(+)").append(String.format("%1$0,1.4f", new BigDecimal(sumRE))).append("</td>");
                 else
-                sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(sumRE))).append("</td>");
+                    sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(sumRE))).append("</td>");
                 sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(total))).append("</td>");
                 sb.append("</tr>");
             }
@@ -3013,7 +3013,7 @@ public class MangeReportImpl implements MangeReportService {
                                 eAmount = Double.parseDouble(expenditure.get(0).getProgressiveAmount());
                             }
                             if(finAmount!=0)
-                            expnAmount=eAmount*100/finAmount;
+                                expnAmount=eAmount*100/finAmount;
                             else
                                 expnAmount=0.0;
                             BudgetHead bHead=subHeadRepository.findByBudgetCodeId(subHeadId);

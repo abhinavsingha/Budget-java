@@ -18,10 +18,8 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.*;
 import java.nio.file.FileSystems;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Component
 public class PdfGenaratorUtil {
@@ -995,6 +993,8 @@ public class PdfGenaratorUtil {
 
     public void createCbReportPdfSample(String templateName, CbReportResponse cbReportResponse, File outputFile) throws Exception {
         Assert.notNull(templateName, "The templateName can not be null");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = dateFormat.format(cbReportResponse.getCbData().getCbDate());
 
 
         String html = "<!DOCTYPE html>" +
@@ -1006,7 +1006,7 @@ public class PdfGenaratorUtil {
                 "</head>" +
                 "<style>" +
                 "body {" +
-                "font-size:14px;" +
+                "font-size:12px;" +
                 "}"+
                 ".header {" +
                 "text-align: center;" +
@@ -1052,7 +1052,7 @@ public class PdfGenaratorUtil {
                 "    <div class=\"wrap\">\n" +
                 "        <div class=\"top-bar\">\n" +
                 "        <div class=\"float-left\">Contingent Bill No. <strong>"+cbReportResponse.getCbData().getCbNo()+"</strong></div>\n" +
-                "        <div class=\"float\">Dated: <strong>"+cbReportResponse.getCbData().getCbDate()+"</strong></div>\n" +
+                "        <div class=\"float\">Dated: <strong>"+dateString+"</strong></div>\n" +
                 "        </div>\n" +
                 "        <div class=\"header\"> <strong>CONTINGENT BILL</strong></div>" +
                 "<div class=expenditure>" +
@@ -1069,7 +1069,7 @@ public class PdfGenaratorUtil {
                 "<td> ₹ " + cbReportResponse.getExpenditureAmount() + "</td>" + "</tr>" +
                 "<tr>" +
                 "<td>Balance amount</td>" +
-                "<td> ₹ " + cbReportResponse.getBalanceAmount() + "</td>" +
+                "<td> ₹ " + cbReportResponse.getRemeningAmount() + "</td>" +
                 "</tr>" +
                 "</table>" + "<br>" + "<div class=authority>" +
                 "Authority: (a) " + cbReportResponse.getOnAurthyData() + "" +
@@ -1093,7 +1093,7 @@ public class PdfGenaratorUtil {
                 "<td class=themed the> ₹ " + cbReportResponse.getCurrentBillAmount() + "</td>" +
                 "</tr>" +
                 "<tr>" +
-                "<td class=themed the colspan=3> Amount in words (Ruppess <span><b><u>" + cbReportResponse.getHindiAmount() + " only)</u></b></span> (Including GST)</td></tr>" + "</table>" +
+                "<td class=themed the colspan=3> Amount in words (Ruppess <span><b><u>" + convertDecimaltoString(cbReportResponse.getCurrentBillAmount()) + " only)</u></b></span> (Including GST)</td></tr>" + "</table>" +
                 "<br>" +
                 "<div class=certify>" +
                 "<u>Certify that:-</u>" +
@@ -1188,5 +1188,108 @@ public class PdfGenaratorUtil {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         tidy.parseDOM(inputStream, outputStream);
         return outputStream.toString(UTF_8);
+    }
+    private static String convertDecimaltoString(String str){
+        String words="";
+
+        float x=Float.parseFloat(str);
+        String whole=convertNumberToWords((long)x);
+        long y=Long.parseLong(str.substring(str.indexOf('.')+1));
+        String decimal=(convertDecimalToWords(y,str.substring(str.indexOf('.')+1).length()));
+        if(decimal=="")
+            return whole;
+        else
+        words =whole + " point "+decimal;
+        return words;
+    }
+    private static String convertDecimalToWords(long y,int length) {
+        String words="";
+        String[] units = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
+        while(y!=0){
+            words=words+" "+units[(int) (y/Math.pow(10,length-1))];
+            y=(long) (y%Math.pow(10,length-1));
+            length--;
+        }
+        return words;
+    }
+    public static String convertNumberToWords(long number) {
+        if (number == 0) {
+            return "zero";
+        }
+        String[] units = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
+        String[] tens = {"", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
+        String[] thousands = {"","hundred", "thousand", "lakh", "crore"};
+        int i = 0;
+        String words = "";
+        while (number > 0) {
+            String str="";
+            long j=number/10000000;
+            if(number >= 10000000){
+                if(number/10000000>=100){
+                    words=convertNumberToWords(number/10000000) +" "+ thousands[4];
+                    number=number%10000000;
+                }
+                else{
+                    int x=(int) number/10000000;
+                    System.out.println("X:"+x);
+                    if(x>20){
+                        int y = x/10;
+                        str=str+ tens[y] +" ";
+                        x=x%10;
+                        System.out.println("Y:"+y);
+
+                    }
+                    words=words +" "+ str + units[x] +" "+ thousands[4];
+                    number =number%10000000;
+                }
+            }
+            else if(number >= 100000){
+                int x=(int) number/100000;
+                System.out.println("X:"+x);
+                if(x>20){
+                    int y = x/10;
+                    str=str+ tens[y] +" ";
+                    x=x%10;
+                    System.out.println("Y:"+y);
+                }
+                words=words +" "+ str + units[x] +" "+ thousands[3];
+                number =number%100000;
+            }else if(number >= 1000){
+                int x=(int) number/1000;
+                System.out.println("X:"+x);
+                if(x>20){
+                    int y = x/10;
+                    str=str+ tens[y] +" ";
+                    x=x%10;
+                    System.out.println("Y:"+y);
+                }
+                words=words+" "+ str + units[x] +" "+ thousands[2];
+                number =number%1000;
+            }else if(number >= 100){
+                int x=(int) number/100;
+                System.out.println("X:"+x);
+                if(x>20){
+                    int y = x/10;
+                    str=str+ tens[y] +" ";
+                    x=x%10;
+                    System.out.println("Y:"+y);
+                }
+                words=words +" "+ str + units[x] +" "+ thousands[1];
+                number =number%100;
+            } else {
+                int x=(int) number;
+                System.out.println("X:"+x);
+                if(x>20){
+                    int y = x/10;
+                    str=str+ tens[y] +" ";
+                    x=x%10;
+                    System.out.println("Y:"+y);
+                }
+                words= words +" "+ str + units[x] +" "+ thousands[0];
+                number=number/100;
+            }
+        }
+        System.out.println(words);
+        return words.trim();
     }
 }
