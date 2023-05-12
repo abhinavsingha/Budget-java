@@ -1033,8 +1033,8 @@ public class MangeReportImpl implements MangeReportService {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(req.getFinYearId());
-        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findBySubHeadAndFinYearAndIsFlag(req.getSubHeadId(), req.getFinYearId(),"0");
-        BudgetHead bHead=subHeadRepository.findByBudgetCodeId(req.getSubHeadId());
+        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findBySubHeadAndFinYearAndIsFlag(req.getSubHeadId(), req.getFinYearId(), "0");
+        BudgetHead bHead = subHeadRepository.findByBudgetCodeId(req.getSubHeadId());
         if (budgetAllocationsDetalis.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -1044,12 +1044,18 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
         }
+        String dBunit = cgUnit.getDescr();
         List<CgUnit> units = new ArrayList<>();
-        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-            units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+        if (dBunit.equalsIgnoreCase("D(Budget)")) {
+            units = cgUnitRepository.findAllByOrderByDescrAsc();
         } else {
+
+            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+            units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+            } else {
             units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-        }
+             }
+         }
         if (units.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "UNIT NOT FOUND", HttpStatus.OK.value());
@@ -1346,11 +1352,16 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
         }
+        String dBunit = cgUnit.getDescr();
         List<CgUnit> units = new ArrayList<>();
-        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-            units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+        if (dBunit.equalsIgnoreCase("D(Budget)")) {
+            units = cgUnitRepository.findAllByOrderByDescrAsc();
         } else {
-            units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
+            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+            } else {
+                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
+            }
         }
         if (units.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -1788,17 +1799,21 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
         }
+        String dBunit = cgUnit.getDescr();
         List<CgUnit> units = new ArrayList<>();
-        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-            units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+        if (dBunit.equalsIgnoreCase("D(Budget)")) {
+            units = cgUnitRepository.findAllByOrderByDescrAsc();
         } else {
-            units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
+            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+            } else {
+                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
+            }
         }
-        if (units.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
-        }
-
+            if (units.size() <= 0) {
+                return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+                }, "UNIT NOT FOUND", HttpStatus.OK.value());
+            }
         String htmlContent = new String();
         try {
             //htmlContent = FileUtils.readFileToString(new File("src/main/resources/templates/re-allocation-report.html"), "UTF-8");
@@ -2251,11 +2266,16 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
         }
+        String dBunit = cgUnit.getDescr();
         List<CgUnit> units = new ArrayList<>();
-        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-            units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+        if (dBunit.equalsIgnoreCase("D(Budget)")) {
+            units = cgUnitRepository.findAllByOrderByDescrAsc();
         } else {
-            units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
+            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+            } else {
+                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
+            }
         }
         if (units.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -2702,11 +2722,16 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>> () {
             }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
         }
+        String dBunit = cgUnit.getDescr();
         List<CgUnit> units = new ArrayList<>();
-        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-            units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+        if (dBunit.equalsIgnoreCase("D(Budget)")) {
+            units = cgUnitRepository.findAllByOrderByDescrAsc();
         } else {
-            units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
+            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+            } else {
+                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
+            }
         }
         if (units.size() <=0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>> () {
