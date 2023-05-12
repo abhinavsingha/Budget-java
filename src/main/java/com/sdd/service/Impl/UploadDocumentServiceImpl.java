@@ -158,6 +158,7 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
                 FileUpload fileUp = fileUploadRepository.findByUploadID(fileId);
                 if(fileUp!=null) {
                     fileUpload.setPathURL(fileUp.getPathURL());
+                    fileUpload.setUploadID(fileUp.getUploadID());
                 }else
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FILE NOT FOUND");
             }else
