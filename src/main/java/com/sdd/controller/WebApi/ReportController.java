@@ -76,8 +76,6 @@ public class ReportController {
 
 
 
-
-
 	@PostMapping("/getUnitWiseAllocationReport")
 	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitWiseAllocationReport(@RequestBody UnitWiseAllocationReport reportRequest) {
 		return new ResponseEntity<>(mangeReportService.getUnitWiseAllocationReport(reportRequest), HttpStatus.OK);

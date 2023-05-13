@@ -900,7 +900,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
         BudgetAllocationResponse budgetAllocationResponse = new BudgetAllocationResponse();
-
         List<Authority> authoritiesList = authorityRepository.findByAuthGroupId(groupId);
 
         budgetAllocationResponse.setAuthList(authoritiesList);
@@ -1070,7 +1069,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 double totalBalanceAmount = Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()) + Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRevisedAmount());
 
                 budgetAllocationDetails.setAllocationId(HelperUtils.getAllocationId());
-                budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(totalBalanceAmount + ""));
+                budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()));
                 budgetAllocationDetails.setBalanceAmount(ConverterUtils.addDecimalPoint(totalBalanceAmount + ""));
                 budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
                 budgetAllocationDetails.setAllocTypeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId());
@@ -1628,14 +1627,10 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (Integer i = 0; i < allocationDetails.size(); i++) {
 
             BudgetAllocationDetails budgetAllocationDetails = allocationDetails.get(i);
-
-
             List<BudgetAllocation> data = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(budgetAllocationDetails.getToUnit(), budgetAllocationDetails.getFinYear(), budgetAllocationDetails.getSubHead(), budgetAllocationDetails.getAllocTypeId(), "Approved", "0");
             if (data.size() == 0) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID DATA.PLEASE CHECK YOUR ADMINISTRATOR.01");
             }
-
-
         }
 
 
@@ -1661,7 +1656,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     data.get(m).setIsBudgetRevision("1");
                     budgetAllocationRepository.save(data.get(m));
                 }
-
 
                 BudgetAllocation budgetAllocation = new BudgetAllocation();
                 budgetAllocation.setAllocationId(HelperUtils.getAllocationId());

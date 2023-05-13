@@ -16,5 +16,6 @@ public class CDAReportRequest {
     private String allocationTypeId;
     private String cdaType;
     private String amountType;
+    private String subHeadType;
 
 }

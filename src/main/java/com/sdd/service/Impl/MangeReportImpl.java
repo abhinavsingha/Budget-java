@@ -476,6 +476,9 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "MAJOR HEAD ID CAN NOT BE BLANK");
         }
 
+        if (cdaReportRequest.getSubHeadType() == null || cdaReportRequest.getSubHeadType().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "SUB HEAD TYPE ID CAN NOT BE BLANK");
+        }
 
         if (cdaReportRequest.getAllocationTypeId() == null || cdaReportRequest.getAllocationTypeId().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION TYPE ID CAN NOT BE BLANK");
@@ -509,7 +512,7 @@ public class MangeReportImpl implements MangeReportService {
             List<CDAReportResponse> cdaReportList = new ArrayList<>();
             CDAReportResponse cdaReportResponse = new CDAReportResponse();
 
-            List<BudgetHead> subHeadsData = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(cdaReportRequest.getMajorHead());
+            List<BudgetHead> subHeadsData = subHeadRepository.findByMajorHeadAndSubHeadTypeIdOrderBySerialNumberAsc(cdaReportRequest.getMajorHead(),cdaReportRequest.getSubHeadType());
             List<CdaParking> cdaParkingTotalList = cdaParkingRepository.findAllByOrderByCdaNameAsc();
             for (int i = 0; i < cdaParkingTotalList.size(); i++) {
                 cdaReportResponse = new CDAReportResponse();
@@ -583,7 +586,7 @@ public class MangeReportImpl implements MangeReportService {
             List<CDAReportResponse> cdaReportList = new ArrayList<>();
             CDAReportResponse cdaReportResponse = new CDAReportResponse();
 
-            List<BudgetHead> subHeadsData = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(cdaReportRequest.getMajorHead());
+            List<BudgetHead> subHeadsData = subHeadRepository.findByMajorHeadAndSubHeadTypeIdOrderBySerialNumberAsc(cdaReportRequest.getMajorHead(),cdaReportRequest.getSubHeadType());
             List<CdaParking> cdaParkingTotalList = cdaParkingRepository.findAllByOrderByCdaNameAsc();
             for (int i = 0; i < cdaParkingTotalList.size(); i++) {
                 cdaReportResponse = new CDAReportResponse();
@@ -659,7 +662,7 @@ public class MangeReportImpl implements MangeReportService {
             List<CDAReportResponse> cdaReportList = new ArrayList<>();
             CDAReportResponse cdaReportResponse = new CDAReportResponse();
 
-            List<BudgetHead> subHeadsData = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(cdaReportRequest.getMajorHead());
+            List<BudgetHead> subHeadsData = subHeadRepository.findByMajorHeadAndSubHeadTypeIdOrderBySerialNumberAsc(cdaReportRequest.getMajorHead(),cdaReportRequest.getSubHeadType());
             List<CdaParking> cdaParkingTotalList = cdaParkingRepository.findByCdaGroupCodeOrderByCdaNameAsc("200201");
             for (int i = 0; i < cdaParkingTotalList.size(); i++) {
                 cdaReportResponse = new CDAReportResponse();
