@@ -648,7 +648,7 @@ public class DashboardServiceImpl implements DashBoardService {
                 .findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(
                     unitId,
                     finYearId,
-                    budgetHead.getBudgetHeadId(),
+                    budgetHead.getBudgetCodeId(),
                     allocationTypeId,
                     "Approved",
                     "1");
