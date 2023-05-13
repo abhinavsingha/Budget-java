@@ -57,6 +57,8 @@ public class MangeInboxOutbox {
     @Column(name = "GROUP_ID")
     private String groupId;
 
+    @Column(name = "type")
+    private String type;
 
     @Column(name = "AMOUNT")
     private String amount;

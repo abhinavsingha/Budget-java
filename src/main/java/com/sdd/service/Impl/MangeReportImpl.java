@@ -55,8 +55,6 @@ public class MangeReportImpl implements MangeReportService {
     @Autowired
     SubHeadRepository subHeadRepository;
 
-    @Autowired
-    BudgetAllocationReportRepository budgetAllocationReportRepository;
 
     @Autowired
     CdaParkingRepository cdaParkingRepository;
@@ -105,7 +103,7 @@ public class MangeReportImpl implements MangeReportService {
         String fileName = "AllocationReport" + hrData.getUnitId();
 
         HashMap<String, List<ReportSubModel>> hashMap = new HashMap<>();
-        List<BudgetAllocationReport> budgetAllocationReport = budgetAllocationReportRepository.findByAuthGroupId(authGroupId);
+        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
 
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
@@ -113,27 +111,27 @@ public class MangeReportImpl implements MangeReportService {
 
         for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
 
-            if (hashMap.containsKey(budgetAllocationReport.get(j).getSubHeadDes())) {
-                List<ReportSubModel> reportMaindata = hashMap.get(budgetAllocationReport.get(j).getSubHeadDes());
+            if (hashMap.containsKey(budgetAllocationReport.get(j).getSubHead())) {
+                List<ReportSubModel> reportMaindata = hashMap.get(budgetAllocationReport.get(j).getSubHead());
                 ReportSubModel subModel = new ReportSubModel();
-                subModel.setType(budgetAllocationReport.get(j).getAllocationType());
-                subModel.setRemark(budgetAllocationReport.get(j).getRemark());
-                subModel.setUnit(budgetAllocationReport.get(j).getUnitName());
-                subModel.setAmount(budgetAllocationReport.get(j).getTotalAmount());
-                subModel.setFinYear(budgetAllocationReport.get(j).getFinYearDes());
+                subModel.setType(budgetAllocationReport.get(j).getAllocationTypeId());
+                subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
+                subModel.setUnit(budgetAllocationReport.get(j).getToUnit());
+                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
+                subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
                 reportMaindata.add(subModel);
-                hashMap.put(budgetAllocationReport.get(j).getSubHeadDes(), reportMaindata);
+                hashMap.put(budgetAllocationReport.get(j).getSubHead(), reportMaindata);
 
             } else {
                 List<ReportSubModel> reportMaindata = new ArrayList<ReportSubModel>();
                 ReportSubModel subModel = new ReportSubModel();
-                subModel.setType(budgetAllocationReport.get(j).getAllocationType());
-                subModel.setRemark(budgetAllocationReport.get(j).getRemark());
-                subModel.setUnit(budgetAllocationReport.get(j).getUnitName());
-                subModel.setAmount(budgetAllocationReport.get(j).getTotalAmount());
-                subModel.setFinYear(budgetAllocationReport.get(j).getFinYearDes());
+                subModel.setType(budgetAllocationReport.get(j).getAllocationTypeId());
+                subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
+                subModel.setUnit(budgetAllocationReport.get(j).getToUnit());
+                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
+                subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
                 reportMaindata.add(subModel);
-                hashMap.put(budgetAllocationReport.get(j).getSubHeadDes(), reportMaindata);
+                hashMap.put(budgetAllocationReport.get(j).getSubHead(), reportMaindata);
             }
         }
 
@@ -173,6 +171,9 @@ public class MangeReportImpl implements MangeReportService {
         });
     }
 
+
+
+
     @Override
     public ApiResponse<List<FilePathResponse>> getAllocationReportRevised(ReportRequest reportRequest) {
 
@@ -205,7 +206,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
         HashMap<String, List<ReportSubModel>> hashMap = new HashMap<>();
-        List<BudgetAllocationReport> budgetAllocationReport = budgetAllocationReportRepository.findByUnitIdAndFinYearIdAndAllocationTypeId(reportRequest.getUnitId(), reportRequest.getBudgetFinancialYearId(), "ALL_102");
+        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(reportRequest.getUnitId(), reportRequest.getBudgetFinancialYearId(), reportRequest.getBudgetFinancialYearId(), "Approved", "", "");
 
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
@@ -215,28 +216,28 @@ public class MangeReportImpl implements MangeReportService {
 
         for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
 
-            if (hashMap.containsKey(budgetAllocationReport.get(j).getSubHeadDes())) {
-                List<ReportSubModel> reportMaindata = hashMap.get(budgetAllocationReport.get(j).getSubHeadDes());
+            if (hashMap.containsKey(budgetAllocationReport.get(j).getSubHead())) {
+                List<ReportSubModel> reportMaindata = hashMap.get(budgetAllocationReport.get(j).getSubHead());
                 ReportSubModel subModel = new ReportSubModel();
-                subModel.setUnit(budgetAllocationReport.get(j).getUnitName());
-                subModel.setType(budgetAllocationReport.get(j).getAllocationType());
-                subModel.setRemark(budgetAllocationReport.get(j).getRemark());
-                subModel.setAmount(budgetAllocationReport.get(j).getTotalAmount());
+                subModel.setUnit(budgetAllocationReport.get(j).getToUnit());
+                subModel.setType(budgetAllocationReport.get(j).getAllocationTypeId());
+                subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
+                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setRevisedAmount(budgetAllocationReport.get(j).getRevisedAmount());
-                subModel.setFinYear(budgetAllocationReport.get(j).getFinYearDes());
+                subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
                 reportMaindata.add(subModel);
-                hashMap.put(budgetAllocationReport.get(j).getSubHeadDes(), reportMaindata);
+                hashMap.put(budgetAllocationReport.get(j).getSubHead(), reportMaindata);
             } else {
                 List<ReportSubModel> reportMaindata = new ArrayList<ReportSubModel>();
                 ReportSubModel subModel = new ReportSubModel();
-                subModel.setUnit(budgetAllocationReport.get(j).getUnitName());
-                subModel.setType(budgetAllocationReport.get(j).getAllocationType());
-                subModel.setRemark(budgetAllocationReport.get(j).getRemark());
-                subModel.setAmount(budgetAllocationReport.get(j).getTotalAmount());
+                subModel.setUnit(budgetAllocationReport.get(j).getToUnit());
+                subModel.setType(budgetAllocationReport.get(j).getAllocationTypeId());
+                subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
+                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setRevisedAmount(budgetAllocationReport.get(j).getRevisedAmount());
-                subModel.setFinYear(budgetAllocationReport.get(j).getFinYearDes());
+                subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
                 reportMaindata.add(subModel);
-                hashMap.put(budgetAllocationReport.get(j).getSubHeadDes(), reportMaindata);
+                hashMap.put(budgetAllocationReport.get(j).getSubHead(), reportMaindata);
             }
         }
 
