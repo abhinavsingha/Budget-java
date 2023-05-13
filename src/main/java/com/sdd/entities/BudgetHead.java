@@ -16,43 +16,44 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Table(name = "BudgetHead")
 public class BudgetHead {
-    @Id
-    @Column(name = "BUDGET_CODE_ID", nullable = false)
-    private String budgetCodeId;
 
-    @Column(name = "CODE_SUBHEAD_ID")
-    private String codeSubHeadId;
+  @Id
+  @Column(name = "BUDGET_CODE_ID", nullable = false)
+  private String budgetCodeId;
 
-    @Column(name = "MAJOR_HEAD")
-    private String majorHead;
+  @Column(name = "CODE_SUBHEAD_ID")
+  private String codeSubHeadId;
 
-    @Column(name = "MINOR_HEAD")
-    private String minorHead;
+  @Column(name = "MAJOR_HEAD")
+  private String majorHead;
 
-    @Column(name = "SUBHEAD_DESCR")
-    private String subHeadDescr;
+  @Column(name = "MINOR_HEAD")
+  private String minorHead;
 
-    @Column(name = "SUBHEAD_SHORT")
-    private String subheadShort;
+  @Column(name = "SUBHEAD_DESCR")
+  private String subHeadDescr;
 
-    @Column(name = "IS_ACTIVE")
-    private String isActive;
+  @Column(name = "SUBHEAD_SHORT")
+  private String subheadShort;
 
-    @Column(name = "REAMRKS")
-    private String remark;
+  @Column(name = "IS_ACTIVE")
+  private String isActive;
 
-    @Column(name = "CREATED_ON")
-    private Timestamp createdOn;
+  @Column(name = "REAMRKS")
+  private String remark;
 
-    @Column(name = "UPDATED_ON", nullable = false)
-    private Timestamp updatedOn;
+  @Column(name = "CREATED_ON")
+  private Timestamp createdOn;
 
-    @Column(name = "BUDGET_HEAD_CODE", nullable = false)
-    private String budgetHeadId;
+  @Column(name = "UPDATED_ON", nullable = false)
+  private Timestamp updatedOn;
 
-    @Column(name = "SUB_HEAD_TYPE_ID")
-    private String subHeadTypeId;
+  @Column(name = "BUDGET_HEAD_CODE", nullable = false)
+  private String budgetHeadId;
 
-    @Column(name = "SERIAL_NUMBER")
-    private String serialNumber;
+  @Column(name = "SUB_HEAD_TYPE_ID")
+  private String subHeadTypeId;
+
+  @Column(name = "SERIAL_NUMBER")
+  private String serialNumber;
 }
