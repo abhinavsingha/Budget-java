@@ -995,7 +995,8 @@ public class PdfGenaratorUtil {
         Assert.notNull(templateName, "The templateName can not be null");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = dateFormat.format(cbReportResponse.getCbData().getCbDate());
-
+        Double gst=(Double.parseDouble(cbReportResponse.getCurrentBillAmount())*(100/118));
+        Double bill=(Double.parseDouble(cbReportResponse.getCurrentBillAmount())*(100/118))-gst;
 
         String html = "<!DOCTYPE html>" +
                 "<html lang=en>" + "<head>" +
@@ -1061,15 +1062,15 @@ public class PdfGenaratorUtil {
                 "<table class=table1 style=width:100%>" +
                 "<tr>" +
                 "<td>Total Amount/ Budget alloted</td>" +
-                "<td> ₹ " + cbReportResponse.getAllocatedAmount() + "</td>" +
+                "<td> (INR) " + cbReportResponse.getAllocatedAmount() + "</td>" +
                 "  " +
                 "</tr>" +
                 "<tr>" +
                 "<td>Progressive expenditure including this bill</td>" +
-                "<td> ₹ " + cbReportResponse.getExpenditureAmount() + "</td>" + "</tr>" +
+                "<td> (INR) " + cbReportResponse.getExpenditureAmount() + "</td>" + "</tr>" +
                 "<tr>" +
                 "<td>Balance amount</td>" +
-                "<td> ₹ " + cbReportResponse.getRemeningAmount() + "</td>" +
+                "<td> (INR) " + cbReportResponse.getRemeningAmount() + "</td>" +
                 "</tr>" +
                 "</table>" + "<br>" + "<div class=authority>" +
                 "Authority: (a) " + cbReportResponse.getOnAurthyData() + "" +
@@ -1090,8 +1091,10 @@ public class PdfGenaratorUtil {
                 "<td class=themed the>Expenditure incurred towards quaterly payment for the 3rd otr from 01 Sep 22 to 30" +
                 "Nov 22 in respect" +
                 "of Hirring of Designer/Developer IT Manpower <span>(Project-SDOT)</span> through <span>" + cbReportResponse.getCbData().getVendorName() + " </span>vibe Invoiice/bill <span>" + cbReportResponse.getCbData().getInvoiceNO() + "</span>Dated <span>" + cbReportResponse.getCbData().getInvoiceDate() + "</span> </td>" +
-                "<td class=themed the> ₹ " + cbReportResponse.getCurrentBillAmount() + "</td>" +
+                "<td class=themed the> (INR) " + bill.toString() + "</td>" +
                 "</tr>" +
+                "<tr><td></td><td style=\"text-align: right\">GST 18%</td><td>"+gst.toString()+"</td></tr>"+
+                "<tr><td></td><td style=\"text-align: right\">TOTAL</td><td>"+cbReportResponse.getCurrentBillAmount()+"</td></tr>"+
                 "<tr>" +
                 "<td class=themed the colspan=3> Amount in words (Ruppess <span><b><u>" + convertDecimaltoString(cbReportResponse.getCurrentBillAmount()) + " only)</u></b></span> (Including GST)</td></tr>" + "</table>" +
                 "<br>" +
