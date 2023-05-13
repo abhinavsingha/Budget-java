@@ -613,22 +613,45 @@ public class DashboardServiceImpl implements DashBoardService {
 
     @Override
     public ApiResponse<List<DashBoardExprnditureResponse>> getSubHeadWiseExpenditureByUnitIdFinYearIdAllocationTypeIdSubHeadTypeId(String unitId, String finYearId, String subHeadTypeId, String allocationTypeId) {
-        List<DashBoardExprnditureResponse> asd = new ArrayList<>();
-        DashBoardExprnditureResponse response = new DashBoardExprnditureResponse();
+
+        try {
+            List<DashBoardExprnditureResponse> dashBoardExprnditureResponseList = new ArrayList<>();
 
 
-        List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(unitId);
-        if (unitList.size() > 0) {
-            for (CgUnit cgUnit : unitList) {
+            BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(finYearId);
+
+            CgUnit cgUnit = cgUnitRepository.findByUnit(unitId);
+
+            List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike(unitId);
+
+            List<BudgetHead> budgetHeadList = subHeadRepository.findBySubHeadTypeIdOrderBySerialNumberAsc(subHeadTypeId);
+
+            for (BudgetHead budgetHead : budgetHeadList) {
+                List<ContigentBill> contigentBillList = contigentBillRepository.findByCbUnitIdInAndFinYearAndBudgetHeadIDOrderByCbDate(unitList, finYearId, budgetHead.getBudgetCodeId());
+                if (contigentBillList.size() > 0) {
+                    Double amount = 0.0;
+                    for (ContigentBill contigentBill : contigentBillList) {
+                        amount = amount + Double.parseDouble(contigentBill.getCbAmount());
+                    }
+                    DashBoardExprnditureResponse dashBoardExprnditureResponse = new DashBoardExprnditureResponse();
+                    dashBoardExprnditureResponse.setBudgetHead(budgetHead);
+                    dashBoardExprnditureResponse.setExpenditureAmount(amount + "");
+                    dashBoardExprnditureResponse.setBudgetFinancialYear(budgetFinancialYear);
+                    dashBoardExprnditureResponse.setCgUnit(cgUnit);
+                    dashBoardExprnditureResponse.setLastCBDate(contigentBillList.get(0).getCbDate() + "");
+
+                    dashBoardExprnditureResponseList.add(dashBoardExprnditureResponse);
+                }
 
             }
+            return ResponseUtils.createSuccessResponse(dashBoardExprnditureResponseList, new TypeReference<List<DashBoardExprnditureResponse>>() {
+            });
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.");
         }
 
-
-        response.setAllocatedAmount(unitId);
-        asd.add(response);
-        return ResponseUtils.createSuccessResponse(asd, new TypeReference<List<DashBoardExprnditureResponse>>() {
-        });
 //        return null;
     }
 

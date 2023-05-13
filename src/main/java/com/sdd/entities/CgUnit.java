@@ -48,4 +48,7 @@ public class CgUnit {
 
     @Column(name = "STATION_ID", nullable = false)
     private String stationId;
+
+    @Column(name = "BUD_GROUP_UNIT")
+    private String budGroupUnit;
 }
