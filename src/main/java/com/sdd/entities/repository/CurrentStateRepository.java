@@ -1,6 +1,6 @@
 package com.sdd.entities.repository;
 
-import com.sdd.entities.AllocationType;
+
 import com.sdd.entities.CurrntStateType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,7 +10,7 @@ public interface CurrentStateRepository extends JpaRepository<CurrntStateType, S
 
   List<CurrntStateType> findByCurrentStateIdAndIsFlag(String stateId, String isFlag);
 
-  CurrntStateType findByIsFlag(String isFlag);
+  List<CurrntStateType> findByIsFlag(String isFlag);
 
   CurrntStateType findByTypeAndIsFlag(String type, String isFlag);
 }

@@ -260,7 +260,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
         }
 
-        List<CurrntStateType> stateList = currentStateRepository.findByTypeOrTypeAndIsFlag("FINYEAR","ALLOCATION","1");
+        List<CurrntStateType> stateList = currentStateRepository.findByIsFlag("1");
         for (Integer j = 0; j < stateList.size(); j++) {
             CurrntStateType currntStateType = stateList.get(j);
             currntStateType.setIsFlag("0");
