@@ -506,7 +506,7 @@ public class MangeReportImpl implements MangeReportService {
         cadSubReport.setAllocationType(allocationType.getAllocDesc());
         cadSubReport.setAmountType(amountUnit.getAmountType());
 
-
+        Float grandTotal = 0f;
         if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID) && cdaReportRequest.getCdaType().contains("All CDA")) {
 
             List<CDAReportResponse> cdaReportList = new ArrayList<>();
@@ -542,6 +542,7 @@ public class MangeReportImpl implements MangeReportService {
                                 amount = amount ;
                             }else{
                                 amount = amount + Float.parseFloat(cdaData.get(m).getTotalParkingAmount());
+                                grandTotal=grandTotal+amount;
                             }
 
                         }
@@ -571,7 +572,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                 File file = new File(filePath);
-                pdfGenaratorUtil.createCdaAllMainReport(templateName, allCdaData, cadSubReport, file);
+                pdfGenaratorUtil.createCdaAllMainReport(templateName, allCdaData, cadSubReport, file,grandTotal);
                 dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                 dtoList.setFileName(fileName);
 
@@ -617,6 +618,7 @@ public class MangeReportImpl implements MangeReportService {
                                     amount = amount ;
                                 }else{
                                     amount = amount + Float.parseFloat(cdaData.get(m).getTotalParkingAmount());
+                                    grandTotal=grandTotal+amount;
                                 }
                             }
 
@@ -647,7 +649,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                 File file = new File(filePath);
-                pdfGenaratorUtil.createCdaMainReport(templateName, allCdaData, cadSubReport, file);
+                pdfGenaratorUtil.createCdaMainReport(templateName, allCdaData, cadSubReport, file,grandTotal);
                 dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                 dtoList.setFileName(fileName);
 
@@ -692,6 +694,7 @@ public class MangeReportImpl implements MangeReportService {
                                 amount = amount ;
                             }else{
                                 amount = amount + Float.parseFloat(cdaData.get(m).getTotalParkingAmount());
+                                grandTotal=grandTotal+amount;
                             }
                         }
                         totalAmount = totalAmount + amount;
@@ -719,7 +722,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                 File file = new File(filePath);
-                pdfGenaratorUtil.createCdaMainReport(templateName, allCdaData, cadSubReport, file);
+                pdfGenaratorUtil.createCdaMainReport(templateName, allCdaData, cadSubReport, file,grandTotal);
                 dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                 dtoList.setFileName(fileName);
 

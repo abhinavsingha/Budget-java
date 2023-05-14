@@ -1059,6 +1059,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
         String authGrouPid = HelperUtils.getAuthorityGroupId();
+        String type = "";
         String refTransID = HelperUtils.getBudgetAlloctionRefrensId();
 
         for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
@@ -1089,7 +1090,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocationDetails.setUserId(hrData.getPid());
                 budgetAllocationDetails.setAmountType(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
                 budgetAllocationDetails.setTransactionId(HelperUtils.getTransId());
-
+                type = budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId();
                 budgetAllocationDetailsRepository.save(budgetAllocationDetails);
             } else {
                 List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "Approved", "0");
@@ -1110,6 +1111,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         }
 
+        BudgetHead budgetHeadId = subHeadRepository.findByBudgetCodeId(type);
 
         MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
 
@@ -1121,6 +1123,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         mangeInboxOutbox.setFromUnit(hrData.getUnitId());
         mangeInboxOutbox.setGroupId(authGrouPid);
         mangeInboxOutbox.setApproverpId("");
+        mangeInboxOutbox.setType(budgetHeadId.getSubHeadDescr());
         mangeInboxOutbox.setRoleId(hrData.getRoleId());
         mangeInboxOutbox.setCreaterpId(hrData.getPid());
         mangeInboxOutbox.setStatus("Pending");
@@ -1671,7 +1674,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocation.setUnallocatedAmount("0.0000");
 
                 double amount = Double.parseDouble(allocationDetails.get(i).getAllocationAmount()) + Double.parseDouble(allocationDetails.get(i).getRevisedAmount());
-                budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(amount+""));
+                budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(amount + ""));
                 budgetAllocation.setBalanceAmount(ConverterUtils.addDecimalPoint(amount + ""));
                 budgetAllocation.setUserId(allocationDetails.get(i).getUserId());
                 budgetAllocation.setStatus("Pending");
@@ -2091,7 +2094,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         mangeInboxOutbox.setStatus("Pending");
         mangeInboxOutbox.setIsBgcg("BG");
 
-        MangeInboxOutbox saveMangeApi = mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+        mangeInboxOutBoxRepository.save(mangeInboxOutbox);
 
 
         response.setMsg("Data save successfully");

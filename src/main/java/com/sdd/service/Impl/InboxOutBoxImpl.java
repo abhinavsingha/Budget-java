@@ -118,6 +118,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                     data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
                     data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
                     data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setType(mangeInboxOutbox.getType());
                     data.setStatus(mangeInboxOutbox.getStatus());
                     data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
@@ -134,6 +135,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                     data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
                     data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
                     data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setType(mangeInboxOutbox.getType());
                     data.setStatus(mangeInboxOutbox.getStatus());
                     data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
@@ -160,6 +162,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                         data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
                         data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
                         data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setType(mangeInboxOutbox.getType());
                         data.setStatus(mangeInboxOutbox.getStatus());
                         data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
@@ -176,6 +179,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                         data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
                         data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
                         data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setType(mangeInboxOutbox.getType());
                         data.setStatus(mangeInboxOutbox.getStatus());
                         data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
@@ -202,6 +206,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                     data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
                     data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
                     data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setType(mangeInboxOutbox.getType());
                     data.setStatus(mangeInboxOutbox.getStatus());
                     data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
@@ -218,6 +223,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                     data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
                     data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
                     data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setType(mangeInboxOutbox.getType());
                     data.setStatus(mangeInboxOutbox.getStatus());
                     data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
@@ -242,6 +248,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                     data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
                     data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
                     data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setType(mangeInboxOutbox.getType());
                     data.setStatus(mangeInboxOutbox.getStatus());
                     data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
@@ -258,6 +265,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                     data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
                     data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
                     data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setType(mangeInboxOutbox.getType());
                     data.setStatus(mangeInboxOutbox.getStatus());
                     data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
@@ -282,6 +290,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                     data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
                     data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
                     data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setType(mangeInboxOutbox.getType());
                     data.setStatus(mangeInboxOutbox.getStatus());
                     data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
@@ -298,6 +307,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                     data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
                     data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
                     data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setType(mangeInboxOutbox.getType());
                     data.setStatus(mangeInboxOutbox.getStatus());
                     data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
@@ -333,6 +343,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 //            data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
 //            data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
 //            data.setAmount(mangeInboxOutbox.getAmount());
+//                    data.setType(mangeInboxOutbox.getType());
 //            data.setStatus(mangeInboxOutbox.getStatus());
 //            data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 //
@@ -389,6 +400,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 //            data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
 //            data.setGroupId(mangeInboxOutbox.getGroupId());
 //            data.setAmount(mangeInboxOutbox.getAmount());
+//                    data.setType(mangeInboxOutbox.getType());
 //            data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 //            data.setRemarks(mangeInboxOutbox.getRemarks());
 //            data.setStatus(mangeInboxOutbox.getStatus());

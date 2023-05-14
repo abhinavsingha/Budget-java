@@ -27,6 +27,9 @@ public class CurrntStateType {
     private String StateName;
 
 
+    @Column(name = "TYPE")
+    private String type;
+
     @Column(name = "IS_FLAG")
     private String isFlag;
 

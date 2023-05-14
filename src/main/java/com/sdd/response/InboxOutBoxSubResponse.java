@@ -24,6 +24,7 @@ public class InboxOutBoxSubResponse {
    private String groupId;
    private String mangeInboxId;
    private String amount;
+   private String type;
    private String status;
    private AllocationType allocationType;
 

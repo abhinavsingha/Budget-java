@@ -260,22 +260,34 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
         }
 
-//        List<CurrntStateType> stateList = currentStateRepository.findAll();
-//        for (Integer j = 0; j < stateList.size(); j++) {
-//            CurrntStateType currntStateType = stateList.get(j);
-//            currntStateType.setIsFlag("0");
-//            currentStateRepository.save(currntStateType);
-//        }
-//
-//
-//        CurrntStateType currntStateType = new CurrntStateType();
-//        currntStateType.setCurrentStateId(HelperUtils.getStateId());
-//        currntStateType.setStateId(stateId);
-//        currntStateType.setStateName(stateName);
-//        currntStateType.setIsFlag("1");
-//        currntStateType.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-//        currntStateType.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-//        currentStateRepository.save(currntStateType);
+        List<CurrntStateType> stateList = currentStateRepository.findByTypeOrTypeAndIsFlag("FINYEAR","ALLOCATION","1");
+        for (Integer j = 0; j < stateList.size(); j++) {
+            CurrntStateType currntStateType = stateList.get(j);
+            currntStateType.setIsFlag("0");
+            currentStateRepository.save(currntStateType);
+        }
+
+
+        CurrntStateType currntStateType = new CurrntStateType();
+        currntStateType.setCurrentStateId(HelperUtils.getStateId());
+        currntStateType.setStateId(budgetFinancialYear.getSerialNo());
+        currntStateType.setStateName(budgetFinancialYear.getFinYear());
+        currntStateType.setIsFlag("1");
+        currntStateType.setType("FINYEAR");
+        currntStateType.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+        currntStateType.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+        currentStateRepository.save(currntStateType);
+
+
+        CurrntStateType currntStateType1 = new CurrntStateType();
+        currntStateType1.setCurrentStateId(HelperUtils.getStateId());
+        currntStateType1.setStateId(allocationType.getAllocTypeId());
+        currntStateType1.setStateName(allocationType.getAllocDesc());
+        currntStateType1.setIsFlag("1");
+        currntStateType1.setType("ALLOCATION");
+        currntStateType1.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+        currntStateType1.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+        currentStateRepository.save(currntStateType1);
 
 
         for (Integer j = 0; j < budgetReciptSaveRequest.getReceiptSubRequests().size(); j++) {

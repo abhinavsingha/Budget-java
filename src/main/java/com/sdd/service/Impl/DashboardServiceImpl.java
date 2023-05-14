@@ -33,6 +33,7 @@ import java.util.*;
 @Service
 public class DashboardServiceImpl implements DashBoardService {
 
+
     @Autowired
     CurrentStateRepository currentStateRepository;
     @Autowired
@@ -149,15 +150,25 @@ public class DashboardServiceImpl implements DashBoardService {
             hradataResponse.setRole(setAllRole);
         }
 
-        CurrntStateType stateList = currentStateRepository.findByIsFlag("1");
+        CurrntStateType stateList = currentStateRepository.findByTypeAndIsFlag("ALLOCATION", "1");
         if (stateList == null) {
             AllocationType allocationType = allocationRepository.findByAllocTypeId("ALL_101");
             dashBoardResponse.setAllocationType(allocationType);
         } else {
-            AllocationType allocationType =
-                    allocationRepository.findByAllocTypeId(stateList.getStateId());
+            AllocationType allocationType = allocationRepository.findByAllocTypeId(stateList.getStateId());
             dashBoardResponse.setAllocationType(allocationType);
         }
+
+
+        CurrntStateType stateList1 = currentStateRepository.findByTypeAndIsFlag("FINYEAR", "1");
+        if (stateList1 == null) {
+            BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo("01");
+            dashBoardResponse.setBudgetFinancialYear(budgetFinancialYear);
+        } else {
+            BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(stateList1.getStateId());
+            dashBoardResponse.setBudgetFinancialYear(budgetFinancialYear);
+        }
+
 
         dashBoardResponse.setUserDetails(hradataResponse);
 
@@ -388,6 +399,7 @@ public class DashboardServiceImpl implements DashBoardService {
             dashBoardList.add(dashBoardData);
         }
 
+
         dashBoardResponse.setInbox(inboxList.size() + "");
         dashBoardResponse.setOutBox(outBoxList.size() + "");
         return ResponseUtils.createSuccessResponse(
@@ -524,15 +536,28 @@ public class DashboardServiceImpl implements DashBoardService {
             hradataResponse.setRole(setAllRole);
         }
 
-        CurrntStateType stateList = currentStateRepository.findByIsFlag("1");
+        CurrntStateType stateList = currentStateRepository.findByTypeAndIsFlag("ALLOCATION", "1");
         if (stateList == null) {
             AllocationType allocationType = allocationRepository.findByAllocTypeId("ALL_101");
             dashBoardResponse.setAllocationType(allocationType);
         } else {
-            AllocationType allocationType =
-                    allocationRepository.findByAllocTypeId(stateList.getStateId());
+            AllocationType allocationType = allocationRepository.findByAllocTypeId(stateList.getStateId());
             dashBoardResponse.setAllocationType(allocationType);
         }
+
+
+        CurrntStateType stateList1 = currentStateRepository.findByTypeAndIsFlag("FINYEAR", "1");
+        if (stateList1 == null) {
+            BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo("01");
+            dashBoardResponse.setBudgetFinancialYear(budgetFinancialYear);
+        } else {
+            BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(stateList1.getStateId());
+            dashBoardResponse.setBudgetFinancialYear(budgetFinancialYear);
+        }
+
+
+
+
         dashBoardResponse.setUserDetails(hradataResponse);
         List<MangeInboxOutbox> inboxOutboxesList = new ArrayList<MangeInboxOutbox>();
         String getCurrentRole = "";

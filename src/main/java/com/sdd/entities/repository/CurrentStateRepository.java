@@ -10,7 +10,7 @@ import java.util.List;
 public interface CurrentStateRepository extends JpaRepository<CurrntStateType, String> {
 
 
-    List<CurrntStateType> findByCurrentStateIdAndIsFlag(String stateId, String isFlag);
+    List<CurrntStateType> findByTypeOrTypeAndIsFlag(String type1, String type2, String isFlag);
 
-    CurrntStateType findByIsFlag(String isFlag);
+    CurrntStateType findByTypeAndIsFlag(String type,String isFlag);
 }

@@ -259,7 +259,7 @@ public class PdfGenaratorUtil {
     }
 
 
-    public void createCdaAllMainReport(String templateName, HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, File outputFile) throws Exception {
+    public void createCdaAllMainReport(String templateName, HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, File outputFile, Float grandTotal) throws Exception {
         Assert.notNull(templateName, "The templateName can not be null");
 
 
@@ -512,7 +512,7 @@ public class PdfGenaratorUtil {
 
     }
 
-    public void createCdaMainReport(String templateName, HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, File outputFile) throws Exception {
+    public void createCdaMainReport(String templateName, HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, File outputFile, Float grandTotal) throws Exception {
         Assert.notNull(templateName, "The templateName can not be null");
 
 
@@ -714,6 +714,7 @@ public class PdfGenaratorUtil {
 
         StringBuilder middle = new StringBuilder();
         int m = 0;
+        int size = 0;
         for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
             String key = entry.getKey();
             List<CDAReportResponse> tabData = entry.getValue();
@@ -722,6 +723,8 @@ public class PdfGenaratorUtil {
             String keyValue = "<tr>" +
                     "<th >" + key + " </th>";
             middle = middle.append(keyValue);
+
+            size = tabData.size();
 
             StringBuilder amountAppend = new StringBuilder();
             for (Integer i = 0; i < tabData.size(); i++) {
@@ -744,6 +747,18 @@ public class PdfGenaratorUtil {
 
             }
         }
+
+        middle = middle.append("</thead></table><br><br><br><br><table  class=dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%  border=\"1\"><thead>");
+        middle = middle.append("<tr>" +
+                "<th > Grand Total </th>");
+        for (Integer i = 0; i < size; i++) {
+            List<CDAReportResponse> tabData1 = map.get("object");
+            String data = "<th >" + " " + "</td>";
+            middle = middle.append(data);
+        }
+        middle = middle.append(grandTotal).append("</tr>");
+
+
 
         String footer = "</thead></table></body>" + "</html>";
 
