@@ -1122,7 +1122,7 @@ public class PdfGenaratorUtil {
                 "<tr><td class=td></td><td class = td style=\"text-align: right\">GST 18%</td><td class=td> (INR)" + String.format("%.2f", gst) + "</td></tr>" +
                 "<tr><td class=td></td><td class = td style=\"text-align: right\">TOTAL</td><td class=td>  (INR)" + cbReportResponse.getCurrentBillAmount() + "</td></tr>" +
                 "<tr>" +
-                "<td class=td colspan=3> Amount in words (Ruppess <span><b><u>" + convertDecimaltoString(cbReportResponse.getCurrentBillAmount()) + " only)</u></b></span> (Including GST)</td></tr>" + "</table>" +
+                "<td class=td colspan=3> Amount in words (Rupees  <span><b><u>" + convertDecimaltoString(cbReportResponse.getCurrentBillAmount()) + " only)</u></b></span> (Including GST)</td></tr>" + "</table>" +
                 "<br>" +
                 "<div class=certify>" +
                 "<u>Certify that:-</u>" +
@@ -1240,7 +1240,7 @@ public class PdfGenaratorUtil {
 
     private static String convertDecimalToWords(long y, int length) {
         String words = "";
-        String[] units = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
+        String[] units = {"Zero","One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
         while (y != 0) {
             words = words + " " + units[(int) (y / Math.pow(10, length - 1))];
             y = (long) (y % Math.pow(10, length - 1));
@@ -1251,11 +1251,11 @@ public class PdfGenaratorUtil {
 
     public static String convertNumberToWords(long number) {
         if (number == 0) {
-            return "zero";
+            return "Zero";
         }
-        String[] units = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
-        String[] tens = {"", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
-        String[] thousands = {"", "hundred", "thousand", "lakh", "crore"};
+        String[] units = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+        String[] tens = {"", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+        String[] thousands = {"", "Hundred", "Thousand", "Lakh", "Crore"};
         int i = 0;
         String words = "";
         while (number > 0) {
