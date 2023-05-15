@@ -11,51 +11,44 @@ import java.util.List;
 
 public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocation, Long> {
 
-  List<BudgetAllocation> findByToUnitAndIsFlag(String toUnit, String isFlag);
+    List<BudgetAllocation> findByToUnitAndIsFlagAndIsBudgetRevision(String toUnit, String isFlag, String isRebison);
 
-  List<BudgetAllocation> findByToUnitAndSubHeadAndIsFlag(
-      String toUnit, String budgetHeadId, String isFlag);
+    List<BudgetAllocation> findByToUnitAndSubHeadAndIsFlagAndIsBudgetRevision(
+            String toUnit, String budgetHeadId, String isFlag, String isRevison);
 
-  List<BudgetAllocation> findByAuthGroupIdAndIsFlag(String toUnit, String isFlag);
+    List<BudgetAllocation> findByAuthGroupIdAndIsFlagAndIsBudgetRevision(String toUnit, String isFlag ,String isRevison);
 
-  List<BudgetAllocation> findByToUnitAndFinYearAndIsFlag(
-      String toUnit, String finYear, String isFalg);
+    List<BudgetAllocation> findByToUnitAndFinYearAndIsFlagAndIsBudgetRevision(
+            String toUnit, String finYear, String isFalg, String isRevision);
 
-  List<BudgetAllocation> findByAuthGroupIdAndIsFlagAndToUnit(
-      String unitId, String isDelete, String toUnit);
+    List<BudgetAllocation> findByAuthGroupIdAndIsFlagAndToUnitAndIsBudgetRevision(
+            String unitId, String isDelete, String toUnit, String isRevison);
 
-  List<BudgetAllocation> findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(
-      String unitId,
-      String finYearId,
-      String budgetCodeId,
-      String allocationType,
-      String approved,
-      String IsFlag);
+    List<BudgetAllocation> findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(
+            String unitId,
+            String finYearId,
+            String budgetCodeId,
+            String allocationType,
+            String approved,
+            String isFlag,
+            String isRevision);
 
-  List<BudgetAllocation>
-      findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(
-          String unitId,
-          String finYearId,
-          String budgetCodeId,
-          String allocationType,
-          String approved,
-          String IsFlag,
-          String isBudgetRevision);
 
-  List<BudgetAllocation> findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsFlag(
-      String unitId, String finYearId, String budgetCodeId, String allocationType, String IsFlag);
 
-  BudgetAllocation findByAllocationIdAndIsFlag(String transactionId, String s);
+    List<BudgetAllocation> findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(
+            String unitId, String finYearId, String budgetCodeId, String allocationType, String IsFlag, String isRevison);
 
-  List<BudgetAllocation> findBySubHeadAndFinYearAndIsFlag(
-      String subHeadId, String finYear, String isFalg);
+    BudgetAllocation findByAllocationIdAndIsFlagAndIsBudgetRevision(String transactionId, String s, String d);
 
-  List<BudgetAllocation> findBySubHeadAndAllocationTypeIdAndIsFlag(
-      String subHeadId, String allocationType, String isFalg);
+    List<BudgetAllocation> findBySubHeadAndFinYearAndIsFlagAndIsBudgetRevision(
+            String subHeadId, String finYear, String isFalg, String isREbision);
 
-  @Query(
-      value =
-          "select SUB_HEAD from budgetallocation where FIN_YEAR=:finYearId and ALLOCATION_TYPE_ID=:allocationTypeId  group by SUB_HEAD",
-      nativeQuery = true)
-  List<String> findSubHead(String finYearId, String allocationTypeId);
+    List<BudgetAllocation> findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(
+            String subHeadId, String allocationType, String isFalg, String isRevison);
+
+    @Query(
+            value =
+                    "select SUB_HEAD from budgetallocation where FIN_YEAR=:finYearId and ALLOCATION_TYPE_ID=:allocationTypeId  group by SUB_HEAD",
+            nativeQuery = true)
+    List<String> findSubHead(String finYearId, String allocationTypeId);
 }

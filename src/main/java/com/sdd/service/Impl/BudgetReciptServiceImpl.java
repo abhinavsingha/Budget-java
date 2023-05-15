@@ -189,7 +189,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
         for (Integer i = 0; i < budgetReciptSaveRequest.getReceiptSubRequests().size(); i++) {
 
-            List<BudgetAllocation> budgetAloocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(hrData.getUnitId(), budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getReceiptSubRequests().get(i).getBudgetHeadId(), budgetReciptSaveRequest.getAllocationTypeId(), "Approved", "0");
+            List<BudgetAllocation> budgetAloocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getReceiptSubRequests().get(i).getBudgetHeadId(), budgetReciptSaveRequest.getAllocationTypeId(), "Approved", "0", "0");
 
             if (budgetAloocation.size() > 0) {
                 BudgetHead budgetHeadId = subHeadRepository.findByBudgetCodeId(budgetReciptSaveRequest.getReceiptSubRequests().get(i).getBudgetHeadId());
@@ -343,7 +343,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         List<AuthorityTableResponse> authorityTableList = new ArrayList<AuthorityTableResponse>();
         BudgetReciptListResponse budgetAllocationResponse = new BudgetReciptListResponse();
         List<BudgetReciptListSubResponse> budgetAllocationList = new ArrayList<BudgetReciptListSubResponse>();
-        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDelete("000000", "0");
+        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDeleteAndIsBudgetRevision("000000", "0","0");
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
             BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
@@ -460,7 +460,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         }
 
 
-        List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDelete(HelperUtils.HEADUNITID, budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getBudgetHeadId(), budgetReciptSaveRequest.getAllocationTypeId(), "Approved", "0");
+        List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(HelperUtils.HEADUNITID, budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getBudgetHeadId(), budgetReciptSaveRequest.getAllocationTypeId(), "Approved", "0","0");
         for (Integer m = 0; m < budgetAllocationDetailsList.size(); m++) {
             BudgetAllocationDetails budgetAllocationDetails = budgetAllocationDetailsList.get(m);
             budgetAllocationDetails.setIsDelete("1");
@@ -468,7 +468,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         }
 
 
-        List<BudgetAllocation> budgetAllocationData = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(HelperUtils.HEADUNITID, budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getBudgetHeadId(), budgetReciptSaveRequest.getAllocationTypeId(), "Approved", "0");
+        List<BudgetAllocation> budgetAllocationData = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(HelperUtils.HEADUNITID, budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getBudgetHeadId(), budgetReciptSaveRequest.getAllocationTypeId(), "Approved", "0", "0");
         if (budgetAllocationData.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
         }
@@ -542,7 +542,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         List<BudgetReciptListSubResponse> budgetAllocationList = new ArrayList<BudgetReciptListSubResponse>();
 
 
-        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDelete("000000", "0");
+        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDeleteAndIsBudgetRevision("000000", "0","0");
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
             BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
@@ -622,7 +622,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         List<AuthorityTableResponse> authorityTableList = new ArrayList<AuthorityTableResponse>();
         BudgetReciptListResponse budgetAllocationResponse = new BudgetReciptListResponse();
         List<BudgetReciptListSubResponse> budgetAllocationList = new ArrayList<BudgetReciptListSubResponse>();
-        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDelete("000000", "0");
+        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDeleteAndIsBudgetRevision("000000", "0","0");
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
             BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
@@ -736,7 +736,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         });
 
         for (Integer l = 0; l < majorData.size(); l++) {
-            List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndFinYearAndSubHeadAndIsDelete("000000", budgetReciptSaveRequest.getBudgetFinancialYearId(), majorData.get(l).getBudgetCodeId(), "0");
+            List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndFinYearAndSubHeadAndIsDeleteAndIsBudgetRevision("000000", budgetReciptSaveRequest.getBudgetFinancialYearId(), majorData.get(l).getBudgetCodeId(), "0","0");
 
             if (budgetAllocations.size() <= 0) {
                 BudgetRecioptDemoResponse budgetRecioptDemoResponse = new BudgetRecioptDemoResponse();

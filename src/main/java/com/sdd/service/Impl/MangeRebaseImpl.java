@@ -319,7 +319,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
             },"INVALID UNIT ID PLEASE CHECK",HttpStatus.OK.value());
         }
-        List<BudgetAllocation> allocationData = budgetAllocationRepository.findByToUnitAndFinYearAndIsFlag(unit, finYear,"0");
+        List<BudgetAllocation> allocationData = budgetAllocationRepository.findByToUnitAndFinYearAndIsFlagAndIsBudgetRevision(unit, finYear,"0","0");
         if (allocationData.size()<=0) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
             },"Record Not Found",HttpStatus.OK.value());

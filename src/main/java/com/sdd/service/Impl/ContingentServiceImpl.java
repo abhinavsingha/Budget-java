@@ -191,7 +191,7 @@ public class ContingentServiceImpl implements ContingentService {
         for (Integer i = 0; i < contingentBillSaveRequestList.size(); i++) {
 
             double amount = 0;
-            List<BudgetAllocation> budgetAloocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(hrData.getUnitId(), contingentBillSaveRequestList.get(i).getBudgetFinancialYearId(), contingentBillSaveRequestList.get(i).getBudgetHeadId(), contingentBillSaveRequestList.get(i).getAllocationTypeId(), "Approved", "0");
+            List<BudgetAllocation> budgetAloocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), contingentBillSaveRequestList.get(i).getBudgetFinancialYearId(), contingentBillSaveRequestList.get(i).getBudgetHeadId(), contingentBillSaveRequestList.get(i).getAllocationTypeId(), "Approved", "0", "0");
 
             for (Integer m = 0; m < budgetAloocation.size(); m++) {
 
@@ -297,7 +297,7 @@ public class ContingentServiceImpl implements ContingentService {
         for (Integer i = 0; i < contingentBillSaveRequestList.size(); i++) {
 
             double amount = 0;
-            List<BudgetAllocation> budgetAllocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(hrData.getUnitId(), contingentBillSaveRequestList.get(i).getBudgetFinancialYearId(), contingentBillSaveRequestList.get(i).getBudgetHeadId(), contingentBillSaveRequestList.get(i).getAllocationTypeId(), "Approved", "0");
+            List<BudgetAllocation> budgetAllocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), contingentBillSaveRequestList.get(i).getBudgetFinancialYearId(), contingentBillSaveRequestList.get(i).getBudgetHeadId(), contingentBillSaveRequestList.get(i).getAllocationTypeId(), "Approved", "0", "0");
 
             for (Integer m = 0; m < budgetAllocation.size(); m++) {
 
@@ -337,7 +337,7 @@ public class ContingentServiceImpl implements ContingentService {
         mangeInboxOutbox.setState("VE");
         mangeInboxOutbox.setIsBgcg("CB");
 
-        MangeInboxOutbox saveMangeApi = mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+        mangeInboxOutBoxRepository.save(mangeInboxOutbox);
 
 
 //        MessageTran messageTran = new MessageTran();
@@ -455,6 +455,7 @@ public class ContingentServiceImpl implements ContingentService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AUTHORITY DETAILS CAN NOT BE BLANK");
             }
 
+
             if (contingentBillSaveRequest.getVendorName() == null || contingentBillSaveRequest.getVendorName().isEmpty()) {
                 contingentBillSaveRequest.setVendorName("");
             } else {
@@ -546,7 +547,7 @@ public class ContingentServiceImpl implements ContingentService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO CB VERIFIER ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
         }
 
-
+        String authGroupId = "";
         for (Integer i = 0; i < contingentBillSaveRequestList.size(); i++) {
 
 
@@ -590,7 +591,7 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBill.setFileDate(contingentBillSaveRequest.getFileDate());
             contigentBill.setFileID(contingentBillSaveRequest.getFileNumber());
             contigentBill.setProgressiveAmount(contingentBillSaveRequest.getProgressiveAmount());
-
+            authGroupId = contigentBill.getAuthGroupId();
             contigentBillRepository.save(contigentBill);
         }
 
@@ -598,7 +599,7 @@ public class ContingentServiceImpl implements ContingentService {
         for (Integer i = 0; i < contingentBillSaveRequestList.size(); i++) {
 
             double amount = 0;
-            List<BudgetAllocation> budgetAloocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(hrData.getUnitId(), contingentBillSaveRequestList.get(i).getBudgetFinancialYearId(), contingentBillSaveRequestList.get(i).getBudgetHeadId(), contingentBillSaveRequestList.get(i).getAllocationTypeId(), "Approved", "0");
+            List<BudgetAllocation> budgetAloocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), contingentBillSaveRequestList.get(i).getBudgetFinancialYearId(), contingentBillSaveRequestList.get(i).getBudgetHeadId(), contingentBillSaveRequestList.get(i).getAllocationTypeId(), "Approved", "0", "0");
 
 
             for (Integer m = 0; m < budgetAloocation.size(); m++) {
@@ -617,6 +618,26 @@ public class ContingentServiceImpl implements ContingentService {
 
             }
         }
+
+        MangeInboxOutbox mangeInboxOutbox =  mangeInboxOutBoxRepository.findByGroupIdAndToUnit(authGroupId, hrData.getUnitId());
+
+        mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
+        mangeInboxOutbox.setRemarks("Contingent Bill");
+        mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+        mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+        mangeInboxOutbox.setToUnit(hrData.getUnitId());
+        mangeInboxOutbox.setStatus("Pending");
+        mangeInboxOutbox.setGroupId(authGroupId);
+        mangeInboxOutbox.setFromUnit(hrData.getUnitId());
+        mangeInboxOutbox.setRoleId(hrData.getRoleId());
+        mangeInboxOutbox.setCreaterpId(hrData.getPid());
+        mangeInboxOutbox.setIsFlag("1");
+        mangeInboxOutbox.setState("VE");
+        mangeInboxOutbox.setIsBgcg("CB");
+
+        mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+
+
 
 
         contingentSaveResponse.setMsg("Data Update Successfully");

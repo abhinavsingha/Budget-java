@@ -188,7 +188,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             BeanUtils.copyProperties(subHeadsData.get(i), budgetHeadResponse);
             String amountType = "0";
             double amount = 0;
-            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDelete(hrDataCheck.getUnitId(), budgetHeadRequest.getFinYearId(), subHeadsData.get(i).getBudgetCodeId(), budgetHeadRequest.getAllocationType(), "Approved", "0");
+            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(hrDataCheck.getUnitId(), budgetHeadRequest.getFinYearId(), subHeadsData.get(i).getBudgetCodeId(), budgetHeadRequest.getAllocationType(), "Approved", "0", "0");
             for (Integer b = 0; b < budgetAllocationDetailsList.size(); b++) {
                 amountType = budgetAllocationDetailsList.get(b).getAmountType();
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(amountType);
@@ -386,7 +386,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         List<BudgetAllocationSubResponse> budgetAllocationList = new ArrayList<BudgetAllocationSubResponse>();
 
 
-        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndIsDeleteAndStatusOrStatus(budgetAllocationReportRequest.getToUnitId(), budgetAllocationReportRequest.getBudgetFinancialYearId(), "0", "Pending", "Rejected");
+        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndIsDeleteAndStatusOrStatusAndIsBudgetRevision(budgetAllocationReportRequest.getToUnitId(), budgetAllocationReportRequest.getBudgetFinancialYearId(), "0", "Pending", "Rejected","0");
         String authgroupId = "";
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
@@ -499,7 +499,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
-        BudgetAllocationDetails budgetAllocationDetails = budgetAllocationDetailsRepository.findByTransactionIdAndIsDelete(budgetAllocationSaveRequestList.getTransactionId(), "0");
+        BudgetAllocationDetails budgetAllocationDetails = budgetAllocationDetailsRepository.findByTransactionIdAndIsDeleteAndIsBudgetRevision(budgetAllocationSaveRequestList.getTransactionId(), "0","0");
 
         if (budgetAllocationDetails == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TRANSACTION ID");
@@ -649,7 +649,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AMOUNT CAN NOT BE BLANK");
         }
 
-        BudgetAllocationDetails budgetAllocationDetails = budgetAllocationDetailsRepository.findByTransactionIdAndIsDelete(budgetAllocationSaveRequestList.getTransactionId(), "0");
+        BudgetAllocationDetails budgetAllocationDetails = budgetAllocationDetailsRepository.findByTransactionIdAndIsDeleteAndIsBudgetRevision(budgetAllocationSaveRequestList.getTransactionId(), "0","0");
 
         if (budgetAllocationDetails == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TRANSACTION ID");
@@ -680,7 +680,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE BUDGET ALLOCATION");
         }
 
-        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByToUnitAndIsDelete(hrData.getToDate(), "0");
+        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByToUnitAndIsDeleteAndIsBudgetRevision(hrData.getToDate(),  "0","0");
 //        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByToUnitAndFinYear(budgetAllocationReportRequest.getToUnitId(), budgetAllocationReportRequest.getBudgetFinancialYearId());
         String authgroupId = "";
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
@@ -747,7 +747,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "GROUP ID CAN NOT BE BLANK");
         }
 
-        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "0");
+        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(groupId, "0","0");
 
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
@@ -777,7 +777,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             double allocationAmount = 0;
             AmountUnit remeningBalanceUnit = null;
-            List<BudgetAllocation> modBudgetAllocations = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(hrData.getUnitId(), budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(), budgetAllocationSubReport.getAllocTypeId(), "Approved", "0");
+            List<BudgetAllocation> modBudgetAllocations = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(), budgetAllocationSubReport.getAllocTypeId(), "Approved", "0", "0");
             for (Integer m = 0; m < modBudgetAllocations.size(); m++) {
                 remeningBalanceUnit = amountUnitRepository.findByAmountTypeId(modBudgetAllocations.get(m).getAmountType());
                 allocationAmount = allocationAmount + (Double.parseDouble(modBudgetAllocations.get(m).getBalanceAmount()));
@@ -837,7 +837,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "GROUP ID CAN NOT BE BLANK");
         }
 
-        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "0");
+        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(groupId, "0","0");
 
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
@@ -923,7 +923,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
-        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDeleteAndStatus(hrData.getUnitId(), "0", "Approved");
+        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDeleteAndStatusAndIsBudgetRevision(hrData.getUnitId(), "0", "Approved","0");
 
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
@@ -1045,7 +1045,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
             if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getIsAllocated().equalsIgnoreCase("1")) {
-                List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDelete(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "Approved", "0");
+                List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "Approved", "0","0");
 
                 for (Integer m = 0; m < budgetAllocationDetailsList.size(); m++) {
 
@@ -1093,7 +1093,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 type = budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId();
                 budgetAllocationDetailsRepository.save(budgetAllocationDetails);
             } else {
-                List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "Approved", "0");
+                List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "Approved", "0", "0");
                 AmountUnit allocationAmountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
                 for (Integer m = 0; m < budgetAllocationDetailsList.size(); m++) {
                     BudgetAllocation budgetAllocationDetails = budgetAllocationDetailsList.get(m);
@@ -1171,7 +1171,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "GROUP ID CAN NOT BE BLANK");
         }
 
-        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlagAndToUnit(groupId, "0", hrData.getUnitId());
+        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlagAndToUnitAndIsBudgetRevision(groupId, "0", hrData.getUnitId(),"0");
 
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
@@ -1200,7 +1200,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             double allocationAmount = 0;
             AmountUnit remeningBalanceUnit = null;
-            List<BudgetAllocation> modBudgetAllocations = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(hrData.getUnitId(), budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(), budgetAllocationSubReport.getAllocationTypeId(), "Approved", "0");
+            List<BudgetAllocation> modBudgetAllocations = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(), budgetAllocationSubReport.getAllocationTypeId(), "Approved", "0", "0");
             for (Integer m = 0; m < modBudgetAllocations.size(); m++) {
 
                 remeningBalanceUnit = amountUnitRepository.findByAmountTypeId(modBudgetAllocations.get(m).getAmountType());
@@ -1285,7 +1285,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         for (Integer i = 0; i < unit.size(); i++) {
 
-            List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(unit.get(i).getUnit(), budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), budgetRivRequest.getAllocTypeId(), "Approved", "0");
+            List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(unit.get(i).getUnit(), budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), budgetRivRequest.getAllocTypeId(), "Approved", "0", "0");
             for (Integer m = 0; m < budgetAllocationsDetalis.size(); m++) {
                 BudgetReviResp res = new BudgetReviResp();
                 res.setUnit(cgUnitRepository.findByUnit(budgetAllocationsDetalis.get(m).getToUnit()));
@@ -1342,7 +1342,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
-        BudgetAllocationDetails allocationDetails = budgetAllocationDetailsRepository.findByTransactionIdAndIsDelete(budgetDeleteRequest.getTransactionId(), "0");
+        BudgetAllocationDetails allocationDetails = budgetAllocationDetailsRepository.findByTransactionIdAndIsDeleteAndIsBudgetRevision(budgetDeleteRequest.getTransactionId(), "0","0");
         if (allocationDetails == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TRANSACTION ID");
         }
@@ -1388,7 +1388,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
         if (budgetApproveRequest.getAuthGroupId() == null || budgetApproveRequest.getAuthGroupId().isEmpty()) {
-            BudgetAllocationDetails allocationDetails = budgetAllocationDetailsRepository.findByTransactionIdAndIsDelete(budgetApproveRequest.getAuthGroupId(), "0");
+            BudgetAllocationDetails allocationDetails = budgetAllocationDetailsRepository.findByTransactionIdAndIsDeleteAndIsBudgetRevision(budgetApproveRequest.getAuthGroupId(), "0","0");
             if (allocationDetails == null) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO AUTH GROUP ID");
             }
@@ -1472,7 +1472,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             }
 
         } else {
-            List<BudgetAllocationDetails> allocationDetails = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(budgetApproveRequest.getAuthGroupId(), "0");
+            List<BudgetAllocationDetails> allocationDetails = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(budgetApproveRequest.getAuthGroupId(), "0","0");
             if (allocationDetails.size() == 0) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO AUTH GROUP ID");
             }
@@ -1593,7 +1593,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
-        List<BudgetAllocationDetails> allocationDetails = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(budgetApproveRequest.getAuthGroupId(), "0");
+        List<BudgetAllocationDetails> allocationDetails = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(budgetApproveRequest.getAuthGroupId(), "0","0");
 
 
         if (allocationDetails.size() == 0) {
@@ -1630,7 +1630,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (Integer i = 0; i < allocationDetails.size(); i++) {
 
             BudgetAllocationDetails budgetAllocationDetails = allocationDetails.get(i);
-            List<BudgetAllocation> data = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(budgetAllocationDetails.getToUnit(), budgetAllocationDetails.getFinYear(), budgetAllocationDetails.getSubHead(), budgetAllocationDetails.getAllocTypeId(), "Approved", "0");
+            List<BudgetAllocation> data = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(budgetAllocationDetails.getToUnit(), budgetAllocationDetails.getFinYear(), budgetAllocationDetails.getSubHead(), budgetAllocationDetails.getAllocTypeId(), "Approved", "0", "0");
             if (data.size() == 0) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID DATA.PLEASE CHECK YOUR ADMINISTRATOR.01");
             }
@@ -1653,7 +1653,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             if (budgetApproveRequest.getStatus().equalsIgnoreCase("Approved")) {
 
 
-                List<BudgetAllocation> data = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(allocationDetails.get(i).getToUnit(), allocationDetails.get(i).getFinYear(), allocationDetails.get(i).getSubHead(), allocationDetails.get(i).getAllocTypeId(), "Approved", "0");
+                List<BudgetAllocation> data = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(allocationDetails.get(i).getToUnit(), allocationDetails.get(i).getFinYear(), allocationDetails.get(i).getSubHead(), allocationDetails.get(i).getAllocTypeId(), "Approved", "0", "0");
                 for (Integer m = 0; m < data.size(); m++) {
                     data.get(m).setIsFlag("1");
                     data.get(m).setIsBudgetRevision("1");
@@ -1741,7 +1741,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), " INVALID SUB HEAD ID .");
         }
 
-        List<BudgetAllocation> modBudgetAllocations = budgetAllocationRepository.findByToUnitAndSubHeadAndIsFlag(hrData.getUnitId(), budgetHeadId.getBudgetHeadId(), "0");
+        List<BudgetAllocation> modBudgetAllocations = budgetAllocationRepository.findByToUnitAndSubHeadAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetHeadId.getBudgetHeadId(), "0", "0");
 
         AmountUnit amountUnit = null;
         if (modBudgetAllocations.size() == 0) {
@@ -1799,7 +1799,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         response.setUnitName(cgUnitData.getCgUnitShort());
 
-        List<BudgetAllocationDetails> modBudgetAllocations = budgetAllocationDetailsRepository.findByToUnitAndIsDelete(HelperUtils.HEADUNITID, "0");
+        List<BudgetAllocationDetails> modBudgetAllocations = budgetAllocationDetailsRepository.findByToUnitAndIsDeleteAndIsBudgetRevision(HelperUtils.HEADUNITID, "0", "0");
         if (modBudgetAllocations.size() == 0) {
             response.setFundAvailable("0");
         } else {
@@ -1813,7 +1813,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         response.setUnitName(cgUnitData.getCgUnitShort());
 
-        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByToUnitAndIsDelete(hrData.getUnitId(), "0");
+        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByToUnitAndIsDeleteAndIsBudgetRevision(hrData.getUnitId(), "0", "0");
         if (budgetAllocations.size() == 0) {
 
             response.setPreviousAllocation("0.0000");
@@ -1828,6 +1828,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             response.setFundAvailable(ConverterUtils.addDecimalPoint(previousAmount + ""));
             response.setUnallocatedAmount("0.0000");
         }
+
 
         return ResponseUtils.createSuccessResponse(response, new TypeReference<AvilableFundResponse>() {
         });
@@ -1878,7 +1879,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         response.setUnitName(checkUnitData.getCgUnitShort());
 
 
-        List<BudgetAllocation> modBudgetAllocations = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(hrData.getUnitId(), getAvilableFundRequest.getFinYearId(), getAvilableFundRequest.getSubHeadId(), getAvilableFundRequest.getAllocationTypeId(), "Approved", "0");
+        List<BudgetAllocation> modBudgetAllocations = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), getAvilableFundRequest.getFinYearId(), getAvilableFundRequest.getSubHeadId(), getAvilableFundRequest.getAllocationTypeId(), "Approved", "0", "0");
         if (modBudgetAllocations.size() == 0) {
             response.setFundAvailable("0");
         } else {
@@ -1922,7 +1923,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
         for (Integer i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
-            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDelete(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId(), "0");
+            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId(), "0","0");
             if (budgetAllocationDetailsList.size() > 0) {
                 CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationDetailsList.get(i).getToUnit());
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY ALLOCATED " + cgUnit.getDescr() + " . CAN NOT ASSIGN AGAIN");
@@ -1985,7 +1986,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "PLEASE ADD CDA IN BUDGET RECEIPT.THAN TRY AGAIN");
             }
 
-            List<BudgetAllocationDetails> budgetAloocation = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDelete(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId(), "0");
+            List<BudgetAllocationDetails> budgetAloocation = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId(), "0","0");
             if (budgetAloocation.size() > 0) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AMOUNT ALREADY ALLOCATED.PLEASE DO REVISION OR CHECK YOUR INBOX/OUTBOX");
 
@@ -1996,7 +1997,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (Integer i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
 
             double amount = 0;
-            List<BudgetAllocation> budgetAloocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(hrData.getUnitId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId(), "Approved", "0");
+            List<BudgetAllocation> budgetAloocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId(), "Approved", "0", "0");
             for (Integer m = 0; m < budgetAloocation.size(); m++) {
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAloocation.get(m).getAmountType());
                 amount = amount + Double.parseDouble(budgetAloocation.get(m).getAllocationAmount()) * amountUnit.getAmount();
@@ -2050,7 +2051,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (Integer i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
 
             double amount = 0;
-            List<BudgetAllocation> budgetAloocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(hrData.getUnitId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId(), "Approved", "0");
+            List<BudgetAllocation> budgetAloocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId(), "Approved", "0", "0");
             for (Integer m = 0; m < budgetAloocation.size(); m++) {
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAloocation.get(m).getAmountType());
                 amount = amount + (Double.parseDouble(budgetAloocation.get(m).getAllocationAmount()) * amountUnit.getAmount());
@@ -2133,7 +2134,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 //        }
 
         for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
-            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDelete(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0");
+            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0","0");
             if (budgetAllocationDetailsList.size() > 0) {
                 CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationDetailsList.get(i).getToUnit());
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY ALLOCATED " + cgUnit.getDescr() + " . CAN NOT ASSIGN AGAIN");
@@ -2195,7 +2196,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "PLEASE ADD CDA IN BUDGET RECEIPT.THAN TRY AGAIN");
             }
 
-            List<BudgetAllocationDetails> budgetAloocation = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDelete(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0");
+            List<BudgetAllocationDetails> budgetAloocation = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0","0");
             if (budgetAloocation.size() > 0) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AMOUNT ALREADY ALLOCATED.PLEASE DO REVISION OR CHECK YOUR INBOX/OUTBOX");
 
@@ -2206,7 +2207,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
 
             double amount = 0;
-            List<BudgetAllocation> budgetAloocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(hrData.getUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "Approved", "0");
+            List<BudgetAllocation> budgetAloocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "Approved", "0", "0");
             for (Integer m = 0; m < budgetAloocation.size(); m++) {
 
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAloocation.get(m).getAmountType());
@@ -2265,7 +2266,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
 
             double amount = 0;
-            List<BudgetAllocation> budgetAloocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(hrData.getUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "Approved", "0");
+            List<BudgetAllocation> budgetAloocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "Approved", "0", "0");
 
             for (Integer m = 0; m < budgetAloocation.size(); m++) {
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAloocation.get(m).getAmountType());
@@ -2344,7 +2345,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CG UNIT ID");
         }
 
-        List<BudgetAllocationDetails> budgetAllocationsDetalis = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndIsDelete(findBudgetRequest.getToUnitId(), findBudgetRequest.getFinYearId(), "0");
+        List<BudgetAllocationDetails> budgetAllocationsDetalis = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndIsDeleteAndIsBudgetRevision(findBudgetRequest.getToUnitId(), findBudgetRequest.getFinYearId(), "0","0");
 
         for (Integer i = 0; i < budgetAllocationsDetalis.size(); i++) {
 
@@ -2410,7 +2411,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         List<BudgetRevisionResponse> budgetRevision = new ArrayList<BudgetRevisionResponse>();
 
-        List<BudgetAllocationDetails> budgetAllocationsDetalis = budgetAllocationDetailsRepository.findBySubHeadAndFinYearAndIsDeleteAndStatus(budgetAllocationReportRequest.getSubHead(), budgetAllocationReportRequest.getBudgetFinancialYearId(), "0", "Approved");
+        List<BudgetAllocationDetails> budgetAllocationsDetalis = budgetAllocationDetailsRepository.findBySubHeadAndFinYearAndIsDeleteAndStatusAndIsBudgetRevision(budgetAllocationReportRequest.getSubHead(), budgetAllocationReportRequest.getBudgetFinancialYearId(), "0", "Approved","0");
 
 
         HashMap<String, List<BudgetRevisionResponse>> hashMap = new HashMap<String, List<BudgetRevisionResponse>>();
@@ -2829,7 +2830,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
-        List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(authRequest.getAuthGroupId(), "0");
+        List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(authRequest.getAuthGroupId(), "0","0");
 //        for (Integer i = 0; i < budgetAllocationDetailsList.size(); i++) {
 //
 //            List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(budgetAllocationDetailsList.get(i).getToUnit(), "1");
@@ -2865,7 +2866,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         authorityRepository.save(authority);
 
 
-        List<BudgetAllocation> budgetAllocationsList = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authRequest.getAuthGroupId(), "0");
+        List<BudgetAllocation> budgetAllocationsList = budgetAllocationRepository.findByAuthGroupIdAndIsFlagAndIsBudgetRevision(authRequest.getAuthGroupId(), "0", "0");
 
         for (Integer i = 0; i < budgetAllocationDetailsList.size(); i++) {
 

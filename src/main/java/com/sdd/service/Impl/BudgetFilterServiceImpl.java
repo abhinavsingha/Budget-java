@@ -138,7 +138,7 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
 
                 double amount = 0;
                 AmountUnit amountUnit = null;
-                List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(budgetUnitWiseSubHeadFilter.getUnitId(), budgetUnitWiseSubHeadFilter.getFinYearId(), majorHedaData.get(i).getBudgetCodeId(), budgetUnitWiseSubHeadFilter.getAllocationType(), "Approved", "0");
+                List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(budgetUnitWiseSubHeadFilter.getUnitId(), budgetUnitWiseSubHeadFilter.getFinYearId(), majorHedaData.get(i).getBudgetCodeId(), budgetUnitWiseSubHeadFilter.getAllocationType(), "Approved", "0", "0");
                 for (Integer m = 0; m < budgetAllocationDetailsList.size(); m++) {
                     amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationDetailsList.get(m).getAmountType());
                     amount = amount + Double.parseDouble(budgetAllocationDetailsList.get(m).getBalanceAmount());
@@ -184,7 +184,7 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
 
                 double amount = 0;
                 AmountUnit amountUnit = null;
-                List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(hrData.getUnitId(), budgetUnitWiseSubHeadFilter.getFinYearId(), budgetHeadData11.getBudgetCodeId(), budgetUnitWiseSubHeadFilter.getAllocationType(), "Approved", "0");
+                List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetUnitWiseSubHeadFilter.getFinYearId(), budgetHeadData11.getBudgetCodeId(), budgetUnitWiseSubHeadFilter.getAllocationType(), "Approved", "0", "0");
                 for (Integer m = 0; m < budgetAllocationDetailsList.size(); m++) {
 
                     amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationDetailsList.get(m).getAmountType());
@@ -257,7 +257,7 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
 
                 double amount = 0;
                 AmountUnit amountUnit = null;
-                List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(hrData.getUnitId(), budgetFilterRequest.getFinyearId(), majorHedaData.get(i).getBudgetCodeId(), budgetFilterRequest.getAllocationType(), "Approved", "0");
+                List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFilterRequest.getFinyearId(), majorHedaData.get(i).getBudgetCodeId(), budgetFilterRequest.getAllocationType(), "Approved", "0", "0");
                 for (Integer m = 0; m < budgetAllocationDetailsList.size(); m++) {
 
                     amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationDetailsList.get(m).getAmountType());
@@ -303,7 +303,7 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
 
                 double amount = 0;
                 AmountUnit amountUnit = null;
-                List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(hrData.getUnitId(), budgetFilterRequest.getFinyearId(), budgetHeadData11.getBudgetCodeId(), budgetFilterRequest.getAllocationType(), "Approved", "0");
+                List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFilterRequest.getFinyearId(), budgetHeadData11.getBudgetCodeId(), budgetFilterRequest.getAllocationType(), "Approved", "0", "0");
                 for (Integer m = 0; m < budgetAllocationDetailsList.size(); m++) {
                     amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationDetailsList.get(m).getAmountType());
                     amount = amount + Double.parseDouble(budgetAllocationDetailsList.get(m).getBalanceAmount());
@@ -381,7 +381,7 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
 
                 double amount = 0;
                 AmountUnit amountUnit = null;
-                List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(hrData.getUnitId(), budgetFilterRequest.getFinyearId(), majorHedaData.get(i).getBudgetCodeId(), budgetFilterRequest.getAllocationType(), "Approved", "0");
+                List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFilterRequest.getFinyearId(), majorHedaData.get(i).getBudgetCodeId(), budgetFilterRequest.getAllocationType(), "Approved", "0", "0");
                 for (Integer m = 0; m < budgetAllocationDetailsList.size(); m++) {
 
                     amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationDetailsList.get(m).getAmountType());
@@ -429,7 +429,7 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
 
                 double amount = 0;
                 AmountUnit amountUnit = null;
-                List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlag(hrData.getUnitId(), budgetFilterRequest.getFinyearId(), budgetHeadData11.getBudgetCodeId(), budgetFilterRequest.getAllocationType(), "Approved", "0");
+                List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFilterRequest.getFinyearId(), budgetHeadData11.getBudgetCodeId(), budgetFilterRequest.getAllocationType(), "Approved", "0", "0");
                 for (Integer m = 0; m < budgetAllocationDetailsList.size(); m++) {
 
                     amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationDetailsList.get(m).getAmountType());

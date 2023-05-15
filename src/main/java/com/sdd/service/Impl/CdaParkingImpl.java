@@ -110,13 +110,13 @@ public class CdaParkingImpl implements CdaParkingService {
             }
 
 
-            BudgetAllocation budgetAllocation= budgetAllocationRepository.findByAllocationIdAndIsFlag(cdaRequest.getCdaRequest().get(i).getTransactionId() ,"0");
+            BudgetAllocation budgetAllocation= budgetAllocationRepository.findByAllocationIdAndIsFlagAndIsBudgetRevision(cdaRequest.getCdaRequest().get(i).getTransactionId() ,"0" ,"0");
             if(budgetAllocation == null){
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TRANSACTION ID");
             }
 
 
-            List<BudgetAllocationDetails> budgetAllocationDetailsLists = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(cdaRequest.getCdaRequest().get(i).getAuthGroupId(), "0");
+            List<BudgetAllocationDetails> budgetAllocationDetailsLists = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(cdaRequest.getCdaRequest().get(i).getAuthGroupId(), "0","0");
             if (budgetAllocationDetailsLists.size() == 0) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AUTH GROUP ID");
             }
@@ -338,7 +338,7 @@ public class CdaParkingImpl implements CdaParkingService {
             }
 
 
-            List<BudgetAllocationDetails> budgetAllocationDetailsLists = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(cdaRequest.getAuthGroupId(), "0");
+            List<BudgetAllocationDetails> budgetAllocationDetailsLists = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(cdaRequest.getAuthGroupId(), "0","0");
             if (budgetAllocationDetailsLists.size() == 0) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AUTH GROUP ID");
             }

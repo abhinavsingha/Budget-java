@@ -11,20 +11,16 @@ public interface BudgetAllocationDetailsRepository extends JpaRepository<BudgetA
 
 
 
-    List<BudgetAllocationDetails> findByAuthGroupIdAndIsDelete(String unitId,String isDelete);
-    BudgetAllocationDetails findByAuthGroupIdAndTransactionIdAndIsDelete(String authGroupId,String tansId,String isDelete);
-    List<BudgetAllocationDetails> findByAuthGroupIdAndIsDeleteAndToUnit(String unitId,String isDelete,String toUnit);
-    List<BudgetAllocationDetails> findByToUnitAndIsDelete(String unitId,String isDelete);
-    List<BudgetAllocationDetails> findByFromUnitAndIsDeleteAndStatus(String unitId,String isDelete,String status);
-    List<BudgetAllocationDetails> findByFromUnitAndIsDelete(String unitId,String isDelete);
-    BudgetAllocationDetails findByTransactionIdAndIsDelete(String unitId,String isDelete);
-    BudgetAllocationDetails findByAllocationAmountAndIsDelete(String allocationId,String isDelete);
-    List<BudgetAllocationDetails> findByToUnitAndFinYearAndIsDelete(String unitId,String finYear,String isDelete);
-    List<BudgetAllocationDetails> findByToUnitAndFinYearAndIsDeleteAndStatusOrStatus(String unitId,String finYear,String isDelete,String status,String statusR);
-
-    List<BudgetAllocationDetails> findBySubHeadAndFinYearAndIsDeleteAndStatus(String subHeadId,String finYear,String isDelete,String status);
-    List<BudgetAllocationDetails> findByFromUnitAndFinYearAndSubHeadAndIsDelete(String unitId,String finYear,String subHeadId,String isDelete);
-    List<BudgetAllocationDetails> findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDelete(String unitId,String finYear,String subHeadId,String allocationType,String status,String isdelete);
-    List<BudgetAllocationDetails> findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDelete(String unitId,String finYear,String subHeadId,String allocationType,String isDelete);
+    List<BudgetAllocationDetails> findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(String unitId,String isDelete,String isRevision);
+    List<BudgetAllocationDetails> findByToUnitAndIsDeleteAndIsBudgetRevision(String unitId,String isDelete,String isRevision);
+    List<BudgetAllocationDetails> findByFromUnitAndIsDeleteAndStatusAndIsBudgetRevision(String unitId,String isDelete,String status,String isRivision);
+    List<BudgetAllocationDetails> findByFromUnitAndIsDeleteAndIsBudgetRevision(String unitId,String isDelete,String isRivision);
+    BudgetAllocationDetails findByTransactionIdAndIsDeleteAndIsBudgetRevision(String unitId,String isDelete,String isRivision);
+    List<BudgetAllocationDetails> findByToUnitAndFinYearAndIsDeleteAndIsBudgetRevision(String unitId,String finYear,String isDelete,String isRivision);
+    List<BudgetAllocationDetails> findByToUnitAndFinYearAndIsDeleteAndStatusOrStatusAndIsBudgetRevision(String unitId,String finYear,String isDelete,String status,String statusR,String isRivision);
+    List<BudgetAllocationDetails> findBySubHeadAndFinYearAndIsDeleteAndStatusAndIsBudgetRevision(String subHeadId,String finYear,String isDelete,String status,String isRivision);
+    List<BudgetAllocationDetails> findByFromUnitAndFinYearAndSubHeadAndIsDeleteAndIsBudgetRevision(String unitId,String finYear,String subHeadId,String isDelete,String isRivision);
+    List<BudgetAllocationDetails> findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(String unitId,String finYear,String subHeadId,String allocationType,String status,String isdelete,String isRivision);
+    List<BudgetAllocationDetails> findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(String unitId,String finYear,String subHeadId,String allocationType,String isDelete,String isRivision);
 
 }
