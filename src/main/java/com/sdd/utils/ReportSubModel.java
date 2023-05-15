@@ -13,6 +13,7 @@ public class ReportSubModel {
     private String type;
     private String finYear;
     private String amount;
+    private String amountType;
     private String unit;
     private String revisedAmount;
 

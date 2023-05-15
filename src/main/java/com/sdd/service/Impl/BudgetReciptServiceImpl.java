@@ -251,6 +251,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             budgetAllocationDetails.setRevisedAmount("0.0000");
             budgetAllocationDetails.setIsDelete("0");
 
+
             budgetAllocationDetails.setRefTransactionId(HelperUtils.getAllocationId());
             budgetAllocationDetails.setUserId(hrData.getPid());
             budgetAllocationDetails.setAmountType(amountUnit.getAmountTypeId());
@@ -511,6 +512,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         budgetAllocationDetails.setUserId(hrData.getPid());
         budgetAllocationDetails.setTransactionId(HelperUtils.getBudgetAlloctionRefrensId());
         budgetAllocationDetails.setRevisedAmount("0");
+
         budgetAllocationDetailsRepository.save(budgetAllocationDetails);
 
 
@@ -530,6 +532,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         budgetAllocation.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getAllocationAmount()));
         budgetAllocation.setUserId(hrData.getPid());
         budgetAllocation.setStatus("Approved");
+        budgetAllocation.setIsBudgetRevision("0");
         budgetAllocation.setAuthGroupId(authGroupId);
         budgetAllocation.setAmountType(amountUnit.getAmountTypeId());
         budgetAllocationRepository.save(budgetAllocation);

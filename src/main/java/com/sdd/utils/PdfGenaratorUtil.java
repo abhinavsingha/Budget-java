@@ -46,12 +46,12 @@ public class PdfGenaratorUtil {
                 String row = "";
                 if (i == 0) {
                     row = "<td data-label=CGCS /ADG (P )/RHQS /DTE AT CGHQ>" + tabData.get(i).getUnit() + "</td>" +
-                            "<td class=dcf-txt-right data-label=BE 2022-23 ALLOCATION(IN LAKHS)>" + tabData.get(i).getAmount() + "</td>" +
+                            "<td class=dcf-txt-right data-label=BE 2022-23 ALLOCATION "+ " (In "+ tabData.get(i).getAmountType() +") " + tabData.get(i).getAmount() + "</td>" +
                             "</tr>";
                 } else {
                     row = " <th scope=row class=bbtm> </th>" +
                             "<td data-label=CGCS /ADG (P )/RHQS /DTE AT CGHQ>" + tabData.get(i).getUnit() + "</td>" +
-                            "<td class=dcf-txt-right data-label=BE 2022-23 ALLOCATION(IN LAKHS)>" + tabData.get(i).getAmount() + "</td>" +
+                            "<td class=dcf-txt-right data-label=BE 2022-23 ALLOCATION"+ " (In "+ tabData.get(i).getAmountType() +") " + tabData.get(i).getAmount() + "</td>" +
                             "</tr>";
                 }
                 tototalAmount = tototalAmount + Double.parseDouble(tabData.get(i).getAmount());
@@ -60,7 +60,7 @@ public class PdfGenaratorUtil {
             }
             String total = "<tr> <th scope=row></th>" +
                     "<td data-label=CGCS /ADG (P )/RHQS /DTE AT CGHQ>TOTAL </td>" +
-                    "<td class=dcf-txt-right data-label=BE 2022-23 ALLOCATION(IN LAKHS)>" + tototalAmount + "</td>" +
+                    "<td class=dcf-txt-right data-label=BE 2022-23 ALLOCATION>" + tototalAmount + "</td>" +
                     "</tr>";
 
             String sdfgh = data + addAllHtml + total;
@@ -461,6 +461,7 @@ public class PdfGenaratorUtil {
 
         StringBuilder middle = new StringBuilder();
         int m = 0;
+        int size = 0;
         for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
             String key = entry.getKey();
             List<CDAReportResponse> tabData = entry.getValue();
@@ -469,6 +470,8 @@ public class PdfGenaratorUtil {
             String keyValue = "<tr>" +
                     "<th >" + key + " </th>";
             middle = middle.append(keyValue);
+
+            size = tabData.size();
 
             StringBuilder amountAppend = new StringBuilder();
             for (Integer i = 0; i < tabData.size(); i++) {
@@ -491,6 +494,15 @@ public class PdfGenaratorUtil {
 
             }
         }
+
+        middle = middle.append("<tr>" +
+                "<th > Grand Total </th>");
+        for (Integer i = 0; i < size; i++) {
+            String data = "<th >" + " " + "</td>";
+            middle = middle.append(data);
+        }
+        middle = middle.append(grandTotal).append("</tr>");
+
 
 
         String footer = "</thead></table></body>" +
@@ -748,11 +760,9 @@ public class PdfGenaratorUtil {
             }
         }
 
-        middle = middle.append("</thead></table><br><br><br><br><table  class=dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%  border=\"1\"><thead>");
         middle = middle.append("<tr>" +
                 "<th > Grand Total </th>");
         for (Integer i = 0; i < size; i++) {
-            List<CDAReportResponse> tabData1 = map.get("object");
             String data = "<th >" + " " + "</td>";
             middle = middle.append(data);
         }

@@ -12,6 +12,7 @@ public interface BudgetAllocationDetailsRepository extends JpaRepository<BudgetA
 
 
     List<BudgetAllocationDetails> findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(String unitId,String isDelete,String isRevision);
+    List<BudgetAllocationDetails> findByAuthGroupIdAndIsDelete(String unitId,String isDelete);
     List<BudgetAllocationDetails> findByToUnitAndIsDeleteAndIsBudgetRevision(String unitId,String isDelete,String isRevision);
     List<BudgetAllocationDetails> findByFromUnitAndIsDeleteAndStatusAndIsBudgetRevision(String unitId,String isDelete,String status,String isRivision);
     List<BudgetAllocationDetails> findByFromUnitAndIsDeleteAndIsBudgetRevision(String unitId,String isDelete,String isRivision);
