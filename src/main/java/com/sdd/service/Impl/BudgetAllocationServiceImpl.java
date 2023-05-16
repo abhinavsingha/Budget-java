@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 @Service
@@ -839,6 +840,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "0");
 
+
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
             BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
@@ -892,6 +894,69 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
+        List<BudgetAllocationSubResponse> oldRevision = new ArrayList<BudgetAllocationSubResponse>();
+
+
+        for (Integer i = 0; i < budgetAllocations.size(); i++) {
+            BudgetAllocationDetails budgetAllocationData = budgetAllocations.get(i);
+            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(budgetAllocationData.getToUnit(), budgetAllocationData.getFinYear(), budgetAllocationData.getSubHead(), budgetAllocationData.getAllocTypeId(), "Approved", "0", "1");
+
+            for (Integer m = 0; m < budgetAllocationDetailsList.size(); m++) {
+                BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
+                if (!(groupId.equalsIgnoreCase(budgetAllocationSubReport.getAuthGroupId()))) {
+
+                    BudgetAllocationSubResponse budgetAllocationReport = new BudgetAllocationSubResponse();
+                    budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
+                    budgetAllocationReport.setAllocationId(budgetAllocationSubReport.getAllocationId());
+                    budgetAllocationReport.setTransactionId(budgetAllocationSubReport.getTransactionId());
+                    budgetAllocationReport.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSubReport.getAllocationAmount()));
+                    budgetAllocationReport.setStatus(budgetAllocationSubReport.getStatus());
+                    budgetAllocationReport.setPurposeCode(budgetAllocationSubReport.getPurposeCode());
+                    budgetAllocationReport.setRemarks(budgetAllocationSubReport.getRemarks());
+                    budgetAllocationReport.setRefTransactionId(budgetAllocationSubReport.getRefTransactionId());
+                    budgetAllocationReport.setUserId(budgetAllocationSubReport.getUserId());
+                    budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
+                    budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
+                    budgetAllocationReport.setCreatedOn(budgetAllocationSubReport.getCreatedOn());
+                    budgetAllocationReport.setUpdatedOn(budgetAllocationSubReport.getUpdatedOn());
+                    budgetAllocationReport.setFinYear(budgetFinancialYearRepository.findBySerialNo(budgetAllocationSubReport.getFinYear()));
+                    budgetAllocationReport.setAmountUnit(amountUnitRepository.findByAmountTypeId(budgetAllocationSubReport.getAmountType()));
+                    budgetAllocationReport.setToUnit(cgUnitRepository.findByUnit(budgetAllocationSubReport.getToUnit()));
+                    budgetAllocationReport.setFromUnit(cgUnitRepository.findByUnit(budgetAllocationSubReport.getFromUnit()));
+                    budgetAllocationReport.setAllocTypeId(allocationRepository.findByAllocTypeId(budgetAllocationSubReport.getAllocTypeId()));
+                    budgetAllocationReport.setSubHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(budgetAllocationSubReport.getSubHead()));
+
+
+                    double allocationAmount = 0;
+                    AmountUnit remeningBalanceUnit = null;
+                    double revisedAmountUnit = 0;
+                    remeningBalanceUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSubReport.getAmountType());
+                    allocationAmount = allocationAmount + (Double.parseDouble(budgetAllocationSubReport.getBalanceAmount()));
+                    revisedAmountUnit = revisedAmountUnit + (Double.parseDouble(budgetAllocationSubReport.getRevisedAmount()));
+
+
+                    budgetAllocationReport.setBalanceAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
+                    budgetAllocationReport.setRevisedAmount(ConverterUtils.addDecimalPoint(revisedAmountUnit + ""));
+                    budgetAllocationReport.setRemeningBalanceUnit(remeningBalanceUnit);
+
+
+                    List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndIsFlag(budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(), budgetAllocationSubReport.getToUnit(), "0");
+                    if (cdaParkingList.size() > 0) {
+                        budgetAllocationReport.setIsCDAparking("1");
+                        budgetAllocationReport.setCdaList(cdaParkingList);
+                    } else {
+                        budgetAllocationReport.setIsCDAparking("0");
+                        budgetAllocationReport.setCdaList(cdaParkingList);
+                    }
+
+                    oldRevision.add(budgetAllocationReport);
+                }
+
+            }
+
+
+        }
+
         Collections.sort(budgetAllocationList, new Comparator<BudgetAllocationSubResponse>() {
             public int compare(BudgetAllocationSubResponse v1, BudgetAllocationSubResponse v2) {
                 return v1.getSubHead().getSerialNumber().compareTo(v2.getSubHead().getSerialNumber());
@@ -904,6 +969,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         budgetAllocationResponse.setAuthList(authoritiesList);
         budgetAllocationResponse.setBudgetResponseist(budgetAllocationList);
+        budgetAllocationResponse.setOldBudgetRevision(oldRevision);
 
 
         return ResponseUtils.createSuccessResponse(budgetAllocationResponse, new TypeReference<BudgetAllocationResponse>() {

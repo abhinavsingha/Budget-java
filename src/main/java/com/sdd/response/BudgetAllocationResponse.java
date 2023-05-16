@@ -16,6 +16,7 @@ import java.util.List;
 public class BudgetAllocationResponse {
 
     private List<BudgetAllocationSubResponse> budgetResponseist;
+    private List<BudgetAllocationSubResponse> oldBudgetRevision;
     private List<Authority> authList;
 
 
