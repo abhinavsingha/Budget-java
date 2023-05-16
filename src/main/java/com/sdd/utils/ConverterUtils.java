@@ -151,15 +151,6 @@ public class ConverterUtils {
     }
 
 
-    public static double addDecimalPoint(double number) {
-        Double toBeTruncated = new Double(number + "");
-
-        return BigDecimal.valueOf(toBeTruncated)
-                .setScale(4, RoundingMode.HALF_UP)
-                .doubleValue();
-    }
-
-
     public static String addDecimalPoint(String number) {
 
 
@@ -167,8 +158,12 @@ public class ConverterUtils {
             if (number == null) {
                 return "0.0000";
             }
-            DecimalFormat df = new DecimalFormat("#.####");
-            return df.format(Double.parseDouble(number));
+//            if (!number.contains(".")) {
+//                return  number + ".0000";
+//            }
+            return String.format("%.4f", Double.parseDouble(number));
+//            DecimalFormat df = new DecimalFormat("#.####");
+//            return df.format(Double.parseDouble(number));
         } catch (Exception e) {
             return number;
         }

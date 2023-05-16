@@ -45,13 +45,13 @@ public class PdfGenaratorUtil {
             for (Integer i = 0; i < tabData.size(); i++) {
                 String row = "";
                 if (i == 0) {
-                    row = "<td data-label=CGCS /ADG (P )/RHQS /DTE AT CGHQ>" + tabData.get(i).getUnit() + "</td>" +
-                            "<td class=dcf-txt-right data-label=BE 2022-23 ALLOCATION "+ " (In "+ tabData.get(i).getAmountType() +") " + tabData.get(i).getAmount() + "</td>" +
+                    row = "<td>" + tabData.get(i).getUnit() + "</td>" +
+                            "<td>" + ConverterUtils.addDecimalPoint(tabData.get(i).getAmount()) + " (In " + tabData.get(i).getAmountType() + ") " + " </td>" +
                             "</tr>";
                 } else {
                     row = " <th scope=row class=bbtm> </th>" +
-                            "<td data-label=CGCS /ADG (P )/RHQS /DTE AT CGHQ>" + tabData.get(i).getUnit() + "</td>" +
-                            "<td class=dcf-txt-right data-label=BE 2022-23 ALLOCATION"+ " (In "+ tabData.get(i).getAmountType() +") " + tabData.get(i).getAmount() + "</td>" +
+                            "<td>" + tabData.get(i).getUnit() + "</td>" +
+                            "<td>" + ConverterUtils.addDecimalPoint(tabData.get(i).getAmount()) + " (In " + tabData.get(i).getAmountType() + ") " + " </td>" +
                             "</tr>";
                 }
                 tototalAmount = tototalAmount + Double.parseDouble(tabData.get(i).getAmount());
@@ -59,8 +59,8 @@ public class PdfGenaratorUtil {
 
             }
             String total = "<tr> <th scope=row></th>" +
-                    "<td data-label=CGCS /ADG (P )/RHQS /DTE AT CGHQ>TOTAL </td>" +
-                    "<td class=dcf-txt-right data-label=BE 2022-23 ALLOCATION>" + tototalAmount + "</td>" +
+                    "<td>TOTAL </td>" +
+                    "<td>" + ConverterUtils.addDecimalPoint(tototalAmount+"") + "</td>" +
                     "</tr>";
 
             String sdfgh = data + addAllHtml + total;
@@ -205,7 +205,7 @@ public class PdfGenaratorUtil {
                 "<table class=dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100% border=\"1\">" +
                 "<thead>" +
                 "<tr>" +
-                "<th scope=col>REVENUE OBJECT HEAD </th>" +
+                "<th scope=col>SUB HEAD </th>" +
                 "<th class=dcf-txt-center scope=col>UNIT NAME</th>" +
                 "<th class=dcf-txt-center scope=col>ALLOCATION</th>" +
                 "</tr>" +
@@ -504,7 +504,6 @@ public class PdfGenaratorUtil {
         middle = middle.append(grandTotal).append("</tr>");
 
 
-
         String footer = "</thead></table></body>" +
                 "</html>";
 
@@ -767,7 +766,6 @@ public class PdfGenaratorUtil {
             middle = middle.append(data);
         }
         middle = middle.append(grandTotal).append("</tr>");
-
 
 
         String footer = "</thead></table></body>" + "</html>";
@@ -1250,7 +1248,7 @@ public class PdfGenaratorUtil {
 
     private static String convertDecimalToWords(long y, int length) {
         String words = "";
-        String[] units = {"Zero","One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+        String[] units = {"Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
         while (y != 0) {
             words = words + " " + units[(int) (y / Math.pow(10, length - 1))];
             y = (long) (y % Math.pow(10, length - 1));

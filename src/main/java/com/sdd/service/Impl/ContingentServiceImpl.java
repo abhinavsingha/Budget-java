@@ -621,7 +621,7 @@ public class ContingentServiceImpl implements ContingentService {
 
         MangeInboxOutbox mangeInboxOutbox =  mangeInboxOutBoxRepository.findByGroupIdAndToUnit(authGroupId, hrData.getUnitId());
 
-        mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
+        mangeInboxOutbox.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
         mangeInboxOutbox.setRemarks("Contingent Bill");
         mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
         mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
@@ -672,13 +672,14 @@ public class ContingentServiceImpl implements ContingentService {
             contingentBill.setCbDate(contigentBill.getCbDate());
             contingentBill.setCbId(contigentBill.getCbId());
             contingentBill.setCbNo(contigentBill.getCbNo());
-            contingentBill.setRemarks(contigentBill.getFileID());
+
             contingentBill.setStatus(contigentBill.getStatus());
             contingentBill.setStatusDate(contigentBill.getStatusDate());
             contingentBill.setCreatedOn(contigentBill.getCreatedOn());
             contingentBill.setUpdatedOn(contigentBill.getUpdatedOn());
             contingentBill.setVendorName(contigentBill.getVendorName());
             contingentBill.setInvoiceDate(contigentBill.getInvoiceDate());
+            contingentBill.setRemarks(contigentBill.getRemarks());
             contingentBill.setFileID(contigentBill.getFileID());
             contingentBill.setInvoiceNO(contigentBill.getInvoiceNO());
             contingentBill.setCbFilePath(fileUploadRepository.findByUploadID(contigentBill.getCbFilePath()));
@@ -849,12 +850,10 @@ public class ContingentServiceImpl implements ContingentService {
 
             mangeInboxOutbox.setFromUnit(toUnit);
             mangeInboxOutbox.setToUnit(fromUnit);
-
+            mangeInboxOutbox.setState("CR");
             if (status.equalsIgnoreCase("Approved")) {
-                mangeInboxOutbox.setState("CR");
                 mangeInboxOutbox.setStatus("Fully Approved");
             } else {
-                mangeInboxOutbox.setState("AP");
                 mangeInboxOutbox.setStatus(approveContigentBillRequest.getStatus());
             }
 

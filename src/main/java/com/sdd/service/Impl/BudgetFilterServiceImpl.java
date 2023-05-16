@@ -144,7 +144,7 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
                     amount = amount + Double.parseDouble(budgetAllocationDetailsList.get(m).getBalanceAmount());
                 }
 
-                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount) + "");
+                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount + ""));
                 budgetHeadResponse.setAmountUnit(amountUnit);
                 budgetListWithAmount.add(budgetHeadResponse);
             }
@@ -190,7 +190,7 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
                     amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationDetailsList.get(m).getAmountType());
                     amount = amount + Double.parseDouble(budgetAllocationDetailsList.get(m).getBalanceAmount());
                 }
-                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount) + "");
+                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount + ""));
                 budgetHeadResponse.setAmountUnit(amountUnit);
                 budgetListWithAmount.add(budgetHeadResponse);
             }
@@ -264,7 +264,7 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
                     amount = amount + Double.parseDouble(budgetAllocationDetailsList.get(m).getBalanceAmount());
                 }
 
-                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount) + "");
+                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount + ""));
                 budgetHeadResponse.setAmountUnit(amountUnit);
                 budgetListWithAmount.add(budgetHeadResponse);
             }
@@ -308,7 +308,7 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
                     amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationDetailsList.get(m).getAmountType());
                     amount = amount + Double.parseDouble(budgetAllocationDetailsList.get(m).getBalanceAmount());
                 }
-                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount) + "");
+                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount + ""));
                 budgetHeadResponse.setAmountUnit(amountUnit);
                 budgetListWithAmount.add(budgetHeadResponse);
             }
@@ -388,7 +388,7 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
                     amount = amount + Double.parseDouble(budgetAllocationDetailsList.get(m).getBalanceAmount());
                 }
 
-                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount) + "");
+                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount + ""));
                 budgetHeadResponse.setAmountUnit(amountUnit);
                 budgetListWithAmount.add(budgetHeadResponse);
             }
@@ -436,7 +436,7 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
                     amount = amount + Double.parseDouble(budgetAllocationDetailsList.get(m).getBalanceAmount());
                 }
 
-                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount) + "");
+                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount + ""));
                 budgetHeadResponse.setAmountUnit(amountUnit);
                 budgetListWithAmount.add(budgetHeadResponse);
             }
