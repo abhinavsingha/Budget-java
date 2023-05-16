@@ -26,9 +26,13 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -1278,10 +1282,7 @@ public class MangeReportImpl implements MangeReportService {
                         amount = Double.valueOf(row.getAllocationAmount());
 
 
-
                         finAmount = amount * amountUnit / reqAmount;
-
-
 
                         sb.append("<tr>");
                         sb.append("<td class=\"the\">").append(i).append("</td>");
@@ -1690,7 +1691,12 @@ public class MangeReportImpl implements MangeReportService {
 
                     for (Integer k = 0; k < units.size(); k++) {
                         if (units.get(k).getUnit().equalsIgnoreCase(row.getToUnit())) {
+
+                            if(row.getToUnit().equalsIgnoreCase(hrData.getUnitId()))
+                                amount = Double.valueOf(row.getBalanceAmount());
+                            else
                             amount = Double.valueOf(row.getAllocationAmount());
+
                             AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
                             if (amountTypeObj == null) {
                                 return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -2145,7 +2151,7 @@ public class MangeReportImpl implements MangeReportService {
 
                     for (Integer k = 0; k < units.size(); k++) {
                         if (units.get(k).getUnit().equalsIgnoreCase(row.getToUnit())) {
-                            amount = Double.valueOf(row.getAllocationAmount());
+                            amount = Double.valueOf(row.getBalanceAmount());
                             if (row.getRevisedAmount() != null) {
                                 revisedAmount = Double.valueOf(row.getRevisedAmount());
                             } else
@@ -2602,12 +2608,16 @@ public class MangeReportImpl implements MangeReportService {
                 float reSum = 0;
                 Double reAmountUnit = 0.0;
                 Double reFinalAmount;
+                Double reTotalAmount=0.0;
 
                 for (BudgetAllocation row : reportDetails) {
 
                     for (Integer k = 0; k < units.size(); k++) {
                         if (units.get(k).getUnit().equalsIgnoreCase(row.getToUnit())) {
 
+                            if(row.getToUnit().equalsIgnoreCase(hrData.getUnitId()))
+                                amount = Double.valueOf(row.getBalanceAmount());
+                            else
                             amount = Double.valueOf(row.getAllocationAmount());
                             String unitIds = row.getToUnit();
                             String allocType = "ALL_102";
@@ -2622,7 +2632,11 @@ public class MangeReportImpl implements MangeReportService {
                             if (reData.size() <= 0) {
                                 reFinalAmount = 0.0000;
                             } else {
-                                Double reTotalAmount = Double.valueOf(reData.get(0).getAllocationAmount());
+                                if(row.getToUnit().equalsIgnoreCase(hrData.getUnitId())) {
+                                    reTotalAmount = Double.valueOf(reData.get(0).getBalanceAmount());
+                                }else {
+                                    reTotalAmount = Double.valueOf(reData.get(0).getAllocationAmount());
+                                }
                                 AmountUnit amountTypeRe = amountUnitRepository.findByAmountTypeId(reData.get(0).getAmountType());
                                 reAmountUnit = amountTypeRe.getAmount();
                                 reFinalAmount = reTotalAmount * reAmountUnit / reqAmount;
@@ -2694,7 +2708,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getMainBEAllocationReport(String finYearId, String allocationType, String amountTypeId) {
+    public ApiResponse<List<FilePathResponse>> getMainBEAllocationReport(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -2718,8 +2732,18 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        if (fromDate == null) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "FROM DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (toDate == null ) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "TO DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
         AllocationType type = allocationRepository.findByAllocTypeId(allocationType);
-        List<String> rowData = budgetAllocationRepository.findSubHead(finYearId, allocationType);
+        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType);
+        List<String> rowData=rowDatas.stream().sorted().collect(Collectors.toList());
+
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -2980,9 +3004,9 @@ public class MangeReportImpl implements MangeReportService {
                     "            <th class=\"dcf-txt-center bold\" scope=\"col\">${allocationType_placeholder} ${finYear_placeholder} Allocation to ICG</th>\n" +
                     "            <th class=\"dcf-txt-center bold\" scope=\"col\">UNIT</th>\n" +
                     "            <th class=\"dcf-txt-center bold\" scope=\"col\">${allocationType_placeholder} : ${finYear_placeholder} Allocation</th>\n" +
-                    "            <th class=\"dcf-txt-center bold\" scope=\"col\">Bill Submission Upto 15 Apr 23</th>\n" +
+                    "            <th class=\"dcf-txt-center bold\" scope=\"col\">Bill Submission Upto ${upToDate_placeholder} </th>\n" +
                     "            <th class=\"dcf-txt-center bold\" scope=\"col\">% Bill Submission w.r.t. ${allocationType_placeholder} ${finYear_placeholder}</th>\n" +
-                    "            <th class=\"dcf-txt-center bold\" scope=\"col\">CGDA Booking Upto 15 Apr 23</th>\n" +
+                    "            <th class=\"dcf-txt-center bold\" scope=\"col\">CGDA Booking Upto ${upToDate_placeholder}</th>\n" +
                     "            <th class=\"dcf-txt-center bold\" scope=\"col\">% Bill Clearance w.r.t. ${allocationType_placeholder} ${finYear_placeholder}</th>\n" +
                     "        </tr>\n" +
                     "        </thead>\n" +
@@ -3009,8 +3033,24 @@ public class MangeReportImpl implements MangeReportService {
             int i = 1;
             String finyear = "";
             String unit = "";
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+            LocalDate date = LocalDate.parse(toDate, inputFormatter);
+            String formattedDate = date.format(outputFormatter);
+
+            LocalDate frmLocal = LocalDate.parse(fromDate);
+            LocalDate resultDate = frmLocal.minusDays(1);
+            LocalDateTime frmlocalDateTime = LocalDateTime.of(resultDate, LocalTime.MIDNIGHT);
+            Timestamp fromDateFormate = Timestamp.valueOf(frmlocalDateTime);
+
+            LocalDate localDa = LocalDate.parse(toDate);
+            LocalDate resultDt = localDa.plusDays(1);
+            LocalDateTime localDateTime = LocalDateTime.of(resultDt, LocalTime.MIDNIGHT);
+            Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
+
             for (String val : rowData) {
                 String subHeadId = val;
+                System.out.println("Sorting "+subHeadId);
                 List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(subHeadId, allocationType, "0", "0");
                 if (reportDetails.size() <= 0) {
                     return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -3046,15 +3086,17 @@ public class MangeReportImpl implements MangeReportService {
                             }
                             amountUnit = amountTypeObj.getAmount();
                             finAmount = amount * amountUnit / reqAmount;
+                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadID(row.getToUnit(), finYearId, subHeadId);
 
-                            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadID(row.getToUnit(), finYearId, subHeadId);
+                            List<ContigentBill> expenditure = expenditure1.stream()
+                                    .filter(e ->e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                             if (expenditure.size() <= 0) {
                                 eAmount = 0.0;
                             } else {
                                 eAmount = Double.parseDouble(expenditure.get(0).getProgressiveAmount());
                             }
                             if (finAmount != 0)
-                                expnAmount = eAmount * 100 / finAmount;
+                                expnAmount = eAmount * 100 / finAmount*reqAmount;
                             else
                                 expnAmount = 0.0;
                             BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
@@ -3113,6 +3155,7 @@ public class MangeReportImpl implements MangeReportService {
             htmlContent = htmlContent.replace("${unit_placeholder}", StringEscapeUtils.escapeHtml4(unitName));
             htmlContent = htmlContent.replace("${rank_placeholder}", StringEscapeUtils.escapeHtml4(rank));
             htmlContent = htmlContent.replace("${date_placeholder}", StringEscapeUtils.escapeHtml4(formattedDateTime));
+            htmlContent = htmlContent.replace("${upToDate_placeholder}", StringEscapeUtils.escapeHtml4(formattedDate));
             htmlContent = htmlContent.replace("${finYear_placeholder}", StringEscapeUtils.escapeHtml4(findyr.getFinYear()));
             htmlContent = htmlContent.replace("${amountType_placeholder}", StringEscapeUtils.escapeHtml4(amountIn));
             htmlContent = htmlContent.replace("${allocationType_placeholder}", StringEscapeUtils.escapeHtml4(type.getAllocDesc()));

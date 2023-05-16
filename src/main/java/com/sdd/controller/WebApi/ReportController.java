@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -101,9 +102,9 @@ public class ReportController {
 		return new ResponseEntity<>(mangeReportService.getBEREAllocationReport(finYearId,allocationType,amountTypeId), HttpStatus.OK);
 	}
 
-	@GetMapping("/getMainBEAllocationReport/{finYearId}/{allocationType}/{amountTypeId}")
-	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getMainBEAllocationReport(@PathVariable(value = "finYearId") String finYearId , @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId)  {
-		return new ResponseEntity<>(mangeReportService.getMainBEAllocationReport(finYearId,allocationType,amountTypeId), HttpStatus.OK);
+	@GetMapping("/getMainBEAllocationReport/{finYearId}/{allocationType}/{amountTypeId}/{fromDate}/{toDate}")
+	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getMainBEAllocationReport(@PathVariable(value = "finYearId") String finYearId , @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId , @PathVariable(value = "fromDate") String fromDate , @PathVariable(value = "toDate") String toDate)  {
+		return new ResponseEntity<>(mangeReportService.getMainBEAllocationReport(finYearId,allocationType,amountTypeId,fromDate,toDate), HttpStatus.OK);
 	}
 
 

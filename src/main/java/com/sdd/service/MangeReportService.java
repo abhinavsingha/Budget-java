@@ -7,6 +7,7 @@ import com.sdd.request.UnitWiseAllocationReport;
 import com.sdd.response.ApiResponse;
 import com.sdd.response.FilePathResponse;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -41,5 +42,5 @@ public interface MangeReportService {
 
     ApiResponse<List<FilePathResponse>> getBEREAllocationReport(String finYearId,String allocationType, String amountTypeId);
 
-    ApiResponse<List<FilePathResponse>> getMainBEAllocationReport(String finYearId,String allocationType, String amountTypeId);
+    ApiResponse<List<FilePathResponse>> getMainBEAllocationReport(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate);
 }
