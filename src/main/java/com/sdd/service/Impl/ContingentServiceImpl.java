@@ -978,7 +978,7 @@ public class ContingentServiceImpl implements ContingentService {
 
             if (status.equalsIgnoreCase("Verified")) {
                 mangeInboxOutbox.setState("AP");
-            } else if (status.equalsIgnoreCase("Rejected")) {
+            } else if (status.equalsIgnoreCase("Rejected") || status.equalsIgnoreCase("Reject")) {
                 mangeInboxOutbox.setState("CR");
             }
 
