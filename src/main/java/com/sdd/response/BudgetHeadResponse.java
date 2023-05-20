@@ -1,6 +1,8 @@
 package com.sdd.response;
 
 import com.sdd.entities.AmountUnit;
+import com.sdd.entities.CdaParkingTrans;
+import com.sdd.request.CdaFilterData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.util.List;
 
 
 @Getter
@@ -30,5 +33,6 @@ public class BudgetHeadResponse {
 
     private String totalAmount;
     private AmountUnit amountUnit;
+    List<CdaFilterData> cdaParkingTrans;
 
 }

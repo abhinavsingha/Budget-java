@@ -14,11 +14,11 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "CdaParkingTrans")
-public class CdaParkingTrans {
+@Table(name = "CdaParkingCreditDebit")
+public class CdaParkingCrAndDr {
     @Id
-    @Column(name = "CDA_PARKING_ID", nullable = false)
-    private String cdaParkingId;
+    @Column(name = "CDA_CRDR_ID", nullable = false)
+    private String cdaCrdrId;
 
     @Column(name = "FIN_YEAR_ID")
     private String finYearId;
@@ -26,33 +26,30 @@ public class CdaParkingTrans {
     @Column(name = "BUDGET_HEAD_ID")
     private String budgetHeadId;
 
-    @Column(name = "REMARKS")
-    private String remarks;
-
     @Column(name = "GIN_NO")
     private String ginNo;
 
     @Column(name = "UNID_ID")
     private String unitId;
 
+    @Column(name = "AMOUNT")
+    private String amount;
 
-    @Column(name = "TOTAL_CDA_PARKING_AMOUNT")
-    private String totalParkingAmount;
-
-    @Column(name = "REMAINING_CDA_AMOUNT")
-    private String remainingCdaAmount;
-
-    @Column(name = "AUTH_GROUP_ID")
-    private String authGroupId;
+    @Column(name = "ISCRDR")
+    private String iscrdr;
 
     @Column(name = "CREATED_ON")
     private Timestamp createdOn;
 
-    @Column(name = "UPDATED_ON", nullable = false)
+    @Column(name = "UPDATED_ON")
     private Timestamp updatedOn;
 
-    @Column(name = "ALLOC_TYPE_ID", nullable = false)
+    @Column(name = "ALLOC_TYPE_ID")
     private String allocTypeId;
+
+    @Column(name = "AUTH_GROUP_ID")
+    private String authGroupId;
+
 
     @Column(name = "isFlag")
     private String isFlag;
@@ -62,5 +59,9 @@ public class CdaParkingTrans {
 
     @Column(name = "AMOUNT_TYPE")
     private String amountType;
+
+
+    @Column(name = "CDA_PARKING_TRANS")
+    private String cdaParkingTrans;
 
 }

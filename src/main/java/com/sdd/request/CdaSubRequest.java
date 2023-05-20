@@ -19,6 +19,7 @@ public class CdaSubRequest {
     private String remark;
     private String authGroupId;
     private String transactionId;
+    private String amountTypeId;
 
 
 }

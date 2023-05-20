@@ -335,13 +335,13 @@ public class MangeRebaseImpl implements MangeRebaseService {
             }
             amountUnit=amountTypeObj.getAmount();
             double aAmount = Double.parseDouble(allocationData.get(i).getAllocationAmount());
-            double bAmount = Double.parseDouble(allocationData.get(i).getBalanceAmount());
+//            double bAmount = Double.parseDouble(allocationData.get(i).getBalanceAmount());
             double uAmount = Double.parseDouble(allocationData.get(i).getUnallocatedAmount());
             rebase.setUnit(unitdata.getDescr());
             rebase.setFinYear(Finyr.getFinYear());
             rebase.setSubHead(allocationData.get(i).getSubHead());
             rebase.setAllocatedAmount(aAmount*amountUnit);
-            rebase.setBalAmount(bAmount*amountUnit);
+//            rebase.setBalAmount(bAmount*amountUnit);
             rebase.setUnlockedAmount(uAmount);
             rebase.setStatus(allocationData.get(i).getStatus());
             rebase.setAmountType(allocationData.get(i).getAmountType());

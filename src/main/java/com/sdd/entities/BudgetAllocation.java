@@ -45,8 +45,8 @@ public class BudgetAllocation {
     @Column(name = "ALLOCATION_TYPE_ID")
     private String allocationTypeId;
 
-    @Column(name = "BALANCE_AMOUNT")
-    private String balanceAmount;
+//    @Column(name = "BALANCE_AMOUNT")
+//    private String balanceAmount;
 
     @Column(name = "REVISED_AMOUNT")
     private String revisedAmount;

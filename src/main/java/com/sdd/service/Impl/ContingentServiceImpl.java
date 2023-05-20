@@ -313,7 +313,7 @@ public class ContingentServiceImpl implements ContingentService {
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocation.get(m).getAmountType());
                 Double reminingBalance = (amount - allocationAmount);
 
-                budgetAllocation.get(m).setBalanceAmount(ConverterUtils.addDecimalPoint((reminingBalance / amountUnit.getAmount()) + ""));
+//                budgetAllocation.get(m).setBalanceAmount(ConverterUtils.addDecimalPoint((reminingBalance / amountUnit.getAmount()) + ""));
                 budgetAllocationRepository.save(budgetAllocation.get(m));
 
             }
@@ -613,7 +613,7 @@ public class ContingentServiceImpl implements ContingentService {
             for (Integer m = 0; m < budgetAloocation.size(); m++) {
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAloocation.get(m).getAmountType());
                 Double reminingBalance = (amount - allocationAmount);
-                budgetAloocation.get(m).setBalanceAmount(ConverterUtils.addDecimalPoint((reminingBalance / amountUnit.getAmount()) + ""));
+//                budgetAloocation.get(m).setBalanceAmount(ConverterUtils.addDecimalPoint((reminingBalance / amountUnit.getAmount()) + ""));
                 budgetAllocationRepository.save(budgetAloocation.get(m));
 
             }

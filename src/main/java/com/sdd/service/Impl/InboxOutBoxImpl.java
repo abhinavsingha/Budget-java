@@ -1,10 +1,8 @@
 package com.sdd.service.Impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.sdd.entities.HrData;
-import com.sdd.entities.MangeInboxOutbox;
+import com.sdd.entities.*;
 //import com.sdd.entities.MessageTran;
-import com.sdd.entities.Role;
 import com.sdd.entities.repository.*;
 import com.sdd.exception.SDDException;
 import com.sdd.jwt.HeaderUtils;
@@ -31,6 +29,10 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
     HrDataRepository hrDataRepository;
 
     @Autowired
+    CurrentStateRepository currentStateRepository;
+
+
+    @Autowired
     RoleRepository roleRepository;
 
     @Autowired
@@ -39,12 +41,11 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
     @Autowired
     MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
 
-
-//    @Autowired
-//    MsgTransRepository msgTransRepository;
-
     @Autowired
     AllocationRepository allocationRepository;
+
+    @Autowired
+    BudgetFinancialYearRepository budgetFinancialYearRepository;
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -143,13 +144,11 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                 }
 
             }
-        }
-
-        else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
+        } else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG", "BR");
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
 
-                if(inboxOutboxesList.get(i).getToUnit().equalsIgnoreCase(hrDataCheck.getUnitId())){
+                if (inboxOutboxesList.get(i).getToUnit().equalsIgnoreCase(hrDataCheck.getUnitId())) {
 
                     if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
                         InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
@@ -162,7 +161,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                         data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
                         data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
                         data.setAmount(mangeInboxOutbox.getAmount());
-                    data.setType(mangeInboxOutbox.getType());
+                        data.setType(mangeInboxOutbox.getType());
                         data.setStatus(mangeInboxOutbox.getStatus());
                         data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
@@ -179,7 +178,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                         data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
                         data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
                         data.setAmount(mangeInboxOutbox.getAmount());
-                    data.setType(mangeInboxOutbox.getType());
+                        data.setType(mangeInboxOutbox.getType());
                         data.setStatus(mangeInboxOutbox.getStatus());
                         data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
@@ -189,9 +188,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                 }
 
             }
-        }
-
-        else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
+        } else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB");
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
 
@@ -231,10 +228,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                 }
 
             }
-        }
-
-        else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
-            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB" );
+        } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB");
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
 
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("VE")) {
@@ -273,9 +268,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                 }
 
             }
-        }
-
-        else if (getCurrentRole.contains(HelperUtils.CBAPPROVER)) {
+        } else if (getCurrentRole.contains(HelperUtils.CBAPPROVER)) {
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB");
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
 
@@ -318,12 +311,20 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         }
 
 
+        List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
+        if (allocationType.size() > 0) {
+            inboxOutBoxResponse.setAllocationType(allocationType.get(0));
+        }
 
-
-
-
-
-
+        CurrntStateType stateList1 = currentStateRepository.findByTypeAndIsFlag("FINYEAR", "1");
+        if (stateList1 == null) {
+            BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo("01");
+            inboxOutBoxResponse.setBudgetFinancialYear(budgetFinancialYear);
+        } else {
+            BudgetFinancialYear budgetFinancialYear =
+                    budgetFinancialYearRepository.findBySerialNo(stateList1.getStateId());
+            inboxOutBoxResponse.setBudgetFinancialYear(budgetFinancialYear);
+        }
 
 
         inboxOutBoxResponse.setInboxList(inboxList);

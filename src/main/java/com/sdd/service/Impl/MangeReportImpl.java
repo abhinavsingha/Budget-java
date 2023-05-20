@@ -326,7 +326,7 @@ public class MangeReportImpl implements MangeReportService {
             for (Integer i = 0; i < modBudgetAllocations.size(); i++) {
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(modBudgetAllocations.get(i).getAmountType());
                 allocationAmount = allocationAmount + (Double.parseDouble(modBudgetAllocations.get(i).getAllocationAmount()) * amountUnit.getAmount());
-                balanceAmount = balanceAmount + (Double.parseDouble(modBudgetAllocations.get(i).getBalanceAmount()) * amountUnit.getAmount());
+//                balanceAmount = balanceAmount + (Double.parseDouble(modBudgetAllocations.get(i).getBalanceAmount()) * amountUnit.getAmount());
             }
         }
 
@@ -1276,8 +1276,9 @@ public class MangeReportImpl implements MangeReportService {
                             }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                         }
                         amountUnit = amountTypeObj.getAmount();
-                        if(row.getToUnit().equalsIgnoreCase(hrData.getUnitId()))
-                            amount = Double.valueOf(row.getBalanceAmount());
+                        if(row.getToUnit().equalsIgnoreCase(hrData.getUnitId())){
+//                            amount = Double.valueOf(row.getBalanceAmount());
+                        }
                         else
                         amount = Double.valueOf(row.getAllocationAmount());
 
@@ -1685,15 +1686,16 @@ public class MangeReportImpl implements MangeReportService {
                 float sum = 0;
                 Double amount;
                 Double amountUnit;
-                Double finAmount;
+                Double finAmount = Double.valueOf(0);
 
                 for (BudgetAllocation row : reportDetails) {
 
                     for (Integer k = 0; k < units.size(); k++) {
                         if (units.get(k).getUnit().equalsIgnoreCase(row.getToUnit())) {
 
-                            if(row.getToUnit().equalsIgnoreCase(hrData.getUnitId()))
-                                amount = Double.valueOf(row.getBalanceAmount());
+                            if(row.getToUnit().equalsIgnoreCase(hrData.getUnitId())){
+//                                amount = Double.valueOf(row.getBalanceAmount());
+                            }
                             else
                             amount = Double.valueOf(row.getAllocationAmount());
 
@@ -1703,7 +1705,7 @@ public class MangeReportImpl implements MangeReportService {
                                 }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                             }
                             amountUnit = amountTypeObj.getAmount();
-                            finAmount = amount * amountUnit / reqAmount;
+//                            finAmount = amount * amountUnit / reqAmount;
                             BudgetHead bHead = subHeadRepository.findByBudgetCodeId(row.getSubHead());
                             CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
                             sb.append("<tr>");
@@ -2122,7 +2124,7 @@ public class MangeReportImpl implements MangeReportService {
             int i = 1;
             String finyear = "";
             String unit = "";
-            Double amount;
+            Double amount = Double.valueOf(0);
             Double amountUnit;
             Double finAmount;
             Double revisedAmount;
@@ -2151,7 +2153,7 @@ public class MangeReportImpl implements MangeReportService {
 
                     for (Integer k = 0; k < units.size(); k++) {
                         if (units.get(k).getUnit().equalsIgnoreCase(row.getToUnit())) {
-                            amount = Double.valueOf(row.getBalanceAmount());
+//                            amount = Double.valueOf(row.getBalanceAmount());
                             if (row.getRevisedAmount() != null) {
                                 revisedAmount = Double.valueOf(row.getRevisedAmount());
                             } else
@@ -2602,7 +2604,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 int count = 0;
                 float sum = 0;
-                Double amount;
+                Double amount = Double.valueOf(0);
                 Double amountUnit;
                 Double finAmount;
                 float reSum = 0;
@@ -2615,8 +2617,9 @@ public class MangeReportImpl implements MangeReportService {
                     for (Integer k = 0; k < units.size(); k++) {
                         if (units.get(k).getUnit().equalsIgnoreCase(row.getToUnit())) {
 
-                            if(row.getToUnit().equalsIgnoreCase(hrData.getUnitId()))
-                                amount = Double.valueOf(row.getBalanceAmount());
+                            if(row.getToUnit().equalsIgnoreCase(hrData.getUnitId())){
+//                                amount = Double.valueOf(row.getBalanceAmount());
+                            }
                             else
                             amount = Double.valueOf(row.getAllocationAmount());
                             String unitIds = row.getToUnit();
@@ -2633,7 +2636,7 @@ public class MangeReportImpl implements MangeReportService {
                                 reFinalAmount = 0.0000;
                             } else {
                                 if(row.getToUnit().equalsIgnoreCase(hrData.getUnitId())) {
-                                    reTotalAmount = Double.valueOf(reData.get(0).getBalanceAmount());
+//                                    reTotalAmount = Double.valueOf(reData.get(0).getBalanceAmount());
                                 }else {
                                     reTotalAmount = Double.valueOf(reData.get(0).getAllocationAmount());
                                 }
@@ -3060,7 +3063,7 @@ public class MangeReportImpl implements MangeReportService {
                 float sum = 0;
                 float expsum = 0;
                 float percentagesum = 0;
-                Double amount;
+                Double amount = Double.valueOf(0);
                 Double amountUnit;
                 Double finAmount;
                 Double eAmount;
@@ -3074,7 +3077,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
                             if(row.getToUnit().equalsIgnoreCase(hrData.getUnitId())) {
-                                amount = Double.valueOf(row.getBalanceAmount());
+//                                amount = Double.valueOf(row.getBalanceAmount());
                                 allAmount = Double.valueOf(row.getAllocationAmount());
                             } else{
                             amount = Double.valueOf(row.getAllocationAmount());

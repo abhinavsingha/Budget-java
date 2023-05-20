@@ -99,13 +99,11 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         }
 
         if (budgetReciptSaveRequest.getAmountTypeId() == null || budgetReciptSaveRequest.getAmountTypeId().isEmpty()) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AMOUNT TYPE ID CAN NOT BE BLANK");
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AMOUNT TYPE CAN NOT BE BLANK");
         }
 
-
-        AllocationType allocationType = allocationRepository.findByAllocTypeId(budgetReciptSaveRequest.getAllocationTypeId());
-        if (allocationType == null) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID ");
+        if (budgetReciptSaveRequest.getAllocationType() == null || budgetReciptSaveRequest.getAllocationType().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION TYPE CAN NOT BE BLANK");
         }
 
 
@@ -124,6 +122,8 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
 
         AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetReciptSaveRequest.getAmountTypeId());
+
+
         if (amountUnit == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AMOUNT TYPE ID");
         }
@@ -176,32 +176,30 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID DATA.PLEASE CHECK");
         }
 
-//        for (Integer c = 0; c < budgetReciptSaveRequest.getReceiptSubRequests().size(); c++) {
-//
-//            List<BudgetAllocationDetails> data = budgetAllocationDetailsRepository.findByFromUnitAndFinYearAndAllocTypeIdAndSubHead("000000", budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getAllocationTypeId(), budgetReciptSaveRequest.getReceiptSubRequests().get(c).getBudgetHeadId());
-//
-//            if (data.size() > 0) {
-//                for (Integer j = 0; j < data.size(); j++) {
-//                    budgetAllocationDetailsRepository.delete(data.get(j));
-//                }
-//            }
-//        }
-
-        for (Integer i = 0; i < budgetReciptSaveRequest.getReceiptSubRequests().size(); i++) {
-
-            List<BudgetAllocation> budgetAloocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getReceiptSubRequests().get(i).getBudgetHeadId(), budgetReciptSaveRequest.getAllocationTypeId(), "Approved", "0", "0");
-
-            if (budgetAloocation.size() > 0) {
-                BudgetHead budgetHeadId = subHeadRepository.findByBudgetCodeId(budgetReciptSaveRequest.getReceiptSubRequests().get(i).getBudgetHeadId());
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA ALREADY SAVE FOR " + budgetHeadId.getSubHeadDescr());
-            }
-
-        }
 
         CgUnit budgetHeadUit = cgUnitRepository.findByUnit("001321");
         if (budgetHeadUit == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO BUDGET UNIT ID");
         }
+
+        List<AllocationType> allocationTypes = allocationRepository.findByIsFlag("1");
+        for (Integer j = 0; j < allocationTypes.size(); j++) {
+
+            AllocationType allocationTypeData = allocationTypes.get(j);
+            allocationTypeData.setIsFlag("0");
+            allocationRepository.save(allocationTypeData);
+
+        }
+
+        AllocationType allocationType = new AllocationType();
+        allocationType.setAllocTypeId(HelperUtils.getAllocationTypeId());
+        allocationType.setAllocType(budgetReciptSaveRequest.getAllocationType());
+        allocationType.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+        allocationType.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+        allocationType.setFinYear(budgetReciptSaveRequest.getBudgetFinancialYearId());
+        allocationType.setAllocDesc(budgetReciptSaveRequest.getAllocationType());
+        allocationType.setIsFlag("1");
+        AllocationType saveAllocationType = allocationRepository.save(allocationType);
 
 
         String authGroupId = HelperUtils.getAuthorityGroupId();
@@ -230,13 +228,13 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
             BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
 
-            budgetAllocationDetails.setAllocationId(HelperUtils.getAllocationId());
+            budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
             budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getReceiptSubRequests().get(j).getAllocationAmount()));
-            budgetAllocationDetails.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getReceiptSubRequests().get(j).getAllocationAmount()));
+//            budgetAllocationDetails.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getReceiptSubRequests().get(j).getAllocationAmount()));
             budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
-            budgetAllocationDetails.setAllocTypeId(budgetReciptSaveRequest.getAllocationTypeId());
-            allocationTypeData = budgetReciptSaveRequest.getAllocationTypeId();
+            budgetAllocationDetails.setAllocTypeId(saveAllocationType.getAllocTypeId());
+            allocationTypeData = saveAllocationType.getAllocTypeId();
             budgetAllocationDetails.setFinYear(budgetReciptSaveRequest.getBudgetFinancialYearId());
             budgetAllocationDetails.setFromUnit("000000");
             budgetAllocationDetails.setToUnit(budgetHeadUit.getUnit());
@@ -252,7 +250,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             budgetAllocationDetails.setIsDelete("0");
 
 
-            budgetAllocationDetails.setRefTransactionId(HelperUtils.getAllocationId());
+            budgetAllocationDetails.setRefTransactionId(HelperUtils.getBudgetAllocationTypeId());
             budgetAllocationDetails.setUserId(hrData.getPid());
             budgetAllocationDetails.setAmountType(amountUnit.getAmountTypeId());
             budgetAllocationDetails.setTransactionId(HelperUtils.getBudgetAlloctionRefrensId());
@@ -280,31 +278,20 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         currentStateRepository.save(currntStateType);
 
 
-        CurrntStateType currntStateType1 = new CurrntStateType();
-        currntStateType1.setCurrentStateId(HelperUtils.getStateId());
-        currntStateType1.setStateId(allocationType.getAllocTypeId());
-        currntStateType1.setStateName(allocationType.getAllocDesc());
-        currntStateType1.setIsFlag("1");
-        currntStateType1.setType("ALLOCATION");
-        currntStateType1.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-        currntStateType1.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-        currentStateRepository.save(currntStateType1);
-
-
         for (Integer j = 0; j < budgetReciptSaveRequest.getReceiptSubRequests().size(); j++) {
 
             BudgetAllocation budgetAllocation = new BudgetAllocation();
-            budgetAllocation.setAllocationId(HelperUtils.getAllocationId());
+            budgetAllocation.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
             budgetAllocation.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
             budgetAllocation.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             budgetAllocation.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-            budgetAllocation.setRefTransId(HelperUtils.getAllocationId());
+            budgetAllocation.setRefTransId(HelperUtils.getBudgetAllocationTypeId());
             budgetAllocation.setFinYear(budgetReciptSaveRequest.getBudgetFinancialYearId());
             budgetAllocation.setToUnit(budgetHeadUit.getUnit());
             budgetAllocation.setSubHead(budgetReciptSaveRequest.getReceiptSubRequests().get(j).getBudgetHeadId());
-            budgetAllocation.setAllocationTypeId(budgetReciptSaveRequest.getAllocationTypeId());
+            budgetAllocation.setAllocationTypeId(saveAllocationType.getAllocTypeId());
             budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getReceiptSubRequests().get(j).getAllocationAmount()));
-            budgetAllocation.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getReceiptSubRequests().get(j).getAllocationAmount()));
+//            budgetAllocation.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getReceiptSubRequests().get(j).getAllocationAmount()));
             budgetAllocation.setUnallocatedAmount("0");
             budgetAllocation.setIsFlag("0");
             budgetAllocation.setIsBudgetRevision("0");
@@ -344,7 +331,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         List<AuthorityTableResponse> authorityTableList = new ArrayList<AuthorityTableResponse>();
         BudgetReciptListResponse budgetAllocationResponse = new BudgetReciptListResponse();
         List<BudgetReciptListSubResponse> budgetAllocationList = new ArrayList<BudgetReciptListSubResponse>();
-        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDeleteAndIsBudgetRevision("000000", "0","0");
+        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDeleteAndIsBudgetRevision("000000", "0", "0");
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
             BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
@@ -372,7 +359,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             budgetAllocationReport.setAllocTypeId(allocationRepository.findByAllocTypeId(budgetAllocationSubReport.getAllocTypeId()));
             budgetAllocationReport.setSubHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(budgetAllocationSubReport.getSubHead()));
 
-            List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocations.get(i).getTransactionId(), "0");;
+            List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocations.get(i).getTransactionId(), "0");
             if (cdaParkingList.size() > 0) {
                 budgetAllocationReport.setIsCdaParked("1");
             } else {
@@ -461,7 +448,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         }
 
 
-        List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(HelperUtils.HEADUNITID, budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getBudgetHeadId(), budgetReciptSaveRequest.getAllocationTypeId(), "Approved", "0","0");
+        List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(HelperUtils.HEADUNITID, budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getBudgetHeadId(), budgetReciptSaveRequest.getAllocationTypeId(), "Approved", "0", "0");
         for (Integer m = 0; m < budgetAllocationDetailsList.size(); m++) {
             BudgetAllocationDetails budgetAllocationDetails = budgetAllocationDetailsList.get(m);
             budgetAllocationDetails.setIsDelete("1");
@@ -487,11 +474,10 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         }
 
 
-
         BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
-        budgetAllocationDetails.setAllocationId(HelperUtils.getAllocationId());
+        budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
         budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getAllocationAmount()));
-        budgetAllocationDetails.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getAllocationAmount()));
+//        budgetAllocationDetails.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getAllocationAmount()));
         budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
         budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
         budgetAllocationDetails.setAllocTypeId(budgetReciptSaveRequest.getAllocationTypeId());
@@ -517,11 +503,11 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
 
         BudgetAllocation budgetAllocation = new BudgetAllocation();
-        budgetAllocation.setAllocationId(HelperUtils.getAllocationId());
+        budgetAllocation.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
         budgetAllocation.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
         budgetAllocation.setCreatedOn(HelperUtils.getCurrentTimeStamp());
         budgetAllocation.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-        budgetAllocation.setRefTransId(HelperUtils.getAllocationId());
+        budgetAllocation.setRefTransId(HelperUtils.getBudgetAllocationTypeId());
         budgetAllocation.setFinYear(budgetReciptSaveRequest.getBudgetFinancialYearId());
         budgetAllocation.setToUnit(hrData.getUnitId());
         budgetAllocation.setSubHead(budgetReciptSaveRequest.getBudgetHeadId());
@@ -529,7 +515,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getAllocationAmount()));
         budgetAllocation.setUnallocatedAmount("0");
         budgetAllocation.setIsFlag("0");
-        budgetAllocation.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getAllocationAmount()));
+//        budgetAllocation.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getAllocationAmount()));
         budgetAllocation.setUserId(hrData.getPid());
         budgetAllocation.setStatus("Approved");
         budgetAllocation.setIsBudgetRevision("0");
@@ -545,7 +531,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         List<BudgetReciptListSubResponse> budgetAllocationList = new ArrayList<BudgetReciptListSubResponse>();
 
 
-        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDeleteAndIsBudgetRevision("000000", "0","0");
+        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDeleteAndIsBudgetRevision("000000", "0", "0");
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
             BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
@@ -622,10 +608,11 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         } else {
 
         }
+
         List<AuthorityTableResponse> authorityTableList = new ArrayList<AuthorityTableResponse>();
         BudgetReciptListResponse budgetAllocationResponse = new BudgetReciptListResponse();
         List<BudgetReciptListSubResponse> budgetAllocationList = new ArrayList<BudgetReciptListSubResponse>();
-        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDeleteAndIsBudgetRevision("000000", "0","0");
+        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDeleteAndIsBudgetRevision("000000", "0", "0");
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
             BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
@@ -700,16 +687,16 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
     public ApiResponse<AllBudgetRevisionResponse> getBudgetReciptFilter(BudgetReciptSaveRequest budgetReciptSaveRequest) {
         AllBudgetRevisionResponse budgetAllocationResponse = new AllBudgetRevisionResponse();
 
-        String authgroupId = "";
-        String token = headerUtils.getTokeFromHeader();
-        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
-        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
-        if (hrData == null) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID SESSION LOGIN AGAIN.");
-        } else {
-
-        }
+//        String token = headerUtils.getTokeFromHeader();
+//        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+//        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+//
+//        if (hrData == null) {
+//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID SESSION LOGIN AGAIN.");
+//        } else {
+//
+//        }
 
         if (budgetReciptSaveRequest.getBudgetFinancialYearId() == null || budgetReciptSaveRequest.getBudgetFinancialYearId().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FINANCIAL ID CAN NOT BE BLANK");
@@ -726,99 +713,90 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         }
 
 
-        HashMap<String, BudgetRecioptDemoResponse> hashMap = new HashMap<>();
+        List<AllocationType> allocationTypes = allocationRepository.findAll();
+
+        List<BudgetRecioptDemoResponse> budgetListData = new ArrayList<BudgetRecioptDemoResponse>();
 
 
-        List<BudgetHead> majorData = subHeadRepository.findByMajorHeadAndSubHeadTypeIdOrderBySerialNumberAsc(budgetReciptSaveRequest.getMajorHeadId(), budgetReciptSaveRequest.getBudgetHeadType());
+        String authgroupId = "";
+        if (allocationTypes.size() == 0) {
+            BudgetRecioptDemoResponse budgetMainData = new BudgetRecioptDemoResponse();
+            List<BudgetHead> majorData = subHeadRepository.findByMajorHeadAndSubHeadTypeIdOrderBySerialNumberAsc(budgetReciptSaveRequest.getMajorHeadId(), budgetReciptSaveRequest.getBudgetHeadType());
+            List<BudgetRecioptSubDemoResponse> budgetData = new ArrayList<BudgetRecioptSubDemoResponse>();
+            for (Integer l = 0; l < majorData.size(); l++) {
 
-
-        Collections.sort(majorData, new Comparator<BudgetHead>() {
-            public int compare(BudgetHead v1, BudgetHead v2) {
-                return v1.getSerialNumber().compareTo(v2.getSerialNumber());
-            }
-        });
-
-        for (Integer l = 0; l < majorData.size(); l++) {
-            List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndFinYearAndSubHeadAndIsDeleteAndIsBudgetRevision("000000", budgetReciptSaveRequest.getBudgetFinancialYearId(), majorData.get(l).getBudgetCodeId(), "0","0");
-
-            if (budgetAllocations.size() <= 0) {
-                BudgetRecioptDemoResponse budgetRecioptDemoResponse = new BudgetRecioptDemoResponse();
+                BudgetRecioptSubDemoResponse budgetRecioptDemoResponse = new BudgetRecioptSubDemoResponse();
                 budgetRecioptDemoResponse.setBudgetHead(majorData.get(l));
-                hashMap.put(majorData.get(l).getSubHeadDescr(), budgetRecioptDemoResponse);
+                budgetData.add(budgetRecioptDemoResponse);
+            }
+            budgetMainData.setData(budgetData);
+            budgetListData.add(budgetMainData);
+        } else {
 
-            } else {
-                for (Integer i = 0; i < budgetAllocations.size(); i++) {
+            for (Integer k = 0; k < allocationTypes.size(); k++) {
+                AllocationType allocationType = allocationTypes.get(k);
+                List<BudgetHead> majorData = subHeadRepository.findByMajorHeadAndSubHeadTypeIdOrderBySerialNumberAsc(budgetReciptSaveRequest.getMajorHeadId(), budgetReciptSaveRequest.getBudgetHeadType());
+                List<BudgetRecioptSubDemoResponse> budgetData = new ArrayList<BudgetRecioptSubDemoResponse>();
+                BudgetRecioptDemoResponse budgetMainData = new BudgetRecioptDemoResponse();
+                for (Integer l = 0; l < majorData.size(); l++) {
+                    List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision("000000", budgetReciptSaveRequest.getBudgetFinancialYearId(), majorData.get(l).getBudgetCodeId(), allocationType.getAllocTypeId(), "Approved", "0", "0");
 
-                    BudgetHead budgetHead = subHeadRepository.findByBudgetCodeIdAndSubHeadTypeIdOrderBySerialNumberAsc(budgetAllocations.get(i).getSubHead(), budgetReciptSaveRequest.getBudgetHeadType());
-
-                    if (hashMap.containsKey(budgetHead.getSubHeadDescr())) {
-                        BudgetRecioptDemoResponse budgetRecioptDemoResponse = hashMap.get(budgetHead.getSubHeadDescr());
-
-                        if (budgetAllocations.get(i).getAllocTypeId().equalsIgnoreCase("ALL_101")) {
-                            budgetRecioptDemoResponse.setBe(budgetAllocations.get(i).getAllocationAmount());
-                        } else if (budgetAllocations.get(i).getAllocTypeId().equalsIgnoreCase("ALL_102")) {
-                            budgetRecioptDemoResponse.setRe(budgetAllocations.get(i).getAllocationAmount());
-                        } else if (budgetAllocations.get(i).getAllocTypeId().equalsIgnoreCase("ALL_105")) {
-                            budgetRecioptDemoResponse.setMa(budgetAllocations.get(i).getAllocationAmount());
-                        } else if (budgetAllocations.get(i).getAllocTypeId().equalsIgnoreCase("ALL_107")) {
-                            budgetRecioptDemoResponse.setSg(budgetAllocations.get(i).getAllocationAmount());
-                        } else if (budgetAllocations.get(i).getAllocTypeId().equalsIgnoreCase("ALL_106")) {
-                            budgetRecioptDemoResponse.setVoa(budgetAllocations.get(i).getAllocationAmount());
-                        }
-                        budgetRecioptDemoResponse.setTransactionId(budgetAllocations.get(0).getTransactionId());
-                        budgetRecioptDemoResponse.setBudgetHead(budgetHead);
-
-                        hashMap.put(budgetHead.getSubHeadDescr(), budgetRecioptDemoResponse);
-
+                    if (budgetAllocations.size() <= 0) {
+                        BudgetRecioptSubDemoResponse budgetRecioptDemoResponse = new BudgetRecioptSubDemoResponse();
+                        budgetRecioptDemoResponse.setBudgetHead(majorData.get(l));
+                        budgetRecioptDemoResponse.setAllocationType(allocationType);
+                        budgetMainData.setAllocationType(allocationType);
+                        budgetData.add(budgetRecioptDemoResponse);
 
                     } else {
 
-                        BudgetRecioptDemoResponse budgetRecioptDemoResponse = new BudgetRecioptDemoResponse();
+                        BudgetHead budgetHead = subHeadRepository.findByBudgetCodeIdAndSubHeadTypeIdOrderBySerialNumberAsc(budgetAllocations.get(0).getSubHead(), budgetReciptSaveRequest.getBudgetHeadType());
 
-                        if (budgetAllocations.get(i).getAllocTypeId().equalsIgnoreCase("ALL_101")) {
-                            budgetRecioptDemoResponse.setBe(budgetAllocations.get(i).getAllocationAmount());
-                        } else if (budgetAllocations.get(i).getAllocTypeId().equalsIgnoreCase("ALL_102")) {
-                            budgetRecioptDemoResponse.setRe(budgetAllocations.get(i).getAllocationAmount());
-                        } else if (budgetAllocations.get(i).getAllocTypeId().equalsIgnoreCase("ALL_105")) {
-                            budgetRecioptDemoResponse.setMa(budgetAllocations.get(i).getAllocationAmount());
-                        } else if (budgetAllocations.get(i).getAllocTypeId().equalsIgnoreCase("ALL_107")) {
-                            budgetRecioptDemoResponse.setSg(budgetAllocations.get(i).getAllocationAmount());
-                        } else if (budgetAllocations.get(i).getAllocTypeId().equalsIgnoreCase("ALL_106")) {
-                            budgetRecioptDemoResponse.setVoa(budgetAllocations.get(i).getAllocationAmount());
-                        }
-                        budgetRecioptDemoResponse.setTransactionId(budgetAllocations.get(0).getTransactionId());
+                        BudgetRecioptSubDemoResponse budgetRecioptDemoResponse = new BudgetRecioptSubDemoResponse();
                         budgetRecioptDemoResponse.setBudgetHead(budgetHead);
-                        authgroupId = budgetAllocations.get(i).getAuthGroupId();
-                        hashMap.put(budgetHead.getSubHeadDescr(), budgetRecioptDemoResponse);
+                        authgroupId = budgetAllocations.get(0).getAuthGroupId();
+                        budgetRecioptDemoResponse.setBudgetAllocations(budgetAllocations);
+                        budgetRecioptDemoResponse.setAllocationType(allocationType);
+                        budgetMainData.setAllocationType(allocationType);
+                        budgetData.add(budgetRecioptDemoResponse);
 
                     }
                 }
-            }
+                budgetMainData.setData(budgetData);
 
+                budgetListData.add(budgetMainData);
+            }
 
         }
 
 
-        List<BudgetRecioptDemoResponse> budgetData = new ArrayList<BudgetRecioptDemoResponse>();
-        for (Map.Entry<String, BudgetRecioptDemoResponse> entry : hashMap.entrySet()) {
-            BudgetRecioptDemoResponse tabData = entry.getValue();
-            budgetData.add(tabData);
+//        List<BudgetRecioptSubDemoResponse> budgetData = new ArrayList<BudgetRecioptSubDemoResponse>();
+//        for (Map.Entry<String, BudgetRecioptSubDemoResponse> entry : hashMap.entrySet()) {
+//            BudgetRecioptSubDemoResponse tabData = entry.getValue();
+//            budgetData.add(tabData);
+//        }
 
+//        Collections.sort(budgetData, new Comparator<BudgetRecioptSubDemoResponse>() {
+//            public int compare(BudgetRecioptSubDemoResponse v1, BudgetRecioptSubDemoResponse v2) {
+//                return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
+//            }
+//        });
+
+        List<BudgetRecioptDemoResponse> budgetMainDataResponse = new ArrayList<BudgetRecioptDemoResponse>();
+
+        for (Integer i = 0; i < budgetListData.size(); i++) {
+            BudgetRecioptDemoResponse budgetRecioptDemoResponse = new BudgetRecioptDemoResponse();
+            budgetRecioptDemoResponse.setData(budgetListData.get(i).getData());
+            budgetRecioptDemoResponse.setAllocationType(budgetListData.get(i).getAllocationType());
+            budgetMainDataResponse.add(budgetRecioptDemoResponse);
         }
-
-
-        Collections.sort(budgetData, new Comparator<BudgetRecioptDemoResponse>() {
-            public int compare(BudgetRecioptDemoResponse v1, BudgetRecioptDemoResponse v2) {
-                return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
-            }
-        });
 
 
         List<Authority> authoritiesList = authorityRepository.findByAuthGroupId(authgroupId);
 
         budgetAllocationResponse.setAuthList(authoritiesList);
-        budgetAllocationResponse.setLoda(null);
-        budgetAllocationResponse.setBudgetData(budgetData);
+//        budgetAllocationResponse.setLoda(null);
+        budgetAllocationResponse.setBudgetData(budgetMainDataResponse);
 
 
         return ResponseUtils.createSuccessResponse(budgetAllocationResponse, new TypeReference<AllBudgetRevisionResponse>() {

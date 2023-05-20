@@ -10,6 +10,8 @@ public class GetAmountRequest {
 
 
     private String unitId;
+    private String budgetFinancialYearId;
     private String budgetHeadId;
+
 
 }

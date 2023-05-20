@@ -33,6 +33,9 @@ public class AllocationType {
     @Column(name = "REMARKS")
     private String remarks;
 
+    @Column(name = "FIN_YEAR")
+    private String finYear;
+
 
     @Column(name = "CREATED_ON")
     private Timestamp createdOn;

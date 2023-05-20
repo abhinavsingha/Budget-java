@@ -140,15 +140,21 @@ public class DashboardServiceImpl implements DashBoardService {
       hradataResponse.setRole(setAllRole);
     }
 
-    CurrntStateType stateList = currentStateRepository.findByTypeAndIsFlag("ALLOCATION", "1");
-    if (stateList == null) {
-      AllocationType allocationType = allocationRepository.findByAllocTypeId("ALL_101");
-      dashBoardResponse.setAllocationType(allocationType);
-    } else {
-      AllocationType allocationType =
-          allocationRepository.findByAllocTypeId(stateList.getStateId());
-      dashBoardResponse.setAllocationType(allocationType);
+//    CurrntStateType stateList = currentStateRepository.findByTypeAndIsFlag("ALLOCATION", "1");
+//    if (stateList == null) {
+//      AllocationType allocationType = allocationRepository.findByAllocTypeId("ALL_101");
+//      dashBoardResponse.setAllocationType(allocationType);
+//    } else {
+//      AllocationType allocationType =
+//          allocationRepository.findByAllocTypeId(stateList.getStateId());
+//      dashBoardResponse.setAllocationType(allocationType);
+//    }
+
+    List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
+    if (allocationType.size() > 0) {
+      dashBoardResponse.setAllocationType(allocationType.get(0));
     }
+
 
     CurrntStateType stateList1 = currentStateRepository.findByTypeAndIsFlag("FINYEAR", "1");
     if (stateList1 == null) {
@@ -279,7 +285,7 @@ public class DashboardServiceImpl implements DashBoardService {
 
     List<BudgetAllocation> budgetAllocation =
         budgetAllocationRepository.findByToUnitAndIsFlagAndIsBudgetRevision(
-            hrDataCheck.getUnitId(), "1", "0");
+            hrDataCheck.getUnitId(), "0", "0");
 
     for (int i = 0; i < budgetAllocation.size(); i++) {
 
@@ -306,7 +312,7 @@ public class DashboardServiceImpl implements DashBoardService {
 
       List<BudgetAllocation> budgetAllocationList =
           budgetAllocationRepository.findByToUnitAndFinYearAndIsFlagAndIsBudgetRevision(
-              unitData.getUnit(), "01", "1", "0");
+              unitData.getUnit(), "01", "0", "0");
       double allocationAmount = 0;
       for (int i = 0; i < budgetAllocationList.size(); i++) {
         allocationAmount =

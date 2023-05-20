@@ -1,6 +1,7 @@
 package com.sdd.response;
 
 import com.sdd.entities.*;
+import com.sdd.request.CdaParkingCrAndDrResponse;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,8 +28,7 @@ public class BudgetAllocationSubResponse {
     private BudgetHead subHead;
     private AllocationType allocTypeId;
     private String allocationAmount;
-    private String balanceAmount;
-    private String revisedAmount;
+    private List<CdaParkingCrAndDrResponse> cdaData;
     private String authGroupId;
     private String status;
     private String purposeCode;

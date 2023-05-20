@@ -12,7 +12,7 @@ public class BudgetReciptSaveRequest {
 
 
     private String budgetFinancialYearId;
-    private String allocationTypeId;
+    private String allocationType;
     private String amountTypeId;
 
     ArrayList<AuthRequest> authListData;

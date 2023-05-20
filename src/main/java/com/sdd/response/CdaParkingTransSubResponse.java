@@ -21,10 +21,11 @@ public class CdaParkingTransSubResponse {
     private String cdaParkingId;
     private BudgetFinancialYear finYearId;
     private AllocationType allocationType;
+    private AmountUnit amountUnit;
     private BudgetHead budgetHead;
     private String remarks;
     private CdaParking ginNo;
-    private String currentParkingAmount;
+    private String remainingCdaAmount;
     private String totalParkingAmount;
     private String unitId;
     private String authGroupId;

@@ -44,8 +44,6 @@ public class BudgetAllocationDetails {
     @Column(name = "ALLOCATION_AMOUNT", nullable = false)
     private String allocationAmount;
 
-    @Column(name = "BALANCE_AMOUNT")
-    private String balanceAmount;
 
     @Column(name = "AUTH_GROUP_ID", nullable = false)
     private String authGroupId;
@@ -85,6 +83,8 @@ public class BudgetAllocationDetails {
 
     @Column(name = "AMOUNT_TYPE")
     private String amountType;
+
+
 
 
 }

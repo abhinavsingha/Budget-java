@@ -27,6 +27,12 @@ import java.util.Date;
 import java.util.Random;
 
 public class HelperUtils {
+    public static final String ACTIVEFLAG = "1";
+    public static final String DEACTIVEFLAG = "0";
+    public static final String ISDELETE = "0";
+    public static final String NOTDELETE = "1";
+
+
     public static String SYSTEMADMIN = "120";
     public static String UNITADMIN = "119";
     public static String BUDGETMANGER = "118";
@@ -61,6 +67,9 @@ public class HelperUtils {
     public static String getCdaId() {
         return "CDA_ID" + ConverterUtils.getRandomTimeStamp();
     }
+    public static String getCdaCrDrId() {
+        return "CDR_ID" + ConverterUtils.getRandomTimeStamp();
+    }
 
     public static String getAuthorityGroupId() {
         return "AGU_ID" + ConverterUtils.getRandomTimeStamp();
@@ -71,8 +80,11 @@ public class HelperUtils {
         return "CB_ID" + ConverterUtils.getRandomTimeStamp();
     }
 
-    public static String getAllocationId() {
+    public static String getAllocationTypeId() {
         return "ALL_ID" + ConverterUtils.getRandomTimeStamp();
+    }
+    public static String getBudgetAllocationTypeId() {
+        return "BA_ID" + ConverterUtils.getRandomTimeStamp();
     }
     public static String getStateId() {
         return "ST_ID" + ConverterUtils.getRandomTimeStamp();

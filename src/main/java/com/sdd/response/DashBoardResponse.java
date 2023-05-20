@@ -12,7 +12,7 @@ import java.util.List;
 public class DashBoardResponse {
 
   HradataResponse userDetails;
-  AllocationType allocationType;
+
   String outBox;
   String Inbox;
 
@@ -20,4 +20,5 @@ public class DashBoardResponse {
   UnitWiseExpenditueResponse unitWiseExpenditure;
 
   BudgetFinancialYear budgetFinancialYear;
+  AllocationType allocationType;
 }
