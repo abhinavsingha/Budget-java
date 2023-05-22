@@ -2,10 +2,8 @@ package com.sdd.controller.WebApi;
 
 
 import com.sdd.entities.HrData;
-import com.sdd.response.ApiResponse;
-import com.sdd.response.DefaultResponse;
-import com.sdd.response.HradataResponse;
-import com.sdd.response.InboxOutBoxResponse;
+import com.sdd.request.RebaseBudgetHistory;
+import com.sdd.response.*;
 import com.sdd.service.InboxOutBoxService;
 import com.sdd.service.MangeUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +40,22 @@ public class InboxOutboxController {
 	public ResponseEntity<ApiResponse<InboxOutBoxResponse>> readMessage(@PathVariable(value = "msgId") String msgId) {
 		return new ResponseEntity<>(inboxOutBoxService.readMessage(msgId), HttpStatus.OK);
 	}
+
+	@GetMapping("/getApprovedList")
+	public ResponseEntity<ApiResponse<List<ApprovedResponse>>> getApprovedList() {
+		return new ResponseEntity<>(inboxOutBoxService.getApprovedList(), HttpStatus.OK);
+	}
+
+	@GetMapping("/getArchivedList")
+	public ResponseEntity<ApiResponse<List<ApprovedResponse>>>  getArchivedList() {
+		return new ResponseEntity<>(inboxOutBoxService.getArchivedList(), HttpStatus.OK);
+	}
+	@GetMapping("/getApprovedListData/{groupId}")
+	public ResponseEntity<ApiResponse<List<ArchivedResponse>>> getApprovedListData(@PathVariable(value = "groupId") String groupId) {
+		return new ResponseEntity<>(inboxOutBoxService.getApprovedListData(groupId), HttpStatus.OK);
+	}
+
+
 
 
 

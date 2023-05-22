@@ -8,6 +8,7 @@ import com.sdd.exception.SDDException;
 import com.sdd.jwt.HeaderUtils;
 import com.sdd.jwt.JwtUtils;
 import com.sdd.jwtParse.TokenParseData;
+import com.sdd.request.RebaseBudgetHistory;
 import com.sdd.response.*;
 import com.sdd.service.InboxOutBoxService;
 import com.sdd.service.MangeUserService;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +57,15 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
     @Autowired
     AuthorityRepository authorityRepository;
+
+    @Autowired
+    private BudgetAllocationDetailsRepository budgetAllocationDetailsRepository;
+
+    @Autowired
+    private AmountUnitRepository amountUnitRepository;
+
+    @Autowired
+    private SubHeadRepository subHeadRepository;
 
 
     @Override
@@ -437,4 +448,150 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         return ResponseUtils.createSuccessResponse(defaultResponse, new TypeReference<InboxOutBoxResponse>() {
         });
     }
+
+    @Override
+    public ApiResponse<List<ApprovedResponse>> getApprovedList() {
+        List<ApprovedResponse> responce = new ArrayList<ApprovedResponse>();
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+        String getCurrentRole = "";
+        try {
+            getCurrentRole = hrDataCheck.getRoleId().split(",")[0];
+        } catch (Exception e) {
+        }
+        LocalDate currentDate = LocalDate.now();
+        int year = currentDate.getYear();
+        int month = currentDate.getMonthValue();
+        if (month < 4) {
+            year--; // Reduce the year by 1 to get the previous financial year
+        }
+        String financialYear = String.format("%d-%02d", year, (year + 1) % 100);
+
+
+        if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER) || getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
+            List<MangeInboxOutbox> inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG");
+            List<BudgetAllocationDetails> allocationData = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(inboxOutboxesList.get(0).getGroupId(), "0");
+            BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.get(0).getFinYear());
+            if (finYear.getFinYear().equalsIgnoreCase(financialYear)) {
+            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+                MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+                ApprovedResponse data = new ApprovedResponse();
+                data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+                data.setType(mangeInboxOutbox.getType());
+                data.setSubmissionDate(mangeInboxOutbox.getCreatedOn());
+                data.setApprovedDate(mangeInboxOutbox.getUpdatedOn());
+                data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                data.setStatus(mangeInboxOutbox.getStatus());
+                data.setRemarks(mangeInboxOutbox.getRemarks());
+                data.setGroupId(mangeInboxOutbox.getGroupId());
+                data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                data.setAmount(mangeInboxOutbox.getAmount());
+                responce.add(data);
+            }
+        }
+        }
+        return ResponseUtils.createSuccessResponse(responce,  new TypeReference<List<ApprovedResponse>>()  {
+        });
+    }
+
+    @Override
+    public ApiResponse<List<ApprovedResponse>> getArchivedList() {
+        List<ApprovedResponse> responce = new ArrayList<ApprovedResponse>();
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+        String getCurrentRole = "";
+        try {
+            getCurrentRole = hrDataCheck.getRoleId().split(",")[0];
+        } catch (Exception e) {
+        }
+        LocalDate currentDate = LocalDate.now();
+        int year = currentDate.getYear();
+        int month = currentDate.getMonthValue();
+        if (month < 4) {
+            year--; // Reduce the year by 1 to get the previous financial year
+        }
+        String financialYear = String.format("%d-%02d", year, (year + 1) % 100);
+
+
+        if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER) || getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
+            List<MangeInboxOutbox> inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG");
+            List<BudgetAllocationDetails> allocationData = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(inboxOutboxesList.get(0).getGroupId(), "0");
+            BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.get(0).getFinYear());
+            if (finYear.getFinYear()!=financialYear) {
+                for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+                    ApprovedResponse data = new ApprovedResponse();
+                    data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+                    data.setType(mangeInboxOutbox.getType());
+                    data.setSubmissionDate(mangeInboxOutbox.getCreatedOn());
+                    data.setApprovedDate(mangeInboxOutbox.getUpdatedOn());
+                    data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                    data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                    data.setStatus(mangeInboxOutbox.getStatus());
+                    data.setRemarks(mangeInboxOutbox.getRemarks());
+                    data.setGroupId(mangeInboxOutbox.getGroupId());
+                    data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                    data.setAmount(mangeInboxOutbox.getAmount());
+                    responce.add(data);
+                }
+            }
+        }
+        return ResponseUtils.createSuccessResponse(responce,  new TypeReference<List<ApprovedResponse>>()  {
+        });
+    }
+
+
+    @Override
+    public ApiResponse<List<ArchivedResponse>>getApprovedListData(String groupId) {
+        List<ArchivedResponse> responce = new ArrayList<ArchivedResponse>();
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+        if (groupId == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "GROUP ID CAN NOT BE BLANK OR EMPTY");
+        }
+        String getCurrentRole = "";
+        try {
+            getCurrentRole = hrDataCheck.getRoleId().split(",")[0];
+        } catch (Exception e) {
+        }
+        if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER) || getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
+            List<BudgetAllocationDetails> inboxOutboxesList = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId,"0");
+            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+                BudgetAllocationDetails mangeInboxOutbox = inboxOutboxesList.get(i);
+                ArchivedResponse data = new ArchivedResponse();
+                data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocTypeId()));
+                data.setFinancialYear(budgetFinancialYearRepository.findBySerialNo(mangeInboxOutbox.getFinYear()));
+                data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                data.setAllocationAmount(mangeInboxOutbox.getAllocationAmount());
+                data.setBalAmount("0.0000");
+                data.setApprovedAmount("0.0000");
+                data.setReceiptAmount("0.0000");
+                data.setAmountType(amountUnitRepository.findByAmountTypeId(mangeInboxOutbox.getAmountType()));
+                data.setStatus(mangeInboxOutbox.getStatus());
+                data.setRemarks(mangeInboxOutbox.getRemarks());
+                data.setSubmissionDate(mangeInboxOutbox.getCreatedOn());
+                data.setApprovedDate(mangeInboxOutbox.getUpdatedOn());
+                data.setGroupId(mangeInboxOutbox.getAuthGroupId());
+                data.setBudgetHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(mangeInboxOutbox.getSubHead()));
+                responce.add(data);
+            }
+        }
+        return ResponseUtils.createSuccessResponse(responce,  new TypeReference<List<ArchivedResponse>>()  {
+        });
+    }
+
 }
