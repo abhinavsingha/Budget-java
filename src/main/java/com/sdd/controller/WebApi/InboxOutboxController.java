@@ -55,8 +55,4 @@ public class InboxOutboxController {
 		return new ResponseEntity<>(inboxOutBoxService.getApprovedListData(groupId), HttpStatus.OK);
 	}
 
-
-
-
-
 }
