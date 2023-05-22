@@ -1758,12 +1758,23 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
-        CgUnit cgUnitData = cgUnitRepository.findByUnit(hrData.getUnitId());
 
 
         if (budgetHeadId.getBudgetHeadId() == null || budgetHeadId.getBudgetHeadId().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "SUB HEAD ID CAN NOT BE BLANK");
         }
+
+
+
+
+        if (budgetHeadId.getUnitId() == null || budgetHeadId.getUnitId().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT ID CAN NOT BE BLANK");
+        }
+        CgUnit cgUnitData = cgUnitRepository.findByUnit(budgetHeadId.getUnitId());
+        if (cgUnitData == null ) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID UNIT ID.");
+        }
+
 
         if (budgetHeadId.getBudgetFinancialYearId() == null || budgetHeadId.getBudgetFinancialYearId().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FIN YEAR ID CAN NOT BE BLANK key:-budgetFinancialYearId");

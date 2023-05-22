@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -36,4 +37,10 @@ public class ContingentBillSaveRequest {
 
     private String contingentBilId;
     private String allocationTypeId;
+
+    private List<CdaTransAllocationRequest> cdaParkingId;
+
+
+
+
 }

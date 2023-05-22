@@ -11,6 +11,8 @@ public interface AllocationRepository extends JpaRepository<AllocationType, Stri
 
 
     AllocationType findByAllocTypeId(String allocationId);
+    AllocationType findByAllocDescAndIsFlagAndFinYear(String allocationName,String isFlag,String finYear);
+    List<AllocationType> findByFinYear(String finYear);
     List<AllocationType> findByIsFlag(String isFlag);
 
 //    AllocationType findByAutherId(String authorsId);

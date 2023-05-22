@@ -1,6 +1,7 @@
 package com.sdd.response;
 
 import com.sdd.entities.*;
+import com.sdd.request.CdaParkingCrAndDrResponse;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -43,5 +44,7 @@ public class ContingentBillResponse {
     private String onAccountOf;
     private String authorityDetails;
 
+
+    private List<CdaParkingCrAndDrResponse> cdaData;
 
 }

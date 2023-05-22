@@ -182,24 +182,29 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO BUDGET UNIT ID");
         }
 
-        List<AllocationType> allocationTypes = allocationRepository.findByIsFlag("1");
-        for (Integer j = 0; j < allocationTypes.size(); j++) {
 
-            AllocationType allocationTypeData = allocationTypes.get(j);
-            allocationTypeData.setIsFlag("0");
-            allocationRepository.save(allocationTypeData);
+        AllocationType saveAllocationType = allocationRepository.findByAllocDescAndIsFlagAndFinYear(budgetReciptSaveRequest.getAllocationType(), "1", budgetReciptSaveRequest.getBudgetFinancialYearId());
 
+        if (saveAllocationType == null) {
+
+            List<AllocationType> allocationTypes = allocationRepository.findByIsFlag("1");
+            for (Integer j = 0; j < allocationTypes.size(); j++) {
+
+                AllocationType allocationTypeData = allocationTypes.get(j);
+                allocationTypeData.setIsFlag("0");
+                allocationRepository.save(allocationTypeData);
+            }
+
+            AllocationType allocationType = new AllocationType();
+            allocationType.setAllocTypeId(HelperUtils.getAllocationTypeId());
+            allocationType.setAllocType(budgetReciptSaveRequest.getAllocationType());
+            allocationType.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            allocationType.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            allocationType.setFinYear(budgetReciptSaveRequest.getBudgetFinancialYearId());
+            allocationType.setAllocDesc(budgetReciptSaveRequest.getAllocationType());
+            allocationType.setIsFlag("1");
+            saveAllocationType = allocationRepository.save(allocationType);
         }
-
-        AllocationType allocationType = new AllocationType();
-        allocationType.setAllocTypeId(HelperUtils.getAllocationTypeId());
-        allocationType.setAllocType(budgetReciptSaveRequest.getAllocationType());
-        allocationType.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-        allocationType.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-        allocationType.setFinYear(budgetReciptSaveRequest.getBudgetFinancialYearId());
-        allocationType.setAllocDesc(budgetReciptSaveRequest.getAllocationType());
-        allocationType.setIsFlag("1");
-        AllocationType saveAllocationType = allocationRepository.save(allocationType);
 
 
         String authGroupId = HelperUtils.getAuthorityGroupId();
@@ -613,6 +618,8 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         BudgetReciptListResponse budgetAllocationResponse = new BudgetReciptListResponse();
         List<BudgetReciptListSubResponse> budgetAllocationList = new ArrayList<BudgetReciptListSubResponse>();
         List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDeleteAndIsBudgetRevision("000000", "0", "0");
+
+
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
             BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
@@ -684,7 +691,8 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
     }
 
     @Override
-    public ApiResponse<AllBudgetRevisionResponse> getBudgetReciptFilter(BudgetReciptSaveRequest budgetReciptSaveRequest) {
+    public ApiResponse<AllBudgetRevisionResponse> getBudgetReciptFilter(BudgetReciptSaveRequest
+                                                                                budgetReciptSaveRequest) {
         AllBudgetRevisionResponse budgetAllocationResponse = new AllBudgetRevisionResponse();
 
 
@@ -708,16 +716,17 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         }
 
 
-        if (budgetReciptSaveRequest.getBudgetHeadType() == null || budgetReciptSaveRequest.getBudgetHeadType().isEmpty()) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET HEAD TYPE CAN NOT BE BLANK");
-        }
+//        if (budgetReciptSaveRequest.getBudgetHeadType() == null || budgetReciptSaveRequest.getBudgetHeadType().isEmpty()) {
+//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET HEAD TYPE CAN NOT BE BLANK");
+//        }
 
 
-        List<AllocationType> allocationTypes = allocationRepository.findAll();
+//        List<AllocationType> allocationTypes = allocationRepository.findAll();
+
+        List<AllocationType> allocationTypes = allocationRepository.findByFinYear(budgetReciptSaveRequest.getBudgetFinancialYearId());
+
 
         List<BudgetRecioptDemoResponse> budgetListData = new ArrayList<BudgetRecioptDemoResponse>();
-
-
         String authgroupId = "";
         if (allocationTypes.size() == 0) {
             BudgetRecioptDemoResponse budgetMainData = new BudgetRecioptDemoResponse();
