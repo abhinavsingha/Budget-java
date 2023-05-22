@@ -775,10 +775,14 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        if (reportRequest.getAllocationTypeId() == null || reportRequest.getAllocationTypeId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "ALLOCATION TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(reportRequest.getAmountTypeId());
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType();
-        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndIsFlagAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), "0", "0");
+        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0");
 
         if (budgetAllocationsDetalis.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -1045,8 +1049,12 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        if (req.getAllocationTypeId() == null || req.getAllocationTypeId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "ALLOCATION TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(req.getFinYearId());
-        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findBySubHeadAndFinYearAndIsFlagAndIsBudgetRevision(req.getSubHeadId(), req.getFinYearId(), "0", "0");
+        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getSubHeadId(), req.getFinYearId(), req.getAllocationTypeId(), "0");
         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(req.getSubHeadId());
         if (budgetAllocationsDetalis.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -1277,7 +1285,7 @@ public class MangeReportImpl implements MangeReportService {
                         }
                         amountUnit = amountTypeObj.getAmount();
                         if(row.getToUnit().equalsIgnoreCase(hrData.getUnitId())){
-//                            amount = Double.valueOf(row.getBalanceAmount());
+                            continue;
                         }
                         else
                         amount = Double.valueOf(row.getAllocationAmount());
@@ -1677,7 +1685,7 @@ public class MangeReportImpl implements MangeReportService {
             String unit = "";
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(subHeadId, allocationType, "0", "0");
+                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId,allocationType, "0");
                 if (reportDetails.size() <= 0) {
                     return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                     }, "RECORD NOT FOUND OR EMPTY", HttpStatus.OK.value());
@@ -1694,7 +1702,7 @@ public class MangeReportImpl implements MangeReportService {
                         if (units.get(k).getUnit().equalsIgnoreCase(row.getToUnit())) {
 
                             if(row.getToUnit().equalsIgnoreCase(hrData.getUnitId())){
-//                                amount = Double.valueOf(row.getBalanceAmount());
+                                continue;
                             }
                             else
                             amount = Double.valueOf(row.getAllocationAmount());
@@ -1705,7 +1713,7 @@ public class MangeReportImpl implements MangeReportService {
                                 }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                             }
                             amountUnit = amountTypeObj.getAmount();
-//                            finAmount = amount * amountUnit / reqAmount;
+                            finAmount = amount * amountUnit / reqAmount;
                             BudgetHead bHead = subHeadRepository.findByBudgetCodeId(row.getSubHead());
                             CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
                             sb.append("<tr>");
@@ -2247,7 +2255,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getBEREAllocationReport(String finYearId, String allocationType, String amountTypeId) {
+    public ApiResponse<List<FilePathResponse>> getBEREAllocationReport(String finYearId, String allocationTypeBE,String allocationTypeRE, String amountTypeId) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -2261,17 +2269,26 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "FINANCIAL YEAR CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
-        if (allocationType == null || allocationType.isEmpty()) {
+        if (allocationTypeBE == null || allocationTypeBE.isEmpty()) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "ALLOCATION TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+            }, "ALLOCATION TYPE BE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (allocationTypeRE == null || allocationTypeRE.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "ALLOCATION TYPE RE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
         if (amountTypeId == null || amountTypeId.isEmpty()) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
-        AllocationType type = allocationRepository.findByAllocTypeId(allocationType);
+        if (allocationTypeBE.equalsIgnoreCase(allocationTypeRE)) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "BE or RE ALLOCATION CAN NOT BE SAME", HttpStatus.OK.value());
+        }
+        AllocationType type = allocationRepository.findByAllocTypeId(allocationTypeBE);
+        AllocationType types = allocationRepository.findByAllocTypeId(allocationTypeRE);
 
-        List<String> rowData = budgetAllocationRepository.findSubHead(finYearId, allocationType);
+        List<String> rowData = budgetAllocationRepository.findSubHead(finYearId, allocationTypeBE);
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -2555,15 +2572,15 @@ public class MangeReportImpl implements MangeReportService {
                     "</head>\n" +
                     "<body>\n" +
                     "<div class=\"wrapper\">\n" +
-                    "    <div class=\"header\"> <strong>BE-RE ALLOCATION REPORT</strong></div>\n" +
+                    "    <div class=\"header\"> <strong>RE ALLOCATION REPORT</strong></div>\n" +
                     "    <br></br>\n" +
                     "    <table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%\">\n" +
                     "        <thead>\n" +
                     "        <tr>\n" +
                     "            <th scope=\"col\">REVENUE OBJECT HEAD </th>\n" +
                     "            <th class=\"dcf-txt-center\" scope=\"col\"> UNIT </th>\n" +
-                    "            <th class=\"dcf-txt-center\" scope=\"col\">BE ${finYear_placeholder} ALLOCATION(IN (in ${amountType_placeholder}))</th>\n" +
-                    "            <th class=\"dcf-txt-center\" scope=\"col\">RE ${finYear_placeholder} ALLOCATION(IN (in ${amountType_placeholder}))</th>\n" +
+                    "            <th class=\"dcf-txt-center\" scope=\"col\">${allocationTypeBE_placeholder} ${finYear_placeholder} ALLOCATION(IN (in ${amountType_placeholder}))</th>\n" +
+                    "            <th class=\"dcf-txt-center\" scope=\"col\">${allocationTypeRE_placeholder} ${finYear_placeholder} ALLOCATION(IN (in ${amountType_placeholder}))</th>\n" +
                     "\n" +
                     "        </tr>\n" +
                     "        </thead>\n" +
@@ -2575,6 +2592,7 @@ public class MangeReportImpl implements MangeReportService {
                     "    <div>\n" +
                     "\n" +
                     "    </div>\n" +
+
                     "\n" +
                     "    <div class=\"sign\">\n" +
                     "        <ul style=\"list-style: none; margin-top: 0;\">\n" +
@@ -2597,7 +2615,7 @@ public class MangeReportImpl implements MangeReportService {
             String unit = "";
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(subHeadId, allocationType, "0", "0");
+                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId,finYearId, allocationTypeBE, "0");
                 if (reportDetails.size() <= 0) {
                     return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                     }, "RECORD NOT FOUND OR EMPTY", HttpStatus.OK.value());
@@ -2618,12 +2636,11 @@ public class MangeReportImpl implements MangeReportService {
                         if (units.get(k).getUnit().equalsIgnoreCase(row.getToUnit())) {
 
                             if(row.getToUnit().equalsIgnoreCase(hrData.getUnitId())){
-//                                amount = Double.valueOf(row.getBalanceAmount());
+                            continue;
                             }
                             else
                             amount = Double.valueOf(row.getAllocationAmount());
                             String unitIds = row.getToUnit();
-                            String allocType = "ALL_102";
                             AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
                             if (amountTypeObj == null) {
                                 return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -2631,12 +2648,12 @@ public class MangeReportImpl implements MangeReportService {
                             }
                             amountUnit = amountTypeObj.getAmount();
                             finAmount = amount * amountUnit / reqAmount;
-                            List<BudgetAllocation> reData = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(unitIds, finYearId, subHeadId, allocType, "Approved", "0", "0");
+                            List<BudgetAllocation> reData = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, finYearId, subHeadId, allocationTypeRE,"0");
                             if (reData.size() <= 0) {
                                 reFinalAmount = 0.0000;
                             } else {
                                 if(row.getToUnit().equalsIgnoreCase(hrData.getUnitId())) {
-//                                    reTotalAmount = Double.valueOf(reData.get(0).getBalanceAmount());
+                                    continue;
                                 }else {
                                     reTotalAmount = Double.valueOf(reData.get(0).getAllocationAmount());
                                 }
@@ -2686,6 +2703,8 @@ public class MangeReportImpl implements MangeReportService {
             htmlContent = htmlContent.replace("${date_placeholder}", StringEscapeUtils.escapeHtml4(formattedDateTime));
             htmlContent = htmlContent.replace("${finYear_placeholder}", StringEscapeUtils.escapeHtml4(findyr.getFinYear()));
             htmlContent = htmlContent.replace("${amountType_placeholder}", StringEscapeUtils.escapeHtml4(amountIn));
+            htmlContent = htmlContent.replace("${allocationTypeBE_placeholder}", StringEscapeUtils.escapeHtml4(type.getAllocDesc()));
+            htmlContent = htmlContent.replace("${allocationTypeRE_placeholder}", StringEscapeUtils.escapeHtml4(types.getAllocDesc()));
 
             htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
             String filepath = HelperUtils.FILEPATH + "/re-allocation-report.pdf";
@@ -3077,8 +3096,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
                             if(row.getToUnit().equalsIgnoreCase(hrData.getUnitId())) {
-//                                amount = Double.valueOf(row.getBalanceAmount());
-                                allAmount = Double.valueOf(row.getAllocationAmount());
+                                continue;
                             } else{
                             amount = Double.valueOf(row.getAllocationAmount());
                             }
@@ -3099,7 +3117,7 @@ public class MangeReportImpl implements MangeReportService {
                                 eAmount = Double.parseDouble(expenditure.get(0).getProgressiveAmount());
                             }
                             if (finAmount != 0)
-                                expnAmount = eAmount * 100 / finAmount*reqAmount;
+                                expnAmount = eAmount * 100 / (finAmount*reqAmount);
                             else
                                 expnAmount = 0.0;
                             BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
@@ -3107,8 +3125,8 @@ public class MangeReportImpl implements MangeReportService {
                             sb.append("<tr>");
                             if (count == 0) {
                                 sb.append("<th scope=\"row\" >").append(StringEscapeUtils.escapeHtml4(bHead.getSubHeadDescr())).append("</th>");
-                                //sb.append("<th scope=\"row bold\" >${ALLOCATION_placeholder}</th>");
-                                sb.append("<th scope=\"row bold\" >").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(allAmount)))).append("</th>");
+                                sb.append("<th scope=\"row bold\" >${ALLOCATION_placeholder}</th>");
+                                //sb.append("<th scope=\"row bold\" >").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(allAmount)))).append("</th>");
 
                             } else {
                                 sb.append("<th scope=\"row\" class=\"bbtm\"></th>");
@@ -3164,18 +3182,18 @@ public class MangeReportImpl implements MangeReportService {
             htmlContent = htmlContent.replace("${allocationType_placeholder}", StringEscapeUtils.escapeHtml4(type.getAllocDesc()));
 
             htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
-            String filepath = HelperUtils.FILEPATH + "/" + type.getAllocDesc() + "_coast-gaurd-budget-report.pdf";
+            String filepath = HelperUtils.FILEPATH + "/" + type.getAllocDesc() + "_FER-budget-report.pdf";
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String filePath = folder.getAbsolutePath() + "/" + type.getAllocDesc() + "_coast-gaurd-budget-report.pdf";
+            String filePath = folder.getAbsolutePath() + "/" + type.getAllocDesc() + "_FER-budget-report.pdf";
             File file = new File(filePath);
             generatePdf(htmlContent, file.getAbsolutePath());
             //generatePdf(htmlContent, filepath);
             FilePathResponse response = new FilePathResponse();
             response.setPath(filepath);
-            response.setFileName(type.getAllocDesc() + "_coast-gaurd-budget-report.pdf");
+            response.setFileName(type.getAllocDesc() + "_FER-budget-report.pdf");
             dtoList.add(response);
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -467,31 +468,60 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         int year = currentDate.getYear();
         int month = currentDate.getMonthValue();
         if (month < 4) {
-            year--; // Reduce the year by 1 to get the previous financial year
+            year--;
         }
         String financialYear = String.format("%d-%02d", year, (year + 1) % 100);
+        String[] parts = financialYear.split("-");
+        int sysFinyr = Integer.parseInt(parts[1]);
+
+/*        CgUnit cgUnit = cgUnitRepository.findByUnit(hrDataCheck.getUnitId());
+        if (cgUnit == null) {
+            return ResponseUtils.createFailureResponse(responce,  new TypeReference<List<ApprovedResponse>>() {
+            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
+        }
+        String dBunit = cgUnit.getDescr();
+        List<CgUnit> units = new ArrayList<>();
+        if (dBunit.equalsIgnoreCase("D(Budget)")) {
+            units = cgUnitRepository.findAllByOrderByDescrAsc();
+        } else {
+            if (hrDataCheck.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+            } else {
+                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
+            }
+        }
+        if (units.size() <= 0) {
+            return ResponseUtils.createFailureResponse(responce,  new TypeReference<List<ApprovedResponse>>() {
+            }, "UNIT NOT FOUND", HttpStatus.OK.value());
+        }*/
 
 
         if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER) || getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
-            List<MangeInboxOutbox> inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG");
-            List<BudgetAllocationDetails> allocationData = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(inboxOutboxesList.get(0).getGroupId(), "0");
-            BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.get(0).getFinYear());
-            if (finYear.getFinYear().equalsIgnoreCase(financialYear)) {
+            List<MangeInboxOutbox> inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndStatus(hrDataCheck.getUnitId(), "BG", "Fully Approved");
+            if (inboxOutboxesList.size() > 0) {
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
                 MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-                ApprovedResponse data = new ApprovedResponse();
-                data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
-                data.setType(mangeInboxOutbox.getType());
-                data.setSubmissionDate(mangeInboxOutbox.getCreatedOn());
-                data.setApprovedDate(mangeInboxOutbox.getUpdatedOn());
-                data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
-                data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
-                data.setStatus(mangeInboxOutbox.getStatus());
-                data.setRemarks(mangeInboxOutbox.getRemarks());
-                data.setGroupId(mangeInboxOutbox.getGroupId());
-                data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
-                data.setAmount(mangeInboxOutbox.getAmount());
-                responce.add(data);
+                List<BudgetAllocationDetails> allocationData = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(mangeInboxOutbox.getGroupId(), "0");
+                if (allocationData.size() > 0) {
+                    BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.get(0).getFinYear());
+                    String[] part = finYear.getFinYear().split("-");
+                    int dbFinyr = Integer.parseInt(part[1]);
+                    if (financialYear.equalsIgnoreCase(finYear.getFinYear()) || sysFinyr < dbFinyr) {
+                        ApprovedResponse data = new ApprovedResponse();
+                        data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+                        data.setType(mangeInboxOutbox.getType());
+                        data.setSubmissionDate(mangeInboxOutbox.getCreatedOn());
+                        data.setApprovedDate(mangeInboxOutbox.getUpdatedOn());
+                        data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                        data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                        data.setStatus(mangeInboxOutbox.getStatus());
+                        data.setRemarks(mangeInboxOutbox.getRemarks());
+                        data.setGroupId(mangeInboxOutbox.getGroupId());
+                        data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                        data.setAmount(mangeInboxOutbox.getAmount());
+                        responce.add(data);
+                    }
+                }
             }
         }
         }
@@ -517,38 +547,66 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         int year = currentDate.getYear();
         int month = currentDate.getMonthValue();
         if (month < 4) {
-            year--; // Reduce the year by 1 to get the previous financial year
+            year--;
         }
         String financialYear = String.format("%d-%02d", year, (year + 1) % 100);
+        String[] parts = financialYear.split("-");
+        int sysFinyr = Integer.parseInt(parts[1]);
+
+/*        CgUnit cgUnit = cgUnitRepository.findByUnit(hrDataCheck.getUnitId());
+        if (cgUnit == null) {
+            return ResponseUtils.createFailureResponse(responce,  new TypeReference<List<ApprovedResponse>>() {
+            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
+        }
+        String dBunit = cgUnit.getDescr();
+        List<CgUnit> units = new ArrayList<>();
+        if (dBunit.equalsIgnoreCase("D(Budget)")) {
+            units = cgUnitRepository.findAllByOrderByDescrAsc();
+        } else {
+            if (hrDataCheck.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+            } else {
+                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
+            }
+        }
+        if (units.size() <= 0) {
+            return ResponseUtils.createFailureResponse(responce,  new TypeReference<List<ApprovedResponse>>() {
+            }, "UNIT NOT FOUND", HttpStatus.OK.value());
+        }*/
 
 
         if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER) || getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
-            List<MangeInboxOutbox> inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG");
-            List<BudgetAllocationDetails> allocationData = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(inboxOutboxesList.get(0).getGroupId(), "0");
-            BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.get(0).getFinYear());
-            if (finYear.getFinYear()!=financialYear) {
+            List<MangeInboxOutbox> inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndStatus(hrDataCheck.getUnitId(), "BG", "Fully Approved");
+            if (inboxOutboxesList.size() > 0) {
                 for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
                     MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-                    ApprovedResponse data = new ApprovedResponse();
-                    data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
-                    data.setType(mangeInboxOutbox.getType());
-                    data.setSubmissionDate(mangeInboxOutbox.getCreatedOn());
-                    data.setApprovedDate(mangeInboxOutbox.getUpdatedOn());
-                    data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
-                    data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
-                    data.setStatus(mangeInboxOutbox.getStatus());
-                    data.setRemarks(mangeInboxOutbox.getRemarks());
-                    data.setGroupId(mangeInboxOutbox.getGroupId());
-                    data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
-                    data.setAmount(mangeInboxOutbox.getAmount());
-                    responce.add(data);
+                    List<BudgetAllocationDetails> allocationData = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(mangeInboxOutbox.getGroupId(), "0");
+                    if (allocationData.size() > 0) {
+                        BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.get(0).getFinYear());
+                        String[] part = finYear.getFinYear().split("-");
+                        int dbFinyr = Integer.parseInt(part[1]);
+                        if (!financialYear.equalsIgnoreCase(finYear.getFinYear()) || sysFinyr > dbFinyr) {
+                            ApprovedResponse data = new ApprovedResponse();
+                            data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+                            data.setType(mangeInboxOutbox.getType());
+                            data.setSubmissionDate(mangeInboxOutbox.getCreatedOn());
+                            data.setApprovedDate(mangeInboxOutbox.getUpdatedOn());
+                            data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                            data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                            data.setStatus(mangeInboxOutbox.getStatus());
+                            data.setRemarks(mangeInboxOutbox.getRemarks());
+                            data.setGroupId(mangeInboxOutbox.getGroupId());
+                            data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                            data.setAmount(mangeInboxOutbox.getAmount());
+                            responce.add(data);
+                        }
+                    }
                 }
             }
         }
         return ResponseUtils.createSuccessResponse(responce,  new TypeReference<List<ApprovedResponse>>()  {
         });
     }
-
 
     @Override
     public ApiResponse<List<ArchivedResponse>>getApprovedListData(String groupId) {
@@ -568,7 +626,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         } catch (Exception e) {
         }
         if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER) || getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
-            List<BudgetAllocationDetails> inboxOutboxesList = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId,"0");
+            List<BudgetAllocationDetails> inboxOutboxesList = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "0");
+            if (inboxOutboxesList.size() > 0) {
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
                 BudgetAllocationDetails mangeInboxOutbox = inboxOutboxesList.get(i);
                 ArchivedResponse data = new ArchivedResponse();
@@ -590,11 +649,9 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                 responce.add(data);
             }
         }
+        }
         return ResponseUtils.createSuccessResponse(responce,  new TypeReference<List<ArchivedResponse>>()  {
         });
     }
-
-
-    
 
 }

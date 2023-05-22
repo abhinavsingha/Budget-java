@@ -97,9 +97,9 @@ public class ReportController {
 		return new ResponseEntity<>(mangeReportService.getREAllocationReport(finYearId,allocationType,amountTypeId), HttpStatus.OK);
 	}
 
-	@GetMapping("/getBEREAllocationReport/{finYearId}/{allocationType}/{amountTypeId}")
-	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getBEREAllocationReport(@PathVariable(value = "finYearId") String finYearId , @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId)  {
-		return new ResponseEntity<>(mangeReportService.getBEREAllocationReport(finYearId,allocationType,amountTypeId), HttpStatus.OK);
+	@GetMapping("/getBEREAllocationReport/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{amountTypeId}")
+	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getBEREAllocationReport(@PathVariable(value = "finYearId") String finYearId , @PathVariable(value = "allocationTypeBE") String allocationTypeBE,@PathVariable(value = "allocationTypeRE") String allocationTypeRE, @PathVariable(value = "amountTypeId") String amountTypeId)  {
+		return new ResponseEntity<>(mangeReportService.getBEREAllocationReport(finYearId,allocationTypeBE,allocationTypeRE,amountTypeId), HttpStatus.OK);
 	}
 
 	@GetMapping("/getMainBEAllocationReport/{finYearId}/{allocationType}/{amountTypeId}/{fromDate}/{toDate}")

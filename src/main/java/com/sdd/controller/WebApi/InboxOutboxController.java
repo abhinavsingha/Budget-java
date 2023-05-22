@@ -29,23 +29,18 @@ public class InboxOutboxController {
 	public ResponseEntity<ApiResponse<InboxOutBoxResponse>> getInboxList() {
 		return new ResponseEntity<>(inboxOutBoxService.getInboxList(), HttpStatus.OK);
 	}
-
-
 	@GetMapping("/getOutBoxList")
 	public ResponseEntity<ApiResponse<List<InboxOutBoxResponse>>> getOutBoxList() {
 		return new ResponseEntity<>(inboxOutBoxService.getOutBoxList(), HttpStatus.OK);
 	}
-
 	@GetMapping("/readMessage/{msgId}")
 	public ResponseEntity<ApiResponse<InboxOutBoxResponse>> readMessage(@PathVariable(value = "msgId") String msgId) {
 		return new ResponseEntity<>(inboxOutBoxService.readMessage(msgId), HttpStatus.OK);
 	}
-
 	@GetMapping("/getApprovedList")
 	public ResponseEntity<ApiResponse<List<ApprovedResponse>>> getApprovedList() {
 		return new ResponseEntity<>(inboxOutBoxService.getApprovedList(), HttpStatus.OK);
 	}
-
 	@GetMapping("/getArchivedList")
 	public ResponseEntity<ApiResponse<List<ApprovedResponse>>>  getArchivedList() {
 		return new ResponseEntity<>(inboxOutBoxService.getArchivedList(), HttpStatus.OK);

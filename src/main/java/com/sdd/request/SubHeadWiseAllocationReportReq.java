@@ -9,4 +9,5 @@ public class SubHeadWiseAllocationReportReq {
     private String finYearId;
     private String amountTypeId;
     private String subHeadId;
+    private String allocationTypeId;
 }

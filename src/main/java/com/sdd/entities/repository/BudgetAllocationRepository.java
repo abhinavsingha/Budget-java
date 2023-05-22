@@ -20,6 +20,8 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
 
     List<BudgetAllocation> findByToUnitAndFinYearAndIsFlagAndIsBudgetRevision(
             String toUnit, String finYear, String isFalg, String isRevision);
+    List<BudgetAllocation> findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(
+            String toUnit, String finYear, String allocationTypeId, String isRevision);
 
     List<BudgetAllocation> findByAuthGroupIdAndIsFlagAndToUnitAndIsBudgetRevision(
             String unitId, String isDelete, String toUnit, String isRevison);
@@ -32,6 +34,12 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
             String approved,
             String isFlag,
             String isRevision);
+    List<BudgetAllocation> findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(
+            String unitId,
+            String finYearId,
+            String budgetCodeId,
+            String allocationType,
+            String isRevision);
 
 
 
@@ -40,8 +48,8 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
 
     BudgetAllocation findByAllocationIdAndIsFlagAndIsBudgetRevision(String transactionId, String s, String d);
 
-    List<BudgetAllocation> findBySubHeadAndFinYearAndIsFlagAndIsBudgetRevision(
-            String subHeadId, String finYear, String isFalg, String isREbision);
+    List<BudgetAllocation> findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(
+            String subHeadId, String finYear, String allocationTypeId, String isREbision);
 
     List<BudgetAllocation> findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(
             String subHeadId, String allocationType, String isFalg, String isRevison);

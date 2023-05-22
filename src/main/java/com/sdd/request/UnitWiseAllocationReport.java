@@ -9,4 +9,6 @@ public class UnitWiseAllocationReport {
     private String finYearId;
     private String unitId;
     private String amountTypeId;
+    private String allocationTypeId;
+
 }
