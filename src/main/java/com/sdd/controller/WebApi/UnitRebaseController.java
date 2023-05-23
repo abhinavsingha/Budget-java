@@ -63,6 +63,11 @@ public class UnitRebaseController {
 		return new ResponseEntity<>(mangeRebaseService.saveUnitRebase(req), HttpStatus.OK);
 	}
 
+	@GetMapping("/getAllIsShipCgUnitData")
+	public ResponseEntity<ApiResponse<List<CgUnitResponse>>> getAllIsShipCgUnitData() {
+		return new ResponseEntity<>(mangeRebaseService.getAllIsShipCgUnitData(), HttpStatus.OK);
+	}
+
 
 
 }

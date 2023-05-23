@@ -26,5 +26,7 @@ public interface MangeRebaseService {
 
 	ApiResponse<CgStation> getAllStationById(String stationId);
 
+	ApiResponse<List<CgUnitResponse>> getAllIsShipCgUnitData();
+
 
 }
