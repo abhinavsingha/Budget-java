@@ -33,9 +33,5 @@ public interface ContigentBillRepository extends JpaRepository<ContigentBill, Lo
           "SELECT CB_AMOUNT,CB_DATE FROM contigentbill where CB_UNIT_ID=:unitId and FIN_YEAR=:finYear and BUDGET_HEAD_ID=:subHead and STATUS=:status",
       nativeQuery = true)
   List<ContigentBill> findExpAndCbDate(String unitId, String finYear, String subHead,String status);
-    @Query(
-            value =
-                    "SELECT PROGRESSIVE_AMOUNT,CB_DATE FROM contigentbill where CB_UNIT_ID=:unitId and FIN_YEAR=:finYear and BUDGET_HEAD_ID=:subHead",
-            nativeQuery = true)
-    List<ContigentBill> findExpAndCbDate(String unitId, String finYear, String subHead);
+
 }
