@@ -373,7 +373,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 }
             }
             rebase.setCdaData(addRes);
-            List<ContigentBill> expenditure = contigentBillRepository.findExpAndCbDate(unit, finYear, bHead,"Approved");
+            List<ContigentBill> expenditure = contigentBillRepository.findExpAndCbDate(unit, finYear, bHead,"Approved","0");
             if (expenditure.size()>0) {
                 double eAmount=0.0;
                 for (int k = 0; k < expenditure.size(); k++) {
