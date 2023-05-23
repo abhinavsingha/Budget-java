@@ -90,8 +90,14 @@ public class ContigentBill {
     @Column(name = "CB_FILE_PATH")
     private String cbFilePath;
 
+    @Column(name = "GST")
+    private String gst;
+
 
     @Column(name = "IS_FLAG")
     private String isFlag;
+
+    @Column(name = "IS_UPDATED")
+    private String isUpdate;
 
 }

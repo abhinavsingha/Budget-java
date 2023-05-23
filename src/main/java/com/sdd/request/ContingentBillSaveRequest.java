@@ -26,6 +26,7 @@ public class ContingentBillSaveRequest {
     private String remark;
     private String vendorName;
     private String invoiceNo;
+    private String gst;
     private String invoiceDate;
     private String invoiceUploadId;
 
@@ -37,6 +38,7 @@ public class ContingentBillSaveRequest {
 
     private String contingentBilId;
     private String allocationTypeId;
+//    private String oldCbId;
 
     private List<CdaTransAllocationRequest> cdaParkingId;
 

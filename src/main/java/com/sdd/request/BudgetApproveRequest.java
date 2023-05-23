@@ -16,6 +16,6 @@ public class BudgetApproveRequest {
     private String transactionId;
     private String remarks;
     private String status;
-    private List<CdaTransAllocationRequest> cdaParkingId;
+    private List<CdaCrDrAllocationRequest> cdaParkingId;
 
 }

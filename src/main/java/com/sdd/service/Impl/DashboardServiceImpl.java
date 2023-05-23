@@ -322,7 +322,7 @@ public class DashboardServiceImpl implements DashBoardService {
 
       double expenditure = 0;
       List<ContigentBill> cbExpendure =
-          contigentBillRepository.findByCbUnitIdAndIsFlag(unitData.getUnit(), "0");
+          contigentBillRepository.findByCbUnitIdAndIsFlagAndIsUpdate(unitData.getUnit(), "0","0");
 
       for (Integer i = 0; i < cbExpendure.size(); i++) {
         expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
@@ -363,7 +363,7 @@ public class DashboardServiceImpl implements DashBoardService {
 
       double expenditure = 0;
       List<ContigentBill> cbExpendure =
-          contigentBillRepository.findByBudgetHeadIDAndIsFlag(subHeadD.getBudgetCodeId(), "0");
+          contigentBillRepository.findByBudgetHeadIDAndIsFlagAndIsUpdate(subHeadD.getBudgetCodeId(), "0","0");
 
       for (Integer i = 0; i < cbExpendure.size(); i++) {
         expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
@@ -703,8 +703,8 @@ public class DashboardServiceImpl implements DashBoardService {
 
         List<ContigentBill> contigentBillList =
             contigentBillRepository
-                .findByCbUnitIdInAndFinYearAndBudgetHeadIDAndAllocationIdOrderByCbDateDesc(
-                    unitIds, finYearId, budgetHead.getBudgetCodeId(), allocationTypeId);
+                .findByCbUnitIdInAndFinYearAndBudgetHeadIDAndAllocationIdAndIsUpdateOrderByCbDateDesc(
+                    unitIds, finYearId, budgetHead.getBudgetCodeId(), allocationTypeId,"0");
 
         if (contigentBillList.size() > 0) {
           Double amount = 0.0;

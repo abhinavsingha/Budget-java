@@ -1019,7 +1019,7 @@ public class PdfGenaratorUtil {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = dateFormat.format(cbReportResponse.getCbData().getCbDate());
         Float bill = (Float.parseFloat(cbReportResponse.getCurrentBillAmount()));
-        bill = bill * 100 / 118;
+        bill = bill * 100 / (100 + Float.parseFloat(cbReportResponse.getGetGst()));
         String billFormat = String.format("%.2f", bill);
         bill = Float.parseFloat(billFormat);
         Float gst = (Float.parseFloat(cbReportResponse.getCurrentBillAmount()));

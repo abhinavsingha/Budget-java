@@ -28,9 +28,12 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
     @Autowired
     BudgetAllocationRepository budgetAllocationRepository;
 
+
+    @Autowired
+    CdaParkingRepository cdaParkingRepository;
+
     @Autowired
     private AmountUnitRepository amountUnitRepository;
-
 
     @Autowired
     MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
@@ -816,6 +819,48 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
         CgUnit cgUnit = cgUnitRepository.findByUnit("000000");
         return ResponseUtils.createSuccessResponse(cgUnit, new TypeReference<CgUnit>() {
+        });
+    }
+
+    @Override
+    public ApiResponse<List<CdaParking>> getAllCda() {
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE BUDGET RECEIPT");
+        }
+        List<CdaParking> totalCdaParkingAmount = new ArrayList<>();
+
+
+        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+            CdaParking cdaParking = new CdaParking();
+            cdaParking.setGinNo("112233");
+            cdaParking.setCdaName("All CDA");
+
+
+            CdaParking cdaParking11 = new CdaParking();
+            cdaParking11.setGinNo("112244");
+            cdaParking11.setCdaName("Mumbai CDA");
+
+            totalCdaParkingAmount.add(cdaParking);
+            totalCdaParkingAmount.add(cdaParking11);
+        }
+
+        List<CdaParking> allCda = cdaParkingRepository.findAll();
+        for (Integer i = 0; i < allCda.size(); i++) {
+
+            if (!(allCda.get(i).getGinNo().equalsIgnoreCase("200201"))) {
+                totalCdaParkingAmount.add(allCda.get(i));
+            }
+
+        }
+
+//        totalCdaParkingAmount.addAll();
+
+        return ResponseUtils.createSuccessResponse(totalCdaParkingAmount, new TypeReference<List<CdaParking>>() {
         });
     }
 

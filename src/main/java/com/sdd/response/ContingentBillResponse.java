@@ -37,6 +37,7 @@ public class ContingentBillResponse {
     private FileUpload invoiceUploadId;
     private String invoiceDate;
     private String fileID;
+    private String gst;
     private String fileDate;
     private String progressiveAmount;
 
