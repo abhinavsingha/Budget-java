@@ -24,6 +24,8 @@ public interface CdaParkingTransRepository extends JpaRepository<CdaParkingTrans
 
     CdaParkingTrans findByCdaParkingIdAndIsFlag(String cdaParkingId, String isFlag);
 
+    CdaParkingTrans findByCdaParkingId(String cdaParkingId);
+
     List<CdaParkingTrans> findByAuthGroupIdAndBudgetHeadIdAndIsFlag(String authGroupId, String budgetHedaId, String isFlag);
 
     List<CdaParkingTrans> findByAuthGroupIdAndTransactionIdAndIsFlag(String authGroupId, String transId, String isFlag);

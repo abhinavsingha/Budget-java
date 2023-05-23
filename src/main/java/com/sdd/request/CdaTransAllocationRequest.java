@@ -15,5 +15,7 @@ public class CdaTransAllocationRequest {
     private String cdaAmount;
 
 
-
+    // Use For only Rejection Case
+    private String allocatedAmount;
+    private String allocatedAmountType;
 }

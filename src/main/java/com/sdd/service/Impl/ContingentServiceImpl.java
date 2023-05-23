@@ -338,29 +338,6 @@ public class ContingentServiceImpl implements ContingentService {
             ContigentBill saveData = contigentBillRepository.save(contigentBill);
 
 
-            for (Integer m = 0; m < contingentBillSaveRequestList.get(i).getCdaParkingId().size(); m++) {
-                CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(contingentBillSaveRequestList.get(i).getCdaParkingId().get(m).getCdaParkingId(), "0");
-
-                CdaParkingCrAndDr cdaParkingCrAndDr = new CdaParkingCrAndDr();
-                cdaParkingCrAndDr.setCdaCrdrId(HelperUtils.getCdaCrDrId());
-                cdaParkingCrAndDr.setCdaParkingTrans(contingentBillSaveRequestList.get(i).getCdaParkingId().get(m).getCdaParkingId());
-                cdaParkingCrAndDr.setFinYearId(contingentBillSaveRequest.getBudgetFinancialYearId());
-                cdaParkingCrAndDr.setBudgetHeadId(contingentBillSaveRequest.getBudgetHeadId());
-                cdaParkingCrAndDr.setGinNo(cdaParkingTrans.getGinNo());
-                cdaParkingCrAndDr.setUnitId(hrData.getUnitId());
-                cdaParkingCrAndDr.setAuthGroupId(authGroupId);
-                cdaParkingCrAndDr.setAmount(ConverterUtils.addDecimalPoint(contingentBillSaveRequestList.get(i).getCdaParkingId().get(m).getCdaAmount()));
-                cdaParkingCrAndDr.setIscrdr("DR");
-                cdaParkingCrAndDr.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-                cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                cdaParkingCrAndDr.setAllocTypeId(allocationTypeData.getAllocTypeId());
-                cdaParkingCrAndDr.setIsFlag("0");
-                cdaParkingCrAndDr.setTransactionId(saveData.getCbId());
-                cdaParkingCrAndDr.setAmountType(null);
-
-                parkingCrAndDrRepository.save(cdaParkingCrAndDr);
-
-            }
         }
 
 
@@ -810,8 +787,6 @@ public class ContingentServiceImpl implements ContingentService {
             contingentBill.setCdaData(data);
 
 
-
-
             contingentBillListData.add(contingentBill);
         }
 
@@ -973,6 +948,22 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBillRepository.save(contigentBill);
         }
 
+        if (status.equalsIgnoreCase("Rejected") || status.equalsIgnoreCase("Reject")) {
+
+
+            for (Integer m = 0; m < approveContigentBillRequest.getCdaParkingId().size(); m++) {
+
+                CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(approveContigentBillRequest.getCdaParkingId().get(m).getCdaParkingId(), "0");
+                AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+
+                double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+                double parkingAmount = Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(m).getCdaAmount());
+
+                double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
+                cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                cdaParkingTransRepository.save(cdaParkingTrans);
+            }
+        }
 
         MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(approveContigentBillRequest.getGroupId(), hrData.getUnitId());
         if (mangeInboxOutbox != null) {
@@ -1098,9 +1089,53 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBill.setRemarks(approveContigentBillRequest.getRemarks());
             contigentBill.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             status = approveContigentBillRequest.getStatus();
-            contigentBillRepository.save(contigentBill);
+            ContigentBill saveData = contigentBillRepository.save(contigentBill);
+
+
+            if (status.equalsIgnoreCase("Verified")) {
+                for (Integer m = 0; m < approveContigentBillRequest.getCdaParkingId().size(); m++) {
+                    CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(approveContigentBillRequest.getCdaParkingId().get(m).getCdaParkingId(), "0");
+
+                    CdaParkingCrAndDr cdaParkingCrAndDr = new CdaParkingCrAndDr();
+                    cdaParkingCrAndDr.setCdaCrdrId(HelperUtils.getCdaCrDrId());
+                    cdaParkingCrAndDr.setCdaParkingTrans(approveContigentBillRequest.getCdaParkingId().get(m).getCdaParkingId());
+                    cdaParkingCrAndDr.setFinYearId(saveData.getFinYear());
+                    cdaParkingCrAndDr.setBudgetHeadId(saveData.getBudgetHeadID());
+                    cdaParkingCrAndDr.setGinNo(cdaParkingTrans.getGinNo());
+                    cdaParkingCrAndDr.setUnitId(hrData.getUnitId());
+                    cdaParkingCrAndDr.setAuthGroupId(saveData.getAuthGroupId());
+                    cdaParkingCrAndDr.setAmount(ConverterUtils.addDecimalPoint(approveContigentBillRequest.getCdaParkingId().get(m).getCdaAmount()));
+                    cdaParkingCrAndDr.setIscrdr("DR");
+                    cdaParkingCrAndDr.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+                    cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                    cdaParkingCrAndDr.setAllocTypeId("");
+                    cdaParkingCrAndDr.setIsFlag("0");
+                    cdaParkingCrAndDr.setTransactionId(saveData.getCbId());
+                    cdaParkingCrAndDr.setAmountType(null);
+
+                    parkingCrAndDrRepository.save(cdaParkingCrAndDr);
+                }
+            }
+
         }
 
+
+        if (status.equalsIgnoreCase("Rejected") || status.equalsIgnoreCase("Reject")) {
+
+
+            for (Integer m = 0; m < approveContigentBillRequest.getCdaParkingId().size(); m++) {
+
+                CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(approveContigentBillRequest.getCdaParkingId().get(m).getCdaParkingId(), "0");
+                AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+
+                double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+                double parkingAmount = Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(m).getCdaAmount());
+
+                double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
+                cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                cdaParkingTransRepository.save(cdaParkingTrans);
+            }
+        }
 
         MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(approveContigentBillRequest.getGroupId(), hrData.getUnitId());
         if (mangeInboxOutbox != null) {
