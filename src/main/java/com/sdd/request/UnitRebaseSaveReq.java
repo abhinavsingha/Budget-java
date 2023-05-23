@@ -12,7 +12,9 @@ public class UnitRebaseSaveReq {
 
     private String budgetFinanciaYearId;
     private String toUnitId;
-    private String stationId;
+    private String headUnitId;
+    private String toStationId;
+    private String fromStationId;
     private String authority;
     private String authDate;
     private String remark;
