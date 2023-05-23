@@ -26,17 +26,38 @@ public class BudgetRebase {
     @Column(name = "FIN_YEAR", nullable = false)
     private String finYear;
 
-    @Column(name = "TO_UNIT_ID", nullable = false)
-    private String toUnitId;
+    @Column(name = "REBASE_UNIT_ID", nullable = false)
+    private String rebaseUnitId;
 
-    @Column(name = "FROM_UNIT_ID", nullable = false)
-    private String fromUnitId;
+    @Column(name = "HEAD_UNIT_ID", nullable = false)
+    private String headUnitId;
 
-    @Column(name = "STATION_ID", nullable = false)
-    private String stationId;
+    @Column(name = "FRM_STATION_ID", nullable = false)
+    private String frmStationId;
 
-    @Column(name = "LAST_CB_DATE", nullable = false)
-    private Timestamp lastCbDate;
+    @Column(name = "TO_STATION_ID", nullable = false)
+    private String toStationId;
+
+    @Column(name = "TO_HEAD_UNIT_ID", nullable = false)
+    private String toHeadUnitId;
+
+    @Column(name = "OCCURANCE_DATE", nullable = false)
+    private Timestamp occuranceDate;
+
+    @Column(name = "BUDGETHEAD_ID", nullable = false)
+    private String budgetHeadId;
+
+    @Column(name = "ALLOC_AMOUNT", nullable = false)
+    private String allocAmount;
+
+    @Column(name = "EXP_AMOUNT", nullable = false)
+    private String expAmount;
+
+    @Column(name = "BAL_AMOUNT", nullable = false)
+    private String balAmount;
+
+    @Column(name = "AMOUNT_TYPE", nullable = false)
+    private String amountType;
 
     @Column(name = "AUTHORITY_ID", nullable = false)
     private String authorityId;

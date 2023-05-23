@@ -24,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -129,7 +131,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
         }
 
 
-        for (Integer m = 0; m < mangeRebaseRequest.getUnitRebaseRequests().size(); m++) {
+       /* for (Integer m = 0; m < mangeRebaseRequest.getUnitRebaseRequests().size(); m++) {
 
 
             if (mangeRebaseRequest.getUnitRebaseRequests().get(m).getToUnitId() == null || mangeRebaseRequest.getUnitRebaseRequests().get(m).getToUnitId().isEmpty()) {
@@ -168,7 +170,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO STATION ID");
             }
 
-        }
+        }*/
 
 
         Authority authority = new Authority();
@@ -191,12 +193,12 @@ public class MangeRebaseImpl implements MangeRebaseService {
             budgetRebase.setBudgetRebaseId(HelperUtils.getUnitRebased());
             budgetRebase.setAuthorityId(saveAuthority.getAuthorityId());
             budgetRebase.setRefTransId(refRensId);
-            budgetRebase.setFromUnitId(hrDataCheck.getUnitId());
-            budgetRebase.setToUnitId(mangeRebaseRequest.getUnitRebaseRequests().get(l).getToUnitId());
-            budgetRebase.setStationId(mangeRebaseRequest.getUnitRebaseRequests().get(l).getStationId());
-            budgetRebase.setFinYear(mangeRebaseRequest.getUnitRebaseRequests().get(l).getBudgetFinanciaYearId());
+            //budgetRebase.setFromUnitId(hrDataCheck.getUnitId());
+            //budgetRebase.setToUnitId(mangeRebaseRequest.getUnitRebaseRequests().get(l).getToUnitId());
+            //budgetRebase.setStationId(mangeRebaseRequest.getUnitRebaseRequests().get(l).getStationId());
+            //budgetRebase.setFinYear(mangeRebaseRequest.getUnitRebaseRequests().get(l).getBudgetFinanciaYearId());
             budgetRebase.setUserId(hrDataCheck.getPid());
-            budgetRebase.setLastCbDate(ConverterUtils.convertDateTotimeStamp(mangeRebaseRequest.getUnitRebaseRequests().get(l).getOccurrenceDate()));
+            //budgetRebase.setLastCbDate(ConverterUtils.convertDateTotimeStamp(mangeRebaseRequest.getUnitRebaseRequests().get(l).getOccurrenceDate()));
 
 
             budgetRebase.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
@@ -436,26 +438,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 },"YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS",HttpStatus.OK.value());
             }
         }
-        if (req.getBudgetFinanciaYearId() == null || req.getBudgetFinanciaYearId().isEmpty()) {
-            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"FINANCIAL YEAR CAN NOT BE BLANK",HttpStatus.OK.value());
-        }
-        if (req.getToUnitId() == null || req.getToUnitId().isEmpty()) {
-            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"TO UNIT CAN NOT BE BLANK",HttpStatus.OK.value());
-        }
-        if (req.getHeadUnitId() == null || req.getHeadUnitId().isEmpty()) {
-            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"TO HEAD UNIT CAN NOT BE BLANK",HttpStatus.OK.value());
-        }
-        if (req.getToStationId() == null || req.getToStationId().isEmpty()) {
-            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"TO_STATION ID CAN NOT BE BLANK",HttpStatus.OK.value());
-        }
-        if (req.getFromStationId() == null || req.getFromStationId().isEmpty()) {
-            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"FROM_STATION ID CAN NOT BE BLANK",HttpStatus.OK.value());
-        }
         if (req.getAuthority() == null || req.getAuthority().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             },"AUTHORITY CAN NOT BE BLANK",HttpStatus.OK.value());
@@ -463,6 +445,10 @@ public class MangeRebaseImpl implements MangeRebaseService {
         if (req.getAuthDate() == null || req.getAuthDate().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             },"AUTHORITY DATE CAN NOT BE BLANK",HttpStatus.OK.value());
+        }
+        if (req.getRemark() == null || req.getRemark().isEmpty()) {
+            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+            },"REMARKS CAN NOT BE BLANK",HttpStatus.OK.value());
         }
         if (req.getAuthUnitId() == null || req.getAuthUnitId().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
@@ -472,17 +458,60 @@ public class MangeRebaseImpl implements MangeRebaseService {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             },"DOCUMENT ID CAN NOT BE BLANK",HttpStatus.OK.value());
         }
-        if (req.getAuthorityId() == null || req.getAuthorityId().isEmpty()) {
-            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"AUTHORITY ID CAN NOT BE BLANK",HttpStatus.OK.value());
-        }
         if (req.getOccurrenceDate() == null) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             },"OCCURRENCE DATE CAN NOT BE BLANK",HttpStatus.OK.value());
         }
+        if (req.getFinYear() == null || req.getFinYear().isEmpty()) {
+            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+            },"FINANCIAL YEAR CAN NOT BE BLANK",HttpStatus.OK.value());
+        }
+        if (req.getRebaseUnitId() == null || req.getRebaseUnitId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+            },"REBASE UNIT ID CAN NOT BE BLANK",HttpStatus.OK.value());
+        }
+        if (req.getHeadUnitId() == null || req.getHeadUnitId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+            }," HEAD UNIT CAN NOT BE BLANK",HttpStatus.OK.value());
+        }
+        if (req.getToStationId() == null || req.getToStationId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+            },"TO_STATION ID CAN NOT BE BLANK",HttpStatus.OK.value());
+        }
+        if (req.getFrmStationId() == null || req.getFrmStationId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+            },"FROM_STATION ID CAN NOT BE BLANK",HttpStatus.OK.value());
+        }
+        if (req.getToHeadUnitId() == null || req.getToHeadUnitId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+            },"TO_HEAD UNIT ID CAN NOT BE BLANK",HttpStatus.OK.value());
+        }
 
+        for (Integer m = 0; m < req.getUnitRebaseRequests().size(); m++) {
 
-        CgUnit chekUnit = cgUnitRepository.findByUnit(req.getToUnitId());
+            if (req.getUnitRebaseRequests().get(m).getBudgetHeadId()== null || req.getUnitRebaseRequests().get(m).getBudgetHeadId().isEmpty()) {
+                return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+                },"BUDGET_HEAD ID CAN NOT BE BLANK",HttpStatus.OK.value());
+            }
+            if (req.getUnitRebaseRequests().get(m).getAllocAmount()== null || req.getUnitRebaseRequests().get(m).getAllocAmount().isEmpty()) {
+                return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+                },"ALLOCATION AMOUNT CAN NOT BE BLANK",HttpStatus.OK.value());
+            }
+            if (req.getUnitRebaseRequests().get(m).getExpAmount()== null || req.getUnitRebaseRequests().get(m).getExpAmount().isEmpty()) {
+                return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+                },"EXPEND_AMOUNT CAN NOT BE BLANK",HttpStatus.OK.value());
+            }
+            if (req.getUnitRebaseRequests().get(m).getBalAmount()== null || req.getUnitRebaseRequests().get(m).getBalAmount().isEmpty()) {
+                return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+                },"BAL_AMOUNT CAN NOT BE BLANK",HttpStatus.OK.value());
+            }
+            if (req.getUnitRebaseRequests().get(m).getAmountType()== null || req.getUnitRebaseRequests().get(m).getAmountType().isEmpty()) {
+                return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+                },"AMOUNT_TYPE CAN NOT BE BLANK",HttpStatus.OK.value());
+            }
+        }
+
+        CgUnit chekUnit = cgUnitRepository.findByUnit(req.getRebaseUnitId());
         if (chekUnit == null || chekUnit.getUnit().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             },"RECORD NOT FOUND",HttpStatus.OK.value());
@@ -491,7 +520,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             },"CAN NOT REBASE ON SAME STATION",HttpStatus.OK.value());
         }
-        String maxRebaseId =budgetRebaseRepository.findMaxRebaseIDByTounit(req.getToUnitId());
+        String maxRebaseId =budgetRebaseRepository.findMaxRebaseIDByTounit(req.getRebaseUnitId());
         if (maxRebaseId!=null) {
             BudgetRebase rebaseData=budgetRebaseRepository.findByBudgetRebaseId(maxRebaseId);
             Date crDate=rebaseData.getCreatedOn();
@@ -502,12 +531,12 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 },"CAN NOT REBASE ON SAME UNIT BEFORE SIX MONTH",HttpStatus.OK.value());
             }else{
                 chekUnit.setStationId(req.getToStationId());
-                chekUnit.setUpdatedOn(ConverterUtils.convertDateTotimeStamp(req.getOccurrenceDate()));
+                chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 cgUnitRepository.save(chekUnit);
             }
         }else {
             chekUnit.setStationId(req.getToStationId());
-            chekUnit.setUpdatedOn(ConverterUtils.convertDateTotimeStamp(req.getOccurrenceDate()));
+            chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             cgUnitRepository.save(chekUnit);
         }
 
@@ -524,27 +553,43 @@ public class MangeRebaseImpl implements MangeRebaseService {
         authority.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
         Authority saveAuthority = authorityRepository.save(authority);
 
+         String authorityId=HelperUtils.getAuthorityId();
+         String occurrenceDate=req.getOccurrenceDate();
+         String finYear=req.getFinYear();
+         String rebaseUnitId=req.getRebaseUnitId();
+         String headUnitId=req.getHeadUnitId();
+         String frmStationId=req.getFrmStationId();
+         String toStationId=req.getToStationId();
+         String toHeadUnitId=req.getToHeadUnitId();
+
         String refRensId = HelperUtils.getTransId();
-        BudgetRebase budgetRebase = new BudgetRebase();
-        budgetRebase.setBudgetRebaseId(HelperUtils.getUnitRebased());
-        budgetRebase.setAuthorityId(saveAuthority.getAuthorityId());
-        budgetRebase.setRefTransId(refRensId);
-        budgetRebase.setFromUnitId(hrDataCheck.getUnitId());
-        budgetRebase.setToUnitId(req.getToUnitId());
-        budgetRebase.setStationId(req.getToStationId());
-        budgetRebase.setFinYear(req.getBudgetFinanciaYearId());
-        budgetRebase.setUserId(hrDataCheck.getPid());
-        budgetRebase.setLastCbDate(ConverterUtils.convertDateTotimeStamp(req.getOccurrenceDate()));
-        budgetRebase.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-        budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-        budgetRebaseRepository.save(budgetRebase);
+        for (Integer l = 0; l < req.getUnitRebaseRequests().size(); l++) {
+            BudgetRebase budgetRebase = new BudgetRebase();
 
-
+            budgetRebase.setBudgetRebaseId(HelperUtils.getUnitRebased());
+            budgetRebase.setRefTransId(refRensId);
+            budgetRebase.setFinYear(finYear);
+            budgetRebase.setRebaseUnitId(rebaseUnitId);
+            budgetRebase.setHeadUnitId(headUnitId);
+            budgetRebase.setFrmStationId(frmStationId);
+            budgetRebase.setToStationId(toStationId);
+            budgetRebase.setToHeadUnitId(toHeadUnitId);
+            budgetRebase.setOccuranceDate(ConverterUtils.convertDateTotimeStamp(occurrenceDate));
+            budgetRebase.setBudgetHeadId(req.getUnitRebaseRequests().get(l).getBudgetHeadId());
+            budgetRebase.setAllocAmount(req.getUnitRebaseRequests().get(l).getAllocAmount());
+            budgetRebase.setExpAmount(req.getUnitRebaseRequests().get(l).getExpAmount());
+            budgetRebase.setBalAmount(req.getUnitRebaseRequests().get(l).getBalAmount());
+            budgetRebase.setAmountType(req.getUnitRebaseRequests().get(l).getAmountType());
+            budgetRebase.setAuthorityId(authorityId);
+            budgetRebase.setUserId(hrDataCheck.getPid());
+            budgetRebase.setAuthorityId(saveAuthority.getAuthorityId());
+            budgetRebase.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            budgetRebaseRepository.save(budgetRebase);
+        }
         defaultResponse.setMsg("UNIT REBASE SUCCESSFULLY");
         return ResponseUtils.createSuccessResponse(defaultResponse, new TypeReference<DefaultResponse>() {
         });
-
-
     }
 
 }
