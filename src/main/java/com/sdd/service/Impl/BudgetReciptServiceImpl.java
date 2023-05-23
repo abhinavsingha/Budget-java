@@ -206,7 +206,6 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             saveAllocationType = allocationRepository.save(allocationType);
         }
 
-
         String authGroupId = HelperUtils.getAuthorityGroupId();
 
         for (Integer j = 0; j < budgetReciptSaveRequest.getAuthListData().size(); j++) {
@@ -754,7 +753,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
                         BudgetRecioptSubDemoResponse budgetRecioptDemoResponse = new BudgetRecioptSubDemoResponse();
                         budgetRecioptDemoResponse.setBudgetHead(majorData.get(l));
                         budgetRecioptDemoResponse.setAllocationType(allocationType);
-                        budgetMainData.setAllocationType(allocationType);
+//                        budgetMainData.setAllocationType(allocationType);
                         budgetData.add(budgetRecioptDemoResponse);
 
                     } else {
@@ -771,8 +770,8 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
                     }
                 }
-                budgetMainData.setData(budgetData);
 
+                budgetMainData.setData(budgetData);
                 budgetListData.add(budgetMainData);
             }
 
