@@ -107,6 +107,11 @@ public class ReportController {
 		return new ResponseEntity<>(mangeReportService.getMainBEAllocationReport(finYearId,allocationType,amountTypeId,fromDate,toDate), HttpStatus.OK);
 	}
 
+	@GetMapping("/getUnitRebaseReport/{amountTypeId}/{fromDate}/{toDate}")
+	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitRebaseReport( @PathVariable(value = "amountTypeId") String amountTypeId , @PathVariable(value = "fromDate") String fromDate , @PathVariable(value = "toDate") String toDate)  {
+		return new ResponseEntity<>(mangeReportService.getUnitRebaseReport(amountTypeId,fromDate,toDate), HttpStatus.OK);
+	}
+
 
 //	@GetMapping("/getConicalPath")
 //	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getConicalPath() {

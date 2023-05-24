@@ -71,5 +71,8 @@ public class BudgetRebase {
     @Column(name = "UPDATED_ON", nullable = false)
     private Timestamp updatedOn;
 
+    @Column(name = "LASTCB_DATE", nullable = false)
+    private Timestamp lastCbDate;
+
 
 }

@@ -92,6 +92,12 @@ public class MangeReportImpl implements MangeReportService {
     @Autowired
     private ContigentBillRepository contigentBillRepository;
 
+    @Autowired
+    private  BudgetRebaseRepository budgetRebaseRepository;
+
+    @Autowired
+    private CgStationRepository cgStationRepository;
+
     @Override
     public ApiResponse<List<FilePathResponse>> getAllocationReport(String authGroupId) {
 
@@ -3495,6 +3501,144 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
     }
+
+    @Override
+    public ApiResponse<List<FilePathResponse>> getUnitRebaseReport(String amountTypeId, String fromDate, String toDate) {
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+
+        if (amountTypeId == null || amountTypeId.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (fromDate == null) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "FROM DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (toDate == null) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "TO DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+
+        AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
+        Double reqAmount = amountObj.getAmount();
+        String amountIn = amountObj.getAmountType();
+
+        String amtType = "";
+        String names = hrData.getFullName();
+        String unitName = hrData.getUnit();
+        String rank = hrData.getRank();
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = now.format(formatter);
+
+        String htmlContent = new String();
+        try {
+            //htmlContent = FileUtils.readFileToString(new File("src/main/resources/templates/be-allocation-report.html"), "UTF-8");
+            //htmlContent = FileUtils.readFileToString(new File(new File(".").getCanonicalPath()+"/webapps/budget/WEB-INF/classes/templates/be-allocation-report"), "UTF-8");
+            htmlContent = "";
+            StringBuilder sb = new StringBuilder();
+            int i = 1;
+            String finyear = "";
+            String unit = "";
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+            LocalDate date = LocalDate.parse(toDate, inputFormatter);
+            String formattedDate = date.format(outputFormatter);
+
+            LocalDate frmLocal = LocalDate.parse(fromDate);
+            LocalDate resultDate = frmLocal.minusDays(1);
+            LocalDateTime frmlocalDateTime = LocalDateTime.of(resultDate, LocalTime.MIDNIGHT);
+            Timestamp fromDateFormate = Timestamp.valueOf(frmlocalDateTime);
+
+            LocalDate localDa = LocalDate.parse(toDate);
+            LocalDate resultDt = localDa.plusDays(1);
+            LocalDateTime localDateTime = LocalDateTime.of(resultDt, LocalTime.MIDNIGHT);
+            Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
+
+            List<String> groupUnitId=budgetRebaseRepository.findGroupRebaseUnit();
+            String RunitId="";
+            String uName="";
+            String frmStation="";
+            String toStation="";
+            String finYear="";
+            String subHead="";
+            String headCodeId="";
+            String allocAmount="";
+            String expAmount="";
+            String balAmount="";
+            String LastCbD="";
+            if(groupUnitId.size()>0) {
+                for (String ids : groupUnitId) {
+                    RunitId=ids;
+                    List<BudgetRebase> rebaseDatas=budgetRebaseRepository.findByRebaseUnitId(RunitId);
+                    List<BudgetRebase> rebaseData = rebaseDatas.stream()
+                            .filter(e -> e.getOccuranceDate().after(fromDateFormate) && e.getOccuranceDate().before(toDateFormate)).collect(Collectors.toList());
+                    CgUnit unitN = cgUnitRepository.findByUnit(RunitId);
+                    CgStation frmS= cgStationRepository.findByStationId(rebaseData.get(0).getFrmStationId());
+                    CgStation toS= cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
+                    uName=unitN.getDescr();
+                    Date rebaseDate=rebaseData.get(0).getOccuranceDate();
+                    frmStation=frmS.getStationName();
+                    toStation=toS.getStationName();
+
+                    for (Integer k = 0; k < rebaseData.size(); k++) {
+                        BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(rebaseData.get(k).getFinYear());
+                        BudgetHead bHead = subHeadRepository.findByBudgetCodeId(rebaseData.get(k).getBudgetHeadId());
+                        finYear=findyr.getFinYear();
+                        subHead=bHead.getSubHeadDescr();
+                        headCodeId=bHead.getBudgetHeadId();
+                        allocAmount=rebaseData.get(k).getAllocAmount();
+                        expAmount=rebaseData.get(k).getExpAmount();
+                        balAmount=rebaseData.get(k).getBalAmount();
+
+
+
+                    }
+
+                }
+            }
+
+
+            htmlContent = htmlContent.replace("${name_placeholder}", StringEscapeUtils.escapeHtml4(names));
+            htmlContent = htmlContent.replace("${unit_placeholder}", StringEscapeUtils.escapeHtml4(unitName));
+            htmlContent = htmlContent.replace("${rank_placeholder}", StringEscapeUtils.escapeHtml4(rank));
+            htmlContent = htmlContent.replace("${date_placeholder}", StringEscapeUtils.escapeHtml4(formattedDateTime));
+            htmlContent = htmlContent.replace("${upToDate_placeholder}", StringEscapeUtils.escapeHtml4(formattedDate));
+            htmlContent = htmlContent.replace("${finYear_placeholder}", StringEscapeUtils.escapeHtml4(finYear));
+            htmlContent = htmlContent.replace("${amountType_placeholder}", StringEscapeUtils.escapeHtml4(amountIn));
+            //htmlContent = htmlContent.replace("${allocationType_placeholder}", StringEscapeUtils.escapeHtml4(type.getAllocDesc()));
+
+            htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
+            String filepath = HelperUtils.FILEPATH + "/" +  "_FER-budget-report.pdf";
+            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String filePath = folder.getAbsolutePath() + "/" + "_FER-budget-report.pdf";
+            File file = new File(filePath);
+            generatePdf(htmlContent, file.getAbsolutePath());
+            //generatePdf(htmlContent, filepath);
+            FilePathResponse response = new FilePathResponse();
+            response.setPath(filepath);
+            response.setFileName( "_FER-budget-report.pdf");
+            dtoList.add(response);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+        });
+    }
+
 
     public static void generatePdf(String htmlContent, String outputPdfFile) throws Exception {
         ITextRenderer renderer = new ITextRenderer();

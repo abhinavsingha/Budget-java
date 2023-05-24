@@ -12,5 +12,6 @@ public class UnitRebaseRequest {
     private String expAmount;
     private String balAmount;
     private String amountType;
+    private String lastCbDate;
 
 }

@@ -582,6 +582,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             budgetRebase.setExpAmount(req.getUnitRebaseRequests().get(l).getExpAmount());
             budgetRebase.setBalAmount(req.getUnitRebaseRequests().get(l).getBalAmount());
             budgetRebase.setAmountType(req.getUnitRebaseRequests().get(l).getAmountType());
+            budgetRebase.setLastCbDate(ConverterUtils.convertDateTotimeStamp(req.getUnitRebaseRequests().get(l).getLastCbDate()));
             budgetRebase.setAuthorityId(authorityId);
             budgetRebase.setUserId(hrDataCheck.getPid());
             budgetRebase.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
@@ -605,6 +606,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             budgetRebase.setExpAmount(null);
             budgetRebase.setBalAmount(null);
             budgetRebase.setAmountType(null);
+            budgetRebase.setLastCbDate(null);
             budgetRebase.setAuthorityId(authorityId);
             budgetRebase.setUserId(hrDataCheck.getPid());
             budgetRebase.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
