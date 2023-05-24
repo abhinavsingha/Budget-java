@@ -375,7 +375,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 }
             }
             rebase.setCdaData(addRes);
-            List<ContigentBill> expenditure = contigentBillRepository.findExpAndCbDate(unit, finYear, bHead,"Approved","0");
+            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndStatusAndIsUpdateAndIsFlag(unit, finYear, bHead,"Approved","0","0");
             if (expenditure.size()>0) {
                 double eAmount=0.0;
                 for (int k = 0; k < expenditure.size(); k++) {
@@ -424,92 +424,94 @@ public class MangeRebaseImpl implements MangeRebaseService {
     public ApiResponse<DefaultResponse> saveUnitRebase(UnitRebaseSaveReq req) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
-        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(),"1");
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
         DefaultResponse defaultResponse = new DefaultResponse();
 
         if (hrDataCheck == null) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS",HttpStatus.OK.value());
+            }, "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS", HttpStatus.OK.value());
         } else {
             if (hrDataCheck.getRoleId().contains(HelperUtils.BUDGETMANGER)) {
 
             } else {
                 return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-                },"YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS",HttpStatus.OK.value());
+                }, "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS", HttpStatus.OK.value());
             }
         }
         if (req.getAuthority() == null || req.getAuthority().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"AUTHORITY CAN NOT BE BLANK",HttpStatus.OK.value());
+            }, "AUTHORITY CAN NOT BE BLANK", HttpStatus.OK.value());
         }
         if (req.getAuthDate() == null || req.getAuthDate().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"AUTHORITY DATE CAN NOT BE BLANK",HttpStatus.OK.value());
+            }, "AUTHORITY DATE CAN NOT BE BLANK", HttpStatus.OK.value());
         }
         if (req.getRemark() == null || req.getRemark().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"REMARKS CAN NOT BE BLANK",HttpStatus.OK.value());
+            }, "REMARKS CAN NOT BE BLANK", HttpStatus.OK.value());
         }
         if (req.getAuthUnitId() == null || req.getAuthUnitId().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"AUTHORITY UNIT CAN NOT BE BLANK",HttpStatus.OK.value());
+            }, "AUTHORITY UNIT CAN NOT BE BLANK", HttpStatus.OK.value());
         }
         if (req.getAuthDocId() == null || req.getAuthDocId().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"DOCUMENT ID CAN NOT BE BLANK",HttpStatus.OK.value());
+            }, "DOCUMENT ID CAN NOT BE BLANK", HttpStatus.OK.value());
         }
         if (req.getOccurrenceDate() == null) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"OCCURRENCE DATE CAN NOT BE BLANK",HttpStatus.OK.value());
+            }, "OCCURRENCE DATE CAN NOT BE BLANK", HttpStatus.OK.value());
         }
         if (req.getFinYear() == null || req.getFinYear().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"FINANCIAL YEAR CAN NOT BE BLANK",HttpStatus.OK.value());
+            }, "FINANCIAL YEAR CAN NOT BE BLANK", HttpStatus.OK.value());
         }
         if (req.getRebaseUnitId() == null || req.getRebaseUnitId().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"REBASE UNIT ID CAN NOT BE BLANK",HttpStatus.OK.value());
+            }, "REBASE UNIT ID CAN NOT BE BLANK", HttpStatus.OK.value());
         }
         if (req.getHeadUnitId() == null || req.getHeadUnitId().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            }," HEAD UNIT CAN NOT BE BLANK",HttpStatus.OK.value());
+            }, " HEAD UNIT CAN NOT BE BLANK", HttpStatus.OK.value());
         }
         if (req.getToStationId() == null || req.getToStationId().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"TO_STATION ID CAN NOT BE BLANK",HttpStatus.OK.value());
+            }, "TO_STATION ID CAN NOT BE BLANK", HttpStatus.OK.value());
         }
         if (req.getFrmStationId() == null || req.getFrmStationId().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"FROM_STATION ID CAN NOT BE BLANK",HttpStatus.OK.value());
+            }, "FROM_STATION ID CAN NOT BE BLANK", HttpStatus.OK.value());
         }
         if (req.getToHeadUnitId() == null || req.getToHeadUnitId().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"TO_HEAD UNIT ID CAN NOT BE BLANK",HttpStatus.OK.value());
+            }, "TO_HEAD UNIT ID CAN NOT BE BLANK", HttpStatus.OK.value());
         }
+        if (req.getUnitRebaseRequests().size() > 0) {
 
         for (Integer m = 0; m < req.getUnitRebaseRequests().size(); m++) {
 
-            if (req.getUnitRebaseRequests().get(m).getBudgetHeadId()== null || req.getUnitRebaseRequests().get(m).getBudgetHeadId().isEmpty()) {
+            if (req.getUnitRebaseRequests().get(m).getBudgetHeadId() == null || req.getUnitRebaseRequests().get(m).getBudgetHeadId().isEmpty()) {
                 return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-                },"BUDGET_HEAD ID CAN NOT BE BLANK",HttpStatus.OK.value());
+                }, "BUDGET_HEAD ID CAN NOT BE BLANK", HttpStatus.OK.value());
             }
-            if (req.getUnitRebaseRequests().get(m).getAllocAmount()== null || req.getUnitRebaseRequests().get(m).getAllocAmount().isEmpty()) {
+            if (req.getUnitRebaseRequests().get(m).getAllocAmount() == null || req.getUnitRebaseRequests().get(m).getAllocAmount().isEmpty()) {
                 return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-                },"ALLOCATION AMOUNT CAN NOT BE BLANK",HttpStatus.OK.value());
+                }, "ALLOCATION AMOUNT CAN NOT BE BLANK", HttpStatus.OK.value());
             }
-            if (req.getUnitRebaseRequests().get(m).getExpAmount()== null || req.getUnitRebaseRequests().get(m).getExpAmount().isEmpty()) {
+            if (req.getUnitRebaseRequests().get(m).getExpAmount() == null || req.getUnitRebaseRequests().get(m).getExpAmount().isEmpty()) {
                 return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-                },"EXPEND_AMOUNT CAN NOT BE BLANK",HttpStatus.OK.value());
+                }, "EXPEND_AMOUNT CAN NOT BE BLANK", HttpStatus.OK.value());
             }
-            if (req.getUnitRebaseRequests().get(m).getBalAmount()== null || req.getUnitRebaseRequests().get(m).getBalAmount().isEmpty()) {
+            if (req.getUnitRebaseRequests().get(m).getBalAmount() == null || req.getUnitRebaseRequests().get(m).getBalAmount().isEmpty()) {
                 return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-                },"BAL_AMOUNT CAN NOT BE BLANK",HttpStatus.OK.value());
+                }, "BAL_AMOUNT CAN NOT BE BLANK", HttpStatus.OK.value());
             }
-            if (req.getUnitRebaseRequests().get(m).getAmountType()== null || req.getUnitRebaseRequests().get(m).getAmountType().isEmpty()) {
+            if (req.getUnitRebaseRequests().get(m).getAmountType() == null || req.getUnitRebaseRequests().get(m).getAmountType().isEmpty()) {
                 return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-                },"AMOUNT_TYPE CAN NOT BE BLANK",HttpStatus.OK.value());
+                }, "AMOUNT_TYPE CAN NOT BE BLANK", HttpStatus.OK.value());
             }
         }
+    }
 
         CgUnit chekUnit = cgUnitRepository.findByUnit(req.getRebaseUnitId());
         if (chekUnit == null || chekUnit.getUnit().isEmpty()) {
@@ -520,7 +522,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             },"CAN NOT REBASE ON SAME STATION",HttpStatus.OK.value());
         }
-        String maxRebaseId =budgetRebaseRepository.findMaxRebaseIDByTounit(req.getRebaseUnitId());
+        String maxRebaseId =budgetRebaseRepository.findMaxRebaseIDByRebaseUnitId(req.getRebaseUnitId());
         if (maxRebaseId!=null) {
             BudgetRebase rebaseData=budgetRebaseRepository.findByBudgetRebaseId(maxRebaseId);
             Date crDate=rebaseData.getCreatedOn();
@@ -563,9 +565,9 @@ public class MangeRebaseImpl implements MangeRebaseService {
          String toHeadUnitId=req.getToHeadUnitId();
 
         String refRensId = HelperUtils.getTransId();
+        if(req.getUnitRebaseRequests().size()>0){
         for (Integer l = 0; l < req.getUnitRebaseRequests().size(); l++) {
             BudgetRebase budgetRebase = new BudgetRebase();
-
             budgetRebase.setBudgetRebaseId(HelperUtils.getUnitRebased());
             budgetRebase.setRefTransId(refRensId);
             budgetRebase.setFinYear(finYear);
@@ -582,7 +584,29 @@ public class MangeRebaseImpl implements MangeRebaseService {
             budgetRebase.setAmountType(req.getUnitRebaseRequests().get(l).getAmountType());
             budgetRebase.setAuthorityId(authorityId);
             budgetRebase.setUserId(hrDataCheck.getPid());
-            budgetRebase.setAuthorityId(saveAuthority.getAuthorityId());
+            budgetRebase.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            budgetRebaseRepository.save(budgetRebase);
+        }
+        }else
+        {
+            BudgetRebase budgetRebase = new BudgetRebase();
+            budgetRebase.setBudgetRebaseId(HelperUtils.getUnitRebased());
+            budgetRebase.setRefTransId(refRensId);
+            budgetRebase.setFinYear(finYear);
+            budgetRebase.setRebaseUnitId(rebaseUnitId);
+            budgetRebase.setHeadUnitId(headUnitId);
+            budgetRebase.setFrmStationId(frmStationId);
+            budgetRebase.setToStationId(toStationId);
+            budgetRebase.setToHeadUnitId(toHeadUnitId);
+            budgetRebase.setOccuranceDate(ConverterUtils.convertDateTotimeStamp(occurrenceDate));
+            budgetRebase.setBudgetHeadId(null);
+            budgetRebase.setAllocAmount(null);
+            budgetRebase.setExpAmount(null);
+            budgetRebase.setBalAmount(null);
+            budgetRebase.setAmountType(null);
+            budgetRebase.setAuthorityId(authorityId);
+            budgetRebase.setUserId(hrDataCheck.getPid());
             budgetRebase.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             budgetRebaseRepository.save(budgetRebase);

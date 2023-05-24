@@ -14,8 +14,8 @@ public interface BudgetRebaseRepository extends JpaRepository<BudgetRebase, Stri
 
     BudgetRebase findByBudgetRebaseId(String rebaseId);
 
-    @Query(value="SELECT max(BUDGET_REBASE_ID) FROM budgetrebase WHERE TO_UNIT_ID=:toUnitId",nativeQuery = true)
-    String findMaxRebaseIDByTounit(String toUnitId);
+    @Query(value="SELECT max(BUDGET_REBASE_ID) FROM budgetrebase WHERE REBASE_UNIT_ID=:rebaseUnitId",nativeQuery = true)
+    String findMaxRebaseIDByRebaseUnitId(String rebaseUnitId);
 
 
 
