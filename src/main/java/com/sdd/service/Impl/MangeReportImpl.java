@@ -533,7 +533,7 @@ public class MangeReportImpl implements MangeReportService {
                 cdaReportResponse = new CDAReportResponse();
                 cdaReportResponse.setName("Total Amount");
                 cdaReportList.add(cdaReportResponse);
-                allCdaData.put("object", cdaReportList);
+                allCdaData.put("head", cdaReportList);
 
                 for (int i = 0; i < subHeadsData.size(); i++) {
                     cdaReportList = new ArrayList<>();
@@ -609,7 +609,7 @@ public class MangeReportImpl implements MangeReportService {
 //                    cdaReportResponse.setName(cdaParkingTotalList.get(i).getCdaName());
 //                    cdaReportList.add(cdaReportResponse);
 //                }
-//                allCdaData.put("object", cdaReportList);
+//                allCdaData.put("head", cdaReportList);
 //
 //
 //                for (int i = 0; i < subHeadsData.size(); i++) {
@@ -689,7 +689,7 @@ public class MangeReportImpl implements MangeReportService {
                 cdaReportResponse = new CDAReportResponse();
                 cdaReportResponse.setName("Total Amount");
                 cdaReportList.add(cdaReportResponse);
-                allCdaData.put("object", cdaReportList);
+                allCdaData.put("head", cdaReportList);
 
                 for (int i = 0; i < subHeadsData.size(); i++) {
                     cdaReportList = new ArrayList<>();
@@ -748,7 +748,86 @@ public class MangeReportImpl implements MangeReportService {
 
 
             } else {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID REQUEST.PLEASE CONTACT YOUR ADMINISTRATOR.");
+
+                List<CDAReportResponse> cdaReportList = new ArrayList<>();
+                CDAReportResponse cdaReportResponse = new CDAReportResponse();
+
+                List<BudgetHead> subHeadsData = subHeadRepository.findByMajorHeadAndSubHeadTypeIdOrderBySerialNumberAsc(cdaReportRequest.getMajorHead(), cdaReportRequest.getSubHeadType());
+                CdaParking cdaParkingTotalList = cdaParkingRepository.findByGinNo(cdaReportRequest.getCdaType());
+
+                if (cdaParkingTotalList == null) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CDA ID YEAR ID");
+                }
+
+
+                cdaReportResponse = new CDAReportResponse();
+                cdaReportResponse.setName(cdaParkingTotalList.getCdaName());
+                cdaReportList.add(cdaReportResponse);
+
+                cdaReportResponse = new CDAReportResponse();
+                cdaReportResponse.setName("Total Amount");
+                cdaReportList.add(cdaReportResponse);
+                allCdaData.put("head", cdaReportList);
+
+                for (int i = 0; i < subHeadsData.size(); i++) {
+                    cdaReportList = new ArrayList<>();
+                    cdaReportResponse = new CDAReportResponse();
+
+                    BudgetHead subHead = subHeadsData.get(i);
+                    cdaReportResponse.setName(subHead.getSubHeadDescr());
+
+                    Float totalAmount = 0f;
+                    if (cdaParkingTotalList != null) {
+//                        for (int k = 0; k < cdaParkingTotalList.size(); k++) {
+                            List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
+                            Float amount = 0f;
+
+                            for (int m = 0; m < cdaData.size(); m++) {
+                                if (cdaData.get(m).getTotalParkingAmount() == null) {
+                                    amount = amount;
+                                } else {
+                                    amount = amount + Float.parseFloat(cdaData.get(m).getTotalParkingAmount());
+                                    grandTotal = grandTotal + amount;
+                                }
+
+                            }
+
+                            totalAmount = totalAmount + amount;
+                            cdaReportResponse = new CDAReportResponse();
+                            cdaReportResponse.setName(amount + "");
+                            cdaReportList.add(cdaReportResponse);
+
+                    } else {
+                        cdaReportResponse = new CDAReportResponse();
+                        cdaReportResponse.setName("0");
+                        cdaReportList.add(cdaReportResponse);
+                    }
+
+                    cdaReportResponse = new CDAReportResponse();
+                    cdaReportResponse.setName(totalAmount + "");
+                    cdaReportResponse.setReportType("CDA Wise Report(ALL CDA)");
+                    cdaReportList.add(cdaReportResponse);
+                    allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
+                }
+                try {
+
+                    String templateName = "cda-parking-report-revenue.html";
+                    File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+                    if (!folder.exists()) {
+                        folder.mkdirs();
+                    }
+                    String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
+                    File file = new File(filePath);
+                    pdfGenaratorUtil.createCdaAllMainReport(templateName, allCdaData, cadSubReport, file, grandTotal);
+                    dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
+                    dtoList.setFileName(fileName);
+                    dtoList.setAllCdaData(allCdaData);
+
+
+                } catch (Exception e) {
+                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+                }
+
             }
 
 
@@ -782,7 +861,7 @@ public class MangeReportImpl implements MangeReportService {
                 cdaReportResponse = new CDAReportResponse();
                 cdaReportResponse.setName("Total Amount");
                 cdaReportList.add(cdaReportResponse);
-                allCdaData.put("object", cdaReportList);
+                allCdaData.put("head", cdaReportList);
 
 
                 cdaReportList = new ArrayList<>();
@@ -864,7 +943,7 @@ public class MangeReportImpl implements MangeReportService {
                 cdaReportResponse = new CDAReportResponse();
                 cdaReportResponse.setName("Total Amount");
                 cdaReportList.add(cdaReportResponse);
-                allCdaData.put("object", cdaReportList);
+                allCdaData.put("head", cdaReportList);
 
                 for (int i = 0; i < subHeadsData.size(); i++) {
                     cdaReportList = new ArrayList<>();
