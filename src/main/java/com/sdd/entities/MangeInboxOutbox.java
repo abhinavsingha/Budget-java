@@ -69,5 +69,11 @@ public class MangeInboxOutbox {
     @Column(name = "ALLOCATION_TYPE")
     private String allocationType;
 
+    @Column(name = "IS_APPROVED")
+    private String isApproved;
+
+
+    @Column(name = "IS_ARCHIVE")
+    private String isArchive;
 
 }

@@ -779,23 +779,23 @@ public class MangeReportImpl implements MangeReportService {
                     Float totalAmount = 0f;
                     if (cdaParkingTotalList != null) {
 //                        for (int k = 0; k < cdaParkingTotalList.size(); k++) {
-                            List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
-                            Float amount = 0f;
+                        List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
+                        Float amount = 0f;
 
-                            for (int m = 0; m < cdaData.size(); m++) {
-                                if (cdaData.get(m).getTotalParkingAmount() == null) {
-                                    amount = amount;
-                                } else {
-                                    amount = amount + Float.parseFloat(cdaData.get(m).getTotalParkingAmount());
-                                    grandTotal = grandTotal + amount;
-                                }
-
+                        for (int m = 0; m < cdaData.size(); m++) {
+                            if (cdaData.get(m).getTotalParkingAmount() == null) {
+                                amount = amount;
+                            } else {
+                                amount = amount + Float.parseFloat(cdaData.get(m).getTotalParkingAmount());
+                                grandTotal = grandTotal + amount;
                             }
 
-                            totalAmount = totalAmount + amount;
-                            cdaReportResponse = new CDAReportResponse();
-                            cdaReportResponse.setName(amount + "");
-                            cdaReportList.add(cdaReportResponse);
+                        }
+
+                        totalAmount = totalAmount + amount;
+                        cdaReportResponse = new CDAReportResponse();
+                        cdaReportResponse.setName(amount + "");
+                        cdaReportList.add(cdaReportResponse);
 
                     } else {
                         cdaReportResponse = new CDAReportResponse();
