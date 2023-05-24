@@ -68,6 +68,9 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
     @Autowired
     private SubHeadRepository subHeadRepository;
 
+    @Autowired
+    private BudgetAllocationRepository budgetAllocationRepository;
+
 
     @Override
     public ApiResponse<InboxOutBoxResponse> getInboxList() {
@@ -480,8 +483,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             if (inboxOutboxesList.size() > 0) {
                 for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
                     MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-                    List<BudgetAllocationDetails> allocationData = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(mangeInboxOutbox.getGroupId(), "0");
-                    if (allocationData.size() > 0) {
+                    String authGId=mangeInboxOutbox.getGroupId();
+                    List<BudgetAllocation> allocationData = budgetAllocationRepository.findByAuthGroupIdAndIsDelete(authGId, "0");                    if (allocationData.size() > 0) {
                         BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.get(0).getFinYear());
                         String[] part = finYear.getFinYear().split("-");
                         int dbFinyr = Integer.parseInt(part[1]);
@@ -559,8 +562,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             if (inboxOutboxesList.size() > 0) {
                 for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
                     MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-                    List<BudgetAllocationDetails> allocationData = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(mangeInboxOutbox.getGroupId(), "0");
-                    if (allocationData.size() > 0) {
+                    String authGId=mangeInboxOutbox.getGroupId();
+                    List<BudgetAllocation> allocationData = budgetAllocationRepository.findByAuthGroupIdAndIsDelete(authGId, "0");                    if (allocationData.size() > 0) {
                         BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.get(0).getFinYear());
                         String[] part = finYear.getFinYear().split("-");
                         int dbFinyr = Integer.parseInt(part[1]);
@@ -605,22 +608,22 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         } catch (Exception e) {
         }
         if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER) || getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
-            List<BudgetAllocationDetails> inboxOutboxesList = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "0");
+            List<BudgetAllocation> inboxOutboxesList = budgetAllocationRepository.findByAuthGroupIdAndIsDelete(groupId, "0");
             if (inboxOutboxesList.size() > 0) {
                 for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
-                    BudgetAllocationDetails mangeInboxOutbox = inboxOutboxesList.get(i);
+                    BudgetAllocation mangeInboxOutbox = inboxOutboxesList.get(i);
                     ArchivedResponse data = new ArchivedResponse();
-                    data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocTypeId()));
+                    data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationTypeId()));
                     data.setFinancialYear(budgetFinancialYearRepository.findBySerialNo(mangeInboxOutbox.getFinYear()));
                     data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
-                    data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                    //data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
                     data.setAllocationAmount(mangeInboxOutbox.getAllocationAmount());
                     data.setBalAmount("0.0000");
                     data.setApprovedAmount("0.0000");
                     data.setReceiptAmount("0.0000");
                     data.setAmountType(amountUnitRepository.findByAmountTypeId(mangeInboxOutbox.getAmountType()));
                     data.setStatus(mangeInboxOutbox.getStatus());
-                    data.setRemarks(mangeInboxOutbox.getRemarks());
+                    //data.setRemarks(mangeInboxOutbox.getRemarks());
                     data.setSubmissionDate(mangeInboxOutbox.getCreatedOn());
                     data.setApprovedDate(mangeInboxOutbox.getUpdatedOn());
                     data.setGroupId(mangeInboxOutbox.getAuthGroupId());

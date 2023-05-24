@@ -59,4 +59,6 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
                     "select SUB_HEAD from budgetallocation where FIN_YEAR=:finYearId and ALLOCATION_TYPE_ID=:allocationTypeId  group by SUB_HEAD",
             nativeQuery = true)
     List<String> findSubHead(String finYearId, String allocationTypeId);
+
+    List<BudgetAllocation> findByAuthGroupIdAndIsDelete(String authGId,String isDelete);
 }
