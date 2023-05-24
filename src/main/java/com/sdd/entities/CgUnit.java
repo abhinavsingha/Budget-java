@@ -36,8 +36,8 @@ public class CgUnit {
     @Column(name = "IS_ACTIVE")
     private String isActive;
 
-    @Column(name = "IS_FLAG")
-    private String isFlag;
+    @Column(name = "IS_SHIP")
+    private String isShip;
 
 
     @Column(name = "CREATED_ON")

@@ -15,5 +15,5 @@ public class ApproveContigentBillRequest {
     private String groupId;
 
     private String cbId;
-    private List<CdaTransAllocationRequest> cdaParkingId;
+    private List<CdaCrDrAllocationRequest> cdaParkingId;
 }

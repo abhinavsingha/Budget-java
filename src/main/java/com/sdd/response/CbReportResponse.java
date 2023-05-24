@@ -17,6 +17,7 @@ public class CbReportResponse {
     private String expenditureAmount;
     private String balanceAmount;
     private String currentBillAmount;
+    private String getGst;
     private String allocatedAmount;
     private String hindiAmount;
     private String remeningAmount;

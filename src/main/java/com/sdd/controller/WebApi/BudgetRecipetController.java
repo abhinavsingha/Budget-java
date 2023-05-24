@@ -1,6 +1,7 @@
 package com.sdd.controller.WebApi;
 
 
+import com.sdd.entities.CdaParking;
 import com.sdd.entities.CgUnit;
 import com.sdd.entities.repository.CgUnitRepository;
 import com.sdd.request.BudgetReciptSaveRequest;
@@ -54,5 +55,14 @@ public class BudgetRecipetController {
 	public ResponseEntity<ApiResponse<AllBudgetRevisionResponse>> getBudgetAllocationDataFilter(@RequestBody BudgetReciptSaveRequest budgetReciptSaveRequest) {
 		return new ResponseEntity<>(budgetReciptService.getBudgetReciptFilter(budgetReciptSaveRequest), HttpStatus.OK);
 	}
+
+
+
+
+	@GetMapping("/getAllCda")
+	public ResponseEntity<ApiResponse<List<CdaParking>>> getAllCda() {
+		return new ResponseEntity<>(budgetReciptService.getAllCda(), HttpStatus.OK);
+	}
+
 
 }

@@ -14,6 +14,7 @@ public class CDAReportResponse {
 
 
     private String name;
+    private String reportType;
 
 
 }

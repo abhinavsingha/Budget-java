@@ -251,7 +251,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 rep.setPurposeCode(getAllData.get(i).getPurposeCode());
                 rep.setCbUnit(getAllData.get(i).getSubUnit());
                 rep.setIsActive(getAllData.get(i).getIsActive());
-                rep.setIsFlag(getAllData.get(i).getIsFlag());
                 rep.setCreatedOn(getAllData.get(i).getCreatedOn());
                 rep.setUpdatedOn(getAllData.get(i).getUpdatedOn());
                 String stationId= getAllData.get(i).getStationId();
