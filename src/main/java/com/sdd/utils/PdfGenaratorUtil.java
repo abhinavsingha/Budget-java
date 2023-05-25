@@ -484,7 +484,7 @@ public class PdfGenaratorUtil {
                 middle = middle.append("</thead></table><br><br><br><br><table  class=dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%  border=\"1\"><thead>");
                 middle = middle.append("<tr>" +
                         "<th > object </th>");
-                List<CDAReportResponse> tabData1 = map.get("head");
+                List<CDAReportResponse> tabData1 = map.get("Sub Head");
                 StringBuilder amountAppend1 = new StringBuilder();
                 for (Integer i = 0; i < tabData1.size(); i++) {
                     String data = "<th >" + tabData1.get(i).getName() + "</td>";
@@ -748,7 +748,7 @@ public class PdfGenaratorUtil {
                 middle = middle.append("</thead></table><br><br><br><br><table  class=dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%  border=\"1\"><thead>");
                 middle = middle.append("<tr>" +
                         "<th > object </th>");
-                List<CDAReportResponse> tabData1 = map.get("head");
+                List<CDAReportResponse> tabData1 = map.get("Sub Head");
                 StringBuilder amountAppend1 = new StringBuilder();
                 for (Integer i = 0; i < tabData1.size(); i++) {
                     String data = "<th >" + tabData1.get(i).getName() + "</td>";

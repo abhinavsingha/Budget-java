@@ -533,7 +533,7 @@ public class MangeReportImpl implements MangeReportService {
                 cdaReportResponse = new CDAReportResponse();
                 cdaReportResponse.setName("Total Amount");
                 cdaReportList.add(cdaReportResponse);
-                allCdaData.put("head", cdaReportList);
+                allCdaData.put("Sub Head", cdaReportList);
 
                 for (int i = 0; i < subHeadsData.size(); i++) {
                     cdaReportList = new ArrayList<>();
@@ -609,7 +609,7 @@ public class MangeReportImpl implements MangeReportService {
 //                    cdaReportResponse.setName(cdaParkingTotalList.get(i).getCdaName());
 //                    cdaReportList.add(cdaReportResponse);
 //                }
-//                allCdaData.put("head", cdaReportList);
+//                allCdaData.put("Sub Head", cdaReportList);
 //
 //
 //                for (int i = 0; i < subHeadsData.size(); i++) {
@@ -689,7 +689,7 @@ public class MangeReportImpl implements MangeReportService {
                 cdaReportResponse = new CDAReportResponse();
                 cdaReportResponse.setName("Total Amount");
                 cdaReportList.add(cdaReportResponse);
-                allCdaData.put("head", cdaReportList);
+                allCdaData.put("Sub Head", cdaReportList);
 
                 for (int i = 0; i < subHeadsData.size(); i++) {
                     cdaReportList = new ArrayList<>();
@@ -767,7 +767,7 @@ public class MangeReportImpl implements MangeReportService {
                 cdaReportResponse = new CDAReportResponse();
                 cdaReportResponse.setName("Total Amount");
                 cdaReportList.add(cdaReportResponse);
-                allCdaData.put("head", cdaReportList);
+                allCdaData.put("Sub Head", cdaReportList);
 
                 for (int i = 0; i < subHeadsData.size(); i++) {
                     cdaReportList = new ArrayList<>();
@@ -836,6 +836,11 @@ public class MangeReportImpl implements MangeReportService {
 //            01     SubHeadWise
 //            02     UnitWise
 
+
+            if (cdaReportRequest.getReportType() == null || cdaReportRequest.getReportType().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REPORT TYPE CAN NOT BE BLANK");
+            }
+
             if (cdaReportRequest.getReportType().equalsIgnoreCase("01")) {
 
 
@@ -852,7 +857,20 @@ public class MangeReportImpl implements MangeReportService {
                 List<CDAReportResponse> cdaReportList = new ArrayList<>();
                 CDAReportResponse cdaReportResponse = new CDAReportResponse();
 
-                List<CdaParking> cdaParkingTotalList = cdaParkingRepository.findAll();
+                List<CdaParking> cdaParkingTotalList = new ArrayList<CdaParking>();
+
+                if (cdaReportRequest.getCdaType().contains("112233")) {
+                    List<CdaParking> cdaParkingTotalList11 = cdaParkingRepository.findAllByOrderByCdaNameAsc();
+                    cdaParkingTotalList.addAll(cdaParkingTotalList11);
+                } else if (cdaReportRequest.getCdaType().contains("112244")) {
+                    List<CdaParking> cdaParkingTotalList11 = cdaParkingRepository.findByCdaGroupCodeOrderByCdaNameAsc("200201");
+                    cdaParkingTotalList.addAll(cdaParkingTotalList11);
+                } else {
+                    CdaParking singleCda = cdaParkingRepository.findByGinNo(cdaReportRequest.getCdaType());
+                    cdaParkingTotalList.add(singleCda);
+                }
+
+
                 for (int i = 0; i < cdaParkingTotalList.size(); i++) {
                     cdaReportResponse = new CDAReportResponse();
                     cdaReportResponse.setName(cdaParkingTotalList.get(i).getCdaName());
@@ -861,7 +879,7 @@ public class MangeReportImpl implements MangeReportService {
                 cdaReportResponse = new CDAReportResponse();
                 cdaReportResponse.setName("Total Amount");
                 cdaReportList.add(cdaReportResponse);
-                allCdaData.put("head", cdaReportList);
+                allCdaData.put("Sub Head", cdaReportList);
 
 
                 cdaReportList = new ArrayList<>();
@@ -934,7 +952,22 @@ public class MangeReportImpl implements MangeReportService {
                 CDAReportResponse cdaReportResponse = new CDAReportResponse();
 
                 List<BudgetHead> subHeadsData = subHeadRepository.findByMajorHeadAndSubHeadTypeIdOrderBySerialNumberAsc(cdaReportRequest.getMajorHead(), cdaReportRequest.getSubHeadType());
-                List<CdaParking> cdaParkingTotalList = cdaParkingRepository.findAll();
+
+
+                List<CdaParking> cdaParkingTotalList = new ArrayList<CdaParking>();
+
+                if (cdaReportRequest.getCdaType().contains("112233")) {
+                    List<CdaParking> cdaParkingTotalList11 = cdaParkingRepository.findAllByOrderByCdaNameAsc();
+                    cdaParkingTotalList.addAll(cdaParkingTotalList11);
+                } else if (cdaReportRequest.getCdaType().contains("112244")) {
+                    List<CdaParking> cdaParkingTotalList11 = cdaParkingRepository.findByCdaGroupCodeOrderByCdaNameAsc("200201");
+                    cdaParkingTotalList.addAll(cdaParkingTotalList11);
+                } else {
+                    CdaParking singleCda = cdaParkingRepository.findByGinNo(cdaReportRequest.getCdaType());
+                    cdaParkingTotalList.add(singleCda);
+                }
+
+
                 for (int i = 0; i < cdaParkingTotalList.size(); i++) {
                     cdaReportResponse = new CDAReportResponse();
                     cdaReportResponse.setName(cdaParkingTotalList.get(i).getCdaName());
@@ -943,7 +976,7 @@ public class MangeReportImpl implements MangeReportService {
                 cdaReportResponse = new CDAReportResponse();
                 cdaReportResponse.setName("Total Amount");
                 cdaReportList.add(cdaReportResponse);
-                allCdaData.put("head", cdaReportList);
+                allCdaData.put("Sub Head", cdaReportList);
 
                 for (int i = 0; i < subHeadsData.size(); i++) {
                     cdaReportList = new ArrayList<>();

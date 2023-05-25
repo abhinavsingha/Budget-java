@@ -79,6 +79,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         InboxOutBoxResponse inboxOutBoxResponse = new InboxOutBoxResponse();
 
         List<InboxOutBoxSubResponse> inboxList = new ArrayList<InboxOutBoxSubResponse>();
+        List<InboxOutBoxSubResponse> approvedList = new ArrayList<InboxOutBoxSubResponse>();
         List<InboxOutBoxSubResponse> outBoxList = new ArrayList<InboxOutBoxSubResponse>();
         if (hrDataCheck == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
@@ -94,30 +95,9 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
         }
 
-//        if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
-//            List<MessageTran> msgTransList = new ArrayList<MessageTran>();
-//
-//            List<MangeInboxOutbox> inboxbList = mangeInboxOutBoxRepository.findByCreaterpId(hrDataCheck.getPid());
-//            for (Integer i = 0; i < inboxbList.size(); i++) {
-//                List<MessageTran> msgTransData =   msgTransRepository.findByMsgId(inboxbList.get(i).getMangeInboxId());
-//
-////                msgTransList.addAll(msgTransRepository.findByMsgId(inboxbList.get(i).getMangeInboxId()));
-//            }
-//
-//        } else if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER)) {
-//            List<MessageTran> msgTransList = new ArrayList<MessageTran>();
-//
-//            List<MangeInboxOutbox> inboxlist1 = mangeInboxOutBoxRepository.findByApproverpId(hrDataCheck.getPid());
-//            for (Integer i = 0; i < inboxlist1.size(); i++) {
-////                List<MessageTran> msgTransData =   msgTransRepository.findByMsgId(inboxlist1.get(i).getMangeInboxId());
-//                msgTransList.addAll(msgTransRepository.findByMsgId(inboxlist1.get(i).getMangeInboxId()));
-//            }
-//        }
-
-
         if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER)) {
 
-            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG");
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG", "0", "0");
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
 
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("AP")) {
@@ -157,7 +137,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
             }
         } else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
-            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG", "BR");
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG", "0", "0");
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
 
                 if (inboxOutboxesList.get(i).getToUnit().equalsIgnoreCase(hrDataCheck.getUnitId())) {
@@ -201,7 +181,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
             }
         } else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
-            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB");
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "0", "0");
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
 
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
@@ -241,7 +221,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
             }
         } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
-            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB");
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "0", "0");
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
 
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("VE")) {
@@ -281,7 +261,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
             }
         } else if (getCurrentRole.contains(HelperUtils.CBAPPROVER)) {
-            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB");
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "0", "0");
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
 
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("AP")) {
@@ -339,30 +319,29 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         }
 
 
+        List<MangeInboxOutbox> approvedListUnitWise = mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1");
+        for (Integer i = 0; i < approvedListUnitWise.size(); i++) {
+            InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+            MangeInboxOutbox mangeInboxOutbox = approvedListUnitWise.get(i);
+
+            data.setGroupId(mangeInboxOutbox.getGroupId());
+            data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+            data.setRemarks(mangeInboxOutbox.getRemarks());
+            data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+            data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+            data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+            data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+            data.setAmount(mangeInboxOutbox.getAmount());
+            data.setType(mangeInboxOutbox.getType());
+            data.setStatus(mangeInboxOutbox.getStatus());
+            data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+
+            approvedList.add(data);
+        }
+        inboxOutBoxResponse.setApprovedList(approvedList);
         inboxOutBoxResponse.setInboxList(inboxList);
         inboxOutBoxResponse.setOutList(outBoxList);
 
-
-//        for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
-//            MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-//
-//            InboxOutBoxResponse data = new InboxOutBoxResponse();
-//
-//            data.setGroupId(mangeInboxOutbox.getGroupId());
-//            data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
-//            data.setRemarks(mangeInboxOutbox.getRemarks());
-//            data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
-//            data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
-//            data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
-//            data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
-//            data.setAmount(mangeInboxOutbox.getAmount());
-//                    data.setType(mangeInboxOutbox.getType());
-//            data.setStatus(mangeInboxOutbox.getStatus());
-//            data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
-//
-//            defaultResponse.add(data);
-//
-//        }
 
         return ResponseUtils.createSuccessResponse(inboxOutBoxResponse, new TypeReference<InboxOutBoxResponse>() {
         });
@@ -499,33 +478,33 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER) || getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
             List<MangeInboxOutbox> inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndStatus(hrDataCheck.getUnitId(), "BG", "Fully Approved");
             if (inboxOutboxesList.size() > 0) {
-            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
-                MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-                List<BudgetAllocationDetails> allocationData = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(mangeInboxOutbox.getGroupId(), "0");
-                if (allocationData.size() > 0) {
-                    BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.get(0).getFinYear());
-                    String[] part = finYear.getFinYear().split("-");
-                    int dbFinyr = Integer.parseInt(part[1]);
-                    if (financialYear.equalsIgnoreCase(finYear.getFinYear()) || sysFinyr < dbFinyr) {
-                        ApprovedResponse data = new ApprovedResponse();
-                        data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
-                        data.setType(mangeInboxOutbox.getType());
-                        data.setSubmissionDate(mangeInboxOutbox.getCreatedOn());
-                        data.setApprovedDate(mangeInboxOutbox.getUpdatedOn());
-                        data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
-                        data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
-                        data.setStatus(mangeInboxOutbox.getStatus());
-                        data.setRemarks(mangeInboxOutbox.getRemarks());
-                        data.setGroupId(mangeInboxOutbox.getGroupId());
-                        data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
-                        data.setAmount(mangeInboxOutbox.getAmount());
-                        responce.add(data);
+                for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+                    List<BudgetAllocationDetails> allocationData = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(mangeInboxOutbox.getGroupId(), "0");
+                    if (allocationData.size() > 0) {
+                        BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.get(0).getFinYear());
+                        String[] part = finYear.getFinYear().split("-");
+                        int dbFinyr = Integer.parseInt(part[1]);
+                        if (financialYear.equalsIgnoreCase(finYear.getFinYear()) || sysFinyr < dbFinyr) {
+                            ApprovedResponse data = new ApprovedResponse();
+                            data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+                            data.setType(mangeInboxOutbox.getType());
+                            data.setSubmissionDate(mangeInboxOutbox.getCreatedOn());
+                            data.setApprovedDate(mangeInboxOutbox.getUpdatedOn());
+                            data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                            data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                            data.setStatus(mangeInboxOutbox.getStatus());
+                            data.setRemarks(mangeInboxOutbox.getRemarks());
+                            data.setGroupId(mangeInboxOutbox.getGroupId());
+                            data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                            data.setAmount(mangeInboxOutbox.getAmount());
+                            responce.add(data);
+                        }
                     }
                 }
             }
         }
-        }
-        return ResponseUtils.createSuccessResponse(responce,  new TypeReference<List<ApprovedResponse>>()  {
+        return ResponseUtils.createSuccessResponse(responce, new TypeReference<List<ApprovedResponse>>() {
         });
     }
 
@@ -604,12 +583,12 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                 }
             }
         }
-        return ResponseUtils.createSuccessResponse(responce,  new TypeReference<List<ApprovedResponse>>()  {
+        return ResponseUtils.createSuccessResponse(responce, new TypeReference<List<ApprovedResponse>>() {
         });
     }
 
     @Override
-    public ApiResponse<List<ArchivedResponse>>getApprovedListData(String groupId) {
+    public ApiResponse<List<ArchivedResponse>> getApprovedListData(String groupId) {
         List<ArchivedResponse> responce = new ArrayList<ArchivedResponse>();
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -628,29 +607,29 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER) || getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
             List<BudgetAllocationDetails> inboxOutboxesList = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "0");
             if (inboxOutboxesList.size() > 0) {
-            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
-                BudgetAllocationDetails mangeInboxOutbox = inboxOutboxesList.get(i);
-                ArchivedResponse data = new ArchivedResponse();
-                data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocTypeId()));
-                data.setFinancialYear(budgetFinancialYearRepository.findBySerialNo(mangeInboxOutbox.getFinYear()));
-                data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
-                data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
-                data.setAllocationAmount(mangeInboxOutbox.getAllocationAmount());
-                data.setBalAmount("0.0000");
-                data.setApprovedAmount("0.0000");
-                data.setReceiptAmount("0.0000");
-                data.setAmountType(amountUnitRepository.findByAmountTypeId(mangeInboxOutbox.getAmountType()));
-                data.setStatus(mangeInboxOutbox.getStatus());
-                data.setRemarks(mangeInboxOutbox.getRemarks());
-                data.setSubmissionDate(mangeInboxOutbox.getCreatedOn());
-                data.setApprovedDate(mangeInboxOutbox.getUpdatedOn());
-                data.setGroupId(mangeInboxOutbox.getAuthGroupId());
-                data.setBudgetHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(mangeInboxOutbox.getSubHead()));
-                responce.add(data);
+                for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+                    BudgetAllocationDetails mangeInboxOutbox = inboxOutboxesList.get(i);
+                    ArchivedResponse data = new ArchivedResponse();
+                    data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocTypeId()));
+                    data.setFinancialYear(budgetFinancialYearRepository.findBySerialNo(mangeInboxOutbox.getFinYear()));
+                    data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                    data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                    data.setAllocationAmount(mangeInboxOutbox.getAllocationAmount());
+                    data.setBalAmount("0.0000");
+                    data.setApprovedAmount("0.0000");
+                    data.setReceiptAmount("0.0000");
+                    data.setAmountType(amountUnitRepository.findByAmountTypeId(mangeInboxOutbox.getAmountType()));
+                    data.setStatus(mangeInboxOutbox.getStatus());
+                    data.setRemarks(mangeInboxOutbox.getRemarks());
+                    data.setSubmissionDate(mangeInboxOutbox.getCreatedOn());
+                    data.setApprovedDate(mangeInboxOutbox.getUpdatedOn());
+                    data.setGroupId(mangeInboxOutbox.getAuthGroupId());
+                    data.setBudgetHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(mangeInboxOutbox.getSubHead()));
+                    responce.add(data);
+                }
             }
         }
-        }
-        return ResponseUtils.createSuccessResponse(responce,  new TypeReference<List<ArchivedResponse>>()  {
+        return ResponseUtils.createSuccessResponse(responce, new TypeReference<List<ArchivedResponse>>() {
         });
     }
 

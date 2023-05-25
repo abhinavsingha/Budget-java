@@ -365,6 +365,8 @@ public class ContingentServiceImpl implements ContingentService {
                 cdaParkingCrAndDr.setAmountType(null);
 
                 parkingCrAndDrRepository.save(cdaParkingCrAndDr);
+
+
             }
 
         }
@@ -429,6 +431,8 @@ public class ContingentServiceImpl implements ContingentService {
         mangeInboxOutbox.setRoleId(hrData.getRoleId());
         mangeInboxOutbox.setCreaterpId(hrData.getPid());
         mangeInboxOutbox.setIsFlag("1");
+        mangeInboxOutbox.setIsArchive("0");
+        mangeInboxOutbox.setIsApproved("0");
         mangeInboxOutbox.setState("VE");
         mangeInboxOutbox.setIsBgcg("CB");
 
@@ -472,6 +476,10 @@ public class ContingentServiceImpl implements ContingentService {
 
             ContingentBillSaveRequest contingentBillSaveRequest = contingentBillSaveRequestList.get(i);
 
+            if (contingentBillSaveRequest.getContingentBilId() == null || contingentBillSaveRequest.getContingentBilId().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "OLD CB ID CAN NOT BE BLANK");
+            }
+
             ContigentBill contigentBill = contigentBillRepository.findByCbIdAndIsFlag(contingentBillSaveRequest.getContingentBilId(), "0");
             if (contigentBill == null) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CONTINGENT BILL ID");
@@ -488,9 +496,6 @@ public class ContingentServiceImpl implements ContingentService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FINANCIAL ID CAN NOT BE BLANK");
             }
 
-            if (contingentBillSaveRequest.getContingentBilId() == null || contingentBillSaveRequest.getContingentBilId().isEmpty()) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "OLD CB ID CAN NOT BE BLANK");
-            }
 
             ContigentBill contigentBill1 = contigentBillRepository.findByCbIdAndIsFlag(contingentBillSaveRequest.getContingentBilId(), "0");
 
@@ -646,8 +651,6 @@ public class ContingentServiceImpl implements ContingentService {
                 parkingAmount = Double.parseDouble(contingentBillSaveRequestList.get(i).getCdaParkingId().get(m).getCdaAmount());
 
             }
-
-
             if (parkingAmount > remainingCdaParkingAmount) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT IS GREATER THAN CDA REMAINING AMOUNT");
             }
@@ -700,14 +703,29 @@ public class ContingentServiceImpl implements ContingentService {
         if (veriferCbPId.isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO CB VERIFIER ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
         }
-        String toUnitId = "";
+//        String toUnitId = "";
         String authGroupId = "";
         for (Integer i = 0; i < contingentBillSaveRequestList.size(); i++) {
 
             ContigentBill contigentBill1 = contigentBillRepository.findByCbIdAndIsFlag(contingentBillSaveRequestList.get(i).getContingentBilId(), "0");
             contigentBill1.setIsUpdate("1");
             authGroupId = contigentBill1.getAuthGroupId();
+
             if (contigentBill1 != null) {
+
+                CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByCdaCrdrIdAndIsFlag(contigentBill1.getCbId(), "0");
+                CdaParkingTrans cdaParkingTrans11 = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(cdaParkingCrAndDr.getCdaParkingTrans(), "0");
+                AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans11.getAmountType());
+
+                double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans11.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+                double parkingAmount = Double.parseDouble(cdaParkingCrAndDr.getAmount());
+
+                double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
+                cdaParkingTrans11.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                cdaParkingTransRepository.save(cdaParkingTrans11);
+
+                cdaParkingCrAndDr.setIsFlag("1");
+                parkingCrAndDrRepository.save(cdaParkingCrAndDr);
                 contigentBillRepository.save(contigentBill1);
             }
 
@@ -726,7 +744,6 @@ public class ContingentServiceImpl implements ContingentService {
                 authoritySaveData.setRemarks(contingentBillSaveRequestList.get(i).getAuthList().get(j).getRemark());
                 authoritySaveData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 authorityRepository.save(authoritySaveData);
-
             }
 
             ContigentBill contigentBill = new ContigentBill();
@@ -736,7 +753,7 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBill.setCbAmount(ConverterUtils.addDecimalPoint(contingentBillSaveRequest.getCbAmount()));
             contigentBill.setCbDate(ConverterUtils.convertDateTotimeStamp(contingentBillSaveRequest.getCbDate()));
             contigentBill.setCbUnitId(contingentBillSaveRequest.getUnit());
-            toUnitId = contingentBillSaveRequest.getUnit();
+//            toUnitId = contingentBillSaveRequest.getUnit();
             contigentBill.setFinYear(contingentBillSaveRequest.getBudgetFinancialYearId());
             contigentBill.setStatus("Pending");
             contigentBill.setRemarks(contingentBillSaveRequest.getRemark());
@@ -1126,6 +1143,7 @@ public class ContingentServiceImpl implements ContingentService {
             mangeInboxOutbox.setState("CR");
             if (status.equalsIgnoreCase("Approved")) {
                 mangeInboxOutbox.setStatus("Fully Approved");
+                mangeInboxOutbox.setIsApproved("1");
             } else {
                 mangeInboxOutbox.setStatus(approveContigentBillRequest.getStatus());
             }

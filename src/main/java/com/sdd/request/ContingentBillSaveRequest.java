@@ -38,7 +38,7 @@ public class ContingentBillSaveRequest {
 
     private String contingentBilId;
     private String allocationTypeId;
-//    private String oldCbId;
+
 
     private List<CdaTransAllocationRequest> cdaParkingId;
 

@@ -26,5 +26,5 @@ public class BudgetAllocationSubRequest {
 
 
 
-    private String isAllocated;
+
 }

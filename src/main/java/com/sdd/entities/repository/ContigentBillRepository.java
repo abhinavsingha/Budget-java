@@ -10,6 +10,16 @@ import java.util.List;
 
 public interface ContigentBillRepository extends JpaRepository<ContigentBill, Long> {
 
+  @Query(
+      value =
+          "SELECT CB_AMOUNT,CB_DATE FROM contigentbill where CB_UNIT_ID=:unitId and FIN_YEAR=:finYear and BUDGET_HEAD_ID=:subHead and STATUS=:status and IS_UPDATED=:update",
+      nativeQuery = true)
+  List<ContigentBill> findExpAndCbDate(String unitId, String finYear, String subHead,String status,String update);
+
+    List<ContigentBill> findByCbUnitIdAndFinYearAndBudgetHeadIDAndStatusAndIsUpdateAndIsFlag(String unitId, String finYear, String subHead,String status,String update, String isFlag);
+
+
+
     ContigentBill findByCbIdAndIsFlagAndIsUpdate(String contingentBilId, String isFlag, String isUpdate);
     ContigentBill findByCbIdAndIsFlag(String contingentBilId, String isFlag);
 
@@ -28,12 +38,9 @@ public interface ContigentBillRepository extends JpaRepository<ContigentBill, Lo
     List<ContigentBill> findByCbUnitIdInAndFinYearAndBudgetHeadIDAndAllocationIdAndIsUpdateOrderByCbDateDesc(
             List<String> cgUnits, String finYear, String budgetHeadID, String allocationId, String isupdate);
 
-  @Query(
-      value =
-          "SELECT CB_AMOUNT,CB_DATE FROM contigentbill where CB_UNIT_ID=:unitId and FIN_YEAR=:finYear and BUDGET_HEAD_ID=:subHead and STATUS=:status and IS_UPDATED=:update",
-      nativeQuery = true)
-  List<ContigentBill> findExpAndCbDate(String unitId, String finYear, String subHead,String status,String update);
+    List<ContigentBill> findByCbUnitIdInAndFinYearAndBudgetHeadIDAndIsFlagAndIsUpdateOrderByCbDateDesc(
+            List<String> cgUnits, String finYear, String budgetHeadID,String isFlag,String isupdate);
 
-    List<ContigentBill> findByCbUnitIdAndFinYearAndBudgetHeadIDAndStatusAndIsUpdateAndIsFlag(String unitId, String finYear, String subHead,String status,String update, String isFlag);
+
 
 }

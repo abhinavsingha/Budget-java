@@ -12,11 +12,18 @@ public interface MangeInboxOutBoxRepository extends JpaRepository<MangeInboxOutb
 
 
 
-    List<MangeInboxOutbox> findByToUnitAndIsBgcgOrderByCreatedOnAsc(String toUnit,String isBgOrCg);
-    List<MangeInboxOutbox> findByToUnitAndIsBgcgOrIsBgcgOrderByCreatedOnDesc(String toUnit,String isBgOrCg,String isBgOrCg1);
-    List<MangeInboxOutbox> findByToUnitAndIsBgcgOrderByCreatedOnDesc(String toUnit,String isBgOrCg);
-    List<MangeInboxOutbox> findByFromUnitAndIsBgcgOrderByCreatedOnAsc(String toUnit,String isBgOrCg);
-    MangeInboxOutbox findByGroupIdAndToUnit(String groupId,String toUnit);
+    List<MangeInboxOutbox> findByToUnitAndIsBgcgOrIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(String toUnit, String isBgOrCg, String isBgOrCg1, String isAproovedd, String isArchived);
+
+//    List<MangeInboxOutbox> findByToUnitAndIsBgcgOrderByCreatedOnDesc(String toUnit, String isBgOrCg);
+
+    List<MangeInboxOutbox> findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(String toUnit, String isBgOrCg, String isArchived, String isApproved);
+    List<MangeInboxOutbox> findByToUnitAndIsApprovedOrderByCreatedOnDesc(String toUnit, String isApproved);
+
+    List<MangeInboxOutbox> findByFromUnitAndIsBgcgOrderByCreatedOnAsc(String toUnit, String isBgOrCg);
+
+    MangeInboxOutbox findByGroupIdAndToUnit(String groupId, String toUnit);
+
     MangeInboxOutbox findByMangeInboxId(String msgId);
-    List<MangeInboxOutbox> findByToUnitAndIsBgcgAndStatus(String toUnit,String bgcg,String status);
+
+    List<MangeInboxOutbox> findByToUnitAndIsBgcgAndStatus(String toUnit, String bgcg, String status);
 }

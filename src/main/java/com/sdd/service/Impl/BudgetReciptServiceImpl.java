@@ -324,8 +324,10 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         mangeInboxOutbox.setRoleId(hrData.getRoleId());
         mangeInboxOutbox.setCreaterpId(hrData.getPid());
         mangeInboxOutbox.setApproverpId(hrData.getPid());
-        mangeInboxOutbox.setStatus("Approved");
+        mangeInboxOutbox.setStatus("Fully Approved");
         mangeInboxOutbox.setState("CR");
+        mangeInboxOutbox.setIsArchive("0");
+        mangeInboxOutbox.setIsApproved("1");
         mangeInboxOutbox.setAllocationType(allocationTypeData);
         mangeInboxOutbox.setIsFlag("1");
         mangeInboxOutbox.setAmount(ConverterUtils.addDecimalPoint(amount + ""));

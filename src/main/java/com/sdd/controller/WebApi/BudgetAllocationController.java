@@ -80,7 +80,6 @@ public class BudgetAllocationController {
     }
 
 
-
     @PostMapping("/getAvailableFund")
     public ResponseEntity<ApiResponse<AvilableFundResponse>> getAvailableFund(@RequestBody GetAmountRequest  budgetHeadId) {
         return new ResponseEntity<>(budgetAllocationService.findAvailableAmount(budgetHeadId), HttpStatus.OK);
@@ -132,8 +131,6 @@ public class BudgetAllocationController {
 
 
 
-
-
     @GetMapping("/getAllGroupIdAndUnitId/{groupId}")
     public ResponseEntity<ApiResponse<BudgetAllocationResponse>> getAllGroupIdAndUnitId(@PathVariable("groupId") String groupId) {
         return new ResponseEntity<>(budgetAllocationService.getAllGroupIdAndUnitId(groupId), HttpStatus.OK);
@@ -181,7 +178,6 @@ public class BudgetAllocationController {
 //    public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> saveBudgetRevisionData(@RequestBody BudgetAllocationSaveUnitRequest budgetAllocationSaveUnitRequest) {
 //        return new ResponseEntity<>(budgetAllocationService.saveBudgetRevisonData(budgetAllocationSaveUnitRequest), HttpStatus.OK);
 //    }
-
 
 
     @PostMapping("/saveAuthData")
