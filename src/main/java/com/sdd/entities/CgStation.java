@@ -18,14 +18,17 @@ import java.sql.Timestamp;
 public class CgStation {
 
     @Id
-    @Column(name = "STATION_ID", nullable = false)
+    @Column(name = "STATION_ID")
     private String stationId;
 
-    @Column(name = "STATION_NAME", nullable = false)
+    @Column(name = "STATION_NAME")
     private String stationName;
 
-    @Column(name = "RHQ_ID", nullable = false)
+    @Column(name = "RHQ_ID")
     private String rhqId;
+
+    @Column(name = "DHQ_NAME")
+    private String dhqName;
 
     @Column(name = "IS_FLAG")
     private String isFlag;
