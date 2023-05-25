@@ -308,60 +308,61 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
-        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(),"1");
         if (hrDataCheck == null) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
-            }, "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS", HttpStatus.OK.value());
+            },"YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS",HttpStatus.OK.value());
         } else {
             if (hrDataCheck.getRoleId().contains(HelperUtils.SYSTEMADMIN)) {
             } else {
                 return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
-                }, "YOU ARE NOT AUTHORIZED TO REBASE THE STATION", HttpStatus.OK.value());
+                },"YOU ARE NOT AUTHORIZED TO REBASE THE STATION",HttpStatus.OK.value());
             }
         }
         if (finYear == null) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
-            }, "FIN YEAR ID CAN NOT BE NULL", HttpStatus.OK.value());
+            },"FIN YEAR ID CAN NOT BE NULL",HttpStatus.OK.value());
         }
         if (unit == null) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
-            }, "UNIT CAN NOT BE NULL", HttpStatus.OK.value());
+            },"UNIT CAN NOT BE NULL",HttpStatus.OK.value());
         }
-        BudgetFinancialYear Finyr = budgetFinancialYearRepository.findBySerialNo(finYear);
+        BudgetFinancialYear Finyr=budgetFinancialYearRepository.findBySerialNo(finYear);
         CgUnit unitdata = cgUnitRepository.findByUnit(unit);
-        List<AllocationType> allocType = allocationRepository.findByIsFlag("1");
+        List<AllocationType> allocType=allocationRepository.findByIsFlag("1");
         if (unitdata == null) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
-            }, "INVALID UNIT ID PLEASE CHECK", HttpStatus.OK.value());
+            },"INVALID UNIT ID PLEASE CHECK",HttpStatus.OK.value());
         }
-        List<BudgetAllocation> allocationData = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(unit, finYear, allocType.get(0).getAllocTypeId(), "0");
-        if (allocationData.size() <= 0) {
+        List<BudgetAllocation> allocationData = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(unit, finYear,allocType.get(0).getAllocTypeId(),"0");
+        if (allocationData.size()<=0) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
-            }, "Record Not Found", HttpStatus.OK.value());
+            },"Record Not Found",HttpStatus.OK.value());
         }
 
         Double amountUnit;
         for (int i = 0; i < allocationData.size(); i++) {
             RebaseBudgetHistory rebase = new RebaseBudgetHistory();
-            AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(allocationData.get(i).getAmountType());
-            if (amountTypeObj == null) {
+            AmountUnit amountTypeObj=amountUnitRepository.findByAmountTypeId(allocationData.get(i).getAmountType());
+            if(amountTypeObj==null){
                 return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
-                }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                },"AMOUNT TYPE NOT FOUND FROM DB",HttpStatus.OK.value());
             }
-            amountUnit = amountTypeObj.getAmount();
+            amountUnit=amountTypeObj.getAmount();
+            String allocId=allocationData.get(i).getAllocationTypeId();
             double aAmount = Double.parseDouble(allocationData.get(i).getAllocationAmount());
             rebase.setUnit(unitdata.getDescr());
             rebase.setFinYear(Finyr.getFinYear());
-            rebase.setAllocatedAmount(aAmount * amountUnit);
+            rebase.setAllocatedAmount(aAmount*amountUnit);
             rebase.setStatus(allocationData.get(i).getStatus());
             rebase.setAmountType(amountTypeObj);
+            rebase.setAllocationType(allocationRepository.findByAllocTypeId(allocId));
             rebase.setAuthGrupId(allocationData.get(i).getAuthGroupId());
             rebase.setSubHead(subHeadRepository.findByBudgetCodeId(allocationData.get(i).getSubHead()));
-            String bHead = allocationData.get(i).getSubHead();
-            String allocId = allocationData.get(i).getAllocationTypeId();
-            List<CdaParkingTrans> cdaDetails = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear, bHead, unit, allocId, "0");
+            String bHead=allocationData.get(i).getSubHead();
+            List<CdaParkingTrans> cdaDetails=cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear,bHead,unit,allocId,"0");
             List<CdaDetailsForRebaseResponse> addRes = new ArrayList<CdaDetailsForRebaseResponse>();
-            if (cdaDetails.size() > 0) {
+            if(cdaDetails.size()>0) {
                 for (int j = 0; j < cdaDetails.size(); j++) {
                     CdaDetailsForRebaseResponse cda = new CdaDetailsForRebaseResponse();
                     cda.setGinNo(cdaParkingRepository.findByGinNo(cdaDetails.get(j).getGinNo()));
@@ -375,19 +376,19 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 }
             }
             rebase.setCdaData(addRes);
-            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndStatusAndIsUpdateAndIsFlag(unit, finYear, bHead, "Approved", "0", "0");
-            if (expenditure.size() > 0) {
-                double eAmount = 0.0;
+            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndStatusAndIsUpdateAndIsFlag(unit, finYear, bHead,"Approved","0","0");
+            if (expenditure.size()>0) {
+                double eAmount=0.0;
                 for (int k = 0; k < expenditure.size(); k++) {
                     eAmount += Double.parseDouble(expenditure.get(k).getCbAmount());
                     rebase.setLastCbDate(expenditure.get(k).getCbDate());
                 }
                 rebase.setExpenditureAmount(eAmount);
-                rebase.setAllcAmntSubtrctExpnAmunt(aAmount * amountUnit - eAmount);
-            } else {
+                rebase.setAllcAmntSubtrctExpnAmunt(aAmount*amountUnit-eAmount);
+            }else{
                 rebase.setExpenditureAmount(0);
                 rebase.setLastCbDate(null);
-                rebase.setAllcAmntSubtrctExpnAmunt(aAmount * amountUnit - 0);
+                rebase.setAllcAmntSubtrctExpnAmunt(aAmount*amountUnit-0);
             }
 
             responce.add(rebase);
@@ -487,6 +488,10 @@ public class MangeRebaseImpl implements MangeRebaseService {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "TO_HEAD UNIT ID CAN NOT BE BLANK", HttpStatus.OK.value());
         }
+        if (req.getAllocationTypeId() == null || req.getAllocationTypeId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+            }, "ALLOCATION TYPE ID CAN NOT BE BLANK", HttpStatus.OK.value());
+        }
         if (req.getUnitRebaseRequests().size() > 0) {
 
             for (Integer m = 0; m < req.getUnitRebaseRequests().size(); m++) {
@@ -517,27 +522,27 @@ public class MangeRebaseImpl implements MangeRebaseService {
         CgUnit chekUnit = cgUnitRepository.findByUnit(req.getRebaseUnitId());
         if (chekUnit == null || chekUnit.getUnit().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+            },"RECORD NOT FOUND",HttpStatus.OK.value());
         }
         if (chekUnit.getStationId().equalsIgnoreCase(req.getToStationId())) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            }, "CAN NOT REBASE ON SAME STATION", HttpStatus.OK.value());
+            },"CAN NOT REBASE ON SAME STATION",HttpStatus.OK.value());
         }
-        String maxRebaseId = budgetRebaseRepository.findMaxRebaseIDByRebaseUnitId(req.getRebaseUnitId());
-        if (maxRebaseId != null) {
-            BudgetRebase rebaseData = budgetRebaseRepository.findByBudgetRebaseId(maxRebaseId);
-            Date crDate = rebaseData.getCreatedOn();
-            Date expireDate = new Date(crDate.getTime() + expirationTime * 1000);
-            Date todayDate = new Date();
-            if (expireDate.getTime() >= todayDate.getTime()) {
+        String maxRebaseId =budgetRebaseRepository.findMaxRebaseIDByRebaseUnitId(req.getRebaseUnitId());
+        if (maxRebaseId!=null) {
+            BudgetRebase rebaseData=budgetRebaseRepository.findByBudgetRebaseId(maxRebaseId);
+            Date crDate=rebaseData.getCreatedOn();
+            Date expireDate= new Date(crDate.getTime()+expirationTime*1000);
+            Date todayDate= new Date();
+            if(expireDate.getTime()>=todayDate.getTime()){
                 return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-                }, "CAN NOT REBASE ON SAME UNIT BEFORE SIX MONTH", HttpStatus.OK.value());
-            } else {
+                },"CAN NOT REBASE ON SAME UNIT BEFORE SIX MONTH",HttpStatus.OK.value());
+            }else{
                 chekUnit.setStationId(req.getToStationId());
                 chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 cgUnitRepository.save(chekUnit);
             }
-        } else {
+        }else {
             chekUnit.setStationId(req.getToStationId());
             chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             cgUnitRepository.save(chekUnit);
@@ -556,17 +561,18 @@ public class MangeRebaseImpl implements MangeRebaseService {
         authority.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
         Authority saveAuthority = authorityRepository.save(authority);
 
-        String authorityId = HelperUtils.getAuthorityId();
-        String occurrenceDate = req.getOccurrenceDate();
-        String finYear = req.getFinYear();
-        String rebaseUnitId = req.getRebaseUnitId();
-        String headUnitId = req.getHeadUnitId();
-        String frmStationId = req.getFrmStationId();
-        String toStationId = req.getToStationId();
-        String toHeadUnitId = req.getToHeadUnitId();
+        String authorityId=HelperUtils.getAuthorityId();
+        String occurrenceDate=req.getOccurrenceDate();
+        String finYear=req.getFinYear();
+        String rebaseUnitId=req.getRebaseUnitId();
+        String headUnitId=req.getHeadUnitId();
+        String frmStationId=req.getFrmStationId();
+        String toStationId=req.getToStationId();
+        String toHeadUnitId=req.getToHeadUnitId();
+        String allocTypeId=req.getAllocationTypeId();
 
         String refRensId = HelperUtils.getTransId();
-        if (req.getUnitRebaseRequests().size() > 0) {
+        if(req.getUnitRebaseRequests().size()>0){
             for (Integer l = 0; l < req.getUnitRebaseRequests().size(); l++) {
                 BudgetRebase budgetRebase = new BudgetRebase();
                 budgetRebase.setBudgetRebaseId(HelperUtils.getUnitRebased());
@@ -577,6 +583,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 budgetRebase.setFrmStationId(frmStationId);
                 budgetRebase.setToStationId(toStationId);
                 budgetRebase.setToHeadUnitId(toHeadUnitId);
+                budgetRebase.setAllocTypeId(allocTypeId);
                 budgetRebase.setOccuranceDate(ConverterUtils.convertDateTotimeStamp(occurrenceDate));
                 budgetRebase.setBudgetHeadId(req.getUnitRebaseRequests().get(l).getBudgetHeadId());
                 budgetRebase.setAllocAmount(req.getUnitRebaseRequests().get(l).getAllocAmount());
@@ -590,7 +597,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                 budgetRebaseRepository.save(budgetRebase);
             }
-        } else {
+        }else
+        {
             BudgetRebase budgetRebase = new BudgetRebase();
             budgetRebase.setBudgetRebaseId(HelperUtils.getUnitRebased());
             budgetRebase.setRefTransId(refRensId);
@@ -601,6 +609,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             budgetRebase.setToStationId(toStationId);
             budgetRebase.setToHeadUnitId(toHeadUnitId);
             budgetRebase.setOccuranceDate(ConverterUtils.convertDateTotimeStamp(occurrenceDate));
+            budgetRebase.setAllocTypeId(allocTypeId);
             budgetRebase.setBudgetHeadId(null);
             budgetRebase.setAllocAmount(null);
             budgetRebase.setExpAmount(null);
