@@ -23,6 +23,7 @@ public class UnitRebaseSaveReq {
     private String frmStationId;
     private String toStationId;
     private String toHeadUnitId;
+    private String allocationTypeId;
     private List<UnitRebaseRequest> unitRebaseRequests;
 
 
