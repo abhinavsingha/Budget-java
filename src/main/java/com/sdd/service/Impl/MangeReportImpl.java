@@ -3736,39 +3736,40 @@ public class MangeReportImpl implements MangeReportService {
                     "<div class=\"wrapper\"> \n" +
                     "\t<h2 style=\"text-align: center;\">UNIT REBASE REPORT</h2><br></br>\n" +
                     "\t<table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100% \">\n" +
-                    "\t\t<tbody>\n" +
-                    "\t\t\t<tr>\n" +
-                    "\t\t\t\t<th class=\"dcf-txt-left\">Unit Name</th>\n" +
-                    "\t\t\t\t<td class=\"dcf-txt-left\">${unitName_placeholder}</td>\n" +
-                    "\t\t\t\t<th class=\"dcf-txt-left\">From Station</th>\n" +
-                    "\t\t\t\t<td class=\"dcf-txt-left\">${fromS_placeholder}</td>\n" +
-                    "\t\t\t</tr>\n" +
-                    "\t\t\t<tr>\n" +
-                    "\t\t\t\t<th class=\"dcf-txt-left\">Date of Rebase</th>\n" +
-                    "\t\t\t\t<td class=\"dcf-txt-left\">${date_placeholder}</td>\n" +
-                    "\t\t\t\t<th class=\"dcf-txt-left\">To Station</th>\n" +
-                    "\t\t\t\t<td class=\"dcf-txt-left\">${toS_placeholder}</td>\n" +
-                    "\t\t\t</tr>\n" +
-                    "\t\t</tbody>\n" +
-                    "\t</table>\n" +
-                    "\t<br></br>\n" +
-                    "<table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%\">\n" +
-                    "\t<thead>\n" +
-                    "\t\t<tr>\n" +
-                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Financial Year </th>\n" +
-                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Sub Head</th>\n" +
-                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Code head</th>\n" +
-                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Allocated</th>\n" +
-                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Expenditure</th>\n" +
-                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Balance</th>\n" +
-                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Last CB Date</th>\n" +
-                    "\t\t</tr>\n" +
-                    "\t</thead>\n" +
-                    "\t<tbody>\n" +
+//                    "\t\t<tbody>\n" +
+//                    "\t\t\t<tr>\n" +
+//                    "\t\t\t\t<th class=\"dcf-txt-left\">Unit Name</th>\n" +
+//                    "\t\t\t\t<td class=\"dcf-txt-left\">${unitName_placeholder}</td>\n" +
+//                    "\t\t\t\t<th class=\"dcf-txt-left\">From Station</th>\n" +
+//                    "\t\t\t\t<td class=\"dcf-txt-left\">${fromS_placeholder}</td>\n" +
+//                    "\t\t\t</tr>\n" +
+//                    "\t\t\t<tr>\n" +
+//                    "\t\t\t\t<th class=\"dcf-txt-left\">Date of Rebase</th>\n" +
+//                    "\t\t\t\t<td class=\"dcf-txt-left\">${date_placeholder}</td>\n" +
+//                    "\t\t\t\t<th class=\"dcf-txt-left\">To Station</th>\n" +
+//                    "\t\t\t\t<td class=\"dcf-txt-left\">${toS_placeholder}</td>\n" +
+//                    "\t\t\t</tr>\n" +
+//                    "\t\t</tbody>\n" +
+//                    "\t</table>\n" +
+//                    "\t<br></br>\n" +
+//                    "<table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%\">\n" +
+//                    "\t<thead>\n" +
+//                    "\t\t<tr>\n" +
+//                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Financial Year </th>\n" +
+//                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Sub Head</th>\n" +
+//                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Code head</th>\n" +
+//                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Allocated</th>\n" +
+//                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Expenditure</th>\n" +
+//                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Balance</th>\n" +
+//                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Last CB Date</th>\n" +
+//                    "\t\t</tr>\n" +
+//                    "\t</thead>\n" +
+//                    "\t<tbody>\n" +
 
                     "\t\t\t${data_placeholder}\n" +
-                    "\t</tbody>\n" +
-                    "</table>\n" +
+//                    "\t</tbody>\n" +
+//                    "</table>\n" +
+
                     "<div class=\"sign\">\n" +
                     "\t\t<ul style=\"list-style: none; margin-top: 0;\">\n" +
                     "\t\t\t<li>${name_placeholder}</li>\n" +
@@ -3783,6 +3784,8 @@ public class MangeReportImpl implements MangeReportService {
                     "</div></body>\n" +
                     "</html>\n";
             StringBuilder sb = new StringBuilder();
+            StringBuilder sb1=new StringBuilder();
+
             int i = 1;
             String finyear = "";
             String unit = "";
@@ -3813,8 +3816,11 @@ public class MangeReportImpl implements MangeReportService {
             String expAmount="";
             String balAmount="";
             String LastCbD="";
+            String val="";
             if(groupUnitId.size()>0) {
+
                 for (String ids : groupUnitId) {
+
                     RunitId=ids;
                     List<BudgetRebase> rebaseDatas=budgetRebaseRepository.findByRebaseUnitId(RunitId);
                     List<BudgetRebase> rebaseData = rebaseDatas.stream()
@@ -3826,6 +3832,40 @@ public class MangeReportImpl implements MangeReportService {
                     Date rebaseDate=rebaseData.get(0).getOccuranceDate();
                     frmStation=frmS.getStationName();
                     toStation=toS.getStationName();
+                    sb1.append("\t\t<tbody>\n" +
+                            "\t\t\t<tr>\n" +
+                            "\t\t\t\t<th class=\"dcf-txt-left\">Unit Name</th>\n" +
+                            "\t\t\t\t<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(uName)).append("</td>\n" +
+                            "\t\t\t\t<th class=\"dcf-txt-left\">From Station</th>\n" +
+                            "\t\t\t\t<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(frmStation)).append("</td>\n" +
+                            "\t\t\t</tr>\n" +
+                            "\t\t\t<tr>\n" +
+                            "\t\t\t\t<th class=\"dcf-txt-left\">Date of Rebase</th>\n" +
+                            "\t\t\t\t<td class=\"dcf-txt-left\">").append("Put DATE").append("</td>\n" +
+                            "\t\t\t\t<th class=\"dcf-txt-left\">To Station</th>\n" +
+                            "\t\t\t\t<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(toStation)).append("</td>\n" +
+                            "\t\t\t</tr>\n" +
+                            "\t\t</tbody>\n" +
+                            "\t</table>\n" +
+                            "\t<br></br>\n" +
+                            "<table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%\">\n" +
+                            "\t<thead>\n" +
+                            "\t\t<tr>\n" +
+                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Financial Year </th>\n" +
+                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Sub Head</th>\n" +
+                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Code head</th>\n" +
+                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Allocated</th>\n" +
+                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Expenditure</th>\n" +
+                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Balance</th>\n" +
+                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Last CB Date</th>\n" +
+                            "\t\t</tr>\n" +
+                            "\t</thead>\n" +
+                            "\t<tbody>\n"+
+                            "\t\t\t${data_placeholder}\n" +
+                            "\t</tbody>\n" +
+                            "</table>\n");
+                    val=val+sb1.toString();
+                    sb1=new StringBuilder();
                     for (Integer k = 0; k < rebaseData.size(); k++) {
                         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(rebaseData.get(k).getFinYear());
                         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(rebaseData.get(k).getBudgetHeadId());
@@ -3847,11 +3887,18 @@ public class MangeReportImpl implements MangeReportService {
 
 
                     }
+                    val=val.replace("${data_placeholder}",sb.toString());
+                    sb=new StringBuilder();
+//                    htmlContent = htmlContent.replace("${unitName_placeholder}", StringEscapeUtils.escapeHtml4(uName));
+//                    htmlContent = htmlContent.replace("${fromS_placeholder}", StringEscapeUtils.escapeHtml4(frmStation));
+//                    htmlContent = htmlContent.replace("${toS_placeholder}", StringEscapeUtils.escapeHtml4(toStation));
+//
+
 
                 }
             }
 
-
+            htmlContent = htmlContent.replace("${data_placeholder}", val);
             htmlContent = htmlContent.replace("${name_placeholder}", StringEscapeUtils.escapeHtml4(names));
             htmlContent = htmlContent.replace("${unit_placeholder}", StringEscapeUtils.escapeHtml4(unitName));
             htmlContent = htmlContent.replace("${rank_placeholder}", StringEscapeUtils.escapeHtml4(rank));
@@ -3860,11 +3907,6 @@ public class MangeReportImpl implements MangeReportService {
             htmlContent = htmlContent.replace("${finYear_placeholder}", StringEscapeUtils.escapeHtml4(finYear));
             htmlContent = htmlContent.replace("${amountType_placeholder}", StringEscapeUtils.escapeHtml4(amountIn));
             //htmlContent = htmlContent.replace("${allocationType_placeholder}", StringEscapeUtils.escapeHtml4(type.getAllocDesc()));
-            htmlContent = htmlContent.replace("${unitName_placeholder}", StringEscapeUtils.escapeHtml4(uName));
-            htmlContent = htmlContent.replace("${fromS_placeholder}", StringEscapeUtils.escapeHtml4(frmStation));
-            htmlContent = htmlContent.replace("${toS_placeholder}", StringEscapeUtils.escapeHtml4(toStation));
-            //htmlContent = htmlContent.replace("${date_placeholder}", StringEscapeUtils.escapeHtml4(formattedDateTime));
-            htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
             String filepath = HelperUtils.FILEPATH + "/" +  "_FER-budget-report.pdf";
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
