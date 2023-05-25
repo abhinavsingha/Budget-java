@@ -3531,6 +3531,7 @@ public class MangeReportImpl implements MangeReportService {
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType();
 
+        String amtType = "";
         String names = hrData.getFullName();
         String unitName = hrData.getUnit();
         String rank = hrData.getRank();
@@ -3542,271 +3543,245 @@ public class MangeReportImpl implements MangeReportService {
         try {
             //htmlContent = FileUtils.readFileToString(new File("src/main/resources/templates/be-allocation-report.html"), "UTF-8");
             //htmlContent = FileUtils.readFileToString(new File(new File(".").getCanonicalPath()+"/webapps/budget/WEB-INF/classes/templates/be-allocation-report"), "UTF-8");
-            htmlContent ="<!DOCTYPE html>\n" +
+            htmlContent = "<!DOCTYPE html>\n" +
                     "<html lang=\"en\">\n" +
                     "<head>\n" +
-                    "    <title>Report</title>\n" +
-                    "    <meta charset=\"utf-8\"></meta>\n" +
-                    "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"></meta>\n" +
+                    "  <title>Report</title>\n" +
+                    "  <meta charset=\"utf-8\"></meta>\n" +
+                    "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"></meta>\n" +
+                    "  \n" +
+                    "<style>\n" +
                     "\n" +
-                    "    <style>\n" +
-                    "        @page  {\n" +
-                    "            size: A4 landscape;\n" +
-                    "        }\n" +
-                    "        .bold{\n" +
-                    "            font-weight: bold !important;\n" +
-                    "        }\n" +
-                    "        .bbtm{\n" +
-                    "            border-bottom: 1px solid transparent !important;\n" +
-                    "        }\n" +
-                    "        .brtm{\n" +
-                    "            border-right: 1px solid transparent !important;\n" +
-                    "        }\n" +
-                    "        .bold{\n" +
-                    "            font-weight: bold;\n" +
-                    "        }\n" +
-                    "        .wrapper{\n" +
-                    "            width: 70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
+                    ".bbtm{\n" +
+                    "\tborder-bottom: 1px solid transparent !important;\n" +
+                    "}\n" +
+                    ".wrapper{\n" +
+                    "\twidth: 70%;\n" +
+                    "\tmargin: 100px auto;\n" +
+                    "}\n" +
                     "\n" +
-                    "        :root {\n" +
-                    "            --bg-table-stripe: #f6f6f5;\n" +
-                    "            --b-table: #e3e3e2;\n" +
-                    "            --caption: #242423;\n" +
-                    "        }\n" +
-                    "        th {\n" +
-                    "            text-align:left;\n" +
-                    "            border: 1px solid #242423 ;\n" +
-                    "        }\n" +
-                    "        td{\n" +
-                    "            border: 1px solid #242423 ;\n" +
-                    "        }\n" +
+                    ":root {\n" +
+                    "    --bg-table-stripe: #f6f6f5;\n" +
+                    "    --b-table: #e3e3e2;\n" +
+                    "    --caption: #242423;\n" +
+                    "}\n" +
                     "\n" +
-                    "        table {\n" +
-                    "            background-color: transparent;\n" +
-                    "            border-collapse:collapse;\n" +
-                    "            font-family: Arial, Helvetica, sans-serif\n" +
-                    "        }\n" +
+                    "table {\n" +
+                    "    background-color: transparent;\n" +
+                    "    border-collapse:collapse;\n" +
+                    "  \tfont-family: Arial, Helvetica, sans-serif\n" +
+                    "}\n" +
                     "\n" +
-                    "        th {\n" +
-                    "            text-align:left\n" +
-                    "        }\n" +
+                    "th {\n" +
+                    "    text-align:left\n" +
+                    "}\n" +
                     "\n" +
-                    "        .dcf-txt-center {\n" +
-                    "            text-align: center!important\n" +
-                    "        }\n" +
+                    ".dcf-txt-left {\n" +
+                    "      text-align: center!important\n" +
+                    "    }\n" +
                     "\n" +
-                    "        .dcf-txt-left {\n" +
-                    "            text-align: left!important\n" +
-                    "        }\n" +
+                    "    .dcf-txt-left {\n" +
+                    "      text-align: left!important\n" +
+                    "    }\n" +
                     "\n" +
-                    "        .dcf-txt-right {\n" +
-                    "            text-align: right!important\n" +
-                    "        }\n" +
+                    "    .dcf-txt-right {\n" +
+                    "      text-align: right!important\n" +
+                    "    }\n" +
+                    "    \n" +
+                    ".dcf-table caption {\n" +
+                    "      color: var(--caption);\n" +
+                    "      font-size: 1.13em;\n" +
+                    "      font-weight: 700;\n" +
+                    "      padding-bottom: .56rem\n" +
+                    "    }\n" +
                     "\n" +
-                    "        .dcf-table caption {\n" +
-                    "            color: var(--caption);\n" +
-                    "            font-size: 1.13em;\n" +
-                    "            font-weight: 700;\n" +
-                    "            padding-bottom: .56rem\n" +
-                    "        }\n" +
+                    "    .dcf-table thead {\n" +
+                    "      font-size: .84em\n" +
+                    "    }\n" +
                     "\n" +
-                    "        .dcf-table thead {\n" +
-                    "            font-size: .84em\n" +
-                    "        }\n" +
+                    "    .dcf-table tbody {\n" +
+                    "      border-bottom: 1px solid var(--b-table);\n" +
+                    "      border-top: 1px solid var(--b-table);\n" +
+                    "      font-size: .84em\n" +
+                    "    }\n" +
                     "\n" +
-                    "        .dcf-table tbody {\n" +
-                    "            border-bottom: 1px solid var(--b-table);\n" +
-                    "            border-top: 1px solid var(--b-table);\n" +
-                    "            font-size: .84em\n" +
-                    "        }\n" +
+                    "    .dcf-table tfoot {\n" +
+                    "      font-size: .84em\n" +
+                    "    }\n" +
                     "\n" +
-                    "        .dcf-table tfoot {\n" +
-                    "            font-size: .84em\n" +
-                    "        }\n" +
+                    "    .dcf-table td, .dcf-table th {\n" +
+                    "      padding-right: 1.78em\n" +
+                    "    }\n" +
                     "\n" +
-                    "        .dcf-table td, .dcf-table th {\n" +
-                    "            padding-right: 1.78em\n" +
-                    "        }\n" +
+                    "    .dcf-table-bordered, .dcf-table-bordered td, .dcf-table-bordered th {\n" +
+                    "      border: 1px solid var(--b-table)\n" +
+                    "    }\n" +
                     "\n" +
-                    "        .dcf-table-bordered, .dcf-table-bordered td, .dcf-table-bordered th {\n" +
-                    "            border: 1px solid var(--b-table)\n" +
-                    "        }\n" +
+                    "    .dcf-table-bordered td, .dcf-table-bordered th, .dcf-table-striped td, .dcf-table-striped th {\n" +
+                    "      padding-left: 1em;\n" +
+                    "      padding-right: 1em\n" +
+                    "    }\n" +
                     "\n" +
-                    "        .dcf-table-bordered td, .dcf-table-bordered th, .dcf-table-striped td, .dcf-table-striped th {\n" +
-                    "            padding-left: 1em;\n" +
-                    "            padding-right: 1em\n" +
-                    "        }\n" +
+                    "    .dcf-table-bordered tr:not(:last-child), .dcf-table-striped tr:not(:last-child) {\n" +
+                    "      border-bottom: 1px solid var(--b-table)\n" +
+                    "    }\n" +
                     "\n" +
-                    "        .dcf-table-bordered tr:not(:last-child), .dcf-table-striped tr:not(:last-child) {\n" +
-                    "            border-bottom: 1px solid var(--b-table)\n" +
-                    "        }\n" +
+                    "    .dcf-table-striped tbody tr:nth-of-type(2n) {\n" +
+                    "      background-color: transparent;\n" +
+                    "    }\n" +
                     "\n" +
-                    "        .dcf-table-striped tbody tr:nth-of-type(2n) {\n" +
-                    "            background-color: transparent;\n" +
-                    "        }\n" +
+                    "    .dcf-table thead td, .dcf-table thead th {\n" +
+                    "      padding-bottom: .75em;\n" +
+                    "      vertical-align: bottom\n" +
+                    "    }\n" +
                     "\n" +
-                    "        .dcf-table thead td, .dcf-table thead th {\n" +
-                    "            padding-bottom: .75em;\n" +
-                    "            vertical-align: bottom\n" +
-                    "        }\n" +
+                    "    .dcf-table tbody td, .dcf-table tbody th, .dcf-table tfoot td, .dcf-table tfoot th {\n" +
+                    "      padding-top: .75em;\n" +
+                    "      vertical-align: top\n" +
+                    "    }\n" +
                     "\n" +
-                    "        .dcf-table tbody td, .dcf-table tbody th, .dcf-table tfoot td, .dcf-table tfoot th {\n" +
-                    "            padding-top: .75em;\n" +
-                    "            vertical-align: top\n" +
-                    "        }\n" +
+                    "    .dcf-table tbody td, .dcf-table tbody th {\n" +
+                    "      padding-bottom: .75em\n" +
+                    "    }\n" +
                     "\n" +
-                    "        .dcf-table tbody td, .dcf-table tbody th {\n" +
-                    "            padding-bottom: .75em\n" +
-                    "        }\n" +
+                    "    .dcf-table-bordered thead th {\n" +
+                    "      padding-top: 1.33em\n" +
+                    "    }\n" +
                     "\n" +
-                    "        .dcf-table-bordered thead th {\n" +
-                    "            padding-top: 1.33em\n" +
-                    "        }\n" +
+                    "    .dcf-wrapper-table-scroll {\n" +
+                    "      overflow-x: auto;\n" +
+                    "      -webkit-overflow-scrolling: touch;\n" +
+                    "      left: 50%;\n" +
+                    "      margin-left: -50vw;\n" +
+                    "      margin-right: -50vw;\n" +
+                    "      padding-bottom: 1em;\n" +
+                    "      position: relative;\n" +
+                    "      right: 50%;\n" +
+                    "      width: 100vw\n" +
+                    "    }\n" +
                     "\n" +
-                    "        .dcf-wrapper-table-scroll {\n" +
-                    "            overflow-x: auto;\n" +
-                    "            -webkit-overflow-scrolling: touch;\n" +
-                    "            left: 50%;\n" +
-                    "            margin-left: -50vw;\n" +
-                    "            margin-right: -50vw;\n" +
-                    "            padding-bottom: 1em;\n" +
-                    "            position: relative;\n" +
-                    "            right: 50%;\n" +
-                    "            width: 100vw\n" +
-                    "        }\n" +
+                    "    @media only screen and (max-width:42.09em) {\n" +
+                    "      .dcf-table-responsive thead {\n" +
+                    "        clip: rect(0 0 0 0);\n" +
+                    "        -webkit-clip-path: inset(50%);\n" +
+                    "        clip-path: inset(50%);\n" +
+                    "        height: 1px;\n" +
+                    "        overflow: hidden;\n" +
+                    "        position: absolute;\n" +
+                    "        width: 1px;\n" +
+                    "        white-space: nowrap\n" +
+                    "      }\n" +
+                    "      .dcf-table-responsive tr {\n" +
+                    "        display: block\n" +
+                    "      }\n" +
+                    "      .dcf-table-responsive td {\n" +
+                    "        -webkit-column-gap: 3.16vw;\n" +
+                    "        -moz-column-gap: 3.16vw;\n" +
+                    "        column-gap: 3.16vw;\n" +
+                    "        display: grid;\n" +
+                    "        grid-template-columns: 1fr 2fr;\n" +
+                    "        text-align: left!important\n" +
+                    "      }\n" +
+                    "      .dcf-table-responsive.dcf-table-bordered, .dcf-table-responsive.dcf-table-bordered thead th {\n" +
+                    "        border-width: 0\n" +
+                    "      }\n" +
+                    "      .dcf-table-responsive.dcf-table-bordered tbody td {\n" +
+                    "        border-top-width: 0\n" +
+                    "      }\n" +
+                    "      .dcf-table-responsive:not(.dcf-table-bordered) tbody tr {\n" +
+                    "        padding-bottom: .75em\n" +
+                    "      }\n" +
+                    "      .dcf-table-responsive:not(.dcf-table-bordered) tbody td {\n" +
+                    "        padding-bottom: 0\n" +
+                    "      }\n" +
+                    "      .dcf-table-responsive:not(.dcf-table-bordered):not(.dcf-table-striped) tbody td {\n" +
+                    "        padding-right: 0\n" +
+                    "      }\n" +
+                    "      .dcf-table-responsive.dcf-table-bordered tbody tr:last-child td:last-child {\n" +
+                    "        border-bottom-width: 0\n" +
+                    "      }\n" +
+                    "      .dcf-table-responsive tbody td:before {\n" +
+                    "        content: attr(data-label);\n" +
+                    "        float: left;\n" +
+                    "        font-weight: 700;\n" +
+                    "        padding-right: 1.78em\n" +
+                    "      }\n" +
+                    "    }\n" +
                     "\n" +
-                    "        @media only screen and (max-width:42.09em) {\n" +
-                    "            .dcf-table-responsive thead {\n" +
-                    "                clip: rect(0 0 0 0);\n" +
-                    "                -webkit-clip-path: inset(50%);\n" +
-                    "                clip-path: inset(50%);\n" +
-                    "                height: 1px;\n" +
-                    "                overflow: hidden;\n" +
-                    "                position: absolute;\n" +
-                    "                width: 1px;\n" +
-                    "                white-space: nowrap\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive tr {\n" +
-                    "                display: block\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive td {\n" +
-                    "                -webkit-column-gap: 3.16vw;\n" +
-                    "                -moz-column-gap: 3.16vw;\n" +
-                    "                column-gap: 3.16vw;\n" +
-                    "                display: grid;\n" +
-                    "                grid-template-columns: 1fr 2fr;\n" +
-                    "                text-align: left!important\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive.dcf-table-bordered, .dcf-table-responsive.dcf-table-bordered thead th {\n" +
-                    "                border-width: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive.dcf-table-bordered tbody td {\n" +
-                    "                border-top-width: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive:not(.dcf-table-bordered) tbody tr {\n" +
-                    "                padding-bottom: .75em\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive:not(.dcf-table-bordered) tbody td {\n" +
-                    "                padding-bottom: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive:not(.dcf-table-bordered):not(.dcf-table-striped) tbody td {\n" +
-                    "                padding-right: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive.dcf-table-bordered tbody tr:last-child td:last-child {\n" +
-                    "                border-bottom-width: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive tbody td:before {\n" +
-                    "                content: attr(data-label);\n" +
-                    "                float: left;\n" +
-                    "                font-weight: 700;\n" +
-                    "                padding-right: 1.78em\n" +
-                    "            }\n" +
+                    ".dcf-overflow-x-auto {\n" +
+                    "      overflow-x: auto!important;\n" +
+                    "      -webkit-overflow-scrolling: touch\n" +
+                    "    }\n" +
+                    "    \n" +
+                    ".dcf-w-100\\% {\n" +
+                    "  width: 100%!important;\n" +
+                    "\t\t}\n" +
+                    "\t\t        .date {\n" +
+                    "            float: left;\n" +
+                    "            padding-left: 20px;\n" +
+                    "            padding-top: 20px;\n" +
+                    "            width:45%;\n" +
                     "        }\n" +
-                    "\n" +
-                    "        .dcf-overflow-x-auto {\n" +
-                    "            overflow-x: auto!important;\n" +
-                    "            -webkit-overflow-scrolling: touch\n" +
-                    "        }\n" +
-                    "        .sign {\n" +
+                    "\t\t        .sign {\n" +
                     "            float: right;\n" +
                     "            padding-right: 20px;\n" +
                     "            padding-top: 20px;\n" +
                     "            width:27%;\n" +
                     "        }\n" +
                     "\n" +
-                    "        .count {\n" +
-                    "            text-align: center;\n" +
-                    "            padding-top: 200px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .table3 {\n" +
-                    "            padding-top: 55px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .tab {\n" +
-                    "            padding-left: 85px;\n" +
-                    "        }\n" +
-                    "        .table4{\n" +
-                    "            padding-top: 15px;\n" +
-                    "        }\n" +
-                    "        .wrap{\n" +
-                    "            width:70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "        .date {\n" +
-                    "            float: left;\n" +
-                    "            padding-left: 20px;\n" +
-                    "            padding-top: 20px;\n" +
-                    "            width:45%;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .count {\n" +
-                    "            text-align: center;\n" +
-                    "            padding-top: 200px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .table3 {\n" +
-                    "            padding-top: 55px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .tab {\n" +
-                    "            padding-left: 85px;\n" +
-                    "        }\n" +
-                    "        .table4{\n" +
-                    "            padding-top: 15px;\n" +
-                    "        }\n" +
-                    "        .wrap{\n" +
-                    "            width:70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-w-100\\% {\n" +
-                    "            width: 100%!important;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "    </style>\n" +
+                    "    \n" +
+                    "</style>\n" +
                     "</head>\n" +
                     "<body>\n" +
-                    "<div class=\"wrapper\">\n" +
-                    "    <h2 style=\"text-align: center;\">UNIT REBASE REPORT</h2><br></br>\n" +
-                    "    ${data_placeholder}\n" +
+                    "<div class=\"wrapper\"> \n" +
+                    "\t<h2 style=\"text-align: center;\">UNIT REBASE REPORT</h2><br></br>\n" +
+                    "\t<table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100% \">\n" +
+//                    "\t\t<tbody>\n" +
+//                    "\t\t\t<tr>\n" +
+//                    "\t\t\t\t<th class=\"dcf-txt-left\">Unit Name</th>\n" +
+//                    "\t\t\t\t<td class=\"dcf-txt-left\">${unitName_placeholder}</td>\n" +
+//                    "\t\t\t\t<th class=\"dcf-txt-left\">From Station</th>\n" +
+//                    "\t\t\t\t<td class=\"dcf-txt-left\">${fromS_placeholder}</td>\n" +
+//                    "\t\t\t</tr>\n" +
+//                    "\t\t\t<tr>\n" +
+//                    "\t\t\t\t<th class=\"dcf-txt-left\">Date of Rebase</th>\n" +
+//                    "\t\t\t\t<td class=\"dcf-txt-left\">${date_placeholder}</td>\n" +
+//                    "\t\t\t\t<th class=\"dcf-txt-left\">To Station</th>\n" +
+//                    "\t\t\t\t<td class=\"dcf-txt-left\">${toS_placeholder}</td>\n" +
+//                    "\t\t\t</tr>\n" +
+//                    "\t\t</tbody>\n" +
+//                    "\t</table>\n" +
+//                    "\t<br></br>\n" +
+//                    "<table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%\">\n" +
+//                    "\t<thead>\n" +
+//                    "\t\t<tr>\n" +
+//                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Financial Year </th>\n" +
+//                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Sub Head</th>\n" +
+//                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Code head</th>\n" +
+//                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Allocated</th>\n" +
+//                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Expenditure</th>\n" +
+//                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Balance</th>\n" +
+//                    "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Last CB Date</th>\n" +
+//                    "\t\t</tr>\n" +
+//                    "\t</thead>\n" +
+//                    "\t<tbody>\n" +
+
+                    "\t\t\t${data_placeholder}\n" +
+//                    "\t</tbody>\n" +
+//                    "</table>\n" +
+
+                    "<div class=\"sign\">\n" +
+                    "\t\t<ul style=\"list-style: none; margin-top: 0;\">\n" +
+                    "\t\t\t<li>${name_placeholder}</li>\n" +
+                    "\t\t\t<li>${unit_placeholder}</li>\n" +
+                    "\t\t\t<li>${rank_placeholder}</li>\n" +
+                    "\t\t</ul>\n" +
+                    "\t</div>\n" +
+                    "\t<div class=\"date\">\n" +
+                    "\t\tDate-${date_placeholder}\n" +
+                    "\t</div>\n" +
                     "\n" +
-                    "\n" +
-                    "            <div class=\"sign\">\n" +
-                    "                <ul style=\"list-style: none; margin-top: 0;\">\n" +
-                    "                    <li>${name_placeholder}</li>\n" +
-                    "                    <li>${unit_placeholder}</li>\n" +
-                    "                    <li>${rank_placeholder}</li>\n" +
-                    "                </ul>\n" +
-                    "            </div>\n" +
-                    "            <div class=\"date\">\n" +
-                    "                Date-${date_placeholder}\n" +
-                    "            </div>\n" +
-                    "\n" +
-                    "</div>\n" +
-                    "</body>\n" +
+                    "</div></body>\n" +
                     "</html>\n";
             StringBuilder sb = new StringBuilder();
             StringBuilder sb1=new StringBuilder();
@@ -3837,15 +3812,13 @@ public class MangeReportImpl implements MangeReportService {
             String finYear="";
             String subHead="";
             String headCodeId="";
-            Double allocAmount;
-            Double expAmount;
-            Double balAmount;
-            Date LastCbD;
+            String allocAmount="";
+            String expAmount="";
+            String balAmount="";
+            String LastCbD="";
             String val="";
-            Double amountUnit;
-            AllocationType allocType;
             if(groupUnitId.size()>0) {
-                int count=1;
+
                 for (String ids : groupUnitId) {
 
                     RunitId=ids;
@@ -3855,13 +3828,11 @@ public class MangeReportImpl implements MangeReportService {
                     CgUnit unitN = cgUnitRepository.findByUnit(RunitId);
                     CgStation frmS= cgStationRepository.findByStationId(rebaseData.get(0).getFrmStationId());
                     CgStation toS= cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
-
                     uName=unitN.getDescr();
                     Date rebaseDate=rebaseData.get(0).getOccuranceDate();
-                    System.out.println("RBDATE" + rebaseDate);
                     frmStation=frmS.getStationName();
                     toStation=toS.getStationName();
-                    sb1.append("<table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100% \">\t\t<tbody>\n" +
+                    sb1.append("\t\t<tbody>\n" +
                             "\t\t\t<tr>\n" +
                             "\t\t\t\t<th class=\"dcf-txt-left\">Unit Name</th>\n" +
                             "\t\t\t\t<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(uName)).append("</td>\n" +
@@ -3870,7 +3841,7 @@ public class MangeReportImpl implements MangeReportService {
                             "\t\t\t</tr>\n" +
                             "\t\t\t<tr>\n" +
                             "\t\t\t\t<th class=\"dcf-txt-left\">Date of Rebase</th>\n" +
-                            "\t\t\t\t<td class=\"dcf-txt-left\">").append(rebaseDate).append("</td>\n" +
+                            "\t\t\t\t<td class=\"dcf-txt-left\">").append("Put DATE").append("</td>\n" +
                             "\t\t\t\t<th class=\"dcf-txt-left\">To Station</th>\n" +
                             "\t\t\t\t<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(toStation)).append("</td>\n" +
                             "\t\t\t</tr>\n" +
@@ -3880,12 +3851,12 @@ public class MangeReportImpl implements MangeReportService {
                             "<table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%\">\n" +
                             "\t<thead>\n" +
                             "\t\t<tr>\n" +
-                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Financial Year and Allocation </th>\n" +
+                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Financial Year </th>\n" +
                             "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Sub Head</th>\n" +
-                            //"\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Code head</th>\n" +
-                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Allocated: (${amountType_placeholder})</th>\n" +
-                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Expenditure: (${amountType_placeholder})</th>\n" +
-                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Balance: (${amountType_placeholder})</th>\n" +
+                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Code head</th>\n" +
+                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Allocated</th>\n" +
+                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Expenditure</th>\n" +
+                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Balance</th>\n" +
                             "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Last CB Date</th>\n" +
                             "\t\t</tr>\n" +
                             "\t</thead>\n" +
@@ -3893,41 +3864,37 @@ public class MangeReportImpl implements MangeReportService {
                             "\t\t\t${data_placeholder}\n" +
                             "\t</tbody>\n" +
                             "</table>\n");
-                    val=val+"\n"+"Serial No: "+(count++)+"\n"+sb1.toString();
+                    val=val+sb1.toString();
                     sb1=new StringBuilder();
                     for (Integer k = 0; k < rebaseData.size(); k++) {
                         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(rebaseData.get(k).getFinYear());
                         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(rebaseData.get(k).getBudgetHeadId());
-                        AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(rebaseData.get(k).getAmountType());
-                        allocType=allocationRepository.findByAllocTypeId(rebaseData.get(k).getAllocTypeId());
-                        if (amountTypeObj == null) {
-                            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                            }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
-                        }
-                        amountUnit = amountTypeObj.getAmount();
                         finYear=findyr.getFinYear();
                         subHead=bHead.getSubHeadDescr();
                         headCodeId=bHead.getBudgetHeadId();
-                        Double aAmount=Double.valueOf(rebaseData.get(k).getAllocAmount());
-                        Double eAmount=Double.valueOf(rebaseData.get(k).getExpAmount());
-                        Double bAmount=Double.valueOf(rebaseData.get(k).getBalAmount());
-                        LastCbD=rebaseData.get(k).getLastCbDate();
-                        allocAmount = aAmount * amountUnit / reqAmount;
-                        expAmount = eAmount * amountUnit / reqAmount;
-                        balAmount = bAmount * amountUnit / reqAmount;
-
+                        allocAmount=rebaseData.get(k).getAllocAmount();
+                        expAmount=rebaseData.get(k).getExpAmount();
+                        balAmount=rebaseData.get(k).getBalAmount();
                     sb.append("<tr>");
-                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(finYear+" "+allocType.getAllocDesc())).append("</td>");
+                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(finYear)).append("</td>");
                     sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(subHead)).append("</td>");
-                    //sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(headCodeId)).append("</td>");
-                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(allocAmount)))).append("</td>");
-                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(expAmount)))).append("</td>");
-                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(balAmount)))).append("</td>");
-                    sb.append("<td class=\"dcf-txt-left\">").append(LastCbD).append("</td>");
-                    sb.append("</tr>");
+                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(headCodeId)).append("</td>");
+                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(allocAmount)).append("</td>");
+                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(expAmount)).append("</td>");
+                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(balAmount)).append("</td>");
+                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(finYear)).append("</td>");
+                        sb.append("</tr>");
+
+
                     }
                     val=val.replace("${data_placeholder}",sb.toString());
                     sb=new StringBuilder();
+//                    htmlContent = htmlContent.replace("${unitName_placeholder}", StringEscapeUtils.escapeHtml4(uName));
+//                    htmlContent = htmlContent.replace("${fromS_placeholder}", StringEscapeUtils.escapeHtml4(frmStation));
+//                    htmlContent = htmlContent.replace("${toS_placeholder}", StringEscapeUtils.escapeHtml4(toStation));
+//
+
+
                 }
             }
 
@@ -3939,18 +3906,19 @@ public class MangeReportImpl implements MangeReportService {
             htmlContent = htmlContent.replace("${upToDate_placeholder}", StringEscapeUtils.escapeHtml4(formattedDate));
             htmlContent = htmlContent.replace("${finYear_placeholder}", StringEscapeUtils.escapeHtml4(finYear));
             htmlContent = htmlContent.replace("${amountType_placeholder}", StringEscapeUtils.escapeHtml4(amountIn));
-            String filepath = HelperUtils.FILEPATH +"/"+"Rebase_Report.pdf";
+            //htmlContent = htmlContent.replace("${allocationType_placeholder}", StringEscapeUtils.escapeHtml4(type.getAllocDesc()));
+            String filepath = HelperUtils.FILEPATH + "/" +  "_FER-budget-report.pdf";
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String filePath = folder.getAbsolutePath()+"/"+"Rebase_Report.pdf";
+            String filePath = folder.getAbsolutePath() + "/" + "_FER-budget-report.pdf";
             File file = new File(filePath);
             generatePdf(htmlContent, file.getAbsolutePath());
             //generatePdf(htmlContent, filepath);
             FilePathResponse response = new FilePathResponse();
             response.setPath(filepath);
-            response.setFileName("Rebase_Report.pdf");
+            response.setFileName( "_FER-budget-report.pdf");
             dtoList.add(response);
         } catch (IOException e) {
             throw new RuntimeException(e);

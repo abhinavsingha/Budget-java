@@ -1,6 +1,5 @@
 package com.sdd.request;
 
-import com.sdd.entities.AllocationType;
 import com.sdd.entities.AmountUnit;
 import com.sdd.entities.BudgetHead;
 import com.sdd.response.CdaDetailsForRebaseResponse;
@@ -21,7 +20,6 @@ public class RebaseBudgetHistory {
     private double allocatedAmount;
     private double expenditureAmount;
     private double allcAmntSubtrctExpnAmunt;
-    private AllocationType allocationType;
     private String status;
     private AmountUnit amountType;
     private Date lastCbDate;
