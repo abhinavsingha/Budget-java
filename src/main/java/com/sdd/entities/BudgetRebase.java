@@ -59,6 +59,9 @@ public class BudgetRebase {
     @Column(name = "AMOUNT_TYPE", nullable = false)
     private String amountType;
 
+    @Column(name = "ALLOC_TYPE", nullable = false)
+    private String allocTypeId;
+
     @Column(name = "AUTHORITY_ID", nullable = false)
     private String authorityId;
 

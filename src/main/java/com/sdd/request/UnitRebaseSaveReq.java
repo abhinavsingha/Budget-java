@@ -18,6 +18,7 @@ public class UnitRebaseSaveReq {
     private String authDocId;
     private String occurrenceDate;
     private String finYear;
+    private String allocationTypeId;
     private String rebaseUnitId;
     private String headUnitId;
     private String frmStationId;
