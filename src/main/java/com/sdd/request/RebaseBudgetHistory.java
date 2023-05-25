@@ -18,9 +18,9 @@ public class RebaseBudgetHistory {
     private String finYear;
     private String authGrupId;
     private BudgetHead subHead;
-    private double allocatedAmount;
-    private double expenditureAmount;
-    private double allcAmntSubtrctExpnAmunt;
+    private String allocatedAmount;
+    private String expenditureAmount;
+    private String remBal;
     private String status;
     private AmountUnit amountType;
     private AllocationType allocationType;

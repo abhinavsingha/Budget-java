@@ -25,6 +25,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -350,10 +351,10 @@ public class MangeRebaseImpl implements MangeRebaseService {
             }
             amountUnit=amountTypeObj.getAmount();
             String allocId=allocationData.get(i).getAllocationTypeId();
-            double aAmount = Double.parseDouble(allocationData.get(i).getAllocationAmount());
+            Double aAmount = Double.parseDouble(allocationData.get(i).getAllocationAmount());
             rebase.setUnit(unitdata.getDescr());
             rebase.setFinYear(Finyr.getFinYear());
-            rebase.setAllocatedAmount(aAmount*amountUnit);
+            rebase.setAllocatedAmount(allocationData.get(i).getAllocationAmount());
             rebase.setStatus(allocationData.get(i).getStatus());
             rebase.setAmountType(amountTypeObj);
             rebase.setAllocationType(allocationRepository.findByAllocTypeId(allocId));
@@ -378,17 +379,21 @@ public class MangeRebaseImpl implements MangeRebaseService {
             rebase.setCdaData(addRes);
             List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndStatusAndIsUpdateAndIsFlag(unit, finYear, bHead,"Approved","0","0");
             if (expenditure.size()>0) {
-                double eAmount=0.0;
-                for (int k = 0; k < expenditure.size(); k++) {
-                    eAmount += Double.parseDouble(expenditure.get(k).getCbAmount());
-                    rebase.setLastCbDate(expenditure.get(k).getCbDate());
+                double totalAmount = 0.0;
+                for (ContigentBill amount : expenditure) {
+                    totalAmount += Double.parseDouble(amount.getCbAmount());
                 }
+                DecimalFormat decimalFormat = new DecimalFormat("#");
+                String eAmount = decimalFormat.format(totalAmount);
                 rebase.setExpenditureAmount(eAmount);
-                rebase.setAllcAmntSubtrctExpnAmunt(aAmount*amountUnit-eAmount);
+                Double bal=aAmount*amountUnit-totalAmount;
+                Double remBal=bal/amountUnit;
+                rebase.setRemBal(Double.toString(remBal));
+                rebase.setLastCbDate(expenditure.get(0).getCbDate());
             }else{
-                rebase.setExpenditureAmount(0);
+                rebase.setExpenditureAmount("0");
                 rebase.setLastCbDate(null);
-                rebase.setAllcAmntSubtrctExpnAmunt(aAmount*amountUnit-0);
+                rebase.setRemBal("0");
             }
 
             responce.add(rebase);
