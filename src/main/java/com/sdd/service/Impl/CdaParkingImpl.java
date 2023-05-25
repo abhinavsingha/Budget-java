@@ -31,6 +31,12 @@ import java.util.Set;
 public class CdaParkingImpl implements CdaParkingService {
 
     @Autowired
+    CgUnitRepository cgUnitRepository;
+
+    @Autowired
+    MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
+
+    @Autowired
     private HrDataRepository hrDataRepository;
 
     @Autowired
@@ -419,6 +425,7 @@ public class CdaParkingImpl implements CdaParkingService {
             parkingCrAndDrRepository.save(cdaParking);
         }
 
+        String authGroupId = cdaRequest.getAuthGroupId();
         for (Integer i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
 
 
@@ -434,7 +441,7 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingTrans.setAmountType(cdaRequest.getCdaRequest().get(i).getAmountTypeId());
             cdaParkingTrans.setAllocTypeId(cdaRequest.getCdaRequest().get(i).getAllocationTypeID());
             cdaParkingTrans.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-            cdaParkingTrans.setAuthGroupId(cdaRequest.getAuthGroupId());
+            cdaParkingTrans.setAuthGroupId(authGroupId);
             cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
 
             CdaParkingTrans saveCdaData = cdaParkingTransRepository.save(cdaParkingTrans);
@@ -446,7 +453,7 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingCrAndDr.setBudgetHeadId(saveCdaData.getBudgetHeadId());
             cdaParkingCrAndDr.setGinNo(saveCdaData.getGinNo());
             cdaParkingCrAndDr.setUnitId(saveCdaData.getUnitId());
-            cdaParkingCrAndDr.setAuthGroupId(saveCdaData.getAuthGroupId());
+            cdaParkingCrAndDr.setAuthGroupId(authGroupId);
             cdaParkingCrAndDr.setAmount(saveCdaData.getAmountType());
             cdaParkingCrAndDr.setIscrdr("CR");
             cdaParkingCrAndDr.setCreatedOn(HelperUtils.getCurrentTimeStamp());
@@ -457,6 +464,41 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingCrAndDr.setAmountType(saveCdaData.getAmountType());
 
             parkingCrAndDrRepository.save(cdaParkingCrAndDr);
+
+        }
+
+
+        CgUnit cgToUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
+
+        String[] groupUnit = cgToUnit.getBudGroupUnit().split(",");
+        for (Integer i = 0; i < groupUnit.length; i++) {
+
+
+            MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
+
+            if (cgToUnit != null) {
+                mangeInboxOutbox.setType(cgToUnit.getDescr());
+            }
+
+            mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
+            mangeInboxOutbox.setRemarks("CDA Update");
+            mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            mangeInboxOutbox.setToUnit(groupUnit[i]);
+            mangeInboxOutbox.setFromUnit(hrData.getUnitId());
+            mangeInboxOutbox.setGroupId(authGroupId);
+            mangeInboxOutbox.setRoleId(hrData.getRoleId());
+            mangeInboxOutbox.setCreaterpId(hrData.getPid());
+            mangeInboxOutbox.setState("AP");
+            mangeInboxOutbox.setApproverpId("");
+            mangeInboxOutbox.setIsFlag("0");
+            mangeInboxOutbox.setIsArchive("0");
+            mangeInboxOutbox.setIsApproved("0");
+            mangeInboxOutbox.setStatus("Approved");
+            mangeInboxOutbox.setIsBgcg("CDA");
+
+            mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+
 
         }
 

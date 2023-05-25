@@ -2573,11 +2573,14 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         }
 
-        CgUnit cgToUnit = cgUnitRepository.findByUnit(type);
-        if (cgToUnit == null) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO UNIT ID");
-        }
+
+
         MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
+
+        CgUnit cgToUnit = cgUnitRepository.findByUnit(type);
+        if(cgToUnit != null){
+            mangeInboxOutbox.setType(cgToUnit.getDescr());
+        }
 
         mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
         mangeInboxOutbox.setRemarks("Budget Allocation Unit Wise");
@@ -2587,7 +2590,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         mangeInboxOutbox.setFromUnit(hrData.getUnitId());
         mangeInboxOutbox.setGroupId(authGrouPid);
         mangeInboxOutbox.setApproverpId("");
-        mangeInboxOutbox.setType(cgToUnit.getDescr());
+
         mangeInboxOutbox.setRoleId(hrData.getRoleId());
         mangeInboxOutbox.setCreaterpId(hrData.getPid());
         mangeInboxOutbox.setStatus("Pending");
