@@ -432,163 +432,163 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         });
     }
 
-    @Override
-    public ApiResponse<List<ApprovedResponse>> getApprovedList() {
-        List<ApprovedResponse> responce = new ArrayList<ApprovedResponse>();
-        String token = headerUtils.getTokeFromHeader();
-        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
-        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
-        if (hrDataCheck == null) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
-        }
-        String getCurrentRole = "";
-        try {
-            getCurrentRole = hrDataCheck.getRoleId().split(",")[0];
-        } catch (Exception e) {
-        }
-        LocalDate currentDate = LocalDate.now();
-        int year = currentDate.getYear();
-        int month = currentDate.getMonthValue();
-        if (month < 4) {
-            year--;
-        }
-        String financialYear = String.format("%d-%02d", year, (year + 1) % 100);
-        String[] parts = financialYear.split("-");
-        int sysFinyr = Integer.parseInt(parts[1]);
+//    @Override
+//    public ApiResponse<List<ApprovedResponse>> getApprovedList() {
+//        List<ApprovedResponse> responce = new ArrayList<ApprovedResponse>();
+//        String token = headerUtils.getTokeFromHeader();
+//        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+//        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+//        if (hrDataCheck == null) {
+//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+//        }
+//        String getCurrentRole = "";
+//        try {
+//            getCurrentRole = hrDataCheck.getRoleId().split(",")[0];
+//        } catch (Exception e) {
+//        }
+//        LocalDate currentDate = LocalDate.now();
+//        int year = currentDate.getYear();
+//        int month = currentDate.getMonthValue();
+//        if (month < 4) {
+//            year--;
+//        }
+//        String financialYear = String.format("%d-%02d", year, (year + 1) % 100);
+//        String[] parts = financialYear.split("-");
+//        int sysFinyr = Integer.parseInt(parts[1]);
+//
+///*        CgUnit cgUnit = cgUnitRepository.findByUnit(hrDataCheck.getUnitId());
+//        if (cgUnit == null) {
+//            return ResponseUtils.createFailureResponse(responce,  new TypeReference<List<ApprovedResponse>>() {
+//            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
+//        }
+//        String dBunit = cgUnit.getDescr();
+//        List<CgUnit> units = new ArrayList<>();
+//        if (dBunit.equalsIgnoreCase("D(Budget)")) {
+//            units = cgUnitRepository.findAllByOrderByDescrAsc();
+//        } else {
+//            if (hrDataCheck.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+//                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+//            } else {
+//                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
+//            }
+//        }
+//        if (units.size() <= 0) {
+//            return ResponseUtils.createFailureResponse(responce,  new TypeReference<List<ApprovedResponse>>() {
+//            }, "UNIT NOT FOUND", HttpStatus.OK.value());
+//        }*/
+//
+//
+//        if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER) || getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
+//            List<MangeInboxOutbox> inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndStatus(hrDataCheck.getUnitId(), "BG", "Fully Approved");
+//            if (inboxOutboxesList.size() > 0) {
+//                for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+//                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+//                    String authGId=mangeInboxOutbox.getGroupId();
+//                    List<BudgetAllocation> allocationData = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGId, "0");                    if (allocationData.size() > 0) {
+//                        BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.get(0).getFinYear());
+//                        String[] part = finYear.getFinYear().split("-");
+//                        int dbFinyr = Integer.parseInt(part[1]);
+//                        if (financialYear.equalsIgnoreCase(finYear.getFinYear()) || sysFinyr < dbFinyr) {
+//                            ApprovedResponse data = new ApprovedResponse();
+//                            data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+//                            data.setType(mangeInboxOutbox.getType());
+//                            data.setSubmissionDate(mangeInboxOutbox.getCreatedOn());
+//                            data.setApprovedDate(mangeInboxOutbox.getUpdatedOn());
+//                            data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+//                            data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+//                            data.setStatus(mangeInboxOutbox.getStatus());
+//                            data.setRemarks(mangeInboxOutbox.getRemarks());
+//                            data.setGroupId(mangeInboxOutbox.getGroupId());
+//                            data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+//                            data.setAmount(mangeInboxOutbox.getAmount());
+//                            responce.add(data);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return ResponseUtils.createSuccessResponse(responce, new TypeReference<List<ApprovedResponse>>() {
+//        });
+//    }
 
-/*        CgUnit cgUnit = cgUnitRepository.findByUnit(hrDataCheck.getUnitId());
-        if (cgUnit == null) {
-            return ResponseUtils.createFailureResponse(responce,  new TypeReference<List<ApprovedResponse>>() {
-            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
-        }
-        String dBunit = cgUnit.getDescr();
-        List<CgUnit> units = new ArrayList<>();
-        if (dBunit.equalsIgnoreCase("D(Budget)")) {
-            units = cgUnitRepository.findAllByOrderByDescrAsc();
-        } else {
-            if (hrDataCheck.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
-            } else {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-            }
-        }
-        if (units.size() <= 0) {
-            return ResponseUtils.createFailureResponse(responce,  new TypeReference<List<ApprovedResponse>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
-        }*/
-
-
-        if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER) || getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
-            List<MangeInboxOutbox> inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndStatus(hrDataCheck.getUnitId(), "BG", "Fully Approved");
-            if (inboxOutboxesList.size() > 0) {
-                for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
-                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-                    String authGId=mangeInboxOutbox.getGroupId();
-                    List<BudgetAllocation> allocationData = budgetAllocationRepository.findByAuthGroupIdAndIsDelete(authGId, "0");                    if (allocationData.size() > 0) {
-                        BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.get(0).getFinYear());
-                        String[] part = finYear.getFinYear().split("-");
-                        int dbFinyr = Integer.parseInt(part[1]);
-                        if (financialYear.equalsIgnoreCase(finYear.getFinYear()) || sysFinyr < dbFinyr) {
-                            ApprovedResponse data = new ApprovedResponse();
-                            data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
-                            data.setType(mangeInboxOutbox.getType());
-                            data.setSubmissionDate(mangeInboxOutbox.getCreatedOn());
-                            data.setApprovedDate(mangeInboxOutbox.getUpdatedOn());
-                            data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
-                            data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
-                            data.setStatus(mangeInboxOutbox.getStatus());
-                            data.setRemarks(mangeInboxOutbox.getRemarks());
-                            data.setGroupId(mangeInboxOutbox.getGroupId());
-                            data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
-                            data.setAmount(mangeInboxOutbox.getAmount());
-                            responce.add(data);
-                        }
-                    }
-                }
-            }
-        }
-        return ResponseUtils.createSuccessResponse(responce, new TypeReference<List<ApprovedResponse>>() {
-        });
-    }
-
-    @Override
-    public ApiResponse<List<ApprovedResponse>> getArchivedList() {
-        List<ApprovedResponse> responce = new ArrayList<ApprovedResponse>();
-        String token = headerUtils.getTokeFromHeader();
-        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
-        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
-        if (hrDataCheck == null) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
-        }
-        String getCurrentRole = "";
-        try {
-            getCurrentRole = hrDataCheck.getRoleId().split(",")[0];
-        } catch (Exception e) {
-        }
-        LocalDate currentDate = LocalDate.now();
-        int year = currentDate.getYear();
-        int month = currentDate.getMonthValue();
-        if (month < 4) {
-            year--;
-        }
-        String financialYear = String.format("%d-%02d", year, (year + 1) % 100);
-        String[] parts = financialYear.split("-");
-        int sysFinyr = Integer.parseInt(parts[1]);
-
-/*        CgUnit cgUnit = cgUnitRepository.findByUnit(hrDataCheck.getUnitId());
-        if (cgUnit == null) {
-            return ResponseUtils.createFailureResponse(responce,  new TypeReference<List<ApprovedResponse>>() {
-            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
-        }
-        String dBunit = cgUnit.getDescr();
-        List<CgUnit> units = new ArrayList<>();
-        if (dBunit.equalsIgnoreCase("D(Budget)")) {
-            units = cgUnitRepository.findAllByOrderByDescrAsc();
-        } else {
-            if (hrDataCheck.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
-            } else {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-            }
-        }
-        if (units.size() <= 0) {
-            return ResponseUtils.createFailureResponse(responce,  new TypeReference<List<ApprovedResponse>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
-        }*/
-
-
-        if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER) || getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
-            List<MangeInboxOutbox> inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndStatus(hrDataCheck.getUnitId(), "BG", "Fully Approved");
-            if (inboxOutboxesList.size() > 0) {
-                for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
-                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-                    String authGId=mangeInboxOutbox.getGroupId();
-                    List<BudgetAllocation> allocationData = budgetAllocationRepository.findByAuthGroupIdAndIsDelete(authGId, "0");                    if (allocationData.size() > 0) {
-                        BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.get(0).getFinYear());
-                        String[] part = finYear.getFinYear().split("-");
-                        int dbFinyr = Integer.parseInt(part[1]);
-                        if (!financialYear.equalsIgnoreCase(finYear.getFinYear()) || sysFinyr > dbFinyr) {
-                            ApprovedResponse data = new ApprovedResponse();
-                            data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
-                            data.setType(mangeInboxOutbox.getType());
-                            data.setSubmissionDate(mangeInboxOutbox.getCreatedOn());
-                            data.setApprovedDate(mangeInboxOutbox.getUpdatedOn());
-                            data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
-                            data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
-                            data.setStatus(mangeInboxOutbox.getStatus());
-                            data.setRemarks(mangeInboxOutbox.getRemarks());
-                            data.setGroupId(mangeInboxOutbox.getGroupId());
-                            data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
-                            data.setAmount(mangeInboxOutbox.getAmount());
-                            responce.add(data);
-                        }
-                    }
-                }
-            }
-        }
-        return ResponseUtils.createSuccessResponse(responce, new TypeReference<List<ApprovedResponse>>() {
-        });
-    }
+//    @Override
+//    public ApiResponse<List<ApprovedResponse>> getArchivedList() {
+//        List<ApprovedResponse> responce = new ArrayList<ApprovedResponse>();
+//        String token = headerUtils.getTokeFromHeader();
+//        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+//        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+//        if (hrDataCheck == null) {
+//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+//        }
+//        String getCurrentRole = "";
+//        try {
+//            getCurrentRole = hrDataCheck.getRoleId().split(",")[0];
+//        } catch (Exception e) {
+//        }
+//        LocalDate currentDate = LocalDate.now();
+//        int year = currentDate.getYear();
+//        int month = currentDate.getMonthValue();
+//        if (month < 4) {
+//            year--;
+//        }
+//        String financialYear = String.format("%d-%02d", year, (year + 1) % 100);
+//        String[] parts = financialYear.split("-");
+//        int sysFinyr = Integer.parseInt(parts[1]);
+//
+///*        CgUnit cgUnit = cgUnitRepository.findByUnit(hrDataCheck.getUnitId());
+//        if (cgUnit == null) {
+//            return ResponseUtils.createFailureResponse(responce,  new TypeReference<List<ApprovedResponse>>() {
+//            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
+//        }
+//        String dBunit = cgUnit.getDescr();
+//        List<CgUnit> units = new ArrayList<>();
+//        if (dBunit.equalsIgnoreCase("D(Budget)")) {
+//            units = cgUnitRepository.findAllByOrderByDescrAsc();
+//        } else {
+//            if (hrDataCheck.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+//                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+//            } else {
+//                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
+//            }
+//        }
+//        if (units.size() <= 0) {
+//            return ResponseUtils.createFailureResponse(responce,  new TypeReference<List<ApprovedResponse>>() {
+//            }, "UNIT NOT FOUND", HttpStatus.OK.value());
+//        }*/
+//
+//
+//        if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER) || getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
+//            List<MangeInboxOutbox> inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndStatus(hrDataCheck.getUnitId(), "BG", "Fully Approved");
+//            if (inboxOutboxesList.size() > 0) {
+//                for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+//                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+//                    String authGId=mangeInboxOutbox.getGroupId();
+//                    List<BudgetAllocation> allocationData = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGId, "0");                    if (allocationData.size() > 0) {
+//                        BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.get(0).getFinYear());
+//                        String[] part = finYear.getFinYear().split("-");
+//                        int dbFinyr = Integer.parseInt(part[1]);
+//                        if (!financialYear.equalsIgnoreCase(finYear.getFinYear()) || sysFinyr > dbFinyr) {
+//                            ApprovedResponse data = new ApprovedResponse();
+//                            data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+//                            data.setType(mangeInboxOutbox.getType());
+//                            data.setSubmissionDate(mangeInboxOutbox.getCreatedOn());
+//                            data.setApprovedDate(mangeInboxOutbox.getUpdatedOn());
+//                            data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+//                            data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+//                            data.setStatus(mangeInboxOutbox.getStatus());
+//                            data.setRemarks(mangeInboxOutbox.getRemarks());
+//                            data.setGroupId(mangeInboxOutbox.getGroupId());
+//                            data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+//                            data.setAmount(mangeInboxOutbox.getAmount());
+//                            responce.add(data);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return ResponseUtils.createSuccessResponse(responce, new TypeReference<List<ApprovedResponse>>() {
+//        });
+//    }
 
     @Override
     public ApiResponse<List<ArchivedResponse>> getApprovedListData(String groupId) {
@@ -608,7 +608,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         } catch (Exception e) {
         }
         if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER) || getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
-            List<BudgetAllocation> inboxOutboxesList = budgetAllocationRepository.findByAuthGroupIdAndIsDelete(groupId, "0");
+            List<BudgetAllocation> inboxOutboxesList = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(groupId, "0");
             if (inboxOutboxesList.size() > 0) {
                 for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
                     BudgetAllocation mangeInboxOutbox = inboxOutboxesList.get(i);

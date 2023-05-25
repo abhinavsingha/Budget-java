@@ -16,9 +16,9 @@ public interface InboxOutBoxService {
 
 	ApiResponse<InboxOutBoxResponse> readMessage(String msgId);
 
-	ApiResponse<List<ApprovedResponse>>getApprovedList();
-
-	ApiResponse<List<ApprovedResponse>> getArchivedList();
+//	ApiResponse<List<ApprovedResponse>>getApprovedList();
+//
+//	ApiResponse<List<ApprovedResponse>> getArchivedList();
 
 	ApiResponse<List<ArchivedResponse>> getApprovedListData(String groupId);
 

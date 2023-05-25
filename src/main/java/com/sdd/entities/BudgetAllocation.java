@@ -72,7 +72,6 @@ public class BudgetAllocation {
     @Column(name = "AMOUNT_TYPE")
     private String amountType;
 
-
     @Column(name = "IS_BUDGET_REVISION")
     private String isBudgetRevision;
 
