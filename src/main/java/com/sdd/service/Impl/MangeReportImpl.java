@@ -3835,6 +3835,10 @@ public class MangeReportImpl implements MangeReportService {
             Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
 
             List<String> groupUnitId=budgetRebaseRepository.findGroupRebaseUnit();
+            if(groupUnitId.size()<=0){
+                return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+                }, "DATA NOT FOUND FROM DB", HttpStatus.OK.value());
+            }
             String RunitId="";
             String uName="";
             String frmStation="";
@@ -3857,6 +3861,11 @@ public class MangeReportImpl implements MangeReportService {
                     List<BudgetRebase> rebaseDatas=budgetRebaseRepository.findByRebaseUnitId(RunitId);
                     List<BudgetRebase> rebaseData = rebaseDatas.stream()
                             .filter(e -> e.getOccuranceDate().after(fromDateFormate) && e.getOccuranceDate().before(toDateFormate)).collect(Collectors.toList());
+                    if(rebaseData.size()<=0){
+                        return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+                        }, "DATA NOT FOUND IN THIS DATE RANGE", HttpStatus.OK.value());
+                    }
+
                     CgUnit unitN = cgUnitRepository.findByUnit(RunitId);
                     CgStation frmS= cgStationRepository.findByStationId(rebaseData.get(0).getFrmStationId());
                     CgStation toS= cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
