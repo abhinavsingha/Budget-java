@@ -3513,7 +3513,7 @@ public class MangeReportImpl implements MangeReportService {
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
 
-        String amountTypeId="101"
+        String amountTypeId="101";
 
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
