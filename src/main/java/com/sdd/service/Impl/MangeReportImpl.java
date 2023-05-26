@@ -3889,7 +3889,7 @@ public class MangeReportImpl implements MangeReportService {
                             "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Sub Head</th>\n" +
                             //"\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Code head</th>\n" +
                             "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Allocated: (${amountType_placeholder})</th>\n" +
-                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Expenditure: (${amountType_placeholder})</th>\n" +
+                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Expenditure: </th>\n" +
                             "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Balance: (${amountType_placeholder})</th>\n" +
                             "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Last CB Date</th>\n" +
                             "\t\t</tr>\n" +
