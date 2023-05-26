@@ -607,6 +607,19 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 budgetRebase.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                 budgetRebaseRepository.save(budgetRebase);
+
+                List<BudgetAllocation> allocationDatas = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(rebaseUnitId, finYear,budHd,allocTypeId,"Approved","0","0");
+                allocationDatas.get(0).setAllocationAmount("0.0000");
+                budgetAllocationRepository.save(allocationDatas.get(0));
+                List<CdaParkingTrans> cdaDetail=cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear,budHd,rebaseUnitId,allocTypeId,"0");
+                if(cdaDetail.size()>0) {
+                    for (int j = 0; j < cdaDetail.size(); j++) {
+                        cdaDetail.get(j).setRemainingCdaAmount("0.0000");
+                        cdaDetail.get(j).setTotalParkingAmount("0.0000");
+                        cdaParkingTransRepository.save(cdaDetail.get(j));
+                    }
+                }
+
                 List<BudgetAllocation> allocationData = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(headUnit, finYear,budHd,allocTypeId,"Approved","0","0");
                 Double alAmnt=Double.parseDouble(allocationData.get(0).getAllocationAmount());
                 Double balAmnt=Double.parseDouble(req.getUnitRebaseRequests().get(l).getBalAmount());
@@ -645,41 +658,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
             budgetRebase.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             budgetRebaseRepository.save(budgetRebase);
-
         }
-/*
-        List<BudgetAllocation> allocationData = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(headUnit, finYear,allocTypeId,"0");
-        if (allocationData.size()<=0) {
-            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            },"HEAD UNIT RECORD NOT FOUND",HttpStatus.OK.value());
-        }
-        String finY="";
-        String allocTId="";
-        String alloAmount="";
-        String amountT="";
-        String subH="";
 
-        for (int i = 0; i < allocationData.size(); i++) {
-            finY=allocationData.get(i).getFinYear();
-            allocTId=allocationData.get(i).getAllocationTypeId();
-            alloAmount=allocationData.get(i).getAllocationAmount();
-            amountT=allocationData.get(i).getAmountType();
-            subH=allocationData.get(i).getSubHead();
-            List<CdaParkingTrans> cdaDetails=cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finY,subH,headUnit,allocTId,"0");
-            List<CdaDetailsForRebaseResponse> addRes = new ArrayList<CdaDetailsForRebaseResponse>();
-            if(cdaDetails.size()>0) {
-                for (int j = 0; j < cdaDetails.size(); j++) {
-                    CdaDetailsForRebaseResponse cda = new CdaDetailsForRebaseResponse();
-                    cda.setGinNo(cdaParkingRepository.findByGinNo(cdaDetails.get(j).getGinNo()));
-                    cda.setAmountUnit(amountUnitRepository.findByAmountTypeId(cdaDetails.get(j).getAmountType()));
-                    cda.setTotalParkingAmount(cdaDetails.get(j).getTotalParkingAmount());
-                    cda.setRemainingCdaAmount(cdaDetails.get(j).getRemainingCdaAmount());
-                    cda.setSubHeadId(cdaDetails.get(j).getBudgetHeadId());
-                    addRes.add(cda);
-
-                }
-            }
-        }*/
         defaultResponse.setMsg("UNIT REBASE SUCCESSFULLY");
         return ResponseUtils.createSuccessResponse(defaultResponse, new TypeReference<DefaultResponse>() {
         });
