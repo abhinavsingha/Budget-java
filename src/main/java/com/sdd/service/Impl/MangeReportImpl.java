@@ -3506,12 +3506,14 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getUnitRebaseReport(String amountTypeId, String fromDate, String toDate) {
+    public ApiResponse<List<FilePathResponse>> getUnitRebaseReport(String fromDate, String toDate) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
+
+        String amountTypeId="101"
 
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");

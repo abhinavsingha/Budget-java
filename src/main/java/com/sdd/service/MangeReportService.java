@@ -44,6 +44,6 @@ public interface MangeReportService {
 
     ApiResponse<List<FilePathResponse>> getMainBEAllocationReport(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate);
 
-    ApiResponse<List<FilePathResponse>> getUnitRebaseReport(String amountTypeId, String fromDate, String toDate);
+    ApiResponse<List<FilePathResponse>> getUnitRebaseReport(String fromDate, String toDate);
 
 }
