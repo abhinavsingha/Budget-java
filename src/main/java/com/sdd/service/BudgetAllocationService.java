@@ -77,4 +77,7 @@ public interface BudgetAllocationService {
 
 	ApiResponse<List<CgUnitResponse>> getAllCgUnitData();
 
+	ApiResponse<List<AllocationType>> getAllocationByFinYear(String finyear);
+
+	ApiResponse<DefaultResponse>  updateAllocation(AllocationType allocationType);
 }

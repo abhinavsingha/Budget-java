@@ -12,13 +12,14 @@ import java.util.List;
 public interface MangeInboxOutBoxRepository extends JpaRepository<MangeInboxOutbox, Long> {
 
 
-
-//    List<MangeInboxOutbox> findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgOrIsBgcgOrderByCreatedOnDesc(String toUnit, String isAproovedd, String isArchived ,String isBgOrCg, String isBgOrCg1);
-
-
     List<MangeInboxOutbox> findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(String toUnit, String isBgOrCg, String isArchived, String isApproved);
+    List<MangeInboxOutbox> findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(String toUnit,String isCgBg, String isApproved);
+    List<MangeInboxOutbox> findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(String toUnit,String isCgBg,  String isArchvied);
+
+
     List<MangeInboxOutbox> findByToUnitAndIsApprovedOrderByCreatedOnDesc(String toUnit, String isApproved);
     List<MangeInboxOutbox> findByToUnitAndIsArchiveOrderByCreatedOnDesc(String toUnit, String isArchvied);
+
 
     List<MangeInboxOutbox> findByFromUnitAndIsBgcgOrderByCreatedOnAsc(String toUnit, String isBgOrCg);
 
@@ -28,7 +29,8 @@ public interface MangeInboxOutBoxRepository extends JpaRepository<MangeInboxOutb
 
     List<MangeInboxOutbox> findByToUnitAndIsBgcgAndStatus(String toUnit, String bgcg, String status);
 
-    @Query(value="select * FROM Budget.MangeInboxOutbox where TO_UNIT =:rebaseUnitId and iS_APPROVED = '0' AND IS_ARCHIVE = '0' AND (IS_BGCG = 'BG' OR IS_BGCG = 'BR');",nativeQuery = true)
-    List<MangeInboxOutbox> findByInboxData(String rebaseUnitId);
+    @Query(value="SELECT * FROM Budget.MangeInboxOutbox where TO_UNIT = ':rebaseUnitId' and IS_APPROVED = ':isApprov' AND IS_ARCHIVE = ':isArchv' AND (IS_BGCG = ':isBgC' OR IS_BGCG = ':isBgCg');",nativeQuery = true)
+    List<MangeInboxOutbox> findByInboxDataForAllRole(String rebaseUnitId,String isApprov,String isArchv,String isBgC,String isBgCg);
+
 
 }

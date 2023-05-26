@@ -205,6 +205,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             allocationType.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             allocationType.setFinYear(budgetReciptSaveRequest.getBudgetFinancialYearId());
             allocationType.setAllocDesc(budgetReciptSaveRequest.getAllocationType());
+            allocationType.setRemarks(budgetReciptSaveRequest.getAllocationType());
             allocationType.setIsFlag("1");
             saveAllocationType = allocationRepository.save(allocationType);
         }

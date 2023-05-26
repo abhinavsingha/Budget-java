@@ -102,14 +102,60 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
     @Override
     public ApiResponse<List<AllocationType>> getAllocationAllData() {
-
         String token = headerUtils.getTokeFromHeader();
         List<AllocationType> allocationRepositoryData = allocationRepository.findAll();
-
 
         return ResponseUtils.createSuccessResponse(allocationRepositoryData, new TypeReference<List<AllocationType>>() {
         });
     }
+
+
+    @Override
+    public ApiResponse<List<AllocationType>> getAllocationByFinYear(String finyear) {
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN .LOGIN AGAIN");
+        }
+        if (finyear == null || finyear.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FIN YEAR ID CAN NOT BE BLANK");
+        }
+        List<AllocationType> allocationRepositoryData = allocationRepository.findByFinYear(finyear);
+        return ResponseUtils.createSuccessResponse(allocationRepositoryData, new TypeReference<List<AllocationType>>() {
+        });
+    }
+
+
+    @Override
+    public ApiResponse<DefaultResponse> updateAllocation(AllocationType allocationType) {
+
+        DefaultResponse defaultResponse = new DefaultResponse();
+
+        if (allocationType.getAllocTypeId() == null || allocationType.getAllocTypeId().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION TYPE ID CAN NOT BE BLANK");
+        }
+
+        if (allocationType.getAllocDesc() == null || allocationType.getAllocDesc().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REMARK CAN NOT BE BLANK");
+        }
+
+        AllocationType allocationTypeData = allocationRepository.findByAllocTypeId(allocationType.getAllocTypeId());
+        if (allocationTypeData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
+        }
+        allocationTypeData.setAllocType(allocationType.getAllocDesc());
+        allocationTypeData.setAllocDesc(allocationType.getAllocDesc());
+        allocationTypeData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+
+        allocationRepository.save(allocationTypeData);
+
+        defaultResponse.setMsg("DATA UPDATE SUCCESSFULLY");
+        return ResponseUtils.createSuccessResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+        });
+    }
+
 
     @Override
     public ApiResponse<List<AllocationType>> getAllocationType() {
@@ -1132,6 +1178,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             }
 
 
+            List<BudgetAllocationDetails> budgetAllocationsDetalis11 = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "Pending", "0", "1");
+            if (budgetAllocationsDetalis11.size() > 0) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY REVISED FOR THIS UNIT CURRENTLY NOT APPROVED. PLEASE APPROVED PREVIOUS REVISION");
+            }
+
+
         }
 
 
@@ -1200,7 +1252,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(revisonData.getAmountTypeId());
                     double parkingAmount = Double.parseDouble(revisonData.getCdaParkingId().get(m).getCdaAmount()) * amountUnit.getAmount();
 
-                    double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
+                    double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
                     cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
                     cdaParkingTransRepository.save(cdaParkingTrans);
                 }
@@ -1395,6 +1447,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         }
 
+
         List<CgUnit> unit = new ArrayList<>();
         if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
             unit = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
@@ -1402,26 +1455,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             unit = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
         }
         if (unit.size() <= 0) {
-            return ResponseUtils.createFailureResponse(budgetRevision, new TypeReference<List<BudgetReviResp>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT NOT FOUND");
         }
 
 
-        double expendure = 0;
-        List<CgUnit> allUnitData = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-        List<String> unitIds = new ArrayList<>();
-        for (CgUnit cgUnit1 : allUnitData) {
-            unitIds.add(cgUnit1.getUnit());
-        }
-
-
-        List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdInAndFinYearAndBudgetHeadIDAndIsFlagAndIsUpdateOrderByCbDateDesc(unitIds, budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), "0", "0");
-
-
-        for (Integer k = 0; k < contigentBills.size(); k++) {
-            expendure = expendure + Double.parseDouble(contigentBills.get(k).getCbAmount());
-        }
-
+//        List<CgUnit> allUnitData = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
 
         for (Integer i = 0; i < unit.size(); i++) {
 
@@ -1431,6 +1469,15 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 BudgetReviResp res = new BudgetReviResp();
                 res.setUnit(cgUnitRepository.findByUnit(budgetAllocationsDetalis.get(m).getToUnit()));
                 res.setAllocationAmount(budgetAllocationsDetalis.get(m).getAllocationAmount());
+
+
+                List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsFlagAndIsUpdateOrderByCbDateDesc(unit.get(i).getUnit(), budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), "0", "0");
+
+                double expendure = 100000000;
+                for (Integer k = 0; k < contigentBills.size(); k++) {
+                    expendure = expendure + Double.parseDouble(contigentBills.get(k).getCbAmount());
+                }
+
                 res.setExpenditureAmount(expendure + "");
                 res.setStatus(budgetAllocationsDetalis.get(m).getStatus());
                 res.setFlag(budgetAllocationsDetalis.get(m).getIsFlag());
@@ -1457,8 +1504,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         if (budgetRevision.size() <= 1) {
             budgetRevision.clear();
-            return ResponseUtils.createFailureResponse(budgetRevision, new TypeReference<List<BudgetReviResp>>() {
-            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO RECORD FOUND.");
         }
         return ResponseUtils.createSuccessResponse(budgetRevision, new TypeReference<List<BudgetReviResp>>() {
         });
@@ -3312,7 +3358,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         return ResponseUtils.createSuccessResponse(cgUnitResponseList, new TypeReference<List<CgUnitResponse>>() {
         });
     }
-
 
 }
 

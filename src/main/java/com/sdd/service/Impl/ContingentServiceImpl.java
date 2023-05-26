@@ -1061,16 +1061,16 @@ public class ContingentServiceImpl implements ContingentService {
         }
 
 
+        if (approveContigentBillRequest.getCdaParkingId() == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA DATA CAN NOT BE BLANK");
+        }
+
+
         for (Integer i = 0; i < approveContigentBillRequest.getCdaParkingId().size(); i++) {
 
             if (approveContigentBillRequest.getCdaParkingId().get(i).getCdacrDrId() == null || approveContigentBillRequest.getCdaParkingId().get(i).getCdacrDrId().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA CRDR PARKING ID CAN NOT BE BLANK");
             }
-
-//            CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingId(approveContigentBillRequest.getCdaParkingId().get(i).getCdaParkingId());
-//            if (cdaParkingTrans == null) {
-//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CDA PARKING ID.");
-//            }
 
             if (approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount() == null || approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB AMOUNT CAN NOT BE BLANK");
@@ -1142,8 +1142,8 @@ public class ContingentServiceImpl implements ContingentService {
             mangeInboxOutbox.setToUnit(fromUnit);
             mangeInboxOutbox.setState("CR");
             if (status.equalsIgnoreCase("Approved")) {
-                mangeInboxOutbox.setStatus("Fully Approved");
-                mangeInboxOutbox.setIsApproved("1");
+                mangeInboxOutbox.setStatus("Approved");
+                mangeInboxOutbox.setIsApproved("0");
             } else {
                 mangeInboxOutbox.setStatus(approveContigentBillRequest.getStatus());
             }
@@ -1166,7 +1166,16 @@ public class ContingentServiceImpl implements ContingentService {
         DefaultResponse defaultResponse = new DefaultResponse();
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO APPROVE CB");
+        } else {
+            if (hrData.getRoleId().contains(HelperUtils.CBAPPROVER)) {
 
+            } else {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO APPROVE APPROVE CB");
+            }
+        }
 
         if (approveContigentBillRequest.getGroupId() == null || approveContigentBillRequest.getGroupId().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB GROUP ID NOT BE BLANK");
@@ -1202,6 +1211,21 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBill.setCbFilePath(approveContigentBillRequest.getDocId());
             contigentBill.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             contigentBillRepository.save(contigentBill);
+        }
+
+
+        MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(approveContigentBillRequest.getGroupId(), hrData.getUnitId());
+        if (mangeInboxOutbox != null) {
+            String toUnit = mangeInboxOutbox.getToUnit();
+            String fromUnit = mangeInboxOutbox.getFromUnit();
+
+            mangeInboxOutbox.setFromUnit(toUnit);
+            mangeInboxOutbox.setToUnit(fromUnit);
+            mangeInboxOutbox.setStatus("Fully Approved");
+            mangeInboxOutbox.setIsApproved("1");
+            mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+
         }
 
         defaultResponse.setMsg("Data update successfully");

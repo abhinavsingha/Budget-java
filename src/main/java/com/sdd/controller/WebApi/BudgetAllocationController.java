@@ -28,11 +28,22 @@ public class BudgetAllocationController {
         return new ResponseEntity<>(budgetAllocationService.getBudgetFinYear(), HttpStatus.OK);
     }
 
-
     @GetMapping("/getAllocationAllData")
     public ResponseEntity<ApiResponse<List<AllocationType>>> getAllocationAllData() {
         return new ResponseEntity<>(budgetAllocationService.getAllocationAllData(), HttpStatus.OK);
     }
+
+    @GetMapping("/getAllocationByFinYear/{finYearId}")
+    public ResponseEntity<ApiResponse<List<AllocationType>>> getAllocationByFinYear(@PathVariable("finYearId") String finYearId) {
+        return new ResponseEntity<>(budgetAllocationService.getAllocationByFinYear(finYearId), HttpStatus.OK);
+    }
+
+
+    @PostMapping("/updateAllocation")
+    public ResponseEntity<ApiResponse<DefaultResponse>> updateAllocation(@RequestBody AllocationType allocationType) {
+        return new ResponseEntity<>(budgetAllocationService.updateAllocation(allocationType), HttpStatus.OK);
+    }
+
 
 
     @GetMapping("/getAllocationType")
@@ -45,7 +56,6 @@ public class BudgetAllocationController {
     public ResponseEntity<ApiResponse<List<BudgetHead>>> getSubHeadsData() {
         return new ResponseEntity<>(budgetAllocationService.getSubHeadsData(), HttpStatus.OK);
     }
-
 
 
     @PostMapping("/getSubHeadListWithAmount")
@@ -96,8 +106,6 @@ public class BudgetAllocationController {
     public ResponseEntity<ApiResponse<List<SubHeadVotedOrChargedType>>> getSubHeadType() {
         return new ResponseEntity<>(budgetAllocationService.getSubHeadType(), HttpStatus.OK);
     }
-
-
 
 
     @GetMapping("/getAvailableFundData")
