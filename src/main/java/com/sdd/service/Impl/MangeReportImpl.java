@@ -3918,7 +3918,7 @@ public class MangeReportImpl implements MangeReportService {
                         Double bAmount=Double.valueOf(rebaseData.get(k).getBalAmount());
                         LastCbD=rebaseData.get(k).getLastCbDate();
                         allocAmount = aAmount * amountUnit / reqAmount;
-                        expAmount = eAmount * amountUnit / reqAmount;
+                        expAmount = eAmount * amountUnit;
                         balAmount = bAmount * amountUnit / reqAmount;
 
                         sb.append("<tr>");
