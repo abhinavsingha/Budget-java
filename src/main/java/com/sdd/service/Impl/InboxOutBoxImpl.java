@@ -83,6 +83,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
         List<InboxOutBoxSubResponse> inboxList = new ArrayList<InboxOutBoxSubResponse>();
         List<InboxOutBoxSubResponse> approvedList = new ArrayList<InboxOutBoxSubResponse>();
+        List<InboxOutBoxSubResponse> archivedList = new ArrayList<InboxOutBoxSubResponse>();
         List<InboxOutBoxSubResponse> outBoxList = new ArrayList<InboxOutBoxSubResponse>();
         if (hrDataCheck == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
@@ -341,9 +342,35 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
             approvedList.add(data);
         }
+
+        List<MangeInboxOutbox> archivedListUnitWise = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1");
+        for (Integer i = 0; i < archivedListUnitWise.size(); i++) {
+            InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+            MangeInboxOutbox mangeInboxOutbox = archivedListUnitWise.get(i);
+
+            data.setGroupId(mangeInboxOutbox.getGroupId());
+            data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+            data.setRemarks(mangeInboxOutbox.getRemarks());
+            data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+            data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+            data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+            data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+            data.setAmount(mangeInboxOutbox.getAmount());
+            data.setType(mangeInboxOutbox.getType());
+            data.setStatus(mangeInboxOutbox.getStatus());
+            data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+
+            archivedList.add(data);
+        }
+
+
+
+
+
         inboxOutBoxResponse.setApprovedList(approvedList);
         inboxOutBoxResponse.setInboxList(inboxList);
         inboxOutBoxResponse.setOutList(outBoxList);
+        inboxOutBoxResponse.setArchivedList(archivedList);
 
 
         return ResponseUtils.createSuccessResponse(inboxOutBoxResponse, new TypeReference<InboxOutBoxResponse>() {

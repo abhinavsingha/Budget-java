@@ -3,6 +3,7 @@ package com.sdd.response;
 import com.sdd.entities.AmountUnit;
 import com.sdd.entities.CdaParkingTrans;
 import com.sdd.entities.CgUnit;
+import com.sdd.request.CdaFilterData;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,6 @@ public class BudgetReviResp {
     private AmountUnit amountType;
     private String status;
     private String flag;
-    List<CdaParkingTrans> cdaTransData;
+    List<CdaFilterData> cdaTransData;
 
 }

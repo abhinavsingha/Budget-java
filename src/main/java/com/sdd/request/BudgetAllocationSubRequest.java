@@ -21,10 +21,6 @@ public class BudgetAllocationSubRequest {
     private String amountTypeId;
     private String transactionId;
 
-
     private List<CdaTransAllocationRequest> cdaParkingId;
-
-
-
 
 }

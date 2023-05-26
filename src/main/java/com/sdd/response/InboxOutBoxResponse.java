@@ -19,6 +19,7 @@ public class InboxOutBoxResponse {
 
    List<InboxOutBoxSubResponse> inboxList;
    List<InboxOutBoxSubResponse> outList;
+   List<InboxOutBoxSubResponse> archivedList;
    List<InboxOutBoxSubResponse> approvedList;
    BudgetFinancialYear budgetFinancialYear;
    AllocationType allocationType;

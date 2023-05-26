@@ -215,8 +215,8 @@ public class DashboardServiceImpl implements DashBoardService {
             }
         } else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
             inboxOutboxesList =
-                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
-                            hrDataCheck.getUnitId(), "BG", "BR","0","0");
+                    mangeInboxOutBoxRepository.findByInboxData(
+                            hrDataCheck.getUnitId());
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
                 if (inboxOutboxesList.get(i).getToUnit().equalsIgnoreCase(hrDataCheck.getUnitId())) {
 
@@ -295,6 +295,7 @@ public class DashboardServiceImpl implements DashBoardService {
 
 
         List<MangeInboxOutbox> approvedListUnitWise = mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1");
+        List<MangeInboxOutbox> archiveWiseList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1");
 
 
         HashMap<String, CgUnit> cgunitData = new LinkedHashMap<>();
@@ -416,7 +417,7 @@ public class DashboardServiceImpl implements DashBoardService {
 
         dashBoardResponse.setInbox(inboxList.size() + "");
         dashBoardResponse.setApproved(approvedListUnitWise.size() + "");
-        dashBoardResponse.setArchived("0");
+        dashBoardResponse.setArchived(archiveWiseList.size() + "");
         dashBoardResponse.setOutBox(outBoxList.size() + "");
         return ResponseUtils.createSuccessResponse(
                 dashBoardResponse, new TypeReference<DashBoardResponse>() {
@@ -604,8 +605,8 @@ public class DashboardServiceImpl implements DashBoardService {
             }
         } else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
             inboxOutboxesList =
-                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgOrIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
-                            hrDataCheck.getUnitId(), "BG", "BR","0","0");
+                    mangeInboxOutBoxRepository.findByInboxData(
+                            hrDataCheck.getUnitId());
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
                 if (inboxOutboxesList.get(i).getToUnit().equalsIgnoreCase(hrDataCheck.getUnitId())) {
 
@@ -666,8 +667,15 @@ public class DashboardServiceImpl implements DashBoardService {
                 }
             }
         }
+
+
+        List<MangeInboxOutbox> approvedListUnitWise = mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1");
+        List<MangeInboxOutbox> archivedListUnitWise = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1");
+
         dashBoardResponse.setInbox(inboxList.size() + "");
         dashBoardResponse.setOutBox(outBoxList.size() + "");
+        dashBoardResponse.setArchived(archivedListUnitWise.size() + "");
+        dashBoardResponse.setApproved(approvedListUnitWise.size() + "");
         return ResponseUtils.createSuccessResponse(
                 dashBoardResponse, new TypeReference<DashBoardResponse>() {
                 });

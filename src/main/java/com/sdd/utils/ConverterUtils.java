@@ -85,19 +85,9 @@ public class ConverterUtils {
 
     }
 
-    public static long timeDiffer(Timestamp dateStart, Timestamp enddate) {
+    public static long timeDiffer(Date startDate, Date endDate) {
 
-
-        Date d1 = null;
-        Date d2 = null;
-        try {
-            d1 = new Date(dateStart.getTime());
-            d2 = new Date(enddate.getTime());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        long diff = d2.getTime() - d1.getTime();
+        long diff = endDate.getTime() - startDate.getTime();
 
         long diffDays = diff / (60 * 60 * 1000 * 24);
 

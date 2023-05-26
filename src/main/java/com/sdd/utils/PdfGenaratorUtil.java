@@ -1127,7 +1127,7 @@ public class PdfGenaratorUtil {
                 "of Hirring of Designer/Developer IT Manpower <span>(Project-SDOT)</span> through <span>" + cbReportResponse.getCbData().getVendorName() + " </span>vibe Invoiice/bill <span>" + cbReportResponse.getCbData().getInvoiceNO() + "</span>Dated <span>" + cbReportResponse.getCbData().getInvoiceDate() + "</span> </td>" +
                 "<td class=td> (INR) " + bill.toString() + "</td>" +
                 "</tr>" +
-                "<tr><td class=td></td><td class = td style=\"text-align: right\">GST 18%</td><td class=td> (INR)" + String.format("%.2f", gst) + "</td></tr>" +
+                "<tr><td class=td></td><td class = td style=\"text-align: right\">GST "+ cbReportResponse.getCbData().getGst() + " % </td><td class=td> (INR)" + String.format("%.2f", gst) + "</td></tr>" +
                 "<tr><td class=td></td><td class = td style=\"text-align: right\">TOTAL</td><td class=td>  (INR)" + cbReportResponse.getCurrentBillAmount() + "</td></tr>" +
                 "<tr>" +
                 "<td class=td colspan=3> Amount in words (Rupees  <span><b><u>" + convertDecimaltoString(cbReportResponse.getCurrentBillAmount()) + " only)</u></b></span> (Including GST)</td></tr>" + "</table>" +

@@ -1063,7 +1063,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
 
-            BudgetAllocationSubRequest budgetAllocationSaveRequest = budgetAllocationSaveRequestList.getBudgetRequest().get(i);
             if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId() == null || budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FINANCIAL YEAR CAN NOT BE BLANK");
             }
@@ -1107,6 +1106,31 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             if (amountUnit == null) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AMOUNT TYPE ID");
             }
+
+            if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId().equalsIgnoreCase(hrData.getUnitId())) {
+
+                BudgetAllocationSubRequest revisonData = budgetAllocationSaveRequestList.getBudgetRequest().get(i);
+
+                List<CdaTransAllocationRequest> cdaData = revisonData.getCdaParkingId();
+
+                for (Integer m = 0; m < cdaData.size(); m++) {
+
+                    if (cdaData.get(m).getCdaParkingId() == null || cdaData.get(m).getCdaParkingId().isEmpty()) {
+                        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA ID CAN NOT BE BLANK");
+                    }
+
+                    CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(cdaData.get(m).getCdaParkingId(), "0");
+                    if (cdaParkingTrans == null) {
+                        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CDA PARKING ID");
+                    }
+
+                    if (cdaData.get(m).getCdaAmount() == null || cdaData.get(m).getCdaAmount().isEmpty()) {
+                        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA AMOUNT CAN NOT BE BLANK");
+                    }
+                }
+
+            }
+
 
         }
 
@@ -1160,17 +1184,41 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
         for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
-            List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0");
 
-            for (Integer k = 0; k < budgetAllocationSaveRequestList.getBudgetRequest().size(); k++) {
+            List<CgUnit> cgUnitData = cgUnitRepository.findBySubUnitOrderByDescrAsc(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
 
-                CdaParkingTrans cdaParkingTrans = cdaParkingTransList.get(k);
+            if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId().equalsIgnoreCase(hrData.getUnitId())) {
 
-                cdaParkingTrans.setIsFlag("1");
-                cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                cdaParkingTransRepository.save(cdaParkingTrans);
+                BudgetAllocationSubRequest revisonData = budgetAllocationSaveRequestList.getBudgetRequest().get(i);
+                for (Integer m = 0; m < revisonData.getCdaParkingId().size(); m++) {
 
+                    CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(revisonData.getCdaParkingId().get(m).getCdaParkingId(), "0");
+                    AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+
+                    double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+
+                    AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(revisonData.getAmountTypeId());
+                    double parkingAmount = Double.parseDouble(revisonData.getCdaParkingId().get(m).getCdaAmount()) * amountUnit.getAmount();
+
+                    double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
+                    cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                    cdaParkingTransRepository.save(cdaParkingTrans);
+                }
+            } else {
+                for (Integer f = 0; f < cgUnitData.size(); f++) {
+                    List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), cgUnitData.get(f).getUnit(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0");
+
+                    for (Integer k = 0; k < cdaParkingTransList.size(); k++) {
+
+                        CdaParkingTrans cdaParkingTrans = cdaParkingTransList.get(k);
+                        cdaParkingTrans.setIsFlag("1");
+                        cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                        cdaParkingTransRepository.save(cdaParkingTrans);
+                    }
+                }
             }
+
+
         }
 
 
@@ -1273,9 +1321,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 cgUnitResponse.setAmountType(amountUnitRepository.findByAmountTypeId(cdaParkingCrAndDr.getAmountType()));
 
                 CdaParkingTrans cdaTransData = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(cdaParkingCrAndDr.getCdaParkingTrans(), "0");
-                cgUnitResponse.setRemainingAmount(ConverterUtils.addDecimalPoint(cdaTransData.getRemainingCdaAmount()));
-                cgUnitResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(cdaTransData.getTotalParkingAmount()));
-                cgUnitResponse.setAmountTypeMain(amountUnitRepository.findByAmountTypeId(cdaTransData.getAmountType()));
+                if (cdaTransData != null) {
+                    cgUnitResponse.setRemainingAmount(ConverterUtils.addDecimalPoint(cdaTransData.getRemainingCdaAmount()));
+                    cgUnitResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(cdaTransData.getTotalParkingAmount()));
+                    cgUnitResponse.setAmountTypeMain(amountUnitRepository.findByAmountTypeId(cdaTransData.getAmountType()));
+
+                }
 
                 data.add(cgUnitResponse);
             }
@@ -1364,8 +1415,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
-//      List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndAndIsFlagAndIsUpdate(allUnitData.get(s).getUnit(), budgetRivRequest.getBudgetFinancialYearId(), "0", "0");
         List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdInAndFinYearAndBudgetHeadIDAndIsFlagAndIsUpdateOrderByCbDateDesc(unitIds, budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), "0", "0");
+
 
         for (Integer k = 0; k < contigentBills.size(); k++) {
             expendure = expendure + Double.parseDouble(contigentBills.get(k).getCbAmount());
@@ -1385,9 +1436,19 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 res.setFlag(budgetAllocationsDetalis.get(m).getIsFlag());
                 res.setAmountType(amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(m).getAmountType()));
 
-                List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationsDetalis.get(m).getAllocationId(), "0");
-                res.setCdaTransData(cdaTransData);
+                List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationsDetalis.get(m).getAllocationId(), "0");
+                List<CdaFilterData> data = new ArrayList<>();
+                for (Integer b = 0; b < cdaParkingTrans.size(); b++) {
+                    CdaParkingTrans cdaParkingCrAndDr = cdaParkingTrans.get(b);
 
+                    CdaFilterData cgUnitResponse = new CdaFilterData();
+                    BeanUtils.copyProperties(cdaParkingCrAndDr, cgUnitResponse);
+                    cgUnitResponse.setGinNo(cdaParkingRepository.findByGinNo(cdaParkingCrAndDr.getGinNo()));
+                    cgUnitResponse.setAmountType(amountUnitRepository.findByAmountTypeId(cdaParkingCrAndDr.getAmountType()));
+                    data.add(cgUnitResponse);
+                }
+
+                res.setCdaTransData(data);
                 budgetRevision.add(res);
             }
 
@@ -1783,17 +1844,13 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                     budgetAllocationRepository.save(budgetAllocation);
                 }
-
-
             }
-
-
         }
 
         MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(budgetApproveRequest.getAuthGroupId(), hrData.getUnitId());
         if (mangeInboxOutbox != null) {
-            String toUnit = mangeInboxOutbox.getToUnit();
-            String fromUnit = mangeInboxOutbox.getFromUnit();
+//            String toUnit = mangeInboxOutbox.getToUnit();
+//            String fromUnit = mangeInboxOutbox.getFromUnit();
 //            mangeInboxOutbox.setFromUnit(toUnit);
 //            mangeInboxOutbox.setToUnit(fromUnit);
             mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
@@ -2179,6 +2236,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
             for (Integer m = 0; m < budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().size(); m++) {
+
+                if (budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId() == null || budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId().isEmpty()) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA ID CAN NOT BE BLANK");
+                }
+
                 CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId(), "0");
                 if (cdaParkingTrans == null) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CDA PARKING ID");
@@ -2421,6 +2483,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
             for (Integer m = 0; m < budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().size(); m++) {
+
+                if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId() == null || budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId().isEmpty()) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA ID CAN NOT BE BLANK");
+                }
+
+
                 CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId(), "0");
                 if (cdaParkingTrans == null) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CDA PARKING ID");
@@ -2574,11 +2642,10 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
-
         MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
 
         CgUnit cgToUnit = cgUnitRepository.findByUnit(type);
-        if(cgToUnit != null){
+        if (cgToUnit != null) {
             mangeInboxOutbox.setType(cgToUnit.getDescr());
         }
 

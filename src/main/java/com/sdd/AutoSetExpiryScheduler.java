@@ -3,6 +3,7 @@ package com.sdd;
 
 import com.sdd.entities.MangeInboxOutbox;
 import com.sdd.entities.repository.MangeInboxOutBoxRepository;
+import com.sdd.utils.ConverterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -30,11 +32,10 @@ public class AutoSetExpiryScheduler {
 
         List<MangeInboxOutbox> getAllMainFormData = mangeInboxOutBoxRepository.findAll();
 
-        System.out.println("scheduler running===============" + getAllMainFormData.size());
 
-        getAllMainFormData.parallelStream().forEach(s -> {
+        getAllMainFormData.parallelStream().forEach(inboxOutBoxMsg -> {
             try {
-                call(s);
+                call(inboxOutBoxMsg);
 
             } catch (Exception e) {
                 System.out.println("scheduler running===============" + e.toString());
@@ -44,9 +45,15 @@ public class AutoSetExpiryScheduler {
 
     }
 
-    public void call(MangeInboxOutbox str) throws IOException {
+    public void call(MangeInboxOutbox inboxOutbox) throws IOException {
 
-        System.out.println("scheduler working===============");
+
+        Date date =  inboxOutbox.getCreatedOn();
+        Date currentDate =  new Date();
+
+        long dayDiffer = ConverterUtils.timeDiffer(currentDate,date);
+
+        System.out.println("scheduler working==============="+dayDiffer);
 
     }
 
