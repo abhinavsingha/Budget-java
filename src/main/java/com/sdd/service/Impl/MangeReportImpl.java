@@ -2439,7 +2439,7 @@ public class MangeReportImpl implements MangeReportService {
             Double s2 = 0.0;
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(subHeadId, allocationType, "0", "1");
+                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(subHeadId, allocationType, "0", "0");
                 if (reportDetails.size() <= 0) {
                     return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                     }, "RECORD NOT FOUND OR EMPTY", HttpStatus.OK.value());
@@ -2460,7 +2460,10 @@ public class MangeReportImpl implements MangeReportService {
 
                     for (Integer k = 0; k < units.size(); k++) {
                         if (units.get(k).getUnit().equalsIgnoreCase(row.getToUnit())) {
-//                            amount = Double.valueOf(row.getBalanceAmount());
+                            if (row.getToUnit().equalsIgnoreCase(hrData.getUnitId())) {
+                                continue;
+                            }
+                            amount = Double.valueOf(row.getAllocationAmount());
                             if (row.getRevisedAmount() != null) {
                                 revisedAmount = Double.valueOf(row.getRevisedAmount());
                             } else
