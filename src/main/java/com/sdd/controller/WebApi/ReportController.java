@@ -113,10 +113,9 @@ public class ReportController {
 		return new ResponseEntity<>(mangeReportService.getUnitRebaseReport(fromDate,toDate), HttpStatus.OK);
 	}
 
-
-//	@GetMapping("/getConicalPath")
-//	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getConicalPath() {
-//		return new ResponseEntity<>(mangeReportService.getConicalPath(), HttpStatus.OK);
-//	}
+	@GetMapping("/getRevisedAllocationReport/{authGroupId}")
+	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getRevisedAllocationReport(@PathVariable(value = "authGroupId") String authGroupId )  {
+		return new ResponseEntity<>(mangeReportService.getRevisedAllocationReport(authGroupId), HttpStatus.OK);
+	}
 
 }

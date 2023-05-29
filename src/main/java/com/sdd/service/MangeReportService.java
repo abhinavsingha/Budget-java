@@ -39,11 +39,12 @@ public interface MangeReportService {
 
     ApiResponse<List<FilePathResponse>> getREAllocationReport(String finYearId,String allocationType, String amountTypeId);
 
-
     ApiResponse<List<FilePathResponse>> getBEREAllocationReport(String finYearId,String allocationTypeBE,String allocationTypeRE, String amountTypeId);
 
     ApiResponse<List<FilePathResponse>> getMainBEAllocationReport(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate);
 
     ApiResponse<List<FilePathResponse>> getUnitRebaseReport(String fromDate, String toDate);
+
+    ApiResponse<List<FilePathResponse>> getRevisedAllocationReport(String authGroupId);
 
 }

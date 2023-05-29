@@ -493,10 +493,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "TO_HEAD UNIT ID CAN NOT BE BLANK", HttpStatus.OK.value());
         }
-        if (req.getAllocationTypeId() == null || req.getAllocationTypeId().isEmpty()) {
-            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            }, "ALLOCATION TYPE ID CAN NOT BE BLANK", HttpStatus.OK.value());
-        }
+
         if (req.getUnitRebaseRequests().size() > 0) {
 
             for (Integer m = 0; m < req.getUnitRebaseRequests().size(); m++) {
@@ -524,6 +521,10 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 if (req.getUnitRebaseRequests().get(m).getLastCbDate() == null || req.getUnitRebaseRequests().get(m).getLastCbDate().isEmpty()) {
                     return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
                     }, "CB DATE CAN NOT BE BLANK", HttpStatus.OK.value());
+                }
+                if (req.getUnitRebaseRequests().get(m).getAllocationTypeId() == null || req.getUnitRebaseRequests().get(m).getAllocationTypeId().isEmpty()) {
+                    return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+                    }, "ALLOCATION TYPE ID CAN NOT BE BLANK", HttpStatus.OK.value());
                 }
             }
         }
@@ -579,13 +580,14 @@ public class MangeRebaseImpl implements MangeRebaseService {
         String frmStationId=req.getFrmStationId();
         String toStationId=req.getToStationId();
         String toHeadUnitId=req.getToHeadUnitId();
-        String allocTypeId=req.getAllocationTypeId();
+
 
         String refRensId = HelperUtils.getTransId();
         if(req.getUnitRebaseRequests().size()>0){
             for (Integer l = 0; l < req.getUnitRebaseRequests().size(); l++) {
                 BudgetRebase budgetRebase = new BudgetRebase();
                 String budHd=req.getUnitRebaseRequests().get(l).getBudgetHeadId();
+                String allocTypeId=req.getUnitRebaseRequests().get(l).getAllocationTypeId();
                 budgetRebase.setBudgetRebaseId(HelperUtils.getUnitRebased());
                 budgetRebase.setRefTransId(refRensId);
                 budgetRebase.setFinYear(finYear);
@@ -646,7 +648,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             budgetRebase.setToStationId(toStationId);
             budgetRebase.setToHeadUnitId(toHeadUnitId);
             budgetRebase.setOccuranceDate(ConverterUtils.convertDateTotimeStamp(occurrenceDate));
-            budgetRebase.setAllocTypeId(allocTypeId);
+            budgetRebase.setAllocTypeId(null);
             budgetRebase.setBudgetHeadId(null);
             budgetRebase.setAllocAmount(null);
             budgetRebase.setExpAmount(null);
