@@ -102,6 +102,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         }
 
         if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER)) {
+            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(),"1"));
+            archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
 
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG", "0", "0");
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
@@ -144,6 +146,13 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             }
         } else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG", "0", "0");
+
+            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(),"1"));
+            archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
+
+
+
+
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
 
                 if (inboxOutboxesList.get(i).getToUnit().equalsIgnoreCase(hrDataCheck.getUnitId())) {

@@ -35,7 +35,6 @@ public class CdaParkingTrans {
     @Column(name = "UNID_ID")
     private String unitId;
 
-
     @Column(name = "TOTAL_CDA_PARKING_AMOUNT")
     private String totalParkingAmount;
 

@@ -29,8 +29,10 @@ public interface MangeInboxOutBoxRepository extends JpaRepository<MangeInboxOutb
 
     List<MangeInboxOutbox> findByToUnitAndIsBgcgAndStatus(String toUnit, String bgcg, String status);
 
-    @Query(value="SELECT * FROM Budget.MangeInboxOutbox where TO_UNIT = ':rebaseUnitId' and IS_APPROVED = ':isApprov' AND IS_ARCHIVE = ':isArchv' AND (IS_BGCG = ':isBgC' OR IS_BGCG = ':isBgCg');",nativeQuery = true)
-    List<MangeInboxOutbox> findByInboxDataForAllRole(String rebaseUnitId,String isApprov,String isArchv,String isBgC,String isBgCg);
+//    @Query(value="SELECT * FROM Budget.MangeInboxOutbox where TO_UNIT = ':rebaseUnitId' and IS_APPROVED = ':isApprov' AND IS_ARCHIVE = ':isArchv' AND (IS_BGCG = ':isBgC' OR IS_BGCG = ':isBgCg');",nativeQuery = true)
+//    List<MangeInboxOutbox> findByInboxDataForAllRole(String rebaseUnitId,String isApprov,String isArchv,String isBgC,String isBgCg);
+
+    List<MangeInboxOutbox> findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(String rebaseUnitId,String isArchv,String isApprov,List<String> cgUnits);
 
 
 }

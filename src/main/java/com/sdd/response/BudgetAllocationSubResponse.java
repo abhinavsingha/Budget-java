@@ -38,7 +38,7 @@ public class BudgetAllocationSubResponse {
     private String userId;
     private Timestamp createdOn;
     private Timestamp updatedOn;
-
+    private String revisedAmount;
 
     private String isCDAparking;
     private List<CdaParkingTrans> cdaList;
