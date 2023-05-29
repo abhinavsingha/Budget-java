@@ -3867,13 +3867,13 @@ public class MangeReportImpl implements MangeReportService {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
                     }
                     CgUnit unitN = cgUnitRepository.findByUnit(RunitId);
-                    CgStation frmS= cgStationRepository.findByStationId(rebaseData.get(0).getFrmStationId());
+                    String frmS=rebaseData.get(0).getFrmStationId();
                     CgStation toS= cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
 
                     uName=unitN.getDescr();
                     Date rebaseDate=rebaseData.get(0).getOccuranceDate();
                     System.out.println("RBDATE" + rebaseDate);
-                    frmStation=frmS.getStationName();
+                    frmStation=frmS;
                     toStation=toS.getStationName();
                     sb1.append("<table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100% \">\t\t<tbody>\n" +
                             "\t\t\t<tr>\n" +
