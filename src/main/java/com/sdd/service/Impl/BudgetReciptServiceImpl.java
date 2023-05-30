@@ -391,7 +391,6 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
                 }
             }
 
-
             budgetAllocationReport.setAuthList(authorityTableList);
             budgetAllocationList.add(budgetAllocationReport);
 
@@ -524,6 +523,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         budgetAllocation.setAllocationTypeId(budgetReciptSaveRequest.getAllocationTypeId());
         budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getAllocationAmount()));
         budgetAllocation.setUnallocatedAmount("0");
+        budgetAllocation.setRevisedAmount("0");
         budgetAllocation.setIsFlag("0");
 //        budgetAllocation.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getAllocationAmount()));
         budgetAllocation.setUserId(hrData.getPid());

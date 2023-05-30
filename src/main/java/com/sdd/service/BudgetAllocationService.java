@@ -35,6 +35,8 @@ public interface BudgetAllocationService {
 
 	ApiResponse<List<CgUnitResponse>> getCgUnitData();
 
+	ApiResponse<List<CgUnitResponse>> getCgUnitWithoutMOD();
+
 	ApiResponse<List<CgUnitResponse>> getCgUnitDataForBudgetRecipt();
 
 	ApiResponse<BudgetAllocationResponse> budgetAllocationReport(BudgetAllocationReportRequest budgetAllocationReportRequest);

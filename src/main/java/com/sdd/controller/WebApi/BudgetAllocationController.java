@@ -73,6 +73,13 @@ public class BudgetAllocationController {
         return new ResponseEntity<>(budgetAllocationService.getCgUnitData(), HttpStatus.OK);
     }
 
+    @GetMapping("/getCgUnitWithoutMOD")
+    public ResponseEntity<ApiResponse<List<CgUnitResponse>>> getCgUnitWithoutMOD() {
+        return new ResponseEntity<>(budgetAllocationService.getCgUnitWithoutMOD(), HttpStatus.OK);
+    }
+
+
+
     @GetMapping("/getCgUnitDataWithPurposeCode")
     public ResponseEntity<ApiResponse<List<CgUnitResponse>>> getCgUnitDataWithPurposeCode() {
         return new ResponseEntity<>(budgetAllocationService.getCgUnitDataWithPurposeCode(), HttpStatus.OK);

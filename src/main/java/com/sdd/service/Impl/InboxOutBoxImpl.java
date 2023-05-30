@@ -105,7 +105,14 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(),"1"));
             archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
 
-            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG", "0", "0");
+
+            List<String> dataIscgBg =  new ArrayList<>();
+            dataIscgBg.add("BG");
+            dataIscgBg.add("BR");
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
+
+
+
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
 
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("AP")) {
@@ -145,7 +152,12 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
             }
         } else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
-            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG", "0", "0");
+//            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG", "0", "0");
+
+            List<String> dataIscgBg =  new ArrayList<>();
+            dataIscgBg.add("BG");
+            dataIscgBg.add("BR");
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
 
             approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(),"1"));
             archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));

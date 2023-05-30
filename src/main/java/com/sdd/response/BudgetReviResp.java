@@ -18,6 +18,7 @@ public class BudgetReviResp {
     private String expenditureAmount;
     private AmountUnit amountType;
     private String status;
+    private String revisedAmount;
     private String flag;
     List<CdaFilterData> cdaTransData;
 
