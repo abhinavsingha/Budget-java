@@ -36,6 +36,15 @@ public class ReportController {
 	}
 
 
+
+	@GetMapping("/getAllocationReportDoc/{authgroupId}")
+	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getAllocationReportDoc(@PathVariable("authgroupId") String authgroupId) {
+		return new ResponseEntity<>(mangeReportService.getAllocationReportDoc(authgroupId), HttpStatus.OK);
+	}
+
+
+
+
 	@PostMapping("/getAllocationReportRevised")
 	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getAllocationReportRevised(@RequestBody ReportRequest reportRequest) {
 		return new ResponseEntity<>(mangeReportService.getAllocationReportRevised(reportRequest), HttpStatus.OK);

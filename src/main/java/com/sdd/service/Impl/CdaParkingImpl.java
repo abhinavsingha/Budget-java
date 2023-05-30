@@ -246,6 +246,7 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingTransResponse.setTotalParkingAmount(ConverterUtils.addDecimalPoint(cdaParkingTrans.get(i).getTotalParkingAmount()));
             cdaParkingTransResponse.setUpdatedOn(cdaParkingTrans.get(i).getUpdatedOn());
             cdaParkingTransResponse.setUnitId(cdaParkingTrans.get(i).getUnitId());
+            cdaParkingTransResponse.setTransactionId(cdaParkingTrans.get(i).getTransactionId());
             cdaParkingTransResponse.setAmountUnit(amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(i).getAmountType()));
             cdaParkingTransResponse.setCreatedOn(cdaParkingTrans.get(i).getCreatedOn());
             cdaParkingTransResponse.setAuthGroupId(cdaParkingTrans.get(i).getAuthGroupId());
@@ -312,6 +313,7 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingTransResponse.setRemainingCdaAmount(cdaParkingTrans.get(i).getRemainingCdaAmount());
             cdaParkingTransResponse.setTotalParkingAmount(ConverterUtils.addDecimalPoint(cdaParkingTrans.get(i).getTotalParkingAmount()));
             cdaParkingTransResponse.setUpdatedOn(cdaParkingTrans.get(i).getUpdatedOn());
+            cdaParkingTransResponse.setTransactionId(cdaParkingTrans.get(i).getTransactionId());
             cdaParkingTransResponse.setCreatedOn(cdaParkingTrans.get(i).getCreatedOn());
             cdaParkingTransResponse.setAmountUnit(amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(i).getAmountType()));
             cdaParkingTransResponse.setAuthGroupId(cdaParkingTrans.get(i).getAuthGroupId());
@@ -361,6 +363,11 @@ public class CdaParkingImpl implements CdaParkingService {
 
             if (cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount() == null || cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AVAILABLE AMOUNT CAN NOT BE BLANK");
+            }
+
+
+            if (cdaRequest.getCdaRequest().get(i).getTransactionId() == null || cdaRequest.getCdaRequest().get(i).getTransactionId().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TRANSACTION ID AMOUNT CAN NOT BE BLANK");
             }
 
 
@@ -429,6 +436,7 @@ public class CdaParkingImpl implements CdaParkingService {
         for (Integer i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
 
 
+
             CdaParkingTrans cdaParkingTrans = new CdaParkingTrans();
             cdaParkingTrans.setCdaParkingId(HelperUtils.getCdaId());
             cdaParkingTrans.setFinYearId(cdaRequest.getCdaRequest().get(i).getBudgetFinancialYearId());
@@ -442,6 +450,8 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingTrans.setAllocTypeId(cdaRequest.getCdaRequest().get(i).getAllocationTypeID());
             cdaParkingTrans.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             cdaParkingTrans.setAuthGroupId(authGroupId);
+            cdaParkingTrans.setTransactionId(cdaRequest.getCdaRequest().get(i).getTransactionId());
+            cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()));
             cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
 
             CdaParkingTrans saveCdaData = cdaParkingTransRepository.save(cdaParkingTrans);

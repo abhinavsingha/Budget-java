@@ -31,6 +31,7 @@ public class CdaParkingTransSubResponse {
     private String authGroupId;
     private Timestamp createdOn;
     private Timestamp updatedOn;
+    private String transactionId;
     private List<AuthorityTableResponse> authList;
 
 }
