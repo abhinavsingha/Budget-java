@@ -8,6 +8,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.sdd.response.CDAReportResponse;
 import com.sdd.response.CDAReportSubResponse;
 import com.sdd.response.CbReportResponse;
+import com.sdd.response.FilePathResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -29,7 +30,7 @@ public class PdfGenaratorUtil {
     private static final String UTF_8 = "UTF-8";
 
     @SuppressWarnings("rawtypes")
-    public void createPdfAllocation(String templateName, HashMap<String, List<ReportSubModel>> map, File outputFile) throws Exception {
+    public void createPdfAllocation(String templateName, HashMap<String, List<ReportSubModel>> map, File outputFile, FilePathResponse filePathResponse) throws Exception {
         Assert.notNull(templateName, "The templateName can not be null");
         StringBuilder allHtml = new StringBuilder();
 
@@ -46,21 +47,22 @@ public class PdfGenaratorUtil {
                 String row = "";
                 if (i == 0) {
                     row = "<td>" + tabData.get(i).getUnit() + "</td>" +
-                            "<td>" + ConverterUtils.addDecimalPoint(tabData.get(i).getAmount()) + " (In " + tabData.get(i).getAmountType() + ") " + " </td>" +
+                            "<td>" + ConverterUtils.addDecimalPoint(tabData.get(i).getAmount()) +  " </td>" +
+//                            "<td>" + ConverterUtils.addDecimalPoint(tabData.get(i).getAmount()) + " (In " + tabData.get(i).getAmountType() + ") " + " </td>" +
                             "</tr>";
                 } else {
                     row = " <th scope=row class=bbtm> </th>" +
                             "<td>" + tabData.get(i).getUnit() + "</td>" +
-                            "<td>" + ConverterUtils.addDecimalPoint(tabData.get(i).getAmount()) + " (In " + tabData.get(i).getAmountType() + ") " + " </td>" +
+                            "<td>" + ConverterUtils.addDecimalPoint(tabData.get(i).getAmount()) + " </td>" +
                             "</tr>";
                 }
                 tototalAmount = tototalAmount + Double.parseDouble(tabData.get(i).getAmount());
                 addAllHtml = addAllHtml.append(row);
 
             }
-            String total = "<tr> <th scope=row></th>" +
-                    "<td>TOTAL </td>" +
-                    "<td>" + ConverterUtils.addDecimalPoint(tototalAmount+"") + "</td>" +
+            String total = "<tr> <th scope=row class=bbtm>Total Amount" +
+                    "<td> </td>" +
+                    "<td>" + ConverterUtils.addDecimalPoint(tototalAmount + "") + "</td></th>" +
                     "</tr>";
 
             String sdfgh = data + addAllHtml + total;
@@ -79,8 +81,8 @@ public class PdfGenaratorUtil {
                 "border-bottom: 1px solid transparent !important;" +
                 "}" +
                 ".wrapper{" +
-                "width: 90%;" +
-                "margin: 100px auto;" +
+                "width: 80%;" +
+                "margin: 50px auto;" +
                 "}" + ":root {" +
                 "--bg-table-stripe: #f6f6f5;" +
                 "--b-table: #e3e3e2;" +
@@ -105,11 +107,11 @@ public class PdfGenaratorUtil {
                 "  font-weight: 700;" +
                 "  padding-bottom: .56rem" +
                 "}" + ".dcf-table thead {" +
-                "  font-size: .84em" +
+                "  font-size: .60em" +
                 "}" + ".dcf-table tbody {" +
                 "  border-bottom: 1px solid var(--b-table);" +
                 "  border-top: 1px solid var(--b-table);" +
-                "  font-size: .84em" +
+                "  font-size: .60em" +
                 "}" + ".dcf-table tfoot {" +
                 "  font-size: .84em" +
                 "}" + ".dcf-table td, .dcf-table th {" +
@@ -207,14 +209,17 @@ public class PdfGenaratorUtil {
                 "<tr>" +
                 "<th scope=col>SUB HEAD </th>" +
                 "<th class=dcf-txt-center scope=col>UNIT NAME</th>" +
-                "<th class=dcf-txt-center scope=col>ALLOCATION</th>" +
+                "<th class=dcf-txt-center scope=col>" + filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")  </th>" +
                 "</tr>" +
                 "</thead>" +
                 "<tbody>";
 
 
         String closeFooter = "</tbody>" +
-                "</table>" +
+                "</table> <br><br>" +
+                "<div class=sign>" +
+                "<div class=div1 style=\"text-align:right;font-size:13px;\">" + filePathResponse.getApproveName() + "</div>" + "<div class=div2 style=\"text-align:right;font-size:13px;\" > " + filePathResponse.getApproveRank() + "" +
+                "</div>" +
                 "<div>" +
                 "</div>" +
                 "</div>" + "</body>" +
@@ -1127,7 +1132,7 @@ public class PdfGenaratorUtil {
                 "of Hirring of Designer/Developer IT Manpower <span>(Project-SDOT)</span> through <span>" + cbReportResponse.getCbData().getVendorName() + " </span>vibe Invoiice/bill <span>" + cbReportResponse.getCbData().getInvoiceNO() + "</span>Dated <span>" + cbReportResponse.getCbData().getInvoiceDate() + "</span> </td>" +
                 "<td class=td> (INR) " + bill.toString() + "</td>" +
                 "</tr>" +
-                "<tr><td class=td></td><td class = td style=\"text-align: right\">GST "+ cbReportResponse.getCbData().getGst() + " % </td><td class=td> (INR)" + String.format("%.2f", gst) + "</td></tr>" +
+                "<tr><td class=td></td><td class = td style=\"text-align: right\">GST " + cbReportResponse.getCbData().getGst() + " % </td><td class=td> (INR)" + String.format("%.2f", gst) + "</td></tr>" +
                 "<tr><td class=td></td><td class = td style=\"text-align: right\">TOTAL</td><td class=td>  (INR)" + cbReportResponse.getCurrentBillAmount() + "</td></tr>" +
                 "<tr>" +
                 "<td class=td colspan=3> Amount in words (Rupees  <span><b><u>" + convertDecimaltoString(cbReportResponse.getCurrentBillAmount()) + " only)</u></b></span> (Including GST)</td></tr>" + "</table>" +

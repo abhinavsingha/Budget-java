@@ -16,10 +16,17 @@ public class FilePathResponse {
    String path;
    String fileName;
    String finYear;
+   String amountType;
    String unit;
    String SubHead;
    String type;
    String remark;
    HashMap<String, List<CDAReportResponse>> allCdaData;
+
+
+
+   String approveName;
+   String approveRank;
+
 
 }

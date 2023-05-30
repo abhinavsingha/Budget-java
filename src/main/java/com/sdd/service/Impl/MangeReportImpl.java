@@ -93,7 +93,7 @@ public class MangeReportImpl implements MangeReportService {
     private ContigentBillRepository contigentBillRepository;
 
     @Autowired
-    private  BudgetRebaseRepository budgetRebaseRepository;
+    private BudgetRebaseRepository budgetRebaseRepository;
 
     @Autowired
     private CgStationRepository cgStationRepository;
@@ -127,7 +127,7 @@ public class MangeReportImpl implements MangeReportService {
 
             if (hashMap.containsKey(budgetHead.getSubHeadDescr())) {
 
-                List<ReportSubModel> reportMaindata = hashMap.get(budgetAllocationReport.get(j).getSubHead());
+                List<ReportSubModel> reportMaindata = hashMap.get(budgetHead.getSubHeadDescr());
                 ReportSubModel subModel = new ReportSubModel();
                 subModel.setType(budgetAllocationReport.get(j).getAllocationTypeId());
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
@@ -159,11 +159,40 @@ public class MangeReportImpl implements MangeReportService {
             List<ReportSubModel> tabData = entry.getValue();
             FilePathResponse filePathResponse = new FilePathResponse();
 
-            filePathResponse.setFinYear(tabData.get(0).getFinYear());
+
+            List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+            if (hrDataList.size() == 0) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+            }
+
+            String approverPId = "";
+
+            for (Integer k = 0; k < hrDataList.size(); k++) {
+                HrData findHrData = hrDataList.get(k);
+                if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                    approverPId = findHrData.getPid();
+                    filePathResponse.setApproveName(findHrData.getFullName());
+                    filePathResponse.setApproveRank(findHrData.getRank());
+                }
+            }
+
+            if (approverPId.isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO APPROVE ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
+            }
+
+
+            AllocationType allocationType =  allocationRepository.findByAllocTypeId(tabData.get(0).getType());
+            BudgetFinancialYear budgetFinancialYear =  budgetFinancialYearRepository.findBySerialNo(tabData.get(0).getFinYear());
+
+
+
+            filePathResponse.setFinYear(budgetFinancialYear.getFinYear());
             filePathResponse.setUnit(tabData.get(0).getUnit());
             filePathResponse.setSubHead(key);
-            filePathResponse.setType(tabData.get(0).getType());
+            filePathResponse.setType(allocationType.getAllocDesc());
+            filePathResponse.setAmountType(tabData.get(0).getAmountType());
             filePathResponse.setRemark(tabData.get(0).getRemark());
+
 
             try {
                 String templateName = "allocation-report.html";
@@ -173,7 +202,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                 File file = new File(filePath);
-                pdfGenaratorUtil.createPdfAllocation(templateName, hashMap, file);
+                pdfGenaratorUtil.createPdfAllocation(templateName, hashMap, file, filePathResponse);
                 filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                 filePathResponse.setFileName(fileName);
                 dtoList.add(filePathResponse);
@@ -3513,7 +3542,7 @@ public class MangeReportImpl implements MangeReportService {
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
 
-        String amountTypeId="101";
+        String amountTypeId = "101";
 
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
@@ -3558,8 +3587,8 @@ public class MangeReportImpl implements MangeReportService {
         LocalDateTime localDateTime = LocalDateTime.of(resultDt, LocalTime.MIDNIGHT);
         Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
 
-        List<String> groupUnitId=budgetRebaseRepository.findGroupRebaseUnit();
-        if(groupUnitId.size()<=0){
+        List<String> groupUnitId = budgetRebaseRepository.findGroupRebaseUnit();
+        if (groupUnitId.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "DATA NOT FOUND FROM DB", HttpStatus.OK.value());
         }
@@ -3568,7 +3597,7 @@ public class MangeReportImpl implements MangeReportService {
         try {
             //htmlContent = FileUtils.readFileToString(new File("src/main/resources/templates/be-allocation-report.html"), "UTF-8");
             //htmlContent = FileUtils.readFileToString(new File(new File(".").getCanonicalPath()+"/webapps/budget/WEB-INF/classes/templates/be-allocation-report"), "UTF-8");
-            htmlContent ="<!DOCTYPE html>\n" +
+            htmlContent = "<!DOCTYPE html>\n" +
                     "<html lang=\"en\">\n" +
                     "<head>\n" +
                     "    <title>Report</title>\n" +
@@ -3835,46 +3864,46 @@ public class MangeReportImpl implements MangeReportService {
                     "</body>\n" +
                     "</html>\n";
             StringBuilder sb = new StringBuilder();
-            StringBuilder sb1=new StringBuilder();
+            StringBuilder sb1 = new StringBuilder();
 
             int i = 1;
             String finyear = "";
             String unit = "";
 
-            String RunitId="";
-            String uName="";
-            String frmStation="";
-            String toStation="";
-            String finYear="";
-            String subHead="";
-            String headCodeId="";
+            String RunitId = "";
+            String uName = "";
+            String frmStation = "";
+            String toStation = "";
+            String finYear = "";
+            String subHead = "";
+            String headCodeId = "";
             Double allocAmount;
             Double expAmount;
             Double balAmount;
             Date LastCbD;
-            String val="";
+            String val = "";
             Double amountUnit;
             AllocationType allocType;
-            if(groupUnitId.size()>0) {
-                int count=1;
+            if (groupUnitId.size() > 0) {
+                int count = 1;
                 for (String ids : groupUnitId) {
 
-                    RunitId=ids;
-                    List<BudgetRebase> rebaseDatas=budgetRebaseRepository.findByRebaseUnitId(RunitId);
+                    RunitId = ids;
+                    List<BudgetRebase> rebaseDatas = budgetRebaseRepository.findByRebaseUnitId(RunitId);
                     List<BudgetRebase> rebaseData = rebaseDatas.stream()
                             .filter(e -> e.getOccuranceDate().after(fromDateFormate) && e.getOccuranceDate().before(toDateFormate)).collect(Collectors.toList());
-                    if(rebaseData.size()<=0){
+                    if (rebaseData.size() <= 0) {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
                     }
                     CgUnit unitN = cgUnitRepository.findByUnit(RunitId);
-                    String frmS=rebaseData.get(0).getFrmStationId();
-                    CgStation toS= cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
+                    String frmS = rebaseData.get(0).getFrmStationId();
+                    CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
 
-                    uName=unitN.getDescr();
-                    Date rebaseDate=rebaseData.get(0).getOccuranceDate();
+                    uName = unitN.getDescr();
+                    Date rebaseDate = rebaseData.get(0).getOccuranceDate();
                     System.out.println("RBDATE" + rebaseDate);
-                    frmStation=frmS;
-                    toStation=toS.getStationName();
+                    frmStation = frmS;
+                    toStation = toS.getStationName();
                     sb1.append("<table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100% \">\t\t<tbody>\n" +
                             "\t\t\t<tr>\n" +
                             "\t\t\t\t<th class=\"dcf-txt-left\">Unit Name</th>\n" +
@@ -3903,35 +3932,35 @@ public class MangeReportImpl implements MangeReportService {
                             "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Last CB Date</th>\n" +
                             "\t\t</tr>\n" +
                             "\t</thead>\n" +
-                            "\t<tbody>\n"+
+                            "\t<tbody>\n" +
                             "\t\t\t${data_placeholder}\n" +
                             "\t</tbody>\n" +
                             "</table>\n");
-                    val=val+"\n"+"Serial No: "+(count++)+"\n"+sb1.toString();
-                    sb1=new StringBuilder();
+                    val = val + "\n" + "Serial No: " + (count++) + "\n" + sb1.toString();
+                    sb1 = new StringBuilder();
                     for (Integer k = 0; k < rebaseData.size(); k++) {
                         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(rebaseData.get(k).getFinYear());
                         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(rebaseData.get(k).getBudgetHeadId());
                         AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(rebaseData.get(k).getAmountType());
-                        allocType=allocationRepository.findByAllocTypeId(rebaseData.get(k).getAllocTypeId());
+                        allocType = allocationRepository.findByAllocTypeId(rebaseData.get(k).getAllocTypeId());
                         if (amountTypeObj == null) {
                             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                             }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                         }
                         amountUnit = amountTypeObj.getAmount();
-                        finYear=findyr.getFinYear();
-                        subHead=bHead.getSubHeadDescr();
-                        headCodeId=bHead.getBudgetHeadId();
-                        Double aAmount=Double.valueOf(rebaseData.get(k).getAllocAmount());
-                        Double eAmount=Double.valueOf(rebaseData.get(k).getExpAmount());
-                        Double bAmount=Double.valueOf(rebaseData.get(k).getBalAmount());
-                        LastCbD=rebaseData.get(k).getLastCbDate();
+                        finYear = findyr.getFinYear();
+                        subHead = bHead.getSubHeadDescr();
+                        headCodeId = bHead.getBudgetHeadId();
+                        Double aAmount = Double.valueOf(rebaseData.get(k).getAllocAmount());
+                        Double eAmount = Double.valueOf(rebaseData.get(k).getExpAmount());
+                        Double bAmount = Double.valueOf(rebaseData.get(k).getBalAmount());
+                        LastCbD = rebaseData.get(k).getLastCbDate();
                         allocAmount = aAmount * amountUnit / reqAmount;
                         expAmount = eAmount * amountUnit;
                         balAmount = bAmount * amountUnit / reqAmount;
 
                         sb.append("<tr>");
-                        sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(finYear+" "+allocType.getAllocDesc())).append("</td>");
+                        sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(finYear + " " + allocType.getAllocDesc())).append("</td>");
                         sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(subHead)).append("</td>");
                         //sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(headCodeId)).append("</td>");
                         sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(allocAmount)))).append("</td>");
@@ -3940,8 +3969,8 @@ public class MangeReportImpl implements MangeReportService {
                         sb.append("<td class=\"dcf-txt-left\">").append(LastCbD).append("</td>");
                         sb.append("</tr>");
                     }
-                    val=val.replace("${data_placeholder}",sb.toString());
-                    sb=new StringBuilder();
+                    val = val.replace("${data_placeholder}", sb.toString());
+                    sb = new StringBuilder();
                 }
             }
 
@@ -3953,12 +3982,12 @@ public class MangeReportImpl implements MangeReportService {
             htmlContent = htmlContent.replace("${upToDate_placeholder}", StringEscapeUtils.escapeHtml4(formattedDate));
             htmlContent = htmlContent.replace("${finYear_placeholder}", StringEscapeUtils.escapeHtml4(finYear));
             htmlContent = htmlContent.replace("${amountType_placeholder}", StringEscapeUtils.escapeHtml4(amountIn));
-            String filepath = HelperUtils.FILEPATH +"/"+"Rebase_Report.pdf";
+            String filepath = HelperUtils.FILEPATH + "/" + "Rebase_Report.pdf";
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String filePath = folder.getAbsolutePath()+"/"+"Rebase_Report.pdf";
+            String filePath = folder.getAbsolutePath() + "/" + "Rebase_Report.pdf";
             File file = new File(filePath);
             generatePdf(htmlContent, file.getAbsolutePath());
             //generatePdf(htmlContent, filepath);
@@ -3974,7 +4003,6 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
     }
-
 
 
     @Override
@@ -4327,14 +4355,14 @@ public class MangeReportImpl implements MangeReportService {
             String amountTypeId = "";
             String allocTypes = "";
             Double amount = Double.valueOf(0);
-            String amountUnit="";
+            String amountUnit = "";
             Double finAmount;
             Double revisedAmount;
             Double reAmount;
             Double s2 = 0.0;
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocationDetails> reportDetails = budgetAllocationDetailsRepository.findByAuthGroupIdAndSubHeadAndIsDelete(authGroupId,subHeadId,"0");
+                List<BudgetAllocationDetails> reportDetails = budgetAllocationDetailsRepository.findByAuthGroupIdAndSubHeadAndIsDelete(authGroupId, subHeadId, "0");
                 if (reportDetails.size() <= 0) {
                     return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                     }, "RECORD NOT FOUND OR EMPTY", HttpStatus.OK.value());
@@ -4356,37 +4384,37 @@ public class MangeReportImpl implements MangeReportService {
                     BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(row.getFinYear());
                     AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
                     CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
-                    allocTypes=allockData.getAllocType();
-                    finyear=findyr.getFinYear();
+                    allocTypes = allockData.getAllocType();
+                    finyear = findyr.getFinYear();
                     amountUnit = amountTypeObj.getAmountType();
 
-                            amount = Double.valueOf(row.getAllocationAmount());
-                            if (row.getRevisedAmount() != null) {
-                                revisedAmount = Double.valueOf(row.getRevisedAmount());
-                            } else
-                                revisedAmount = 0.0;
+                    amount = Double.valueOf(row.getAllocationAmount());
+                    if (row.getRevisedAmount() != null) {
+                        revisedAmount = Double.valueOf(row.getRevisedAmount());
+                    } else
+                        revisedAmount = 0.0;
 
-                            finAmount = amount;
-                            reAmount = revisedAmount;
-                            String s = reAmount.toString();
-                            if (s.contains("-")) {
-                                String s1 = s.replace("-", "");
-                                s2 = Double.parseDouble(s1);
-                            }
+                    finAmount = amount;
+                    reAmount = revisedAmount;
+                    String s = reAmount.toString();
+                    if (s.contains("-")) {
+                        String s1 = s.replace("-", "");
+                        s2 = Double.parseDouble(s1);
+                    }
 
-                            sb.append("<tr>");
-                            sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(unitN.getDescr())).append("</td>");
-                            sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(finAmount)))).append("</td>");
-                            if (reAmount < 0)
-                                sb.append("<td class=\"the\">(-)").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(s2)))).append("</td>");
-                            else if (reAmount > 0)
-                                sb.append("<td class=\"the\"> (+)").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(reAmount)))).append("</td>");
-                            else
-                                sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(reAmount)))).append("</td>");
-                            sb.append("<td class=\"the\">").append(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Double.toString(finAmount)) + Float.parseFloat(Double.toString(reAmount))))))).append("</td>");
-                            sb.append("</tr>");
-                            sumExisting += Float.parseFloat(new BigDecimal(Double.toString(finAmount)).toPlainString());
-                            sumRE += Float.parseFloat(new BigDecimal(Double.toString(reAmount)).toPlainString());
+                    sb.append("<tr>");
+                    sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(unitN.getDescr())).append("</td>");
+                    sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(finAmount)))).append("</td>");
+                    if (reAmount < 0)
+                        sb.append("<td class=\"the\">(-)").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(s2)))).append("</td>");
+                    else if (reAmount > 0)
+                        sb.append("<td class=\"the\"> (+)").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(reAmount)))).append("</td>");
+                    else
+                        sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(reAmount)))).append("</td>");
+                    sb.append("<td class=\"the\">").append(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Double.toString(finAmount)) + Float.parseFloat(Double.toString(reAmount))))))).append("</td>");
+                    sb.append("</tr>");
+                    sumExisting += Float.parseFloat(new BigDecimal(Double.toString(finAmount)).toPlainString());
+                    sumRE += Float.parseFloat(new BigDecimal(Double.toString(reAmount)).toPlainString());
                 }
                 total = sumExisting + sumRE;
                 Double ss2 = 0.0;
@@ -4418,12 +4446,12 @@ public class MangeReportImpl implements MangeReportService {
 
 
             htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
-            String filepath = HelperUtils.FILEPATH +"/"+"Rivision_Allocation-Report.pdf";
+            String filepath = HelperUtils.FILEPATH + "/" + "Rivision_Allocation-Report.pdf";
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String filePath = folder.getAbsolutePath() + "/"+"Rivision_Allocation-Report.pdf";
+            String filePath = folder.getAbsolutePath() + "/" + "Rivision_Allocation-Report.pdf";
             File file = new File(filePath);
             generatePdf(htmlContent, file.getAbsolutePath());
             //generatePdf(htmlContent, filepath);

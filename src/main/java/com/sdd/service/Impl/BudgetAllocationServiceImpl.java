@@ -375,7 +375,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             } else {
 
 
-                if(!unitDataList.get(n).getDescr().equalsIgnoreCase("MOD")){
+                if (!unitDataList.get(n).getDescr().equalsIgnoreCase("MOD")) {
                     BeanUtils.copyProperties(unitDataList.get(n), cgUnitResponse);
                     CgStation cgStation = null;
                     if (unitDataList.get(n).getStationId() == null) {
@@ -1030,11 +1030,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
-
-
-
-
-
         List<BudgetAllocationSubResponse> oldRevision = new ArrayList<BudgetAllocationSubResponse>();
 
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
@@ -1108,11 +1103,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 }
             }
         }
-
-
-
-
-
 
 
         Collections.sort(budgetAllocationList, new Comparator<BudgetAllocationSubResponse>() {
@@ -2692,10 +2682,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO UNIT CAN NOT BE BLANK");
             }
 
-            if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId() == null || budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().isEmpty() || budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().size() == 0) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA ID CAN NOT BE BLANK");
-            }
-
 
             AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
             if (amountUnit == null) {
@@ -2751,10 +2737,13 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             }
 
 
-            List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), hrData.getUnitId(), "0");
+            double totalAMount = Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount());
 
-            if (cdaParkingList.size() <= 0) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "PLEASE ADD CDA IN BUDGET RECEIPT.THAN TRY AGAIN");
+            if (totalAMount > 0) {
+                List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), hrData.getUnitId(), "0");
+                if (cdaParkingList.size() <= 0) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "PLEASE ADD CDA IN BUDGET RECEIPT.THAN TRY AGAIN");
+                }
             }
 
         }
@@ -3454,9 +3443,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         String authgroupid = authRequest.getAuthGroupId();
 
 
-        HashMap<String ,BudgetAllocationDetails> totalUnit  = new HashMap<String ,BudgetAllocationDetails>();
+        HashMap<String, BudgetAllocationDetails> totalUnit = new HashMap<String, BudgetAllocationDetails>();
         for (Integer i = 0; i < budgetAllocationDetailsList.size(); i++) {
-            totalUnit.put(budgetAllocationDetailsList.get(i).getToUnit(),budgetAllocationDetailsList.get(i));
+            totalUnit.put(budgetAllocationDetailsList.get(i).getToUnit(), budgetAllocationDetailsList.get(i));
         }
 
         for (Map.Entry<String, BudgetAllocationDetails> entry : totalUnit.entrySet()) {
