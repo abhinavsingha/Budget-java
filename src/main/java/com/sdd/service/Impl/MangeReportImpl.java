@@ -3022,7 +3022,7 @@ public class MangeReportImpl implements MangeReportService {
                     "        <tr>\n" +
                     "            <th scope=\"col\">REVENUE OBJECT HEAD </th>\n" +
                     "            <th class=\"dcf-txt-center\" scope=\"col\"> UNIT </th>\n" +
-                    "            <th class=\"dcf-txt-center\" scope=\"col\">${allocationType_placeholder}  ${finYear_placeholder} ALLOCATION(IN (in ${amountType_placeholder}))</th>\n" +
+                    "            <th class=\"dcf-txt-center\" scope=\"col\">${allocationType_placeholder}  ${finYear_placeholder} ALLOCATION (in ${amountType_placeholder})</th>\n" +
                     "        </tr>\n" +
                     "        </thead>\n" +
                     "        <tbody>\n" +
@@ -4969,9 +4969,9 @@ public class MangeReportImpl implements MangeReportService {
                             "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Financial Year and Allocation </th>\n" +
                             "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Sub Head</th>\n" +
                             //"\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Code head</th>\n" +
-                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Allocated: (${amountType_placeholder})</th>\n" +
+                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Allocated: In (${amountType_placeholder})</th>\n" +
                             "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Expenditure: </th>\n" +
-                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Balance: (${amountType_placeholder})</th>\n" +
+                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Balance: In (${amountType_placeholder})</th>\n" +
                             "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Last CB Date</th>\n" +
                             "\t\t</tr>\n" +
                             "\t</thead>\n" +
@@ -5642,15 +5642,16 @@ public class MangeReportImpl implements MangeReportService {
                 XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
                 boldText(paragraphtableRowOne.createRun(), 10, "UNIT NAME", true);
 
-                XWPFParagraph paragraphtableRowOne1 =tableRowOne.getCell(1).addParagraph();
-                boldText(paragraphtableRowOne1.createRun(), 10, unitN.getDescr(), true);
+                XWPFParagraph paragraphtableRowOne1 =tableRowOne.getCell(0).addParagraph();
+                boldText(paragraphtableRowOne1.createRun(), 10, "unitN.getDescr()", true);
 
-                XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
+                XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(0).addParagraph();
                 boldText(paragraphtableRowOne2.createRun(), 10, "FROM STATION", true);
 
-                XWPFParagraph paragraphtableRowOne3 = tableRowOne.getCell(3).addParagraph();
+                XWPFParagraph paragraphtableRowOne3 = tableRowOne.getCell(0).addParagraph();
                 boldText(paragraphtableRowOne3.createRun(), 10, rebaseData.get(0).getFrmStationId(), true);
 
+/*
 
                 XWPFTableRow tableRow11 = table.createRow();
 
@@ -5666,6 +5667,7 @@ public class MangeReportImpl implements MangeReportService {
                 XWPFParagraph qadr = tableRow11.getCell(3).addParagraph();
                 normalText(qadr.createRun(), 10, "ta)", false);
 
+*/
 
 
 
