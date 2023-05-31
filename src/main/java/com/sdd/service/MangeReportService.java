@@ -6,6 +6,7 @@ import com.sdd.request.SubHeadWiseAllocationReportReq;
 import com.sdd.request.UnitWiseAllocationReport;
 import com.sdd.response.ApiResponse;
 import com.sdd.response.FilePathResponse;
+import com.sdd.response.UnitRebaseReportResponce;
 
 import java.util.Date;
 import java.util.List;
@@ -52,5 +53,7 @@ public interface MangeReportService {
     ApiResponse<List<FilePathResponse>> getUnitRebaseReport(String fromDate, String toDate);
 
     ApiResponse<List<FilePathResponse>> getRevisedAllocationReport(String authGroupId);
+
+    ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseReportData(String fromDate, String toDate);
 
 }

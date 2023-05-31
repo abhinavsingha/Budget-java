@@ -8,6 +8,7 @@ import com.sdd.request.SubHeadWiseAllocationReportReq;
 import com.sdd.request.UnitWiseAllocationReport;
 import com.sdd.response.ApiResponse;
 import com.sdd.response.FilePathResponse;
+import com.sdd.response.UnitRebaseReportResponce;
 import com.sdd.service.MangeReportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,6 +136,11 @@ public class ReportController {
 	@GetMapping("/getRevisedAllocationReport/{authGroupId}")
 	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getRevisedAllocationReport(@PathVariable(value = "authGroupId") String authGroupId )  {
 		return new ResponseEntity<>(mangeReportService.getRevisedAllocationReport(authGroupId), HttpStatus.OK);
+	}
+
+	@GetMapping("/getUnitRebaseReportData/{fromDate}/{toDate}")
+	public ResponseEntity<ApiResponse<List<UnitRebaseReportResponce>>> getUnitRebaseReportData(@PathVariable(value = "fromDate") String fromDate , @PathVariable(value = "toDate") String toDate)  {
+		return new ResponseEntity<>(mangeReportService.getUnitRebaseReportData(fromDate,toDate), HttpStatus.OK);
 	}
 
 }

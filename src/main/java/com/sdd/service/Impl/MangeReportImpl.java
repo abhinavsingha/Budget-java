@@ -5557,4 +5557,93 @@ public class MangeReportImpl implements MangeReportService {
         run.setText(text);
         run.setBold(bold);
     }
+
+    @Override
+    public ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseReportData(String fromDate, String toDate) {
+        List<UnitRebaseReportResponce> responce = new ArrayList<UnitRebaseReportResponce>();
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(),"1");
+        if (hrDataCheck == null) {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+            },"YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS",HttpStatus.OK.value());
+        } else {
+            if (hrDataCheck.getRoleId().contains(HelperUtils.SYSTEMADMIN)) {
+            } else {
+                return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+                },"YOU ARE NOT AUTHORIZED TO REBASE THE STATION",HttpStatus.OK.value());
+            }
+        }
+        if (fromDate == null) {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+            },"FROM DATE CAN NOT BE NULL",HttpStatus.OK.value());
+        }
+        if (toDate == null) {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+            },"TO DATE NOT BE NULL",HttpStatus.OK.value());
+        }
+
+        List<String> groupUnitId = budgetRebaseRepository.findGroupRebaseUnit();
+        if (groupUnitId.size() <= 0) {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+            }, "DATA NOT FOUND FROM DB", HttpStatus.OK.value());
+        }
+
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+        LocalDate date = LocalDate.parse(toDate, inputFormatter);
+        String formattedDate = date.format(outputFormatter);
+
+        LocalDate frmLocal = LocalDate.parse(fromDate);
+        LocalDate resultDate = frmLocal.minusDays(1);
+        LocalDateTime frmlocalDateTime = LocalDateTime.of(resultDate, LocalTime.MIDNIGHT);
+        Timestamp fromDateFormate = Timestamp.valueOf(frmlocalDateTime);
+
+        LocalDate localDa = LocalDate.parse(toDate);
+        LocalDate resultDt = localDa.plusDays(1);
+        LocalDateTime localDateTime = LocalDateTime.of(resultDt, LocalTime.MIDNIGHT);
+        Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
+        String RunitId = "";
+        if (groupUnitId.size() > 0) {
+            for (String ids : groupUnitId) {
+                RunitId = ids;
+                List<BudgetRebase> rebaseDatas = budgetRebaseRepository.findByRebaseUnitId(RunitId);
+                List<BudgetRebase> rebaseData = rebaseDatas.stream()
+                        .filter(e -> e.getOccuranceDate().after(fromDateFormate) && e.getOccuranceDate().before(toDateFormate)).collect(Collectors.toList());
+                if (rebaseData.size() <= 0) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
+                }
+                UnitRebaseReportResponce rebase = new UnitRebaseReportResponce();
+                CgUnit unitN = cgUnitRepository.findByUnit(RunitId);
+                CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
+                rebase.setUnitName(unitN.getDescr());
+                rebase.setDateOfRebase(rebaseData.get(0).getOccuranceDate());
+                rebase.setFromStation(rebaseData.get(0).getFrmStationId());
+                rebase.setToStation(toS.getStationName());
+                List<UnitRebaseSubReportResponce> addRes = new ArrayList<UnitRebaseSubReportResponce>();
+                for (Integer k = 0; k < rebaseData.size(); k++) {
+                    BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(rebaseData.get(k).getFinYear());
+                    BudgetHead bHead = subHeadRepository.findByBudgetCodeId(rebaseData.get(k).getBudgetHeadId());
+                    AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(rebaseData.get(k).getAmountType());
+                    AllocationType allocType = allocationRepository.findByAllocTypeId(rebaseData.get(k).getAllocTypeId());
+                    UnitRebaseSubReportResponce subResp = new UnitRebaseSubReportResponce();
+                    subResp.setFinYear(findyr.getFinYear());
+                    subResp.setAllocationType(allocType.getAllocDesc());
+                    subResp.setSubHead(bHead.getSubHeadDescr());
+                    subResp.setAllocationAmount(rebaseData.get(k).getAllocAmount());
+                    subResp.setExpenditureAmount(rebaseData.get(k).getExpAmount());
+                    subResp.setBalAmount(rebaseData.get(k).getBalAmount());
+                    subResp.setAmountType(amountTypeObj.getAmountType());
+                    subResp.setLastCbDate(rebaseData.get(k).getLastCbDate());
+                    addRes.add(subResp);
+                }
+                rebase.setList(addRes);
+                responce.add(rebase);
+            }
+        }
+        return ResponseUtils.createSuccessResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+        });
+    }
+
 }
