@@ -5038,12 +5038,15 @@ public class MangeReportImpl implements MangeReportService {
                         Double aAmount = Double.valueOf(rebaseData.get(k).getAllocAmount());
                         Double eAmount = Double.valueOf(rebaseData.get(k).getExpAmount());
                         Double bAmount = Double.valueOf(rebaseData.get(k).getBalAmount());
-                        LastCbD = rebaseData.get(k).getLastCbDate();
-                        SimpleDateFormat id = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-                        SimpleDateFormat od = new SimpleDateFormat("dd-MMMM-yyyy");
-                        Date dateC = id.parse(LastCbD.toString());
-                        String cbD = od.format(dateC);
-
+                        String cbD="";
+                        if(rebaseData.get(k).getLastCbDate()!=null) {
+                            LastCbD = rebaseData.get(k).getLastCbDate();
+                            SimpleDateFormat id = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                            SimpleDateFormat od = new SimpleDateFormat("dd-MMMM-yyyy");
+                            Date dateC = id.parse(LastCbD.toString());
+                            cbD = od.format(dateC);
+                        }else
+                            cbD="null";
                         allocAmount = aAmount * amountUnit / reqAmount;
                         expAmount = eAmount;
                         balAmount = bAmount * amountUnit / reqAmount;
