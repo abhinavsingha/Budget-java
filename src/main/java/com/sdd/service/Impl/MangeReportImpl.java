@@ -5559,34 +5559,34 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseReportData(String fromDate, String toDate) {
+    public ApiResponse<List<FilePathResponse>> getUnitRebaseReportData(String fromDate, String toDate) {
         List<UnitRebaseReportResponce> responce = new ArrayList<UnitRebaseReportResponce>();
-
+        List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(),"1");
         if (hrDataCheck == null) {
-            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             },"YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS",HttpStatus.OK.value());
         } else {
             if (hrDataCheck.getRoleId().contains(HelperUtils.SYSTEMADMIN)) {
             } else {
-                return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+                return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                 },"YOU ARE NOT AUTHORIZED TO REBASE THE STATION",HttpStatus.OK.value());
             }
         }
         if (fromDate == null) {
-            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             },"FROM DATE CAN NOT BE NULL",HttpStatus.OK.value());
         }
         if (toDate == null) {
-            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             },"TO DATE NOT BE NULL",HttpStatus.OK.value());
         }
 
         List<String> groupUnitId = budgetRebaseRepository.findGroupRebaseUnit();
         if (groupUnitId.size() <= 0) {
-            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "DATA NOT FOUND FROM DB", HttpStatus.OK.value());
         }
 
@@ -5604,6 +5604,16 @@ public class MangeReportImpl implements MangeReportService {
         LocalDate resultDt = localDa.plusDays(1);
         LocalDateTime localDateTime = LocalDateTime.of(resultDt, LocalTime.MIDNIGHT);
         Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
+
+        try{
+        XWPFDocument document = new XWPFDocument();
+        File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        String path = folder.getAbsolutePath() + "/" + "UnitRebaseReport" + ".docx";
+        FileOutputStream out = new FileOutputStream(new File(path));
+
         String RunitId = "";
         if (groupUnitId.size() > 0) {
             for (String ids : groupUnitId) {
@@ -5621,6 +5631,62 @@ public class MangeReportImpl implements MangeReportService {
                 rebase.setDateOfRebase(rebaseData.get(0).getOccuranceDate());
                 rebase.setFromStation(rebaseData.get(0).getFrmStationId());
                 rebase.setToStation(toS.getStationName());
+
+                XWPFTable table = document.createTable();
+                table.setWidth("100%");
+
+
+
+                XWPFTableRow tableRowOne = table.getRow(0);
+
+                XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
+                boldText(paragraphtableRowOne.createRun(), 10, "UNIT NAME", true);
+
+                XWPFParagraph paragraphtableRowOne1 =tableRowOne.getCell(1).addParagraph();
+                boldText(paragraphtableRowOne1.createRun(), 10, unitN.getDescr(), true);
+
+                XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
+                boldText(paragraphtableRowOne2.createRun(), 10, "FROM STATION", true);
+
+                XWPFParagraph paragraphtableRowOne3 = tableRowOne.getCell(3).addParagraph();
+                boldText(paragraphtableRowOne3.createRun(), 10, rebaseData.get(0).getFrmStationId(), true);
+
+
+                XWPFTableRow tableRow11 = table.createRow();
+
+                XWPFParagraph paragraph = tableRow11.getCell(0).addParagraph();
+                normalText(paragraph.createRun(), 10, ").getUnit()", false);
+
+                XWPFParagraph paragraph1we1 = tableRow11.getCell(1).addParagraph();
+                normalText(paragraph1we1.createRun(), 10," tabData1nit()", false);
+
+                XWPFParagraph paragraph1221 = tableRow11.getCell(2).addParagraph();
+                normalText(paragraph1221.createRun(), 10, "tabData1t()", false);
+
+                XWPFParagraph qadr = tableRow11.getCell(3).addParagraph();
+                normalText(qadr.createRun(), 10, "ta)", false);
+
+
+
+
+
+
+
+//                XWPFTable table1 = document.createTable();
+//                table1.setWidth("100%");
+//                XWPFTableRow tableRowOnes = table.getRow(0);
+//                XWPFParagraph paragraphtableRowOne4 = tableRowOnes.getCell(0).addParagraph();
+//                boldText(paragraphtableRowOne4.createRun(), 10, "DATE OF REBASE", true);
+//
+//                XWPFParagraph paragraphtableRowOne5 = tableRowOne.addNewTableCell().addParagraph();
+//                boldText(paragraphtableRowOne5.createRun(), 10, rebaseData.get(0).getOccuranceDate().toString(), true);
+//
+//                XWPFParagraph paragraphtableRowOne6 = tableRowOne.getCell(0).addParagraph();
+//                boldText(paragraphtableRowOne6.createRun(), 10, "TO STATION", true);
+//
+//                XWPFParagraph paragraphtableRowOne7 = tableRowOne.addNewTableCell().addParagraph();
+//                boldText(paragraphtableRowOne7.createRun(), 10, toS.getStationName(), true);
+
                 List<UnitRebaseSubReportResponce> addRes = new ArrayList<UnitRebaseSubReportResponce>();
                 for (Integer k = 0; k < rebaseData.size(); k++) {
                     BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(rebaseData.get(k).getFinYear());
@@ -5642,7 +5708,25 @@ public class MangeReportImpl implements MangeReportService {
                 responce.add(rebase);
             }
         }
-        return ResponseUtils.createSuccessResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+
+            XWPFParagraph mainParagraph = document.createParagraph();
+            mainParagraph = document.createParagraph();
+            mainParagraph.createRun().addBreak();
+            mainParagraph = document.createParagraph();
+            boldText(mainParagraph.createRun(), 10, "Test" + "", true);
+            mainParagraph = document.createParagraph();
+            normalText(mainParagraph.createRun(), 10, "Hello"+ "", true);
+            document.write(out);
+            out.close();
+            document.close();
+            FilePathResponse dto = new FilePathResponse();
+            dto.setPath(HelperUtils.FILEPATH + "UnitRebaseReport" + ".docx");
+            dto.setFileName("UnitRebaseReport");
+            dtoList.add(dto);
+        } catch (Exception e) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
+        }
+        return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
     }
 

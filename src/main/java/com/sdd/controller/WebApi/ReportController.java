@@ -139,7 +139,7 @@ public class ReportController {
 	}
 
 	@GetMapping("/getUnitRebaseReportData/{fromDate}/{toDate}")
-	public ResponseEntity<ApiResponse<List<UnitRebaseReportResponce>>> getUnitRebaseReportData(@PathVariable(value = "fromDate") String fromDate , @PathVariable(value = "toDate") String toDate)  {
+	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitRebaseReportData(@PathVariable(value = "fromDate") String fromDate , @PathVariable(value = "toDate") String toDate)  {
 		return new ResponseEntity<>(mangeReportService.getUnitRebaseReportData(fromDate,toDate), HttpStatus.OK);
 	}
 
