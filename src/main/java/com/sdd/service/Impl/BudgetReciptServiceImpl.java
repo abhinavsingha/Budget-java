@@ -504,6 +504,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         budgetAllocationDetails.setAmountType(amountUnit.getAmountTypeId());
         budgetAllocationDetails.setPurposeCode("");
         budgetAllocationDetails.setIsDelete("0");
+        budgetAllocationDetails.setIsBudgetRevision("0");
         budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
         budgetAllocationDetails.setRefTransactionId(refTransID);
         budgetAllocationDetails.setUserId(hrData.getPid());

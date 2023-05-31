@@ -417,6 +417,7 @@ public class ContingentServiceImpl implements ContingentService {
 //
 //        }
 
+        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
 
         MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
 
@@ -426,6 +427,7 @@ public class ContingentServiceImpl implements ContingentService {
         mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
         mangeInboxOutbox.setToUnit(toUnitId);
         mangeInboxOutbox.setStatus("Pending");
+        mangeInboxOutbox.setType(cgUnit.getDescr());
         mangeInboxOutbox.setGroupId(authGroupId);
         mangeInboxOutbox.setFromUnit(toUnitId);
         mangeInboxOutbox.setRoleId(hrData.getRoleId());

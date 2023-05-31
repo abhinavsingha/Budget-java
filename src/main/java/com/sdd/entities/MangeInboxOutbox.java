@@ -30,6 +30,7 @@ public class MangeInboxOutbox {
     @Column(name = "REMARKS")
     private String remarks;
 
+
     @Column(name = "status")
     private String status;
 

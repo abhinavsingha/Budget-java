@@ -30,6 +30,7 @@ public class BudgetAllocationSubResponse {
     private String allocationAmount;
     private List<CdaParkingCrAndDrResponse> cdaData;
     private String authGroupId;
+    private String returnRemarks;
     private String status;
     private String purposeCode;
     private Timestamp allocationDate;

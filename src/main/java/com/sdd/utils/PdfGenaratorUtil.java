@@ -36,6 +36,7 @@ public class PdfGenaratorUtil {
 
         for (Map.Entry<String, List<ReportSubModel>> entry : map.entrySet()) {
             String key = entry.getKey();
+
             List<ReportSubModel> tabData = entry.getValue();
             String data = "<tr>" +
                     "<th scope=row class=bbtm>" + key + "</th>";

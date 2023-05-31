@@ -36,28 +36,40 @@ public class DashboardServiceImpl implements DashBoardService {
 
     @Autowired
     CurrentStateRepository currentStateRepository;
+
     @Autowired
     AmountUnitRepository amountUnitRepository;
+
     @Autowired
     AllocationRepository allocationRepository;
+
     @Autowired
     MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
+
     @Autowired
     SubHeadRepository subHeadRepository;
+
     @Autowired
     CgUnitRepository cgUnitRepository;
+
     @Autowired
     RoleRepository roleRepository;
+
     @Autowired
     BudgetFinancialYearRepository budgetFinancialYearRepository;
+
     @Autowired
     BudgetAllocationDetailsRepository budgetAllocationDetailsRepository;
+
     @Autowired
     BudgetAllocationRepository budgetAllocationRepository;
+
     @Autowired
     private ContigentBillRepository contigentBillRepository;
+
     @Autowired
     private HeaderUtils headerUtils;
+
     @Autowired
     private HrDataRepository hrDataRepository;
 
@@ -153,15 +165,6 @@ public class DashboardServiceImpl implements DashBoardService {
             hradataResponse.setRole(setAllRole);
         }
 
-//    CurrntStateType stateList = currentStateRepository.findByTypeAndIsFlag("ALLOCATION", "1");
-//    if (stateList == null) {
-//      AllocationType allocationType = allocationRepository.findByAllocTypeId("ALL_101");
-//      dashBoardResponse.setAllocationType(allocationType);
-//    } else {
-//      AllocationType allocationType =
-//          allocationRepository.findByAllocTypeId(stateList.getStateId());
-//      dashBoardResponse.setAllocationType(allocationType);
-//    }
 
         List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
         if (allocationType.size() > 0) {
@@ -219,9 +222,10 @@ public class DashboardServiceImpl implements DashBoardService {
                     outBoxList.add(data);
                 }
             }
-        } else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
+        }
+        else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
 
-            List<String> dataIscgBg =  new ArrayList<>();
+            List<String> dataIscgBg = new ArrayList<>();
             dataIscgBg.add("BG");
             dataIscgBg.add("BR");
 
@@ -249,7 +253,8 @@ public class DashboardServiceImpl implements DashBoardService {
                     }
                 }
             }
-        } else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
+        }
+        else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
             inboxOutboxesList =
                     mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
                             hrDataCheck.getUnitId(), "CB", "0", "0");
@@ -274,7 +279,8 @@ public class DashboardServiceImpl implements DashBoardService {
                     outBoxList.add(data);
                 }
             }
-        } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
+        }
+        else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
 
             arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
             archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
@@ -297,7 +303,8 @@ public class DashboardServiceImpl implements DashBoardService {
                     outBoxList.add(data);
                 }
             }
-        } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
+        }
+        else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
 
             arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
             archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
@@ -377,8 +384,8 @@ public class DashboardServiceImpl implements DashBoardService {
         }
 
         unitWiseExpenditueResponse.setUnitWise(unit);
-        unitWiseExpenditueResponse.setExpenditureUnit(unitByAllocationAmount);
-        unitWiseExpenditueResponse.setAllocatedUnit(unitByExpendureAmount);
+        unitWiseExpenditueResponse.setExpenditureUnit(unitByExpendureAmount);
+        unitWiseExpenditueResponse.setAllocatedUnit(unitByAllocationAmount);
 
         dashBoardResponse.setUnitWiseExpenditure(unitWiseExpenditueResponse);
 
@@ -639,7 +646,7 @@ public class DashboardServiceImpl implements DashBoardService {
             archiveboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
 
 //            inboxOutboxesList = mangeInboxOutBoxRepository.findByInboxDataForAllRole(hrDataCheck.getUnitId(), "0", "0", "BG", "BR");
-            List<String> dataIscgBg =  new ArrayList<>();
+            List<String> dataIscgBg = new ArrayList<>();
             dataIscgBg.add("BG");
             dataIscgBg.add("BR");
 

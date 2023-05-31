@@ -85,6 +85,8 @@ public class BudgetAllocationDetails {
     private String amountType;
 
 
+    @Column(name = "RETURN_REMARKS")
+    private String returnRemarks;
 
 
 }

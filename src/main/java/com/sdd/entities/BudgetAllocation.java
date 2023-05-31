@@ -75,4 +75,6 @@ public class BudgetAllocation {
     @Column(name = "IS_BUDGET_REVISION")
     private String isBudgetRevision;
 
+    @Column(name = "RETURN_REMARKS")
+    private String returnRemarks;
 }

@@ -1,5 +1,6 @@
 package com.sdd.utils;
 
+import com.sdd.entities.BudgetHead;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ public class ReportSubModel {
     private String finYear;
     private String amount;
     private String amountType;
+    private BudgetHead budgetHead;
     private String unit;
     private String revisedAmount;
 

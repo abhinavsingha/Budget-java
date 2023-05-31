@@ -874,6 +874,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setUserId(budgetAllocationSubReport.getUserId());
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
+            budgetAllocationReport.setReturnRemarks(budgetAllocationSubReport.getReturnRemarks());
             budgetAllocationReport.setCreatedOn(budgetAllocationSubReport.getCreatedOn());
             budgetAllocationReport.setUpdatedOn(budgetAllocationSubReport.getUpdatedOn());
             budgetAllocationReport.setFinYear(budgetFinancialYearRepository.findBySerialNo(budgetAllocationSubReport.getFinYear()));
@@ -971,6 +972,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setStatus(budgetAllocationSubReport.getStatus());
             budgetAllocationReport.setPurposeCode(budgetAllocationSubReport.getPurposeCode());
             budgetAllocationReport.setRemarks(budgetAllocationSubReport.getRemarks());
+            budgetAllocationReport.setReturnRemarks(budgetAllocationSubReport.getReturnRemarks());
             budgetAllocationReport.setRefTransactionId(budgetAllocationSubReport.getRefTransactionId());
             budgetAllocationReport.setUserId(budgetAllocationSubReport.getUserId());
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
@@ -1057,6 +1059,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
                     budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
                     budgetAllocationReport.setCreatedOn(budgetAllocationSubReport.getCreatedOn());
+                    budgetAllocationReport.setReturnRemarks(budgetAllocationSubReport.getReturnRemarks());
                     budgetAllocationReport.setUpdatedOn(budgetAllocationSubReport.getUpdatedOn());
                     budgetAllocationReport.setFinYear(budgetFinancialYearRepository.findBySerialNo(budgetAllocationSubReport.getFinYear()));
                     budgetAllocationReport.setAmountUnit(amountUnitRepository.findByAmountTypeId(budgetAllocationSubReport.getAmountType()));
@@ -1463,6 +1466,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSubReport.getAllocationAmount()));
             budgetAllocationReport.setStatus(budgetAllocationSubReport.getStatus());
             budgetAllocationReport.setRemarks(budgetAllocationSubReport.getStatus());
+            budgetAllocationReport.setReturnRemarks(budgetAllocationSubReport.getReturnRemarks());
             budgetAllocationReport.setRefTransactionId(budgetAllocationSubReport.getRefTransId());
             budgetAllocationReport.setUserId(budgetAllocationSubReport.getUserId());
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getCreatedOn());
@@ -1779,7 +1783,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             BudgetAllocationDetails allocationData = allocationDetails.get(i);
             status = budgetApproveRequest.getStatus();
-            allocationData.setRemarks(budgetApproveRequest.getRemarks());
+            allocationData.setReturnRemarks(budgetApproveRequest.getRemarks());
             allocationData.setStatus(budgetApproveRequest.getStatus());
             allocationData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetailsRepository.save(allocationData);
@@ -1946,8 +1950,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             BudgetAllocationDetails allocationData = allocationDetails.get(i);
             status = budgetApproveRequest.getStatus();
-            allocationData.setRemarks(budgetApproveRequest.getRemarks());
             allocationData.setStatus(budgetApproveRequest.getStatus());
+            allocationData.setReturnRemarks(budgetApproveRequest.getRemarks());
             allocationData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetailsRepository.save(allocationData);
 
@@ -2068,11 +2072,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         if (mangeInboxOutbox != null) {
             mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             mangeInboxOutbox.setStatus(budgetApproveRequest.getStatus());
-            if (status.equalsIgnoreCase("Approved")) {
-                mangeInboxOutbox.setState("CR");
-            } else {
-                mangeInboxOutbox.setState("AP");
-            }
+
+//            if (status.equalsIgnoreCase("Approved")) {
+            mangeInboxOutbox.setState("CR");
+//            } else {
+//                mangeInboxOutbox.setState("AP");
+//            }
             mangeInboxOutBoxRepository.save(mangeInboxOutbox);
 
         }
