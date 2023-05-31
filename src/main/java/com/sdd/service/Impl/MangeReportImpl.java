@@ -116,12 +116,13 @@ public class MangeReportImpl implements MangeReportService {
         String fileName = "AllocationReport" + hrData.getUnitId();
 
         HashMap<String, List<ReportSubModel>> hashMap = new HashMap<>();
-//        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlagAndIsBudgetRevision(authGroupId, "0", "0");
-        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupId(authGroupId);
+        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
+
 
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
         }
+
 
         for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
 
@@ -137,9 +138,17 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setAmountType(amountUnit.getAmountType());
+                subModel.setBudgetHead(budgetHead);
                 subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
                 reportMaindata.add(subModel);
+
+                Collections.sort(reportMaindata, new Comparator<ReportSubModel>() {
+                    public int compare(ReportSubModel v1, ReportSubModel v2) {
+                        return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
+                    }
+                });
+
                 hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
 
             } else {
@@ -148,10 +157,17 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setType(budgetAllocationReport.get(j).getAllocationTypeId());
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
                 subModel.setUnit(cgUnit.getDescr());
+                subModel.setBudgetHead(budgetHead);
                 subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
                 reportMaindata.add(subModel);
+
+                Collections.sort(reportMaindata, new Comparator<ReportSubModel>() {
+                    public int compare(ReportSubModel v1, ReportSubModel v2) {
+                        return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
+                    }
+                });
                 hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
             }
         }
@@ -199,6 +215,8 @@ public class MangeReportImpl implements MangeReportService {
 
 
             try {
+
+
                 String templateName = "allocation-report.html";
                 File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
                 if (!folder.exists()) {
@@ -237,8 +255,7 @@ public class MangeReportImpl implements MangeReportService {
         String fileName = "AllocationReport" + hrData.getUnitId();
 
         HashMap<String, List<ReportSubModel>> hashMap = new HashMap<>();
-        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupId(authGroupId);
-
+        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
         }
@@ -256,10 +273,18 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setType(budgetAllocationReport.get(j).getAllocationTypeId());
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
                 subModel.setUnit(cgUnit.getDescr());
+                subModel.setBudgetHead(budgetHead);
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
                 reportMaindata.add(subModel);
+
+                Collections.sort(reportMaindata, new Comparator<ReportSubModel>() {
+                    public int compare(ReportSubModel v1, ReportSubModel v2) {
+                        return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
+                    }
+                });
+
                 hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
 
             } else {
@@ -268,10 +293,18 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setType(budgetAllocationReport.get(j).getAllocationTypeId());
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
                 subModel.setUnit(cgUnit.getDescr());
+                subModel.setBudgetHead(budgetHead);
                 subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
                 reportMaindata.add(subModel);
+
+                Collections.sort(reportMaindata, new Comparator<ReportSubModel>() {
+                    public int compare(ReportSubModel v1, ReportSubModel v2) {
+                        return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
+                    }
+                });
+
                 hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
             }
         }
@@ -440,6 +473,7 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
     }
+
 
 
     @Override
@@ -647,7 +681,7 @@ public class MangeReportImpl implements MangeReportService {
         cbReportResponse.setBalanceAmount(String.format("%.2f", (balanceAmount - expenditure)));
         cbReportResponse.setRemeningAmount(String.format("%.2f", ((allocationAmount - expenditure))));
 
-        String hindiAmount = ConverterUtils.convert(Long.parseLong(cbData.getCbAmount()));
+        String hindiAmount = ConverterUtils.convert((new Double(cbData.getCbAmount())).longValue());
         cbReportResponse.setHindiAmount(hindiAmount);
 
         HashMap<String, List<ReportSubModel>> hashMap = new HashMap<>();
