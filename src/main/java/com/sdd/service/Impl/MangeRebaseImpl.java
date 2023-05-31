@@ -622,13 +622,15 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         cdaParkingTransRepository.save(cdaDetail.get(j));
                     }
                 }
-
+                Double balAmnt=0.0;
                 List<BudgetAllocation> allocationData = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(headUnit, finYear,budHd,allocTypeId,"Approved","0","0");
+                if(allocationData.size()>0) {
                 Double alAmnt=Double.parseDouble(allocationData.get(0).getAllocationAmount());
-                Double balAmnt=Double.parseDouble(req.getUnitRebaseRequests().get(l).getBalAmount());
+                balAmnt=Double.parseDouble(req.getUnitRebaseRequests().get(l).getBalAmount());
                 Double add=alAmnt+balAmnt;
                 allocationData.get(0).setAllocationAmount(Double.toString(add));
                 budgetAllocationRepository.save(allocationData.get(0));
+                }
                 List<CdaParkingTrans> cdaDetails=cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear,budHd,headUnit,allocTypeId,"0");
                 if(cdaDetails.size()>0) {
                     Double totatA=Double.parseDouble(cdaDetails.get(0).getTotalParkingAmount());
