@@ -23,6 +23,8 @@ public interface MangeReportService {
 
     ApiResponse<List<FilePathResponse>> getContingentBillReport(ReportRequest reportRequest);
 
+    ApiResponse<List<FilePathResponse>> getContingentBillReportDoc(ReportRequest reportRequest);
+
     ApiResponse<List<FilePathResponse>> getAllocationReportUnitWise(ReportRequest reportRequest);
 
     ApiResponse<List<FilePathResponse>> getAllocationReportSubHead(ReportRequest reportRequest);
@@ -32,6 +34,8 @@ public interface MangeReportService {
 //    ApiResponse<DefaultResponse> getConicalPath();
 
     ApiResponse<FilePathResponse> getCdaParkingReport(CDAReportRequest reportRequest);
+
+    ApiResponse<FilePathResponse> getCdaParkingReportDoc(CDAReportRequest reportRequest);
 
     ApiResponse<List<FilePathResponse>> getUnitWiseAllocationReport(UnitWiseAllocationReport reportRequest);
 

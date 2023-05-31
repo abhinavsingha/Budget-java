@@ -35,13 +35,10 @@ public class ReportController {
 		return new ResponseEntity<>(mangeReportService.getAllocationReport(authgroupId), HttpStatus.OK);
 	}
 
-
-
 	@GetMapping("/getAllocationReportDoc/{authgroupId}")
 	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getAllocationReportDoc(@PathVariable("authgroupId") String authgroupId) {
 		return new ResponseEntity<>(mangeReportService.getAllocationReportDoc(authgroupId), HttpStatus.OK);
 	}
-
 
 
 
@@ -53,8 +50,13 @@ public class ReportController {
 
 
 	@PostMapping("/getContingentBillReport")
-	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getCbRevised(@RequestBody ReportRequest reportRequest) {
+	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getContingentBillReport(@RequestBody ReportRequest reportRequest) {
 		return new ResponseEntity<>(mangeReportService.getContingentBillReport(reportRequest), HttpStatus.OK);
+	}
+
+	@PostMapping("/getContingentBillReportDoc")
+	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getContingentBillReportDoc(@RequestBody ReportRequest reportRequest) {
+		return new ResponseEntity<>(mangeReportService.getContingentBillReportDoc(reportRequest), HttpStatus.OK);
 	}
 
 
@@ -81,6 +83,14 @@ public class ReportController {
 	@PostMapping("/getCdaParkingReport")
 	public ResponseEntity<ApiResponse<FilePathResponse>> getCdaParkingReport(@RequestBody CDAReportRequest reportRequest) {
 		return new ResponseEntity<>(mangeReportService.getCdaParkingReport(reportRequest), HttpStatus.OK);
+	}
+
+
+
+
+	@PostMapping("/getCdaParkingReportDoc")
+	public ResponseEntity<ApiResponse<FilePathResponse>> getCdaParkingReportDoc(@RequestBody CDAReportRequest reportRequest) {
+		return new ResponseEntity<>(mangeReportService.getCdaParkingReportDoc(reportRequest), HttpStatus.OK);
 	}
 
 

@@ -1492,7 +1492,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     cgUnitResponse.setRemainingAmount(ConverterUtils.addDecimalPoint(cdaTransData.getRemainingCdaAmount()));
                     cgUnitResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(cdaTransData.getTotalParkingAmount()));
                     cgUnitResponse.setAmountTypeMain(amountUnitRepository.findByAmountTypeId(cdaTransData.getAmountType()));
-
                 }
 
                 data.add(cgUnitResponse);
@@ -1588,7 +1587,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                 List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsFlagAndIsUpdateOrderByCbDateDesc(unit.get(i).getUnit(), budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), "0", "0");
 
-                double expendure = 100000000;
+                double expendure = 0;
                 for (Integer k = 0; k < contigentBills.size(); k++) {
                     expendure = expendure + Double.parseDouble(contigentBills.get(k).getCbAmount());
                 }
