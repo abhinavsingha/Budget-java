@@ -28,6 +28,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import java.io.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -4518,10 +4519,16 @@ public class MangeReportImpl implements MangeReportService {
 
                             List<ContigentBill> expenditure = expenditure1.stream()
                                     .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
-                            if (expenditure.size() <= 0) {
-                                eAmount = 0.0;
+                            if (expenditure.size() > 0) {
+                                double totalAmount = 0.0;
+                                for (ContigentBill bill : expenditure) {
+                                    totalAmount += Double.parseDouble(bill.getCbAmount());
+                                }
+                                DecimalFormat decimalFormat = new DecimalFormat("#");
+                                String cbAmount = decimalFormat.format(totalAmount);
+                                eAmount=Double.parseDouble(cbAmount);
                             } else {
-                                eAmount = Double.parseDouble(expenditure.get(0).getCbAmount());
+                                eAmount = 0.0;
                             }
                             if (finAmount != 0)
                                 expnAmount = eAmount * 100 / (finAmount * reqAmount);
