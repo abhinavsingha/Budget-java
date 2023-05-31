@@ -477,10 +477,10 @@ public class MangeRebaseImpl implements MangeRebaseService {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "REBASE UNIT ID CAN NOT BE BLANK", HttpStatus.OK.value());
         }
-        if (req.getHeadUnitId() == null || req.getHeadUnitId().isEmpty()) {
+/*        if (req.getHeadUnitId() == null || req.getHeadUnitId().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, " HEAD UNIT CAN NOT BE BLANK", HttpStatus.OK.value());
-        }
+        }*/
         if (req.getToStationId() == null || req.getToStationId().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "TO_STATION ID CAN NOT BE BLANK", HttpStatus.OK.value());
@@ -489,10 +489,10 @@ public class MangeRebaseImpl implements MangeRebaseService {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "FROM_STATION ID CAN NOT BE BLANK", HttpStatus.OK.value());
         }
-        if (req.getToHeadUnitId() == null || req.getToHeadUnitId().isEmpty()) {
+/*        if (req.getToHeadUnitId() == null || req.getToHeadUnitId().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "TO_HEAD UNIT ID CAN NOT BE BLANK", HttpStatus.OK.value());
-        }
+        }*/
 
         if (req.getUnitRebaseRequests().size() > 0) {
 
@@ -518,10 +518,10 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
                     }, "AMOUNT_TYPE CAN NOT BE BLANK", HttpStatus.OK.value());
                 }
-                if (req.getUnitRebaseRequests().get(m).getLastCbDate() == null || req.getUnitRebaseRequests().get(m).getLastCbDate().isEmpty()) {
+/*                if (req.getUnitRebaseRequests().get(m).getLastCbDate() == null || req.getUnitRebaseRequests().get(m).getLastCbDate().isEmpty()) {
                     return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
                     }, "CB DATE CAN NOT BE BLANK", HttpStatus.OK.value());
-                }
+                }*/
                 if (req.getUnitRebaseRequests().get(m).getAllocationTypeId() == null || req.getUnitRebaseRequests().get(m).getAllocationTypeId().isEmpty()) {
                     return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
                     }, "ALLOCATION TYPE ID CAN NOT BE BLANK", HttpStatus.OK.value());
@@ -603,6 +603,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 budgetRebase.setExpAmount(req.getUnitRebaseRequests().get(l).getExpAmount());
                 budgetRebase.setBalAmount(req.getUnitRebaseRequests().get(l).getBalAmount());
                 budgetRebase.setAmountType(req.getUnitRebaseRequests().get(l).getAmountType());
+                if(req.getUnitRebaseRequests().get(l).getLastCbDate()!=null)
                 budgetRebase.setLastCbDate(ConverterUtils.convertDateTotimeStamp(req.getUnitRebaseRequests().get(l).getLastCbDate()));
                 budgetRebase.setAuthorityId(authorityId);
                 budgetRebase.setUserId(hrDataCheck.getPid());
@@ -610,7 +611,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                 budgetRebaseRepository.save(budgetRebase);
 
-                List<BudgetAllocation> allocationDatas = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(rebaseUnitId, finYear,budHd,allocTypeId,"Approved","0","0");
+/*                List<BudgetAllocation> allocationDatas = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(rebaseUnitId, finYear,budHd,allocTypeId,"Approved","0","0");
                 allocationDatas.get(0).setAllocationAmount("0.0000");
                 budgetAllocationRepository.save(allocationDatas.get(0));
                 List<CdaParkingTrans> cdaDetail=cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear,budHd,rebaseUnitId,allocTypeId,"0");
@@ -634,7 +635,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     Double addition=totatA+balAmnt;
                     cdaDetails.get(0).setTotalParkingAmount(Double.toString(addition));
                     cdaParkingTransRepository.save(cdaDetails.get(0));
-                }
+                }*/
             }
         }else
         {
