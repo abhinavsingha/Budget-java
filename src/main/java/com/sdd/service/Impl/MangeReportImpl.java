@@ -4521,7 +4521,7 @@ public class MangeReportImpl implements MangeReportService {
                             if (expenditure.size() <= 0) {
                                 eAmount = 0.0;
                             } else {
-                                eAmount = Double.parseDouble(expenditure.get(0).getProgressiveAmount());
+                                eAmount = Double.parseDouble(expenditure.get(0).getCbAmount());
                             }
                             if (finAmount != 0)
                                 expnAmount = eAmount * 100 / (finAmount * reqAmount);

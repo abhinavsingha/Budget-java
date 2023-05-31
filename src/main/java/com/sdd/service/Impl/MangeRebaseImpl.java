@@ -611,7 +611,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                 budgetRebaseRepository.save(budgetRebase);
 
-/*                List<BudgetAllocation> allocationDatas = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(rebaseUnitId, finYear,budHd,allocTypeId,"Approved","0","0");
+                List<BudgetAllocation> allocationDatas = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(rebaseUnitId, finYear,budHd,allocTypeId,"Approved","0","0");
                 allocationDatas.get(0).setAllocationAmount("0.0000");
                 budgetAllocationRepository.save(allocationDatas.get(0));
                 List<CdaParkingTrans> cdaDetail=cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear,budHd,rebaseUnitId,allocTypeId,"0");
@@ -635,7 +635,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     Double addition=totatA+balAmnt;
                     cdaDetails.get(0).setTotalParkingAmount(Double.toString(addition));
                     cdaParkingTransRepository.save(cdaDetails.get(0));
-                }*/
+                }
             }
         }else
         {
