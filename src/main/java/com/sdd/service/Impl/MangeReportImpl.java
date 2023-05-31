@@ -2729,7 +2729,8 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
-        List<String> rowData = budgetAllocationRepository.findSubHead(finYearId, allocationType);
+        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType);
+        List<String> rowData = rowDatas.stream().sorted().collect(Collectors.toList());
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -3176,7 +3177,8 @@ public class MangeReportImpl implements MangeReportService {
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
 
-        List<String> rowData = budgetAllocationRepository.findSubHead(finYearId, allocationType);
+        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType);
+        List<String> rowData = rowDatas.stream().sorted().collect(Collectors.toList());
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -3659,7 +3661,8 @@ public class MangeReportImpl implements MangeReportService {
         AllocationType type = allocationRepository.findByAllocTypeId(allocationTypeBE);
         AllocationType types = allocationRepository.findByAllocTypeId(allocationTypeRE);
 
-        List<String> rowData = budgetAllocationRepository.findSubHead(finYearId, allocationTypeBE);
+        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationTypeBE);
+        List<String> rowData = rowDatas.stream().sorted().collect(Collectors.toList());
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -3950,8 +3953,8 @@ public class MangeReportImpl implements MangeReportService {
                     "        <tr>\n" +
                     "            <th scope=\"col\">REVENUE OBJECT HEAD </th>\n" +
                     "            <th class=\"dcf-txt-center\" scope=\"col\"> UNIT </th>\n" +
-                    "            <th class=\"dcf-txt-center\" scope=\"col\">${allocationTypeBE_placeholder} ${finYear_placeholder} ALLOCATION(IN (in ${amountType_placeholder}))</th>\n" +
-                    "            <th class=\"dcf-txt-center\" scope=\"col\">${allocationTypeRE_placeholder} ${finYear_placeholder} ALLOCATION(IN (in ${amountType_placeholder}))</th>\n" +
+                    "            <th class=\"dcf-txt-center\" scope=\"col\">${allocationTypeBE_placeholder} ${finYear_placeholder} ALLOCATION (in ${amountType_placeholder})</th>\n" +
+                    "            <th class=\"dcf-txt-center\" scope=\"col\">${allocationTypeRE_placeholder} ${finYear_placeholder} ALLOCATION (in ${amountType_placeholder})</th>\n" +
                     "\n" +
                     "        </tr>\n" +
                     "        </thead>\n" +
