@@ -391,9 +391,9 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 rebase.setRemBal(Double.toString(remBal));
                 rebase.setLastCbDate(expenditure.get(0).getCbDate());
             }else{
-                rebase.setExpenditureAmount("0");
+                rebase.setExpenditureAmount("0.0000");
                 rebase.setLastCbDate(null);
-                rebase.setRemBal("0");
+                rebase.setRemBal(allocationData.get(i).getAllocationAmount());
             }
 
             responce.add(rebase);
@@ -498,10 +498,10 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
             for (Integer m = 0; m < req.getUnitRebaseRequests().size(); m++) {
 
-                if (req.getUnitRebaseRequests().get(m).getBudgetHeadId() == null || req.getUnitRebaseRequests().get(m).getBudgetHeadId().isEmpty()) {
+/*                if (req.getUnitRebaseRequests().get(m).getBudgetHeadId() == null || req.getUnitRebaseRequests().get(m).getBudgetHeadId().isEmpty()) {
                     return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
                     }, "BUDGET_HEAD ID CAN NOT BE BLANK", HttpStatus.OK.value());
-                }
+                }*/
                 if (req.getUnitRebaseRequests().get(m).getAllocAmount() == null || req.getUnitRebaseRequests().get(m).getAllocAmount().isEmpty()) {
                     return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
                     }, "ALLOCATION AMOUNT CAN NOT BE BLANK", HttpStatus.OK.value());
@@ -592,7 +592,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 budgetRebase.setRefTransId(refRensId);
                 budgetRebase.setFinYear(finYear);
                 budgetRebase.setRebaseUnitId(rebaseUnitId);
-                budgetRebase.setHeadUnitId(headUnitId);
+                budgetRebase.setHeadUnitId(headUnit);
                 budgetRebase.setFrmStationId(frmStationId);
                 budgetRebase.setToStationId(toStationId);
                 budgetRebase.setToHeadUnitId(toHeadUnitId);
@@ -612,8 +612,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 budgetRebaseRepository.save(budgetRebase);
 
                 List<BudgetAllocation> allocationDatas = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(rebaseUnitId, finYear,budHd,allocTypeId,"Approved","0","0");
-                allocationDatas.get(0).setAllocationAmount("0.0000");
-                budgetAllocationRepository.save(allocationDatas.get(0));
+                //allocationDatas.get(0).setAllocationAmount("0.0000");
+                //budgetAllocationRepository.save(allocationDatas.get(0));
                 List<CdaParkingTrans> cdaDetail=cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear,budHd,rebaseUnitId,allocTypeId,"0");
                 if(cdaDetail.size()>0) {
                     for (int j = 0; j < cdaDetail.size(); j++) {
@@ -644,7 +644,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             budgetRebase.setRefTransId(refRensId);
             budgetRebase.setFinYear(finYear);
             budgetRebase.setRebaseUnitId(rebaseUnitId);
-            budgetRebase.setHeadUnitId(headUnitId);
+            budgetRebase.setHeadUnitId(headUnit);
             budgetRebase.setFrmStationId(frmStationId);
             budgetRebase.setToStationId(toStationId);
             budgetRebase.setToHeadUnitId(toHeadUnitId);
