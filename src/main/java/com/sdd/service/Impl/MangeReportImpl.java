@@ -3508,7 +3508,7 @@ public class MangeReportImpl implements MangeReportService {
                     "\n" +
                     "\t\t\t<tr>\n" +
                     "\t\t\t\t<td data-label=\"CGCs/RHQs/ADG(P) Directorates at CGHQ\"></td>\n" +
-                    "\t\t\t\t<td class=\"dcf-txt-center brtm bold\">Existing Amount (in ${amountType_placeholder})</td>\n" +
+                    "\t\t\t\t<td class=\"dcf-txt-center brtm bold\">Allocation Amount (in ${amountType_placeholder})</td>\n" +
                     "\t\t\t\t<td class=\"dcf-txt-center brtm bold\" data-label=\"RE 2022-23 Allocation\">Additional/Withdrawal (in ${amountType_placeholder})</td>\n" +
                     "\t\t\t\t<td class=\"dcf-txt-center bold\">Revised (in ${amountType_placeholder})</td>\n" +
                     "\t\t\t</tr>\n" +
