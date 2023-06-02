@@ -27,7 +27,7 @@ public class PdfGenaratorUtilMain {
     @SuppressWarnings("rawtypes")
     public void createPdfAllocation(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse) throws Exception {
 
-        Document document = new Document(PageSize.A4);
+        Document document = new Document();
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
         document.open();
 
@@ -75,7 +75,7 @@ public class PdfGenaratorUtilMain {
 
 
         Phrase phrase = new Phrase();
-        Font font = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
+        Font font = new Font(Font.FontFamily.COURIER, 10, Font.BOLD);
         Chunk approverName = new Chunk(filePathResponse.getApproveName() + "\n" + filePathResponse.getApproveRank(), font);
         phrase.add(new Paragraph("\n" + "\n" + approverName));
 
@@ -87,157 +87,65 @@ public class PdfGenaratorUtilMain {
     }
 
 
-    public void createCdaAllMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal) throws Exception {
+    public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal) throws Exception {
 
 
-        Document document = new Document(PageSize.A4);
+        Document document = new Document(PageSize.A4.rotate());
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
         document.open();
-        document.setPageSize(PageSize.A4.rotate());
         document.newPage();
 
-        Phrase phrase = new Phrase();
-        Font font = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
-        Chunk header = new Chunk("CDA WISE/OBJECT HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear(), font);
+
+        Font font = new Font(Font.FontFamily.COURIER, 15, Font.BOLD);
+        Chunk header = new Chunk("\n" + "CDA WISE/OBJECT HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() + "\n" + "\n", font);
         Paragraph preface = new Paragraph();
         preface.setAlignment(Element.ALIGN_CENTER);
         preface.add(header);
 
-        Chunk revenue = new Chunk("REVENUE", font);
+        Chunk revenue = new Chunk("REVENUE" + "\n" + "\n", font);
         preface.add(revenue);
 
-        Chunk head = new Chunk("REVENUE", font);
-        preface.add("Major Head " + cadSubReport.getMajorHead() + ". Sub Major Head 00. Minor Head " + cadSubReport.getMinorHead() + ") (In " + cadSubReport.getAmountType()+")");
+        Chunk thiredHead = new Chunk("Major Head " + cadSubReport.getMajorHead() + ". Sub Major Head 00. Minor Head " + cadSubReport.getMinorHead() + ") (In " + cadSubReport.getAmountType() + ")" + "\n" + "\n" + "\n" + "\n", font);
+        preface.add(thiredHead);
 
 
-        document.add(phrase);
-
-//        float[] pointColumnWidths = {50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F};
-//        PdfPTable table = new PdfPTable(21);
+        List<CDAReportResponse> tabData1 = map.get("Sub Head");
+//        float[] pointColumnWidths = {50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F};
+        PdfPTable table = new PdfPTable(tabData1.size() + 1);
+        table.setWidthPercentage(100);
 //        table.setWidths(pointColumnWidths);
-//        table.setSpacingAfter(10);
+        table.setSpacingAfter(10);
 
 
-        StringBuilder middle = new StringBuilder();
-        int m = 0;
-        int size = 0;
+        table.addCell(boldText("object", 6, 35f));
+        for (Integer i = 0; i < tabData1.size(); i++) {
+            table.addCell(boldText(tabData1.get(i).getName(), 5, 20f));
+        }
+
+
         for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
             String key = entry.getKey();
-            List<CDAReportResponse> tabData = entry.getValue();
-            m++;
 
-            String keyValue = "<tr>" +
-                    "<th >" + key + " </th>";
-            middle = middle.append(keyValue);
-
-            size = tabData.size();
-
-            StringBuilder amountAppend = new StringBuilder();
-            for (Integer i = 0; i < tabData.size(); i++) {
-                String data = "<th >" + tabData.get(i).getName() + "</td>";
-                amountAppend = amountAppend.append(data);
-            }
-            middle = middle.append(amountAppend).append("</tr>");
-
-            if (m == 12 || m == 22 || m == 34 || m == 46 || m == 58) {
-                middle = middle.append("</thead></table><br><br><br><br><table  class=dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%  border=\"1\"><thead>");
-                middle = middle.append("<tr>" +
-                        "<th > object </th>");
-                List<CDAReportResponse> tabData1 = map.get("Sub Head");
-                StringBuilder amountAppend1 = new StringBuilder();
-                for (Integer i = 0; i < tabData1.size(); i++) {
-                    String data = "<th >" + tabData1.get(i).getName() + "</td>";
-                    amountAppend1 = amountAppend1.append(data);
+            if (!key.equalsIgnoreCase("Sub Head")) {
+                List<CDAReportResponse> tabData = entry.getValue();
+                table.addCell(boldText(key, 5, 35f));
+                for (Integer i = 0; i < tabData.size(); i++) {
+                    table.addCell(normalText(tabData.get(i).getName(), 6, 20f));
                 }
-                middle = middle.append(amountAppend1).append("</tr>");
-
+            }
+        }
+        table.addCell(boldText("Grand Total", 5, 20f));
+        for (Integer i = 0; i < tabData1.size(); i++) {
+            if (i == (tabData1.size() - 1)) {
+                table.addCell(boldText(grandTotal + "", 6, 20f));
+            } else {
+                table.addCell(normalText("", 6, 20f));
             }
         }
 
-        middle = middle.append("<tr>" +
-                "<th > Grand Total </th>");
-        for (Integer i = 0; i < size; i++) {
-            String data = "<th >" + " " + "</td>";
-            middle = middle.append(data);
-        }
-        middle = middle.append(grandTotal).append("</tr>");
 
-
-        document.close();
-    }
-
-
-
-    public void createCdaMainReport( HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal) throws Exception {
-
-
-        Document document = new Document(PageSize.A4);
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
-        document.open();
-        document.setPageSize(PageSize.A4.rotate());
-        document.newPage();
-
-        Phrase phrase = new Phrase();
-        Font font = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
-        Chunk header = new Chunk("CDA WISE/OBJECT HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear(), font);
-        Paragraph preface = new Paragraph();
-        preface.setAlignment(Element.ALIGN_CENTER);
-        preface.add(header);
-
-        Chunk revenue = new Chunk("REVENUE", font);
-        preface.add(revenue);
-
-        Chunk head = new Chunk("REVENUE", font);
-        preface.add("Major Head " + cadSubReport.getMajorHead() + ". Sub Major Head 00. Minor Head " + cadSubReport.getMinorHead() + ") (In " + cadSubReport.getAmountType()+")");
-
-
-        document.add(phrase);
-
-
-
-        StringBuilder middle = new StringBuilder();
-        int m = 0;
-        int size = 0;
-        for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
-            String key = entry.getKey();
-            List<CDAReportResponse> tabData = entry.getValue();
-            m++;
-
-            String keyValue = "<tr>" +
-                    "<th >" + key + " </th>";
-            middle = middle.append(keyValue);
-
-            size = tabData.size();
-
-            StringBuilder amountAppend = new StringBuilder();
-            for (Integer i = 0; i < tabData.size(); i++) {
-                String data = "<th >" + tabData.get(i).getName() + "</td>";
-                amountAppend = amountAppend.append(data);
-            }
-            middle = middle.append(amountAppend).append("</tr>");
-
-            if (m == 30 || m == 68 || m == 96) {
-                middle = middle.append("</thead></table><br><br><br><br><table  class=dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%  border=\"1\"><thead>");
-                middle = middle.append("<tr>" +
-                        "<th > object </th>");
-                List<CDAReportResponse> tabData1 = map.get("Sub Head");
-                StringBuilder amountAppend1 = new StringBuilder();
-                for (Integer i = 0; i < tabData1.size(); i++) {
-                    String data = "<th >" + tabData1.get(i).getName() + "</td>";
-                    amountAppend1 = amountAppend1.append(data);
-                }
-                middle = middle.append(amountAppend1).append("</tr>");
-
-            }
-        }
-
-        middle = middle.append("<tr>" +
-                "<th > Grand Total </th>");
-        for (Integer i = 0; i < size; i++) {
-            String data = "<th >" + " " + "</td>";
-            middle = middle.append(data);
-        }
-        middle = middle.append(grandTotal).append("</tr>");
+        document.add(preface);
+        document.add(table);
         document.close();
 
     }
@@ -245,13 +153,14 @@ public class PdfGenaratorUtilMain {
 
     private PdfPCell boldText(String text, int fontSize, float cellHeight) {
         Phrase phrase = new Phrase();
-        Font font = new Font(Font.FontFamily.TIMES_ROMAN, fontSize, Font.BOLD);
+        Font font = new Font(Font.FontFamily.COURIER, fontSize, Font.BOLD);
         Chunk world = new Chunk(text, font);
         phrase.add(world);
         Paragraph paragraph = new Paragraph();
         paragraph.add(phrase);
         PdfPCell cell = new PdfPCell(phrase);
         cell.setMinimumHeight(cellHeight);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         return cell;
     }
 
@@ -265,6 +174,7 @@ public class PdfGenaratorUtilMain {
         paragraph.add(phrase);
         PdfPCell cell = new PdfPCell(phrase);
         cell.setMinimumHeight(cellHeight);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         return cell;
     }
 

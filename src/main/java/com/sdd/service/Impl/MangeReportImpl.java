@@ -235,7 +235,7 @@ public class MangeReportImpl implements MangeReportService {
             dtoList.add(filePathResponse);
 
         } catch (Exception e) {
-            throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+            throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
         }
 
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -369,7 +369,7 @@ public class MangeReportImpl implements MangeReportService {
             dtoList.add(filePathResponse);
 
         } catch (Exception e) {
-            throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+            throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
         }
 
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -476,7 +476,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
             } catch (Exception e) {
-                throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+                throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
             }
 
         }
@@ -605,7 +605,7 @@ public class MangeReportImpl implements MangeReportService {
             dtoList.add(dto);
 
         } catch (Exception e) {
-            throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+            throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
         }
 
 //        }
@@ -832,7 +832,7 @@ public class MangeReportImpl implements MangeReportService {
             dto.setFileName(fileName);
             dtoList.add(dto);
         } catch (Exception e) {
-            throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+            throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
         }
 
 //        }
@@ -1012,14 +1012,14 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaAllMainReport(allCdaData, cadSubReport, filePath, grandTotal);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
 
 
                 } catch (Exception e) {
-                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
                 }
 
             } else if (cdaReportRequest.getCdaType().contains("112244")) {
@@ -1092,7 +1092,7 @@ public class MangeReportImpl implements MangeReportService {
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
                 } catch (Exception e) {
-                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
                 }
 
 
@@ -1167,14 +1167,14 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaAllMainReport(allCdaData, cadSubReport, filePath, grandTotal);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
 
 
                 } catch (Exception e) {
-                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
                 }
 
             }
@@ -1281,7 +1281,7 @@ public class MangeReportImpl implements MangeReportService {
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
                 } catch (Exception e) {
-                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
                 }
 
 
@@ -1379,7 +1379,7 @@ public class MangeReportImpl implements MangeReportService {
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
                 } catch (Exception e) {
-                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
                 }
             }
 
@@ -1521,14 +1521,14 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaAllMainReport(allCdaData, cadSubReport, filePath, grandTotal);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
 
 
                 } catch (Exception e) {
-                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
                 }
 
             }
@@ -1606,7 +1606,7 @@ public class MangeReportImpl implements MangeReportService {
 //                    dtoList.setFileName(fileName);
 //
 //                } catch (Exception e) {
-//                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+//                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
 //                }
 //
 //            }
@@ -1680,7 +1680,7 @@ public class MangeReportImpl implements MangeReportService {
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
                 } catch (Exception e) {
-                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
                 }
 
 
@@ -1755,14 +1755,14 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaAllMainReport(allCdaData, cadSubReport, filePath, grandTotal);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
 
 
                 } catch (Exception e) {
-                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
                 }
 
             }
@@ -1869,7 +1869,7 @@ public class MangeReportImpl implements MangeReportService {
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
                 } catch (Exception e) {
-                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
                 }
 
 
@@ -1967,7 +1967,7 @@ public class MangeReportImpl implements MangeReportService {
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
                 } catch (Exception e) {
-                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+                    throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
                 }
             }
 
