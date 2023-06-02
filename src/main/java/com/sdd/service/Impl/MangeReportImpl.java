@@ -1863,7 +1863,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    File file = new File(filePath);
+
                     pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
@@ -1961,7 +1961,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    File file = new File(filePath);
+
                     pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
