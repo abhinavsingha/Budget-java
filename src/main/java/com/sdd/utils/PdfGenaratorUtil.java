@@ -1,10 +1,6 @@
 package com.sdd.utils;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.html.simpleparser.HTMLWorker;
-import com.itextpdf.text.html.simpleparser.StyleSheet;
-import com.itextpdf.text.pdf.PdfWriter;
+
 import com.sdd.response.CDAReportResponse;
 import com.sdd.response.CDAReportSubResponse;
 import com.sdd.response.CbReportResponse;
@@ -36,7 +32,6 @@ public class PdfGenaratorUtil {
 
         for (Map.Entry<String, List<ReportSubModel>> entry : map.entrySet()) {
             String key = entry.getKey();
-
             List<ReportSubModel> tabData = entry.getValue();
             String data = "<tr>" +
                     "<th scope=row class=bbtm>" + key + "</th>";
@@ -1020,7 +1015,7 @@ public class PdfGenaratorUtil {
     }
 
 
-    public void createCbReportPdfSample(String templateName, CbReportResponse cbReportResponse, File outputFile) throws Exception {
+    public void  createCbReportPdfSample(String templateName, CbReportResponse cbReportResponse, File outputFile) throws Exception {
         Assert.notNull(templateName, "The templateName can not be null");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = dateFormat.format(cbReportResponse.getCbData().getCbDate());
@@ -1157,7 +1152,8 @@ public class PdfGenaratorUtil {
                 "<table class=table3>" +
                 "<tr>" +
                 "<th></th>" + "<td class=tab>(" + cbReportResponse.getApprover().getFullName() + ")</td>" + "</tr>" + "<tr>" +
-                "<th>Coast Guard Headquaters</th>" + "<td class=tab>Dy Inspector General</td>" + "</tr>" +
+                "<th>Coast Guard Headquaters</th>" + "</tr>" +
+
                 "<tr>" +
                 "<th>National Stadium Complex</th>" +
                 "<td class=tab>" + cbReportResponse.getApprover().getRank() + "</td>" + "</tr>" +

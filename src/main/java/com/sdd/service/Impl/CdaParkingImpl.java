@@ -499,13 +499,13 @@ public class CdaParkingImpl implements CdaParkingService {
             mangeInboxOutbox.setGroupId(authGroupId);
             mangeInboxOutbox.setRoleId(hrData.getRoleId());
             mangeInboxOutbox.setCreaterpId(hrData.getPid());
-            mangeInboxOutbox.setState("AP");
             mangeInboxOutbox.setApproverpId("");
-            mangeInboxOutbox.setIsFlag("0");
+            mangeInboxOutbox.setIsFlag("1");
             mangeInboxOutbox.setIsArchive("0");
             mangeInboxOutbox.setIsApproved("0");
             mangeInboxOutbox.setStatus("Approved");
             mangeInboxOutbox.setIsBgcg("CDA");
+            mangeInboxOutbox.setState("CR");
 
             mangeInboxOutBoxRepository.save(mangeInboxOutbox);
 

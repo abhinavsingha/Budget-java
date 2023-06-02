@@ -874,6 +874,15 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setUserId(budgetAllocationSubReport.getUserId());
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
+
+            if(budgetAllocationSubReport.getRevisedAmount() == null){
+                budgetAllocationReport.setRevisedAmount("0");
+            }else{
+                budgetAllocationReport.setRevisedAmount(budgetAllocationSubReport.getRevisedAmount());
+            }
+
+
+
             budgetAllocationReport.setReturnRemarks(budgetAllocationSubReport.getReturnRemarks());
             budgetAllocationReport.setCreatedOn(budgetAllocationSubReport.getCreatedOn());
             budgetAllocationReport.setUpdatedOn(budgetAllocationSubReport.getUpdatedOn());
@@ -1100,11 +1109,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                     oldRevision.add(budgetAllocationReport);
 
-                    Collections.sort(oldRevision, new Comparator<BudgetAllocationSubResponse>() {
-                        public int compare(BudgetAllocationSubResponse v1, BudgetAllocationSubResponse v2) {
-                            return v1.getSubHead().getCreatedOn().compareTo(v2.getSubHead().getCreatedOn());
-                        }
-                    });
+//                    Collections.sort(oldRevision, new Comparator<BudgetAllocationSubResponse>() {
+//                        public int compare(BudgetAllocationSubResponse v1, BudgetAllocationSubResponse v2) {
+//                            return v1.getSubHead().getCreatedOn().compareTo(v2.getSubHead().getCreatedOn());
+//                        }
+//                    });
 
                 }
             }
@@ -1471,6 +1480,14 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setUserId(budgetAllocationSubReport.getUserId());
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getCreatedOn());
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
+
+            if(budgetAllocationSubReport.getRevisedAmount() == null){
+                budgetAllocationReport.setRevisedAmount("0");
+            }else{
+                budgetAllocationReport.setRevisedAmount(budgetAllocationSubReport.getRevisedAmount());
+            }
+
+
             budgetAllocationReport.setCreatedOn(budgetAllocationSubReport.getCreatedOn());
             budgetAllocationReport.setUpdatedOn(budgetAllocationSubReport.getUpdatedOn());
             budgetAllocationReport.setFinYear(budgetFinancialYearRepository.findBySerialNo(budgetAllocationSubReport.getFinYear()));
@@ -3423,14 +3440,14 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         String authgroupid = authRequest.getAuthGroupId();
 
 
-        HashMap<String, BudgetAllocationDetails> totalUnit = new HashMap<String, BudgetAllocationDetails>();
-        for (Integer i = 0; i < budgetAllocationDetailsList.size(); i++) {
-            totalUnit.put(budgetAllocationDetailsList.get(i).getToUnit(), budgetAllocationDetailsList.get(i));
+        HashMap<String, BudgetAllocation> totalUnit = new HashMap<String, BudgetAllocation>();
+        for (Integer i = 0; i < budgetAllocationsList.size(); i++) {
+            totalUnit.put(budgetAllocationsList.get(i).getToUnit(), budgetAllocationsList.get(i));
         }
 
-        for (Map.Entry<String, BudgetAllocationDetails> entry : totalUnit.entrySet()) {
+        for (Map.Entry<String, BudgetAllocation> entry : totalUnit.entrySet()) {
             String key = entry.getKey();
-            BudgetAllocationDetails tabData = entry.getValue();
+            BudgetAllocation tabData = entry.getValue();
 
             MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
 
@@ -3445,7 +3462,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             mangeInboxOutbox.setCreaterpId(hrDataCheck.getPid());
             mangeInboxOutbox.setApproverpId("");
             mangeInboxOutbox.setStatus("Approved");
-            mangeInboxOutbox.setAllocationType(tabData.getAllocTypeId());
+            mangeInboxOutbox.setAllocationType(tabData.getAllocationTypeId());
             mangeInboxOutbox.setIsFlag("1");
             mangeInboxOutbox.setIsArchive("0");
             mangeInboxOutbox.setIsApproved("1");
@@ -3457,11 +3474,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             mangeInboxOutBoxRepository.save(mangeInboxOutbox);
 
         }
-
-
-//        for (Integer i = 0; i < budgetAllocationDetailsList.size(); i++) {
-//
-//        }
 
 
         MangeInboxOutbox mangeInboxOutbox11 = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(authgroupid, hrDataCheck.getUnitId());

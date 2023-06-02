@@ -93,6 +93,12 @@ public class MangeReportImpl implements MangeReportService {
     private PdfGenaratorUtil pdfGenaratorUtil;
 
     @Autowired
+    private PdfGenaratorUtilMain pdfGenaratorUtilMain;
+
+    @Autowired
+    private DocxGenaratorUtil docxGenaratorUtil;
+
+    @Autowired
     private ContigentBillRepository contigentBillRepository;
 
     @Autowired
@@ -175,11 +181,12 @@ public class MangeReportImpl implements MangeReportService {
 
 
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
-
+        FilePathResponse filePathResponse = new FilePathResponse();
+        List<ReportSubModel> tabData = new ArrayList<ReportSubModel>();
+        String key = "";
         for (Map.Entry<String, List<ReportSubModel>> entry : hashMap.entrySet()) {
-            String key = entry.getKey();
-            List<ReportSubModel> tabData = entry.getValue();
-            FilePathResponse filePathResponse = new FilePathResponse();
+            key = entry.getKey();
+            tabData.addAll(entry.getValue());
 
 
             List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
@@ -202,39 +209,34 @@ public class MangeReportImpl implements MangeReportService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO APPROVE ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
             }
 
-
-            AllocationType allocationType = allocationRepository.findByAllocTypeId(tabData.get(0).getType());
-            BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(tabData.get(0).getFinYear());
-
-
-            filePathResponse.setFinYear(budgetFinancialYear.getFinYear());
-            filePathResponse.setUnit(tabData.get(0).getUnit());
-            filePathResponse.setSubHead(key);
-            filePathResponse.setType(allocationType.getAllocDesc());
-            filePathResponse.setAmountType(tabData.get(0).getAmountType());
-            filePathResponse.setRemark(tabData.get(0).getRemark());
-
-
-            try {
-
-
-                String templateName = "allocation-report.html";
-                File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
-                if (!folder.exists()) {
-                    folder.mkdirs();
-                }
-                String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                File file = new File(filePath);
-                pdfGenaratorUtil.createPdfAllocation(templateName, hashMap, file, filePathResponse);
-                filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
-                filePathResponse.setFileName(fileName);
-                dtoList.add(filePathResponse);
-
-            } catch (Exception e) {
-                throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
-            }
         }
 
+
+        AllocationType allocationType = allocationRepository.findByAllocTypeId(tabData.get(0).getType());
+        BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(tabData.get(0).getFinYear());
+
+        filePathResponse.setFinYear(budgetFinancialYear.getFinYear());
+        filePathResponse.setUnit(tabData.get(0).getUnit());
+        filePathResponse.setSubHead(key);
+        filePathResponse.setType(allocationType.getAllocDesc());
+        filePathResponse.setAmountType(tabData.get(0).getAmountType());
+        filePathResponse.setRemark(tabData.get(0).getRemark());
+
+
+        try {
+            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
+            pdfGenaratorUtilMain.createPdfAllocation(hashMap, filePath, filePathResponse);
+            filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
+            filePathResponse.setFileName(fileName);
+            dtoList.add(filePathResponse);
+
+        } catch (Exception e) {
+            throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+        }
 
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
@@ -252,8 +254,6 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
 
-
-        String fileName = "AllocationReport" + hrData.getUnitId();
 
         HashMap<String, List<ReportSubModel>> hashMap = new HashMap<>();
         List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
@@ -312,10 +312,13 @@ public class MangeReportImpl implements MangeReportService {
 
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
 
+
+        FilePathResponse filePathResponse = new FilePathResponse();
+        List<ReportSubModel> tabData = new ArrayList<ReportSubModel>();
+        String key = "";
         for (Map.Entry<String, List<ReportSubModel>> entry : hashMap.entrySet()) {
-            String key = entry.getKey();
-            List<ReportSubModel> tabData = entry.getValue();
-            FilePathResponse filePathResponse = new FilePathResponse();
+            key = entry.getKey();
+            tabData.addAll(entry.getValue());
 
 
             List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
@@ -338,143 +341,43 @@ public class MangeReportImpl implements MangeReportService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO APPROVE ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
             }
 
-
-            AllocationType allocationType = allocationRepository.findByAllocTypeId(tabData.get(0).getType());
-            BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(tabData.get(0).getFinYear());
-
-
-            filePathResponse.setFinYear(budgetFinancialYear.getFinYear());
-            filePathResponse.setUnit(tabData.get(0).getUnit());
-            filePathResponse.setSubHead(key);
-            filePathResponse.setType(allocationType.getAllocDesc());
-            filePathResponse.setAmountType(tabData.get(0).getAmountType());
-            filePathResponse.setRemark(tabData.get(0).getRemark());
-
-
-            try {
-
-
-                XWPFDocument document = new XWPFDocument();
-                File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
-                if (!folder.exists()) {
-                    folder.mkdirs();
-                }
-                String path = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                FileOutputStream out = new FileOutputStream(new File(path));
-
-                XWPFTable table = document.createTable();
-                table.setWidth("100%");
-//                XWPFParagraph para = document.createParagraph();
-//                XWPFRun run = para.createRun();
-
-
-                XWPFTableRow tableRowOne = table.getRow(0);
-                XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
-                boldText(paragraphtableRowOne.createRun(), 10, "SUB HEAD", true);
-
-                XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
-                boldText(paragraphtableRowOne1.createRun(), 10, "UNIT NAME", true);
-
-                XWPFParagraph paragraphtableRowOne11 = tableRowOne.addNewTableCell().addParagraph();
-                boldText(paragraphtableRowOne11.createRun(), 10, filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", true);
-
-
-                for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
-                    String key11 = entry11.getKey();
-                    List<ReportSubModel> tabData11 = entry11.getValue();
-
-                    XWPFTableRow tableRow = table.createRow();
-                    tableRow.getCell(0).setText(key11);
-                    double allAmountData = 0;
-                    for (Integer i = 0; i < tabData11.size(); i++) {
-
-                        if (i == 0) {
-//                            tableRow.getCell(1).setText(tabData11.get(i).getUnit());
-                            XWPFParagraph paragraph = tableRow.getCell(1).addParagraph();
-                            normalText(paragraph.createRun(), 10, tabData11.get(i).getUnit(), false);
-
-//                            tableRow.getCell(2).setText(tabData11.get(i).getAmount());
-                            XWPFParagraph paragraph11 = tableRow.getCell(2).addParagraph();
-                            normalText(paragraph11.createRun(), 10, tabData11.get(i).getAmount(), false);
-
-                        } else {
-                            XWPFTableRow tableRow11 = table.createRow();
-                            tableRow11.getCell(0).setText("");
-                            XWPFParagraph paragraph = tableRow11.getCell(1).addParagraph();
-                            normalText(paragraph.createRun(), 10, tabData11.get(i).getUnit(), false);
-
-                            XWPFParagraph paragraph11 = tableRow11.getCell(2).addParagraph();
-                            normalText(paragraph11.createRun(), 10, tabData11.get(i).getAmount(), false);
-                        }
-
-
-                        allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
-
-                        XWPFTableRow latRow = table.createRow();
-
-                        XWPFParagraph total1 = latRow.getCell(1).addParagraph();
-                        boldText(total1.createRun(), 10, "Total Amount", true);
-
-                        XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
-                        boldText(total1111.createRun(), 10, allAmountData + "", true);
-
-                    }
-                }
-
-
-                //create first row
-                XWPFParagraph mainParagraph = document.createParagraph();
-                mainParagraph = document.createParagraph();
-                mainParagraph.createRun().addBreak();
-                mainParagraph = document.createParagraph();
-                boldText(mainParagraph.createRun(), 10, filePathResponse.getApproveName() + "", true);
-                mainParagraph = document.createParagraph();
-                normalText(mainParagraph.createRun(), 10, filePathResponse.getApproveRank() + "", true);
-
-
-                // Line 2
-                // Creating object for line 2
-//                XWPFRun line2 = paragraph.createRun();
-
-                // Formatting line1 by setting italic
-//                line2.setText("Formatted with Italics");
-//                line2.setItalic(true);
-//                line2.addBreak();
-
-                // Line 3
-                // Creating object for line 3
-//                XWPFRun line3 = paragraph.createRun();
-
-                // Formatting line3 by setting
-                // color & font size
-//                line3.setColor("73fc03");
-//                line3.setFontSize(20);
-//                line3.setText(" Formatted with Color");
-
-                // Step 6: Saving changes to document
-                document.write(out);
-
-                // Step 7: Closing the connections
-                out.close();
-                document.close();
-
-
-                FilePathResponse dto = new FilePathResponse();
-                dto.setPath(HelperUtils.FILEPATH + fileName + ".docx");
-                dto.setFileName(fileName);
-                dtoList.add(dto);
-
-            } catch (Exception e) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
-            }
-
         }
 
 
+        AllocationType allocationType = allocationRepository.findByAllocTypeId(tabData.get(0).getType());
+        BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(tabData.get(0).getFinYear());
+
+        filePathResponse.setFinYear(budgetFinancialYear.getFinYear());
+        filePathResponse.setUnit(tabData.get(0).getUnit());
+        filePathResponse.setSubHead(key);
+        filePathResponse.setType(allocationType.getAllocDesc());
+        filePathResponse.setAmountType(tabData.get(0).getAmountType());
+        filePathResponse.setRemark(tabData.get(0).getRemark());
+
+
+        try {
+
+            String fileName = "AllocationReport" + hrData.getUnitId();
+
+            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
+            docxGenaratorUtil.createDocAllocation(hashMap, filePath, filePathResponse);
+            filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
+            filePathResponse.setFileName(fileName);
+            dtoList.add(filePathResponse);
+
+        } catch (Exception e) {
+            throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "INTERNAL SERVER ERROR");
+        }
+
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
-    }
 
+
+    }
 
 
     @Override
@@ -4526,7 +4429,7 @@ public class MangeReportImpl implements MangeReportService {
                                 }
                                 DecimalFormat decimalFormat = new DecimalFormat("#");
                                 String cbAmount = decimalFormat.format(totalAmount);
-                                eAmount=Double.parseDouble(cbAmount);
+                                eAmount = Double.parseDouble(cbAmount);
                             } else {
                                 eAmount = 0.0;
                             }
@@ -5038,15 +4941,15 @@ public class MangeReportImpl implements MangeReportService {
                         Double aAmount = Double.valueOf(rebaseData.get(k).getAllocAmount());
                         Double eAmount = Double.valueOf(rebaseData.get(k).getExpAmount());
                         Double bAmount = Double.valueOf(rebaseData.get(k).getBalAmount());
-                        String cbD="";
-                        if(rebaseData.get(k).getLastCbDate()!=null) {
+                        String cbD = "";
+                        if (rebaseData.get(k).getLastCbDate() != null) {
                             LastCbD = rebaseData.get(k).getLastCbDate();
                             SimpleDateFormat id = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
                             SimpleDateFormat od = new SimpleDateFormat("dd-MMMM-yyyy");
                             Date dateC = id.parse(LastCbD.toString());
                             cbD = od.format(dateC);
-                        }else
-                            cbD="null";
+                        } else
+                            cbD = "null";
                         allocAmount = aAmount * amountUnit / reqAmount;
                         expAmount = eAmount;
                         balAmount = bAmount * amountUnit / reqAmount;
@@ -5608,24 +5511,24 @@ public class MangeReportImpl implements MangeReportService {
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
-        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(),"1");
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
         if (hrDataCheck == null) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            },"YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS",HttpStatus.OK.value());
+            }, "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS", HttpStatus.OK.value());
         } else {
             if (hrDataCheck.getRoleId().contains(HelperUtils.SYSTEMADMIN)) {
             } else {
                 return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                },"YOU ARE NOT AUTHORIZED TO REBASE THE STATION",HttpStatus.OK.value());
+                }, "YOU ARE NOT AUTHORIZED TO REBASE THE STATION", HttpStatus.OK.value());
             }
         }
         if (fromDate == null) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            },"FROM DATE CAN NOT BE NULL",HttpStatus.OK.value());
+            }, "FROM DATE CAN NOT BE NULL", HttpStatus.OK.value());
         }
         if (toDate == null) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            },"TO DATE NOT BE NULL",HttpStatus.OK.value());
+            }, "TO DATE NOT BE NULL", HttpStatus.OK.value());
         }
 
         List<String> groupUnitId = budgetRebaseRepository.findGroupRebaseUnit();
@@ -5649,51 +5552,50 @@ public class MangeReportImpl implements MangeReportService {
         LocalDateTime localDateTime = LocalDateTime.of(resultDt, LocalTime.MIDNIGHT);
         Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
 
-        try{
-        XWPFDocument document = new XWPFDocument();
-        File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-        String path = folder.getAbsolutePath() + "/" + "UnitRebaseReport" + ".docx";
-        FileOutputStream out = new FileOutputStream(new File(path));
+        try {
+            XWPFDocument document = new XWPFDocument();
+            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String path = folder.getAbsolutePath() + "/" + "UnitRebaseReport" + ".docx";
+            FileOutputStream out = new FileOutputStream(new File(path));
 
-        String RunitId = "";
-        if (groupUnitId.size() > 0) {
-            for (String ids : groupUnitId) {
-                RunitId = ids;
-                List<BudgetRebase> rebaseDatas = budgetRebaseRepository.findByRebaseUnitId(RunitId);
-                List<BudgetRebase> rebaseData = rebaseDatas.stream()
-                        .filter(e -> e.getOccuranceDate().after(fromDateFormate) && e.getOccuranceDate().before(toDateFormate)).collect(Collectors.toList());
-                if (rebaseData.size() <= 0) {
-                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
-                }
-                UnitRebaseReportResponce rebase = new UnitRebaseReportResponce();
-                CgUnit unitN = cgUnitRepository.findByUnit(RunitId);
-                CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
-                rebase.setUnitName(unitN.getDescr());
-                rebase.setDateOfRebase(rebaseData.get(0).getOccuranceDate());
-                rebase.setFromStation(rebaseData.get(0).getFrmStationId());
-                rebase.setToStation(toS.getStationName());
+            String RunitId = "";
+            if (groupUnitId.size() > 0) {
+                for (String ids : groupUnitId) {
+                    RunitId = ids;
+                    List<BudgetRebase> rebaseDatas = budgetRebaseRepository.findByRebaseUnitId(RunitId);
+                    List<BudgetRebase> rebaseData = rebaseDatas.stream()
+                            .filter(e -> e.getOccuranceDate().after(fromDateFormate) && e.getOccuranceDate().before(toDateFormate)).collect(Collectors.toList());
+                    if (rebaseData.size() <= 0) {
+                        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
+                    }
+                    UnitRebaseReportResponce rebase = new UnitRebaseReportResponce();
+                    CgUnit unitN = cgUnitRepository.findByUnit(RunitId);
+                    CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
+                    rebase.setUnitName(unitN.getDescr());
+                    rebase.setDateOfRebase(rebaseData.get(0).getOccuranceDate());
+                    rebase.setFromStation(rebaseData.get(0).getFrmStationId());
+                    rebase.setToStation(toS.getStationName());
 
-                XWPFTable table = document.createTable();
-                table.setWidth("100%");
+                    XWPFTable table = document.createTable();
+                    table.setWidth("100%");
 
 
+                    XWPFTableRow tableRowOne = table.getRow(0);
 
-                XWPFTableRow tableRowOne = table.getRow(0);
+                    XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
+                    boldText(paragraphtableRowOne.createRun(), 10, "UNIT NAME", true);
 
-                XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
-                boldText(paragraphtableRowOne.createRun(), 10, "UNIT NAME", true);
+                    XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(0).addParagraph();
+                    boldText(paragraphtableRowOne1.createRun(), 10, "unitN.getDescr()", true);
 
-                XWPFParagraph paragraphtableRowOne1 =tableRowOne.getCell(0).addParagraph();
-                boldText(paragraphtableRowOne1.createRun(), 10, "unitN.getDescr()", true);
+                    XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(0).addParagraph();
+                    boldText(paragraphtableRowOne2.createRun(), 10, "FROM STATION", true);
 
-                XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(0).addParagraph();
-                boldText(paragraphtableRowOne2.createRun(), 10, "FROM STATION", true);
-
-                XWPFParagraph paragraphtableRowOne3 = tableRowOne.getCell(0).addParagraph();
-                boldText(paragraphtableRowOne3.createRun(), 10, rebaseData.get(0).getFrmStationId(), true);
+                    XWPFParagraph paragraphtableRowOne3 = tableRowOne.getCell(0).addParagraph();
+                    boldText(paragraphtableRowOne3.createRun(), 10, rebaseData.get(0).getFrmStationId(), true);
 
 /*
 
@@ -5714,10 +5616,6 @@ public class MangeReportImpl implements MangeReportService {
 */
 
 
-
-
-
-
 //                XWPFTable table1 = document.createTable();
 //                table1.setWidth("100%");
 //                XWPFTableRow tableRowOnes = table.getRow(0);
@@ -5733,27 +5631,27 @@ public class MangeReportImpl implements MangeReportService {
 //                XWPFParagraph paragraphtableRowOne7 = tableRowOne.addNewTableCell().addParagraph();
 //                boldText(paragraphtableRowOne7.createRun(), 10, toS.getStationName(), true);
 
-                List<UnitRebaseSubReportResponce> addRes = new ArrayList<UnitRebaseSubReportResponce>();
-                for (Integer k = 0; k < rebaseData.size(); k++) {
-                    BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(rebaseData.get(k).getFinYear());
-                    BudgetHead bHead = subHeadRepository.findByBudgetCodeId(rebaseData.get(k).getBudgetHeadId());
-                    AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(rebaseData.get(k).getAmountType());
-                    AllocationType allocType = allocationRepository.findByAllocTypeId(rebaseData.get(k).getAllocTypeId());
-                    UnitRebaseSubReportResponce subResp = new UnitRebaseSubReportResponce();
-                    subResp.setFinYear(findyr.getFinYear());
-                    subResp.setAllocationType(allocType.getAllocDesc());
-                    subResp.setSubHead(bHead.getSubHeadDescr());
-                    subResp.setAllocationAmount(rebaseData.get(k).getAllocAmount());
-                    subResp.setExpenditureAmount(rebaseData.get(k).getExpAmount());
-                    subResp.setBalAmount(rebaseData.get(k).getBalAmount());
-                    subResp.setAmountType(amountTypeObj.getAmountType());
-                    subResp.setLastCbDate(rebaseData.get(k).getLastCbDate());
-                    addRes.add(subResp);
+                    List<UnitRebaseSubReportResponce> addRes = new ArrayList<UnitRebaseSubReportResponce>();
+                    for (Integer k = 0; k < rebaseData.size(); k++) {
+                        BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(rebaseData.get(k).getFinYear());
+                        BudgetHead bHead = subHeadRepository.findByBudgetCodeId(rebaseData.get(k).getBudgetHeadId());
+                        AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(rebaseData.get(k).getAmountType());
+                        AllocationType allocType = allocationRepository.findByAllocTypeId(rebaseData.get(k).getAllocTypeId());
+                        UnitRebaseSubReportResponce subResp = new UnitRebaseSubReportResponce();
+                        subResp.setFinYear(findyr.getFinYear());
+                        subResp.setAllocationType(allocType.getAllocDesc());
+                        subResp.setSubHead(bHead.getSubHeadDescr());
+                        subResp.setAllocationAmount(rebaseData.get(k).getAllocAmount());
+                        subResp.setExpenditureAmount(rebaseData.get(k).getExpAmount());
+                        subResp.setBalAmount(rebaseData.get(k).getBalAmount());
+                        subResp.setAmountType(amountTypeObj.getAmountType());
+                        subResp.setLastCbDate(rebaseData.get(k).getLastCbDate());
+                        addRes.add(subResp);
+                    }
+                    rebase.setList(addRes);
+                    responce.add(rebase);
                 }
-                rebase.setList(addRes);
-                responce.add(rebase);
             }
-        }
 
             XWPFParagraph mainParagraph = document.createParagraph();
             mainParagraph = document.createParagraph();
@@ -5761,7 +5659,7 @@ public class MangeReportImpl implements MangeReportService {
             mainParagraph = document.createParagraph();
             boldText(mainParagraph.createRun(), 10, "Test" + "", true);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, "Hello"+ "", true);
+            normalText(mainParagraph.createRun(), 10, "Hello" + "", true);
             document.write(out);
             out.close();
             document.close();
