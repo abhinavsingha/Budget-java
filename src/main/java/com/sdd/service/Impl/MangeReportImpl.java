@@ -1005,7 +1005,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 try {
 
-                    String templateName = "cda-parking-report-revenue.html";
+                    
                     File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
@@ -1080,7 +1080,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 try {
 
-                    String templateName = "cda-parking-report-revenue.html";
+                    
                     File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
@@ -1160,7 +1160,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 try {
 
-                    String templateName = "cda-parking-report-revenue.html";
+                    
                     File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
@@ -1269,7 +1269,7 @@ public class MangeReportImpl implements MangeReportService {
 
                 try {
 
-                    String templateName = "cda-parking-report-revenue.html";
+                    
                     File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
@@ -1367,7 +1367,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 try {
 
-                    String templateName = "cda-parking-report-revenue.html";
+                    
                     File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
@@ -1514,15 +1514,15 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 try {
 
-                    String templateName = "cda-parking-report-revenue.html";
+                    
                     File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
-                    String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
+                    String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
                     File file = new File(filePath);
                     pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
-                    dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
+                    dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
 
@@ -1594,7 +1594,7 @@ public class MangeReportImpl implements MangeReportService {
 //
 //                try {
 //
-//                    String templateName = "cda-parking-report-revenue.html";
+//                    
 //                    File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
 //                    if (!folder.exists()) {
 //                        folder.mkdirs();
@@ -1668,15 +1668,15 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 try {
 
-                    String templateName = "cda-parking-report-revenue.html";
+                    
                     File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
-                    String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
+                    String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
                     File file = new File(filePath);
                     pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
-                    dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
+                    dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
                 } catch (Exception e) {
@@ -1748,15 +1748,15 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 try {
 
-                    String templateName = "cda-parking-report-revenue.html";
+                    
                     File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
-                    String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
+                    String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
                     File file = new File(filePath);
                     pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
-                    dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
+                    dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
 
@@ -1857,15 +1857,15 @@ public class MangeReportImpl implements MangeReportService {
 
                 try {
 
-                    String templateName = "cda-parking-report-revenue.html";
+                    
                     File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
-                    String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
+                    String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
                     File file = new File(filePath);
                     pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
-                    dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
+                    dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
                 } catch (Exception e) {
@@ -1955,15 +1955,15 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 try {
 
-                    String templateName = "cda-parking-report-revenue.html";
+                    
                     File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
-                    String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
+                    String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
                     File file = new File(filePath);
                     pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
-                    dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
+                    dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
                 } catch (Exception e) {

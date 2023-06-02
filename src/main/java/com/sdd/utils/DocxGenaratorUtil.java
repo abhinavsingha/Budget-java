@@ -1,35 +1,23 @@
 package com.sdd.utils;
 
 
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.sdd.exception.SDDException;
 import com.sdd.response.CDAReportResponse;
 import com.sdd.response.CDAReportSubResponse;
-import com.sdd.response.CbReportResponse;
 import com.sdd.response.FilePathResponse;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
-import org.w3c.tidy.Tidy;
-import org.xhtmlrenderer.pdf.ITextRenderer;
+
 
 import java.io.*;
-import java.nio.file.FileSystems;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
 @Component
 public class DocxGenaratorUtil {
-    @Autowired
-    private TemplateEngine templateEngine;
 
 
     @SuppressWarnings("rawtypes")
@@ -124,93 +112,118 @@ public class DocxGenaratorUtil {
 
 
         } catch (Exception e) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), e.toString());
         }
     }
 
 
-    public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal) throws Exception {
+    public void createCdaMainReportDoc(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal) throws Exception {
 
         try {
+
             XWPFDocument document = new XWPFDocument();
             FileOutputStream out = new FileOutputStream(new File(path));
+
+            CTDocument1 ctDocument = document.getDocument();
+            CTBody ctBody = ctDocument.getBody();
+            CTSectPr ctSectPr = (ctBody.isSetSectPr()) ? ctBody.getSectPr() : ctBody.addNewSectPr();
+            CTPageSz ctPageSz = (ctSectPr.isSetPgSz()) ? ctSectPr.getPgSz() : ctSectPr.addNewPgSz();
+            ctPageSz.setOrient(STPageOrientation.LANDSCAPE);
+
+            List<CDAReportResponse> tabData1 = map.get("Sub Head");
+
+            if (tabData1.size() > 12) {
+                ctPageSz.setW(java.math.BigInteger.valueOf(Math.round(120 * 1440))); //11 inches
+                ctPageSz.setH(java.math.BigInteger.valueOf(Math.round(8.5 * 1440))); //8.5 inches
+            }
+
+
+            XWPFParagraph mainParagraph = document.createParagraph();
+            mainParagraph.createRun().addBreak();
+
+            mainParagraph = document.createParagraph();
+            mainParagraph.setAlignment(ParagraphAlignment.CENTER);
+            boldText(mainParagraph.createRun(), 20, "\n" + "CDA WISE/OBJECT HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() , true);
+            mainParagraph.createRun().addBreak();
+
+            mainParagraph = document.createParagraph();
+            mainParagraph.setAlignment(ParagraphAlignment.CENTER);
+            boldText(mainParagraph.createRun(), 20, "REVENUE" , true);
+            mainParagraph.createRun().addBreak();
+
+
+            mainParagraph = document.createParagraph();
+            mainParagraph.setAlignment(ParagraphAlignment.CENTER);
+            boldText(mainParagraph.createRun(), 20, "Major Head " + cadSubReport.getMajorHead() + ". Sub Major Head 00. Minor Head " + cadSubReport.getMinorHead() + ") (In " + cadSubReport.getAmountType() + ")", true);
+
+            mainParagraph.createRun().addBreak();
+            mainParagraph.createRun().addBreak();
+            mainParagraph.createRun().addBreak();
 
             XWPFTable table = document.createTable();
             table.setWidth("100%");
 
-            CTDocument1 doc = document.getDocument();
-            CTBody body = doc.getBody();
-            CTSectPr section = body.addNewSectPr();
-            XWPFParagraph para = document.createParagraph();
-            CTP ctp = para.getCTP();
-            CTPPr br = ctp.addNewPPr();
-            br.setSectPr(section);
-            CTPageSz pageSize = section.getPgSz();
-            pageSize.setOrient(STPageOrientation.LANDSCAPE);
+
+            XWPFTableRow tableRowOne = table.getRow(0);
+            XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
+            boldText(paragraphtableRowOne.createRun(), 10, "object", true);
 
 
-            XWPFParagraph mainParagraph = document.createParagraph();
-            mainParagraph = document.createParagraph();
-            mainParagraph.createRun().addBreak();
+            for (Integer i = 0; i < tabData1.size(); i++) {
+                XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
+                boldText(paragraphtableRowOne1.createRun(), 10, tabData1.get(i).getName(), true);
+            }
 
-            mainParagraph = document.createParagraph();
-            boldText(mainParagraph.createRun(), 10, "\n" + "CDA WISE/OBJECT HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() + "\n" + "\n", true);
+            for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
+                String key = entry.getKey();
 
-            mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, "REVENUE" + "\n" + "\n", true);
+                if (!key.equalsIgnoreCase("Sub Head")) {
+                    List<CDAReportResponse> tabData = entry.getValue();
+                    XWPFTableRow tableRow11 = table.createRow();
+//                    tableRow11.getCell(0).setText(key);
+                    XWPFParagraph paragraphtableRowOne11 = tableRow11.getCell(0).addParagraph();
+                    boldText(paragraphtableRowOne11.createRun(), 10, key, true);
 
-            mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, "Major Head " + cadSubReport.getMajorHead() + ". Sub Major Head 00. Minor Head " + cadSubReport.getMinorHead() + ") (In " + cadSubReport.getAmountType() + ")", true);
+
+                    for (Integer i = 0; i < tabData.size(); i++) {
+                        XWPFParagraph paragraph11 = tableRow11.getCell(i + 1).addParagraph();
+                        normalText(paragraph11.createRun(), 10, tabData.get(i).getName(), false);
+                    }
+                }
+            }
+
+            XWPFTableRow tableRow11 = table.createRow();
+            tableRow11.getCell(0).setText("Grand Total");
+
+            for (Integer i = 0; i < tabData1.size(); i++) {
+                if (i == (tabData1.size() - 1)) {
+                    XWPFParagraph paragraph11 = tableRow11.getCell(i + 1).addParagraph();
+                    normalText(paragraph11.createRun(), 10, grandTotal + "", false);
+                } else {
+                    XWPFParagraph paragraph11 = tableRow11.getCell(i + 1).addParagraph();
+                    normalText(paragraph11.createRun(), 10, "", false);
+                }
+            }
 
 
 //
-//        List<CDAReportResponse> tabData1 = map.get("Sub Head");
-////        float[] pointColumnWidths = {50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F};
-//        PdfPTable table = new PdfPTable(tabData1.size() + 1);
-//        table.setWidthPercentage(100);
-////        table.setWidths(pointColumnWidths);
-//        table.setSpacingAfter(10);
+//            CTDocument1 doc = document.getDocument();
+//            CTBody body = doc.getBody();
+//            CTSectPr section = body.addNewSectPr();
+//            XWPFParagraph para = document.createParagraph();
+//            CTP ctp = para.getCTP();
+//            CTPPr br = ctp.addNewPPr();
+//            br.setSectPr(section);
+//            CTPageSz pageSize = section.isSetPgSz() ? section.getPgSz() : section.addNewPgSz();
+//            pageSize.setOrient(STPageOrientation.LANDSCAPE);
 //
-//
-//        table.addCell(boldText("object", 6, 35f));
-//        for (Integer i = 0; i < tabData1.size(); i++) {
-//            table.addCell(boldText(tabData1.get(i).getName(), 5, 20f));
-//        }
-//
-//
-//        for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
-//            String key = entry.getKey();
-//
-//            if (!key.equalsIgnoreCase("Sub Head")) {
-//                List<CDAReportResponse> tabData = entry.getValue();
-//                table.addCell(boldText(key, 5, 35f));
-//                for (Integer i = 0; i < tabData.size(); i++) {
-//                    table.addCell(normalText(tabData.get(i).getName(), 6, 20f));
-//                }
-//            }
-//        }
-//        table.addCell(boldText("Grand Total", 5, 20f));
-//        for (Integer i = 0; i < tabData1.size(); i++) {
-//            if (i == (tabData1.size() - 1)) {
-//                table.addCell(boldText(grandTotal + "", 6, 20f));
-//            } else {
-//                table.addCell(normalText("", 6, 20f));
-//            }
-//        }
-//
-//
-//        document.add(preface);
-//        document.add(table);
-//        document.close();
-
 
             document.write(out);
             out.close();
             document.close();
 
-
         } catch (Exception e) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), e.toString());
         }
     }
 
