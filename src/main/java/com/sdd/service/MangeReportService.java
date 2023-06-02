@@ -54,6 +54,6 @@ public interface MangeReportService {
 
     ApiResponse<List<FilePathResponse>> getRevisedAllocationReport(String authGroupId);
 
-    ApiResponse<List<FilePathResponse>> getUnitRebaseReportData(String fromDate, String toDate);
+    ApiResponse<List<FilePathResponse>> getUnitRebaseReportDoc(String fromDate, String toDate);
 
 }

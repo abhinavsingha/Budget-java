@@ -5253,16 +5253,16 @@ public class MangeReportImpl implements MangeReportService {
                     "\n" +
                     "\t\t</tbody>\n" +
                     "\t</table>\n" +
-/*                    "\t<div class=\"sign\">\n" +
+                    "\t<div class=\"sign\">\n" +
                     "\t\t<ul style=\"list-style: none; margin-top: 0;\">\n" +
                     "\t\t\t<li>${name_placeholder}</li>\n" +
                     "\t\t\t<li>${unit_placeholder}</li>\n" +
                     "\t\t\t<li>${rank_placeholder}</li>\n" +
                     "\t\t</ul>\n" +
-                    "\t</div>\n" +*/
-/*                    "\t<div class=\"date\">\n" +
+                    "\t</div>\n" +
+                    "\t<div class=\"date\">\n" +
                     "\t\tDate-${date_placeholder}\n" +
-                    "\t</div>\n" +*/
+                    "\t</div>\n" +
                     "</div>\n" +
                     "\n" +
                     "</body>\n" +
@@ -5270,6 +5270,13 @@ public class MangeReportImpl implements MangeReportService {
 
             StringBuilder sb = new StringBuilder();
             int i = 1;
+
+            String names = hrData.getFullName();
+            String unitName = hrData.getUnit();
+            String rank = hrData.getRank();
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String formattedDateTime = now.format(formatter);
             String finyear = "";
             String amountTypeId = "";
             String allocTypes = "";
@@ -5362,6 +5369,10 @@ public class MangeReportImpl implements MangeReportService {
             htmlContent = htmlContent.replace("${finYear_placeholder}", StringEscapeUtils.escapeHtml4(finyear));
             htmlContent = htmlContent.replace("${amountType_placeholder}", StringEscapeUtils.escapeHtml4(amountUnit));
             htmlContent = htmlContent.replace("${allocaType_placeholder}", StringEscapeUtils.escapeHtml4(allocTypes));
+            htmlContent = htmlContent.replace("${name_placeholder}", StringEscapeUtils.escapeHtml4(names));
+            htmlContent = htmlContent.replace("${unit_placeholder}", StringEscapeUtils.escapeHtml4(unitName));
+            htmlContent = htmlContent.replace("${rank_placeholder}", StringEscapeUtils.escapeHtml4(rank));
+            htmlContent = htmlContent.replace("${date_placeholder}", StringEscapeUtils.escapeHtml4(formattedDateTime));
 
 
             htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
@@ -5430,29 +5441,29 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getUnitRebaseReportData(String fromDate, String toDate) {
+    public ApiResponse<List<FilePathResponse>> getUnitRebaseReportDoc(String fromDate, String toDate) {
         List<UnitRebaseReportResponce> responce = new ArrayList<UnitRebaseReportResponce>();
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
-        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(),"1");
         if (hrDataCheck == null) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS", HttpStatus.OK.value());
+            },"YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS",HttpStatus.OK.value());
         } else {
             if (hrDataCheck.getRoleId().contains(HelperUtils.SYSTEMADMIN)) {
             } else {
                 return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                }, "YOU ARE NOT AUTHORIZED TO REBASE THE STATION", HttpStatus.OK.value());
+                },"YOU ARE NOT AUTHORIZED TO REBASE THE STATION",HttpStatus.OK.value());
             }
         }
         if (fromDate == null) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "FROM DATE CAN NOT BE NULL", HttpStatus.OK.value());
+            },"FROM DATE CAN NOT BE NULL",HttpStatus.OK.value());
         }
         if (toDate == null) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "TO DATE NOT BE NULL", HttpStatus.OK.value());
+            },"TO DATE NOT BE NULL",HttpStatus.OK.value());
         }
 
         List<String> groupUnitId = budgetRebaseRepository.findGroupRebaseUnit();
@@ -5476,15 +5487,26 @@ public class MangeReportImpl implements MangeReportService {
         LocalDateTime localDateTime = LocalDateTime.of(resultDt, LocalTime.MIDNIGHT);
         Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
 
-        try {
+        try{
             XWPFDocument document = new XWPFDocument();
+            XWPFParagraph headingParagraph = document.createParagraph();
+            headingParagraph.setAlignment(ParagraphAlignment.CENTER);
+            headingParagraph.setStyle("Heading1");
+            XWPFRun headingRun = headingParagraph.createRun();
+            headingRun.setText("UNIT REBASE REPORT");
+            headingRun.setBold(true);
+            headingRun.setFontSize(16);
+
+            XWPFParagraph spacingParagraphss = document.createParagraph();
+            spacingParagraphss.setSpacingAfter(20);
+
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
             String path = folder.getAbsolutePath() + "/" + "UnitRebaseReport" + ".docx";
             FileOutputStream out = new FileOutputStream(new File(path));
-
+            int count = 1;
             String RunitId = "";
             if (groupUnitId.size() > 0) {
                 for (String ids : groupUnitId) {
@@ -5502,60 +5524,78 @@ public class MangeReportImpl implements MangeReportService {
                     rebase.setDateOfRebase(rebaseData.get(0).getOccuranceDate());
                     rebase.setFromStation(rebaseData.get(0).getFrmStationId());
                     rebase.setToStation(toS.getStationName());
+                    int size=rebaseData.size();
 
-                    XWPFTable table = document.createTable();
+                    XWPFParagraph headingParagraph11 = document.createParagraph();
+                    headingParagraph11.setAlignment(ParagraphAlignment.LEFT);
+                    headingParagraph11.setStyle("Heading1");
+                    XWPFRun headingRun11 = headingParagraph11.createRun();
+                    headingRun11.setText("Serial No:"+count);
+                    headingRun11.setBold(true);
+                    headingRun11.setColor("0000FF");
+                    headingRun11.setFontSize(12);
+
+                    XWPFTable table = document.createTable(2,4);
                     table.setWidth("100%");
 
 
-                    XWPFTableRow tableRowOne = table.getRow(0);
 
+                    XWPFTableRow tableRowOne = table.getRow(0);
                     XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
                     boldText(paragraphtableRowOne.createRun(), 10, "UNIT NAME", true);
 
-                    XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(0).addParagraph();
-                    boldText(paragraphtableRowOne1.createRun(), 10, "unitN.getDescr()", true);
+                    XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
+                    boldText(paragraphtableRowOne1.createRun(), 8, unitN.getDescr(), true);
 
-                    XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(0).addParagraph();
+                    XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
                     boldText(paragraphtableRowOne2.createRun(), 10, "FROM STATION", true);
 
-                    XWPFParagraph paragraphtableRowOne3 = tableRowOne.getCell(0).addParagraph();
-                    boldText(paragraphtableRowOne3.createRun(), 10, rebaseData.get(0).getFrmStationId(), true);
+                    XWPFParagraph paragraphtableRowOne3 = tableRowOne.getCell(3).addParagraph();
+                    boldText(paragraphtableRowOne3.createRun(), 8, rebaseData.get(0).getFrmStationId(), true);
 
-/*
+                    XWPFTableRow tableRowTwo = table.getRow(1);
+                    XWPFParagraph paragraphtableRowTwo = tableRowTwo.getCell(0).addParagraph();
+                    boldText(paragraphtableRowTwo.createRun(), 10, "REBASE DATE", true);
 
-                XWPFTableRow tableRow11 = table.createRow();
+                    XWPFParagraph paragraphtableRowTwo1 = tableRowTwo.getCell(1).addParagraph();
+                    boldText(paragraphtableRowTwo1.createRun(), 8, rebaseData.get(0).getOccuranceDate().toString(), true);
 
-                XWPFParagraph paragraph = tableRow11.getCell(0).addParagraph();
-                normalText(paragraph.createRun(), 10, ").getUnit()", false);
+                    XWPFParagraph paragraphtableRowTwo2 = tableRowTwo.getCell(2).addParagraph();
+                    boldText(paragraphtableRowTwo2.createRun(), 10, "TO STATION", true);
 
-                XWPFParagraph paragraph1we1 = tableRow11.getCell(1).addParagraph();
-                normalText(paragraph1we1.createRun(), 10," tabData1nit()", false);
+                    XWPFParagraph paragraphtableRowTwo3 = tableRowTwo.getCell(3).addParagraph();
+                    boldText(paragraphtableRowTwo3.createRun(), 8, toS.getStationName(), true);
 
-                XWPFParagraph paragraph1221 = tableRow11.getCell(2).addParagraph();
-                normalText(paragraph1221.createRun(), 10, "tabData1t()", false);
-
-                XWPFParagraph qadr = tableRow11.getCell(3).addParagraph();
-                normalText(qadr.createRun(), 10, "ta)", false);
-
-*/
-
-
-//                XWPFTable table1 = document.createTable();
-//                table1.setWidth("100%");
-//                XWPFTableRow tableRowOnes = table.getRow(0);
-//                XWPFParagraph paragraphtableRowOne4 = tableRowOnes.getCell(0).addParagraph();
-//                boldText(paragraphtableRowOne4.createRun(), 10, "DATE OF REBASE", true);
-//
-//                XWPFParagraph paragraphtableRowOne5 = tableRowOne.addNewTableCell().addParagraph();
-//                boldText(paragraphtableRowOne5.createRun(), 10, rebaseData.get(0).getOccuranceDate().toString(), true);
-//
-//                XWPFParagraph paragraphtableRowOne6 = tableRowOne.getCell(0).addParagraph();
-//                boldText(paragraphtableRowOne6.createRun(), 10, "TO STATION", true);
-//
-//                XWPFParagraph paragraphtableRowOne7 = tableRowOne.addNewTableCell().addParagraph();
-//                boldText(paragraphtableRowOne7.createRun(), 10, toS.getStationName(), true);
+                    XWPFParagraph spacingParagraph = document.createParagraph();
+                    spacingParagraph.setSpacingAfter(20);
 
                     List<UnitRebaseSubReportResponce> addRes = new ArrayList<UnitRebaseSubReportResponce>();
+                    XWPFTable table1 = document.createTable(size+1,6);
+                    table.setWidth("100%");
+
+                    XWPFTableRow tableRow = table1.getRow(0);
+                    XWPFParagraph paragraphtableRow0 = tableRow.getCell(0).addParagraph();
+                    boldText(paragraphtableRow0.createRun(), 10, "FINANCIAL YEAR & ALLOCATION", true);
+
+                    XWPFParagraph paragraphtableRow1 = tableRow.getCell(1).addParagraph();
+                    boldText(paragraphtableRow1.createRun(), 8, "SUB HEAD", true);
+
+                    XWPFParagraph paragraphtableRow2 = tableRow.getCell(2).addParagraph();
+                    boldText(paragraphtableRow2.createRun(), 10, "ALLOCATION IN:", true);
+
+                    XWPFParagraph paragraphtableRow3 = tableRow.getCell(3).addParagraph();
+                    boldText(paragraphtableRow3.createRun(), 8, "EXPENDITURE", true);
+
+                    XWPFParagraph paragraphtableRow4 = tableRow.getCell(4).addParagraph();
+                    boldText(paragraphtableRow4.createRun(), 8, "BALANCE IN:", true);
+
+                    XWPFParagraph paragraphtableRow5 = tableRow.getCell(5).addParagraph();
+                    boldText(paragraphtableRow5.createRun(), 8, "LAST CB DATE:", true);
+                    count++;
+
+                    XWPFParagraph spacingParagraph1 = document.createParagraph();
+                    spacingParagraph1.setSpacingAfter(20);
+
                     for (Integer k = 0; k < rebaseData.size(); k++) {
                         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(rebaseData.get(k).getFinYear());
                         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(rebaseData.get(k).getBudgetHeadId());
@@ -5570,20 +5610,57 @@ public class MangeReportImpl implements MangeReportService {
                         subResp.setBalAmount(rebaseData.get(k).getBalAmount());
                         subResp.setAmountType(amountTypeObj.getAmountType());
                         subResp.setLastCbDate(rebaseData.get(k).getLastCbDate());
+
+
+                        XWPFTableRow tableRows = table1.getRow(k+1);
+                        XWPFParagraph paragraphtableRow01 = tableRows.getCell(0).addParagraph();
+                        boldText(paragraphtableRow01.createRun(), 10, findyr.getFinYear(), true);
+
+                        XWPFParagraph paragraphtableRow11 = tableRows.getCell(1).addParagraph();
+                        boldText(paragraphtableRow11.createRun(), 8, bHead.getSubHeadDescr(), true);
+
+                        XWPFParagraph paragraphtableRow21 = tableRows.getCell(2).addParagraph();
+                        boldText(paragraphtableRow21.createRun(), 10, rebaseData.get(k).getAllocAmount(), true);
+
+                        XWPFParagraph paragraphtableRow31 = tableRows.getCell(3).addParagraph();
+                        boldText(paragraphtableRow31.createRun(), 8, rebaseData.get(k).getExpAmount(), true);
+
+                        XWPFParagraph paragraphtableRow41 = tableRows.getCell(4).addParagraph();
+                        boldText(paragraphtableRow41.createRun(), 8, rebaseData.get(k).getBalAmount(), true);
+                        if(rebaseData.get(k).getLastCbDate()!=null) {
+                            XWPFParagraph paragraphtableRow51 = tableRows.getCell(5).addParagraph();
+                            boldText(paragraphtableRow51.createRun(), 8, rebaseData.get(k).getLastCbDate().toString(), true);
+                        }else{
+                            XWPFParagraph paragraphtableRow51 = tableRows.getCell(5).addParagraph();
+                            boldText(paragraphtableRow51.createRun(), 8, null, true);
+                        }
+
                         addRes.add(subResp);
                     }
                     rebase.setList(addRes);
                     responce.add(rebase);
                 }
             }
-
+            String names = hrDataCheck.getFullName();
+            String unitName = hrDataCheck.getUnit();
+            String rank = hrDataCheck.getRank();
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String formattedDateTime = now.format(formatter);
             XWPFParagraph mainParagraph = document.createParagraph();
             mainParagraph = document.createParagraph();
             mainParagraph.createRun().addBreak();
             mainParagraph = document.createParagraph();
-            boldText(mainParagraph.createRun(), 10, "Test" + "", true);
+            boldText(mainParagraph.createRun(), 10, formattedDateTime + "", true);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, "Hello" + "", true);
+            normalText(mainParagraph.createRun(), 10, names+ "", true);
+            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
+            mainParagraph = document.createParagraph();
+            normalText(mainParagraph.createRun(), 10, unitName+ "", true);
+            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
+            mainParagraph = document.createParagraph();
+            normalText(mainParagraph.createRun(), 10, rank+ "", true);
+            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             document.write(out);
             out.close();
             document.close();

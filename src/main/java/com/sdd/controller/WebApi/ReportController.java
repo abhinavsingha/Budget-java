@@ -142,9 +142,9 @@ public class ReportController {
 		return new ResponseEntity<>(mangeReportService.getRevisedAllocationReport(authGroupId), HttpStatus.OK);
 	}
 
-	@GetMapping("/getUnitRebaseReportData/{fromDate}/{toDate}")
-	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitRebaseReportData(@PathVariable(value = "fromDate") String fromDate , @PathVariable(value = "toDate") String toDate)  {
-		return new ResponseEntity<>(mangeReportService.getUnitRebaseReportData(fromDate,toDate), HttpStatus.OK);
+	@GetMapping("/getUnitRebaseReportDoc/{fromDate}/{toDate}")
+	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitRebaseReportDoc(@PathVariable(value = "fromDate") String fromDate , @PathVariable(value = "toDate") String toDate)  {
+		return new ResponseEntity<>(mangeReportService.getUnitRebaseReportDoc(fromDate,toDate), HttpStatus.OK);
 	}
 
 }
