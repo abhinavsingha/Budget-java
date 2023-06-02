@@ -453,10 +453,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "AUTHORITY DATE CAN NOT BE BLANK", HttpStatus.OK.value());
         }
-/*        if (req.getRemark() == null || req.getRemark().isEmpty()) {
-            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            }, "REMARKS CAN NOT BE BLANK", HttpStatus.OK.value());
-        }*/
         if (req.getAuthUnitId() == null || req.getAuthUnitId().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "AUTHORITY UNIT CAN NOT BE BLANK", HttpStatus.OK.value());
@@ -477,10 +473,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "REBASE UNIT ID CAN NOT BE BLANK", HttpStatus.OK.value());
         }
-/*        if (req.getHeadUnitId() == null || req.getHeadUnitId().isEmpty()) {
-            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            }, " HEAD UNIT CAN NOT BE BLANK", HttpStatus.OK.value());
-        }*/
         if (req.getToStationId() == null || req.getToStationId().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "TO_STATION ID CAN NOT BE BLANK", HttpStatus.OK.value());
@@ -489,19 +481,15 @@ public class MangeRebaseImpl implements MangeRebaseService {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "FROM_STATION ID CAN NOT BE BLANK", HttpStatus.OK.value());
         }
-/*        if (req.getToHeadUnitId() == null || req.getToHeadUnitId().isEmpty()) {
+        if (req.getUnitRebaseRequests().size() <=0 || req.getToHeadUnitId().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-            }, "TO_HEAD UNIT ID CAN NOT BE BLANK", HttpStatus.OK.value());
-        }*/
+            }, "YOU CAN'T REBASE WITHOUT ALLOCATION", HttpStatus.OK.value());
+        }
 
         if (req.getUnitRebaseRequests().size() > 0) {
 
             for (Integer m = 0; m < req.getUnitRebaseRequests().size(); m++) {
 
-/*                if (req.getUnitRebaseRequests().get(m).getBudgetHeadId() == null || req.getUnitRebaseRequests().get(m).getBudgetHeadId().isEmpty()) {
-                    return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-                    }, "BUDGET_HEAD ID CAN NOT BE BLANK", HttpStatus.OK.value());
-                }*/
                 if (req.getUnitRebaseRequests().get(m).getAllocAmount() == null || req.getUnitRebaseRequests().get(m).getAllocAmount().isEmpty()) {
                     return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
                     }, "ALLOCATION AMOUNT CAN NOT BE BLANK", HttpStatus.OK.value());
@@ -518,10 +506,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
                     }, "AMOUNT_TYPE CAN NOT BE BLANK", HttpStatus.OK.value());
                 }
-/*                if (req.getUnitRebaseRequests().get(m).getLastCbDate() == null || req.getUnitRebaseRequests().get(m).getLastCbDate().isEmpty()) {
-                    return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-                    }, "CB DATE CAN NOT BE BLANK", HttpStatus.OK.value());
-                }*/
                 if (req.getUnitRebaseRequests().get(m).getAllocationTypeId() == null || req.getUnitRebaseRequests().get(m).getAllocationTypeId().isEmpty()) {
                     return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
                     }, "ALLOCATION TYPE ID CAN NOT BE BLANK", HttpStatus.OK.value());
