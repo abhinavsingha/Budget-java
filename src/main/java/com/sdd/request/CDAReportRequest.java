@@ -17,6 +17,7 @@ public class CDAReportRequest {
 
     private String financialYearId;
     private String majorHead;
+    private String minorHead;
     private String allocationTypeId;
     private String cdaType;
     private String amountType;

@@ -524,6 +524,9 @@ public class PdfGenaratorUtil {
 
     }
 
+
+
+
     public void createCdaMainReport(String templateName, HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, File outputFile, Float grandTotal) throws Exception {
         Assert.notNull(templateName, "The templateName can not be null");
 
