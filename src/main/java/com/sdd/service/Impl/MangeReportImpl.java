@@ -5520,6 +5520,8 @@ public class MangeReportImpl implements MangeReportService {
                     UnitRebaseReportResponce rebase = new UnitRebaseReportResponce();
                     CgUnit unitN = cgUnitRepository.findByUnit(RunitId);
                     CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
+                    AmountUnit amountTypeObjs = amountUnitRepository.findByAmountTypeId(rebaseData.get(0).getAmountType());
+
                     rebase.setUnitName(unitN.getDescr());
                     rebase.setDateOfRebase(rebaseData.get(0).getOccuranceDate());
                     rebase.setFromStation(rebaseData.get(0).getFrmStationId());
@@ -5575,19 +5577,19 @@ public class MangeReportImpl implements MangeReportService {
 
                     XWPFTableRow tableRow = table1.getRow(0);
                     XWPFParagraph paragraphtableRow0 = tableRow.getCell(0).addParagraph();
-                    boldText(paragraphtableRow0.createRun(), 10, "FINANCIAL YEAR & ALLOCATION", true);
+                    boldText(paragraphtableRow0.createRun(), 8, "FINANCIAL YEAR & ALLOCATION", true);
 
                     XWPFParagraph paragraphtableRow1 = tableRow.getCell(1).addParagraph();
                     boldText(paragraphtableRow1.createRun(), 8, "SUB HEAD", true);
 
                     XWPFParagraph paragraphtableRow2 = tableRow.getCell(2).addParagraph();
-                    boldText(paragraphtableRow2.createRun(), 10, "ALLOCATION IN:", true);
+                    boldText(paragraphtableRow2.createRun(), 8, "ALLOCATION IN: ("+amountTypeObjs.getAmountType() +")", true);
 
                     XWPFParagraph paragraphtableRow3 = tableRow.getCell(3).addParagraph();
                     boldText(paragraphtableRow3.createRun(), 8, "EXPENDITURE", true);
 
                     XWPFParagraph paragraphtableRow4 = tableRow.getCell(4).addParagraph();
-                    boldText(paragraphtableRow4.createRun(), 8, "BALANCE IN:", true);
+                    boldText(paragraphtableRow4.createRun(), 8, "BALANCE IN: ("+amountTypeObjs.getAmountType()+")", true);
 
                     XWPFParagraph paragraphtableRow5 = tableRow.getCell(5).addParagraph();
                     boldText(paragraphtableRow5.createRun(), 8, "LAST CB DATE:", true);
@@ -5614,13 +5616,13 @@ public class MangeReportImpl implements MangeReportService {
 
                         XWPFTableRow tableRows = table1.getRow(k+1);
                         XWPFParagraph paragraphtableRow01 = tableRows.getCell(0).addParagraph();
-                        boldText(paragraphtableRow01.createRun(), 10, findyr.getFinYear(), true);
+                        boldText(paragraphtableRow01.createRun(), 8, findyr.getFinYear()+" "+allocType.getAllocDesc(), true);
 
                         XWPFParagraph paragraphtableRow11 = tableRows.getCell(1).addParagraph();
                         boldText(paragraphtableRow11.createRun(), 8, bHead.getSubHeadDescr(), true);
 
                         XWPFParagraph paragraphtableRow21 = tableRows.getCell(2).addParagraph();
-                        boldText(paragraphtableRow21.createRun(), 10, rebaseData.get(k).getAllocAmount(), true);
+                        boldText(paragraphtableRow21.createRun(), 8, rebaseData.get(k).getAllocAmount(), true);
 
                         XWPFParagraph paragraphtableRow31 = tableRows.getCell(3).addParagraph();
                         boldText(paragraphtableRow31.createRun(), 8, rebaseData.get(k).getExpAmount(), true);
@@ -5628,8 +5630,13 @@ public class MangeReportImpl implements MangeReportService {
                         XWPFParagraph paragraphtableRow41 = tableRows.getCell(4).addParagraph();
                         boldText(paragraphtableRow41.createRun(), 8, rebaseData.get(k).getBalAmount(), true);
                         if(rebaseData.get(k).getLastCbDate()!=null) {
+                            Date LastCbD = rebaseData.get(k).getLastCbDate();
+                            SimpleDateFormat id = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                            SimpleDateFormat od = new SimpleDateFormat("dd-MMMM-yyyy");
+                            Date dateC = id.parse(LastCbD.toString());
+                            String cbD = od.format(dateC);
                             XWPFParagraph paragraphtableRow51 = tableRows.getCell(5).addParagraph();
-                            boldText(paragraphtableRow51.createRun(), 8, rebaseData.get(k).getLastCbDate().toString(), true);
+                            boldText(paragraphtableRow51.createRun(), 8,cbD, true);
                         }else{
                             XWPFParagraph paragraphtableRow51 = tableRows.getCell(5).addParagraph();
                             boldText(paragraphtableRow51.createRun(), 8, null, true);
