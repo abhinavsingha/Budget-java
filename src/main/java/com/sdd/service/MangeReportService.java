@@ -15,7 +15,6 @@ import java.util.List;
 public interface MangeReportService {
 
 
-
     ApiResponse<List<FilePathResponse>> getAllocationReport(String reportRequest);
 
     ApiResponse<List<FilePathResponse>> getAllocationReportDoc(String reportRequest);
@@ -42,11 +41,11 @@ public interface MangeReportService {
 
     ApiResponse<List<FilePathResponse>> getSubHeadWiseAllocationReport(SubHeadWiseAllocationReportReq req);
 
-    ApiResponse<List<FilePathResponse>> getBEAllocationReport(String finYearId,String allocationType, String amountTypeId);
+    ApiResponse<List<FilePathResponse>> getBEAllocationReport(String finYearId, String allocationType, String amountTypeId);
 
-    ApiResponse<List<FilePathResponse>> getREAllocationReport(String finYearId,String allocationType, String amountTypeId);
+    ApiResponse<List<FilePathResponse>> getREAllocationReport(String finYearId, String allocationType, String amountTypeId);
 
-    ApiResponse<List<FilePathResponse>> getBEREAllocationReport(String finYearId,String allocationTypeBE,String allocationTypeRE, String amountTypeId);
+    ApiResponse<List<FilePathResponse>> getBEREAllocationReport(String finYearId, String allocationTypeBE, String allocationTypeRE, String amountTypeId);
 
     ApiResponse<List<FilePathResponse>> getMainBEAllocationReport(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate);
 

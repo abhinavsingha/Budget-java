@@ -148,14 +148,14 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setBudgetHead(budgetHead);
                 subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
-                reportMaindata.add(subModel);
+
 
                 Collections.sort(reportMaindata, new Comparator<ReportSubModel>() {
                     public int compare(ReportSubModel v1, ReportSubModel v2) {
                         return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
                     }
                 });
-
+                reportMaindata.add(subModel);
                 hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
 
             } else {
@@ -168,13 +168,14 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
-                reportMaindata.add(subModel);
+
 
                 Collections.sort(reportMaindata, new Comparator<ReportSubModel>() {
                     public int compare(ReportSubModel v1, ReportSubModel v2) {
                         return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
                     }
                 });
+                reportMaindata.add(subModel);
                 hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
             }
         }
@@ -278,13 +279,12 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
-                reportMaindata.add(subModel);
-
                 Collections.sort(reportMaindata, new Comparator<ReportSubModel>() {
                     public int compare(ReportSubModel v1, ReportSubModel v2) {
                         return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
                     }
                 });
+                reportMaindata.add(subModel);
 
                 hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
 
@@ -298,13 +298,12 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
-                reportMaindata.add(subModel);
-
                 Collections.sort(reportMaindata, new Comparator<ReportSubModel>() {
                     public int compare(ReportSubModel v1, ReportSubModel v2) {
                         return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
                     }
                 });
+                reportMaindata.add(subModel);
 
                 hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
             }

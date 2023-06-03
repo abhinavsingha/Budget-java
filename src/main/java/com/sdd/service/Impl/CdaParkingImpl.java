@@ -81,7 +81,7 @@ public class CdaParkingImpl implements CdaParkingService {
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
         if (hrData == null) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CAD PARKING");
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CDA PARKING");
         }
 
 
@@ -167,7 +167,7 @@ public class CdaParkingImpl implements CdaParkingService {
 
         boolean data = checkDuplicateData(cdaRequest.getCdaRequest());
         if (data) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DUPLICATE CAD FOUND.PLEASE CHECK");
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DUPLICATE CDA FOUND.PLEASE CHECK");
         }
 
         for (Integer i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
@@ -230,7 +230,7 @@ public class CdaParkingImpl implements CdaParkingService {
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
         if (hrData == null) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CAD PARKING");
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CDA PARKING");
         }
         List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByAuthGroupIdAndIsFlag(groupId, "0");
         List<CdaParkingTransSubResponse> cdaParkingTransList = new ArrayList<CdaParkingTransSubResponse>();
@@ -269,7 +269,7 @@ public class CdaParkingImpl implements CdaParkingService {
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
         if (hrData == null) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CAD PARKING");
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CDA PARKING");
         }
         List<AuthorityTableResponse> authorityTableList = new ArrayList<AuthorityTableResponse>();
 
@@ -345,13 +345,13 @@ public class CdaParkingImpl implements CdaParkingService {
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
         if (hrData == null) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CAD PARKING");
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CDA PARKING");
         }
 
 
         boolean data = checkDuplicateData(cdaRequest.getCdaRequest());
         if (data) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DUPLICATE CAD FOUND.PLEASE CHECK");
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DUPLICATE CDA FOUND.PLEASE CHECK");
         }
 
         DefaultResponse defaultResponse = new DefaultResponse();
@@ -415,7 +415,7 @@ public class CdaParkingImpl implements CdaParkingService {
             double cdaAvialabeBalance = Double.parseDouble(cdaParking.getRemainingCdaAmount());
 
             if (cdaBalance != cdaAvialabeBalance) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AVAILABLE BALANCE CAN NOT CHANGED BECAUSE CAD BALANCE AND AVAILABLE BALANCE CAN NOT BE SAME");
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AVAILABLE BALANCE CAN NOT CHANGED BECAUSE CDA BALANCE AND AVAILABLE BALANCE CAN NOT BE SAME");
             }
         }
 
