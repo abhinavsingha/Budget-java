@@ -18,7 +18,7 @@ import java.util.List;
 @Slf4j
 public class MangeRoleController {
 
-	@Autowired
+	@Autowired    
 	private MangeRoleService mangeRoleService;
 
 

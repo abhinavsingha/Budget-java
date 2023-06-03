@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 public class MangeUserController {
 
-	@Autowired
+	@Autowired    
 	private MangeUserService mangeUserService;
 
 

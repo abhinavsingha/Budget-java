@@ -22,13 +22,13 @@ import java.util.Map;
 @Service
 public class AllocationServiceImpl implements AllocationService {
 
-    @Autowired
+    @Autowired    
     AllocationRepository allocationRepository;
 
-    @Autowired
+    @Autowired    
     private JwtUtils jwtUtils;
 
-    @Autowired
+    @Autowired    
     private HeaderUtils headerUtils;
 
 

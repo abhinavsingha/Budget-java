@@ -30,46 +30,46 @@ import java.util.Set;
 @Service
 public class CdaParkingImpl implements CdaParkingService {
 
-    @Autowired
+    @Autowired    
     CgUnitRepository cgUnitRepository;
 
-    @Autowired
+    @Autowired    
     MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
 
-    @Autowired
+    @Autowired    
     private HrDataRepository hrDataRepository;
 
-    @Autowired
+    @Autowired    
     AmountUnitRepository amountUnitRepository;
 
-    @Autowired
+    @Autowired    
     BudgetFinancialYearRepository budgetFinancialYearRepository;
 
-    @Autowired
+    @Autowired    
     CdaParkingRepository cdaParkingRepository;
 
-    @Autowired
+    @Autowired    
     CdaParkingTransRepository cdaParkingTransRepository;
 
-    @Autowired
+    @Autowired    
     CdaParkingCrAndDrRepository parkingCrAndDrRepository;
 
-    @Autowired
+    @Autowired    
     AllocationRepository allocationRepository;
 
-    @Autowired
+    @Autowired    
     BudgetAllocationDetailsRepository budgetAllocationDetailsRepository;
 
-    @Autowired
+    @Autowired    
     BudgetAllocationRepository budgetAllocationRepository;
 
-    @Autowired
+    @Autowired    
     private JwtUtils jwtUtils;
 
-    @Autowired
+    @Autowired    
     private HeaderUtils headerUtils;
 
-    @Autowired
+    @Autowired    
     SubHeadRepository subHeadRepository;
 
 

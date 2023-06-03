@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 public class DashBoardController {
 
-  @Autowired private DashBoardService dashBoardService;
+  @Autowired     private DashBoardService dashBoardService;
 
   @PostMapping("/getDashBoardDta")
   public ResponseEntity<ApiResponse<DashBoardResponse>> getBudgetFinYear(

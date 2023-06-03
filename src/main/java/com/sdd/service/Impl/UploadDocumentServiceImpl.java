@@ -52,19 +52,19 @@ import java.util.Map;
 public class UploadDocumentServiceImpl implements UploadDocumentService {
 
 
-    @Autowired
+    @Autowired    
     private JwtUtils jwtUtils;
 
-    @Autowired
+    @Autowired    
     private FileUploadRepository fileUploadRepository;
 
-    @Autowired
+    @Autowired    
     private ContigentBillRepository contigentBillRepository;
 
-    @Autowired
+    @Autowired    
     private AuthorityRepository authorityRepository;
 
-    @Autowired
+    @Autowired    
     private HeaderUtils headerUtils;
 
 

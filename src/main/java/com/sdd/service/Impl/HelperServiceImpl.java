@@ -34,7 +34,7 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 public class HelperServiceImpl implements HelperService {
 
   private static final String UTF_8 = "UTF-8";
-  @Autowired private TemplateEngine templateEngine;
+  @Autowired     private TemplateEngine templateEngine;
 
   @Override
   public String generatePDFDemo() {

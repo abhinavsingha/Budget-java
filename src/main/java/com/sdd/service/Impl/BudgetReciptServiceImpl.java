@@ -25,57 +25,57 @@ import java.util.*;
 public class BudgetReciptServiceImpl implements BudgetReciptService {
 
 
-    @Autowired
+    @Autowired    
     BudgetAllocationRepository budgetAllocationRepository;
 
 
-    @Autowired
+    @Autowired    
     CdaParkingRepository cdaParkingRepository;
 
-    @Autowired
+    @Autowired    
     private AmountUnitRepository amountUnitRepository;
 
-    @Autowired
+    @Autowired    
     MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
 
-    @Autowired
+    @Autowired    
     private HrDataRepository hrDataRepository;
 
-    @Autowired
+    @Autowired    
     AuthorityRepository authorityRepository;
 
-    @Autowired
+    @Autowired    
     AllocationRepository allocationRepository;
 
-    @Autowired
+    @Autowired    
     private JwtUtils jwtUtils;
 
-    @Autowired
+    @Autowired    
     private HeaderUtils headerUtils;
 
 
-    @Autowired
+    @Autowired    
     BudgetFinancialYearRepository budgetFinancialYearRepository;
 
-    @Autowired
+    @Autowired    
     SubHeadRepository subHeadRepository;
 
 
-    @Autowired
+    @Autowired    
     CdaParkingTransRepository cdaParkingTransRepository;
 
 
-    @Autowired
+    @Autowired    
     FileUploadRepository fileUploadRepository;
 
-    @Autowired
+    @Autowired    
     CgUnitRepository cgUnitRepository;
 
-    @Autowired
+    @Autowired    
     BudgetAllocationDetailsRepository budgetAllocationDetailsRepository;
 
 
-    @Autowired
+    @Autowired    
     CurrentStateRepository currentStateRepository;
 
 

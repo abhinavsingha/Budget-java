@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class BudgetAllocationController {
 
-    @Autowired
+    @Autowired    
     private BudgetAllocationService budgetAllocationService;
 
     @GetMapping("/getBudgetFinYear")

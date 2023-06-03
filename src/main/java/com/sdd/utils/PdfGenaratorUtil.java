@@ -20,7 +20,7 @@ import java.util.*;
 
 @Component
 public class PdfGenaratorUtil {
-    @Autowired
+    @Autowired    
     private TemplateEngine templateEngine;
 
     private static final String UTF_8 = "UTF-8";

@@ -57,4 +57,5 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
     List<String> findSubHead(String finYearId, String allocationTypeId);
 
     List<BudgetAllocation> findByAuthGroupIdAndIsFlag(String authGId,String isFlag);
+    List<BudgetAllocation> findByAuthGroupIdAndIsFlagOrderBySubHeadAsc(String authGId,String isFlag);
 }

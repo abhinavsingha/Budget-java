@@ -24,68 +24,68 @@ import java.util.*;
 
 @Service
 public class BudgetAllocationServiceImpl implements BudgetAllocationService {
-    @Autowired
+    @Autowired    
     CgStationRepository cgStationRepository;
 
-    @Autowired
+    @Autowired    
     CdaParkingTransRepository cdaParkingTransRepository;
 
-    @Autowired
+    @Autowired    
     CdaParkingCrAndDrRepository parkingCrAndDrRepository;
 
-    @Autowired
+    @Autowired    
     CdaParkingRepository cdaParkingRepository;
 
 
-    @Autowired
+    @Autowired    
     SubHeadTypeRepository subHeadTypeRepository;
 
-    @Autowired
+    @Autowired    
     CurrentStateRepository currentStateRepository;
 
 
-    @Autowired
+    @Autowired    
     ContigentBillRepository contigentBillRepository;
 
 
-    @Autowired
+    @Autowired    
     AmountUnitRepository amountUnitRepository;
 
 
-    @Autowired
+    @Autowired    
     MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
 
-    @Autowired
+    @Autowired    
     private HrDataRepository hrDataRepository;
 
-    @Autowired
+    @Autowired    
     private JwtUtils jwtUtils;
 
-    @Autowired
+    @Autowired    
     private HeaderUtils headerUtils;
 
-    @Autowired
+    @Autowired    
     BudgetFinancialYearRepository budgetFinancialYearRepository;
 
-    @Autowired
+    @Autowired    
     SubHeadRepository subHeadRepository;
 
-    @Autowired
+    @Autowired    
     CgUnitRepository cgUnitRepository;
 
-    @Autowired
+    @Autowired    
     AllocationRepository allocationRepository;
 
-    @Autowired
+    @Autowired    
     BudgetAllocationRepository budgetAllocationRepository;
 
-    @Autowired
+    @Autowired    
     BudgetAllocationDetailsRepository budgetAllocationDetailsRepository;
 
-    @Autowired
+    @Autowired    
     private FileUploadRepository fileUploadRepository;
 
-    @Autowired
+    @Autowired    
     AuthorityRepository authorityRepository;
 
 

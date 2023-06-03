@@ -43,68 +43,68 @@ public class MangeReportImpl implements MangeReportService {
 
     private static final String UTF_8 = "UTF-8";
 
-    @Autowired
+    @Autowired    
     private TemplateEngine templateEngine;
 
-    @Autowired
+    @Autowired    
     BudgetAllocationRepository budgetAllocationRepository;
 
-    @Autowired
+    @Autowired    
     BudgetFinancialYearRepository budgetFinancialYearRepository;
 
-    @Autowired
+    @Autowired    
     AuthorityRepository authorityRepository;
 
-    @Autowired
+    @Autowired    
     AllocationRepository allocationRepository;
 
 
-    @Autowired
+    @Autowired    
     SubHeadRepository subHeadRepository;
 
 
-    @Autowired
+    @Autowired    
     CdaParkingRepository cdaParkingRepository;
 
 
-    @Autowired
+    @Autowired    
     AmountUnitRepository amountUnitRepository;
 
 
-    @Autowired
+    @Autowired    
     CdaParkingTransRepository cdaParkingTransRepository;
 
-    @Autowired
+    @Autowired    
     private BudgetAllocationDetailsRepository budgetAllocationDetailsRepository;
 
-    @Autowired
+    @Autowired    
     CgUnitRepository cgUnitRepository;
 
-    @Autowired
+    @Autowired    
     HrDataRepository hrDataRepository;
 
-    @Autowired
+    @Autowired    
     private JwtUtils jwtUtils;
 
-    @Autowired
+    @Autowired    
     private HeaderUtils headerUtils;
 
-    @Autowired
+    @Autowired    
     private PdfGenaratorUtil pdfGenaratorUtil;
 
-    @Autowired
+    @Autowired    
     private PdfGenaratorUtilMain pdfGenaratorUtilMain;
 
-    @Autowired
+    @Autowired    
     private DocxGenaratorUtil docxGenaratorUtil;
 
-    @Autowired
+    @Autowired    
     private ContigentBillRepository contigentBillRepository;
 
-    @Autowired
+    @Autowired    
     private BudgetRebaseRepository budgetRebaseRepository;
 
-    @Autowired
+    @Autowired    
     private CgStationRepository cgStationRepository;
 
 
@@ -123,7 +123,7 @@ public class MangeReportImpl implements MangeReportService {
         String fileName = "AllocationReport" + hrData.getUnitId();
 
         HashMap<String, List<ReportSubModel>> hashMap = new HashMap<>();
-        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
+        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlagOrderBySubHeadAsc(authGroupId, "0");
 
 
         if (budgetAllocationReport.size() <= 0) {
@@ -169,16 +169,11 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-
-                Collections.sort(reportMaindata, new Comparator<ReportSubModel>() {
-                    public int compare(ReportSubModel v1, ReportSubModel v2) {
-                        return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
-                    }
-                });
                 reportMaindata.add(subModel);
                 hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
             }
         }
+
 
 
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
@@ -257,7 +252,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
         HashMap<String, List<ReportSubModel>> hashMap = new HashMap<>();
-        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
+        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlagOrderBySubHeadAsc(authGroupId, "0");
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
         }

@@ -23,19 +23,19 @@ import java.util.List;
 @Service
 public class MangeUserImpl implements MangeUserService {
 
-    @Autowired
+    @Autowired    
     RoleRepository roleRepository;
 
-    @Autowired
+    @Autowired    
     CgUnitRepository cgUnitRepository;
 
-    @Autowired
+    @Autowired    
     HrDataRepository hrDataRepository;
 
-    @Autowired
+    @Autowired    
     private JwtUtils jwtUtils;
 
-    @Autowired
+    @Autowired    
     private HeaderUtils headerUtils;
 
     @Override

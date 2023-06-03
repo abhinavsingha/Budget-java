@@ -34,43 +34,43 @@ import java.util.*;
 @Service
 public class DashboardServiceImpl implements DashBoardService {
 
-    @Autowired
+    @Autowired    
     CurrentStateRepository currentStateRepository;
 
-    @Autowired
+    @Autowired    
     AmountUnitRepository amountUnitRepository;
 
-    @Autowired
+    @Autowired    
     AllocationRepository allocationRepository;
 
-    @Autowired
+    @Autowired    
     MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
 
-    @Autowired
+    @Autowired    
     SubHeadRepository subHeadRepository;
 
-    @Autowired
+    @Autowired    
     CgUnitRepository cgUnitRepository;
 
-    @Autowired
+    @Autowired    
     RoleRepository roleRepository;
 
-    @Autowired
+    @Autowired    
     BudgetFinancialYearRepository budgetFinancialYearRepository;
 
-    @Autowired
+    @Autowired    
     BudgetAllocationDetailsRepository budgetAllocationDetailsRepository;
 
-    @Autowired
+    @Autowired    
     BudgetAllocationRepository budgetAllocationRepository;
 
-    @Autowired
+    @Autowired    
     private ContigentBillRepository contigentBillRepository;
 
-    @Autowired
+    @Autowired    
     private HeaderUtils headerUtils;
 
-    @Autowired
+    @Autowired    
     private HrDataRepository hrDataRepository;
 
     @Override

@@ -28,47 +28,47 @@ import java.util.List;
 @Service
 public class InboxOutBoxImpl implements InboxOutBoxService {
 
-    @Autowired
+    @Autowired    
     HrDataRepository hrDataRepository;
 
-    @Autowired
+    @Autowired    
     CurrentStateRepository currentStateRepository;
 
 
-    @Autowired
+    @Autowired    
     RoleRepository roleRepository;
 
-    @Autowired
+    @Autowired    
     CgUnitRepository cgUnitRepository;
 
-    @Autowired
+    @Autowired    
     MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
 
-    @Autowired
+    @Autowired    
     AllocationRepository allocationRepository;
 
-    @Autowired
+    @Autowired    
     BudgetFinancialYearRepository budgetFinancialYearRepository;
 
-    @Autowired
+    @Autowired    
     private JwtUtils jwtUtils;
 
-    @Autowired
+    @Autowired    
     private HeaderUtils headerUtils;
 
-    @Autowired
+    @Autowired    
     AuthorityRepository authorityRepository;
 
-    @Autowired
+    @Autowired    
     private BudgetAllocationDetailsRepository budgetAllocationDetailsRepository;
 
-    @Autowired
+    @Autowired    
     private AmountUnitRepository amountUnitRepository;
 
-    @Autowired
+    @Autowired    
     private SubHeadRepository subHeadRepository;
 
-    @Autowired
+    @Autowired    
     private BudgetAllocationRepository budgetAllocationRepository;
 
 

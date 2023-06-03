@@ -23,7 +23,7 @@ import java.io.IOException;
 @Slf4j
 public class FileUploadController {
 
-	@Autowired
+	@Autowired    
 	private UploadDocumentService uploadDocumentService;
 
 

@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class BudgetRecipetController {
 
-	@Autowired
+	@Autowired    
 	private BudgetReciptService budgetReciptService;
 
 

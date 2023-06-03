@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class InboxOutboxController {
 
-    @Autowired
+    @Autowired    
     private InboxOutBoxService inboxOutBoxService;
 
 

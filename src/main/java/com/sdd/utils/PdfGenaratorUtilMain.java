@@ -75,13 +75,15 @@ public class PdfGenaratorUtilMain {
 
 
         Phrase phrase = new Phrase();
-        Font font = new Font(Font.FontFamily.COURIER, 10, Font.BOLD);
-        Chunk approverName = new Chunk(filePathResponse.getApproveName() + "\n" + filePathResponse.getApproveRank(), font);
-        phrase.add(new Paragraph("\n" + "\n" + approverName));
-
+        Font font = new Font(Font.FontFamily.COURIER, 8, Font.BOLD);
+        Chunk approverName = new Chunk(""+(filePathResponse.getApproveName() + "\n" + filePathResponse.getApproveRank()), font);
+        phrase.add(approverName);
+        Paragraph paragraph = new Paragraph();
+        paragraph.add(phrase);
+        paragraph.setAlignment(Element.ALIGN_BOTTOM);
 
         document.add(table);
-        document.add(phrase);
+        document.add(paragraph);
         document.close();
 
     }

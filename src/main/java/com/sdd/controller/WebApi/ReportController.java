@@ -26,7 +26,7 @@ import java.util.List;
 @Slf4j
 public class ReportController {
 
-	@Autowired
+	@Autowired    
 	private MangeReportService mangeReportService;
 
 

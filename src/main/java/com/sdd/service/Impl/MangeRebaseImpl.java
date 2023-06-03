@@ -37,56 +37,56 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
     private static final long expirationTime = 180L * 24L * 60L * 60L;
 
-    @Autowired
+    @Autowired    
     private CgUnitRepository cgUnitRepository;
 
-    @Autowired
+    @Autowired    
     BudgetAllocationRepository budgetAllocationRepository;
 
-    @Autowired
+    @Autowired    
     private AmountUnitRepository amountUnitRepository;
 
 
-    @Autowired
+    @Autowired    
     private BudgetFinancialYearRepository budgetFinancialYearRepository;
 
-    @Autowired
+    @Autowired    
     private FileUploadRepository fileUploadRepository;
 
-    @Autowired
+    @Autowired    
     private HrDataRepository hrDataRepository;
 
-    @Autowired
+    @Autowired    
     private JwtUtils jwtUtils;
 
-    @Autowired
+    @Autowired    
     private HeaderUtils headerUtils;
 
-    @Autowired
+    @Autowired    
     private AuthorityRepository authorityRepository;
 
-    @Autowired
+    @Autowired    
     private CgStationRepository cgStationRepository;
 
-    @Autowired
+    @Autowired    
     private BudgetRebaseRepository budgetRebaseRepository;
 
-    @Autowired
+    @Autowired    
     private BudgetAllocationDetailsRepository budgetAllocationDetailsRepository;
 
-    @Autowired
+    @Autowired    
     private ContigentBillRepository contigentBillRepository;
 
-    @Autowired
+    @Autowired    
     private AllocationRepository allocationRepository;
 
-    @Autowired
+    @Autowired    
     private SubHeadRepository subHeadRepository;
 
-    @Autowired
+    @Autowired    
     private CdaParkingTransRepository cdaParkingTransRepository;
 
-    @Autowired
+    @Autowired    
     private CdaParkingRepository cdaParkingRepository;
 
 

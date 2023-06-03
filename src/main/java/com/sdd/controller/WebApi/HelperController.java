@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class HelperController {
 
-  @Autowired private HelperService helperService;
+  @Autowired     private HelperService helperService;
 
   @GetMapping("/generatePDFDemo")
   public String generatePDFDemo() {

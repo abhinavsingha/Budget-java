@@ -34,52 +34,52 @@ import java.util.List;
 @Service
 public class ContingentServiceImpl implements ContingentService {
 
-    @Autowired
+    @Autowired    
     CdaParkingTransRepository cdaParkingTransRepository;
 
-    @Autowired
+    @Autowired    
     CdaParkingCrAndDrRepository parkingCrAndDrRepository;
 
-    @Autowired
+    @Autowired    
     CdaParkingRepository cdaParkingRepository;
 
-    @Autowired
+    @Autowired    
     BudgetFinancialYearRepository budgetFinancialYearRepository;
 
-    @Autowired
+    @Autowired    
     BudgetAllocationRepository budgetAllocationRepository;
 
-    @Autowired
+    @Autowired    
     AmountUnitRepository amountUnitRepository;
 
-    @Autowired
+    @Autowired    
     AllocationRepository allocationRepository;
 
-    @Autowired
+    @Autowired    
     SubHeadRepository subHeadRepository;
 
-    @Autowired
+    @Autowired    
     CgUnitRepository cgUnitRepository;
 
-    @Autowired
+    @Autowired    
     FileUploadRepository fileUploadRepository;
 
-    @Autowired
+    @Autowired    
     ContigentBillRepository contigentBillRepository;
 
-    @Autowired
+    @Autowired    
     MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
 
-    @Autowired
+    @Autowired    
     AuthorityRepository authorityRepository;
 
-    @Autowired
+    @Autowired    
     private JwtUtils jwtUtils;
 
-    @Autowired
+    @Autowired    
     private HeaderUtils headerUtils;
 
-    @Autowired
+    @Autowired    
     private HrDataRepository hrDataRepository;
 
     @Override
