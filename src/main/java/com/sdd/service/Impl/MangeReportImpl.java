@@ -356,9 +356,9 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
+            String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
             docxGenaratorUtil.createDocAllocation(hashMap, filePath, filePathResponse);
-            filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
+            filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".docx");
             filePathResponse.setFileName(fileName);
             dtoList.add(filePathResponse);
 
