@@ -313,13 +313,14 @@ public class MangeRebaseImpl implements MangeRebaseService {
         if (hrDataCheck == null) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
             },"YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS",HttpStatus.OK.value());
-        } else {
+        }
+        /* else {
             if (hrDataCheck.getRoleId().contains(HelperUtils.SYSTEMADMIN)) {
             } else {
                 return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
                 },"YOU ARE NOT AUTHORIZED TO REBASE THE STATION",HttpStatus.OK.value());
             }
-        }
+        }*/
         if (finYear == null) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
             },"FIN YEAR ID CAN NOT BE NULL",HttpStatus.OK.value());
@@ -331,11 +332,12 @@ public class MangeRebaseImpl implements MangeRebaseService {
         BudgetFinancialYear Finyr=budgetFinancialYearRepository.findBySerialNo(finYear);
         CgUnit unitdata = cgUnitRepository.findByUnit(unit);
         List<AllocationType> allocType=allocationRepository.findByIsFlag("1");
+        String allocTypes=allocType.get(0).getAllocTypeId();
         if (unitdata == null) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
             },"INVALID UNIT ID PLEASE CHECK",HttpStatus.OK.value());
         }
-        List<BudgetAllocation> allocationData = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(unit, finYear,allocType.get(0).getAllocTypeId(),"0");
+        List<BudgetAllocation> allocationData = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(unit, finYear,allocTypes,"0");
         if (allocationData.size()<=0) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
             },"Record Not Found",HttpStatus.OK.value());
