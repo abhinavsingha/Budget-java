@@ -24,4 +24,7 @@ public interface MangeUserService {
 	ApiResponse<DefaultResponse> deActivateUser(String pid);
 
 	ApiResponse<DefaultResponse> removeRole(HrData hrData);
+
+	ApiResponse<Boolean> userExit();
+
 }

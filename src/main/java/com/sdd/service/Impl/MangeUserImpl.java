@@ -460,4 +460,22 @@ public class MangeUserImpl implements MangeUserService {
         });
     }
 
+
+    @Override
+    public ApiResponse<Boolean> userExit() {
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if(hrDataCheck != null) {
+            return ResponseUtils.createSuccessResponse(true, new TypeReference<Boolean>() {
+            });
+        } else {
+            return ResponseUtils.createSuccessResponse(false, new TypeReference<Boolean>() {
+            });
+        }
+
+    }
+
 }

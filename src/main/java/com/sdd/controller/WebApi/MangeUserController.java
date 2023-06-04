@@ -58,4 +58,9 @@ public class MangeUserController {
 		return new ResponseEntity<>(mangeUserService.removeRole(hrData), HttpStatus.OK);
 	}
 
+	@GetMapping("/userExit")
+	public ResponseEntity<ApiResponse<Boolean>> userExit() {
+		return new ResponseEntity<>(mangeUserService.userExit(), HttpStatus.OK);
+	}
+
 }
