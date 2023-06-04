@@ -111,26 +111,6 @@ public class ConverterUtils {
 
     }
 
-    public static File getTargetFile(String fileExtn, String fileName, String fileDestPath) {
-
-        String dirPath = null;
-        try {
-            dirPath = "/usr/local/tomcat/webapps/" + fileDestPath;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Path path = Paths.get(dirPath);
-        if (Files.notExists(path)) {
-            try {
-                Files.createDirectories(path);
-            } catch (IOException ie) {
-                System.out.println("Problem creating directory " + ie);
-            }
-        }
-        File targetFile = new File(path.toString() + "/" + fileName + fileExtn);
-        return targetFile;
-    }
 
     public static File getComplaintPathOnly(String fileExtn, String fileName, String fileDestPath) {
         Path path = Paths.get(fileDestPath);
@@ -139,10 +119,6 @@ public class ConverterUtils {
     }
 
 
-    public static String getFileExtension(MultipartFile file) {
-        String fileExtention = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.'));
-        return fileExtention;
-    }
 
     public static String getCurrentDate() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -150,26 +126,14 @@ public class ConverterUtils {
         return (dtf.format(now));
     }
 
-    public static String getCurrentDateWithTime() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        return (dtf.format(now));
-    }
 
 
     public static String addDecimalPoint(String number) {
-
-
         try {
             if (number == null) {
                 return "0.0000";
             }
-//            if (!number.contains(".")) {
-//                return  number + ".0000";
-//            }
             return String.format("%.4f", Double.parseDouble(number));
-//            DecimalFormat df = new DecimalFormat("#.####");
-//            return df.format(Double.parseDouble(number));
         } catch (Exception e) {
             return number;
         }

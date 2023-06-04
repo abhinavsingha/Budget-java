@@ -1515,7 +1515,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);

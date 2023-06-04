@@ -63,7 +63,7 @@ public class DocxGenaratorUtil {
 
 //                            tableRow.getCell(2).setText(tabData11.get(i).getAmount());
                         XWPFParagraph paragraph11 = tableRow.getCell(2).addParagraph();
-                        normalText(paragraph11.createRun(), 10, tabData11.get(i).getAmount(), false);
+                        normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), false);
 
                     } else {
                         XWPFTableRow tableRow11 = table.createRow();
@@ -73,7 +73,7 @@ public class DocxGenaratorUtil {
                         normalText(paragraph.createRun(), 10, tabData11.get(i).getUnit(), false);
 
                         XWPFParagraph paragraph11 = tableRow11.getCell(2).addParagraph();
-                        normalText(paragraph11.createRun(), 10, tabData11.get(i).getAmount(), false);
+                        normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), false);
                     }
 
                     allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
@@ -83,7 +83,7 @@ public class DocxGenaratorUtil {
                     XWPFParagraph total1 = latRow.getCell(1).addParagraph();
                     boldText(total1.createRun(), 10, "Total Amount", true);
                     XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
-                    boldText(total1111.createRun(), 10, allAmountData + "", true);
+                    boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(allAmountData + ""), true);
 
                 }
             }
@@ -93,7 +93,7 @@ public class DocxGenaratorUtil {
             XWPFParagraph total1 = latRow.getCell(0).addParagraph();
             boldText(total1.createRun(), 10, "Grand Total", true);
             XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
-            boldText(total1111.createRun(), 10, grandTotal + "", true);
+            boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(grandTotal + ""), true);
 
 
             XWPFParagraph mainParagraph = document.createParagraph();
@@ -171,7 +171,7 @@ public class DocxGenaratorUtil {
 
             for (Integer i = 0; i < tabData1.size(); i++) {
                 XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
-                boldText(paragraphtableRowOne1.createRun(), 10, tabData1.get(i).getName(), true);
+                boldText(paragraphtableRowOne1.createRun(), 10, ConverterUtils.addDecimalPoint(tabData1.get(i).getName()), true);
             }
 
             for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
@@ -187,7 +187,7 @@ public class DocxGenaratorUtil {
 
                     for (Integer i = 0; i < tabData.size(); i++) {
                         XWPFParagraph paragraph11 = tableRow11.getCell(i + 1).addParagraph();
-                        normalText(paragraph11.createRun(), 10, tabData.get(i).getName(), false);
+                        normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(tabData.get(i).getName()), false);
                     }
                 }
             }
@@ -198,7 +198,7 @@ public class DocxGenaratorUtil {
             for (Integer i = 0; i < tabData1.size(); i++) {
                 if (i == (tabData1.size() - 1)) {
                     XWPFParagraph paragraph11 = tableRow11.getCell(i + 1).addParagraph();
-                    normalText(paragraph11.createRun(), 10, grandTotal + "", false);
+                    normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(grandTotal + ""), false);
                 } else {
                     XWPFParagraph paragraph11 = tableRow11.getCell(i + 1).addParagraph();
                     normalText(paragraph11.createRun(), 10, "", false);

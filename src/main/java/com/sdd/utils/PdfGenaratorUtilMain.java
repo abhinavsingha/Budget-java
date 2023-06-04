@@ -53,25 +53,25 @@ public class PdfGenaratorUtilMain {
 
                 if (i == 0) {
                     table.addCell(normalText(tabData11.get(i).getUnit(), 8, 25f));
-                    table.addCell(normalText(tabData11.get(i).getAmount(), 8, 25f));
+                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 8, 25f));
                 } else {
                     table.addCell(normalText("", 8, 25f));
-                    table.addCell(normalText(tabData11.get(i).getUnit(), 8, 25f));
-                    table.addCell(normalText(tabData11.get(i).getAmount(), 8, 25f));
+                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getUnit()), 8, 25f));
+                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 8, 25f));
                 }
                 allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
 
                 table.addCell(boldText("", 8, 25f));
-                table.addCell(boldText("Total Amount", 8, 25f));
-                table.addCell(boldText(allAmountData + "", 8, 25f));
+                table.addCell(boldText(ConverterUtils.addDecimalPoint("Total Amount"), 8, 25f));
+                table.addCell(boldText(ConverterUtils.addDecimalPoint(allAmountData + ""), 8, 25f));
 
                 grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
             }
         }
 
-        table.addCell(boldText("Grand Total", 8, 25f));
+        table.addCell(boldText(ConverterUtils.addDecimalPoint("Grand Total"), 8, 25f));
         table.addCell(boldText("", 8, 25f));
-        table.addCell(boldText(grandTotal + "", 8, 25f));
+        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 8, 25f));
 
 
         Phrase phrase = new Phrase();
@@ -132,14 +132,14 @@ public class PdfGenaratorUtilMain {
                 List<CDAReportResponse> tabData = entry.getValue();
                 table.addCell(boldText(key, 5, 35f));
                 for (Integer i = 0; i < tabData.size(); i++) {
-                    table.addCell(normalText(tabData.get(i).getName(), 6, 20f));
+                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(i).getName()), 6, 20f));
                 }
             }
         }
         table.addCell(boldText("Grand Total", 5, 20f));
         for (Integer i = 0; i < tabData1.size(); i++) {
             if (i == (tabData1.size() - 1)) {
-                table.addCell(boldText(grandTotal + "", 6, 20f));
+                table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 6, 20f));
             } else {
                 table.addCell(normalText("", 6, 20f));
             }
