@@ -20,61 +20,61 @@ public class BudgetRebase {
     @Column(name = "BUDGET_REBASE_ID", nullable = false)
     private String budgetRebaseId;
 
-    @Column(name = "REF_TRANS_ID", nullable = false)
+    @Column(name = "REF_TRANS_ID")
     private String refTransId;
 
-    @Column(name = "FIN_YEAR", nullable = false)
+    @Column(name = "FIN_YEAR")
     private String finYear;
 
-    @Column(name = "REBASE_UNIT_ID", nullable = false)
+    @Column(name = "REBASE_UNIT_ID")
     private String rebaseUnitId;
 
-    @Column(name = "HEAD_UNIT_ID", nullable = false)
+    @Column(name = "HEAD_UNIT_ID")
     private String headUnitId;
 
-    @Column(name = "FRM_STATION_ID", nullable = false)
+    @Column(name = "FRM_STATION_ID")
     private String frmStationId;
 
-    @Column(name = "TO_STATION_ID", nullable = false)
+    @Column(name = "TO_STATION_ID")
     private String toStationId;
 
-    @Column(name = "TO_HEAD_UNIT_ID", nullable = false)
+    @Column(name = "TO_HEAD_UNIT_ID")
     private String toHeadUnitId;
 
-    @Column(name = "OCCURANCE_DATE", nullable = false)
+    @Column(name = "OCCURANCE_DATE")
     private Timestamp occuranceDate;
 
-    @Column(name = "BUDGETHEAD_ID", nullable = false)
+    @Column(name = "BUDGETHEAD_ID")
     private String budgetHeadId;
 
-    @Column(name = "ALLOC_AMOUNT", nullable = false)
+    @Column(name = "ALLOC_AMOUNT")
     private String allocAmount;
 
-    @Column(name = "EXP_AMOUNT", nullable = false)
+    @Column(name = "EXP_AMOUNT")
     private String expAmount;
 
-    @Column(name = "BAL_AMOUNT", nullable = false)
+    @Column(name = "BAL_AMOUNT")
     private String balAmount;
 
-    @Column(name = "AMOUNT_TYPE", nullable = false)
+    @Column(name = "AMOUNT_TYPE")
     private String amountType;
 
-    @Column(name = "ALLOC_TYPE", nullable = false)
+    @Column(name = "ALLOC_TYPE")
     private String allocTypeId;
 
-    @Column(name = "AUTHORITY_ID", nullable = false)
+    @Column(name = "AUTHORITY_ID")
     private String authorityId;
 
-    @Column(name = "USER_ID", nullable = false)
+    @Column(name = "USER_ID")
     private String userId;
 
     @Column(name = "CREATED_ON")
     private Timestamp createdOn;
 
-    @Column(name = "UPDATED_ON", nullable = false)
+    @Column(name = "UPDATED_ON")
     private Timestamp updatedOn;
 
-    @Column(name = "LASTCB_DATE", nullable = false)
+    @Column(name = "LASTCB_DATE")
     private Timestamp lastCbDate;
 
 
