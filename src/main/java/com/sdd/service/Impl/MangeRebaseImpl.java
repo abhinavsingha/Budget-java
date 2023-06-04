@@ -524,6 +524,25 @@ public class MangeRebaseImpl implements MangeRebaseService {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             },"CAN NOT REBASE ON SAME STATION",HttpStatus.OK.value());
         }
+        String maxRebaseId =budgetRebaseRepository.findMaxRebaseIDByRebaseUnitId(req.getRebaseUnitId());
+        if (maxRebaseId!=null) {
+            BudgetRebase rebaseData=budgetRebaseRepository.findByBudgetRebaseId(maxRebaseId);
+            Date crDate=rebaseData.getCreatedOn();
+            Date expireDate= new Date(crDate.getTime()+expirationTime*1000);
+            Date todayDate= new Date();
+            if(expireDate.getTime()>=todayDate.getTime()){
+                return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+                },"CAN NOT REBASE SAME UNIT ! TRY AFTER 24 HOURS",HttpStatus.OK.value());
+            }else{
+                chekUnit.setStationId(req.getToStationId());
+                chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                cgUnitRepository.save(chekUnit);
+            }
+        }else {
+            chekUnit.setStationId(req.getToStationId());
+            chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            cgUnitRepository.save(chekUnit);
+        }
         String headUnit=chekUnit.getSubUnit();
 
 
@@ -631,25 +650,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             budgetRebaseRepository.save(budgetRebase);
         }
-        String maxRebaseId =budgetRebaseRepository.findMaxRebaseIDByRebaseUnitId(req.getRebaseUnitId());
-        if (maxRebaseId!=null) {
-            BudgetRebase rebaseData=budgetRebaseRepository.findByBudgetRebaseId(maxRebaseId);
-            Date crDate=rebaseData.getCreatedOn();
-            Date expireDate= new Date(crDate.getTime()+expirationTime*1000);
-            Date todayDate= new Date();
-            if(expireDate.getTime()>=todayDate.getTime()){
-                return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-                },"CAN NOT REBASE SAME UNIT ! TRY AFTER 24 HOURS",HttpStatus.OK.value());
-            }else{
-                chekUnit.setStationId(req.getToStationId());
-                chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                cgUnitRepository.save(chekUnit);
-            }
-        }else {
-            chekUnit.setStationId(req.getToStationId());
-            chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-            cgUnitRepository.save(chekUnit);
-        }
+
 
 
         defaultResponse.setMsg("UNIT REBASE SUCCESSFULLY");
