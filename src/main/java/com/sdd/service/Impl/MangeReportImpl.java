@@ -123,7 +123,8 @@ public class MangeReportImpl implements MangeReportService {
         String fileName = "AllocationReport" + hrData.getUnitId();
 
         HashMap<String, List<ReportSubModel>> hashMap = new HashMap<>();
-        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlagOrderBySubHeadAsc(authGroupId, "0");
+//        List<BudgetAllocationDetails> budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsFlagOrderBySubHeadAsc(authGroupId, "0");
+        List<BudgetAllocationDetails> budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(authGroupId, "0");
 
 
         if (budgetAllocationReport.size() <= 0) {
@@ -141,8 +142,8 @@ public class MangeReportImpl implements MangeReportService {
 
                 List<ReportSubModel> reportMaindata = hashMap.get(budgetHead.getSubHeadDescr());
                 ReportSubModel subModel = new ReportSubModel();
-                subModel.setType(budgetAllocationReport.get(j).getAllocationTypeId());
-                subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
+                subModel.setType(budgetAllocationReport.get(j).getAllocTypeId());
+                subModel.setRemark(budgetAllocationReport.get(j).getTransactionId());
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setBudgetHead(budgetHead);
@@ -161,8 +162,8 @@ public class MangeReportImpl implements MangeReportService {
             } else {
                 List<ReportSubModel> reportMaindata = new ArrayList<ReportSubModel>();
                 ReportSubModel subModel = new ReportSubModel();
-                subModel.setType(budgetAllocationReport.get(j).getAllocationTypeId());
-                subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
+                subModel.setType(budgetAllocationReport.get(j).getAllocTypeId());
+                subModel.setRemark(budgetAllocationReport.get(j).getTransactionId());
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
                 subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
@@ -252,7 +253,10 @@ public class MangeReportImpl implements MangeReportService {
 
 
         HashMap<String, List<ReportSubModel>> hashMap = new HashMap<>();
-        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlagOrderBySubHeadAsc(authGroupId, "0");
+//        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlagOrderBySubHeadAsc(authGroupId, "0");
+
+        List<BudgetAllocationDetails> budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(authGroupId, "0");
+
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
         }
@@ -267,8 +271,8 @@ public class MangeReportImpl implements MangeReportService {
 
                 List<ReportSubModel> reportMaindata = hashMap.get(budgetHead.getSubHeadDescr());
                 ReportSubModel subModel = new ReportSubModel();
-                subModel.setType(budgetAllocationReport.get(j).getAllocationTypeId());
-                subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
+                subModel.setType(budgetAllocationReport.get(j).getAllocTypeId());
+                subModel.setRemark(budgetAllocationReport.get(j).getTransactionId());
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
                 subModel.setAmountType(amountUnit.getAmountType());
@@ -286,8 +290,8 @@ public class MangeReportImpl implements MangeReportService {
             } else {
                 List<ReportSubModel> reportMaindata = new ArrayList<ReportSubModel>();
                 ReportSubModel subModel = new ReportSubModel();
-                subModel.setType(budgetAllocationReport.get(j).getAllocationTypeId());
-                subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
+                subModel.setType(budgetAllocationReport.get(j).getAllocTypeId());
+                subModel.setRemark(budgetAllocationReport.get(j).getTransactionId());
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
                 subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
