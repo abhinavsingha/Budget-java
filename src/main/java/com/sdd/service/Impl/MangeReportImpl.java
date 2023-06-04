@@ -4334,9 +4334,10 @@ public class MangeReportImpl implements MangeReportService {
                                 return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                                 }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                             }
+                            String uid=row.getToUnit();
                             amountUnit = amountTypeObj.getAmount();
                             finAmount = amount * amountUnit / reqAmount;
-                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdate(row.getToUnit(), finYearId, subHeadId, "0");
+                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdate(uid, finYearId, subHeadId, "0");
 
                             List<ContigentBill> expenditure = expenditure1.stream()
                                     .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
@@ -4352,7 +4353,7 @@ public class MangeReportImpl implements MangeReportService {
                                 eAmount = 0.0;
                             }
                             if (finAmount != 0)
-                                expnAmount = eAmount * 100 / (finAmount * reqAmount);
+                                expnAmount = eAmount * 100 / (amount * amountUnit);
                             else
                                 expnAmount = 0.0;
                             BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
@@ -4370,7 +4371,7 @@ public class MangeReportImpl implements MangeReportService {
                             sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(unitN.getDescr())).append("</td>");
                             sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(finAmount)))).append("</td>");
                             sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(eAmount)))).append("</td>");
-                            sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(expnAmount)))).append("</td>");
+                            sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.9f", new BigDecimal(expnAmount)))).append("</td>");
                             sb.append("<td class=\"the\"></td>");
                             sb.append("<td class=\"the\"></td>");
                             sb.append("</tr>");
@@ -4390,7 +4391,7 @@ public class MangeReportImpl implements MangeReportService {
                     sb.append("<td class=\"the bold\">TOTAL</td>");
                     sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(sum)))).append("</td>");
                     sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(expsum)))).append("</td>");
-                    sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(percentagesum)))).append("</td>");
+                    sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.9f", new BigDecimal(percentagesum)))).append("</td>");
                     sb.append("<td class=\"the bold\"></td>");
                     sb.append("<td class=\"the bold\"></td>");
 
@@ -5370,18 +5371,18 @@ public class MangeReportImpl implements MangeReportService {
 
 
             htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
-            String filepath = HelperUtils.FILEPATH + "/" + "Rivision_Allocation-Report.pdf";
+            String filepath = HelperUtils.FILEPATH + "/" + "Revision_Allocation-Report.pdf";
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String filePath = folder.getAbsolutePath() + "/" + "Rivision_Allocation-Report.pdf";
+            String filePath = folder.getAbsolutePath() + "/" + "Revision_Allocation-Report.pdf";
             File file = new File(filePath);
             generatePdf(htmlContent, file.getAbsolutePath());
             //generatePdf(htmlContent, filepath);
             FilePathResponse response = new FilePathResponse();
             response.setPath(filepath);
-            response.setFileName("Rivision_Allocation-Report.pdf");
+            response.setFileName("Revision_Allocation-Report.pdf");
 
             dtoList.add(response);
         } catch (IOException e) {
