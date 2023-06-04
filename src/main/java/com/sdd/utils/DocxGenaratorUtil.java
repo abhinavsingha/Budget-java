@@ -52,10 +52,10 @@ public class DocxGenaratorUtil {
 
                 XWPFTableRow tableRow = table.createRow();
                 tableRow.getCell(0).setText(key11);
-                double allAmountData = 0;
+
 
                 for (Integer i = 0; i < tabData11.size(); i++) {
-
+                    double allAmountData = 0;
                     if (i == 0) {
 //                            tableRow.getCell(1).setText(tabData11.get(i).getUnit());
                         XWPFParagraph paragraph = tableRow.getCell(1).addParagraph();

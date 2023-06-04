@@ -48,9 +48,9 @@ public class PdfGenaratorUtilMain {
 
             table.addCell(normalText(key11, 8, 25f));
 
-            double allAmountData = 0;
-            for (Integer i = 0; i < tabData11.size(); i++) {
 
+            for (Integer i = 0; i < tabData11.size(); i++) {
+                double allAmountData = 0;
                 if (i == 0) {
                     table.addCell(normalText(tabData11.get(i).getUnit(), 8, 25f));
                     table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 8, 25f));
