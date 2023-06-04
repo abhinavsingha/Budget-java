@@ -55,4 +55,11 @@ public interface MangeReportService {
 
     ApiResponse<List<FilePathResponse>> getUnitRebaseReportDoc(String fromDate, String toDate);
 
+    ApiResponse<List<FilePathResponse>> getUnitWiseAllocationReportDoc(UnitWiseAllocationReport reportRequest);
+
+    ApiResponse<List<FilePathResponse>> getSubHeadWiseAllocationReportDoc(SubHeadWiseAllocationReportReq req);
+
+    ApiResponse<List<FilePathResponse>> getBEAllocationReportDoc(String finYearId,String allocationType, String amountTypeId);
+
+
 }

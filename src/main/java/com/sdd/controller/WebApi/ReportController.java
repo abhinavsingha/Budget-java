@@ -140,9 +140,25 @@ public class ReportController {
 		return new ResponseEntity<>(mangeReportService.getRevisedAllocationReport(authGroupId), HttpStatus.OK);
 	}
 
+
 	@GetMapping("/getUnitRebaseReportDoc/{fromDate}/{toDate}")
 	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitRebaseReportDoc(@PathVariable(value = "fromDate") String fromDate , @PathVariable(value = "toDate") String toDate)  {
 		return new ResponseEntity<>(mangeReportService.getUnitRebaseReportDoc(fromDate,toDate), HttpStatus.OK);
+	}
+
+	@PostMapping("/getUnitWiseAllocationReportDoc")
+	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitWiseAllocationReportDoc(@RequestBody UnitWiseAllocationReport reportRequest) {
+		return new ResponseEntity<>(mangeReportService.getUnitWiseAllocationReportDoc(reportRequest), HttpStatus.OK);
+	}
+
+	@PostMapping("/getSubHeadWiseAllocationReportDoc")
+	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getSubHeadWiseAllocationReportDoc(@RequestBody SubHeadWiseAllocationReportReq req) {
+		return new ResponseEntity<>(mangeReportService.getSubHeadWiseAllocationReportDoc(req), HttpStatus.OK);
+	}
+
+	@GetMapping("/getBEAllocationReportDoc/{finYearId}/{allocationType}/{amountTypeId}")
+	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getBEAllocationReportDoc(@PathVariable(value = "finYearId") String finYearId , @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId)  {
+		return new ResponseEntity<>(mangeReportService.getBEAllocationReportDoc(finYearId,allocationType,amountTypeId), HttpStatus.OK);
 	}
 
 }
