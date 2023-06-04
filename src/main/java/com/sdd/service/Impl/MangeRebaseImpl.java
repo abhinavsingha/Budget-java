@@ -35,7 +35,7 @@ import java.util.List;
 @Service
 public class MangeRebaseImpl implements MangeRebaseService {
 
-    private static final long expirationTime = 180L * 24L * 60L * 60L;
+    private static final long expirationTime = 24L * 60L * 60L;
 
     @Autowired    
     private CgUnitRepository cgUnitRepository;
@@ -314,13 +314,13 @@ public class MangeRebaseImpl implements MangeRebaseService {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
             },"YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS",HttpStatus.OK.value());
         }
-        /* else {
-            if (hrDataCheck.getRoleId().contains(HelperUtils.SYSTEMADMIN)) {
+         else {
+            if (hrDataCheck.getRoleId().contains(HelperUtils.BUDGETMANGER)) {
             } else {
                 return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
                 },"YOU ARE NOT AUTHORIZED TO REBASE THE STATION",HttpStatus.OK.value());
             }
-        }*/
+        }
         if (finYear == null) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
             },"FIN YEAR ID CAN NOT BE NULL",HttpStatus.OK.value());
@@ -532,7 +532,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             Date todayDate= new Date();
             if(expireDate.getTime()>=todayDate.getTime()){
                 return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-                },"CAN NOT REBASE ON SAME UNIT BEFORE SIX MONTH",HttpStatus.OK.value());
+                },"CAN NOT REBASE SAME UNIT ! TRY AFTER 24 HOURS",HttpStatus.OK.value());
             }else{
                 chekUnit.setStationId(req.getToStationId());
                 chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
