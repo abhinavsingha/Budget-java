@@ -19,18 +19,16 @@ import java.util.Date;
 public class FileUpload {
 
     @Id
-    @Column(name = "UPLOAD_ID", nullable = false)
+    @Column(name = "UPLOAD_ID")
     private String uploadID;
 
-    @Column(name = "PATH_URL", nullable = false)
+    @Column(name = "PATH_URL")
     private String pathURL;
 
     @Column(name = "CREATED_ON")
     private Timestamp createdOn;
 
-
-
-    @Column(name = "UPDATED_ON", nullable = false)
+    @Column(name = "UPDATED_ON")
     private Timestamp updatedOn;
 
 

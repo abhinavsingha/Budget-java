@@ -22,6 +22,7 @@ import com.sdd.jwt.JwtUtils;
 import com.sdd.jwtParse.TokenParseData;
 import com.sdd.response.ApiResponse;
 import com.sdd.response.UplaodMainFormDocumentsResponse;
+import com.sdd.response.UserManualResponse;
 import com.sdd.service.UploadDocumentService;
 import com.sdd.utils.ConverterUtils;
 import com.sdd.utils.HelperUtils;
@@ -52,19 +53,19 @@ import java.util.Map;
 public class UploadDocumentServiceImpl implements UploadDocumentService {
 
 
-    @Autowired    
+    @Autowired
     private JwtUtils jwtUtils;
 
-    @Autowired    
+    @Autowired
     private FileUploadRepository fileUploadRepository;
 
-    @Autowired    
+    @Autowired
     private ContigentBillRepository contigentBillRepository;
 
-    @Autowired    
+    @Autowired
     private AuthorityRepository authorityRepository;
 
-    @Autowired    
+    @Autowired
     private HeaderUtils headerUtils;
 
 
@@ -72,7 +73,7 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
     public ApiResponse<UplaodMainFormDocumentsResponse> fileUplaod(MultipartFile file) throws IOException {
         UplaodMainFormDocumentsResponse uplaodDocuments = new UplaodMainFormDocumentsResponse();
 
-        File mainFilePath = new File (new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+        File mainFilePath = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         if (!mainFilePath.exists()) {
@@ -134,13 +135,27 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
     }
 
 
+    @Override
+    public ApiResponse<UserManualResponse> getUserManual() {
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+
+        UserManualResponse fileUpload = new UserManualResponse();
+        fileUpload.setFilename("ICG Budget Management System User Manual v1.0.pdf");
+        fileUpload.setPath("https://icg.net.in/bmsreport/usermanul.pdf");
+
+        return ResponseUtils.createSuccessResponse(fileUpload, new TypeReference<UserManualResponse>() {
+        });
+    }
+
+
     public String getFileExtension(MultipartFile file) {
         String fileExtention = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.'));
         return fileExtention;
     }
 
     @Override
-    public ApiResponse<FileUpload> getApprovedFilePath(String authGoupId,String type) {
+    public ApiResponse<FileUpload> getApprovedFilePath(String authGoupId, String type) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
 
@@ -151,38 +166,36 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
         if (type == null || type.isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TYPE CAN NOT BE BLANK");
         }
-        if(type.equalsIgnoreCase("CB")) {
+        if (type.equalsIgnoreCase("CB")) {
             List<ContigentBill> cbdata = contigentBillRepository.findByAuthGroupIdAndIsFlag(authGoupId, "0");
-            if(cbdata.size()>0) {
-                String fileId=cbdata.get(0).getCbFilePath();
+            if (cbdata.size() > 0) {
+                String fileId = cbdata.get(0).getCbFilePath();
                 FileUpload fileUp = fileUploadRepository.findByUploadID(fileId);
-                if(fileUp!=null) {
+                if (fileUp != null) {
                     fileUpload.setPathURL(fileUp.getPathURL());
                     fileUpload.setUploadID(fileUp.getUploadID());
-                }else
+                } else
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FILE NOT FOUND");
-            }else
+            } else
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "RECORD NOT FOUND");
 
-        }
-        else if(type.equalsIgnoreCase("BG") ||type.equalsIgnoreCase("BR")){
-            List<Authority> authData=authorityRepository.findByAuthGroupId(authGoupId);
-            if(authData.size()>0) {
-                String fId=authData.get(0).getDocId();
+        } else if (type.equalsIgnoreCase("BG") || type.equalsIgnoreCase("BR")) {
+            List<Authority> authData = authorityRepository.findByAuthGroupId(authGoupId);
+            if (authData.size() > 0) {
+                String fId = authData.get(0).getDocId();
                 FileUpload fileUp = fileUploadRepository.findByUploadID(fId);
-                if(fileUp!=null) {
+                if (fileUp != null) {
                     fileUpload.setPathURL(fileUp.getPathURL());
                     fileUpload.setUploadID(fileUp.getUploadID());
-                }else
+                } else
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FILE NOT FOUND");
-            }else
+            } else
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "RECORD NOT FOUND");
         }
 
         return ResponseUtils.createSuccessResponse(fileUpload, new TypeReference<FileUpload>() {
         });
     }
-
 
 
 }

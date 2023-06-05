@@ -6,6 +6,7 @@ import com.sdd.entities.FileUpload;
 import com.sdd.response.ApiResponse;
 import com.sdd.request.BudgetAllocationSaveRequest;
 import com.sdd.response.UplaodMainFormDocumentsResponse;
+import com.sdd.response.UserManualResponse;
 import com.sdd.service.UploadDocumentService;
 import lombok.extern.slf4j.Slf4j;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -50,6 +51,12 @@ public class FileUploadController {
 	@GetMapping("/getApprovedFilePath/{authGoupId}/{type}")
 	public ResponseEntity<ApiResponse<FileUpload>> getApprovedFilePath(@PathVariable(value = "authGoupId") String authGoupId ,@PathVariable(value = "type") String type) throws IOException {
 		return new ResponseEntity<>(uploadDocumentService.getApprovedFilePath(authGoupId,type), HttpStatus.OK);
+	}
+
+
+	@GetMapping("/getUserManual")
+	public ResponseEntity<ApiResponse<UserManualResponse>> getUserManual() throws IOException {
+		return new ResponseEntity<>(uploadDocumentService.getUserManual(), HttpStatus.OK);
 	}
 
 
