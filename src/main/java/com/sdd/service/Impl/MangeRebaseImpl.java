@@ -543,8 +543,13 @@ public class MangeRebaseImpl implements MangeRebaseService {
             chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             cgUnitRepository.save(chekUnit);
         }
-        String headUnit=chekUnit.getSubUnit();
-
+        String headUnits=chekUnit.getSubUnit();
+        String headUnit="";
+        if(headUnits.equalsIgnoreCase("000225")){
+            headUnit="001321";
+        }else{
+            headUnit=headUnits;
+        }
 
         Authority authority = new Authority();
         authority.setAuthority(req.getAuthority());
