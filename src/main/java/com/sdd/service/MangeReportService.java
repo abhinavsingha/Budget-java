@@ -61,5 +61,12 @@ public interface MangeReportService {
 
     ApiResponse<List<FilePathResponse>> getBEAllocationReportDoc(String finYearId,String allocationType, String amountTypeId);
 
+    ApiResponse<List<FilePathResponse>> getREAllocationReportDoc(String finYearId, String allocationType, String amountTypeId);
+
+    ApiResponse<List<FilePathResponse>> getBEREAllocationReportDoc(String finYearId, String allocationTypeBE, String allocationTypeRE, String amountTypeId);
+
+    ApiResponse<List<FilePathResponse>> getMainBEAllocationReportDoc(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate);
+
+
 
 }
