@@ -54,9 +54,6 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
 
 
     @Autowired
-    private JwtUtils jwtUtils;
-
-    @Autowired
     private FileUploadRepository fileUploadRepository;
 
     @Autowired

@@ -25,6 +25,7 @@ public interface BudgetAllocationDetailsRepository extends JpaRepository<BudgetA
     List<BudgetAllocationDetails> findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(String unitId,String finYear,String subHeadId,String allocationType,String status,String isdelete,String isRivision);
     List<BudgetAllocationDetails> findByFromUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(String unitId,String finYear,String subHeadId,String allocationType,String status,String isdelete,String isRivision);
     List<BudgetAllocationDetails> findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(String unitId,String finYear,String subHeadId,String allocationType,String isDelete,String isRivision);
+    List<BudgetAllocationDetails> findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatusIn(String unitId,String finYear,String subHeadId,String allocationType,String isDelete,String isRivision,List<String> cgUnits);
     List<BudgetAllocationDetails> findByAuthGroupIdAndSubHeadAndIsDelete(String authGroupId,String subHead,String isDelete);
     @Query(
             value =

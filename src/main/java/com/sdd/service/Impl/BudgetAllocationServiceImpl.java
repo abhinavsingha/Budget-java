@@ -24,68 +24,68 @@ import java.util.*;
 
 @Service
 public class BudgetAllocationServiceImpl implements BudgetAllocationService {
-    @Autowired    
+    @Autowired
     CgStationRepository cgStationRepository;
 
-    @Autowired    
+    @Autowired
     CdaParkingTransRepository cdaParkingTransRepository;
 
-    @Autowired    
+    @Autowired
     CdaParkingCrAndDrRepository parkingCrAndDrRepository;
 
-    @Autowired    
+    @Autowired
     CdaParkingRepository cdaParkingRepository;
 
 
-    @Autowired    
+    @Autowired
     SubHeadTypeRepository subHeadTypeRepository;
 
-    @Autowired    
+    @Autowired
     CurrentStateRepository currentStateRepository;
 
 
-    @Autowired    
+    @Autowired
     ContigentBillRepository contigentBillRepository;
 
 
-    @Autowired    
+    @Autowired
     AmountUnitRepository amountUnitRepository;
 
 
-    @Autowired    
+    @Autowired
     MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
 
-    @Autowired    
+    @Autowired
     private HrDataRepository hrDataRepository;
 
-    @Autowired    
+    @Autowired
     private JwtUtils jwtUtils;
 
-    @Autowired    
+    @Autowired
     private HeaderUtils headerUtils;
 
-    @Autowired    
+    @Autowired
     BudgetFinancialYearRepository budgetFinancialYearRepository;
 
-    @Autowired    
+    @Autowired
     SubHeadRepository subHeadRepository;
 
-    @Autowired    
+    @Autowired
     CgUnitRepository cgUnitRepository;
 
-    @Autowired    
+    @Autowired
     AllocationRepository allocationRepository;
 
-    @Autowired    
+    @Autowired
     BudgetAllocationRepository budgetAllocationRepository;
 
-    @Autowired    
+    @Autowired
     BudgetAllocationDetailsRepository budgetAllocationDetailsRepository;
 
-    @Autowired    
+    @Autowired
     private FileUploadRepository fileUploadRepository;
 
-    @Autowired    
+    @Autowired
     AuthorityRepository authorityRepository;
 
 
@@ -875,12 +875,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
 
-            if(budgetAllocationSubReport.getRevisedAmount() == null){
+            if (budgetAllocationSubReport.getRevisedAmount() == null) {
                 budgetAllocationReport.setRevisedAmount("0");
-            }else{
+            } else {
                 budgetAllocationReport.setRevisedAmount(budgetAllocationSubReport.getRevisedAmount());
             }
-
 
 
             budgetAllocationReport.setReturnRemarks(budgetAllocationSubReport.getReturnRemarks());
@@ -1364,7 +1363,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
 
-            List<CgUnit> cgUnitData = cgUnitRepository.findBySubUnitOrderByDescrAsc(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
+//            List<CgUnit> cgUnitData = cgUnitRepository.findBySubUnitOrderByDescrAsc(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
 
             if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId().equalsIgnoreCase(hrData.getUnitId())) {
 
@@ -1384,19 +1383,20 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     cdaParkingTransRepository.save(cdaParkingTrans);
                 }
             } else {
-                for (Integer f = 0; f < cgUnitData.size(); f++) {
-                    List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), cgUnitData.get(f).getUnit(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0");
+//                for (Integer f = 0; f < cgUnitData.size(); f++) {
+//                if (!cgUnitData.get(f).getUnit().equalsIgnoreCase(hrData.getUnitId())) {
+                List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0");
 
-                    for (Integer k = 0; k < cdaParkingTransList.size(); k++) {
+                for (Integer k = 0; k < cdaParkingTransList.size(); k++) {
 
-                        CdaParkingTrans cdaParkingTrans = cdaParkingTransList.get(k);
-                        cdaParkingTrans.setIsFlag("1");
-                        cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                        cdaParkingTransRepository.save(cdaParkingTrans);
-                    }
+                    CdaParkingTrans cdaParkingTrans = cdaParkingTransList.get(k);
+                    cdaParkingTrans.setIsFlag("1");
+                    cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                    cdaParkingTransRepository.save(cdaParkingTrans);
                 }
+//                    }
+//            }
             }
-
 
         }
 
@@ -1481,9 +1481,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getCreatedOn());
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
 
-            if(budgetAllocationSubReport.getRevisedAmount() == null){
+            if (budgetAllocationSubReport.getRevisedAmount() == null) {
                 budgetAllocationReport.setRevisedAmount("0");
-            }else{
+            } else {
                 budgetAllocationReport.setRevisedAmount(budgetAllocationSubReport.getRevisedAmount());
             }
 
@@ -2398,10 +2398,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         if (budgetAllocationSaveRequest.getBudgetRequest().size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND. PLEASE TRY AGAIN");
         }
-
+        List<String> dataIscgBg = new ArrayList<>();
+        dataIscgBg.add("Pending");
+        dataIscgBg.add("Approved");
 
         for (Integer i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
-            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId(), "0", "0");
+            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatusIn(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId(), "0", "0", dataIscgBg);
             if (budgetAllocationDetailsList.size() > 0) {
                 CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId());
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY ALLOCATED " + cgUnit.getDescr() + " . CAN NOT ASSIGN AGAIN");
@@ -2644,10 +2646,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         }
         BudgetAllocationSaveResponse response = new BudgetAllocationSaveResponse();
-
+        List<String> dataIscgBg = new ArrayList<>();
+        dataIscgBg.add("Pending");
+        dataIscgBg.add("Approved");
 
         for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
-            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0", "0");
+            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatusIn(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0", "0", dataIscgBg);
             if (budgetAllocationDetailsList.size() > 0) {
                 CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationDetailsList.get(i).getToUnit());
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY ALLOCATED " + cgUnit.getDescr() + " . CAN NOT ASSIGN AGAIN");
