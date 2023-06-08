@@ -2014,8 +2014,8 @@ public class MangeReportImpl implements MangeReportService {
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(reportRequest.getAmountTypeId());
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType().toUpperCase();
-        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0");
-
+        List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0");
+        List<BudgetAllocation> budgetAllocationsDetalis=budgetAllocationsDetalis1.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
         if (budgetAllocationsDetalis.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -2257,6 +2257,7 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
     }
+
 
     @Override
     public ApiResponse<List<FilePathResponse>> getSubHeadWiseAllocationReport(SubHeadWiseAllocationReportReq req) {
@@ -2592,7 +2593,7 @@ public class MangeReportImpl implements MangeReportService {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
         List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType);
-        List<String> rowData = rowDatas.stream().sorted().collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -3040,7 +3041,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
         List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType);
-        List<String> rowData = rowDatas.stream().sorted().collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -3524,7 +3525,7 @@ public class MangeReportImpl implements MangeReportService {
         AllocationType types = allocationRepository.findByAllocTypeId(allocationTypeRE);
 
         List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationTypeBE);
-        List<String> rowData = rowDatas.stream().sorted().collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -3999,7 +4000,7 @@ public class MangeReportImpl implements MangeReportService {
         }
         AllocationType type = allocationRepository.findByAllocTypeId(allocationType);
         List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType);
-        List<String> rowData = rowDatas.stream().sorted().collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
 
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -4802,8 +4803,10 @@ public class MangeReportImpl implements MangeReportService {
 
                     RunitId = ids;
                     List<BudgetRebase> rebaseDatas = budgetRebaseRepository.findByRebaseUnitId(RunitId);
-                    List<BudgetRebase> rebaseData = rebaseDatas.stream()
+                    List<BudgetRebase> rebaseData1 = rebaseDatas.stream()
                             .filter(e -> e.getOccuranceDate().after(fromDateFormate) && e.getOccuranceDate().before(toDateFormate)).collect(Collectors.toList());
+                    List<BudgetRebase> rebaseData=rebaseData1.stream().sorted(Comparator.comparing(data -> data.getBudgetHeadId().substring(data.getBudgetHeadId().length() - 2))).collect(Collectors.toList());
+
                     if (rebaseData.size() <= 0) {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
                     }
@@ -5516,8 +5519,10 @@ public class MangeReportImpl implements MangeReportService {
                 for (String ids : groupUnitId) {
                     RunitId = ids;
                     List<BudgetRebase> rebaseDatas = budgetRebaseRepository.findByRebaseUnitId(RunitId);
-                    List<BudgetRebase> rebaseData = rebaseDatas.stream()
+                    List<BudgetRebase> rebaseData1 = rebaseDatas.stream()
                             .filter(e -> e.getOccuranceDate().after(fromDateFormate) && e.getOccuranceDate().before(toDateFormate)).collect(Collectors.toList());
+                    List<BudgetRebase> rebaseData=rebaseData1.stream().sorted(Comparator.comparing(data -> data.getBudgetHeadId().substring(data.getBudgetHeadId().length() - 2))).collect(Collectors.toList());
+
                     if (rebaseData.size() <= 0) {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
                     }
@@ -5719,7 +5724,8 @@ public class MangeReportImpl implements MangeReportService {
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(reportRequest.getAmountTypeId());
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType();
-        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0");
+        List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0");
+        List<BudgetAllocation> budgetAllocationsDetalis=budgetAllocationsDetalis1.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
 
         if (budgetAllocationsDetalis.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -6060,7 +6066,8 @@ public class MangeReportImpl implements MangeReportService {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
         List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType);
-        List<String> rowData = rowDatas.stream().sorted().collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
+
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -6252,7 +6259,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
         List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType);
-        List<String> rowData = rowDatas.stream().sorted().collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -6497,7 +6504,7 @@ public class MangeReportImpl implements MangeReportService {
         AllocationType types = allocationRepository.findByAllocTypeId(allocationTypeRE);
 
         List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationTypeBE);
-        List<String> rowData = rowDatas.stream().sorted().collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -6712,7 +6719,7 @@ public class MangeReportImpl implements MangeReportService {
         }
         AllocationType type = allocationRepository.findByAllocTypeId(allocationType);
         List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType);
-        List<String> rowData = rowDatas.stream().sorted().collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
 
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
