@@ -4305,15 +4305,19 @@ public class MangeReportImpl implements MangeReportService {
             LocalDate resultDt = localDa.plusDays(1);
             LocalDateTime localDateTime = LocalDateTime.of(resultDt, LocalTime.MIDNIGHT);
             Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
-
+            Double IcgAmount=0.0;
             for (String val : rowData) {
                 String subHeadId = val;
+                String hrUnit=hrData.getUnitId();
                 System.out.println("Sorting " + subHeadId);
                 List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(subHeadId, allocationType, "0", "0");
-/*                if (reportDetails.size() <= 0) {
-                    return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                    }, "RECORD NOT FOUND OR EMPTY", HttpStatus.OK.value());
-                }*/
+                List<BudgetAllocation> hrDetails = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(hrUnit,finYearId,subHeadId, allocationType, "0");
+               if(hrDetails.size()>0) {
+                   Double hrAllocAmount = Double.valueOf(hrDetails.get(0).getAllocationAmount());
+                   AmountUnit hrAmount = amountUnitRepository.findByAmountTypeId(hrDetails.get(0).getAmountType());
+                   Double hrAmountUnit = hrAmount.getAmount();
+                   IcgAmount = hrAllocAmount * hrAmountUnit / reqAmount;
+               }
                 int count = 0;
                 float sum = 0;
                 float expsum = 0;
@@ -4405,7 +4409,7 @@ public class MangeReportImpl implements MangeReportService {
                     sb.append("</tr>");
                     count = 0;
                     //print sum
-                    String text = sb.toString().replace("${ALLOCATION_placeholder}", StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(sum))));
+                    String text = sb.toString().replace("${ALLOCATION_placeholder}", StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(IcgAmount))));
                     sb.setLength(0);
                     sb.append(text);
                 }
@@ -6830,10 +6834,18 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne6.createRun(), 12,"CGDA BOOKING UPTO : "+formattedDate, true);
             XWPFParagraph paragraphtableRowOne7 = tableRowOne.getCell(7).addParagraph();
             boldText(paragraphtableRowOne7.createRun(), 12,"% BILL CLEARANCE w.r.t : "+type.getAllocDesc().toUpperCase()+" "+findyr.getFinYear(), true);
-
+            Double IcgAmount=0.0;
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(subHeadId, allocationType, "0", "0");
+                String hrUnit=hrData.getUnitId();
+                List<BudgetAllocation> hrDetails = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(hrUnit,finYearId,subHeadId, allocationType, "0");
+                if(hrDetails.size()>0) {
+                    Double hrAllocAmount = Double.valueOf(hrDetails.get(0).getAllocationAmount());
+                    AmountUnit hrAmount = amountUnitRepository.findByAmountTypeId(hrDetails.get(0).getAmountType());
+                    Double hrAmountUnit = hrAmount.getAmount();
+                    IcgAmount = hrAllocAmount * hrAmountUnit / reqAmount;
+                }
                 List<BudgetAllocation> reportDetails=reportDetail.stream().filter(e->!e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 int sz=reportDetails.size();
                 XWPFTable table11 = document.createTable(sz,8);
@@ -6893,7 +6905,7 @@ public class MangeReportImpl implements MangeReportService {
                             }
                             XWPFParagraph paragraphtableRow11 = tableRowOne111.getCell(1).addParagraph();
                             if(r==0) {
-                                boldText(paragraphtableRow11.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
+                                boldText(paragraphtableRow11.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(IcgAmount)), true);
                             }else{
                                 boldText(paragraphtableRow11.createRun(), 10,"", true);
                             }
