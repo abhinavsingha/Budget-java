@@ -13,9 +13,11 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.sdd.entities.Authority;
 import com.sdd.entities.ContigentBill;
 import com.sdd.entities.FileUpload;
+import com.sdd.entities.HrData;
 import com.sdd.entities.repository.AuthorityRepository;
 import com.sdd.entities.repository.ContigentBillRepository;
 import com.sdd.entities.repository.FileUploadRepository;
+import com.sdd.entities.repository.HrDataRepository;
 import com.sdd.exception.SDDException;
 import com.sdd.jwt.HeaderUtils;
 import com.sdd.jwt.JwtUtils;
@@ -54,6 +56,9 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
 
 
     @Autowired
+    HrDataRepository hrDataRepository;
+
+    @Autowired
     private FileUploadRepository fileUploadRepository;
 
     @Autowired
@@ -68,11 +73,18 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
 
     @Override
     public ApiResponse<UplaodMainFormDocumentsResponse> fileUplaod(MultipartFile file) throws IOException {
+
+
         UplaodMainFormDocumentsResponse uplaodDocuments = new UplaodMainFormDocumentsResponse();
 
         File mainFilePath = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN .LOGIN AGAIN");
+        }
         if (!mainFilePath.exists()) {
             mainFilePath.mkdirs();
         }
@@ -121,7 +133,11 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
     public ApiResponse<FileUpload> getFilePath(String fileId) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN .LOGIN AGAIN");
+        }
 
         if (fileId == null || fileId.isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FILE ID CAN NOT BE BLANK");
@@ -136,7 +152,11 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
     public ApiResponse<UserManualResponse> getUserManual() {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN .LOGIN AGAIN");
+        }
         UserManualResponse fileUpload = new UserManualResponse();
         fileUpload.setFilename("ICG Budget Management System User Manual v1.0.pdf");
         fileUpload.setPath("https://icg.net.in/bmsreport/usermanul.pdf");

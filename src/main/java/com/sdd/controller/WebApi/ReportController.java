@@ -28,8 +28,7 @@ public class ReportController {
 
 	@Autowired    
 	private MangeReportService mangeReportService;
-
-
+	
 
 	@GetMapping("/getAllocationReport/{authgroupId}")
 	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getAllocationReport(@PathVariable("authgroupId") String authgroupId) {

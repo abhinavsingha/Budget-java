@@ -98,14 +98,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
         if (hrDataCheck == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS");
-        } else {
-            if (hrDataCheck.getRoleId().contains(HelperUtils.SYSTEMADMIN)) {
-
-            } else {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS");
-            }
         }
-
 
         if (mangeRebaseRequest.getAuthDocId() == null || mangeRebaseRequest.getAuthDocId().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DOCUMENT ID CAN NOT BE BLANK");
@@ -221,15 +214,9 @@ public class MangeRebaseImpl implements MangeRebaseService {
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
-/*        if (hrDataCheck == null) {
+       if (hrDataCheck == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS");
-        } else {
-            if (hrDataCheck.getRoleId().contains(HelperUtils.SYSTEMADMIN)) {
-
-            } else {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS");
-            }
-        }*/
+        }
 
         List<CgStation> getAllData = cgStationRepository.findAll();
 
@@ -244,15 +231,9 @@ public class MangeRebaseImpl implements MangeRebaseService {
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
-/*        if (hrDataCheck == null) {
+       if (hrDataCheck == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS");
-        } else {
-            if (hrDataCheck.getRoleId().contains(HelperUtils.SYSTEMADMIN)) {
-
-            } else {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS");
-            }
-        }*/
+        }
 
         List<CgUnit> getAllData = cgUnitRepository.findAllByOrderByDescrAsc();
 
@@ -287,15 +268,9 @@ public class MangeRebaseImpl implements MangeRebaseService {
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
-/*        if (hrDataCheck == null) {
+        if (hrDataCheck == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS");
-        } else {
-            if (hrDataCheck.getRoleId().contains(HelperUtils.SYSTEMADMIN)) {
-
-            } else {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS");
-            }
-        }*/
+        }
 
         List<BudgetFinancialYear> getAllFnYrData = budgetFinancialYearRepository.findAllByOrderByFinYearAsc();
 
@@ -412,12 +387,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
         if (hrDataCheck == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS");
-        } else {
-            if (hrDataCheck.getRoleId().contains(HelperUtils.SYSTEMADMIN)) {
-
-            } else {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS");
-            }
         }
 
         if (stationId == null || stationId.isEmpty()) {
@@ -439,13 +408,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
         if (hrDataCheck == null) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS", HttpStatus.OK.value());
-        } else {
-            if (hrDataCheck.getRoleId().contains(HelperUtils.BUDGETMANGER)) {
-
-            } else {
-                return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-                }, "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS", HttpStatus.OK.value());
-            }
         }
         if (req.getAuthority() == null || req.getAuthority().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {

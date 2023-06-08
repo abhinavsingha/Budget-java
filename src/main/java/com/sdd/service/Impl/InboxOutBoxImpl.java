@@ -78,6 +78,9 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN .LOGIN AGAIN");
+        }
 
         InboxOutBoxResponse inboxOutBoxResponse = new InboxOutBoxResponse();
 

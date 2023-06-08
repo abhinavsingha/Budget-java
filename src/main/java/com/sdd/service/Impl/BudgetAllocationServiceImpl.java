@@ -93,7 +93,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     public ApiResponse<List<BudgetFinancialYear>> getBudgetFinYear() {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN .LOGIN AGAIN");
+        }
         List<BudgetFinancialYear> budgetFinYearData = budgetFinancialYearRepository.findAllByOrderByFinYearAsc();
 
         return ResponseUtils.createSuccessResponse(budgetFinYearData, new TypeReference<List<BudgetFinancialYear>>() {
@@ -103,6 +107,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     @Override
     public ApiResponse<List<AllocationType>> getAllocationAllData() {
         String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN .LOGIN AGAIN");
+        }
         List<AllocationType> allocationRepositoryData = allocationRepository.findAll();
 
         return ResponseUtils.createSuccessResponse(allocationRepositoryData, new TypeReference<List<AllocationType>>() {
@@ -130,7 +140,13 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
     @Override
     public ApiResponse<DefaultResponse> updateAllocation(AllocationType allocationType) {
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN .LOGIN AGAIN");
+        }
         DefaultResponse defaultResponse = new DefaultResponse();
 
         if (allocationType.getAllocTypeId() == null || allocationType.getAllocTypeId().isEmpty()) {
@@ -161,7 +177,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     public ApiResponse<List<AllocationType>> getAllocationType() {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN .LOGIN AGAIN");
+        }
         List<AllocationType> allocationRepositoryData = allocationRepository.findAll();
         List<AllocationType> minList = new ArrayList<AllocationType>();
 
@@ -206,6 +226,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     public ApiResponse<List<BudgetHeadResponse>> getSubHeadListWithAmount(BudgetHeadRequest budgetHeadRequest) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN .LOGIN AGAIN");
+        }
+
         HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
         if (hrDataCheck == null) {
@@ -261,10 +287,13 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
     @Override
     public ApiResponse<BudgetResponseWithToken> getSubHeads() {
-
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN .LOGIN AGAIN");
+        }
 
         BudgetResponseWithToken mainDataToSer = new BudgetResponseWithToken();
         ArrayList<BudgetHead> mainData = new ArrayList<BudgetHead>();
