@@ -8,12 +8,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@Transactional
 @Table(name = "BudgetHead")
 public class BudgetHead {
 

@@ -8,12 +8,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 
 
 @Getter
 @Setter
-
+@Transactional
 public class AuthorityTableResponse {
 
     private String authorityId;

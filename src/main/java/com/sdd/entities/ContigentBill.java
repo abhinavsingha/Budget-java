@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.transaction.Transactional;
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -15,6 +16,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @NoArgsConstructor
+@Transactional
 @Table(name = "ContigentBill")
 public class ContigentBill {
     @Id

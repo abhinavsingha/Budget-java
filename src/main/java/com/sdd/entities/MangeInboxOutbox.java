@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -15,6 +16,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@Transactional
 @Table(name = "MangeInboxOutbox")
 public class MangeInboxOutbox {
     @Id
