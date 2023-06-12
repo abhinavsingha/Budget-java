@@ -6994,4 +6994,184 @@ public class MangeReportImpl implements MangeReportService {
         });
     }
 
+    @Override
+    public ApiResponse<List<FerResponse>> getMainBEAllocationReportExcel (String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate) {
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        List<FerResponse> responce = new ArrayList<FerResponse>();
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+
+        if (finYearId == null || finYearId.isEmpty()) {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
+            }, "FINANCIAL YEAR CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (allocationType == null || allocationType.isEmpty()) {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
+            }, "ALLOCATION TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+
+        if (amountTypeId == null || amountTypeId.isEmpty()) {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
+            }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (fromDate == null) {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
+            }, "FROM DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (toDate == null) {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
+            }, "TO DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        AllocationType type = allocationRepository.findByAllocTypeId(allocationType);
+        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType);
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
+
+        if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
+            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
+        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
+        if (cgUnit == null) {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
+            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
+        }
+        String dBunit = cgUnit.getDescr();
+        List<CgUnit> units = new ArrayList<>();
+        if (dBunit.equalsIgnoreCase("D(Budget)")) {
+            units = cgUnitRepository.findAllByOrderByDescrAsc();
+        } else {
+            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+            } else {
+                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
+            }
+        }
+        if (units.size() <= 0) {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
+            }, "UNIT NOT FOUND", HttpStatus.OK.value());
+        }
+        AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
+        Double reqAmount = amountObj.getAmount();
+        String amountIn = amountObj.getAmountType();
+
+        try {
+            int i = 1;
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+            LocalDate date = LocalDate.parse(toDate, inputFormatter);
+            String formattedDate = date.format(outputFormatter);
+
+            LocalDate frmLocal = LocalDate.parse(fromDate);
+            LocalDate resultDate = frmLocal.minusDays(1);
+            LocalDateTime frmlocalDateTime = LocalDateTime.of(resultDate, LocalTime.MIDNIGHT);
+            Timestamp fromDateFormate = Timestamp.valueOf(frmlocalDateTime);
+
+            LocalDate localDa = LocalDate.parse(toDate);
+            LocalDate resultDt = localDa.plusDays(1);
+            LocalDateTime localDateTime = LocalDateTime.of(resultDt, LocalTime.MIDNIGHT);
+            Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
+
+            FerResponse res=new FerResponse();
+            res.setFinYear(findyr.getFinYear());
+            res.setAmountIn(amountIn);
+            res.setAllocationType(type.getAllocDesc().toUpperCase());
+            res.setUpToDate(formattedDate);
+            List<FerSubResponse> addRes = new ArrayList<FerSubResponse>();
+
+
+            Double IcgAmount=0.0;
+            for (String val : rowData) {
+                String subHeadId = val;
+                List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(subHeadId, allocationType, "0", "0");
+                String hrUnit=hrData.getUnitId();
+                List<BudgetAllocation> hrDetails = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(hrUnit,finYearId,subHeadId, allocationType, "0");
+                if(hrDetails.size()>0) {
+                    Double hrAllocAmount = Double.valueOf(hrDetails.get(0).getAllocationAmount());
+                    AmountUnit hrAmount = amountUnitRepository.findByAmountTypeId(hrDetails.get(0).getAmountType());
+                    Double hrAmountUnit = hrAmount.getAmount();
+                    IcgAmount = hrAllocAmount * hrAmountUnit / reqAmount;
+                }
+                List<BudgetAllocation> reportDetails=reportDetail.stream().filter(e->!e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+
+                int count = 0;
+                float sum = 0;
+                float expsum = 0;
+                float percentagesum = 0;
+                Double amount = Double.valueOf(0);
+                Double amountUnit;
+                Double finAmount;
+                Double eAmount;
+                Double expnAmount;
+                Double allAmount = 0.0;
+
+                for (Integer r = 0; r < reportDetails.size(); r++) {
+                    for (Integer k = 0; k < units.size(); k++) {
+                        if (units.get(k).getUnit().equalsIgnoreCase(reportDetails.get(r).getToUnit())) {
+
+                            FerSubResponse subResp = new FerSubResponse();
+
+
+                            amount = Double.valueOf(reportDetails.get(r).getAllocationAmount());
+                            AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(reportDetails.get(r).getAmountType());
+
+                            String uid=reportDetails.get(r).getToUnit();
+                            amountUnit = amountTypeObj.getAmount();
+                            finAmount = amount * amountUnit / reqAmount;
+                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdate(uid, finYearId, subHeadId, "0");
+
+                            List<ContigentBill> expenditure = expenditure1.stream()
+                                    .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
+                            if (expenditure.size() > 0) {
+                                double totalAmount = 0.0;
+                                for (ContigentBill bill : expenditure) {
+                                    totalAmount += Double.parseDouble(bill.getCbAmount());
+                                }
+                                DecimalFormat decimalFormat = new DecimalFormat("#");
+                                String cbAmount = decimalFormat.format(totalAmount);
+                                eAmount = Double.parseDouble(cbAmount);
+                            } else {
+                                eAmount = 0.0;
+                            }
+                            if (finAmount != 0)
+                                expnAmount = eAmount * 100 / (amount * amountUnit);
+                            else
+                                expnAmount = 0.0;
+                            BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
+                            CgUnit unitN = cgUnitRepository.findByUnit(reportDetails.get(r).getToUnit());
+
+                            subResp.setSubHead(bHead.getSubHeadDescr());
+                            subResp.setUnitName(unitN.getDescr());
+                            subResp.setIcgAllocAmount(String.format("%1$0,1.4f", new BigDecimal(IcgAmount)));
+                            subResp.setAllocAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
+                            subResp.setBillSubmission(String.format("%1$0,1.4f", new BigDecimal(eAmount)));
+                            subResp.setPercentageBill(String.format("%1$0,1.9f", new BigDecimal(expnAmount)));
+                            subResp.setCgdaBooking("");
+                            subResp.setPercentageBillClearnce("");
+                            addRes.add(subResp);
+
+                            count++;
+                            sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
+                            expsum += Float.parseFloat(new BigDecimal(eAmount).toPlainString());
+                            percentagesum += Float.parseFloat(new BigDecimal(expnAmount).toPlainString());
+                        }
+                    }
+
+                }
+
+            }
+            res.setFerDetails(addRes);
+            responce.add(res);
+        } catch (Exception e) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
+        }
+        return ResponseUtils.createSuccessResponse(responce, new TypeReference<List<FerResponse>>() {
+        });
+    }
+
 }

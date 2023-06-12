@@ -7,6 +7,7 @@ import com.sdd.request.ReportRequest;
 import com.sdd.request.SubHeadWiseAllocationReportReq;
 import com.sdd.request.UnitWiseAllocationReport;
 import com.sdd.response.ApiResponse;
+import com.sdd.response.FerResponse;
 import com.sdd.response.FilePathResponse;
 import com.sdd.response.UnitRebaseReportResponce;
 import com.sdd.service.MangeReportService;
@@ -174,5 +175,10 @@ public class ReportController {
 	public ResponseEntity<ApiResponse<List<FilePathResponse>>> getMainBEAllocationReportDoc(@PathVariable(value = "finYearId") String finYearId , @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId , @PathVariable(value = "fromDate") String fromDate , @PathVariable(value = "toDate") String toDate)  {
 		return new ResponseEntity<>(mangeReportService.getMainBEAllocationReportDoc(finYearId,allocationType,amountTypeId,fromDate,toDate), HttpStatus.OK);
 	}
+
+    @GetMapping("/getMainBEAllocationReportExcel/{finYearId}/{allocationType}/{amountTypeId}/{fromDate}/{toDate}")
+    public ResponseEntity<ApiResponse<List<FerResponse>>> getMainBEAllocationReportExcel(@PathVariable(value = "finYearId") String finYearId , @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId , @PathVariable(value = "fromDate") String fromDate , @PathVariable(value = "toDate") String toDate)  {
+        return new ResponseEntity<>(mangeReportService.getMainBEAllocationReportExcel(finYearId,allocationType,amountTypeId,fromDate,toDate), HttpStatus.OK);
+    }
 
 }

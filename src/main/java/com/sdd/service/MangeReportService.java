@@ -5,6 +5,7 @@ import com.sdd.request.ReportRequest;
 import com.sdd.request.SubHeadWiseAllocationReportReq;
 import com.sdd.request.UnitWiseAllocationReport;
 import com.sdd.response.ApiResponse;
+import com.sdd.response.FerResponse;
 import com.sdd.response.FilePathResponse;
 import com.sdd.response.UnitRebaseReportResponce;
 
@@ -66,6 +67,8 @@ public interface MangeReportService {
     ApiResponse<List<FilePathResponse>> getBEREAllocationReportDoc(String finYearId, String allocationTypeBE, String allocationTypeRE, String amountTypeId);
 
     ApiResponse<List<FilePathResponse>> getMainBEAllocationReportDoc(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate);
+
+    ApiResponse<List<FerResponse>> getMainBEAllocationReportExcel(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate);
 
 
 
