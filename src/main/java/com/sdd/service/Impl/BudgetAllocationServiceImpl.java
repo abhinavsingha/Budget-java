@@ -2384,7 +2384,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 response.setFundAvailable("0.0000");
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(m).getAmountType());
                 allocationAmount = allocationAmount + (Double.parseDouble(cdaParkingTrans.get(m).getRemainingCdaAmount()) * amountUnit.getAmount());
-                response.setFundAvailable(allocationAmount + "");
+                response.setFundAvailable(ConverterUtils.addDecimalPoint(allocationAmount + ""));
 
             }
         }
