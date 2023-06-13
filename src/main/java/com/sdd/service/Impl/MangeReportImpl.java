@@ -49,6 +49,10 @@ public class MangeReportImpl implements MangeReportService {
     private TemplateEngine templateEngine;
 
     @Autowired
+    MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
+
+
+    @Autowired
     BudgetAllocationRepository budgetAllocationRepository;
 
     @Autowired
@@ -127,6 +131,18 @@ public class MangeReportImpl implements MangeReportService {
         HashMap<String, List<ReportSubModel>> hashMap = new HashMap<>();
 //        List<BudgetAllocationDetails> budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsFlagOrderBySubHeadAsc(authGroupId, "0");
         List<BudgetAllocationDetails> budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(authGroupId, "0");
+
+
+        MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupId(authGroupId);
+
+        if (mangeInboxOutbox != null) {
+            if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
+                fileName = "BudgetReceipt" + hrData.getUnitId();
+            } else {
+                fileName = "AllocationReport" + hrData.getUnitId();
+            }
+        }
+
 
 
         if (budgetAllocationReport.size() <= 0) {
@@ -356,7 +372,15 @@ public class MangeReportImpl implements MangeReportService {
         try {
 
             String fileName = "AllocationReport" + hrData.getUnitId();
+            MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupId(authGroupId);
 
+            if (mangeInboxOutbox != null) {
+                if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
+                    fileName = "BudgetReceipt" + hrData.getUnitId();
+                } else {
+                    fileName = "AllocationReport" + hrData.getUnitId();
+                }
+            }
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
