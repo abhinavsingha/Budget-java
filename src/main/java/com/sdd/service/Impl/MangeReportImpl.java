@@ -621,14 +621,13 @@ public class MangeReportImpl implements MangeReportService {
 
         try {
             FilePathResponse dto = new FilePathResponse();
-            String templateName = "cb-report.html";
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-            File file = new File(filePath);
-            pdfGenaratorUtil.createCbReportPdfSample(templateName, cbReportResponse, file);
+//            pdfGenaratorUtil.createCbReportPdfSample(templateName, cbReportResponse, file);
+            pdfGenaratorUtilMain.createContigentBillReport(cbReportResponse, filePath);
             dto.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             dto.setFileName(fileName);
             dtoList.add(dto);

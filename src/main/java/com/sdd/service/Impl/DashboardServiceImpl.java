@@ -585,15 +585,13 @@ public class DashboardServiceImpl implements DashBoardService {
             hradataResponse.setRole(setAllRole);
         }
 
-        CurrntStateType stateList = currentStateRepository.findByTypeAndIsFlag("ALLOCATION", "1");
-        if (stateList == null) {
-            AllocationType allocationType = allocationRepository.findByAllocTypeId("ALL_101");
-            dashBoardResponse.setAllocationType(allocationType);
-        } else {
-            AllocationType allocationType =
-                    allocationRepository.findByAllocTypeId(stateList.getStateId());
-            dashBoardResponse.setAllocationType(allocationType);
+
+
+        List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
+        if (allocationType.size() > 0) {
+            dashBoardResponse.setAllocationType(allocationType.get(0));
         }
+
 
         CurrntStateType stateList1 = currentStateRepository.findByTypeAndIsFlag("FINYEAR", "1");
         if (stateList1 == null) {
