@@ -4,10 +4,7 @@ import com.sdd.request.CDAReportRequest;
 import com.sdd.request.ReportRequest;
 import com.sdd.request.SubHeadWiseAllocationReportReq;
 import com.sdd.request.UnitWiseAllocationReport;
-import com.sdd.response.ApiResponse;
-import com.sdd.response.FerResponse;
-import com.sdd.response.FilePathResponse;
-import com.sdd.response.UnitRebaseReportResponce;
+import com.sdd.response.*;
 
 import java.util.Date;
 import java.util.List;
@@ -38,38 +35,48 @@ public interface MangeReportService {
 
     ApiResponse<FilePathResponse> getCdaParkingReportDoc(CDAReportRequest reportRequest);
 
+
+
+//  UNIT WISE ALLOCATION REPORT
     ApiResponse<List<FilePathResponse>> getUnitWiseAllocationReport(UnitWiseAllocationReport reportRequest);
-
-    ApiResponse<List<FilePathResponse>> getSubHeadWiseAllocationReport(SubHeadWiseAllocationReportReq req);
-
-    ApiResponse<List<FilePathResponse>> getBEAllocationReport(String finYearId, String allocationType, String amountTypeId);
-
-    ApiResponse<List<FilePathResponse>> getREAllocationReport(String finYearId, String allocationType, String amountTypeId);
-
-    ApiResponse<List<FilePathResponse>> getBEREAllocationReport(String finYearId, String allocationTypeBE, String allocationTypeRE, String amountTypeId);
-
-    ApiResponse<List<FilePathResponse>> getMainBEAllocationReport(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate);
-
-    ApiResponse<List<FilePathResponse>> getUnitRebaseReport(String fromDate, String toDate);
-
-    ApiResponse<List<FilePathResponse>> getRevisedAllocationReport(String authGroupId);
-
-    ApiResponse<List<FilePathResponse>> getUnitRebaseReportDoc(String fromDate, String toDate);
-
     ApiResponse<List<FilePathResponse>> getUnitWiseAllocationReportDoc(UnitWiseAllocationReport reportRequest);
+    ApiResponse<List<BeReportResp>> getUnitWiseAllocationReportExcel(UnitWiseAllocationReport reportRequest);
 
+//  SUBHEAD WISE ALLOCATION REPORT
+    ApiResponse<List<FilePathResponse>> getSubHeadWiseAllocationReport(SubHeadWiseAllocationReportReq req);
     ApiResponse<List<FilePathResponse>> getSubHeadWiseAllocationReportDoc(SubHeadWiseAllocationReportReq req);
+    ApiResponse<List<BeReportResp>> getSubHeadWiseAllocationReportExcel(SubHeadWiseAllocationReportReq req);
 
+//  BE ALLOCATION REPORT
+    ApiResponse<List<FilePathResponse>> getBEAllocationReport(String finYearId, String allocationType, String amountTypeId);
     ApiResponse<List<FilePathResponse>> getBEAllocationReportDoc(String finYearId,String allocationType, String amountTypeId);
+    ApiResponse<List<BeReportResp>> getBEAllocationReportExcel(String finYearId,String allocationType, String amountTypeId);
 
+//  RE ALLOCATION REPORT
+    ApiResponse<List<FilePathResponse>> getREAllocationReport(String finYearId, String allocationType, String amountTypeId);
     ApiResponse<List<FilePathResponse>> getREAllocationReportDoc(String finYearId, String allocationType, String amountTypeId);
+    ApiResponse<List<RivisionReportResp>> getREAllocationReportExcel(String finYearId, String allocationType, String amountTypeId);
 
+//  BEandRE ALLOCATION REPORT
+    ApiResponse<List<FilePathResponse>> getBEREAllocationReport(String finYearId, String allocationTypeBE, String allocationTypeRE, String amountTypeId);
     ApiResponse<List<FilePathResponse>> getBEREAllocationReportDoc(String finYearId, String allocationTypeBE, String allocationTypeRE, String amountTypeId);
+    ApiResponse<List<BEREResponce>> getBEREAllocationReportExcel(String finYearId, String allocationTypeBE, String allocationTypeRE, String amountTypeId);
 
+
+//  FER ALLOCATION REPORT
+    ApiResponse<List<FilePathResponse>> getMainBEAllocationReport(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate);
     ApiResponse<List<FilePathResponse>> getMainBEAllocationReportDoc(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate);
-
     ApiResponse<List<FerResponse>> getMainBEAllocationReportExcel(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate);
 
 
+ //  UNIT REBASE ALLOCATION REPORT
+    ApiResponse<List<FilePathResponse>> getUnitRebaseReport(String fromDate, String toDate);
+    ApiResponse<List<FilePathResponse>> getUnitRebaseReportDoc(String fromDate, String toDate);
+    ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseReportExcel(String fromDate, String toDate);
+
+ //  REVISED ALLOCATION REPORT
+    ApiResponse<List<FilePathResponse>> getRevisedAllocationReport(String authGroupId);
 
 }
+
+
