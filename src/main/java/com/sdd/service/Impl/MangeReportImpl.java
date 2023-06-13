@@ -7074,7 +7074,20 @@ public class MangeReportImpl implements MangeReportService {
                         sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(balAmount)))).append("</td>");
                         sb.append("<td class=\"dcf-txt-left\">").append(cbD).append("</td>");
                         sb.append("</tr>");
+
+                        grTotalAlloc+=allocAmount;
+                        grTotalAddition+=expAmount;
+                        grTotalSum+=balAmount;
                     }
+
+                    sb.append("<tr>");
+                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4("")).append("</td>");
+                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4("GRAND TOTAL")).append("</td>");
+                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)))).append("</td>");
+                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)))).append("</td>");
+                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(grTotalSum)))).append("</td>");
+                    sb.append("<td class=\"dcf-txt-left\">").append("").append("</td>");
+                    sb.append("</tr>");
                     val = val.replace("${data_placeholder}", sb.toString());
                     sb = new StringBuilder();
                 }
@@ -7323,7 +7336,6 @@ public class MangeReportImpl implements MangeReportService {
                         grTotalAlloc+=sumExisting;
                         grTotalAddition+=sumExp;
                         grTotalSum+=sumBaal;
-
                         addRes.add(subResp);
                     }
                     rebase.setList(addRes);
@@ -7334,7 +7346,7 @@ public class MangeReportImpl implements MangeReportService {
 
                     XWPFTableRow tableRow111 = table111.getRow(0);
                     XWPFParagraph paragraphtableRow01 = tableRow111.getCell(0).addParagraph();
-                    boldText(paragraphtableRow01.createRun(), 12, "", true);
+                    boldText(paragraphtableRow01.createRun(), 12, "      ", true);
 
                     XWPFParagraph paragraphtableRow11 = tableRow111.getCell(1).addParagraph();
                     boldText(paragraphtableRow11.createRun(), 12, "GRAND TOTAL", true);
@@ -7349,7 +7361,7 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRow41.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), true);
 
                     XWPFParagraph paragraphtableRow51 = tableRow111.getCell(5).addParagraph();
-                    boldText(paragraphtableRow51.createRun(), 12, "", true);
+                    boldText(paragraphtableRow51.createRun(), 12, "       ", true);
                 }
             }
             String names = hrDataCheck.getFullName();
