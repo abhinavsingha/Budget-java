@@ -3448,13 +3448,10 @@ public class MangeReportImpl implements MangeReportService {
             int i = 1;
             String finyear = "";
             String unit = "";
+            float gdTotal = 0;
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId, allocationType, "0");
-/*                if (reportDetails.size() <= 0) {
-                    return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                    }, "RECORD NOT FOUND OR EMPTY", HttpStatus.OK.value());
-                }*/
                 int count = 0;
                 float sum = 0;
                 Double amount;
@@ -3490,7 +3487,9 @@ public class MangeReportImpl implements MangeReportService {
                             sb.append("</tr>");
                             count++;
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
+                            gdTotal +=sum;
                         }
+
                     }
 
                 }
@@ -3505,6 +3504,11 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
             }
+            sb.append("<tr>");
+            sb.append("<th scope=\"row\" class=\"bbtm\"></th>");
+            sb.append("<td class=\"the bold\">GRAND TOTAL</td>");
+            sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(gdTotal)))).append("</td>");
+            sb.append("</tr>");
             if (sb.toString().isEmpty()) {
                 return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                 }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -3627,7 +3631,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
             boldText(paragraphtableRowOne2.createRun(), 12, type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear() + " " + "ALLOCATION IN: (" + amountIn + ")", true);
 
-
+            float gdTotal = 0;
             int i = 1;
             for (String val : rowData) {
                 String subHeadId = val;
@@ -3676,6 +3680,7 @@ public class MangeReportImpl implements MangeReportService {
                             boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), true);
 
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
+                            gdTotal += sum;
                         }
                         count++;
                     }
@@ -3692,6 +3697,16 @@ public class MangeReportImpl implements MangeReportService {
                 boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
 
             }
+            XWPFTable table223 = document.createTable(1, 3);
+            table223.setWidth("100%");
+            XWPFTableRow tableRowOne223 = table223.getRow(0);
+            XWPFParagraph paragraphtableRowOne223 = tableRowOne223.getCell(0).addParagraph();
+            boldText(paragraphtableRowOne223.createRun(), 12, "", true);
+            XWPFParagraph paragraphtableRowOne1223 = tableRowOne223.getCell(1).addParagraph();
+            boldText(paragraphtableRowOne1223.createRun(), 12, "GRAND TOTAL ", true);
+            XWPFParagraph paragraphtableRowOne2223 = tableRowOne223.getCell(2).addParagraph();
+            boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(gdTotal)), true);
+
             String names = hrData.getFullName();
             String unitName = hrData.getUnit();
             String rank = hrData.getRank();
@@ -4193,6 +4208,9 @@ public class MangeReportImpl implements MangeReportService {
             int i = 1;
             String finyear = "";
             String unit = "";
+            float grTotalAlloc = 0;
+            float grTotalAddition = 0;
+            float grTotalSum = 0;
             Double amount = Double.valueOf(0);
             Double amountUnit;
             Double finAmount;
@@ -4202,10 +4220,7 @@ public class MangeReportImpl implements MangeReportService {
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(subHeadId, allocationType, "0", "0");
-    /*            if (reportDetails.size() <= 0) {
-                    return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                    }, "RECORD NOT FOUND OR EMPTY", HttpStatus.OK.value());
-                }*/
+
                 BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
 
                 int count = 0;
@@ -4258,6 +4273,9 @@ public class MangeReportImpl implements MangeReportService {
                             sb.append("</tr>");
                             sumExisting += Float.parseFloat(new BigDecimal(Double.toString(finAmount)).toPlainString());
                             sumRE += Float.parseFloat(new BigDecimal(Double.toString(reAmount)).toPlainString());
+                            grTotalAlloc+=sumExisting;
+                            grTotalAddition+=sumRE;
+                            grTotalSum+=(sumExisting+sumRE);
 
                         }
                     }
@@ -4270,7 +4288,7 @@ public class MangeReportImpl implements MangeReportService {
                     ss2 = Double.parseDouble(ss1);
                 }
                 sb.append("<tr>");
-                sb.append("<td class=\"the bold\">").append("Total").append("</td>");
+                sb.append("<td class=\"the bold\">").append("TOTAL").append("</td>");
                 sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(sumExisting))).append("</td>");
                 if (sumRE < 0)
                     sb.append("<td class=\"the bold\">(-)").append(String.format("%1$0,1.4f", new BigDecimal(ss2))).append("</td>");
@@ -4281,6 +4299,13 @@ public class MangeReportImpl implements MangeReportService {
                 sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(total))).append("</td>");
                 sb.append("</tr>");
             }
+            sb.append("<tr>");
+            sb.append("<td class=\"the bold\">").append("GRAND TOTAL").append("</td>");
+            sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc))).append("</td>");
+            sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition))).append("</td>");
+            sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(grTotalSum))).append("</td>");
+            sb.append("</tr>");
+
             if (sb.toString().isEmpty()) {
                 return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                 }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -4423,6 +4448,9 @@ public class MangeReportImpl implements MangeReportService {
 
 
             int i = 1;
+            float grTotalAlloc = 0;
+            float grTotalAddition = 0;
+            float grTotalSum = 0;
             Double amount = Double.valueOf(0);
             Double amountUnit;
             Double finAmount;
@@ -4497,6 +4525,10 @@ public class MangeReportImpl implements MangeReportService {
                             sumExisting += Float.parseFloat(new BigDecimal(Double.toString(finAmount)).toPlainString());
                             sumRE += Float.parseFloat(new BigDecimal(Double.toString(reAmount)).toPlainString());
 
+                            grTotalAlloc+=sumExisting;
+                            grTotalAddition+=sumRE;
+                            grTotalSum+=(sumExisting+sumRE);
+
                         }
                     }
                 }
@@ -4526,6 +4558,20 @@ public class MangeReportImpl implements MangeReportService {
                 XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
                 boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(total)), true);
             }
+            XWPFTable table223 = document.createTable(1, 5);
+            table223.setWidth("100%");
+            XWPFTableRow tableRowOne223 = table223.getRow(0);
+            XWPFParagraph paragraphtableRowOne223 = tableRowOne223.getCell(0).addParagraph();
+            boldText(paragraphtableRowOne223.createRun(), 12, "", true);
+            XWPFParagraph paragraphtableRowOne1223 = tableRowOne223.getCell(1).addParagraph();
+            boldText(paragraphtableRowOne1223.createRun(), 12, "GRAND TOTAL ", true);
+            XWPFParagraph paragraphtableRowOne2223 = tableRowOne223.getCell(2).addParagraph();
+            boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), true);
+            XWPFParagraph paragraphtableRowOne2234 = tableRowOne223.getCell(3).addParagraph();
+            boldText(paragraphtableRowOne2234.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), true);
+            XWPFParagraph paragraphtableRowOne2245 = tableRowOne223.getCell(4).addParagraph();
+            boldText(paragraphtableRowOne2245.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), true);
+
             String names = hrData.getFullName();
             String unitName = hrData.getUnit();
             String rank = hrData.getRank();
@@ -5059,15 +5105,14 @@ public class MangeReportImpl implements MangeReportService {
 
             StringBuilder sb = new StringBuilder();
             int i = 1;
+            float grTotalAlloc = 0;
+            float grTotalAddition = 0;
             String finyear = "";
             String unit = "";
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId, allocationTypeBE, "0");
-/*                if (reportDetails.size() <= 0) {
-                    return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                    }, "RECORD NOT FOUND OR EMPTY", HttpStatus.OK.value());
-                }*/
+
                 int count = 0;
                 float sum = 0;
                 Double amount = Double.valueOf(0);
@@ -5123,6 +5168,9 @@ public class MangeReportImpl implements MangeReportService {
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                             reSum += Float.parseFloat(new BigDecimal(reFinalAmount).toPlainString());
 
+                            grTotalAlloc+=sum;
+                            grTotalAddition+=reSum;
+
                         }
                     }
 
@@ -5139,6 +5187,12 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
             }
+            sb.append("<tr>");
+            sb.append("<th scope=\"row\" class=\"bbtm\"></th>");
+            sb.append("<td class=\"the bold\">GRAND TOTAL</td>");
+            sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)))).append("</td>");
+            sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)))).append("</td>");
+            sb.append("</tr>");
             if (sb.toString().isEmpty()) {
                 return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                 }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -5274,6 +5328,8 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne3.createRun(), 12, types.getAllocDesc().toUpperCase() + " " + "ALLOCATION :" + " (" + amountIn + " )", true);
 
             int i = 1;
+            float grTotalAlloc = 0;
+            float grTotalAddition = 0;
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId, allocationTypeBE, "0");
@@ -5338,6 +5394,9 @@ public class MangeReportImpl implements MangeReportService {
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                             reSum += Float.parseFloat(new BigDecimal(reFinalAmount).toPlainString());
 
+                            grTotalAlloc+=sum;
+                            grTotalAddition+=reSum;
+
                         }
                     }
                 }
@@ -5356,6 +5415,18 @@ public class MangeReportImpl implements MangeReportService {
                     count = 0;
                 }
             }
+
+            XWPFTable table223 = document.createTable(1, 4);
+            table223.setWidth("100%");
+            XWPFTableRow tableRowOne223 = table223.getRow(0);
+            XWPFParagraph paragraphtableRowOne220 = tableRowOne223.getCell(0).addParagraph();
+            boldText(paragraphtableRowOne220.createRun(), 12, "", true);
+            XWPFParagraph paragraphtableRowOne1220 = tableRowOne223.getCell(1).addParagraph();
+            boldText(paragraphtableRowOne1220.createRun(), 12, "GRAND TOTAL ", true);
+            XWPFParagraph paragraphtableRowOne2220 = tableRowOne223.getCell(2).addParagraph();
+            boldText(paragraphtableRowOne2220.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), true);
+            XWPFParagraph paragraphtableRowOne2230 = tableRowOne223.getCell(3).addParagraph();
+            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), true);
 
             String names = hrData.getFullName();
             String unitName = hrData.getUnit();
@@ -5860,6 +5931,9 @@ public class MangeReportImpl implements MangeReportService {
                     "</html>\n";
             StringBuilder sb = new StringBuilder();
             int i = 1;
+            float grTotalAlloc = 0;
+            float grTotalAddition = 0;
+            float grTotalSum = 0;
             String finyear = "";
             String unit = "";
             DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -5961,6 +6035,10 @@ public class MangeReportImpl implements MangeReportService {
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                             expsum += Float.parseFloat(new BigDecimal(eAmount).toPlainString());
                             percentagesum += Float.parseFloat(new BigDecimal(expnAmount).toPlainString());
+
+                            grTotalAlloc+=sum;
+                            grTotalAddition+=expsum;
+                            grTotalSum+=percentagesum;
                         }
                     }
 
@@ -5986,6 +6064,17 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
             }
+            sb.append("<tr>");
+            sb.append("<td class=\"the bold\"></td>");
+            sb.append("<th scope=\"row\" class=\"bbtm\"></th>");
+            sb.append("<td class=\"the bold\">GRAND TOTAL</td>");
+            sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)))).append("</td>");
+            sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)))).append("</td>");
+            sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.9f", new BigDecimal(grTotalSum)))).append("</td>");
+            sb.append("<td class=\"the bold\"></td>");
+            sb.append("<td class=\"the bold\"></td>");
+
+            sb.append("</tr>");
             if (sb.toString().isEmpty()) {
                 return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                 }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -6169,6 +6258,9 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne7 = tableRowOne.getCell(7).addParagraph();
             boldText(paragraphtableRowOne7.createRun(), 12, "% BILL CLEARANCE w.r.t : " + type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear(), true);
             Double IcgAmount = 0.0;
+            float grTotalAlloc = 0;
+            float grTotalAddition = 0;
+            float grTotalSum = 0;
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(subHeadId, allocationType, "0", "0");
@@ -6266,6 +6358,11 @@ public class MangeReportImpl implements MangeReportService {
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                             expsum += Float.parseFloat(new BigDecimal(eAmount).toPlainString());
                             percentagesum += Float.parseFloat(new BigDecimal(expnAmount).toPlainString());
+
+
+                            grTotalAlloc+=sum;
+                            grTotalAddition+=expsum;
+                            grTotalSum+=percentagesum;
                         }
                     }
 
@@ -6294,6 +6391,26 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
             }
+            XWPFTable table220 = document.createTable(1, 8);
+            table220.setWidth("100%");
+            XWPFTableRow tableRowOne220 = table220.getRow(0);
+            XWPFParagraph paragraphtableRowOne220 = tableRowOne220.getCell(0).addParagraph();
+            boldText(paragraphtableRowOne220.createRun(), 12, "", true);
+            XWPFParagraph paragraphtableRowOne1220 = tableRowOne220.getCell(1).addParagraph();
+            boldText(paragraphtableRowOne1220.createRun(), 12, "", true);
+            XWPFParagraph paragraphtableRowOne2220 = tableRowOne220.getCell(2).addParagraph();
+            boldText(paragraphtableRowOne2220.createRun(), 12, " GRAND TOTAL", true);
+            XWPFParagraph paragraphtableRowOne2230 = tableRowOne220.getCell(3).addParagraph();
+            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), true);
+            XWPFParagraph paragraphtableRowOne2200 = tableRowOne220.getCell(4).addParagraph();
+            boldText(paragraphtableRowOne2200.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), true);
+            XWPFParagraph paragraphtableRowOne2250 = tableRowOne220.getCell(5).addParagraph();
+            boldText(paragraphtableRowOne2250.createRun(), 12, String.format("%1$0,1.9f", new BigDecimal(grTotalSum)), true);
+            XWPFParagraph paragraphtableRowOne2260 = tableRowOne220.getCell(6).addParagraph();
+            boldText(paragraphtableRowOne2260.createRun(), 12, "", true);
+            XWPFParagraph paragraphtableRowOne2270 = tableRowOne220.getCell(7).addParagraph();
+            boldText(paragraphtableRowOne2270.createRun(), 12, "", true);
+
             String names = hrData.getFullName();
             String unitName = hrData.getUnit();
             String rank = hrData.getRank();
@@ -6856,6 +6973,9 @@ public class MangeReportImpl implements MangeReportService {
             Double balAmount;
             Timestamp LastCbD;
             String val = "";
+            float grTotalAlloc = 0;
+            float grTotalAddition = 0;
+            float grTotalSum = 0;
             Double amountUnit;
             AllocationType allocType;
             if (groupUnitId.size() > 0) {
@@ -7058,6 +7178,9 @@ public class MangeReportImpl implements MangeReportService {
             FileOutputStream out = new FileOutputStream(new File(path));
             int count = 1;
             String RunitId = "";
+            float grTotalAlloc = 0;
+            float grTotalAddition = 0;
+            float grTotalSum = 0;
             if (groupUnitId.size() > 0) {
                 for (String ids : groupUnitId) {
                     RunitId = ids;
@@ -7193,11 +7316,40 @@ public class MangeReportImpl implements MangeReportService {
                             XWPFParagraph paragraphtableRow51 = tableRows.getCell(5).addParagraph();
                             boldText(paragraphtableRow51.createRun(), 10, null, true);
                         }
+                        Double  sumExisting = Double.valueOf(rebaseData.get(k).getAllocAmount());
+                        Double  sumExp = Double.valueOf(rebaseData.get(k).getExpAmount());
+                        Double  sumBaal = Double.valueOf(rebaseData.get(k).getBalAmount());
+
+                        grTotalAlloc+=sumExisting;
+                        grTotalAddition+=sumExp;
+                        grTotalSum+=sumBaal;
 
                         addRes.add(subResp);
                     }
                     rebase.setList(addRes);
                     responce.add(rebase);
+
+                    XWPFTable table111 = document.createTable(1, 6);
+                    table111.setWidth("100%");
+
+                    XWPFTableRow tableRow111 = table111.getRow(0);
+                    XWPFParagraph paragraphtableRow01 = tableRow111.getCell(0).addParagraph();
+                    boldText(paragraphtableRow01.createRun(), 12, "", true);
+
+                    XWPFParagraph paragraphtableRow11 = tableRow111.getCell(1).addParagraph();
+                    boldText(paragraphtableRow11.createRun(), 12, "GRAND TOTAL", true);
+
+                    XWPFParagraph paragraphtableRow21 = tableRow111.getCell(2).addParagraph();
+                    boldText(paragraphtableRow21.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), true);
+
+                    XWPFParagraph paragraphtableRow31 = tableRow111.getCell(3).addParagraph();
+                    boldText(paragraphtableRow31.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), true);
+
+                    XWPFParagraph paragraphtableRow41 = tableRow111.getCell(4).addParagraph();
+                    boldText(paragraphtableRow41.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), true);
+
+                    XWPFParagraph paragraphtableRow51 = tableRow111.getCell(5).addParagraph();
+                    boldText(paragraphtableRow51.createRun(), 12, "", true);
                 }
             }
             String names = hrDataCheck.getFullName();
