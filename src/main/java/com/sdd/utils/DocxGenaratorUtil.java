@@ -207,17 +207,6 @@ public class DocxGenaratorUtil {
             }
 
 
-//
-//            CTDocument1 doc = document.getDocument();
-//            CTBody body = doc.getBody();
-//            CTSectPr section = body.addNewSectPr();
-//            XWPFParagraph para = document.createParagraph();
-//            CTP ctp = para.getCTP();
-//            CTPPr br = ctp.addNewPPr();
-//            br.setSectPr(section);
-//            CTPageSz pageSize = section.isSetPgSz() ? section.getPgSz() : section.addNewPgSz();
-//            pageSize.setOrient(STPageOrientation.LANDSCAPE);
-//
 
             document.write(out);
             out.close();
