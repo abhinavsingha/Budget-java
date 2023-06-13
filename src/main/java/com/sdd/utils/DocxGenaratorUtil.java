@@ -53,9 +53,9 @@ public class DocxGenaratorUtil {
                 XWPFTableRow tableRow = table.createRow();
                 tableRow.getCell(0).setText(key11);
 
-
+                double allAmountData = 0;
                 for (Integer i = 0; i < tabData11.size(); i++) {
-                    double allAmountData = 0;
+
                     if (i == 0) {
 //                            tableRow.getCell(1).setText(tabData11.get(i).getUnit());
                         XWPFParagraph paragraph = tableRow.getCell(1).addParagraph();
@@ -79,13 +79,14 @@ public class DocxGenaratorUtil {
                     allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
                     grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
 
-                    XWPFTableRow latRow = table.createRow();
-                    XWPFParagraph total1 = latRow.getCell(1).addParagraph();
-                    boldText(total1.createRun(), 10, "Total Amount", true);
-                    XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
-                    boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(allAmountData + ""), true);
-
                 }
+
+                XWPFTableRow latRow = table.createRow();
+                XWPFParagraph total1 = latRow.getCell(1).addParagraph();
+                boldText(total1.createRun(), 10, "Total Amount", true);
+                XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
+                boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(allAmountData + ""), true);
+
             }
 
 
@@ -143,12 +144,12 @@ public class DocxGenaratorUtil {
 
             mainParagraph = document.createParagraph();
             mainParagraph.setAlignment(ParagraphAlignment.CENTER);
-            boldText(mainParagraph.createRun(), 20, "\n" + "CDA WISE/OBJECT HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() , true);
+            boldText(mainParagraph.createRun(), 20, "\n" + "CDA WISE/OBJECT HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear(), true);
             mainParagraph.createRun().addBreak();
 
             mainParagraph = document.createParagraph();
             mainParagraph.setAlignment(ParagraphAlignment.CENTER);
-            boldText(mainParagraph.createRun(), 20, "REVENUE" , true);
+            boldText(mainParagraph.createRun(), 20, "REVENUE", true);
             mainParagraph.createRun().addBreak();
 
 

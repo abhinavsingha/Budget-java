@@ -48,9 +48,9 @@ public class PdfGenaratorUtilMain {
 
             table.addCell(normalText(key11, 8, 25f));
 
-
+            double allAmountData = 0;
             for (Integer i = 0; i < tabData11.size(); i++) {
-                double allAmountData = 0;
+
                 if (i == 0) {
                     table.addCell(normalText(tabData11.get(i).getUnit(), 8, 25f));
                     table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 8, 25f));
@@ -60,13 +60,14 @@ public class PdfGenaratorUtilMain {
                     table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 8, 25f));
                 }
                 allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
-
-                table.addCell(boldText("", 8, 25f));
-                table.addCell(boldText(ConverterUtils.addDecimalPoint("Total Amount"), 8, 25f));
-                table.addCell(boldText(ConverterUtils.addDecimalPoint(allAmountData + ""), 8, 25f));
-
                 grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
+
+
             }
+
+            table.addCell(boldText("", 8, 25f));
+            table.addCell(boldText(ConverterUtils.addDecimalPoint("Total Amount"), 8, 25f));
+            table.addCell(boldText(ConverterUtils.addDecimalPoint(allAmountData + ""), 8, 25f));
         }
 
         table.addCell(boldText(ConverterUtils.addDecimalPoint("Grand Total"), 8, 25f));
@@ -76,7 +77,7 @@ public class PdfGenaratorUtilMain {
 
         Phrase phrase = new Phrase();
         Font font = new Font(Font.FontFamily.COURIER, 8, Font.BOLD);
-        Chunk approverName = new Chunk(""+(filePathResponse.getApproveName() + "\n" + filePathResponse.getApproveRank()), font);
+        Chunk approverName = new Chunk("" + (filePathResponse.getApproveName() + "\n" + filePathResponse.getApproveRank()), font);
         phrase.add(approverName);
         Paragraph paragraph = new Paragraph();
         paragraph.add(phrase);

@@ -144,7 +144,6 @@ public class MangeReportImpl implements MangeReportService {
         }
 
 
-
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
         }
@@ -174,9 +173,11 @@ public class MangeReportImpl implements MangeReportService {
                         return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
                     }
                 });
-                reportMaindata.add(subModel);
-                hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
 
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                    reportMaindata.add(subModel);
+                    hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
+                }
             } else {
                 List<ReportSubModel> reportMaindata = new ArrayList<ReportSubModel>();
                 ReportSubModel subModel = new ReportSubModel();
@@ -188,8 +189,10 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                reportMaindata.add(subModel);
-                hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                    reportMaindata.add(subModel);
+                    hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
+                }
             }
         }
 
@@ -300,10 +303,11 @@ public class MangeReportImpl implements MangeReportService {
                         return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
                     }
                 });
-                reportMaindata.add(subModel);
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                    reportMaindata.add(subModel);
 
-                hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
-
+                    hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
+                }
             } else {
                 List<ReportSubModel> reportMaindata = new ArrayList<ReportSubModel>();
                 ReportSubModel subModel = new ReportSubModel();
@@ -319,9 +323,11 @@ public class MangeReportImpl implements MangeReportService {
                         return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
                     }
                 });
-                reportMaindata.add(subModel);
 
-                hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                    reportMaindata.add(subModel);
+                    hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
+                }
             }
         }
 
@@ -2504,7 +2510,7 @@ public class MangeReportImpl implements MangeReportService {
                 BudgetHead bHead = subHeadRepository.findByBudgetCodeId(budgetAllocationsDetalis.get(k).getSubHead());
                 AllocationType type = allocationRepository.findByAllocTypeId(budgetAllocationsDetalis.get(k).getAllocationTypeId());
 
-                BeReportResp resp=new BeReportResp();
+                BeReportResp resp = new BeReportResp();
                 resp.setFinYear(findyr.getFinYear());
                 resp.setAllocationType(type.getAllocDesc().toUpperCase());
                 resp.setAmountIn(amountIn);
@@ -3104,7 +3110,7 @@ public class MangeReportImpl implements MangeReportService {
                         amount = Double.valueOf(budgetAllocationsDetalis.get(r).getAllocationAmount());
                         finAmount = amount * amountUnit / reqAmount;
 
-                        BeReportResp resp=new BeReportResp();
+                        BeReportResp resp = new BeReportResp();
                         resp.setFinYear(findyr.getFinYear());
                         resp.setAllocationType(type.getAllocDesc().toUpperCase());
                         resp.setAmountIn(amountIn);
@@ -3511,7 +3517,7 @@ public class MangeReportImpl implements MangeReportService {
                             sb.append("</tr>");
                             count++;
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
-                            gdTotal +=sum;
+                            gdTotal += sum;
                         }
 
                     }
@@ -3850,7 +3856,7 @@ public class MangeReportImpl implements MangeReportService {
                             BudgetHead bHead = subHeadRepository.findByBudgetCodeId(reportDetails.get(r).getSubHead());
                             CgUnit unitN = cgUnitRepository.findByUnit(reportDetails.get(r).getToUnit());
 
-                            BeReportResp resp =new BeReportResp();
+                            BeReportResp resp = new BeReportResp();
                             resp.setFinYear(findyr.getFinYear());
                             resp.setAmountIn(amountIn);
                             resp.setAllocationType(type.getAllocDesc().toUpperCase());
@@ -4297,9 +4303,9 @@ public class MangeReportImpl implements MangeReportService {
                             sb.append("</tr>");
                             sumExisting += Float.parseFloat(new BigDecimal(Double.toString(finAmount)).toPlainString());
                             sumRE += Float.parseFloat(new BigDecimal(Double.toString(reAmount)).toPlainString());
-                            grTotalAlloc+=sumExisting;
-                            grTotalAddition+=sumRE;
-                            grTotalSum+=(sumExisting+sumRE);
+                            grTotalAlloc += sumExisting;
+                            grTotalAddition += sumRE;
+                            grTotalSum += (sumExisting + sumRE);
 
                         }
                     }
@@ -4549,9 +4555,9 @@ public class MangeReportImpl implements MangeReportService {
                             sumExisting += Float.parseFloat(new BigDecimal(Double.toString(finAmount)).toPlainString());
                             sumRE += Float.parseFloat(new BigDecimal(Double.toString(reAmount)).toPlainString());
 
-                            grTotalAlloc+=sumExisting;
-                            grTotalAddition+=sumRE;
-                            grTotalSum+=(sumExisting+sumRE);
+                            grTotalAlloc += sumExisting;
+                            grTotalAddition += sumRE;
+                            grTotalSum += (sumExisting + sumRE);
 
                         }
                     }
@@ -4734,7 +4740,7 @@ public class MangeReportImpl implements MangeReportService {
                             }
                             CgUnit unitN = cgUnitRepository.findByUnit(reportDetails.get(r).getToUnit());
 
-                            RivisionReportResp res=new RivisionReportResp();
+                            RivisionReportResp res = new RivisionReportResp();
                             res.setFinYear(findyr.getFinYear());
                             res.setAmountIn(amountIn);
                             res.setAllocationType(allocType);
@@ -5192,8 +5198,8 @@ public class MangeReportImpl implements MangeReportService {
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                             reSum += Float.parseFloat(new BigDecimal(reFinalAmount).toPlainString());
 
-                            grTotalAlloc+=sum;
-                            grTotalAddition+=reSum;
+                            grTotalAlloc += sum;
+                            grTotalAddition += reSum;
 
                         }
                     }
@@ -5418,8 +5424,8 @@ public class MangeReportImpl implements MangeReportService {
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                             reSum += Float.parseFloat(new BigDecimal(reFinalAmount).toPlainString());
 
-                            grTotalAlloc+=sum;
-                            grTotalAddition+=reSum;
+                            grTotalAlloc += sum;
+                            grTotalAddition += reSum;
 
                         }
                     }
@@ -6060,9 +6066,9 @@ public class MangeReportImpl implements MangeReportService {
                             expsum += Float.parseFloat(new BigDecimal(eAmount).toPlainString());
                             percentagesum += Float.parseFloat(new BigDecimal(expnAmount).toPlainString());
 
-                            grTotalAlloc+=sum;
-                            grTotalAddition+=expsum;
-                            grTotalSum+=percentagesum;
+                            grTotalAlloc += sum;
+                            grTotalAddition += expsum;
+                            grTotalSum += percentagesum;
                         }
                     }
 
@@ -6384,9 +6390,9 @@ public class MangeReportImpl implements MangeReportService {
                             percentagesum += Float.parseFloat(new BigDecimal(expnAmount).toPlainString());
 
 
-                            grTotalAlloc+=sum;
-                            grTotalAddition+=expsum;
-                            grTotalSum+=percentagesum;
+                            grTotalAlloc += sum;
+                            grTotalAddition += expsum;
+                            grTotalSum += percentagesum;
                         }
                     }
 
@@ -7099,9 +7105,9 @@ public class MangeReportImpl implements MangeReportService {
                         sb.append("<td class=\"dcf-txt-left\">").append(cbD).append("</td>");
                         sb.append("</tr>");
 
-                        grTotalAlloc+=allocAmount;
-                        grTotalAddition+=expAmount;
-                        grTotalSum+=balAmount;
+                        grTotalAlloc += allocAmount;
+                        grTotalAddition += expAmount;
+                        grTotalSum += balAmount;
                     }
 
                     sb.append("<tr>");
@@ -7322,8 +7328,8 @@ public class MangeReportImpl implements MangeReportService {
                         subResp.setExpenditureAmount(rebaseData.get(k).getExpAmount());
                         subResp.setBalAmount(rebaseData.get(k).getBalAmount());
                         subResp.setAmountType(amountTypeObj.getAmountType());
-                        if(rebaseData.get(k).getLastCbDate()!=null)
-                        subResp.setLastCbDate(rebaseData.get(k).getLastCbDate());
+                        if (rebaseData.get(k).getLastCbDate() != null)
+                            subResp.setLastCbDate(rebaseData.get(k).getLastCbDate());
 
 
                         XWPFTableRow tableRows = table1.getRow(k + 1);
@@ -7353,13 +7359,13 @@ public class MangeReportImpl implements MangeReportService {
                             XWPFParagraph paragraphtableRow51 = tableRows.getCell(5).addParagraph();
                             boldText(paragraphtableRow51.createRun(), 10, null, true);
                         }
-                        Double  sumExisting = Double.valueOf(rebaseData.get(k).getAllocAmount());
-                        Double  sumExp = Double.valueOf(rebaseData.get(k).getExpAmount());
-                        Double  sumBaal = Double.valueOf(rebaseData.get(k).getBalAmount());
+                        Double sumExisting = Double.valueOf(rebaseData.get(k).getAllocAmount());
+                        Double sumExp = Double.valueOf(rebaseData.get(k).getExpAmount());
+                        Double sumBaal = Double.valueOf(rebaseData.get(k).getBalAmount());
 
-                        grTotalAlloc+=sumExisting;
-                        grTotalAddition+=sumExp;
-                        grTotalSum+=sumBaal;
+                        grTotalAlloc += sumExisting;
+                        grTotalAddition += sumExp;
+                        grTotalSum += sumBaal;
                         addRes.add(subResp);
                     }
                     rebase.setList(addRes);
