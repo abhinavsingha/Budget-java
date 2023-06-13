@@ -12,7 +12,6 @@ import java.util.List;
 @Getter
 @Setter
 public class BudgetReviResp {
-
     private CgUnit unit;
     private String allocationAmount;
     private String expenditureAmount;
