@@ -3814,7 +3814,7 @@ public class MangeReportImpl implements MangeReportService {
                             BeReportResp resp =new BeReportResp();
                             resp.setFinYear(findyr.getFinYear());
                             resp.setAmountIn(amountIn);
-                            resp.setAllocationType(type.getAllocDesc());
+                            resp.setAllocationType(type.getAllocDesc().toUpperCase());
                             if (r == 0) {
                                 resp.setBudgetHead(bHead.getSubHeadDescr());
                             } else {
