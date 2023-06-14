@@ -972,6 +972,10 @@ public class MangeReportImpl implements MangeReportService {
         cadSubReport.setAmountType(amountUnit.getAmountType());
 
 
+        HashMap<String, String> coloumWiseAmount = new LinkedHashMap<String, String>();
+
+
+
         Float grandTotal = 0f;
         if (cdaReportRequest.getBudgetHeadId() == null && cdaReportRequest.getUnitId() == null) {
             if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID) && cdaReportRequest.getCdaType().contains("112233")) {
@@ -991,6 +995,9 @@ public class MangeReportImpl implements MangeReportService {
                 cdaReportList.add(cdaReportResponse);
                 allCdaData.put("Sub Head", cdaReportList);
 
+
+
+
                 for (int i = 0; i < subHeadsData.size(); i++) {
                     cdaReportList = new ArrayList<>();
                     cdaReportResponse = new CDAReportResponse();
@@ -1002,6 +1009,9 @@ public class MangeReportImpl implements MangeReportService {
                     if (cdaParkingTotalList.size() > 0) {
                         for (int k = 0; k < cdaParkingTotalList.size(); k++) {
                             List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
+
+                            CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
+
                             Float amount = 0f;
 
                             for (int m = 0; m < cdaData.size(); m++) {
@@ -1011,8 +1021,19 @@ public class MangeReportImpl implements MangeReportService {
                                     amount = amount + Float.parseFloat(cdaData.get(m).getTotalParkingAmount());
                                     grandTotal = grandTotal + amount;
                                 }
-
                             }
+
+
+
+
+
+                            coloumWiseAmount.put(ginWiseData.getCdaName(),amount+"");
+
+
+
+
+
+
 
                             totalAmount = totalAmount + amount;
                             cdaReportResponse = new CDAReportResponse();
@@ -1039,7 +1060,6 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                    File file = new File(filePath);
                     pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
