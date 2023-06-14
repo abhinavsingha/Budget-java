@@ -21,6 +21,7 @@ import com.sdd.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,50 +31,51 @@ import java.util.Set;
 @Service
 public class CdaParkingImpl implements CdaParkingService {
 
-    @Autowired    
+    @Autowired
     CgUnitRepository cgUnitRepository;
 
-    @Autowired    
+    @Autowired
     MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
 
-    @Autowired    
+    @Autowired
     private HrDataRepository hrDataRepository;
 
-    @Autowired    
+    @Autowired
     AmountUnitRepository amountUnitRepository;
 
-    @Autowired    
+    @Autowired
     BudgetFinancialYearRepository budgetFinancialYearRepository;
 
-    @Autowired    
+    @Autowired
     CdaParkingRepository cdaParkingRepository;
 
-    @Autowired    
+    @Autowired
     CdaParkingTransRepository cdaParkingTransRepository;
 
-    @Autowired    
+    @Autowired
     CdaParkingCrAndDrRepository parkingCrAndDrRepository;
 
-    @Autowired    
+    @Autowired
     AllocationRepository allocationRepository;
 
-    @Autowired    
+    @Autowired
     BudgetAllocationDetailsRepository budgetAllocationDetailsRepository;
 
-    @Autowired    
+    @Autowired
     BudgetAllocationRepository budgetAllocationRepository;
 
-    @Autowired    
+    @Autowired
     private JwtUtils jwtUtils;
 
-    @Autowired    
+    @Autowired
     private HeaderUtils headerUtils;
 
-    @Autowired    
+    @Autowired
     SubHeadRepository subHeadRepository;
 
 
     @Override
+    @Transactional
     public ApiResponse<DefaultResponse> saveCdaParkingData(CDARequest cdaRequest) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -222,6 +224,7 @@ public class CdaParkingImpl implements CdaParkingService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<CdaParkingTransResponse> getCdaData(String groupId) {
         CdaParkingTransResponse mainResponse = new CdaParkingTransResponse();
 
@@ -261,6 +264,7 @@ public class CdaParkingImpl implements CdaParkingService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<CdaParkingTransResponse> getAllCdaData(CDARequest cdaRequest) {
         CdaParkingTransResponse mainResponse = new CdaParkingTransResponse();
 
@@ -329,6 +333,7 @@ public class CdaParkingImpl implements CdaParkingService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<List<CdaParking>> getCdaUnitList() {
 
         List<CdaParking> cdaParkingTrans = cdaParkingRepository.findAll();
@@ -339,6 +344,7 @@ public class CdaParkingImpl implements CdaParkingService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<DefaultResponse> updateCdaParkingData(CDARequest cdaRequest) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -434,7 +440,6 @@ public class CdaParkingImpl implements CdaParkingService {
 
         String authGroupId = cdaRequest.getAuthGroupId();
         for (Integer i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
-
 
 
             CdaParkingTrans cdaParkingTrans = new CdaParkingTrans();

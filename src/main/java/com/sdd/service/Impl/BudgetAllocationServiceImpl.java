@@ -18,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -90,6 +91,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
+    @Transactional
+
     public ApiResponse<List<BudgetFinancialYear>> getBudgetFinYear() {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -105,6 +108,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<List<AllocationType>> getAllocationAllData() {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -121,6 +125,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
+    @Transactional
     public ApiResponse<List<AllocationType>> getAllocationByFinYear(String finyear) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -139,6 +144,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
+    @Transactional
     public ApiResponse<DefaultResponse> updateAllocation(AllocationType allocationType) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -174,6 +180,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
+    @Transactional
     public ApiResponse<List<AllocationType>> getAllocationType() {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -201,6 +208,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
+    @Transactional
     public ApiResponse<List<BudgetHead>> getSubHeadsData() {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -223,6 +231,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
+    @Transactional
     public ApiResponse<List<BudgetHeadResponse>> getSubHeadListWithAmount(BudgetHeadRequest budgetHeadRequest) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -286,6 +295,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
+    @Transactional
     public ApiResponse<BudgetResponseWithToken> getSubHeads() {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -323,6 +333,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<List<CgUnitResponse>> getCgUnitData() {
 
         List<CgUnitResponse> cgUnitResponseList = new ArrayList<CgUnitResponse>();
@@ -371,6 +382,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
+    @Transactional
     public ApiResponse<List<CgUnitResponse>> getCgUnitWithoutMOD() {
 
         List<CgUnitResponse> cgUnitResponseList = new ArrayList<CgUnitResponse>();
@@ -423,6 +435,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<List<CgUnitResponse>> getCgUnitDataForBudgetRecipt() {
         List<CgUnitResponse> cgUnitResponseList = new ArrayList<CgUnitResponse>();
 
@@ -493,6 +506,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
+    @Transactional
     public ApiResponse<BudgetAllocationResponse> budgetAllocationReport(BudgetAllocationReportRequest budgetAllocationReportRequest) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -569,6 +583,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<List<BudgetHead>> getSubHeadsDataByMajorHead(BudgetHeadRequest majorHead) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -600,6 +615,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<BudgetAllocationSaveResponse> updateBudgetAllocationSubHeadWise(BudgetAllocationUpdateRequest budgetAllocationSaveRequestList) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -760,6 +776,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<BudgetAllocationSaveResponse> updateBudgetAllocationUnitWise(BudgetAllocationUpdateRequest budgetAllocationSaveRequestList) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -806,6 +823,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<BudgetAllocationResponse> getBudgetAllocationData() {
 
         List<BudgetAllocationSubResponse> budgetAllocationList = new ArrayList<BudgetAllocationSubResponse>();
@@ -871,6 +889,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<BudgetAllocationResponse> getBudgetAllocationDataGroupId(String groupId) {
         List<BudgetAllocationSubResponse> budgetAllocationList = new ArrayList<BudgetAllocationSubResponse>();
 
@@ -980,6 +999,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<BudgetAllocationResponse> getAllRevisionGroupId(String groupId) {
         List<BudgetAllocationSubResponse> budgetAllocationList = new ArrayList<BudgetAllocationSubResponse>();
 
@@ -1168,6 +1188,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<BudgetAllocationResponse> getApprovedBudgetData() {
         List<BudgetAllocationSubResponse> budgetAllocationList = new ArrayList<BudgetAllocationSubResponse>();
 
@@ -1226,6 +1247,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<BudgetAllocationSaveResponse> saveBudgetRevision(BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -1460,6 +1482,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<List<SubHeadVotedOrChargedType>> getSubHeadType() {
 
         String token = headerUtils.getTokeFromHeader();
@@ -1477,6 +1500,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<BudgetAllocationResponse> getAllGroupIdAndUnitId(String groupId) {
         List<BudgetAllocationSubResponse> budgetAllocationList = new ArrayList<BudgetAllocationSubResponse>();
 
@@ -1583,6 +1607,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<List<BudgetReviResp>> getBudgetRevisionData(BudgetReviReq budgetRivRequest) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -1676,6 +1701,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<BudgetAllocationSaveResponse> budgetDelete(BudgetDeleteRequest budgetDeleteRequest) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -1728,6 +1754,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<BudgetAllocationSaveResponse> approveBudgetOrReject(BudgetApproveRequest budgetApproveRequest) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -1925,6 +1952,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
+    @Transactional
     public ApiResponse<BudgetAllocationSaveResponse> approveRivisonBudgetOrReject(BudgetApproveRequest budgetApproveRequest) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -2137,6 +2165,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
+    @Transactional
     public ApiResponse<AvilableFundResponse> findAvailableAmount(GetAmountRequest budgetHeadId) {
         AvilableFundResponse response = new AvilableFundResponse();
         String token = headerUtils.getTokeFromHeader();
@@ -2230,6 +2259,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<AvilableFundResponse> getAvailableFundData() {
         AvilableFundResponse response = new AvilableFundResponse();
         String token = headerUtils.getTokeFromHeader();
@@ -2320,6 +2350,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<AvilableFundResponse> getAvailableFundFindByUnitIdAndFinYearId(GetAvilableFundRequest getAvilableFundRequest) {
         AvilableFundResponse response = new AvilableFundResponse();
         String token = headerUtils.getTokeFromHeader();
@@ -2409,6 +2440,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<BudgetAllocationSaveResponse> saveBudgetAllocationSubHeadWise(BudgetAllocationSaveRequest budgetAllocationSaveRequest) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -2658,6 +2690,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
+    @Transactional
     public ApiResponse<BudgetAllocationSaveResponse> saveBudgetAllocationUnitWise(BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -2914,6 +2947,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
+    @Transactional
     public ApiResponse<List<FindBudgetResponse>> findBudgetAllocationFinYearAndUnit(FindBudgetRequest findBudgetRequest) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -2972,6 +3006,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
+    @Transactional
     public ApiResponse<List<BudgetRevisionResponse>> getBudgetRevisionData(BudgetAllocationReportRequest budgetAllocationReportRequest) {
 
 
@@ -3054,6 +3089,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<BudgetAllocationSaveResponse> saveBudgetRevisonData(BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -3226,6 +3262,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<List<CgUnitResponse>> getCgUnitDataWithPurposeCode() {
         List<CgUnitResponse> cgUnitResponseList = new ArrayList<CgUnitResponse>();
         String token = headerUtils.getTokeFromHeader();
@@ -3389,6 +3426,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<DefaultResponse> saveAuthData(AuthRequest authRequest) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -3526,6 +3564,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
+    @Transactional
     public ApiResponse<List<CgUnitResponse>> getAllCgUnitData() {
 
         List<CgUnitResponse> cgUnitResponseList = new ArrayList<CgUnitResponse>();

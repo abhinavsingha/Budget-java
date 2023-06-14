@@ -36,6 +36,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -72,6 +73,7 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
 
 
     @Override
+    @Transactional
     public ApiResponse<UplaodMainFormDocumentsResponse> fileUplaod(MultipartFile file) throws IOException {
 
 
@@ -130,6 +132,7 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<FileUpload> getFilePath(String fileId) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);

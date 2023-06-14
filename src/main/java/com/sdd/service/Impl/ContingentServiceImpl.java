@@ -17,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,55 +35,56 @@ import java.util.List;
 @Service
 public class ContingentServiceImpl implements ContingentService {
 
-    @Autowired    
+    @Autowired
     CdaParkingTransRepository cdaParkingTransRepository;
 
-    @Autowired    
+    @Autowired
     CdaParkingCrAndDrRepository parkingCrAndDrRepository;
 
-    @Autowired    
+    @Autowired
     CdaParkingRepository cdaParkingRepository;
 
-    @Autowired    
+    @Autowired
     BudgetFinancialYearRepository budgetFinancialYearRepository;
 
-    @Autowired    
+    @Autowired
     BudgetAllocationRepository budgetAllocationRepository;
 
-    @Autowired    
+    @Autowired
     AmountUnitRepository amountUnitRepository;
 
-    @Autowired    
+    @Autowired
     AllocationRepository allocationRepository;
 
-    @Autowired    
+    @Autowired
     SubHeadRepository subHeadRepository;
 
-    @Autowired    
+    @Autowired
     CgUnitRepository cgUnitRepository;
 
-    @Autowired    
+    @Autowired
     FileUploadRepository fileUploadRepository;
 
-    @Autowired    
+    @Autowired
     ContigentBillRepository contigentBillRepository;
 
-    @Autowired    
+    @Autowired
     MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
 
-    @Autowired    
+    @Autowired
     AuthorityRepository authorityRepository;
 
-    @Autowired    
+    @Autowired
     private JwtUtils jwtUtils;
 
-    @Autowired    
+    @Autowired
     private HeaderUtils headerUtils;
 
-    @Autowired    
+    @Autowired
     private HrDataRepository hrDataRepository;
 
     @Override
+    @Transactional
     public ApiResponse<ContingentSaveResponse> saveContingentBill(ArrayList<ContingentBillSaveRequest> contingentBillSaveRequestList) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -456,6 +458,7 @@ public class ContingentServiceImpl implements ContingentService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<ContingentSaveResponse> updateContingentBill(ArrayList<ContingentBillSaveRequest> contingentBillSaveRequestList) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -850,6 +853,7 @@ public class ContingentServiceImpl implements ContingentService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<List<ContingentBillResponse>> getContingentBill() {
 
         ArrayList<ContingentBillResponse> contingentBillListData = new ArrayList<ContingentBillResponse>();
@@ -937,6 +941,7 @@ public class ContingentServiceImpl implements ContingentService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<List<ContingentBillResponse>> getContingentBillGroupId(String groupId) {
 
         ArrayList<ContingentBillResponse> contingentBillListData = new ArrayList<ContingentBillResponse>();
@@ -1033,6 +1038,7 @@ public class ContingentServiceImpl implements ContingentService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<ContingentSaveResponse> approveContingentBill(ApproveContigentBillRequest approveContigentBillRequest) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -1163,6 +1169,7 @@ public class ContingentServiceImpl implements ContingentService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<DefaultResponse> updateFinalStatus(UploadCBRequest approveContigentBillRequest) throws IOException {
 
         DefaultResponse defaultResponse = new DefaultResponse();
@@ -1239,6 +1246,7 @@ public class ContingentServiceImpl implements ContingentService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<ContingentSaveResponse> verifyContingentBill(ApproveContigentBillRequest approveContigentBillRequest) {
 
         String token = headerUtils.getTokeFromHeader();

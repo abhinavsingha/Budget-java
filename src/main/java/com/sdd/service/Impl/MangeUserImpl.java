@@ -16,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class MangeUserImpl implements MangeUserService {
     private HeaderUtils headerUtils;
 
     @Override
+    @Transactional
     public ApiResponse<DefaultResponse> addUser(HrData hrData) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -253,6 +255,7 @@ public class MangeUserImpl implements MangeUserService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<DefaultResponse> removeUser(String pid) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -287,6 +290,7 @@ public class MangeUserImpl implements MangeUserService {
 
 
     @Override
+    @Transactional
     public ApiResponse<DefaultResponse> activateUser(String pid) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -346,6 +350,7 @@ public class MangeUserImpl implements MangeUserService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<DefaultResponse> deActivateUser(String pid) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -404,6 +409,7 @@ public class MangeUserImpl implements MangeUserService {
 
 
     @Override
+    @Transactional
     public ApiResponse<DefaultResponse> removeRole(HrData hrDataRequest) {
 
         String token = headerUtils.getTokeFromHeader();
