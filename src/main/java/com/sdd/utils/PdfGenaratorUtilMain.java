@@ -168,8 +168,8 @@ public class PdfGenaratorUtilMain {
 
 
         Phrase phrase = new Phrase();
-        Font normalFont = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
-        Font font = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
+        Font normalFont = new Font(Font.FontFamily.TIMES_ROMAN, 11, Font.NORMAL);
+        Font font = new Font(Font.FontFamily.TIMES_ROMAN, 11, Font.BOLD);
 
 
         Chunk billNumber1 = new Chunk("Contingent Bill No. ", normalFont);
@@ -190,13 +190,13 @@ public class PdfGenaratorUtilMain {
         phrase.add(normalTexet);
 
 
-        Chunk totalAmount = new Chunk("Total Amount/ Budget allotted                                                               (INR)  " + cbReportResponse.getAllocatedAmount() + " \n", normalFont);
+        Chunk totalAmount = new Chunk("Total Amount/ Budget allotted                                                                   (INR)  " + cbReportResponse.getAllocatedAmount() + " \n", normalFont);
         phrase.add(totalAmount);
 
-        Chunk progressiveExpen = new Chunk("Progressive expenditure including this bill                                             (INR)  " + cbReportResponse.getExpenditureAmount() + " \n", normalFont);
+        Chunk progressiveExpen = new Chunk("Progressive expenditure including this bill                                                (INR)  " + cbReportResponse.getExpenditureAmount() + " \n", normalFont);
         phrase.add(progressiveExpen);
 
-        Chunk balanceAmount = new Chunk("Progressive expenditure including this bill                                            (INR)  " + cbReportResponse.getRemeningAmount() + " \n\n\n", normalFont);
+        Chunk balanceAmount = new Chunk("Progressive expenditure including this bill                                                (INR)  " + cbReportResponse.getRemeningAmount() + " \n\n", normalFont);
         phrase.add(balanceAmount);
 
 
@@ -204,7 +204,7 @@ public class PdfGenaratorUtilMain {
         phrase.add(authoritya);
 
 
-        Chunk authorityb1 = new Chunk("                 : (b) " + cbReportResponse.getUnitData().getDescr() + "  Sanction No. ", normalFont);
+        Chunk authorityb1 = new Chunk("               : (b) " + cbReportResponse.getUnitData().getDescr() + "  Sanction No. ", normalFont);
         Chunk authorityb2 = new Chunk(cbReportResponse.getAuthorityDetails().getAuthority() + " \n\n\n", font);
         phrase.add(authorityb1);
         phrase.add(authorityb2);
@@ -220,9 +220,9 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText("Details of Expenditure", 10, 25f));
         table.addCell(boldText("Amount (in INR)", 10, 25f));
 
-        table.addCell(normalText("01", 9, 25f));
-        table.addCell(normalText("Expenditure incurred towards quaterly payment for the 3rd otr from 01 Sep 22 to 30 Nov 22 in respect of Hirring of Designer/Developer IT Manpower (Project-SDOT) through " + cbReportResponse.getCbData().getVendorName() + " vibe Invoiice/bill " + cbReportResponse.getCbData().getInvoiceNO() + " Dated " + cbReportResponse.getCbData().getInvoiceDate() + "", 9, 25f));
-        table.addCell(normalText(ConverterUtils.addDecimalPoint("(INR)" + bill.toString()), 9, 25f));
+        table.addCell(normalText("01", 9, 50f));
+        table.addCell(normalText("Expenditure incurred towards quaterly payment for the 3rd otr from 01 Sep 22 to 30 Nov 22 in respect of Hirring of Designer/Developer IT Manpower (Project-SDOT) through " + cbReportResponse.getCbData().getVendorName() + " vibe Invoiice/bill " + cbReportResponse.getCbData().getInvoiceNO() + " Dated " + cbReportResponse.getCbData().getInvoiceDate(), 10, 50f));
+        table.addCell(normalText(ConverterUtils.addDecimalPoint("(INR)" + bill.toString()), 9, 50f));
 
 
         table.addCell(normalText("", 9, 25f));
@@ -281,23 +281,23 @@ public class PdfGenaratorUtilMain {
         phraseFooter.add(certifyd);
 
 
-        Chunk veriferSign = new Chunk("                                                                                                                                                                                " + cbReportResponse.getVerifer().getFullName() + " \n" + "                                                                                                                                                                                " + cbReportResponse.getVerifer().getRank() + " \n\n\n", normalFont);
+        Chunk veriferSign = new Chunk("                                                                                                                                                                   " + cbReportResponse.getVerifer().getFullName() + " \n" + "                                                                                                                                                            " + cbReportResponse.getVerifer().getRank() + " \n\n", normalFont);
         phraseFooter.add(veriferSign);
 
 
         Font counterSign = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
-        Chunk counterSigner = new Chunk("                                                                         COUNTERSIGNED" + " \n" + " \n" + " \n", counterSign);
+        Chunk counterSigner = new Chunk("                                                           COUNTERSIGNED" + " \n" + " \n" , counterSign);
         phraseFooter.add(counterSigner);
 
 
         Chunk footer11 = new Chunk("Coast Guard Headquarters", font);
-        Chunk footer12 = new Chunk("                                                                                                                                  " + cbReportResponse.getApprover().getFullName() + " \n", normalFont);
+        Chunk footer12 = new Chunk("                                                                                                                     " + cbReportResponse.getApprover().getFullName() + " \n", normalFont);
         phraseFooter.add(footer11);
         phraseFooter.add(footer12);
 
 
         Chunk footer21 = new Chunk("National Stadium Complex", font);
-        Chunk footer22 = new Chunk("                                                                                                                                  " + cbReportResponse.getApprover().getRank() + " \n", normalFont);
+        Chunk footer22 = new Chunk("                                                                                                                " + cbReportResponse.getApprover().getRank() + " \n", normalFont);
         phraseFooter.add(footer21);
         phraseFooter.add(footer22);
 
