@@ -128,9 +128,9 @@ public class MangeReportImpl implements MangeReportService {
 
         String fileName = "AllocationReport" + hrData.getUnitId();
 
-        HashMap<String, List<ReportSubModel>> hashMap = new HashMap<>();
-//        List<BudgetAllocationDetails> budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsFlagOrderBySubHeadAsc(authGroupId, "0");
-        List<BudgetAllocationDetails> budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(authGroupId, "0");
+        HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
+        List<BudgetAllocationDetails> budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(authGroupId, "0");
+//        List<BudgetAllocationDetails> budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(authGroupId, "0");
 
 
         MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupId(authGroupId);
@@ -167,12 +167,6 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-
-                Collections.sort(reportMaindata, new Comparator<ReportSubModel>() {
-                    public int compare(ReportSubModel v1, ReportSubModel v2) {
-                        return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
-                    }
-                });
 
                 if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
@@ -272,10 +266,10 @@ public class MangeReportImpl implements MangeReportService {
         }
 
 
-        HashMap<String, List<ReportSubModel>> hashMap = new HashMap<>();
+        HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
 //        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlagOrderBySubHeadAsc(authGroupId, "0");
 
-        List<BudgetAllocationDetails> budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(authGroupId, "0");
+        List<BudgetAllocationDetails> budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(authGroupId, "0");
 
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
@@ -298,14 +292,9 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
-                Collections.sort(reportMaindata, new Comparator<ReportSubModel>() {
-                    public int compare(ReportSubModel v1, ReportSubModel v2) {
-                        return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
-                    }
-                });
+
                 if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
-
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
             } else {
@@ -318,11 +307,6 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
-                Collections.sort(reportMaindata, new Comparator<ReportSubModel>() {
-                    public int compare(ReportSubModel v1, ReportSubModel v2) {
-                        return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
-                    }
-                });
 
                 if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);

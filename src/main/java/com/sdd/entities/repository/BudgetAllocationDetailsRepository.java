@@ -32,4 +32,6 @@ public interface BudgetAllocationDetailsRepository extends JpaRepository<BudgetA
                     "select BUDGET_HEAD from BudgetAllocationDetails where AUTH_GROUP_ID=:authGroupId  group by BUDGET_HEAD",
             nativeQuery = true)
     List<String> findSubHead(String authGroupId);
+
+    List<BudgetAllocationDetails> findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(String authGroupId, String s);
 }
