@@ -39,6 +39,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 
 @Service
 public class MangeReportImpl implements MangeReportService {
@@ -2137,7 +2145,9 @@ public class MangeReportImpl implements MangeReportService {
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType().toUpperCase();
         List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0");
-        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis1.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
+        List<BudgetAllocation> budgetAllocationsDetalis2 = budgetAllocationsDetalis1.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
+        List<BudgetAllocation> budgetAllocationsDetalis=budgetAllocationsDetalis2.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
+
         if (budgetAllocationsDetalis.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -2149,173 +2159,39 @@ public class MangeReportImpl implements MangeReportService {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
-
-        String htmlContent = new String();
         try {
-            //htmlContent = FileUtils.readFileToString(new File("src/main/resources/templates/allocation-unit-wise-report.html"), "UTF-8");
-            //htmlContent = FileUtils.readFileToString(new File(new File(".").getCanonicalPath()+"/webapps/budget/WEB-INF/classes/templates/allocation-unit-wise-report.html"), "UTF-8");
-            htmlContent = "<!DOCTYPE html>\n" +
-                    "<html >\n" +
-                    "<head>\n" +
-                    "    <meta charset=\"UTF-8\"></meta>\n" +
-                    "    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"></meta>\n" +
-                    "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"></meta>\n" +
-                    "    <title>Unit Wise Allocation Report</title>\n" +
-                    "    <style>\n" +
-                    "        .header {\n" +
-                    "            text-align: center;\n" +
-                    "        }\n" +
-                    "        .bbtm{\n" +
-                    "            border-bottom: 1px solid transparent !important;\n" +
-                    "        }\n" +
-                    "        .brtm{\n" +
-                    "            border-right: 1px solid transparent !important;\n" +
-                    "        }\n" +
-                    "        .table {\n" +
-                    "            display: flex;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .float {\n" +
-                    "            float: right;\n" +
-                    "\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .auth {\n" +
-                    "            padding-left: 72px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .table2,\n" +
-                    "        .the,\n" +
-                    "        .them.themed {\n" +
-                    "            border: 1px solid black;\n" +
-                    "            border-collapse: collapse;\n" +
-                    "            padding-left: 8px;\n" +
-                    "            padding-right: 8px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "\n" +
-                    "        .count {\n" +
-                    "            text-align: center;\n" +
-                    "            padding-top: 200px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .table3 {\n" +
-                    "            padding-top: 55px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .tab {\n" +
-                    "            padding-left: 85px;\n" +
-                    "        }\n" +
-                    "        .table4{\n" +
-                    "            padding-top: 15px;\n" +
-                    "        }\n" +
-                    "        .wrap{\n" +
-                    "            width:90%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "        .sign {\n" +
-                    "            float: right;\n" +
-                    "            padding-right: 20px;\n" +
-                    "            padding-top: 20px;\n" +
-                    "            width:27%;\n" +
-                    "        }\n" +
-                    "        .sign ul li{\n" +
-                    "            margin-bottom: 10px;\n" +
-                    "        }\n" +
-                    "        .count {\n" +
-                    "            text-align: center;\n" +
-                    "            padding-top: 200px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .table3 {\n" +
-                    "            padding-top: 55px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .tab {\n" +
-                    "            padding-left: 85px;\n" +
-                    "        }\n" +
-                    "        .table4{\n" +
-                    "            padding-top: 15px;\n" +
-                    "        }\n" +
-                    "        .wrap{\n" +
-                    "            width:70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "        .date {\n" +
-                    "            float: left;\n" +
-                    "            padding-left: 20px;\n" +
-                    "            padding-top: 20px;\n" +
-                    "            width:45%;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .count {\n" +
-                    "            text-align: center;\n" +
-                    "            padding-top: 200px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .table3 {\n" +
-                    "            padding-top: 55px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .tab {\n" +
-                    "            padding-left: 85px;\n" +
-                    "        }\n" +
-                    "        .table4{\n" +
-                    "            padding-top: 15px;\n" +
-                    "        }\n" +
-                    "        .wrap{\n" +
-                    "            width:70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "    </style>\n" +
-                    "</head>\n" +
-                    "<body>\n" +
-                    "<!--header-->\n" +
-                    "<div class=\"wrap\">\n" +
-                    "    <div class=\"header\"> <strong>UNIT WISE ALLOCATION REPORT</strong></div>\n" +
-                    "    <br></br>\n" +
-                    "    <table style=\"width:100%\" class=\"table2\">\n" +
-                    "        <tbody>\n" +
-                    "        <tr>\n" +
-                    "        <tr>\n" +
-                    "            <td colspan=\"2\" rowspan=\"2\" height=\"60\" align=\"center\" valign=\"middle\" class=\"the\"><b>Financial Year : ${finYear_placeholder}</b></td>\n" +
-                    "        </tr>\n" +
-                    "        <tr>\n" +
-                    "            <td colspan=\"2\" align=\"center\" valign=\"middle\" class=\"the\"><b>Unit: ${unitName_placeholder}</b></td>\n" +
-                    "        </tr>\n" +
-                    "        <tr>\n" +
-                    "            <td height=\"41\" align=\"left\" valign=\"middle\" class=\"the\"><b>S.L</b></td>\n" +
-                    "            <td class=\"the\"><b>Sub Head</b></td>\n" +
-                    "            <td class=\"the\"><b>Allocation Type</b></td>\n" +
-                    "            <td class=\"the\"><b>Amount (in ${amountType_placeholder})</b></td>\n" +
-                    "        </tr>\n" +
-                    "        ${data_placeholder}\n" +
-                    "        <tr>\n" +
-                    "            <td height=\"41\" align=\"left\" valign=\"middle\" class=\"the brtm\" style=\" border-right: 1px solid transparent !important;\"><b>Total</b></td>\n" +
-                    "            <td class=\"the brtm\" style=\" border-right: 1px solid transparent !important;\"></td>\n" +
-                    "            <td class=\"the\"></td>\n" +
-                    "            <td class=\"the\"><b>${total_placeholder} </b></td>\n" +
-                    "        </tr>\n" +
-                    "        </tr>\n" +
-                    "        </tbody>\n" +
-                    "    </table>\n" +
-                    "\n" +
-                    "    <div class=\"sign\">\n" +
-                    "        <ul style=\"list-style: none; margin-top: 0;\">\n" +
-                    "            <li>${name_placeholder}</li>\n" +
-                    "            <li>${unit_placeholder}</li>\n" +
-                    "            <li>${rank_placeholder}</li>\n" +
-                    "        </ul>\n" +
-                    "\n" +
-                    "    </div>\n" +
-                    "    <div class=\"date\">\n" +
-                    "        Date-${date_placeholder}\n" +
-                    "    </div>\n" +
-                    "</div>\n" +
-                    "</body>\n" +
-                    "</html>\n";
+            Document document = new Document(PageSize.A4);
 
-            StringBuilder sb = new StringBuilder();
+            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String path = folder.getAbsolutePath() + "/" + "UnitWise_Allocation" + ".pdf";
+            PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
+
+            document.open();
+
+            Paragraph heading = new Paragraph("UNIT WISE ALLOCATION REPORT");
+            heading.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(heading);
+            document.add(new Paragraph("\n"));
+
+            PdfPTable table1 = new PdfPTable(2);
+            table1.setWidthPercentage(80);
+
+            table1.addCell("FINANCIAL YEAR : "+findyr.getFinYear());
+            table1.addCell("UNIT :"+subUnit.getDescr());
+            document.add(table1);
+
+            PdfPTable table = new PdfPTable(4);
+            table.setWidthPercentage(80);
+
+            table.addCell("S.L");
+            table.addCell("REVENUE OBJECT HEAD");
+            table.addCell("ALLOCATION TYPE");
+            table.addCell("AMOUNT IN :("+amountIn+")");
+
+
             int i = 1;
             String finyear = "";
             String unit = "";
@@ -2335,42 +2211,38 @@ public class MangeReportImpl implements MangeReportService {
                 finAmount = amount * amountUnit / reqAmount;
                 BudgetHead bHead = subHeadRepository.findByBudgetCodeId(row.getSubHead());
                 AllocationType type = allocationRepository.findByAllocTypeId(row.getAllocationTypeId());
-                sb.append("<tr>");
-                sb.append("<td class=\"the\">").append(i).append("</td>");
-                sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(bHead.getSubHeadDescr())).append("</td>");
-                sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(type.getAllocDesc().toUpperCase())).append("</td>");
-                sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(finAmount)))).append("</td>");
 
-                sb.append("</tr>");
+                table.addCell(String.valueOf(i));
+                table.addCell(bHead.getSubHeadDescr());
+                table.addCell(type.getAllocDesc().toUpperCase());
+                table.addCell(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
+
                 i++;
-//                sum=sum+Double.parseDouble(row.getTotalAmount());
                 sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
             }
 
-            htmlContent = htmlContent.replace("${total_placeholder}", StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(sum))));
-            htmlContent = htmlContent.replace("${name_placeholder}", StringEscapeUtils.escapeHtml4(names));
-            htmlContent = htmlContent.replace("${unit_placeholder}", StringEscapeUtils.escapeHtml4(unitName));
-            htmlContent = htmlContent.replace("${rank_placeholder}", StringEscapeUtils.escapeHtml4(rank));
-            htmlContent = htmlContent.replace("${date_placeholder}", StringEscapeUtils.escapeHtml4(formattedDateTime));
-            htmlContent = htmlContent.replace("${unitName_placeholder}", StringEscapeUtils.escapeHtml4(subUnit.getDescr()));
-            htmlContent = htmlContent.replace("${finYear_placeholder}", StringEscapeUtils.escapeHtml4(findyr.getFinYear()));
-            htmlContent = htmlContent.replace("${amountType_placeholder}", StringEscapeUtils.escapeHtml4(amountIn));
-            htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
+            table.addCell("TOTAL");
+            table.addCell("");
+            table.addCell("");
+            table.addCell(String.format("%1$0,1.4f", new BigDecimal(sum)));
 
-            String filepath = HelperUtils.FILEPATH + "/allocation-unit-wise-report.pdf";
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
-            String filePath = folder.getAbsolutePath() + "/" + "allocation-unit-wise-report.pdf";
-            File file = new File(filePath);
-            generatePdf(htmlContent, file.getAbsolutePath());
+            document.add(table);
 
-            // generatePdf(htmlContent, filepath);
-            FilePathResponse response = new FilePathResponse();
-            response.setPath(filepath);
-            response.setFileName("AllocationUnitWiseReport.pdf");
-            dtoList.add(response);
+            document.add(new Paragraph("\n"));
+            Paragraph heading1 = new Paragraph(formattedDateTime);
+            heading1.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(heading1);
+
+            document.add(new Paragraph("\n"));
+            Paragraph heading2 = new Paragraph(names+"\n"+unitName+"\n"+rank);
+            heading2.setAlignment(Paragraph.ALIGN_RIGHT);
+            document.add(heading2);
+
+            document.close();
+            FilePathResponse dto = new FilePathResponse();
+            dto.setPath(HelperUtils.FILEPATH + "UnitWise_Allocation" + ".pdf");
+            dto.setFileName("UnitWise_Allocation");
+            dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
@@ -2379,7 +2251,6 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
     }
-
     @Override
     public ApiResponse<List<FilePathResponse>> getUnitWiseAllocationReportDoc(UnitWiseAllocationReport reportRequest) {
 
@@ -2651,7 +2522,9 @@ public class MangeReportImpl implements MangeReportService {
             }, "ALLOCATION TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(req.getFinYearId());
-        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getSubHeadId(), req.getFinYearId(), req.getAllocationTypeId(), "0");
+        List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getSubHeadId(), req.getFinYearId(), req.getAllocationTypeId(), "0");
+        List<BudgetAllocation> budgetAllocationsDetalis=budgetAllocationsDetalis1.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
+
         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(req.getSubHeadId());
         if (budgetAllocationsDetalis.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -2688,180 +2561,38 @@ public class MangeReportImpl implements MangeReportService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
 
-        String htmlContent = new String();
         try {
-            //htmlContent = FileUtils.readFileToString(new File("src\\main\\resources\\templates\\subhead-wise-allocation-report.html"), "UTF-8");
-            //htmlContent = FileUtils.readFileToString(new File(new File(".").getCanonicalPath()+"/webapps/budget/WEB-INF/classes/templates/subhead-wise-allocation-report.html"), "UTF-8");
-            htmlContent = "<!DOCTYPE html>\n" +
-                    "<html lang=\"en\">\n" +
-                    "\n" +
-                    "<head>\n" +
-                    "    <meta charset=\"UTF-8\"></meta>\n" +
-                    "    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"></meta>\n" +
-                    "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"></meta>\n" +
-                    "    <title>Sub Head Allocation Report</title>\n" +
-                    "    <style>\n" +
-                    "        .header {\n" +
-                    "            text-align: center;\n" +
-                    "        }\n" +
-                    "        .bbtm{\n" +
-                    "             border-bottom: 1px solid transparent !important;\n" +
-                    "         }\n" +
-                    "        .brtm{\n" +
-                    "            border-right: 1px solid transparent !important;\n" +
-                    "        }\n" +
-                    "        .table {\n" +
-                    "            display: flex;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .float {\n" +
-                    "            float: right;\n" +
-                    "\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .auth {\n" +
-                    "            padding-left: 72px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .table2,\n" +
-                    "        .the,\n" +
-                    "        .them.themed {\n" +
-                    "            border: 1px solid black;\n" +
-                    "            border-collapse: collapse;\n" +
-                    "            padding-left: 8px;\n" +
-                    "            padding-right: 8px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "\n" +
-                    "        .count {\n" +
-                    "            text-align: center;\n" +
-                    "            padding-top: 200px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .table3 {\n" +
-                    "            padding-top: 55px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .tab {\n" +
-                    "            padding-left: 85px;\n" +
-                    "        }\n" +
-                    "        .table4{\n" +
-                    "            padding-top: 15px;\n" +
-                    "        }\n" +
-                    "        .wrap{\n" +
-                    "            width:70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "        .sign {\n" +
-                    "            float: right;\n" +
-                    "            padding-right: 20px;\n" +
-                    "            padding-top: 20px;\n" +
-                    "            width:27%;\n" +
-                    "        }\n" +
-                    "        .sign ul li{\n" +
-                    "            margin-bottom: 10px;\n" +
-                    "        }\n" +
-                    "        .count {\n" +
-                    "            text-align: center;\n" +
-                    "            padding-top: 200px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .table3 {\n" +
-                    "            padding-top: 55px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .tab {\n" +
-                    "            padding-left: 85px;\n" +
-                    "        }\n" +
-                    "        .table4{\n" +
-                    "            padding-top: 15px;\n" +
-                    "        }\n" +
-                    "        .wrap{\n" +
-                    "            width:70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "        .date {\n" +
-                    "            float: left;\n" +
-                    "            padding-left: 20px;\n" +
-                    "            padding-top: 20px;\n" +
-                    "            width:45%;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .count {\n" +
-                    "            text-align: center;\n" +
-                    "            padding-top: 200px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .table3 {\n" +
-                    "            padding-top: 55px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .tab {\n" +
-                    "            padding-left: 85px;\n" +
-                    "        }\n" +
-                    "        .table4{\n" +
-                    "            padding-top: 15px;\n" +
-                    "        }\n" +
-                    "        .wrap{\n" +
-                    "            width:70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "    </style>\n" +
-                    "\n" +
-                    "</head>\n" +
-                    "\n" +
-                    "\n" +
-                    "<body>\n" +
-                    "    <!--header-->\n" +
-                    "    <div class=\"wrap\">\n" +
-                    "        <div class=\"header\"> <strong>SUB HEAD WISE ALLOCATION REPORT</strong></div>\n" +
-                    "\n" +
-                    "        <table style=\"width:100%\" class=\"table2\">\n" +
-                    "            <tbody>\n" +
-                    "\n" +
-                    "                    <tr>\n" +
-                    "                        <td colspan=\"2\" rowspan=\"2\" height=\"60\" align=\"center\" valign=\"middle\" class=\"the\"><b>Financial Year : ${finYear_placeholder}</b></td>\n" +
-                    "                        </tr>\n" +
-                    "                    <tr>\n" +
-                    "                        <td colspan=\"2\" align=\"center\" valign=\"middle\" class=\"the\"><b>Subhead:  ${subHd_placeholder}</b></td>\n" +
-                    "                        </tr>\n" +
-                    "                    <tr>\n" +
-                    "                        <td style=\"border-right: 2px solid #000000\" height=\"41\" align=\"left\" valign=\"middle\" class=\"the\"><b>S.L</b></td>\n" +
-                    "                        <td class=\"the\"><b>Unit</b></td>\n" +
-                    "                        <td class=\"the\"><b>Allocation Type</b></td>\n" +
-                    "                        <td class=\"the\"><b>Amount (in ${amountType_placeholder})</b></td>\n" +
-                    "                    </tr>\n" +
-                    "                ${data_placeholder}\n" +
-                    "                    <tr>\n" +
-                    "                        <td height=\"41\" align=\"left\" valign=\"middle\" class=\"the brtm\" style=\" border-right: 1px solid transparent !important;\"><b>Total</b></td>\n" +
-                    "                        <td class=\"the brtm\" style=\" border-right: 1px solid transparent !important;\"></td>\n" +
-                    "                        <td class=\"the\"></td>\n" +
-                    "                        <td class=\"the\"><b> ${total_placeholder}</b></td>\n" +
-                    "                    </tr>\n" +
-                    "\n" +
-                    "\n" +
-                    "            </tbody>\n" +
-                    "            \n" +
-                    "\n" +
-                    "        </table>\n" +
-                    "        <div class=\"sign\">\n" +
-                    "            <ul style=\"list-style: none; margin-top: 0;\">\n" +
-                    "                <li>${name_placeholder}</li>\n" +
-                    "                <li>${unit_placeholder}</li>\n" +
-                    "                <li>${rank_placeholder}</li>\n" +
-                    "            </ul>\n" +
-                    "\n" +
-                    "        </div>\n" +
-                    "        <div class=\"date\">\n" +
-                    "            Date-${date_placeholder}\n" +
-                    "        </div>\n" +
-                    "    </div>\n" +
-                    "\n" +
-                    "</body>\n" +
-                    "\n" +
-                    "</html>";
+            Document document = new Document(PageSize.A4);
 
-            StringBuilder sb = new StringBuilder();
+            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String path = folder.getAbsolutePath() + "/" + "subhead-wise-allocation-report" + ".pdf";
+            PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
+
+            document.open();
+
+            Paragraph heading = new Paragraph("SUBHEAD WISE ALLOCATION REPORT");
+            heading.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(heading);
+            document.add(new Paragraph("\n"));
+
+            PdfPTable table1 = new PdfPTable(2);
+            table1.setWidthPercentage(80);
+
+            table1.addCell("FINANCIAL YEAR : "+findyr.getFinYear());
+            table1.addCell("SUBHEAD :"+bHead.getSubHeadDescr());
+            document.add(table1);
+
+            PdfPTable table = new PdfPTable(4);
+            table.setWidthPercentage(80);
+
+            table.addCell("S.L");
+            table.addCell("UNIT");
+            table.addCell("ALLOCATION TYPE");
+            table.addCell("AMOUNT IN :("+amountIn+")");
+
             int i = 1;
             String finyear = "";
             String unit = "";
@@ -2886,53 +2617,48 @@ public class MangeReportImpl implements MangeReportService {
                         } else
                             amount = Double.valueOf(row.getAllocationAmount());
 
-
                         finAmount = amount * amountUnit / reqAmount;
 
-                        sb.append("<tr>");
-                        sb.append("<td class=\"the\">").append(i).append("</td>");
-                        sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(unitN.getDescr())).append("</td>");
-                        sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(type.getAllocDesc().toUpperCase())).append("</td>");
-                        sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(finAmount)))).append("</td>");
-                        sb.append("</tr>");
+                        table.addCell(String.valueOf(i));
+                        table.addCell(unitN.getDescr());
+                        table.addCell(type.getAllocDesc().toUpperCase());
+                        table.addCell(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
                         i++;
                         sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                     }
                 }
             }
-            htmlContent = htmlContent.replace("${total_placeholder}", StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(sum))));
-            htmlContent = htmlContent.replace("${name_placeholder}", StringEscapeUtils.escapeHtml4(names));
-            htmlContent = htmlContent.replace("${unit_placeholder}", StringEscapeUtils.escapeHtml4(unitName));
-            htmlContent = htmlContent.replace("${rank_placeholder}", StringEscapeUtils.escapeHtml4(rank));
-            htmlContent = htmlContent.replace("${date_placeholder}", StringEscapeUtils.escapeHtml4(formattedDateTime));
-            htmlContent = htmlContent.replace("${finYear_placeholder}", StringEscapeUtils.escapeHtml4(findyr.getFinYear()));
-            htmlContent = htmlContent.replace("${subHd_placeholder}", StringEscapeUtils.escapeHtml4(bHead.getSubHeadDescr()));
-            htmlContent = htmlContent.replace("${amountType_placeholder}", StringEscapeUtils.escapeHtml4(amountIn));
-            htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
-            String filepath = HelperUtils.FILEPATH + "/subhead-wise-allocation-report.pdf";
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
-            String filePath = folder.getAbsolutePath() + "/" + "subhead-wise-allocation-report.pdf";
-            File file = new File(filePath);
-            generatePdf(htmlContent, file.getAbsolutePath());
-            // generatePdf(htmlContent, filepath);
-            FilePathResponse response = new FilePathResponse();
-            response.setPath(filepath);
-            response.setFileName("SubheadWiseAllocationReport.pdf");
-            dtoList.add(response);
+            table.addCell("TOTAL");
+            table.addCell("");
+            table.addCell("");
+            table.addCell(String.format("%1$0,1.4f", new BigDecimal(sum)));
+
+            document.add(table);
+
+            document.add(new Paragraph("\n"));
+            Paragraph heading1 = new Paragraph(formattedDateTime);
+            heading1.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(heading1);
+
+            document.add(new Paragraph("\n"));
+            Paragraph heading2 = new Paragraph(names+"\n"+unitName+"\n"+rank);
+            heading2.setAlignment(Paragraph.ALIGN_RIGHT);
+            document.add(heading2);
+
+            document.close();
+            FilePathResponse dto = new FilePathResponse();
+            dto.setPath(HelperUtils.FILEPATH + "subhead-wise-allocation-report" + ".pdf");
+            dto.setFileName("subhead-wise-allocation-report");
+            dtoList.add(dto);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        /*     return null;*/
-
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
     }
-
     @Override
     public ApiResponse<List<FilePathResponse>> getSubHeadWiseAllocationReportDoc(SubHeadWiseAllocationReportReq req) {
 
@@ -3288,293 +3014,38 @@ public class MangeReportImpl implements MangeReportService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
 
-        String htmlContent = new String();
         try {
-            //htmlContent = FileUtils.readFileToString(new File("src/main/resources/templates/be-allocation-report.html"), "UTF-8");
-            //htmlContent = FileUtils.readFileToString(new File(new File(".").getCanonicalPath()+"/webapps/budget/WEB-INF/classes/templates/be-allocation-report"), "UTF-8");
-            htmlContent = "<!DOCTYPE html>\n" +
-                    "<html lang=\"en\">\n" +
-                    "<head>\n" +
-                    "    <title>Report</title>\n" +
-                    "    <meta charset=\"utf-8\"></meta>\n" +
-                    "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"></meta>\n" +
-                    "\n" +
-                    "    <style>\n" +
-                    "        .header {\n" +
-                    "            text-align: center;\n" +
-                    "        }\n" +
-                    "        .bbtm{\n" +
-                    "            border-bottom: 1px solid transparent !important;\n" +
-                    "        }\n" +
-                    "        .wrapper{\n" +
-                    "            width: 70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        :root {\n" +
-                    "            --bg-table-stripe: #f6f6f5;\n" +
-                    "            --b-table: #e3e3e2;\n" +
-                    "            --caption: #242423;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        table {\n" +
-                    "            background-color: transparent;\n" +
-                    "            border-collapse:collapse;\n" +
-                    "            font-family: Arial, Helvetica, sans-serif\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        th {\n" +
-                    "            text-align:left;\n" +
-                    "            border: 1px solid #242423 ;\n" +
-                    "        }\n" +
-                    "        td{\n" +
-                    "            border: 1px solid #242423 ;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-txt-center {\n" +
-                    "            text-align: center!important\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-txt-left {\n" +
-                    "            text-align: left!important\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-txt-right {\n" +
-                    "            text-align: right!important\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table caption {\n" +
-                    "            color: var(--caption);\n" +
-                    "            font-size: 1.13em;\n" +
-                    "            font-weight: 700;\n" +
-                    "            padding-bottom: .56rem\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table thead {\n" +
-                    "            font-size: .84em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table tbody {\n" +
-                    "            border-bottom: 1px solid var(--b-table);\n" +
-                    "            border-top: 1px solid var(--b-table);\n" +
-                    "            font-size: .84em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table tfoot {\n" +
-                    "            font-size: .84em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table td, .dcf-table th {\n" +
-                    "            padding-right: 1.78em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-bordered, .dcf-table-bordered td, .dcf-table-bordered th {\n" +
-                    "            border: 1px solid var(--b-table)\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-bordered td, .dcf-table-bordered th, .dcf-table-striped td, .dcf-table-striped th {\n" +
-                    "            padding-left: 1em;\n" +
-                    "            padding-right: 1em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-bordered tr:not(:last-child), .dcf-table-striped tr:not(:last-child) {\n" +
-                    "            border-bottom: 1px solid var(--b-table)\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-striped tbody tr:nth-of-type(2n) {\n" +
-                    "            background-color: transparent;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table thead td, .dcf-table thead th {\n" +
-                    "            padding-bottom: .75em;\n" +
-                    "            vertical-align: bottom\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table tbody td, .dcf-table tbody th, .dcf-table tfoot td, .dcf-table tfoot th {\n" +
-                    "            padding-top: .75em;\n" +
-                    "            vertical-align: top\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table tbody td, .dcf-table tbody th {\n" +
-                    "            padding-bottom: .75em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-bordered thead th {\n" +
-                    "            padding-top: 1.33em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-wrapper-table-scroll {\n" +
-                    "            overflow-x: auto;\n" +
-                    "            -webkit-overflow-scrolling: touch;\n" +
-                    "            left: 50%;\n" +
-                    "            margin-left: -50vw;\n" +
-                    "            margin-right: -50vw;\n" +
-                    "            padding-bottom: 1em;\n" +
-                    "            position: relative;\n" +
-                    "            right: 50%;\n" +
-                    "            width: 100vw\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        @media only screen and (max-width:42.09em) {\n" +
-                    "            .dcf-table-responsive thead {\n" +
-                    "                clip: rect(0 0 0 0);\n" +
-                    "                -webkit-clip-path: inset(50%);\n" +
-                    "                clip-path: inset(50%);\n" +
-                    "                height: 1px;\n" +
-                    "                overflow: hidden;\n" +
-                    "                position: absolute;\n" +
-                    "                width: 1px;\n" +
-                    "                white-space: nowrap\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive tr {\n" +
-                    "                display: block\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive td {\n" +
-                    "                -webkit-column-gap: 3.16vw;\n" +
-                    "                -moz-column-gap: 3.16vw;\n" +
-                    "                column-gap: 3.16vw;\n" +
-                    "                display: grid;\n" +
-                    "                grid-template-columns: 1fr 2fr;\n" +
-                    "                text-align: left!important\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive.dcf-table-bordered, .dcf-table-responsive.dcf-table-bordered thead th {\n" +
-                    "                border-width: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive.dcf-table-bordered tbody td {\n" +
-                    "                border-top-width: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive:not(.dcf-table-bordered) tbody tr {\n" +
-                    "                padding-bottom: .75em\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive:not(.dcf-table-bordered) tbody td {\n" +
-                    "                padding-bottom: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive:not(.dcf-table-bordered):not(.dcf-table-striped) tbody td {\n" +
-                    "                padding-right: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive.dcf-table-bordered tbody tr:last-child td:last-child {\n" +
-                    "                border-bottom-width: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive tbody td:before {\n" +
-                    "                content: attr(data-label);\n" +
-                    "                float: left;\n" +
-                    "                font-weight: 700;\n" +
-                    "                padding-right: 1.78em\n" +
-                    "            }\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-overflow-x-auto {\n" +
-                    "            overflow-x: auto!important;\n" +
-                    "            -webkit-overflow-scrolling: touch\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-w-100\\% {\n" +
-                    "            width: 100%!important;\n" +
-                    "        }\n" +
-                    "        .sign {\n" +
-                    "            float: right;\n" +
-                    "            padding-right: 20px;\n" +
-                    "            padding-top: 20px;\n" +
-                    "            width:27%;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .count {\n" +
-                    "            text-align: center;\n" +
-                    "            padding-top: 200px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .table3 {\n" +
-                    "            padding-top: 55px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .tab {\n" +
-                    "            padding-left: 85px;\n" +
-                    "        }\n" +
-                    "        .table4{\n" +
-                    "            padding-top: 15px;\n" +
-                    "        }\n" +
-                    "        .wrap{\n" +
-                    "            width:70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "        .date {\n" +
-                    "            float: left;\n" +
-                    "            padding-left: 20px;\n" +
-                    "            padding-top: 20px;\n" +
-                    "            width:45%;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .count {\n" +
-                    "            text-align: center;\n" +
-                    "            padding-top: 200px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .table3 {\n" +
-                    "            padding-top: 55px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .tab {\n" +
-                    "            padding-left: 85px;\n" +
-                    "        }\n" +
-                    "        .table4{\n" +
-                    "            padding-top: 15px;\n" +
-                    "        }\n" +
-                    "        .wrap{\n" +
-                    "            width:70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "        .bold{\n" +
-                    "            font-weight: bold;\n" +
-                    "        }\n" +
-                    "        .bbtm{\n" +
-                    "            border-bottom: 1px solid transparent !important;\n" +
-                    "        }\n" +
-                    "    </style>\n" +
-                    "</head>\n" +
-                    "<body>\n" +
-                    "<div class=\"wrapper\">\n" +
-                    "    <div class=\"header\"> <strong>${allocationType_placeholder} ALLOCATION REPORT</strong></div>\n" +
-                    "    <br></br>\n" +
-                    "    <table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%\">\n" +
-                    "        <thead>\n" +
-                    "        <tr>\n" +
-                    "            <th scope=\"col\">REVENUE OBJECT HEAD </th>\n" +
-                    "            <th class=\"dcf-txt-center\" scope=\"col\"> UNIT </th>\n" +
-                    "            <th class=\"dcf-txt-center\" scope=\"col\">${allocationType_placeholder}  ${finYear_placeholder} ALLOCATION (in ${amountType_placeholder})</th>\n" +
-                    "        </tr>\n" +
-                    "        </thead>\n" +
-                    "        <tbody>\n" +
-                    "        ${data_placeholder}\n" +
-                    "\n" +
-                    "        </tbody>\n" +
-                    "    </table>\n" +
-                    "    <div>\n" +
-                    "       \n" +
-                    "    </div>\n" +
-                    "\n" +
-                    "    <div class=\"sign\">\n" +
-                    "        <ul style=\"list-style: none; margin-top: 0;\">\n" +
-                    "            <li>${name_placeholder}</li>\n" +
-                    "            <li>${unit_placeholder}</li>\n" +
-                    "            <li>${rank_placeholder}</li>\n" +
-                    "        </ul>\n" +
-                    "    </div>\n" +
-                    "    <div class=\"date\">\n" +
-                    "        Date-${date_placeholder}\n" +
-                    "    </div>\n" +
-                    "</div>\n" +
-                    "\n" +
-                    "</body>\n" +
-                    "</html>\n";
+            Document document = new Document(PageSize.A4);
+            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "_AllocationReport" + ".pdf";
+            PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
-            StringBuilder sb = new StringBuilder();
+            document.open();
+
+            Paragraph heading = new Paragraph(type.getAllocDesc().toUpperCase()+ "ALLOCATION REPORT");
+            heading.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(heading);
+            document.add(new Paragraph("\n"));
+
+            PdfPTable table = new PdfPTable(3);
+            table.setWidthPercentage(80);
+
+            table.addCell("REVENUE OBJECT HEAD ");
+            table.addCell("UNIT");
+            table.addCell(type.getAllocDesc().toUpperCase()+" "+findyr.getFinYear()+" "+"ALLOCATION IN: ("+amountIn+")");
+
             int i = 1;
             String finyear = "";
             String unit = "";
             float gdTotal = 0;
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId, allocationType, "0");
+                List<BudgetAllocation> reportDetailss = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId, allocationType, "0");
+                List<BudgetAllocation> reportDetails=reportDetailss.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
+
                 int count = 0;
                 float sum = 0;
                 Double amount;
@@ -3600,14 +3071,13 @@ public class MangeReportImpl implements MangeReportService {
                             finAmount = amount * amountUnit / reqAmount;
                             BudgetHead bHead = subHeadRepository.findByBudgetCodeId(row.getSubHead());
                             CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
-                            sb.append("<tr>");
+
                             if (count == 0)
-                                sb.append("<th scope=\"row\" >").append(StringEscapeUtils.escapeHtml4(bHead.getSubHeadDescr())).append("</th>");
+                                table.addCell(bHead.getSubHeadDescr());
                             else
-                                sb.append("<th scope=\"row\" class=\"bbtm\"></th>");
-                            sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(unitN.getDescr())).append("</td>");
-                            sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(finAmount)))).append("</td>");
-                            sb.append("</tr>");
+                                table.addCell("");
+                            table.addCell(unitN.getDescr());
+                            table.addCell(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
                             count++;
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                             gdTotal += sum;
@@ -3617,48 +3087,34 @@ public class MangeReportImpl implements MangeReportService {
 
                 }
                 if (count != 0) {
-                    sb.append("<tr>");
-                    sb.append("<th scope=\"row\" class=\"bbtm\"></th>");
-                    sb.append("<td class=\"the bold\">TOTAL</td>");
-                    sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(sum)))).append("</td>");
-                    sb.append("</tr>");
+                    table.addCell("");
+                    table.addCell("TOTAL");
+                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(sum)));
                     count = 0;
-                    //print sum
                 }
 
             }
-            sb.append("<tr>");
-            sb.append("<th scope=\"row\" class=\"bbtm\"></th>");
-            sb.append("<td class=\"the bold\">GRAND TOTAL</td>");
-            sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(gdTotal)))).append("</td>");
-            sb.append("</tr>");
-            if (sb.toString().isEmpty()) {
-                return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                }, "RECORD NOT FOUND", HttpStatus.OK.value());
-            }
+            table.addCell("");
+            table.addCell("GRAND TOTAL");
+            table.addCell(String.format("%1$0,1.4f", new BigDecimal(gdTotal)));
 
-            htmlContent = htmlContent.replace("${name_placeholder}", StringEscapeUtils.escapeHtml4(names));
-            htmlContent = htmlContent.replace("${unit_placeholder}", StringEscapeUtils.escapeHtml4(unitName));
-            htmlContent = htmlContent.replace("${rank_placeholder}", StringEscapeUtils.escapeHtml4(rank));
-            htmlContent = htmlContent.replace("${date_placeholder}", StringEscapeUtils.escapeHtml4(formattedDateTime));
-            htmlContent = htmlContent.replace("${finYear_placeholder}", StringEscapeUtils.escapeHtml4(findyr.getFinYear()));
-            htmlContent = htmlContent.replace("${amountType_placeholder}", StringEscapeUtils.escapeHtml4(amountIn));
-            htmlContent = htmlContent.replace("${allocationType_placeholder}", StringEscapeUtils.escapeHtml4(type.getAllocDesc().toUpperCase()));
+            document.add(table);
 
-            htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
-            String filepath = HelperUtils.FILEPATH + "/" + type.getAllocDesc() + "_allocation-report.pdf";
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
-            String filePath = folder.getAbsolutePath() + "/" + type.getAllocDesc() + "_allocation-report.pdf";
-            File file = new File(filePath);
-            generatePdf(htmlContent, file.getAbsolutePath());
-            //generatePdf(htmlContent, filepath);
-            FilePathResponse response = new FilePathResponse();
-            response.setPath(filepath);
-            response.setFileName(type.getAllocDesc() + "_AllocationReport.pdf");
-            dtoList.add(response);
+            document.add(new Paragraph("\n"));
+            Paragraph heading1 = new Paragraph(formattedDateTime);
+            heading1.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(heading1);
+
+            document.add(new Paragraph("\n"));
+            Paragraph heading2 = new Paragraph(names+"\n"+unitName+"\n"+rank);
+            heading2.setAlignment(Paragraph.ALIGN_RIGHT);
+            document.add(heading2);
+
+            document.close();
+            FilePathResponse dto = new FilePathResponse();
+            dto.setPath(HelperUtils.FILEPATH + type.getAllocDesc().toUpperCase() + "_AllocationReport.pdf");
+            dto.setFileName(type.getAllocDesc().toUpperCase() + "_AllocationReport.pdf");
+            dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
@@ -3667,7 +3123,6 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
     }
-
     @Override
     public ApiResponse<List<FilePathResponse>> getBEAllocationReportDoc(String finYearId, String allocationType, String amountTypeId) {
 
@@ -4040,294 +3495,32 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "UNIT NOT FOUND", HttpStatus.OK.value());
         }
-        String htmlContent = new String();
         try {
-            //htmlContent = FileUtils.readFileToString(new File("src/main/resources/templates/re-allocation-report.html"), "UTF-8");
-            //htmlContent = FileUtils.readFileToString(new File(new File(".").getCanonicalPath()+"/webapps/budget/WEB-INF/classes/templates/re-allocation-report.html"), "UTF-8");
-            htmlContent = "<!DOCTYPE html>\n" +
-                    "<html lang=\"en\">\n" +
-                    "<head>\n" +
-                    "  <title> Revised Report</title>\n" +
-                    "  <meta charset=\"utf-8\"></meta>\n" +
-                    "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"></meta>\n" +
-                    "  \n" +
-                    "<style>\n" +
-                    ".bold{\n" +
-                    "\tfont-weight: bold !important;\n" +
-                    "}\n" +
-                    ".bbtm{\n" +
-                    "\tborder-bottom: 1px solid transparent !important;\n" +
-                    "}\n" +
-                    ".brtm{\n" +
-                    "\tborder-right: 1px solid transparent !important;\n" +
-                    "}\n" +
-                    ".bold{\n" +
-                    "\tfont-weight: bold;\n" +
-                    "}\n" +
-                    ".wrapper{\n" +
-                    "\twidth: 70%;\n" +
-                    "\tmargin: 100px auto;\n" +
-                    "}\n" +
-                    "\n" +
-                    ":root {\n" +
-                    "    --bg-table-stripe: #f6f6f5;\n" +
-                    "    --b-table: #e3e3e2;\n" +
-                    "    --caption: #242423;\n" +
-                    "}\n" +
-                    "th {\n" +
-                    "\ttext-align:left;\n" +
-                    "\tborder: 1px solid #242423 ;\n" +
-                    "}\n" +
-                    "td{\n" +
-                    "\tborder: 1px solid #242423 ;\n" +
-                    "}\n" +
-                    "\n" +
-                    "table {\n" +
-                    "    background-color: transparent;\n" +
-                    "    border-collapse:collapse;\n" +
-                    "  \tfont-family: Arial, Helvetica, sans-serif\n" +
-                    "}\n" +
-                    "\n" +
-                    "th {\n" +
-                    "    text-align:left\n" +
-                    "}\n" +
-                    "\n" +
-                    ".dcf-txt-center {\n" +
-                    "      text-align: center!important\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-txt-left {\n" +
-                    "      text-align: left!important\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-txt-right {\n" +
-                    "      text-align: right!important\n" +
-                    "    }\n" +
-                    "    \n" +
-                    ".dcf-table caption {\n" +
-                    "      color: var(--caption);\n" +
-                    "      font-size: 1.13em;\n" +
-                    "      font-weight: 700;\n" +
-                    "      padding-bottom: .56rem\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table thead {\n" +
-                    "      font-size: .84em\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table tbody {\n" +
-                    "      border-bottom: 1px solid var(--b-table);\n" +
-                    "      border-top: 1px solid var(--b-table);\n" +
-                    "      font-size: .84em\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table tfoot {\n" +
-                    "      font-size: .84em\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table td, .dcf-table th {\n" +
-                    "      padding-right: 1.78em\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table-bordered, .dcf-table-bordered td, .dcf-table-bordered th {\n" +
-                    "      border: 1px solid var(--b-table)\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table-bordered td, .dcf-table-bordered th, .dcf-table-striped td, .dcf-table-striped th {\n" +
-                    "      padding-left: 1em;\n" +
-                    "      padding-right: 1em\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table-bordered tr:not(:last-child), .dcf-table-striped tr:not(:last-child) {\n" +
-                    "      border-bottom: 1px solid var(--b-table)\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table-striped tbody tr:nth-of-type(2n) {\n" +
-                    "      background-color: transparent;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table thead td, .dcf-table thead th {\n" +
-                    "      padding-bottom: .75em;\n" +
-                    "      vertical-align: bottom\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table tbody td, .dcf-table tbody th, .dcf-table tfoot td, .dcf-table tfoot th {\n" +
-                    "      padding-top: .75em;\n" +
-                    "      vertical-align: top\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table tbody td, .dcf-table tbody th {\n" +
-                    "      padding-bottom: .75em\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table-bordered thead th {\n" +
-                    "      padding-top: 1.33em\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-wrapper-table-scroll {\n" +
-                    "      overflow-x: auto;\n" +
-                    "      -webkit-overflow-scrolling: touch;\n" +
-                    "      left: 50%;\n" +
-                    "      margin-left: -50vw;\n" +
-                    "      margin-right: -50vw;\n" +
-                    "      padding-bottom: 1em;\n" +
-                    "      position: relative;\n" +
-                    "      right: 50%;\n" +
-                    "      width: 100vw\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    @media only screen and (max-width:42.09em) {\n" +
-                    "      .dcf-table-responsive thead {\n" +
-                    "        clip: rect(0 0 0 0);\n" +
-                    "        -webkit-clip-path: inset(50%);\n" +
-                    "        clip-path: inset(50%);\n" +
-                    "        height: 1px;\n" +
-                    "        overflow: hidden;\n" +
-                    "        position: absolute;\n" +
-                    "        width: 1px;\n" +
-                    "        white-space: nowrap\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive tr {\n" +
-                    "        display: block\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive td {\n" +
-                    "        -webkit-column-gap: 3.16vw;\n" +
-                    "        -moz-column-gap: 3.16vw;\n" +
-                    "        column-gap: 3.16vw;\n" +
-                    "        display: grid;\n" +
-                    "        grid-template-columns: 1fr 2fr;\n" +
-                    "        text-align: left!important\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive.dcf-table-bordered, .dcf-table-responsive.dcf-table-bordered thead th {\n" +
-                    "        border-width: 0\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive.dcf-table-bordered tbody td {\n" +
-                    "        border-top-width: 0\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive:not(.dcf-table-bordered) tbody tr {\n" +
-                    "        padding-bottom: .75em\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive:not(.dcf-table-bordered) tbody td {\n" +
-                    "        padding-bottom: 0\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive:not(.dcf-table-bordered):not(.dcf-table-striped) tbody td {\n" +
-                    "        padding-right: 0\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive.dcf-table-bordered tbody tr:last-child td:last-child {\n" +
-                    "        border-bottom-width: 0\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive tbody td:before {\n" +
-                    "        content: attr(data-label);\n" +
-                    "        float: left;\n" +
-                    "        font-weight: 700;\n" +
-                    "        padding-right: 1.78em\n" +
-                    "      }\n" +
-                    "    }\n" +
-                    "\n" +
-                    ".dcf-overflow-x-auto {\n" +
-                    "      overflow-x: auto!important;\n" +
-                    "      -webkit-overflow-scrolling: touch\n" +
-                    "    }\n" +
-                    ".sign {\n" +
-                    "\t\t float: right;\n" +
-                    "\t\t padding-right: 20px;\n" +
-                    "\t\t padding-top: 20px;\n" +
-                    "\t\t width:27%;\n" +
-                    "\t }\n" +
-                    "\n" +
-                    ".count {\n" +
-                    "\ttext-align: center;\n" +
-                    "\tpadding-top: 200px;\n" +
-                    "}\n" +
-                    "\n" +
-                    ".table3 {\n" +
-                    "\tpadding-top: 55px;\n" +
-                    "}\n" +
-                    "\n" +
-                    ".tab {\n" +
-                    "\tpadding-left: 85px;\n" +
-                    "}\n" +
-                    ".table4{\n" +
-                    "\tpadding-top: 15px;\n" +
-                    "}\n" +
-                    ".wrap{\n" +
-                    "\twidth:70%;\n" +
-                    "\tmargin: 100px auto;\n" +
-                    "}\n" +
-                    ".date {\n" +
-                    "\tfloat: left;\n" +
-                    "\tpadding-left: 20px;\n" +
-                    "\tpadding-top: 20px;\n" +
-                    "\twidth:45%;\n" +
-                    "}\n" +
-                    "\n" +
-                    ".count {\n" +
-                    "\ttext-align: center;\n" +
-                    "\tpadding-top: 200px;\n" +
-                    "}\n" +
-                    "\n" +
-                    ".table3 {\n" +
-                    "\tpadding-top: 55px;\n" +
-                    "}\n" +
-                    "\n" +
-                    ".tab {\n" +
-                    "\tpadding-left: 85px;\n" +
-                    "}\n" +
-                    ".table4{\n" +
-                    "\tpadding-top: 15px;\n" +
-                    "}\n" +
-                    ".wrap{\n" +
-                    "\twidth:70%;\n" +
-                    "\tmargin: 100px auto;\n" +
-                    "}\n" +
-                    "    \n" +
-                    ".dcf-w-100\\% {\n" +
-                    "  width: 100%!important;\n" +
-                    "\t\t}\n" +
-                    "    \n" +
-                    "</style>\n" +
-                    "</head>\n" +
-                    "<body>\n" +
-                    "<div class=\"wrapper\"> \n" +
-                    "\t<h2 style=\"text-align: center;\">${allocaType_placeholder} ALLOCATION REPORT</h2><br></br>\n" +
-                    "\t<table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%\">\n" +
-                    "\t\t<thead>\n" +
-                    "\t\t\t<tr>\n" +
-                    "\t\t\t\t<th class=\"dcf-txt-center bbtm\" scope=\"col\">UNIT</th>\n" +
-                    "\t\t\t\t<th scope=\"col\"></th>\n" +
-                    "\t\t\t\t<th class=\"dcf-txt-center\" scope=\"col\">${allocaType_placeholder} ${finYear_placeholder}  Allocation</th>\n" +
-                    "\t\t\t\t<th scope=\"col\"></th>\n" +
-                    "\t\t\t</tr>\n" +
-                    "\t\t</thead>\n" +
-                    "\t\t<tbody>\n" +
-                    "\n" +
-                    "\t\t\t<tr>\n" +
-                    "\t\t\t\t<td data-label=\"CGCs/RHQs/ADG(P) Directorates at CGHQ\"></td>\n" +
-                    "\t\t\t\t<td class=\"dcf-txt-center brtm bold\">Allocation Amount (in ${amountType_placeholder})</td>\n" +
-                    "\t\t\t\t<td class=\"dcf-txt-center brtm bold\" data-label=\"RE 2022-23 Allocation\">Additional/Withdrawal (in ${amountType_placeholder})</td>\n" +
-                    "\t\t\t\t<td class=\"dcf-txt-center bold\">Revised (in ${amountType_placeholder})</td>\n" +
-                    "\t\t\t</tr>\n" +
-                    "\n" +
-                    "\t\t\t${data_placeholder}\n" +
-                    "\n" +
-                    "\t\t</tbody>\n" +
-                    "\t</table>\n" +
-                    "\t<div class=\"sign\">\n" +
-                    "\t\t<ul style=\"list-style: none; margin-top: 0;\">\n" +
-                    "\t\t\t<li>${name_placeholder}</li>\n" +
-                    "\t\t\t<li>${unit_placeholder}</li>\n" +
-                    "\t\t\t<li>${rank_placeholder}</li>\n" +
-                    "\t\t</ul>\n" +
-                    "\t</div>\n" +
-                    "\t<div class=\"date\">\n" +
-                    "\t\tDate-${date_placeholder}\n" +
-                    "\t</div>\n" +
-                    "</div>\n" +
-                    "\n" +
-                    "</body>\n" +
-                    "</html>\n";
+            Document document = new Document(PageSize.A4);
 
-            StringBuilder sb = new StringBuilder();
+            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String path = folder.getAbsolutePath() + "/" + allocType.toUpperCase() + "_Revised_Allocation-Report.pdf";
+            PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
+
+            document.open();
+
+            Paragraph heading = new Paragraph(allocType.toUpperCase()+" "+ "REVISED  ALLOCATION  REPORT");
+            heading.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(heading);
+            document.add(new Paragraph("\n"));
+
+            PdfPTable table = new PdfPTable(5);
+            table.setWidthPercentage(80);
+
+            table.addCell("REVENUE OBJECT HEAD ");
+            table.addCell("UNIT");
+            table.addCell("ALLOCATION AMOUNT IN: ("+amountIn+")");
+            table.addCell("ADDITIONAL AMOUNT IN: ("+amountIn+")");
+            table.addCell("REVISED AMOUNT IN: ("+amountIn+")");
+
             int i = 1;
             String finyear = "";
             String unit = "";
@@ -4342,17 +3535,12 @@ public class MangeReportImpl implements MangeReportService {
             Double s2 = 0.0;
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(subHeadId, allocationType, "0", "0");
+                List<BudgetAllocation> reportDetailss = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(subHeadId, allocationType, "0", "0");
+                List<BudgetAllocation> reportDetails=reportDetailss.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
 
                 BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
 
                 int count = 0;
-                sb.append("<tr>");
-                sb.append("<td class=\"the\" ><b>").append(StringEscapeUtils.escapeHtml4(bHead.getSubHeadDescr())).append("</b></td>");
-                sb.append("<td class=\"the\"></td>");
-                sb.append("<td class=\"the\"></td>");
-                sb.append("<td class=\"the\"></td>");
-                sb.append("</tr>");
                 float sumExisting = 0;
                 float sumRE = 0;
                 float total = 0;
@@ -4383,17 +3571,21 @@ public class MangeReportImpl implements MangeReportService {
                                 s2 = Double.parseDouble(s1);
                             }
                             CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
-                            sb.append("<tr>");
-                            sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(unitN.getDescr())).append("</td>");
-                            sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(finAmount)))).append("</td>");
-                            if (reAmount < 0)
-                                sb.append("<td class=\"the\">(-)").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(s2)))).append("</td>");
-                            else if (reAmount > 0)
-                                sb.append("<td class=\"the\"> (+)").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(reAmount)))).append("</td>");
+
+                            if (count == 0)
+                                table.addCell(bHead.getSubHeadDescr());
                             else
-                                sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(reAmount)))).append("</td>");
-                            sb.append("<td class=\"the\">").append(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Double.toString(finAmount)) + Float.parseFloat(Double.toString(reAmount))))))).append("</td>");
-                            sb.append("</tr>");
+                                table.addCell("");
+                            table.addCell(unitN.getDescr());
+                            table.addCell(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
+                            if (reAmount < 0)
+                                table.addCell("(-) "+String.format("%1$0,1.4f", new BigDecimal(s2)));
+                            else if (reAmount > 0)
+                                table.addCell("(+) "+String.format("%1$0,1.4f", new BigDecimal(reAmount)));
+                            else
+                                table.addCell(String.format("%1$0,1.4f", new BigDecimal(reAmount)));
+                            table.addCell(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Double.toString(finAmount)) + Float.parseFloat(Double.toString(reAmount)))))));
+                            count++;
                             sumExisting += Float.parseFloat(new BigDecimal(Double.toString(finAmount)).toPlainString());
                             sumRE += Float.parseFloat(new BigDecimal(Double.toString(reAmount)).toPlainString());
                             grTotalAlloc += sumExisting;
@@ -4403,60 +3595,51 @@ public class MangeReportImpl implements MangeReportService {
                         }
                     }
                 }
-                total = sumExisting + sumRE;
-                Double ss2 = 0.0;
-                String ss = Float.toString(sumRE);
-                if (ss.contains("-")) {
-                    String ss1 = ss.replace("-", "");
-                    ss2 = Double.parseDouble(ss1);
+                if (count != 0) {
+                    total = sumExisting + sumRE;
+                    Double ss2 = 0.0;
+                    String ss = Float.toString(sumRE);
+                    if (ss.contains("-")) {
+                        String ss1 = ss.replace("-", "");
+                        ss2 = Double.parseDouble(ss1);
+                    }
+                    table.addCell(" ");
+                    table.addCell("TOTAL");
+                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(sumExisting)));
+                    if (sumRE < 0)
+                        table.addCell("(-) "+String.format("%1$0,1.4f", new BigDecimal(ss2)));
+                    else if (sumRE > 0)
+                        table.addCell("(+) "+String.format("%1$0,1.4f", new BigDecimal(sumRE)));
+                    else
+                        table.addCell(String.format("%1$0,1.4f", new BigDecimal(sumRE)));
+                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(total)));
+                    count = 0;
                 }
-                sb.append("<tr>");
-                sb.append("<td class=\"the bold\">").append("TOTAL").append("</td>");
-                sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(sumExisting))).append("</td>");
-                if (sumRE < 0)
-                    sb.append("<td class=\"the bold\">(-)").append(String.format("%1$0,1.4f", new BigDecimal(ss2))).append("</td>");
-                else if (sumRE > 0)
-                    sb.append("<td class=\"the bold\">(+)").append(String.format("%1$0,1.4f", new BigDecimal(sumRE))).append("</td>");
-                else
-                    sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(sumRE))).append("</td>");
-                sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(total))).append("</td>");
-                sb.append("</tr>");
+
             }
-            sb.append("<tr>");
-            sb.append("<td class=\"the bold\">").append("GRAND TOTAL").append("</td>");
-            sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc))).append("</td>");
-            sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition))).append("</td>");
-            sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(grTotalSum))).append("</td>");
-            sb.append("</tr>");
+            table.addCell(" ");
+            table.addCell("GRAND TOTAL");
+            table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)));
+            table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)));
+            table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalSum)));
 
-            if (sb.toString().isEmpty()) {
-                return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                }, "RECORD NOT FOUND", HttpStatus.OK.value());
-            }
-            htmlContent = htmlContent.replace("${name_placeholder}", StringEscapeUtils.escapeHtml4(names));
-            htmlContent = htmlContent.replace("${unit_placeholder}", StringEscapeUtils.escapeHtml4(unitName));
-            htmlContent = htmlContent.replace("${rank_placeholder}", StringEscapeUtils.escapeHtml4(rank));
-            htmlContent = htmlContent.replace("${date_placeholder}", StringEscapeUtils.escapeHtml4(formattedDateTime));
-            htmlContent = htmlContent.replace("${finYear_placeholder}", StringEscapeUtils.escapeHtml4(findyr.getFinYear()));
-            htmlContent = htmlContent.replace("${amountType_placeholder}", StringEscapeUtils.escapeHtml4(amountIn));
-            htmlContent = htmlContent.replace("${allocaType_placeholder}", StringEscapeUtils.escapeHtml4(allocType.toUpperCase()));
+            document.add(table);
 
+            document.add(new Paragraph("\n"));
+            Paragraph heading1 = new Paragraph(formattedDateTime);
+            heading1.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(heading1);
 
-            htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
-            String filepath = HelperUtils.FILEPATH + "/" + allocType + "_Revised_allocation-report.pdf";
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
-            String filePath = folder.getAbsolutePath() + "/" + allocType + "_Revised_allocation-report.pdf";
-            File file = new File(filePath);
-            generatePdf(htmlContent, file.getAbsolutePath());
-            //generatePdf(htmlContent, filepath);
-            FilePathResponse response = new FilePathResponse();
-            response.setPath(filepath);
-            response.setFileName(allocType + "_Revised_Allocation-report.pdf");
+            document.add(new Paragraph("\n"));
+            Paragraph heading2 = new Paragraph(names+"\n"+unitName+"\n"+rank);
+            heading2.setAlignment(Paragraph.ALIGN_RIGHT);
+            document.add(heading2);
 
-            dtoList.add(response);
+            document.close();
+            FilePathResponse dto = new FilePathResponse();
+            dto.setPath(HelperUtils.FILEPATH + allocType.toUpperCase() + "_Revised_allocation-report.pdf");
+            dto.setFileName(allocType.toUpperCase() + "_Revised_allocation-report.pdf");
+            dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
@@ -4465,7 +3648,6 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
     }
-
     @Override
     public ApiResponse<List<FilePathResponse>> getREAllocationReportDoc(String finYearId, String allocationType, String amountTypeId) {
 
@@ -4944,289 +4126,33 @@ public class MangeReportImpl implements MangeReportService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
 
-        String htmlContent = new String();
+
         try {
-            //htmlContent = FileUtils.readFileToString(new File("src/main/resources/templates/bere-allocation-report.html"), "UTF-8");
-            //htmlContent = FileUtils.readFileToString(new File(new File(".").getCanonicalPath()+"/webapps/budget/WEB-INF/classes/templates/bere-allocation-report"), "UTF-8");
-            htmlContent = "<!DOCTYPE html>\n" +
-                    "<html lang=\"en\">\n" +
-                    "<head>\n" +
-                    "    <title>Report</title>\n" +
-                    "    <meta charset=\"utf-8\"></meta>\n" +
-                    "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"></meta>\n" +
-                    "\n" +
-                    "    <style>\n" +
-                    "        .header {\n" +
-                    "            text-align: center;\n" +
-                    "        }\n" +
-                    "        .bbtm{\n" +
-                    "            border-bottom: 1px solid transparent !important;\n" +
-                    "        }\n" +
-                    "        .wrapper{\n" +
-                    "            width: 70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        :root {\n" +
-                    "            --bg-table-stripe: #f6f6f5;\n" +
-                    "            --b-table: #e3e3e2;\n" +
-                    "            --caption: #242423;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        table {\n" +
-                    "            background-color: transparent;\n" +
-                    "            border-collapse:collapse;\n" +
-                    "            font-family: Arial, Helvetica, sans-serif\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        th {\n" +
-                    "            text-align:left;\n" +
-                    "            border: 1px solid #242423 ;\n" +
-                    "        }\n" +
-                    "        td{\n" +
-                    "            border: 1px solid #242423 ;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-txt-center {\n" +
-                    "            text-align: center!important\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-txt-left {\n" +
-                    "            text-align: left!important\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-txt-right {\n" +
-                    "            text-align: right!important\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table caption {\n" +
-                    "            color: var(--caption);\n" +
-                    "            font-size: 1.13em;\n" +
-                    "            font-weight: 700;\n" +
-                    "            padding-bottom: .56rem\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table thead {\n" +
-                    "            font-size: .84em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table tbody {\n" +
-                    "            border-bottom: 1px solid var(--b-table);\n" +
-                    "            border-top: 1px solid var(--b-table);\n" +
-                    "            font-size: .84em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table tfoot {\n" +
-                    "            font-size: .84em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table td, .dcf-table th {\n" +
-                    "            padding-right: 1.78em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-bordered, .dcf-table-bordered td, .dcf-table-bordered th {\n" +
-                    "            border: 1px solid var(--b-table)\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-bordered td, .dcf-table-bordered th, .dcf-table-striped td, .dcf-table-striped th {\n" +
-                    "            padding-left: 1em;\n" +
-                    "            padding-right: 1em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-bordered tr:not(:last-child), .dcf-table-striped tr:not(:last-child) {\n" +
-                    "            border-bottom: 1px solid var(--b-table)\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-striped tbody tr:nth-of-type(2n) {\n" +
-                    "            background-color: transparent;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table thead td, .dcf-table thead th {\n" +
-                    "            padding-bottom: .75em;\n" +
-                    "            vertical-align: bottom\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table tbody td, .dcf-table tbody th, .dcf-table tfoot td, .dcf-table tfoot th {\n" +
-                    "            padding-top: .75em;\n" +
-                    "            vertical-align: top\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table tbody td, .dcf-table tbody th {\n" +
-                    "            padding-bottom: .75em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-bordered thead th {\n" +
-                    "            padding-top: 1.33em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-wrapper-table-scroll {\n" +
-                    "            overflow-x: auto;\n" +
-                    "            -webkit-overflow-scrolling: touch;\n" +
-                    "            left: 50%;\n" +
-                    "            margin-left: -50vw;\n" +
-                    "            margin-right: -50vw;\n" +
-                    "            padding-bottom: 1em;\n" +
-                    "            position: relative;\n" +
-                    "            right: 50%;\n" +
-                    "            width: 100vw\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        @media only screen and (max-width:42.09em) {\n" +
-                    "            .dcf-table-responsive thead {\n" +
-                    "                clip: rect(0 0 0 0);\n" +
-                    "                -webkit-clip-path: inset(50%);\n" +
-                    "                clip-path: inset(50%);\n" +
-                    "                height: 1px;\n" +
-                    "                overflow: hidden;\n" +
-                    "                position: absolute;\n" +
-                    "                width: 1px;\n" +
-                    "                white-space: nowrap\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive tr {\n" +
-                    "                display: block\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive td {\n" +
-                    "                -webkit-column-gap: 3.16vw;\n" +
-                    "                -moz-column-gap: 3.16vw;\n" +
-                    "                column-gap: 3.16vw;\n" +
-                    "                display: grid;\n" +
-                    "                grid-template-columns: 1fr 2fr;\n" +
-                    "                text-align: left!important\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive.dcf-table-bordered, .dcf-table-responsive.dcf-table-bordered thead th {\n" +
-                    "                border-width: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive.dcf-table-bordered tbody td {\n" +
-                    "                border-top-width: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive:not(.dcf-table-bordered) tbody tr {\n" +
-                    "                padding-bottom: .75em\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive:not(.dcf-table-bordered) tbody td {\n" +
-                    "                padding-bottom: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive:not(.dcf-table-bordered):not(.dcf-table-striped) tbody td {\n" +
-                    "                padding-right: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive.dcf-table-bordered tbody tr:last-child td:last-child {\n" +
-                    "                border-bottom-width: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive tbody td:before {\n" +
-                    "                content: attr(data-label);\n" +
-                    "                float: left;\n" +
-                    "                font-weight: 700;\n" +
-                    "                padding-right: 1.78em\n" +
-                    "            }\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-overflow-x-auto {\n" +
-                    "            overflow-x: auto!important;\n" +
-                    "            -webkit-overflow-scrolling: touch\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-w-100\\% {\n" +
-                    "            width: 100%!important;\n" +
-                    "        }\n" +
-                    "        .sign {\n" +
-                    "            float: right;\n" +
-                    "            padding-right: 20px;\n" +
-                    "            padding-top: 20px;\n" +
-                    "            width:27%;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .count {\n" +
-                    "            text-align: center;\n" +
-                    "            padding-top: 200px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .table3 {\n" +
-                    "            padding-top: 55px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .tab {\n" +
-                    "            padding-left: 85px;\n" +
-                    "        }\n" +
-                    "        .table4{\n" +
-                    "            padding-top: 15px;\n" +
-                    "        }\n" +
-                    "        .wrap{\n" +
-                    "            width:70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "        .date {\n" +
-                    "            float: left;\n" +
-                    "            padding-left: 20px;\n" +
-                    "            padding-top: 20px;\n" +
-                    "            width:45%;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .count {\n" +
-                    "            text-align: center;\n" +
-                    "            padding-top: 200px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .table3 {\n" +
-                    "            padding-top: 55px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .tab {\n" +
-                    "            padding-left: 85px;\n" +
-                    "        }\n" +
-                    "        .table4{\n" +
-                    "            padding-top: 15px;\n" +
-                    "        }\n" +
-                    "        .wrap{\n" +
-                    "            width:70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "        .bold{\n" +
-                    "            font-weight: bold;\n" +
-                    "        }\n" +
-                    "        .bbtm{\n" +
-                    "            border-bottom: 1px solid transparent !important;\n" +
-                    "        }\n" +
-                    "    </style>\n" +
-                    "</head>\n" +
-                    "<body>\n" +
-                    "<div class=\"wrapper\">\n" +
-                    "    <div class=\"header\"> <strong>RE ALLOCATION REPORT</strong></div>\n" +
-                    "    <br></br>\n" +
-                    "    <table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%\">\n" +
-                    "        <thead>\n" +
-                    "        <tr>\n" +
-                    "            <th scope=\"col\">REVENUE OBJECT HEAD </th>\n" +
-                    "            <th class=\"dcf-txt-center\" scope=\"col\"> UNIT </th>\n" +
-                    "            <th class=\"dcf-txt-center\" scope=\"col\">${allocationTypeBE_placeholder} ${finYear_placeholder} ALLOCATION (in ${amountType_placeholder})</th>\n" +
-                    "            <th class=\"dcf-txt-center\" scope=\"col\">${allocationTypeRE_placeholder} ${finYear_placeholder} ALLOCATION (in ${amountType_placeholder})</th>\n" +
-                    "\n" +
-                    "        </tr>\n" +
-                    "        </thead>\n" +
-                    "        <tbody>\n" +
-                    "        ${data_placeholder}\n" +
-                    "\n" +
-                    "        </tbody>\n" +
-                    "    </table>\n" +
-                    "    <div>\n" +
-                    "\n" +
-                    "    </div>\n" +
+            Document document = new Document(PageSize.A4);
 
-                    "\n" +
-                    "    <div class=\"sign\">\n" +
-                    "        <ul style=\"list-style: none; margin-top: 0;\">\n" +
-                    "            <li>${name_placeholder}</li>\n" +
-                    "            <li>${unit_placeholder}</li>\n" +
-                    "            <li>${rank_placeholder}</li>\n" +
-                    "        </ul>\n" +
-                    "    </div>\n" +
-                    "    <div class=\"date\">\n" +
-                    "        Date-${date_placeholder}\n" +
-                    "    </div>\n" +
-                    "</div>\n" +
-                    "\n" +
-                    "</body>\n" +
-                    "</html>\n";
+            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation-Report.pdf";
+            PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
-            StringBuilder sb = new StringBuilder();
+            document.open();
+
+            Paragraph heading = new Paragraph("RE  ALLOCATION  REPORT");
+            heading.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(heading);
+            document.add(new Paragraph("\n"));
+
+            PdfPTable table = new PdfPTable(4);
+            table.setWidthPercentage(80);
+
+            table.addCell("REVENUE OBJECT HEAD ");
+            table.addCell("UNIT");
+            table.addCell(type.getAllocDesc().toUpperCase()+" "+findyr.getFinYear()+" "+"ALLOCATION AMOUNT IN: ("+amountIn+")");
+            table.addCell(type.getAllocDesc().toUpperCase()+" "+findyr.getFinYear()+" "+"ALLOCATION AMOUNT IN: ("+amountIn+")");
+
+
             int i = 1;
             float grTotalAlloc = 0;
             float grTotalAddition = 0;
@@ -5235,7 +4161,6 @@ public class MangeReportImpl implements MangeReportService {
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId, allocationTypeBE, "0");
-
                 int count = 0;
                 float sum = 0;
                 Double amount = Double.valueOf(0);
@@ -5278,15 +4203,15 @@ public class MangeReportImpl implements MangeReportService {
                             }
                             BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
                             CgUnit unitN = cgUnitRepository.findByUnit(unitIds);
-                            sb.append("<tr>");
+
                             if (count == 0)
-                                sb.append("<th scope=\"row\" >").append(StringEscapeUtils.escapeHtml4(bHead.getSubHeadDescr())).append("</th>");
+                                table.addCell(bHead.getSubHeadDescr());
                             else
-                                sb.append("<th scope=\"row\" class=\"bbtm\"></th>");
-                            sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(unitN.getDescr())).append("</td>");
-                            sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(finAmount)))).append("</td>");
-                            sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(reFinalAmount)))).append("</td>");
-                            sb.append("</tr>");
+                                table.addCell(" ");
+                            table.addCell(unitN.getDescr());
+                            table.addCell(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
+                            table.addCell(String.format("%1$0,1.4f", new BigDecimal(reFinalAmount)));
+
                             count++;
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                             reSum += Float.parseFloat(new BigDecimal(reFinalAmount).toPlainString());
@@ -5299,51 +4224,36 @@ public class MangeReportImpl implements MangeReportService {
 
                 }
                 if (count != 0) {
-                    sb.append("<tr>");
-                    sb.append("<th scope=\"row\" class=\"bbtm\"></th>");
-                    sb.append("<td class=\"the bold\">TOTAL</td>");
-                    sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(sum)))).append("</td>");
-                    sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(reSum)))).append("</td>");
-                    sb.append("</tr>");
+                    table.addCell(" ");
+                    table.addCell(" TOTAL");
+                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(sum)));
+                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(reSum)));
                     count = 0;
-                    //print sum
                 }
 
             }
-            sb.append("<tr>");
-            sb.append("<th scope=\"row\" class=\"bbtm\"></th>");
-            sb.append("<td class=\"the bold\">GRAND TOTAL</td>");
-            sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)))).append("</td>");
-            sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)))).append("</td>");
-            sb.append("</tr>");
-            if (sb.toString().isEmpty()) {
-                return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                }, "RECORD NOT FOUND", HttpStatus.OK.value());
-            }
+            table.addCell(" ");
+            table.addCell("GRAND TOTAL");
+            table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)));
+            table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)));
 
-            htmlContent = htmlContent.replace("${name_placeholder}", StringEscapeUtils.escapeHtml4(names));
-            htmlContent = htmlContent.replace("${unit_placeholder}", StringEscapeUtils.escapeHtml4(unitName));
-            htmlContent = htmlContent.replace("${rank_placeholder}", StringEscapeUtils.escapeHtml4(rank));
-            htmlContent = htmlContent.replace("${date_placeholder}", StringEscapeUtils.escapeHtml4(formattedDateTime));
-            htmlContent = htmlContent.replace("${finYear_placeholder}", StringEscapeUtils.escapeHtml4(findyr.getFinYear()));
-            htmlContent = htmlContent.replace("${amountType_placeholder}", StringEscapeUtils.escapeHtml4(amountIn));
-            htmlContent = htmlContent.replace("${allocationTypeBE_placeholder}", StringEscapeUtils.escapeHtml4(type.getAllocDesc().toUpperCase()));
-            htmlContent = htmlContent.replace("${allocationTypeRE_placeholder}", StringEscapeUtils.escapeHtml4(types.getAllocDesc().toUpperCase()));
+            document.add(table);
 
-            htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
-            String filepath = HelperUtils.FILEPATH + "/" + type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation-Report.pdf";
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
-            String filePath = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation-Report.pdf";
-            File file = new File(filePath);
-            generatePdf(htmlContent, file.getAbsolutePath());
-            //generatePdf(htmlContent, filepath);
-            FilePathResponse response = new FilePathResponse();
-            response.setPath(filepath);
-            response.setFileName(type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation-Report.pdf");
-            dtoList.add(response);
+            document.add(new Paragraph("\n"));
+            Paragraph heading1 = new Paragraph(formattedDateTime);
+            heading1.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(heading1);
+
+            document.add(new Paragraph("\n"));
+            Paragraph heading2 = new Paragraph(names+"\n"+unitName+"\n"+rank);
+            heading2.setAlignment(Paragraph.ALIGN_RIGHT);
+            document.add(heading2);
+
+            document.close();
+            FilePathResponse dto = new FilePathResponse();
+            dto.setPath(HelperUtils.FILEPATH + type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation-Report.pdf");
+            dto.setFileName(type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation-Report.pdf");
+            dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
@@ -5352,7 +4262,6 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
     }
-
     @Override
     public ApiResponse<List<FilePathResponse>> getBEREAllocationReportDoc(String finYearId, String allocationTypeBE, String allocationTypeRE, String amountTypeId) {
 
@@ -5805,254 +4714,35 @@ public class MangeReportImpl implements MangeReportService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
 
-        String htmlContent = new String();
         try {
-            //htmlContent = FileUtils.readFileToString(new File("src/main/resources/templates/be-allocation-report.html"), "UTF-8");
-            //htmlContent = FileUtils.readFileToString(new File(new File(".").getCanonicalPath()+"/webapps/budget/WEB-INF/classes/templates/be-allocation-report"), "UTF-8");
-            htmlContent = "\n" +
-                    "<!DOCTYPE html>\n" +
-                    "<html lang=\"en\">\n" +
-                    "<head>\n" +
-                    "    <title>Coast Guard Budget</title>\n" +
-                    "    <meta charset=\"utf-8\"></meta>\n" +
-                    "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"></meta>\n" +
-                    "\n" +
-                    "    <style>\n" +
-                    "        @page  {\n" +
-                    "            size: A4 landscape;\n" +
-                    "        }\n" +
-                    "        .bbtm{\n" +
-                    "            border-bottom: 1px solid transparent !important;\n" +
-                    "        }\n" +
-                    "        .wrapper{\n" +
-                    "            width: 95%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        :root {\n" +
-                    "            --bg-table-stripe: #f6f6f5;\n" +
-                    "            --b-table: #e3e3e2;\n" +
-                    "            --caption: #242423;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        table {\n" +
-                    "            background-color: transparent;\n" +
-                    "            border-collapse:collapse;\n" +
-                    "            font-family: Arial, Helvetica, sans-serif\n" +
-                    "        }\n" +
-                    "        .bold{\n" +
-                    "            font-weight: 900;\n" +
-                    "        }\n" +
-                    "        th {\n" +
-                    "            text-align:left;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        th {\n" +
-                    "            text-align:left;\n" +
-                    "            border: 1px solid #242423 ;\n" +
-                    "        }\n" +
-                    "        td{\n" +
-                    "            border: 1px solid #242423 ;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-txt-center {\n" +
-                    "            text-align: center!important\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-txt-left {\n" +
-                    "            text-align: left!important\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-txt-right {\n" +
-                    "            text-align: right!important\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table caption {\n" +
-                    "            color: var(--caption);\n" +
-                    "            font-size: 1.13em;\n" +
-                    "            font-weight: 700;\n" +
-                    "            padding-bottom: .56rem\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table thead {\n" +
-                    "            font-size: .75em;\n" +
-                    "            text-decoration: underline;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table tbody {\n" +
-                    "            border-bottom: 1px solid var(--b-table);\n" +
-                    "            border-top: 1px solid var(--b-table);\n" +
-                    "            font-size: .75em;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table tfoot {\n" +
-                    "            font-size: .84em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table td, .dcf-table th {\n" +
-                    "            padding-right: 1.78em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-bordered, .dcf-table-bordered td, .dcf-table-bordered th {\n" +
-                    "            border: 1px solid var(--b-table)\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-bordered td, .dcf-table-bordered th, .dcf-table-striped td, .dcf-table-striped th {\n" +
-                    "            padding-left: 1em;\n" +
-                    "            padding-right: 1em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-bordered tr:not(:last-child), .dcf-table-striped tr:not(:last-child) {\n" +
-                    "            border-bottom: 1px solid var(--b-table)\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-striped tbody tr:nth-of-type(2n) {\n" +
-                    "            background-color: transparent;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table thead td, .dcf-table thead th {\n" +
-                    "            padding-bottom: .75em;\n" +
-                    "            vertical-align: middle;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table tbody td, .dcf-table tbody th, .dcf-table tfoot td, .dcf-table tfoot th {\n" +
-                    "            padding-top: .75em;\n" +
-                    "            vertical-align: middle;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table tbody td, .dcf-table tbody th {\n" +
-                    "            padding-bottom: .75em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-bordered thead th {\n" +
-                    "            padding-top: 0.75em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-wrapper-table-scroll {\n" +
-                    "            overflow-x: auto;\n" +
-                    "            -webkit-overflow-scrolling: touch;\n" +
-                    "            left: 50%;\n" +
-                    "            margin-left: -50vw;\n" +
-                    "            margin-right: -50vw;\n" +
-                    "            padding-bottom: 1em;\n" +
-                    "            position: relative;\n" +
-                    "            right: 50%;\n" +
-                    "            width: 100vw\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        @media only screen and (max-width:42.09em) {\n" +
-                    "            .dcf-table-responsive thead {\n" +
-                    "                clip: rect(0 0 0 0);\n" +
-                    "                -webkit-clip-path: inset(50%);\n" +
-                    "                clip-path: inset(50%);\n" +
-                    "                height: 1px;\n" +
-                    "                overflow: hidden;\n" +
-                    "                position: absolute;\n" +
-                    "                width: 1px;\n" +
-                    "                white-space: nowrap\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive tr {\n" +
-                    "                display: block\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive td {\n" +
-                    "                -webkit-column-gap: 3.16vw;\n" +
-                    "                -moz-column-gap: 3.16vw;\n" +
-                    "                column-gap: 3.16vw;\n" +
-                    "                display: grid;\n" +
-                    "                grid-template-columns: 1fr 2fr;\n" +
-                    "                text-align: left!important\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive.dcf-table-bordered, .dcf-table-responsive.dcf-table-bordered thead th {\n" +
-                    "                border-width: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive.dcf-table-bordered tbody td {\n" +
-                    "                border-top-width: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive:not(.dcf-table-bordered) tbody tr {\n" +
-                    "                padding-bottom: .75em\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive:not(.dcf-table-bordered) tbody td {\n" +
-                    "                padding-bottom: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive:not(.dcf-table-bordered):not(.dcf-table-striped) tbody td {\n" +
-                    "                padding-right: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive.dcf-table-bordered tbody tr:last-child td:last-child {\n" +
-                    "                border-bottom-width: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive tbody td:before {\n" +
-                    "                content: attr(data-label);\n" +
-                    "                float: left;\n" +
-                    "                font-weight: 700;\n" +
-                    "                padding-right: 1.78em\n" +
-                    "            }\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-overflow-x-auto {\n" +
-                    "            overflow-x: auto!important;\n" +
-                    "            -webkit-overflow-scrolling: touch\n" +
-                    "        }\n" +
-                    "        .sign {\n" +
-                    "            float: right;\n" +
-                    "            padding-right: 20px;\n" +
-                    "            padding-top: 20px;\n" +
-                    "            width:27%;\n" +
-                    "        }\n" +
-                    "        .date {\n" +
-                    "            float: left;\n" +
-                    "            padding-left: 20px;\n" +
-                    "            padding-top: 20px;\n" +
-                    "            width:45%;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-w-100\\% {\n" +
-                    "            width: 100%!important;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "    </style>\n" +
-                    "</head>\n" +
-                    "<body>\n" +
-                    "<div class=\"wrapper\">\n" +
-                    "    <table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%\">\n" +
-                    "        <thead>\n" +
-                    "        <tr>\n" +
-                    "            <th class=\"bold dcf-txt-center\" colspan=\"8\">COAST GUARD BUDGET : FY : ${finYear_placeholder}</th>\n" +
-                    "        </tr>\n" +
-                    "        <tr>\n" +
-                    "            <th class=\"bold\" colspan=\"7\"></th>\n" +
-                    "            <th class=\"bold dcf-txt-right\" colspan=\"1\">(In ${amountType_placeholder})</th>\n" +
-                    "        </tr>\n" +
-                    "        <tr>\n" +
-                    "            <th class=\"dcf-txt-center bold\" scope=\"col\">REVENUE OBJECT HEAD </th>\n" +
-                    "            <th class=\"dcf-txt-center bold\" scope=\"col\">${allocationType_placeholder} ${finYear_placeholder} Allocation to ICG</th>\n" +
-                    "            <th class=\"dcf-txt-center bold\" scope=\"col\">UNIT</th>\n" +
-                    "            <th class=\"dcf-txt-center bold\" scope=\"col\">${allocationType_placeholder} : ${finYear_placeholder} Allocation</th>\n" +
-                    "            <th class=\"dcf-txt-center bold\" scope=\"col\">Bill Submission Upto ${upToDate_placeholder} </th>\n" +
-                    "            <th class=\"dcf-txt-center bold\" scope=\"col\">% Bill Submission w.r.t. ${allocationType_placeholder} ${finYear_placeholder}</th>\n" +
-                    "            <th class=\"dcf-txt-center bold\" scope=\"col\">CGDA Booking Upto ${upToDate_placeholder}</th>\n" +
-                    "            <th class=\"dcf-txt-center bold\" scope=\"col\">% Bill Clearance w.r.t. ${allocationType_placeholder} ${finYear_placeholder}</th>\n" +
-                    "        </tr>\n" +
-                    "        </thead>\n" +
-                    "        <tbody>\n" +
-                    "        ${data_placeholder}\n" +
-                    "\n" +
-                    "        </tbody>\n" +
-                    "    </table>\n" +
-                    "    <div class=\"sign\">\n" +
-                    "        <ul style=\"list-style: none; margin-top: 0;\">\n" +
-                    "            <li>${name_placeholder}</li>\n" +
-                    "            <li>${unit_placeholder}</li>\n" +
-                    "            <li>${rank_placeholder}</li>\n" +
-                    "        </ul>\n" +
-                    "    </div>\n" +
-                    "    <div class=\"date\">\n" +
-                    "        Date-${date_placeholder}\n" +
-                    "    </div>\n" +
-                    "</div>\n" +
-                    "\n" +
-                    "</body>\n" +
-                    "</html>\n";
-            StringBuilder sb = new StringBuilder();
+            Document document = new Document(PageSize.A4_LANDSCAPE);
+
+            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "_FER-budget-report.pdf";
+            PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
+
+            document.open();
+
+            Paragraph heading = new Paragraph(" COAST GUARD BUDGET : FY : "+findyr.getFinYear());
+            heading.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(heading);
+            document.add(new Paragraph("\n"));
+
+            PdfPTable table = new PdfPTable(8);
+            table.setWidthPercentage(100);
+
+            table.addCell("REVENUE OBJECT HEAD ");
+            table.addCell("RE1 2023-24 Allocation to ICG");
+            table.addCell("UNIT");
+            table.addCell("RE1 : 2023-24 Allocation");
+            table.addCell("Bill Submission Upto 09-Jun-2023");
+            table.addCell("% Bill Submission w.r.t. RE1 2023-24");
+            table.addCell("CGDA Booking Upto 09-Jun-2023");
+            table.addCell("% Bill Clearance w.r.t. RE1 2023- 24");
+
             int i = 1;
             float grTotalAlloc = 0;
             float grTotalAddition = 0;
@@ -6137,23 +4827,21 @@ public class MangeReportImpl implements MangeReportService {
                                 expnAmount = 0.0;
                             BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
                             CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
-                            sb.append("<tr>");
-                            if (count == 0) {
-                                sb.append("<th scope=\"row\" >").append(StringEscapeUtils.escapeHtml4(bHead.getSubHeadDescr())).append("</th>");
-                                sb.append("<th scope=\"row bold\" >${ALLOCATION_placeholder}</th>");
-                                //sb.append("<th scope=\"row bold\" >").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(allAmount)))).append("</th>");
 
+                            if (count == 0) {
+                                table.addCell(bHead.getSubHeadDescr());
+                                table.addCell(String.format("%1$0,1.4f", new BigDecimal(IcgAmount)));
                             } else {
-                                sb.append("<th scope=\"row\" class=\"bbtm\"></th>");
-                                sb.append("<th scope=\"row\" class=\"bbtm\"></th>");
+                                table.addCell("");
+                                table.addCell("");
                             }
-                            sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(unitN.getDescr())).append("</td>");
-                            sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(finAmount)))).append("</td>");
-                            sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(eAmount)))).append("</td>");
-                            sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.9f", new BigDecimal(expnAmount)))).append("</td>");
-                            sb.append("<td class=\"the\"></td>");
-                            sb.append("<td class=\"the\"></td>");
-                            sb.append("</tr>");
+                            table.addCell(unitN.getDescr());
+                            table.addCell(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
+                            table.addCell(String.format("%1$0,1.4f", new BigDecimal(eAmount)));
+                            table.addCell(String.format("%1$0,1.4f", new BigDecimal(expnAmount)));
+                            table.addCell(" ");
+                            table.addCell(" ");
+
                             count++;
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                             expsum += Float.parseFloat(new BigDecimal(eAmount).toPlainString());
@@ -6167,64 +4855,44 @@ public class MangeReportImpl implements MangeReportService {
 
                 }
                 if (count != 0) {
-
-                    sb.append("<tr>");
-                    sb.append("<td class=\"the bold\"></td>");
-                    sb.append("<th scope=\"row\" class=\"bbtm\"></th>");
-                    sb.append("<td class=\"the bold\">TOTAL</td>");
-                    sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(sum)))).append("</td>");
-                    sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(expsum)))).append("</td>");
-                    sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.9f", new BigDecimal(percentagesum)))).append("</td>");
-                    sb.append("<td class=\"the bold\"></td>");
-                    sb.append("<td class=\"the bold\"></td>");
-
-                    sb.append("</tr>");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell("TOTAL");
+                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(sum)));
+                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(expsum)));
+                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(percentagesum)));
+                    table.addCell(" ");
+                    table.addCell(" ");
                     count = 0;
-                    //print sum
-                    String text = sb.toString().replace("${ALLOCATION_placeholder}", StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(IcgAmount))));
-                    sb.setLength(0);
-                    sb.append(text);
                 }
 
             }
-            sb.append("<tr>");
-            sb.append("<td class=\"the bold\"></td>");
-            sb.append("<th scope=\"row\" class=\"bbtm\"></th>");
-            sb.append("<td class=\"the bold\">GRAND TOTAL</td>");
-            sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)))).append("</td>");
-            sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)))).append("</td>");
-            sb.append("<td class=\"the bold\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.9f", new BigDecimal(grTotalSum)))).append("</td>");
-            sb.append("<td class=\"the bold\"></td>");
-            sb.append("<td class=\"the bold\"></td>");
+            table.addCell(" ");
+            table.addCell(" ");
+            table.addCell("GRAND TOTAL");
+            table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)));
+            table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)));
+            table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalSum)));
+            table.addCell(" ");
+            table.addCell(" ");
 
-            sb.append("</tr>");
-            if (sb.toString().isEmpty()) {
-                return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                }, "RECORD NOT FOUND", HttpStatus.OK.value());
-            }
-            htmlContent = htmlContent.replace("${name_placeholder}", StringEscapeUtils.escapeHtml4(names));
-            htmlContent = htmlContent.replace("${unit_placeholder}", StringEscapeUtils.escapeHtml4(unitName));
-            htmlContent = htmlContent.replace("${rank_placeholder}", StringEscapeUtils.escapeHtml4(rank));
-            htmlContent = htmlContent.replace("${date_placeholder}", StringEscapeUtils.escapeHtml4(formattedDateTime));
-            htmlContent = htmlContent.replace("${upToDate_placeholder}", StringEscapeUtils.escapeHtml4(formattedDate));
-            htmlContent = htmlContent.replace("${finYear_placeholder}", StringEscapeUtils.escapeHtml4(findyr.getFinYear()));
-            htmlContent = htmlContent.replace("${amountType_placeholder}", StringEscapeUtils.escapeHtml4(amountIn));
-            htmlContent = htmlContent.replace("${allocationType_placeholder}", StringEscapeUtils.escapeHtml4(type.getAllocDesc().toUpperCase()));
+            document.add(table);
 
-            htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
-            String filepath = HelperUtils.FILEPATH + "/" + type.getAllocDesc().toUpperCase() + "_FER-budget-report.pdf";
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
-            String filePath = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "_FER-budget-report.pdf";
-            File file = new File(filePath);
-            generatePdf(htmlContent, file.getAbsolutePath());
-            //generatePdf(htmlContent, filepath);
-            FilePathResponse response = new FilePathResponse();
-            response.setPath(filepath);
-            response.setFileName(type.getAllocDesc().toUpperCase() + "_FER-budget-report.pdf");
-            dtoList.add(response);
+            document.add(new Paragraph("\n"));
+            Paragraph heading1 = new Paragraph(formattedDateTime);
+            heading1.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(heading1);
+
+            document.add(new Paragraph("\n"));
+            Paragraph heading2 = new Paragraph(names+"\n"+unitName+"\n"+rank);
+            heading2.setAlignment(Paragraph.ALIGN_RIGHT);
+            document.add(heading2);
+
+            document.close();
+            FilePathResponse dto = new FilePathResponse();
+            dto.setPath(HelperUtils.FILEPATH + type.getAllocDesc().toUpperCase() + "_FER-budget-report.pdf");
+            dto.setFileName(type.getAllocDesc().toUpperCase() + "_FER-budget-report.pdf");
+            dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
@@ -6807,278 +5475,24 @@ public class MangeReportImpl implements MangeReportService {
             }, "DATA NOT FOUND FROM DB", HttpStatus.OK.value());
         }
 
-        String htmlContent = new String();
         try {
-            //htmlContent = FileUtils.readFileToString(new File("src/main/resources/templates/be-allocation-report.html"), "UTF-8");
-            //htmlContent = FileUtils.readFileToString(new File(new File(".").getCanonicalPath()+"/webapps/budget/WEB-INF/classes/templates/be-allocation-report"), "UTF-8");
-            htmlContent = "<!DOCTYPE html>\n" +
-                    "<html lang=\"en\">\n" +
-                    "<head>\n" +
-                    "    <title>Report</title>\n" +
-                    "    <meta charset=\"utf-8\"></meta>\n" +
-                    "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"></meta>\n" +
-                    "\n" +
-                    "    <style>\n" +
-                    "        @page  {\n" +
-                    "            size: A4 landscape;\n" +
-                    "        }\n" +
-                    "        .bold{\n" +
-                    "            font-weight: bold !important;\n" +
-                    "        }\n" +
-                    "        .bbtm{\n" +
-                    "            border-bottom: 1px solid transparent !important;\n" +
-                    "        }\n" +
-                    "        .brtm{\n" +
-                    "            border-right: 1px solid transparent !important;\n" +
-                    "        }\n" +
-                    "        .bold{\n" +
-                    "            font-weight: bold;\n" +
-                    "        }\n" +
-                    "        .wrapper{\n" +
-                    "            width: 70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        :root {\n" +
-                    "            --bg-table-stripe: #f6f6f5;\n" +
-                    "            --b-table: #e3e3e2;\n" +
-                    "            --caption: #242423;\n" +
-                    "        }\n" +
-                    "        th {\n" +
-                    "            text-align:left;\n" +
-                    "            border: 1px solid #242423 ;\n" +
-                    "        }\n" +
-                    "        td{\n" +
-                    "            border: 1px solid #242423 ;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        table {\n" +
-                    "            background-color: transparent;\n" +
-                    "            border-collapse:collapse;\n" +
-                    "            font-family: Arial, Helvetica, sans-serif\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        th {\n" +
-                    "            text-align:left\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-txt-center {\n" +
-                    "            text-align: center!important\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-txt-left {\n" +
-                    "            text-align: left!important\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-txt-right {\n" +
-                    "            text-align: right!important\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table caption {\n" +
-                    "            color: var(--caption);\n" +
-                    "            font-size: 1.13em;\n" +
-                    "            font-weight: 700;\n" +
-                    "            padding-bottom: .56rem\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table thead {\n" +
-                    "            font-size: .84em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table tbody {\n" +
-                    "            border-bottom: 1px solid var(--b-table);\n" +
-                    "            border-top: 1px solid var(--b-table);\n" +
-                    "            font-size: .84em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table tfoot {\n" +
-                    "            font-size: .84em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table td, .dcf-table th {\n" +
-                    "            padding-right: 1.78em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-bordered, .dcf-table-bordered td, .dcf-table-bordered th {\n" +
-                    "            border: 1px solid var(--b-table)\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-bordered td, .dcf-table-bordered th, .dcf-table-striped td, .dcf-table-striped th {\n" +
-                    "            padding-left: 1em;\n" +
-                    "            padding-right: 1em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-bordered tr:not(:last-child), .dcf-table-striped tr:not(:last-child) {\n" +
-                    "            border-bottom: 1px solid var(--b-table)\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-striped tbody tr:nth-of-type(2n) {\n" +
-                    "            background-color: transparent;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table thead td, .dcf-table thead th {\n" +
-                    "            padding-bottom: .75em;\n" +
-                    "            vertical-align: bottom\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table tbody td, .dcf-table tbody th, .dcf-table tfoot td, .dcf-table tfoot th {\n" +
-                    "            padding-top: .75em;\n" +
-                    "            vertical-align: top\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table tbody td, .dcf-table tbody th {\n" +
-                    "            padding-bottom: .75em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-table-bordered thead th {\n" +
-                    "            padding-top: 1.33em\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-wrapper-table-scroll {\n" +
-                    "            overflow-x: auto;\n" +
-                    "            -webkit-overflow-scrolling: touch;\n" +
-                    "            left: 50%;\n" +
-                    "            margin-left: -50vw;\n" +
-                    "            margin-right: -50vw;\n" +
-                    "            padding-bottom: 1em;\n" +
-                    "            position: relative;\n" +
-                    "            right: 50%;\n" +
-                    "            width: 100vw\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        @media only screen and (max-width:42.09em) {\n" +
-                    "            .dcf-table-responsive thead {\n" +
-                    "                clip: rect(0 0 0 0);\n" +
-                    "                -webkit-clip-path: inset(50%);\n" +
-                    "                clip-path: inset(50%);\n" +
-                    "                height: 1px;\n" +
-                    "                overflow: hidden;\n" +
-                    "                position: absolute;\n" +
-                    "                width: 1px;\n" +
-                    "                white-space: nowrap\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive tr {\n" +
-                    "                display: block\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive td {\n" +
-                    "                -webkit-column-gap: 3.16vw;\n" +
-                    "                -moz-column-gap: 3.16vw;\n" +
-                    "                column-gap: 3.16vw;\n" +
-                    "                display: grid;\n" +
-                    "                grid-template-columns: 1fr 2fr;\n" +
-                    "                text-align: left!important\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive.dcf-table-bordered, .dcf-table-responsive.dcf-table-bordered thead th {\n" +
-                    "                border-width: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive.dcf-table-bordered tbody td {\n" +
-                    "                border-top-width: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive:not(.dcf-table-bordered) tbody tr {\n" +
-                    "                padding-bottom: .75em\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive:not(.dcf-table-bordered) tbody td {\n" +
-                    "                padding-bottom: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive:not(.dcf-table-bordered):not(.dcf-table-striped) tbody td {\n" +
-                    "                padding-right: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive.dcf-table-bordered tbody tr:last-child td:last-child {\n" +
-                    "                border-bottom-width: 0\n" +
-                    "            }\n" +
-                    "            .dcf-table-responsive tbody td:before {\n" +
-                    "                content: attr(data-label);\n" +
-                    "                float: left;\n" +
-                    "                font-weight: 700;\n" +
-                    "                padding-right: 1.78em\n" +
-                    "            }\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-overflow-x-auto {\n" +
-                    "            overflow-x: auto!important;\n" +
-                    "            -webkit-overflow-scrolling: touch\n" +
-                    "        }\n" +
-                    "        .sign {\n" +
-                    "            float: right;\n" +
-                    "            padding-right: 20px;\n" +
-                    "            padding-top: 20px;\n" +
-                    "            width:27%;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .count {\n" +
-                    "            text-align: center;\n" +
-                    "            padding-top: 200px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .table3 {\n" +
-                    "            padding-top: 55px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .tab {\n" +
-                    "            padding-left: 85px;\n" +
-                    "        }\n" +
-                    "        .table4{\n" +
-                    "            padding-top: 15px;\n" +
-                    "        }\n" +
-                    "        .wrap{\n" +
-                    "            width:70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "        .date {\n" +
-                    "            float: left;\n" +
-                    "            padding-left: 20px;\n" +
-                    "            padding-top: 20px;\n" +
-                    "            width:45%;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .count {\n" +
-                    "            text-align: center;\n" +
-                    "            padding-top: 200px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .table3 {\n" +
-                    "            padding-top: 55px;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .tab {\n" +
-                    "            padding-left: 85px;\n" +
-                    "        }\n" +
-                    "        .table4{\n" +
-                    "            padding-top: 15px;\n" +
-                    "        }\n" +
-                    "        .wrap{\n" +
-                    "            width:70%;\n" +
-                    "            margin: 100px auto;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "        .dcf-w-100\\% {\n" +
-                    "            width: 100%!important;\n" +
-                    "        }\n" +
-                    "\n" +
-                    "    </style>\n" +
-                    "</head>\n" +
-                    "<body>\n" +
-                    "<div class=\"wrapper\">\n" +
-                    "    <h2 style=\"text-align: center;\">UNIT REBASE REPORT</h2><br></br>\n" +
-                    "    ${data_placeholder}\n" +
-                    "\n" +
-                    "\n" +
-                    "            <div class=\"sign\">\n" +
-                    "                <ul style=\"list-style: none; margin-top: 0;\">\n" +
-                    "                    <li>${name_placeholder}</li>\n" +
-                    "                    <li>${unit_placeholder}</li>\n" +
-                    "                    <li>${rank_placeholder}</li>\n" +
-                    "                </ul>\n" +
-                    "            </div>\n" +
-                    "            <div class=\"date\">\n" +
-                    "                Date-${date_placeholder}\n" +
-                    "            </div>\n" +
-                    "\n" +
-                    "</div>\n" +
-                    "</body>\n" +
-                    "</html>\n";
-            StringBuilder sb = new StringBuilder();
-            StringBuilder sb1 = new StringBuilder();
+            Document document = new Document(PageSize.A4);
+
+            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String path = folder.getAbsolutePath() + "/" + "Rebase_Report.pdf";
+            PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
+
+            document.open();
+
+            Paragraph heading = new Paragraph("UNIT  REBASE  REPORT");
+            heading.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(heading);
+            document.add(new Paragraph("\n"));
+
+
 
             int i = 1;
             String finyear = "";
@@ -7123,40 +5537,30 @@ public class MangeReportImpl implements MangeReportService {
                     System.out.println("RBDATE" + rebaseDate);
                     frmStation = frmS;
                     toStation = toS.getStationName();
-                    sb1.append("<table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100% \">\t\t<tbody>\n" +
-                            "\t\t\t<tr>\n" +
-                            "\t\t\t\t<th class=\"dcf-txt-left\">Unit Name</th>\n" +
-                            "\t\t\t\t<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(uName)).append("</td>\n" +
-                            "\t\t\t\t<th class=\"dcf-txt-left\">From Station</th>\n" +
-                            "\t\t\t\t<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(frmStation)).append("</td>\n" +
-                            "\t\t\t</tr>\n" +
-                            "\t\t\t<tr>\n" +
-                            "\t\t\t\t<th class=\"dcf-txt-left\">Date of Rebase</th>\n" +
-                            "\t\t\t\t<td class=\"dcf-txt-left\">").append(rebaseDate).append("</td>\n" +
-                            "\t\t\t\t<th class=\"dcf-txt-left\">To Station</th>\n" +
-                            "\t\t\t\t<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(toStation)).append("</td>\n" +
-                            "\t\t\t</tr>\n" +
-                            "\t\t</tbody>\n" +
-                            "\t</table>\n" +
-                            "\t<br></br>\n" +
-                            "<table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%\">\n" +
-                            "\t<thead>\n" +
-                            "\t\t<tr>\n" +
-                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Financial Year and Allocation </th>\n" +
-                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Sub Head</th>\n" +
-                            //"\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Code head</th>\n" +
-                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Allocated: In (${amountType_placeholder})</th>\n" +
-                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Expenditure: In (INR) </th>\n" +
-                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Balance: In (${amountType_placeholder})</th>\n" +
-                            "\t\t\t<th class=\"dcf-txt-left\" scope=\"col\">Last CB Date</th>\n" +
-                            "\t\t</tr>\n" +
-                            "\t</thead>\n" +
-                            "\t<tbody>\n" +
-                            "\t\t\t${data_placeholder}\n" +
-                            "\t</tbody>\n" +
-                            "</table>\n");
-                    val = val + "\n" + "Serial No: " + (count++) + "\n" + sb1.toString();
-                    sb1 = new StringBuilder();
+
+                    PdfPTable table1 = new PdfPTable(4);
+                    table1.setWidthPercentage(100);
+                    table1.addCell("Unit Name ");
+                    table1.addCell(uName);
+                    table1.addCell("From Station");
+                    table1.addCell(frmStation);
+                    table1.addCell("Date of Rebase");
+                    table1.addCell(String.valueOf(rebaseDate));
+                    table1.addCell("To Station");
+                    table1.addCell(toStation);
+
+                    document.add(table1);
+
+
+                    PdfPTable table = new PdfPTable(6);
+                    table.setWidthPercentage(100);
+                    table.addCell("FINANCIAL YEAR & ALLOCATION TYPE ");
+                    table.addCell("REVENUE OBJECT HEAD");
+                    table.addCell("ALLOCATION IN: ( "+amountIn+")");
+                    table.addCell("EXPENDITURE IN: (INR)");
+                    table.addCell("BALANCE IN : ( "+amountIn+")");
+                    table.addCell("LAST CB DATE");
+
                     for (Integer k = 0; k < rebaseData.size(); k++) {
                         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(rebaseData.get(k).getFinYear());
                         String bHeads = rebaseData.get(k).getBudgetHeadId();
@@ -7188,55 +5592,44 @@ public class MangeReportImpl implements MangeReportService {
                         expAmount = eAmount;
                         balAmount = bAmount * amountUnit / reqAmount;
 
-                        sb.append("<tr>");
-                        sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(finYear + " " + allocType.getAllocType().toUpperCase())).append("</td>");
-                        sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(subHead)).append("</td>");
-                        //sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(headCodeId)).append("</td>");
-                        sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(allocAmount)))).append("</td>");
-                        sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(expAmount)))).append("</td>");
-                        sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(balAmount)))).append("</td>");
-                        sb.append("<td class=\"dcf-txt-left\">").append(cbD).append("</td>");
-                        sb.append("</tr>");
+                        table.addCell(finYear + " " + allocType.getAllocType().toUpperCase());
+                        table.addCell(subHead);
+                        table.addCell(String.format("%1$0,1.4f", new BigDecimal(allocAmount)));
+                        table.addCell(String.format("%1$0,1.4f", new BigDecimal(expAmount)));
+                        table.addCell(String.format("%1$0,1.4f", new BigDecimal(balAmount)));
+                        table.addCell(cbD);
 
                         grTotalAlloc += allocAmount;
                         grTotalAddition += expAmount;
                         grTotalSum += balAmount;
                     }
+                    table.addCell(" ");
+                    table.addCell("GRAND TOTAL");
+                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)));
+                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)));
+                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalSum)));
+                    table.addCell(" ");
+                    document.add(table);
 
-                    sb.append("<tr>");
-                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4("")).append("</td>");
-                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4("GRAND TOTAL")).append("</td>");
-                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)))).append("</td>");
-                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)))).append("</td>");
-                    sb.append("<td class=\"dcf-txt-left\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(grTotalSum)))).append("</td>");
-                    sb.append("<td class=\"dcf-txt-left\">").append("").append("</td>");
-                    sb.append("</tr>");
-                    val = val.replace("${data_placeholder}", sb.toString());
-                    sb = new StringBuilder();
                 }
             }
 
-            htmlContent = htmlContent.replace("${data_placeholder}", val);
-            htmlContent = htmlContent.replace("${name_placeholder}", StringEscapeUtils.escapeHtml4(names));
-            htmlContent = htmlContent.replace("${unit_placeholder}", StringEscapeUtils.escapeHtml4(unitName));
-            htmlContent = htmlContent.replace("${rank_placeholder}", StringEscapeUtils.escapeHtml4(rank));
-            htmlContent = htmlContent.replace("${date_placeholder}", StringEscapeUtils.escapeHtml4(formattedDateTime));
-            htmlContent = htmlContent.replace("${upToDate_placeholder}", StringEscapeUtils.escapeHtml4(formattedDate));
-            htmlContent = htmlContent.replace("${finYear_placeholder}", StringEscapeUtils.escapeHtml4(finYear));
-            htmlContent = htmlContent.replace("${amountType_placeholder}", StringEscapeUtils.escapeHtml4(amountIn));
-            String filepath = HelperUtils.FILEPATH + "/" + "Rebase_Report.pdf";
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
-            String filePath = folder.getAbsolutePath() + "/" + "Rebase_Report.pdf";
-            File file = new File(filePath);
-            generatePdf(htmlContent, file.getAbsolutePath());
-            //generatePdf(htmlContent, filepath);
-            FilePathResponse response = new FilePathResponse();
-            response.setPath(filepath);
-            response.setFileName("Rebase_Report.pdf");
-            dtoList.add(response);
+
+            document.add(new Paragraph("\n"));
+            Paragraph heading1 = new Paragraph(formattedDateTime);
+            heading1.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(heading1);
+
+            document.add(new Paragraph("\n"));
+            Paragraph heading2 = new Paragraph(names+"\n"+unitName+"\n"+rank);
+            heading2.setAlignment(Paragraph.ALIGN_RIGHT);
+            document.add(heading2);
+
+            document.close();
+            FilePathResponse dto = new FilePathResponse();
+            dto.setPath(HelperUtils.FILEPATH + "Rebase_Report.pdf");
+            dto.setFileName("Rebase_Report.pdf");
+            dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
@@ -7245,7 +5638,6 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
     }
-
     @Override
     public ApiResponse<List<FilePathResponse>> getUnitRebaseReportDoc(String fromDate, String toDate) {
         List<UnitRebaseReportResponce> responce = new ArrayList<UnitRebaseReportResponce>();
