@@ -975,7 +975,6 @@ public class MangeReportImpl implements MangeReportService {
         HashMap<String, String> coloumWiseAmount = new LinkedHashMap<String, String>();
 
 
-
         Float grandTotal = 0f;
         if (cdaReportRequest.getBudgetHeadId() == null && cdaReportRequest.getUnitId() == null) {
             if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID) && cdaReportRequest.getCdaType().contains("112233")) {
@@ -996,8 +995,6 @@ public class MangeReportImpl implements MangeReportService {
                 allCdaData.put("Sub Head", cdaReportList);
 
 
-
-
                 for (int i = 0; i < subHeadsData.size(); i++) {
                     cdaReportList = new ArrayList<>();
                     cdaReportResponse = new CDAReportResponse();
@@ -1009,8 +1006,6 @@ public class MangeReportImpl implements MangeReportService {
                     if (cdaParkingTotalList.size() > 0) {
                         for (int k = 0; k < cdaParkingTotalList.size(); k++) {
                             List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
-
-                            CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
 
                             Float amount = 0f;
 
@@ -1024,15 +1019,15 @@ public class MangeReportImpl implements MangeReportService {
                             }
 
 
+                            CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
 
+                            if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
+                                Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
 
-
-                            coloumWiseAmount.put(ginWiseData.getCdaName(),amount+"");
-
-
-
-
-
+                            } else {
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
+                            }
 
 
                             totalAmount = totalAmount + amount;
@@ -1060,7 +1055,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -1109,6 +1104,18 @@ public class MangeReportImpl implements MangeReportService {
                                     grandTotal = grandTotal + amount;
                                 }
                             }
+
+
+                            CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
+
+                            if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
+                                Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+
+                            } else {
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
+                            }
+
                             totalAmount = totalAmount + amount;
                             cdaReportResponse = new CDAReportResponse();
                             cdaReportResponse.setName(amount + "");
@@ -1135,7 +1142,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal,coloumWiseAmount);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -1189,6 +1196,16 @@ public class MangeReportImpl implements MangeReportService {
 
                         }
 
+                        CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.getGinNo());
+
+                        if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
+                            Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                            coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+
+                        } else {
+                            coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
+                        }
+
                         totalAmount = totalAmount + amount;
                         cdaReportResponse = new CDAReportResponse();
                         cdaReportResponse.setName(amount + "");
@@ -1215,7 +1232,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal,coloumWiseAmount);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -1298,6 +1315,17 @@ public class MangeReportImpl implements MangeReportService {
                                 grandTotal = grandTotal + amount;
                             }
                         }
+
+                        CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
+
+                        if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
+                            Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                            coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+
+                        } else {
+                            coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
+                        }
+
                         totalAmount = totalAmount + amount;
                         cdaReportResponse = new CDAReportResponse();
                         cdaReportResponse.setName(amount + "");
@@ -1324,7 +1352,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal,coloumWiseAmount);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -1396,6 +1424,17 @@ public class MangeReportImpl implements MangeReportService {
                                     grandTotal = grandTotal + amount;
                                 }
                             }
+
+                            CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
+
+                            if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
+                                Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+
+                            } else {
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
+                            }
+
                             totalAmount = totalAmount + amount;
                             cdaReportResponse = new CDAReportResponse();
                             cdaReportResponse.setName(amount + "");
@@ -1421,8 +1460,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                    File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal,coloumWiseAmount);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -1500,7 +1538,7 @@ public class MangeReportImpl implements MangeReportService {
         cadSubReport.setAllocationType(allocationType.getAllocDesc());
         cadSubReport.setAmountType(amountUnit.getAmountType());
 
-
+        HashMap<String, String> coloumWiseAmount = new LinkedHashMap<String, String>();
         Float grandTotal = 0f;
         if (cdaReportRequest.getBudgetHeadId() == null && cdaReportRequest.getUnitId() == null) {
             if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID) && cdaReportRequest.getCdaType().contains("112233")) {
@@ -1543,6 +1581,16 @@ public class MangeReportImpl implements MangeReportService {
 
                             }
 
+                            CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
+
+                            if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
+                                Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+
+                            } else {
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
+                            }
+
                             totalAmount = totalAmount + amount;
                             cdaReportResponse = new CDAReportResponse();
                             cdaReportResponse.setName(amount + "");
@@ -1569,7 +1617,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
                     File file = new File(filePath);
-                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal,coloumWiseAmount);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -1697,6 +1745,16 @@ public class MangeReportImpl implements MangeReportService {
                                     grandTotal = grandTotal + amount;
                                 }
                             }
+
+                            CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
+
+                            if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
+                                Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+
+                            } else {
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
+                            }
                             totalAmount = totalAmount + amount;
                             cdaReportResponse = new CDAReportResponse();
                             cdaReportResponse.setName(amount + "");
@@ -1722,8 +1780,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal,coloumWiseAmount);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -1777,6 +1834,16 @@ public class MangeReportImpl implements MangeReportService {
 
                         }
 
+                        CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.getGinNo());
+
+                        if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
+                            Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                            coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+
+                        } else {
+                            coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
+                        }
+
                         totalAmount = totalAmount + amount;
                         cdaReportResponse = new CDAReportResponse();
                         cdaReportResponse.setName(amount + "");
@@ -1803,7 +1870,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal,coloumWiseAmount);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -1886,6 +1953,17 @@ public class MangeReportImpl implements MangeReportService {
                                 grandTotal = grandTotal + amount;
                             }
                         }
+                        CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
+
+                        if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
+                            Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                            coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+
+                        } else {
+                            coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
+                        }
+
+
                         totalAmount = totalAmount + amount;
                         cdaReportResponse = new CDAReportResponse();
                         cdaReportResponse.setName(amount + "");
@@ -1912,7 +1990,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
 
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal,coloumWiseAmount);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -1984,6 +2062,18 @@ public class MangeReportImpl implements MangeReportService {
                                     grandTotal = grandTotal + amount;
                                 }
                             }
+
+                            CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
+
+                            if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
+                                Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+
+                            } else {
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
+                            }
+
+
                             totalAmount = totalAmount + amount;
                             cdaReportResponse = new CDAReportResponse();
                             cdaReportResponse.setName(amount + "");
@@ -2010,7 +2100,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
 
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal,coloumWiseAmount);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);

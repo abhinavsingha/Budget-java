@@ -86,7 +86,7 @@ public class PdfGenaratorUtilMain {
     }
 
 
-    public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal) throws Exception {
+    public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal, HashMap<String, String> coloumWiseAmount) throws Exception {
 
 
         Document document = new Document(PageSize.A4.rotate());
@@ -134,13 +134,19 @@ public class PdfGenaratorUtilMain {
             }
         }
         table.addCell(boldText("Grand Total", 5, 20f));
-        for (Integer i = 0; i < tabData1.size(); i++) {
-            if (i == (tabData1.size() - 1)) {
-                table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 6, 20f));
-            } else {
-                table.addCell(normalText("", 6, 20f));
-            }
+//        for (Integer i = 0; i < tabData1.size(); i++) {
+//            if (i == (tabData1.size() - 1)) {
+//
+//            } else {
+
+        for (Map.Entry<String, String> entry : coloumWiseAmount.entrySet()) {
+            String tabData = entry.getValue();
+            table.addCell(boldText(ConverterUtils.addDecimalPoint(tabData), 6, 20f));
         }
+//            }
+//        }
+
+        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 6, 20f));
 
 
         document.add(preface);
@@ -286,7 +292,7 @@ public class PdfGenaratorUtilMain {
 
 
         Font counterSign = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
-        Chunk counterSigner = new Chunk("                                                           COUNTERSIGNED" + " \n" + " \n" , counterSign);
+        Chunk counterSigner = new Chunk("                                                           COUNTERSIGNED" + " \n" + " \n", counterSign);
         phraseFooter.add(counterSigner);
 
 

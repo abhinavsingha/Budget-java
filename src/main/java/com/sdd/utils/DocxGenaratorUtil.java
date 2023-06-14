@@ -118,7 +118,7 @@ public class DocxGenaratorUtil {
     }
 
 
-    public void createCdaMainReportDoc(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal) throws Exception {
+    public void createCdaMainReportDoc(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal, HashMap<String, String> coloumWiseAmount) throws Exception {
 
         try {
 
@@ -193,19 +193,28 @@ public class DocxGenaratorUtil {
                 }
             }
 
-            XWPFTableRow tableRow11 = table.createRow();
-            tableRow11.getCell(0).setText("Grand Total");
 
-            for (Integer i = 0; i < tabData1.size(); i++) {
-                if (i == (tabData1.size() - 1)) {
-                    XWPFParagraph paragraph11 = tableRow11.getCell(i + 1).addParagraph();
-                    normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(grandTotal + ""), false);
-                } else {
-                    XWPFParagraph paragraph11 = tableRow11.getCell(i + 1).addParagraph();
-                    normalText(paragraph11.createRun(), 10, "", false);
-                }
+            int ih = 0;
+            XWPFTableRow tableRow11 = table.createRow();
+            tableRow11.getCell(ih).setText("Grand Total");
+
+//            for (Integer i = 0; i < tabData1.size(); i++) {
+//                if (i == (tabData1.size() - 1)) {
+//                    } else {
+//
+//                }
+//            }
+
+            for (Map.Entry<String, String> entry : coloumWiseAmount.entrySet()) {
+                String tabData = entry.getValue();
+                XWPFParagraph paragraph11 = tableRow11.getCell(ih + 1).addParagraph();
+                normalText(paragraph11.createRun(), 10, tabData, false);
+                ih++;
             }
 
+
+            XWPFParagraph paragraph11 = tableRow11.getCell(ih + 1).addParagraph();
+            normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(grandTotal + ""), false);
 
 
             document.write(out);
