@@ -140,10 +140,11 @@ public class MangeReportImpl implements MangeReportService {
 //        List<BudgetAllocationDetails> budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(authGroupId, "0");
 
 
-        MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupId(authGroupId);
+        List<MangeInboxOutbox> mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupId(authGroupId);
 
-        if (mangeInboxOutbox != null) {
-            if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
+        if (mangeInboxOutbox.size() > 0) {
+
+            if (mangeInboxOutbox.get(0).getIsBgcg().equalsIgnoreCase("BR")) {
                 fileName = "BudgetReceipt" + hrData.getUnitId();
             } else {
                 fileName = "AllocationReport" + hrData.getUnitId();
@@ -369,10 +370,11 @@ public class MangeReportImpl implements MangeReportService {
         try {
 
             String fileName = "AllocationReport" + hrData.getUnitId();
-            MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupId(authGroupId);
+            List<MangeInboxOutbox> mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupId(authGroupId);
 
-            if (mangeInboxOutbox != null) {
-                if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
+            if (mangeInboxOutbox.size() > 0) {
+
+                if (mangeInboxOutbox.get(0).getIsBgcg().equalsIgnoreCase("BR")) {
                     fileName = "BudgetReceipt" + hrData.getUnitId();
                 } else {
                     fileName = "AllocationReport" + hrData.getUnitId();
