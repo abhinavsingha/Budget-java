@@ -2140,6 +2140,24 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "ALLOCATION TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(reportRequest.getAmountTypeId());
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType().toUpperCase();
@@ -2152,9 +2170,9 @@ public class MangeReportImpl implements MangeReportService {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
         String amtType = budgetAllocationsDetalis.get(0).getAmountType();
-        String names = hrData.getFullName();
+        String names = approveName;
         String unitName = hrData.getUnit();
-        String rank = hrData.getRank();
+        String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
@@ -2175,18 +2193,11 @@ public class MangeReportImpl implements MangeReportService {
             paragraph.add(new Chunk("UNIT WISE ALLOCATION REPORT", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
-/*
-            Paragraph heading = new Paragraph("UNIT WISE ALLOCATION REPORT");
-            heading.setAlignment(Paragraph.ALIGN_CENTER);
-            heading.setFont(new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD));
-            document.add(heading);*/
             document.add(new Paragraph("\n"));
 
             PdfPTable table1 = new PdfPTable(2);
             table1.setWidthPercentage(100);
             Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
-
-            // Create and add the table cells
             PdfPCell cell1 = new PdfPCell(new Phrase("FINANCIAL YEAR : "+findyr.getFinYear(), cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT :"+subUnit.getDescr(), cellFont));
 
@@ -2197,7 +2208,6 @@ public class MangeReportImpl implements MangeReportService {
             PdfPTable table = new PdfPTable(4);
             table.setWidthPercentage(100);
             Font cellFont1 = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
-
             PdfPCell cell01 = new PdfPCell(new Phrase("S.L", cellFont1));
             PdfPCell cell02 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD", cellFont1));
             PdfPCell cell03 = new PdfPCell(new Phrase("ALLOCATION TYPE", cellFont1));
@@ -2298,6 +2308,24 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "ALLOCATION TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
         CgUnit subUnit = cgUnitRepository.findByUnit(reportRequest.getUnitId());
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(reportRequest.getFinYearId());
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(reportRequest.getAmountTypeId());
@@ -2400,9 +2428,9 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
             boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
 
-            String names = hrData.getFullName();
+            String names = approveName;
             String unitName = hrData.getUnit();
-            String rank = hrData.getRank();
+            String rank = approveRank;
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = now.format(formatter);
@@ -2462,6 +2490,24 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
             }, "ALLOCATION TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
         CgUnit subUnit = cgUnitRepository.findByUnit(reportRequest.getUnitId());
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(reportRequest.getFinYearId());
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(reportRequest.getAmountTypeId());
@@ -2542,6 +2588,23 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "ALLOCATION TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(req.getFinYearId());
         List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getSubHeadId(), req.getFinYearId(), req.getAllocationTypeId(), "0");
         List<BudgetAllocation> budgetAllocationsDetalis=budgetAllocationsDetalis1.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
@@ -2575,9 +2638,9 @@ public class MangeReportImpl implements MangeReportService {
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType().toUpperCase();
 
-        String names = hrData.getFullName();
+        String names = approveName;
         String unitName = hrData.getUnit();
-        String rank = hrData.getRank();
+        String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
@@ -2718,6 +2781,24 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "ALLOCATION TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(req.getFinYearId());
         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(req.getSubHeadId());
         List<BudgetAllocation> budgetAllocationsDetaliss = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getSubHeadId(), req.getFinYearId(), req.getAllocationTypeId(), "0");
@@ -2846,9 +2927,9 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
             boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
 
-            String names = hrData.getFullName();
+            String names = approveName;
             String unitName = hrData.getUnit();
-            String rank = hrData.getRank();
+            String rank = approveRank;
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = now.format(formatter);
@@ -2907,6 +2988,25 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
             }, "ALLOCATION TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(req.getFinYearId());
         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(req.getSubHeadId());
         List<BudgetAllocation> budgetAllocationsDetaliss = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getSubHeadId(), req.getFinYearId(), req.getAllocationTypeId(), "0");
@@ -3007,6 +3107,24 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
         List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType);
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -3041,9 +3159,9 @@ public class MangeReportImpl implements MangeReportService {
         String amountIn = amountObj.getAmountType().toUpperCase();
 
         String amtType = "";
-        String names = hrData.getFullName();
+        String names = approveName;
         String unitName = hrData.getUnit();
-        String rank = hrData.getRank();
+        String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
@@ -3060,7 +3178,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
-            paragraph.add(new Chunk(type.getAllocDesc().toUpperCase()+ "ALLOCATION REPORT", boldFont));
+            paragraph.add(new Chunk(type.getAllocDesc().toUpperCase()+" "+ "ALLOCATION REPORT", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
@@ -3190,6 +3308,24 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
         List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType);
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
 
@@ -3332,9 +3468,9 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne2223 = tableRowOne223.getCell(2).addParagraph();
             boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(gdTotal)), true);
 
-            String names = hrData.getFullName();
+            String names = approveName;
             String unitName = hrData.getUnit();
-            String rank = hrData.getRank();
+            String rank = approveRank;
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = now.format(formatter);
@@ -3389,6 +3525,24 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
         List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType);
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
 
@@ -3500,6 +3654,24 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType().toUpperCase();
@@ -3516,9 +3688,9 @@ public class MangeReportImpl implements MangeReportService {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
         String amtType = "";
-        String names = hrData.getFullName();
+        String names = approveName;
         String unitName = hrData.getUnit();
-        String rank = hrData.getRank();
+        String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
@@ -3561,14 +3733,23 @@ public class MangeReportImpl implements MangeReportService {
             document.add(paragraph);
             document.add(new Paragraph("\n"));
 
+            PdfPTable tables = new PdfPTable(2);
+            tables.setWidthPercentage(100);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            PdfPCell cells = new PdfPCell(new Phrase(allocType.toUpperCase()+": "+findyr.getFinYear()+" "+"ALLOCATION", cellFont));
+            PdfPCell cells0 = new PdfPCell(new Phrase("AMOUNT IN: ("+amountIn.toUpperCase()+")", cellFont));
+            tables.addCell(cells);
+            tables.addCell(cells0);
+            document.add(tables);
+
             PdfPTable table = new PdfPTable(5);
             table.setWidthPercentage(100);
-            Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+
             PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
-            PdfPCell cell3 = new PdfPCell(new Phrase("ALLOCATION AMOUNT IN: ("+amountIn+")", cellFont));
-            PdfPCell cell4 = new PdfPCell(new Phrase("ADDITIONAL AMOUNT IN: ("+amountIn+")", cellFont));
-            PdfPCell cell5 = new PdfPCell(new Phrase("REVISED AMOUNT IN: ("+amountIn+")", cellFont));
+            PdfPCell cell3 = new PdfPCell(new Phrase("ALLOCATION AMOUNT", cellFont));
+            PdfPCell cell4 = new PdfPCell(new Phrase("ADDITIONAL AMOUNT", cellFont));
+            PdfPCell cell5 = new PdfPCell(new Phrase("REVISED AMOUNT", cellFont));
 
             table.addCell(cell1);
             table.addCell(cell2);
@@ -3737,6 +3918,23 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType();
@@ -3947,9 +4145,9 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne2245 = tableRowOne223.getCell(4).addParagraph();
             boldText(paragraphtableRowOne2245.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), true);
 
-            String names = hrData.getFullName();
+            String names = approveName;
             String unitName = hrData.getUnit();
-            String rank = hrData.getRank();
+            String rank = approveRank;
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = now.format(formatter);
@@ -4003,6 +4201,24 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType();
@@ -4154,6 +4370,24 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "BE or RE ALLOCATION CAN NOT BE SAME", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
         AllocationType type = allocationRepository.findByAllocTypeId(allocationTypeBE);
         AllocationType types = allocationRepository.findByAllocTypeId(allocationTypeRE);
 
@@ -4190,9 +4424,9 @@ public class MangeReportImpl implements MangeReportService {
         String amountIn = amountObj.getAmountType().toUpperCase();
 
         String amtType = "";
-        String names = hrData.getFullName();
+        String names = approveName;
         String unitName = hrData.getUnit();
-        String rank = hrData.getRank();
+        String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
@@ -4211,7 +4445,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
-            paragraph.add(new Chunk("RE  ALLOCATION  REPORT", boldFont));
+            paragraph.add(new Chunk("RE  ALLOCATION  REPORT"+": "+findyr.getFinYear(), boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
@@ -4221,8 +4455,8 @@ public class MangeReportImpl implements MangeReportService {
             Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
             PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
-            PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()+" "+findyr.getFinYear()+" "+"ALLOCATION AMOUNT IN: ("+amountIn+")", cellFont));
-            PdfPCell cell4 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()+" "+findyr.getFinYear()+" "+"ALLOCATION AMOUNT IN: ("+amountIn+")", cellFont));
+            PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()+" "+"ALLOCATION AMOUNT IN: ("+amountIn+")", cellFont));
+            PdfPCell cell4 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()+" "+"ALLOCATION AMOUNT IN: ("+amountIn+")", cellFont));
 
             table.addCell(cell1);
             table.addCell(cell2);
@@ -4378,6 +4612,23 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "BE or RE ALLOCATION CAN NOT BE SAME", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
         AllocationType type = allocationRepository.findByAllocTypeId(allocationTypeBE);
         AllocationType types = allocationRepository.findByAllocTypeId(allocationTypeRE);
 
@@ -4419,7 +4670,7 @@ public class MangeReportImpl implements MangeReportService {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText(type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_ALLOCATION REPORT" + ": " + findyr.getFinYear());
+            headingRun.setText("RE  ALLOCATION  REPORT"+": "+findyr.getFinYear());
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
@@ -4440,9 +4691,9 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
             boldText(paragraphtableRowOne1.createRun(), 12, "UNIT ", true);
             XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
-            boldText(paragraphtableRowOne2.createRun(), 12, type.getAllocDesc().toUpperCase() + " " + "ALLOCATION :" + " (" + amountIn + " )", true);
+            boldText(paragraphtableRowOne2.createRun(), 12, type.getAllocDesc().toUpperCase() + " " + "ALLOCATION IN:" + " (" + amountIn + " )", true);
             XWPFParagraph paragraphtableRowOne3 = tableRowOne.getCell(3).addParagraph();
-            boldText(paragraphtableRowOne3.createRun(), 12, types.getAllocDesc().toUpperCase() + " " + "ALLOCATION :" + " (" + amountIn + " )", true);
+            boldText(paragraphtableRowOne3.createRun(), 12, types.getAllocDesc().toUpperCase() + " " + "ALLOCATION IN:" + " (" + amountIn + " )", true);
 
             int i = 1;
             float grTotalAlloc = 0;
@@ -4547,9 +4798,9 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne2230 = tableRowOne223.getCell(3).addParagraph();
             boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), true);
 
-            String names = hrData.getFullName();
+            String names = approveName;
             String unitName = hrData.getUnit();
-            String rank = hrData.getRank();
+            String rank = approveRank;
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = now.format(formatter);
@@ -4612,6 +4863,24 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BEREResponce>>() {
             }, "BE or RE ALLOCATION CAN NOT BE SAME", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
         AllocationType type = allocationRepository.findByAllocTypeId(allocationTypeBE);
         AllocationType types = allocationRepository.findByAllocTypeId(allocationTypeRE);
 
@@ -4759,6 +5028,24 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "TO DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
         AllocationType type = allocationRepository.findByAllocTypeId(allocationType);
         List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType);
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
@@ -4794,12 +5081,27 @@ public class MangeReportImpl implements MangeReportService {
         String amountIn = amountObj.getAmountType().toUpperCase();
 
         String amtType = "";
-        String names = hrData.getFullName();
+        String names = approveName;
         String unitName = hrData.getUnit();
-        String rank = hrData.getRank();
+        String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
+
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+        LocalDate date = LocalDate.parse(toDate, inputFormatter);
+        String formattedDate = date.format(outputFormatter);
+
+        LocalDate frmLocal = LocalDate.parse(fromDate);
+        LocalDate resultDate = frmLocal.minusDays(1);
+        LocalDateTime frmlocalDateTime = LocalDateTime.of(resultDate, LocalTime.MIDNIGHT);
+        Timestamp fromDateFormate = Timestamp.valueOf(frmlocalDateTime);
+
+        LocalDate localDa = LocalDate.parse(toDate);
+        LocalDate resultDt = localDa.plusDays(1);
+        LocalDateTime localDateTime = LocalDateTime.of(resultDt, LocalTime.MIDNIGHT);
+        Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
 
         try {
             Document document = new Document(PageSize.A4_LANDSCAPE);
@@ -4814,22 +5116,32 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
-            paragraph.add(new Chunk(" COAST GUARD BUDGET : FY : "+findyr.getFinYear(), boldFont));
+            paragraph.add(new Chunk(type.getAllocDesc().toUpperCase()+" "+"FER_ALLOCATION REPORT", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
 
+            PdfPTable tabless = new PdfPTable(1);
+            tabless.setWidthPercentage(100);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            PdfPCell cell1ss = new PdfPCell(new Phrase(" COAST GUARD BUDGET : FY : "+findyr.getFinYear(), cellFont));
+            cell1ss.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            PdfPCell cell1ss1 = new PdfPCell(new Phrase("AMOUNT IN:  ("+amountIn.toUpperCase()+")", cellFont));
+            cell1ss1.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+            tabless.addCell(cell1ss);
+            tabless.addCell(cell1ss1);
+            document.add(tabless);
+
             PdfPTable table = new PdfPTable(8);
             table.setWidthPercentage(100);
-            Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
             PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
-            PdfPCell cell2 = new PdfPCell(new Phrase("RE1 2023-24 Allocation to ICG", cellFont));
+            PdfPCell cell2 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()+" "+findyr.getFinYear()+" "+" Allocation to ICG", cellFont));
             PdfPCell cell3 = new PdfPCell(new Phrase("UNIT", cellFont));
-            PdfPCell cell4 = new PdfPCell(new Phrase("RE1 : 2023-24 Allocation", cellFont));
-            PdfPCell cell5 = new PdfPCell(new Phrase("Bill Submission Upto 09-Jun-2023", cellFont));
-            PdfPCell cell6 = new PdfPCell(new Phrase("% Bill Submission w.r.t. RE1 2023-24", cellFont));
-            PdfPCell cell7 = new PdfPCell(new Phrase("CGDA Booking Upto 09-Jun-2023", cellFont));
-            PdfPCell cell8 = new PdfPCell(new Phrase("% Bill Clearance w.r.t. RE1 2023- 24", cellFont));
+            PdfPCell cell4 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()+": "+findyr.getFinYear()+" "+" Allocation", cellFont));
+            PdfPCell cell5 = new PdfPCell(new Phrase("Bill Submission Upto "+" "+formattedDate, cellFont));
+            PdfPCell cell6 = new PdfPCell(new Phrase("% Bill Submission w.r.t. "+" "+type.getAllocDesc().toUpperCase()+": "+findyr.getFinYear(), cellFont));
+            PdfPCell cell7 = new PdfPCell(new Phrase("CGDA Booking Upto "+" "+formattedDate, cellFont));
+            PdfPCell cell8 = new PdfPCell(new Phrase("% Bill Clearance w.r.t."+" "+type.getAllocDesc().toUpperCase()+": "+findyr.getFinYear(), cellFont));
 
             table.addCell(cell1);
             table.addCell(cell2);
@@ -4846,26 +5158,16 @@ public class MangeReportImpl implements MangeReportService {
             float grTotalSum = 0;
             String finyear = "";
             String unit = "";
-            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
-            LocalDate date = LocalDate.parse(toDate, inputFormatter);
-            String formattedDate = date.format(outputFormatter);
 
-            LocalDate frmLocal = LocalDate.parse(fromDate);
-            LocalDate resultDate = frmLocal.minusDays(1);
-            LocalDateTime frmlocalDateTime = LocalDateTime.of(resultDate, LocalTime.MIDNIGHT);
-            Timestamp fromDateFormate = Timestamp.valueOf(frmlocalDateTime);
-
-            LocalDate localDa = LocalDate.parse(toDate);
-            LocalDate resultDt = localDa.plusDays(1);
-            LocalDateTime localDateTime = LocalDateTime.of(resultDt, LocalTime.MIDNIGHT);
-            Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
             Double IcgAmount = 0.0;
             for (String val : rowData) {
                 String subHeadId = val;
                 String hrUnit = hrData.getUnitId();
                 System.out.println("Sorting " + subHeadId);
-                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(subHeadId, allocationType, "0", "0");
+                List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(subHeadId, allocationType, "0", "0");
+                List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails=reportDetailss.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
+
                 List<BudgetAllocation> hrDetails = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(hrUnit, finYearId, subHeadId, allocationType, "0");
                 if (hrDetails.size() > 0) {
                     Double hrAllocAmount = Double.valueOf(hrDetails.get(0).getAllocationAmount());
@@ -5042,6 +5344,24 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "TO DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
         AllocationType type = allocationRepository.findByAllocTypeId(allocationType);
         List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType);
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
@@ -5170,7 +5490,9 @@ public class MangeReportImpl implements MangeReportService {
                     Double hrAmountUnit = hrAmount.getAmount();
                     IcgAmount = hrAllocAmount * hrAmountUnit / reqAmount;
                 }
-                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails=reportDetailss.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
+
                 int sz = reportDetails.size();
                 if(sz<=0)
                     continue;
@@ -5311,9 +5633,9 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne2270 = tableRowOne220.getCell(7).addParagraph();
             boldText(paragraphtableRowOne2270.createRun(), 12, "", true);
 
-            String names = hrData.getFullName();
+            String names = approveName;
             String unitName = hrData.getUnit();
-            String rank = hrData.getRank();
+            String rank = approveRank;
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = now.format(formatter);
@@ -5378,6 +5700,24 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
             }, "TO DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
         AllocationType type = allocationRepository.findByAllocTypeId(allocationType);
         List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType);
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
@@ -5448,7 +5788,8 @@ public class MangeReportImpl implements MangeReportService {
                     Double hrAmountUnit = hrAmount.getAmount();
                     IcgAmount = hrAllocAmount * hrAmountUnit / reqAmount;
                 }
-                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails=reportDetailss.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
 
                 int count = 0;
                 float sum = 0;
@@ -5551,14 +5892,30 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "TO DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
 
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType().toUpperCase();
 
-        String names = hrData.getFullName();
+        String names = approveName;
         String unitName = hrData.getUnit();
-        String rank = hrData.getRank();
+        String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
@@ -5618,6 +5975,7 @@ public class MangeReportImpl implements MangeReportService {
             Double balAmount;
             Timestamp LastCbD;
             String val = "";
+            int no=1;
             float grTotalAlloc = 0;
             float grTotalAddition = 0;
             float grTotalSum = 0;
@@ -5631,7 +5989,8 @@ public class MangeReportImpl implements MangeReportService {
                     List<BudgetRebase> rebaseDatas = budgetRebaseRepository.findByRebaseUnitId(RunitId);
                     List<BudgetRebase> rebaseData1 = rebaseDatas.stream()
                             .filter(e -> e.getOccuranceDate().after(fromDateFormate) && e.getOccuranceDate().before(toDateFormate)).collect(Collectors.toList());
-                    List<BudgetRebase> rebaseData = rebaseData1.stream().sorted(Comparator.comparing(data -> data.getBudgetHeadId().substring(data.getBudgetHeadId().length() - 2))).collect(Collectors.toList());
+                    List<BudgetRebase> rebaseDatass = rebaseData1.stream().sorted(Comparator.comparing(data -> data.getBudgetHeadId().substring(data.getBudgetHeadId().length() - 2))).collect(Collectors.toList());
+                    List<BudgetRebase> rebaseData=rebaseDatass.stream().filter(e->Double.valueOf(e.getAllocAmount())!=0).collect(Collectors.toList());
 
                     if (rebaseData.size() <= 0) {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
@@ -5645,6 +6004,13 @@ public class MangeReportImpl implements MangeReportService {
                     System.out.println("RBDATE" + rebaseDate);
                     frmStation = frmS;
                     toStation = toS.getStationName();
+
+                    Paragraph paragraph11 = new Paragraph();
+                    Font boldFontss = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+                    paragraph11.add(new Chunk("Serial No: "+no, boldFontss));
+                    document.add(paragraph11);
+                    document.add(new Paragraph("\n"));
+
 
                     PdfPTable table1 = new PdfPTable(4);
                     table1.setWidthPercentage(100);
@@ -5676,7 +6042,7 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell10 = new PdfPCell(new Phrase("FINANCIAL YEAR & ALLOCATION TYPE ", cellFont));
                     PdfPCell cell20 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD", cellFont));
                     PdfPCell cell40 = new PdfPCell(new Phrase("ALLOCATION IN: ( "+amountIn+")", cellFont));
-                    PdfPCell cell50 = new PdfPCell(new Phrase("EXPENDITURE IN: (INR)"));
+                    PdfPCell cell50 = new PdfPCell(new Phrase("EXPENDITURE IN: (INR)",cellFont));
                     PdfPCell cell60 = new PdfPCell(new Phrase("BALANCE IN : ( "+amountIn+")", cellFont));
                     PdfPCell cell70 = new PdfPCell(new Phrase("LAST CB DATE", cellFont));
 
@@ -5686,6 +6052,8 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(cell50);
                     table.addCell(cell60);
                     table.addCell(cell70);
+
+                    no++;
 
                     for (Integer k = 0; k < rebaseData.size(); k++) {
                         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(rebaseData.get(k).getFinYear());
@@ -5794,7 +6162,23 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "TO DATE NOT BE NULL", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrDataCheck.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
 
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
         List<String> groupUnitId = budgetRebaseRepository.findGroupRebaseUnit();
         if (groupUnitId.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -5846,7 +6230,8 @@ public class MangeReportImpl implements MangeReportService {
                     List<BudgetRebase> rebaseDatas = budgetRebaseRepository.findByRebaseUnitId(RunitId);
                     List<BudgetRebase> rebaseData1 = rebaseDatas.stream()
                             .filter(e -> e.getOccuranceDate().after(fromDateFormate) && e.getOccuranceDate().before(toDateFormate)).collect(Collectors.toList());
-                    List<BudgetRebase> rebaseData = rebaseData1.stream().sorted(Comparator.comparing(data -> data.getBudgetHeadId().substring(data.getBudgetHeadId().length() - 2))).collect(Collectors.toList());
+                    List<BudgetRebase> rebaseDatass = rebaseData1.stream().sorted(Comparator.comparing(data -> data.getBudgetHeadId().substring(data.getBudgetHeadId().length() - 2))).collect(Collectors.toList());
+                    List<BudgetRebase> rebaseData=rebaseDatass.stream().filter(e->Double.valueOf(e.getAllocAmount())!=0).collect(Collectors.toList());
 
                     if (rebaseData.size() <= 0) {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
@@ -6010,9 +6395,9 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRow51.createRun(), 12, "       ", true);
                 }
             }
-            String names = hrDataCheck.getFullName();
+            String names = approveName;
             String unitName = hrDataCheck.getUnit();
-            String rank = hrDataCheck.getRank();
+            String rank = approveRank;
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = now.format(formatter);
@@ -6074,7 +6459,23 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
             }, "DATA NOT FOUND FROM DB", HttpStatus.OK.value());
         }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrDataCheck.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
 
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
         LocalDate date = LocalDate.parse(toDate, inputFormatter);
@@ -6100,7 +6501,8 @@ public class MangeReportImpl implements MangeReportService {
                     List<BudgetRebase> rebaseDatas = budgetRebaseRepository.findByRebaseUnitId(RunitId);
                     List<BudgetRebase> rebaseData1 = rebaseDatas.stream()
                             .filter(e -> e.getOccuranceDate().after(fromDateFormate) && e.getOccuranceDate().before(toDateFormate)).collect(Collectors.toList());
-                    List<BudgetRebase> rebaseData = rebaseData1.stream().sorted(Comparator.comparing(data -> data.getBudgetHeadId().substring(data.getBudgetHeadId().length() - 2))).collect(Collectors.toList());
+                    List<BudgetRebase> rebaseDatass = rebaseData1.stream().sorted(Comparator.comparing(data -> data.getBudgetHeadId().substring(data.getBudgetHeadId().length() - 2))).collect(Collectors.toList());
+                    List<BudgetRebase> rebaseData=rebaseDatass.stream().filter(e->Double.valueOf(e.getAllocAmount())!=0).collect(Collectors.toList());
 
                     if (rebaseData.size() <= 0) {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
