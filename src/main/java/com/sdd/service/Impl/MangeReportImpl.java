@@ -2,7 +2,8 @@ package com.sdd.service.Impl;
 
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.itextpdf.text.PageSize;
+import com.itextpdf.text.*;
+import com.itextpdf.text.Document;
 import com.sdd.entities.*;
 import com.sdd.entities.repository.*;
 import com.sdd.exception.SDDException;
@@ -37,12 +38,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -2171,25 +2170,43 @@ public class MangeReportImpl implements MangeReportService {
 
             document.open();
 
+            Paragraph paragraph = new Paragraph();
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+            paragraph.add(new Chunk("UNIT WISE ALLOCATION REPORT", boldFont));
+            paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(paragraph);
+/*
             Paragraph heading = new Paragraph("UNIT WISE ALLOCATION REPORT");
             heading.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(heading);
+            heading.setFont(new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD));
+            document.add(heading);*/
             document.add(new Paragraph("\n"));
 
             PdfPTable table1 = new PdfPTable(2);
-            table1.setWidthPercentage(80);
+            table1.setWidthPercentage(100);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
 
-            table1.addCell("FINANCIAL YEAR : "+findyr.getFinYear());
-            table1.addCell("UNIT :"+subUnit.getDescr());
+            // Create and add the table cells
+            PdfPCell cell1 = new PdfPCell(new Phrase("FINANCIAL YEAR : "+findyr.getFinYear(), cellFont));
+            PdfPCell cell2 = new PdfPCell(new Phrase("UNIT :"+subUnit.getDescr(), cellFont));
+
+            table1.addCell(cell1);
+            table1.addCell(cell2);
             document.add(table1);
 
             PdfPTable table = new PdfPTable(4);
-            table.setWidthPercentage(80);
+            table.setWidthPercentage(100);
+            Font cellFont1 = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
 
-            table.addCell("S.L");
-            table.addCell("REVENUE OBJECT HEAD");
-            table.addCell("ALLOCATION TYPE");
-            table.addCell("AMOUNT IN :("+amountIn+")");
+            PdfPCell cell01 = new PdfPCell(new Phrase("S.L", cellFont1));
+            PdfPCell cell02 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD", cellFont1));
+            PdfPCell cell03 = new PdfPCell(new Phrase("ALLOCATION TYPE", cellFont1));
+            PdfPCell cell04 = new PdfPCell(new Phrase("AMOUNT IN :("+amountIn+")", cellFont1));
+
+            table.addCell(cell01);
+            table.addCell(cell02);
+            table.addCell(cell03);
+            table.addCell(cell04);
 
 
             int i = 1;
@@ -2220,11 +2237,13 @@ public class MangeReportImpl implements MangeReportService {
                 i++;
                 sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
             }
-
-            table.addCell("TOTAL");
+            Font cellFont2 = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            PdfPCell cell20 = new PdfPCell(new Phrase("TOTAL", cellFont2));
+            PdfPCell cell21 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum)), cellFont2));
+            table.addCell(cell20);
             table.addCell("");
             table.addCell("");
-            table.addCell(String.format("%1$0,1.4f", new BigDecimal(sum)));
+            table.addCell(cell21);
 
             document.add(table);
 
@@ -2285,7 +2304,8 @@ public class MangeReportImpl implements MangeReportService {
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType();
         List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0");
-        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis1.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
+        List<BudgetAllocation> budgetAllocationsDetalis2 = budgetAllocationsDetalis1.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
+        List<BudgetAllocation> budgetAllocationsDetalis=budgetAllocationsDetalis2.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
 
         if (budgetAllocationsDetalis.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -2448,7 +2468,8 @@ public class MangeReportImpl implements MangeReportService {
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType();
         List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0");
-        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis1.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
+        List<BudgetAllocation> budgetAllocationsDetalis2 = budgetAllocationsDetalis1.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
+        List<BudgetAllocation> budgetAllocationsDetalis=budgetAllocationsDetalis2.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
 
         if (budgetAllocationsDetalis.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
@@ -2572,26 +2593,34 @@ public class MangeReportImpl implements MangeReportService {
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
-
-            Paragraph heading = new Paragraph("SUBHEAD WISE ALLOCATION REPORT");
-            heading.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(heading);
+            Paragraph paragraph = new Paragraph();
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+            paragraph.add(new Chunk("SUBHEAD WISE ALLOCATION REPORT", boldFont));
+            paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(paragraph);
             document.add(new Paragraph("\n"));
 
             PdfPTable table1 = new PdfPTable(2);
-            table1.setWidthPercentage(80);
+            table1.setWidthPercentage(100);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            PdfPCell cell1 = new PdfPCell(new Phrase("FINANCIAL YEAR : "+findyr.getFinYear(), cellFont));
+            PdfPCell cell2 = new PdfPCell(new Phrase("SUBHEAD :"+bHead.getSubHeadDescr(), cellFont));
 
-            table1.addCell("FINANCIAL YEAR : "+findyr.getFinYear());
-            table1.addCell("SUBHEAD :"+bHead.getSubHeadDescr());
+            table1.addCell(cell1);
+            table1.addCell(cell2);
             document.add(table1);
 
             PdfPTable table = new PdfPTable(4);
-            table.setWidthPercentage(80);
+            table.setWidthPercentage(100);
+            PdfPCell cell10 = new PdfPCell(new Phrase("S.L", cellFont));
+            PdfPCell cell20 = new PdfPCell(new Phrase("UNIT", cellFont));
+            PdfPCell cell30 = new PdfPCell(new Phrase("ALLOCATION TYPE", cellFont));
+            PdfPCell cell40 = new PdfPCell(new Phrase("AMOUNT IN :("+amountIn+")", cellFont));
 
-            table.addCell("S.L");
-            table.addCell("UNIT");
-            table.addCell("ALLOCATION TYPE");
-            table.addCell("AMOUNT IN :("+amountIn+")");
+            table.addCell(cell10);
+            table.addCell(cell20);
+            table.addCell(cell30);
+            table.addCell(cell40);
 
             int i = 1;
             String finyear = "";
@@ -2628,10 +2657,13 @@ public class MangeReportImpl implements MangeReportService {
                     }
                 }
             }
-            table.addCell("TOTAL");
+            PdfPCell cell110 = new PdfPCell(new Phrase("TOTAL", cellFont));
+            PdfPCell cell200 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum)), cellFont));
+
+            table.addCell(cell110);
             table.addCell("");
             table.addCell("");
-            table.addCell(String.format("%1$0,1.4f", new BigDecimal(sum)));
+            table.addCell(cell200);
 
             document.add(table);
 
@@ -2689,7 +2721,8 @@ public class MangeReportImpl implements MangeReportService {
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(req.getFinYearId());
         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(req.getSubHeadId());
         List<BudgetAllocation> budgetAllocationsDetaliss = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getSubHeadId(), req.getFinYearId(), req.getAllocationTypeId(), "0");
-        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetaliss.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+        List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationsDetaliss.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+        List<BudgetAllocation> budgetAllocationsDetalis=budgetAllocationsDetalis1.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
 
         int size = budgetAllocationsDetalis.size();
         if (budgetAllocationsDetalis.size() <= 0) {
@@ -2877,7 +2910,8 @@ public class MangeReportImpl implements MangeReportService {
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(req.getFinYearId());
         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(req.getSubHeadId());
         List<BudgetAllocation> budgetAllocationsDetaliss = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getSubHeadId(), req.getFinYearId(), req.getAllocationTypeId(), "0");
-        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetaliss.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+        List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationsDetaliss.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+        List<BudgetAllocation> budgetAllocationsDetalis=budgetAllocationsDetalis1.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
 
         if (budgetAllocationsDetalis.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
@@ -3024,18 +3058,24 @@ public class MangeReportImpl implements MangeReportService {
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
-
-            Paragraph heading = new Paragraph(type.getAllocDesc().toUpperCase()+ "ALLOCATION REPORT");
-            heading.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(heading);
+            Paragraph paragraph = new Paragraph();
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+            paragraph.add(new Chunk(type.getAllocDesc().toUpperCase()+ "ALLOCATION REPORT", boldFont));
+            paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(paragraph);
             document.add(new Paragraph("\n"));
 
-            PdfPTable table = new PdfPTable(3);
-            table.setWidthPercentage(80);
 
-            table.addCell("REVENUE OBJECT HEAD ");
-            table.addCell("UNIT");
-            table.addCell(type.getAllocDesc().toUpperCase()+" "+findyr.getFinYear()+" "+"ALLOCATION IN: ("+amountIn+")");
+            PdfPTable table = new PdfPTable(3);
+            table.setWidthPercentage(100);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
+            PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
+            PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()+" "+findyr.getFinYear()+" "+"ALLOCATION IN: ("+amountIn+")", cellFont));
+
+            table.addCell(cell1);
+            table.addCell(cell2);
+            table.addCell(cell3);
 
             int i = 1;
             String finyear = "";
@@ -3087,16 +3127,20 @@ public class MangeReportImpl implements MangeReportService {
 
                 }
                 if (count != 0) {
+                    PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL ", cellFont));
+                    PdfPCell cell11 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum)), cellFont));
                     table.addCell("");
-                    table.addCell("TOTAL");
-                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(sum)));
+                    table.addCell(cell10);
+                    table.addCell(cell11);
                     count = 0;
                 }
 
             }
+            PdfPCell cell101 = new PdfPCell(new Phrase("GRAND TOTAL ", cellFont));
+            PdfPCell cell111 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(gdTotal)), cellFont));
             table.addCell("");
-            table.addCell("GRAND TOTAL");
-            table.addCell(String.format("%1$0,1.4f", new BigDecimal(gdTotal)));
+            table.addCell(cell101);
+            table.addCell(cell111);
 
             document.add(table);
 
@@ -3214,14 +3258,13 @@ public class MangeReportImpl implements MangeReportService {
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId, allocationType, "0");
-                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
-/*                if (reportDetails.size() <= 0) {
-                    return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                    }, "RECORD NOT FOUND OR EMPTY", HttpStatus.OK.value());
-                }*/
+                List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails=reportDetailss.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
                 int sz = reportDetails.size();
-                XWPFTable table11 = document.createTable(sz, 3);
-                table11.setWidth("100%");
+                if(sz<=0)
+                    continue;
+                    XWPFTable table11 = document.createTable(sz, 3);
+                    table11.setWidth("100%");
 
                 int count = 0;
                 float sum = 0;
@@ -3256,23 +3299,27 @@ public class MangeReportImpl implements MangeReportService {
 
                             XWPFParagraph paragraphtableRow21 = tableRowOne111.getCell(2).addParagraph();
                             boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), true);
-
+                            count++;
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                             gdTotal += sum;
+
                         }
-                        count++;
+
                     }
 
                 }
-                XWPFTable table222 = document.createTable(1, 3);
-                table222.setWidth("100%");
-                XWPFTableRow tableRowOne222 = table222.getRow(0);
-                XWPFParagraph paragraphtableRowOne222 = tableRowOne222.getCell(0).addParagraph();
-                boldText(paragraphtableRowOne222.createRun(), 12, "", true);
-                XWPFParagraph paragraphtableRowOne1222 = tableRowOne222.getCell(1).addParagraph();
-                boldText(paragraphtableRowOne1222.createRun(), 12, "TOTAL ", true);
-                XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
-                boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
+                if (count != 0) {
+                    XWPFTable table222 = document.createTable(1, 3);
+                    table222.setWidth("100%");
+                    XWPFTableRow tableRowOne222 = table222.getRow(0);
+                    XWPFParagraph paragraphtableRowOne222 = tableRowOne222.getCell(0).addParagraph();
+                    boldText(paragraphtableRowOne222.createRun(), 12, "", true);
+                    XWPFParagraph paragraphtableRowOne1222 = tableRowOne222.getCell(1).addParagraph();
+                    boldText(paragraphtableRowOne1222.createRun(), 12, "TOTAL ", true);
+                    XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
+                    boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
+                    count =0;
+                }
 
             }
             XWPFTable table223 = document.createTable(1, 3);
@@ -3382,7 +3429,8 @@ public class MangeReportImpl implements MangeReportService {
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId, allocationType, "0");
-                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails=reportDetailss.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
 
                 int count = 0;
                 float sum = 0;
@@ -3506,20 +3554,27 @@ public class MangeReportImpl implements MangeReportService {
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
-
-            Paragraph heading = new Paragraph(allocType.toUpperCase()+" "+ "REVISED  ALLOCATION  REPORT");
-            heading.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(heading);
+            Paragraph paragraph = new Paragraph();
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+            paragraph.add(new Chunk(allocType.toUpperCase()+" "+ "REVISED  ALLOCATION  REPORT", boldFont));
+            paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(paragraph);
             document.add(new Paragraph("\n"));
 
             PdfPTable table = new PdfPTable(5);
-            table.setWidthPercentage(80);
+            table.setWidthPercentage(100);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
+            PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
+            PdfPCell cell3 = new PdfPCell(new Phrase("ALLOCATION AMOUNT IN: ("+amountIn+")", cellFont));
+            PdfPCell cell4 = new PdfPCell(new Phrase("ADDITIONAL AMOUNT IN: ("+amountIn+")", cellFont));
+            PdfPCell cell5 = new PdfPCell(new Phrase("REVISED AMOUNT IN: ("+amountIn+")", cellFont));
 
-            table.addCell("REVENUE OBJECT HEAD ");
-            table.addCell("UNIT");
-            table.addCell("ALLOCATION AMOUNT IN: ("+amountIn+")");
-            table.addCell("ADDITIONAL AMOUNT IN: ("+amountIn+")");
-            table.addCell("REVISED AMOUNT IN: ("+amountIn+")");
+            table.addCell(cell1);
+            table.addCell(cell2);
+            table.addCell(cell3);
+            table.addCell(cell4);
+            table.addCell(cell5);
 
             int i = 1;
             String finyear = "";
@@ -3603,25 +3658,37 @@ public class MangeReportImpl implements MangeReportService {
                         String ss1 = ss.replace("-", "");
                         ss2 = Double.parseDouble(ss1);
                     }
+                    PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
+                    PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sumExisting)), cellFont));
+                    PdfPCell cell301 = new PdfPCell(new Phrase("(-) "+String.format("%1$0,1.4f", new BigDecimal(ss2)), cellFont));
+                    PdfPCell cell302 = new PdfPCell(new Phrase("(+) "+String.format("%1$0,1.4f", new BigDecimal(sumRE)), cellFont));
+                    PdfPCell cell303 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sumRE)), cellFont));
+                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(total)), cellFont));
+
                     table.addCell(" ");
-                    table.addCell("TOTAL");
-                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(sumExisting)));
+                    table.addCell(cell10);
+                    table.addCell(cell20);
                     if (sumRE < 0)
-                        table.addCell("(-) "+String.format("%1$0,1.4f", new BigDecimal(ss2)));
+                        table.addCell(cell301);
                     else if (sumRE > 0)
-                        table.addCell("(+) "+String.format("%1$0,1.4f", new BigDecimal(sumRE)));
+                        table.addCell(cell302);
                     else
-                        table.addCell(String.format("%1$0,1.4f", new BigDecimal(sumRE)));
-                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(total)));
+                        table.addCell(cell303);
+                    table.addCell(cell40);
                     count = 0;
                 }
 
             }
+            PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
+            PdfPCell cell01 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
+            PdfPCell cell02 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
+            PdfPCell cell03 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), cellFont));
+
             table.addCell(" ");
-            table.addCell("GRAND TOTAL");
-            table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)));
-            table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)));
-            table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalSum)));
+            table.addCell(cell00);
+            table.addCell(cell01);
+            table.addCell(cell02);
+            table.addCell(cell03);
 
             document.add(table);
 
@@ -3765,11 +3832,14 @@ public class MangeReportImpl implements MangeReportService {
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(subHeadId, allocationType, "0", "0");
-                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails=reportDetailss.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
 
                 BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
 
                 int sz = reportDetails.size();
+                if(sz<=0)
+                    continue;
                 XWPFTable table11 = document.createTable(sz, 5);
                 table11.setWidth("100%");
 
@@ -3982,7 +4052,8 @@ public class MangeReportImpl implements MangeReportService {
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(subHeadId, allocationType, "0", "0");
-                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails=reportDetailss.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
 
                 BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
 
@@ -4138,19 +4209,25 @@ public class MangeReportImpl implements MangeReportService {
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
-
-            Paragraph heading = new Paragraph("RE  ALLOCATION  REPORT");
-            heading.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(heading);
+            Paragraph paragraph = new Paragraph();
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+            paragraph.add(new Chunk("RE  ALLOCATION  REPORT", boldFont));
+            paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(paragraph);
             document.add(new Paragraph("\n"));
 
             PdfPTable table = new PdfPTable(4);
-            table.setWidthPercentage(80);
+            table.setWidthPercentage(100);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
+            PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
+            PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()+" "+findyr.getFinYear()+" "+"ALLOCATION AMOUNT IN: ("+amountIn+")", cellFont));
+            PdfPCell cell4 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()+" "+findyr.getFinYear()+" "+"ALLOCATION AMOUNT IN: ("+amountIn+")", cellFont));
 
-            table.addCell("REVENUE OBJECT HEAD ");
-            table.addCell("UNIT");
-            table.addCell(type.getAllocDesc().toUpperCase()+" "+findyr.getFinYear()+" "+"ALLOCATION AMOUNT IN: ("+amountIn+")");
-            table.addCell(type.getAllocDesc().toUpperCase()+" "+findyr.getFinYear()+" "+"ALLOCATION AMOUNT IN: ("+amountIn+")");
+            table.addCell(cell1);
+            table.addCell(cell2);
+            table.addCell(cell3);
+            table.addCell(cell4);
 
 
             int i = 1;
@@ -4224,18 +4301,26 @@ public class MangeReportImpl implements MangeReportService {
 
                 }
                 if (count != 0) {
+                    PdfPCell cell20 = new PdfPCell(new Phrase(" TOTAL", cellFont));
+                    PdfPCell cell21 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum)), cellFont));
+                    PdfPCell cell22 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(reSum)), cellFont));
+
                     table.addCell(" ");
-                    table.addCell(" TOTAL");
-                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(sum)));
-                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(reSum)));
+                    table.addCell(cell20);
+                    table.addCell(cell21);
+                    table.addCell(cell22);
                     count = 0;
                 }
 
             }
+            PdfPCell cell210 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
+            PdfPCell cell211 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
+            PdfPCell cell212 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
+
             table.addCell(" ");
-            table.addCell("GRAND TOTAL");
-            table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)));
-            table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)));
+            table.addCell(cell210);
+            table.addCell(cell211);
+            table.addCell(cell212);
 
             document.add(table);
 
@@ -4367,6 +4452,8 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId, allocationTypeBE, "0");
                 List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 int sz = reportDetails.size();
+                if(sz<=0)
+                    continue;
                 XWPFTable table11 = document.createTable(sz, 4);
                 table11.setWidth("100%");
 
@@ -4725,23 +4812,33 @@ public class MangeReportImpl implements MangeReportService {
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
-
-            Paragraph heading = new Paragraph(" COAST GUARD BUDGET : FY : "+findyr.getFinYear());
-            heading.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(heading);
+            Paragraph paragraph = new Paragraph();
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+            paragraph.add(new Chunk(" COAST GUARD BUDGET : FY : "+findyr.getFinYear(), boldFont));
+            paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(paragraph);
             document.add(new Paragraph("\n"));
 
             PdfPTable table = new PdfPTable(8);
             table.setWidthPercentage(100);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
+            PdfPCell cell2 = new PdfPCell(new Phrase("RE1 2023-24 Allocation to ICG", cellFont));
+            PdfPCell cell3 = new PdfPCell(new Phrase("UNIT", cellFont));
+            PdfPCell cell4 = new PdfPCell(new Phrase("RE1 : 2023-24 Allocation", cellFont));
+            PdfPCell cell5 = new PdfPCell(new Phrase("Bill Submission Upto 09-Jun-2023", cellFont));
+            PdfPCell cell6 = new PdfPCell(new Phrase("% Bill Submission w.r.t. RE1 2023-24", cellFont));
+            PdfPCell cell7 = new PdfPCell(new Phrase("CGDA Booking Upto 09-Jun-2023", cellFont));
+            PdfPCell cell8 = new PdfPCell(new Phrase("% Bill Clearance w.r.t. RE1 2023- 24", cellFont));
 
-            table.addCell("REVENUE OBJECT HEAD ");
-            table.addCell("RE1 2023-24 Allocation to ICG");
-            table.addCell("UNIT");
-            table.addCell("RE1 : 2023-24 Allocation");
-            table.addCell("Bill Submission Upto 09-Jun-2023");
-            table.addCell("% Bill Submission w.r.t. RE1 2023-24");
-            table.addCell("CGDA Booking Upto 09-Jun-2023");
-            table.addCell("% Bill Clearance w.r.t. RE1 2023- 24");
+            table.addCell(cell1);
+            table.addCell(cell2);
+            table.addCell(cell3);
+            table.addCell(cell4);
+            table.addCell(cell5);
+            table.addCell(cell6);
+            table.addCell(cell7);
+            table.addCell(cell8);
 
             int i = 1;
             float grTotalAlloc = 0;
@@ -4855,24 +4952,34 @@ public class MangeReportImpl implements MangeReportService {
 
                 }
                 if (count != 0) {
+                    PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
+                    PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum)), cellFont));
+                    PdfPCell cell30 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(expsum)), cellFont));
+                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(percentagesum)), cellFont));
+
                     table.addCell(" ");
                     table.addCell(" ");
-                    table.addCell("TOTAL");
-                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(sum)));
-                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(expsum)));
-                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(percentagesum)));
+                    table.addCell(cell10);
+                    table.addCell(cell20);
+                    table.addCell(cell30);
+                    table.addCell(cell40);
                     table.addCell(" ");
                     table.addCell(" ");
                     count = 0;
                 }
 
             }
+            PdfPCell cell50 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
+            PdfPCell cell60 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
+            PdfPCell cell70 = new PdfPCell(new Phrase( String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
+            PdfPCell cell80 = new PdfPCell(new Phrase( String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), cellFont));
+
             table.addCell(" ");
             table.addCell(" ");
-            table.addCell("GRAND TOTAL");
-            table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)));
-            table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)));
-            table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalSum)));
+            table.addCell(cell50);
+            table.addCell(cell60);
+            table.addCell(cell70);
+            table.addCell(cell80);
             table.addCell(" ");
             table.addCell(" ");
 
@@ -5065,6 +5172,8 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 int sz = reportDetails.size();
+                if(sz<=0)
+                    continue;
                 XWPFTable table11 = document.createTable(sz, 8);
                 table11.setWidth("100%");
                 int count = 0;
@@ -5486,13 +5595,12 @@ public class MangeReportImpl implements MangeReportService {
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
-
-            Paragraph heading = new Paragraph("UNIT  REBASE  REPORT");
-            heading.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(heading);
+            Paragraph paragraph = new Paragraph();
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+            paragraph.add(new Chunk("UNIT  REBASE  REPORT", boldFont));
+            paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(paragraph);
             document.add(new Paragraph("\n"));
-
-
 
             int i = 1;
             String finyear = "";
@@ -5540,26 +5648,44 @@ public class MangeReportImpl implements MangeReportService {
 
                     PdfPTable table1 = new PdfPTable(4);
                     table1.setWidthPercentage(100);
-                    table1.addCell("Unit Name ");
-                    table1.addCell(uName);
-                    table1.addCell("From Station");
-                    table1.addCell(frmStation);
-                    table1.addCell("Date of Rebase");
-                    table1.addCell(String.valueOf(rebaseDate));
-                    table1.addCell("To Station");
-                    table1.addCell(toStation);
+
+                    Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+                    PdfPCell cell1 = new PdfPCell(new Phrase("Unit Name ", cellFont));
+                    PdfPCell cell2 = new PdfPCell(new Phrase(uName, cellFont));
+                    PdfPCell cell3 = new PdfPCell(new Phrase("From Station", cellFont));
+                    PdfPCell cell4 = new PdfPCell(new Phrase(frmStation, cellFont));
+                    PdfPCell cell5 = new PdfPCell(new Phrase("Date of Rebase", cellFont));
+                    PdfPCell cell6 = new PdfPCell(new Phrase(String.valueOf(rebaseDate), cellFont));
+                    PdfPCell cell7 = new PdfPCell(new Phrase("To Station", cellFont));
+                    PdfPCell cell8 = new PdfPCell(new Phrase(toStation, cellFont));
+
+                    table1.addCell(cell1);
+                    table1.addCell(cell2);
+                    table1.addCell(cell3);
+                    table1.addCell(cell4);
+                    table1.addCell(cell5);
+                    table1.addCell(cell6);
+                    table1.addCell(cell7);
+                    table1.addCell(cell8);
 
                     document.add(table1);
 
 
                     PdfPTable table = new PdfPTable(6);
                     table.setWidthPercentage(100);
-                    table.addCell("FINANCIAL YEAR & ALLOCATION TYPE ");
-                    table.addCell("REVENUE OBJECT HEAD");
-                    table.addCell("ALLOCATION IN: ( "+amountIn+")");
-                    table.addCell("EXPENDITURE IN: (INR)");
-                    table.addCell("BALANCE IN : ( "+amountIn+")");
-                    table.addCell("LAST CB DATE");
+                    PdfPCell cell10 = new PdfPCell(new Phrase("FINANCIAL YEAR & ALLOCATION TYPE ", cellFont));
+                    PdfPCell cell20 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD", cellFont));
+                    PdfPCell cell40 = new PdfPCell(new Phrase("ALLOCATION IN: ( "+amountIn+")", cellFont));
+                    PdfPCell cell50 = new PdfPCell(new Phrase("EXPENDITURE IN: (INR)"));
+                    PdfPCell cell60 = new PdfPCell(new Phrase("BALANCE IN : ( "+amountIn+")", cellFont));
+                    PdfPCell cell70 = new PdfPCell(new Phrase("LAST CB DATE", cellFont));
+
+                    table.addCell(cell10);
+                    table.addCell(cell20);
+                    table.addCell(cell40);
+                    table.addCell(cell50);
+                    table.addCell(cell60);
+                    table.addCell(cell70);
 
                     for (Integer k = 0; k < rebaseData.size(); k++) {
                         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(rebaseData.get(k).getFinYear());
@@ -5603,11 +5729,16 @@ public class MangeReportImpl implements MangeReportService {
                         grTotalAddition += expAmount;
                         grTotalSum += balAmount;
                     }
+                    PdfPCell cell99 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
+                    PdfPCell cell88 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
+                    PdfPCell cell77 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
+                    PdfPCell cell66 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), cellFont));
+
                     table.addCell(" ");
-                    table.addCell("GRAND TOTAL");
-                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)));
-                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)));
-                    table.addCell(String.format("%1$0,1.4f", new BigDecimal(grTotalSum)));
+                    table.addCell(cell99);
+                    table.addCell(cell88);
+                    table.addCell(cell77);
+                    table.addCell(cell66);
                     table.addCell(" ");
                     document.add(table);
 
