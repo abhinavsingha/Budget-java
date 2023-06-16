@@ -6332,23 +6332,23 @@ public class MangeReportImpl implements MangeReportService {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        String amountTypeId = "101";
+
         if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+
+        if (amountTypeId == null || amountTypeId.isEmpty()) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS", HttpStatus.OK.value());
-        } else {
-            if (hrDataCheck.getRoleId().contains(HelperUtils.SYSTEMADMIN)) {
-            } else {
-                return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                }, "YOU ARE NOT AUTHORIZED TO REBASE THE STATION", HttpStatus.OK.value());
-            }
+            }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
         if (fromDate == null) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "FROM DATE CAN NOT BE NULL", HttpStatus.OK.value());
+            }, "FROM DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
         if (toDate == null) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "TO DATE NOT BE NULL", HttpStatus.OK.value());
+            }, "TO DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrDataCheck.getUnitId(), "1");
         if (hrDataList.size() == 0) {
@@ -6623,23 +6623,23 @@ public class MangeReportImpl implements MangeReportService {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        String amountTypeId = "101";
+
         if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+
+        if (amountTypeId == null || amountTypeId.isEmpty()) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
-            }, "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS", HttpStatus.OK.value());
-        } else {
-            if (hrDataCheck.getRoleId().contains(HelperUtils.SYSTEMADMIN)) {
-            } else {
-                return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
-                }, "YOU ARE NOT AUTHORIZED TO REBASE THE STATION", HttpStatus.OK.value());
-            }
+            }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
         if (fromDate == null) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
-            }, "FROM DATE CAN NOT BE NULL", HttpStatus.OK.value());
+            }, "FROM DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
         if (toDate == null) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
-            }, "TO DATE NOT BE NULL", HttpStatus.OK.value());
+            }, "TO DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
 
         List<String> groupUnitId = budgetRebaseRepository.findGroupRebaseUnit();
