@@ -2191,7 +2191,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
 
             Paragraph paragraph = new Paragraph();
-            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             paragraph.add(new Chunk("UNIT WISE ALLOCATION REPORT", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
@@ -2199,7 +2199,7 @@ public class MangeReportImpl implements MangeReportService {
 
             PdfPTable table1 = new PdfPTable(2);
             table1.setWidthPercentage(100);
-            Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
             PdfPCell cell1 = new PdfPCell(new Phrase("FINANCIAL YEAR : "+findyr.getFinYear(), cellFont));
             cell1.setPadding(15);
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT :"+subUnit.getDescr(), cellFont));
@@ -2210,7 +2210,7 @@ public class MangeReportImpl implements MangeReportService {
 
             PdfPTable table = new PdfPTable(4);
             table.setWidthPercentage(100);
-            Font cellFont1 = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            Font cellFont1 = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
             PdfPCell cell01 = new PdfPCell(new Phrase("S.L", cellFont1));
             PdfPCell cell02 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD", cellFont1));
             PdfPCell cell03 = new PdfPCell(new Phrase("ALLOCATION TYPE", cellFont1));
@@ -2255,7 +2255,7 @@ public class MangeReportImpl implements MangeReportService {
                 i++;
                 sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
             }
-            Font cellFont2 = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            Font cellFont2 = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
             PdfPCell cell20 = new PdfPCell(new Phrase("TOTAL", cellFont2));
             PdfPCell cell21 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum)), cellFont2));
             cell20.setPadding(10);
@@ -2668,7 +2668,7 @@ public class MangeReportImpl implements MangeReportService {
 
             document.open();
             Paragraph paragraph = new Paragraph();
-            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             paragraph.add(new Chunk("SUBHEAD WISE ALLOCATION REPORT", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
@@ -2676,9 +2676,11 @@ public class MangeReportImpl implements MangeReportService {
 
             PdfPTable table1 = new PdfPTable(2);
             table1.setWidthPercentage(100);
-            Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
             PdfPCell cell1 = new PdfPCell(new Phrase("FINANCIAL YEAR : "+findyr.getFinYear(), cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("SUBHEAD :"+bHead.getSubHeadDescr(), cellFont));
+            cell1.setPadding(15);
+            cell2.setPadding(15);
 
             table1.addCell(cell1);
             table1.addCell(cell2);
@@ -2690,6 +2692,10 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell20 = new PdfPCell(new Phrase("UNIT", cellFont));
             PdfPCell cell30 = new PdfPCell(new Phrase("ALLOCATION TYPE", cellFont));
             PdfPCell cell40 = new PdfPCell(new Phrase("AMOUNT IN :("+amountIn+")", cellFont));
+            cell10.setPadding(10);
+            cell20.setPadding(10);
+            cell30.setPadding(10);
+            cell40.setPadding(10);
 
             table.addCell(cell10);
             table.addCell(cell20);
@@ -2733,6 +2739,9 @@ public class MangeReportImpl implements MangeReportService {
             }
             PdfPCell cell110 = new PdfPCell(new Phrase("TOTAL", cellFont));
             PdfPCell cell200 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum)), cellFont));
+            cell110.setPadding(10);
+            cell200.setPadding(10);
+
 
             table.addCell(cell110);
             table.addCell("");
@@ -3188,7 +3197,7 @@ public class MangeReportImpl implements MangeReportService {
 
             document.open();
             Paragraph paragraph = new Paragraph();
-            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             paragraph.add(new Chunk(type.getAllocDesc().toUpperCase()+" "+ "ALLOCATION REPORT", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
@@ -3197,10 +3206,13 @@ public class MangeReportImpl implements MangeReportService {
 
             PdfPTable table = new PdfPTable(3);
             table.setWidthPercentage(100);
-            Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
             PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
             PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()+" "+findyr.getFinYear()+" "+"ALLOCATION IN: ("+amountIn+")", cellFont));
+            cell1.setPadding(10);
+            cell2.setPadding(10);
+            cell3.setPadding(10);
 
             table.addCell(cell1);
             table.addCell(cell2);
@@ -3258,6 +3270,9 @@ public class MangeReportImpl implements MangeReportService {
                 if (count != 0) {
                     PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL ", cellFont));
                     PdfPCell cell11 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum)), cellFont));
+                    cell10.setPadding(10);
+                    cell11.setPadding(10);
+
                     table.addCell("");
                     table.addCell(cell10);
                     table.addCell(cell11);
@@ -3267,6 +3282,8 @@ public class MangeReportImpl implements MangeReportService {
             }
             PdfPCell cell101 = new PdfPCell(new Phrase("GRAND TOTAL ", cellFont));
             PdfPCell cell111 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(gdTotal)), cellFont));
+            cell101.setPadding(12);
+            cell111.setPadding(12);
             table.addCell("");
             table.addCell(cell101);
             table.addCell(cell111);
@@ -3738,7 +3755,7 @@ public class MangeReportImpl implements MangeReportService {
 
             document.open();
             Paragraph paragraph = new Paragraph();
-            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             paragraph.add(new Chunk(allocType.toUpperCase()+" "+ "REVISED  ALLOCATION  REPORT", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
@@ -3746,9 +3763,12 @@ public class MangeReportImpl implements MangeReportService {
 
             PdfPTable tables = new PdfPTable(2);
             tables.setWidthPercentage(100);
-            Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
             PdfPCell cells = new PdfPCell(new Phrase(allocType.toUpperCase()+": "+findyr.getFinYear()+" "+"ALLOCATION", cellFont));
             PdfPCell cells0 = new PdfPCell(new Phrase("AMOUNT IN: ("+amountIn.toUpperCase()+")", cellFont));
+            cells.setPadding(15);
+            cells0.setPadding(15);
+
             tables.addCell(cells);
             tables.addCell(cells0);
             document.add(tables);
@@ -3761,6 +3781,11 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell3 = new PdfPCell(new Phrase("ALLOCATION AMOUNT", cellFont));
             PdfPCell cell4 = new PdfPCell(new Phrase("ADDITIONAL AMOUNT", cellFont));
             PdfPCell cell5 = new PdfPCell(new Phrase("REVISED AMOUNT", cellFont));
+            cell1.setPadding(10);
+            cell2.setPadding(10);
+            cell3.setPadding(10);
+            cell4.setPadding(10);
+            cell5.setPadding(10);
 
             table.addCell(cell1);
             table.addCell(cell2);
@@ -3856,6 +3881,12 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell302 = new PdfPCell(new Phrase("(+) "+String.format("%1$0,1.4f", new BigDecimal(sumRE)), cellFont));
                     PdfPCell cell303 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sumRE)), cellFont));
                     PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(total)), cellFont));
+                    cell10.setPadding(10);
+                    cell20.setPadding(10);
+                    cell301.setPadding(10);
+                    cell302.setPadding(10);
+                    cell303.setPadding(10);
+                    cell40.setPadding(10);
 
                     table.addCell(" ");
                     table.addCell(cell10);
@@ -3875,6 +3906,10 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell01 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
             PdfPCell cell02 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
             PdfPCell cell03 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), cellFont));
+            cell00.setPadding(12);
+            cell01.setPadding(12);
+            cell02.setPadding(12);
+            cell03.setPadding(12);
 
             table.addCell(" ");
             table.addCell(cell00);
@@ -4455,7 +4490,7 @@ public class MangeReportImpl implements MangeReportService {
 
             document.open();
             Paragraph paragraph = new Paragraph();
-            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             paragraph.add(new Chunk("RE  ALLOCATION  REPORT"+": "+findyr.getFinYear(), boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
@@ -4463,11 +4498,17 @@ public class MangeReportImpl implements MangeReportService {
 
             PdfPTable table = new PdfPTable(4);
             table.setWidthPercentage(100);
-            Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
             PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
             PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()+" "+"ALLOCATION AMOUNT IN: ("+amountIn+")", cellFont));
             PdfPCell cell4 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()+" "+"ALLOCATION AMOUNT IN: ("+amountIn+")", cellFont));
+
+            cell1.setPadding(10);
+            cell2.setPadding(10);
+            cell3.setPadding(10);
+            cell4.setPadding(10);
+
 
             table.addCell(cell1);
             table.addCell(cell2);
@@ -4482,7 +4523,9 @@ public class MangeReportImpl implements MangeReportService {
             String unit = "";
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId, allocationTypeBE, "0");
+                List<BudgetAllocation> reportDetailss = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId, allocationTypeBE, "0");
+                List<BudgetAllocation> reportDetails=reportDetailss.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
+
                 int count = 0;
                 float sum = 0;
                 Double amount = Double.valueOf(0);
@@ -4550,6 +4593,10 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell21 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum)), cellFont));
                     PdfPCell cell22 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(reSum)), cellFont));
 
+                    cell20.setPadding(10);
+                    cell21.setPadding(10);
+                    cell22.setPadding(10);
+
                     table.addCell(" ");
                     table.addCell(cell20);
                     table.addCell(cell21);
@@ -4561,6 +4608,9 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell210 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
             PdfPCell cell211 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
             PdfPCell cell212 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
+            cell210.setPadding(12);
+            cell211.setPadding(12);
+            cell212.setPadding(12);
 
             table.addCell(" ");
             table.addCell(cell210);
@@ -4712,7 +4762,9 @@ public class MangeReportImpl implements MangeReportService {
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId, allocationTypeBE, "0");
-                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails=reportDetailss.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
+
                 int sz = reportDetails.size();
                 if(sz<=0)
                     continue;
@@ -4933,7 +4985,8 @@ public class MangeReportImpl implements MangeReportService {
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId, allocationTypeBE, "0");
-                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails=reportDetailss.stream().filter(e->Double.valueOf(e.getAllocationAmount())!=0).collect(Collectors.toList());
 
 
                 int count = 0;
@@ -5115,7 +5168,7 @@ public class MangeReportImpl implements MangeReportService {
         Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
 
         try {
-            Document document = new Document(PageSize.A4_LANDSCAPE);
+            Document document = new Document(PageSize.A4.rotate());
 
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
@@ -5126,7 +5179,7 @@ public class MangeReportImpl implements MangeReportService {
 
             document.open();
             Paragraph paragraph = new Paragraph();
-            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             paragraph.add(new Chunk(type.getAllocDesc().toUpperCase()+" "+"FER_ALLOCATION REPORT", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
@@ -5134,11 +5187,14 @@ public class MangeReportImpl implements MangeReportService {
 
             PdfPTable tabless = new PdfPTable(1);
             tabless.setWidthPercentage(100);
-            Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
             PdfPCell cell1ss = new PdfPCell(new Phrase(" COAST GUARD BUDGET : FY : "+findyr.getFinYear(), cellFont));
             cell1ss.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
             PdfPCell cell1ss1 = new PdfPCell(new Phrase("AMOUNT IN:  ("+amountIn.toUpperCase()+")", cellFont));
             cell1ss1.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+            cell1ss.setPadding(15);
+            cell1ss1.setPadding(15);
+
             tabless.addCell(cell1ss);
             tabless.addCell(cell1ss1);
             document.add(tabless);
@@ -5153,6 +5209,14 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell6 = new PdfPCell(new Phrase("% Bill Submission w.r.t. "+" "+type.getAllocDesc().toUpperCase()+": "+findyr.getFinYear(), cellFont));
             PdfPCell cell7 = new PdfPCell(new Phrase("CGDA Booking Upto "+" "+formattedDate, cellFont));
             PdfPCell cell8 = new PdfPCell(new Phrase("% Bill Clearance w.r.t."+" "+type.getAllocDesc().toUpperCase()+": "+findyr.getFinYear(), cellFont));
+            cell1.setPadding(10);
+            cell2.setPadding(10);
+            cell3.setPadding(10);
+            cell4.setPadding(10);
+            cell5.setPadding(10);
+            cell6.setPadding(10);
+            cell7.setPadding(10);
+            cell8.setPadding(10);
 
             table.addCell(cell1);
             table.addCell(cell2);
@@ -5269,6 +5333,11 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum)), cellFont));
                     PdfPCell cell30 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(expsum)), cellFont));
                     PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(percentagesum)), cellFont));
+                    cell10.setPadding(10);
+                    cell20.setPadding(10);
+                    cell30.setPadding(10);
+                    cell40.setPadding(10);
+
 
                     table.addCell(" ");
                     table.addCell(" ");
@@ -5286,6 +5355,10 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell60 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
             PdfPCell cell70 = new PdfPCell(new Phrase( String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
             PdfPCell cell80 = new PdfPCell(new Phrase( String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), cellFont));
+            cell50.setPadding(12);
+            cell60.setPadding(12);
+            cell70.setPadding(12);
+            cell80.setPadding(12);
 
             table.addCell(" ");
             table.addCell(" ");
@@ -5964,7 +6037,7 @@ public class MangeReportImpl implements MangeReportService {
 
             document.open();
             Paragraph paragraph = new Paragraph();
-            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             paragraph.add(new Chunk("UNIT  REBASE  REPORT", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
@@ -6017,7 +6090,7 @@ public class MangeReportImpl implements MangeReportService {
                     toStation = toS.getStationName();
 
                     Paragraph paragraph11 = new Paragraph();
-                    Font boldFontss = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+                    Font boldFontss = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
                     paragraph11.add(new Chunk("Serial No: "+no, boldFontss));
                     document.add(paragraph11);
                     document.add(new Paragraph("\n"));
@@ -6026,7 +6099,7 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPTable table1 = new PdfPTable(4);
                     table1.setWidthPercentage(100);
 
-                    Font cellFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+                    Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
                     PdfPCell cell1 = new PdfPCell(new Phrase("Unit Name ", cellFont));
                     PdfPCell cell2 = new PdfPCell(new Phrase(uName, cellFont));
                     PdfPCell cell3 = new PdfPCell(new Phrase("From Station", cellFont));
@@ -6035,6 +6108,15 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell6 = new PdfPCell(new Phrase(String.valueOf(rebaseDate), cellFont));
                     PdfPCell cell7 = new PdfPCell(new Phrase("To Station", cellFont));
                     PdfPCell cell8 = new PdfPCell(new Phrase(toStation, cellFont));
+
+                    cell1.setPadding(15);
+                    cell2.setPadding(15);
+                    cell3.setPadding(15);
+                    cell4.setPadding(15);
+                    cell5.setPadding(15);
+                    cell6.setPadding(15);
+                    cell7.setPadding(15);
+                    cell8.setPadding(15);
 
                     table1.addCell(cell1);
                     table1.addCell(cell2);
@@ -6056,6 +6138,13 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell50 = new PdfPCell(new Phrase("EXPENDITURE IN: (INR)",cellFont));
                     PdfPCell cell60 = new PdfPCell(new Phrase("BALANCE IN : ( "+amountIn+")", cellFont));
                     PdfPCell cell70 = new PdfPCell(new Phrase("LAST CB DATE", cellFont));
+
+                    cell10.setPadding(10);
+                    cell20.setPadding(10);
+                    cell40.setPadding(10);
+                    cell50.setPadding(10);
+                    cell60.setPadding(10);
+                    cell70.setPadding(10);
 
                     table.addCell(cell10);
                     table.addCell(cell20);
@@ -6112,6 +6201,11 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell88 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
                     PdfPCell cell77 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
                     PdfPCell cell66 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), cellFont));
+
+                    cell99.setPadding(12);
+                    cell88.setPadding(12);
+                    cell77.setPadding(12);
+                    cell66.setPadding(12);
 
                     table.addCell(" ");
                     table.addCell(cell99);
