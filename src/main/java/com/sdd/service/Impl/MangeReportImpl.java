@@ -2247,10 +2247,20 @@ public class MangeReportImpl implements MangeReportService {
                 BudgetHead bHead = subHeadRepository.findByBudgetCodeId(row.getSubHead());
                 AllocationType type = allocationRepository.findByAllocTypeId(row.getAllocationTypeId());
 
-                table.addCell(String.valueOf(i));
-                table.addCell(bHead.getSubHeadDescr());
-                table.addCell(type.getAllocDesc().toUpperCase());
-                table.addCell(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
+                PdfPCell cellaa = new PdfPCell(new Phrase(String.valueOf(i)));
+                PdfPCell cellbb = new PdfPCell(new Phrase(bHead.getSubHeadDescr()));
+                PdfPCell cellcc = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()));
+                PdfPCell celldd = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
+
+                cellaa.setPadding(8);
+                cellbb.setPadding(8);
+                cellcc.setPadding(8);
+                celldd.setPadding(8);
+
+                table.addCell(cellaa);
+                table.addCell(cellbb);
+                table.addCell(cellcc);
+                table.addCell(celldd);
 
                 i++;
                 sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
@@ -2413,16 +2423,16 @@ public class MangeReportImpl implements MangeReportService {
 
                 XWPFTableRow tableRows = table1.getRow(k + 1);
                 XWPFParagraph paragraphtableRow01 = tableRows.getCell(0).addParagraph();
-                boldText(paragraphtableRow01.createRun(), 10, Integer.toString(count), true);
+                boldText(paragraphtableRow01.createRun(), 10, Integer.toString(count), false);
 
                 XWPFParagraph paragraphtableRow11 = tableRows.getCell(1).addParagraph();
-                boldText(paragraphtableRow11.createRun(), 10, bHead.getSubHeadDescr(), true);
+                boldText(paragraphtableRow11.createRun(), 10, bHead.getSubHeadDescr(), false);
 
                 XWPFParagraph paragraphtableRow21 = tableRows.getCell(2).addParagraph();
-                boldText(paragraphtableRow21.createRun(), 10, type.getAllocDesc().toUpperCase(), true);
+                boldText(paragraphtableRow21.createRun(), 10, type.getAllocDesc().toUpperCase(), false);
 
                 XWPFParagraph paragraphtableRow31 = tableRows.getCell(3).addParagraph();
-                boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), true);
+                boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
                 count++;
                 sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
 
@@ -2728,10 +2738,20 @@ public class MangeReportImpl implements MangeReportService {
 
                         finAmount = amount * amountUnit / reqAmount;
 
-                        table.addCell(String.valueOf(i));
-                        table.addCell(unitN.getDescr());
-                        table.addCell(type.getAllocDesc().toUpperCase());
-                        table.addCell(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
+                        PdfPCell cellaa = new PdfPCell(new Phrase(String.valueOf(i)));
+                        PdfPCell cellbb = new PdfPCell(new Phrase(unitN.getDescr()));
+                        PdfPCell cellcc = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()));
+                        PdfPCell celldd = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
+
+                        cellaa.setPadding(8);
+                        cellbb.setPadding(8);
+                        cellcc.setPadding(8);
+                        celldd.setPadding(8);
+
+                        table.addCell(cellaa);
+                        table.addCell(cellbb);
+                        table.addCell(cellcc);
+                        table.addCell(celldd);
                         i++;
                         sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                     }
@@ -2920,16 +2940,16 @@ public class MangeReportImpl implements MangeReportService {
 
                         XWPFTableRow tableRows = table1.getRow(r + 1);
                         XWPFParagraph paragraphtableRow01 = tableRows.getCell(0).addParagraph();
-                        boldText(paragraphtableRow01.createRun(), 10, Integer.toString(i), true);
+                        boldText(paragraphtableRow01.createRun(), 10, Integer.toString(i), false);
 
                         XWPFParagraph paragraphtableRow11 = tableRows.getCell(1).addParagraph();
-                        boldText(paragraphtableRow11.createRun(), 10, unitN.getDescr(), true);
+                        boldText(paragraphtableRow11.createRun(), 10, unitN.getDescr(), false);
 
                         XWPFParagraph paragraphtableRow21 = tableRows.getCell(2).addParagraph();
-                        boldText(paragraphtableRow21.createRun(), 10, type.getAllocDesc().toUpperCase(), true);
+                        boldText(paragraphtableRow21.createRun(), 10, type.getAllocDesc().toUpperCase(), false);
 
                         XWPFParagraph paragraphtableRow31 = tableRows.getCell(3).addParagraph();
-                        boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), true);
+                        boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
                         i++;
                         sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                     }
@@ -3253,12 +3273,19 @@ public class MangeReportImpl implements MangeReportService {
                             BudgetHead bHead = subHeadRepository.findByBudgetCodeId(row.getSubHead());
                             CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
 
+                            PdfPCell cella1 = new PdfPCell(new Phrase(bHead.getSubHeadDescr()));
+                            PdfPCell cella2 = new PdfPCell(new Phrase(unitN.getDescr()));
+                            PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
+                            cella1.setPadding(8);
+                            cella2.setPadding(8);
+                            cella3.setPadding(8);
+
                             if (count == 0)
-                                table.addCell(bHead.getSubHeadDescr());
+                                table.addCell(cella1);
                             else
                                 table.addCell("");
-                            table.addCell(unitN.getDescr());
-                            table.addCell(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
+                            table.addCell(cella2);
+                            table.addCell(cella3);
                             count++;
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                             gdTotal += sum;
@@ -3454,15 +3481,15 @@ public class MangeReportImpl implements MangeReportService {
                             XWPFParagraph paragraphtableRowOne11 = tableRowOne111.getCell(0).addParagraph();
 
                             if (r == 0) {
-                                boldText(paragraphtableRowOne11.createRun(), 10, bHead.getSubHeadDescr(), true);
+                                boldText(paragraphtableRowOne11.createRun(), 10, bHead.getSubHeadDescr(), false);
                             } else {
-                                boldText(paragraphtableRowOne11.createRun(), 10, "", true);
+                                boldText(paragraphtableRowOne11.createRun(), 10, "", false);
                             }
                             XWPFParagraph paragraphtableRow11 = tableRowOne111.getCell(1).addParagraph();
-                            boldText(paragraphtableRow11.createRun(), 10, unitN.getDescr(), true);
+                            boldText(paragraphtableRow11.createRun(), 10, unitN.getDescr(), false);
 
                             XWPFParagraph paragraphtableRow21 = tableRowOne111.getCell(2).addParagraph();
-                            boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), true);
+                            boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
                             count++;
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                             gdTotal += sum;
@@ -3844,19 +3871,36 @@ public class MangeReportImpl implements MangeReportService {
                             }
                             CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
 
+                            PdfPCell cella1 = new PdfPCell(new Phrase(bHead.getSubHeadDescr()));
+                            PdfPCell cella2 = new PdfPCell(new Phrase(unitN.getDescr()));
+                            PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
+                            PdfPCell cella4 = new PdfPCell(new Phrase("(-) "+String.format("%1$0,1.4f", new BigDecimal(s2))));
+                            PdfPCell cella5 = new PdfPCell(new Phrase("(+) "+String.format("%1$0,1.4f", new BigDecimal(reAmount))));
+                            PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(reAmount))));
+                            PdfPCell cella7 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Double.toString(finAmount)) + Float.parseFloat(Double.toString(reAmount))))))));
+                            cella1.setPadding(8);
+                            cella2.setPadding(8);
+                            cella3.setPadding(8);
+                            cella4.setPadding(8);
+                            cella5.setPadding(8);
+                            cella6.setPadding(8);
+                            cella7.setPadding(8);
+
+
                             if (count == 0)
-                                table.addCell(bHead.getSubHeadDescr());
+                                table.addCell(cella1);
                             else
                                 table.addCell("");
-                            table.addCell(unitN.getDescr());
-                            table.addCell(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
+                            table.addCell(cella2);
+                            table.addCell(cella3);
                             if (reAmount < 0)
-                                table.addCell("(-) "+String.format("%1$0,1.4f", new BigDecimal(s2)));
+                                table.addCell(cella4);
                             else if (reAmount > 0)
-                                table.addCell("(+) "+String.format("%1$0,1.4f", new BigDecimal(reAmount)));
+                                table.addCell(cella5);
                             else
-                                table.addCell(String.format("%1$0,1.4f", new BigDecimal(reAmount)));
-                            table.addCell(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Double.toString(finAmount)) + Float.parseFloat(Double.toString(reAmount)))))));
+                                table.addCell(cella6);
+                            table.addCell(cella7);
+
                             count++;
                             sumExisting += Float.parseFloat(new BigDecimal(Double.toString(finAmount)).toPlainString());
                             sumRE += Float.parseFloat(new BigDecimal(Double.toString(reAmount)).toPlainString());
@@ -4120,26 +4164,26 @@ public class MangeReportImpl implements MangeReportService {
                             XWPFParagraph paragraphtableRowOne11 = tableRowOne111.getCell(0).addParagraph();
 
                             if (r == 0) {
-                                boldText(paragraphtableRowOne11.createRun(), 10, bHead.getSubHeadDescr(), true);
+                                boldText(paragraphtableRowOne11.createRun(), 10, bHead.getSubHeadDescr(), false);
                             } else {
-                                boldText(paragraphtableRowOne11.createRun(), 10, "", true);
+                                boldText(paragraphtableRowOne11.createRun(), 10, "", false);
                             }
                             XWPFParagraph paragraphtableRow11 = tableRowOne111.getCell(1).addParagraph();
-                            boldText(paragraphtableRow11.createRun(), 10, unitN.getDescr(), true);
+                            boldText(paragraphtableRow11.createRun(), 10, unitN.getDescr(), false);
 
                             XWPFParagraph paragraphtableRow21 = tableRowOne111.getCell(2).addParagraph();
-                            boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), true);
+                            boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
 
                             XWPFParagraph paragraphtableRow31 = tableRowOne111.getCell(3).addParagraph();
                             if (reAmount < 0)
-                                boldText(paragraphtableRow31.createRun(), 10, "(-)" + String.format("%1$0,1.4f", new BigDecimal(s2)), true);
+                                boldText(paragraphtableRow31.createRun(), 10, "(-)" + String.format("%1$0,1.4f", new BigDecimal(s2)), false);
                             else if (reAmount > 0)
-                                boldText(paragraphtableRow31.createRun(), 10, "(+)" + String.format("%1$0,1.4f", new BigDecimal(reAmount)), true);
+                                boldText(paragraphtableRow31.createRun(), 10, "(+)" + String.format("%1$0,1.4f", new BigDecimal(reAmount)), false);
                             else
-                                boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(reAmount)), true);
+                                boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(reAmount)), false);
 
                             XWPFParagraph paragraphtableRow41 = tableRowOne111.getCell(4).addParagraph();
-                            boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(add)), true);
+                            boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(add)), false);
 
                             sumExisting += Float.parseFloat(new BigDecimal(Double.toString(finAmount)).toPlainString());
                             sumRE += Float.parseFloat(new BigDecimal(Double.toString(reAmount)).toPlainString());
@@ -4502,7 +4546,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
             PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()+" "+"ALLOCATION AMOUNT IN: ("+amountIn+")", cellFont));
-            PdfPCell cell4 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()+" "+"ALLOCATION AMOUNT IN: ("+amountIn+")", cellFont));
+            PdfPCell cell4 = new PdfPCell(new Phrase(types.getAllocDesc().toUpperCase()+" "+"ALLOCATION AMOUNT IN: ("+amountIn+")", cellFont));
 
             cell1.setPadding(10);
             cell2.setPadding(10);
@@ -4569,13 +4613,23 @@ public class MangeReportImpl implements MangeReportService {
                             BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
                             CgUnit unitN = cgUnitRepository.findByUnit(unitIds);
 
+                            PdfPCell cella1 = new PdfPCell(new Phrase(bHead.getSubHeadDescr()));
+                            PdfPCell cella2 = new PdfPCell(new Phrase(unitN.getDescr()));
+                            PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
+                            PdfPCell cella4 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(reFinalAmount))));
+
+                            cella1.setPadding(8);
+                            cella2.setPadding(8);
+                            cella3.setPadding(8);
+                            cella4.setPadding(8);
+
                             if (count == 0)
-                                table.addCell(bHead.getSubHeadDescr());
+                                table.addCell(cella1);
                             else
                                 table.addCell(" ");
-                            table.addCell(unitN.getDescr());
-                            table.addCell(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
-                            table.addCell(String.format("%1$0,1.4f", new BigDecimal(reFinalAmount)));
+                            table.addCell(cella2);
+                            table.addCell(cella3);
+                            table.addCell(cella4);
 
                             count++;
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
@@ -4810,18 +4864,18 @@ public class MangeReportImpl implements MangeReportService {
                             XWPFTableRow tableRowOne111 = table11.getRow(r);
                             XWPFParagraph paragraphtableRowOne11 = tableRowOne111.getCell(0).addParagraph();
                             if (r == 0) {
-                                boldText(paragraphtableRowOne11.createRun(), 10, bHead.getSubHeadDescr(), true);
+                                boldText(paragraphtableRowOne11.createRun(), 10, bHead.getSubHeadDescr(), false);
                             } else {
-                                boldText(paragraphtableRowOne11.createRun(), 10, "", true);
+                                boldText(paragraphtableRowOne11.createRun(), 10, "", false);
                             }
                             XWPFParagraph paragraphtableRow11 = tableRowOne111.getCell(1).addParagraph();
-                            boldText(paragraphtableRow11.createRun(), 10, unitN.getDescr(), true);
+                            boldText(paragraphtableRow11.createRun(), 10, unitN.getDescr(), false);
 
                             XWPFParagraph paragraphtableRow21 = tableRowOne111.getCell(2).addParagraph();
-                            boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), true);
+                            boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
 
                             XWPFParagraph paragraphtableRow31 = tableRowOne111.getCell(3).addParagraph();
-                            boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(reFinalAmount)), true);
+                            boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(reFinalAmount)), false);
 
                             count++;
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
@@ -5302,17 +5356,32 @@ public class MangeReportImpl implements MangeReportService {
                             BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
                             CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
 
+                            PdfPCell cella1 = new PdfPCell(new Phrase(bHead.getSubHeadDescr()));
+                            PdfPCell cella2 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(IcgAmount))));
+                            PdfPCell cella3 = new PdfPCell(new Phrase(unitN.getDescr()));
+                            PdfPCell cella4 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
+                            PdfPCell cella5 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(eAmount))));
+                            PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(expnAmount))));
+
+                            cella1.setPadding(8);
+                            cella2.setPadding(8);
+                            cella3.setPadding(8);
+                            cella4.setPadding(8);
+                            cella5.setPadding(8);
+                            cella6.setPadding(8);
+
+
                             if (count == 0) {
-                                table.addCell(bHead.getSubHeadDescr());
-                                table.addCell(String.format("%1$0,1.4f", new BigDecimal(IcgAmount)));
+                                table.addCell(cella1);
+                                table.addCell(cella2);
                             } else {
                                 table.addCell("");
                                 table.addCell("");
                             }
-                            table.addCell(unitN.getDescr());
-                            table.addCell(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
-                            table.addCell(String.format("%1$0,1.4f", new BigDecimal(eAmount)));
-                            table.addCell(String.format("%1$0,1.4f", new BigDecimal(expnAmount)));
+                            table.addCell(cella3);
+                            table.addCell(cella4);
+                            table.addCell(cella5);
+                            table.addCell(cella6);
                             table.addCell(" ");
                             table.addCell(" ");
 
@@ -5332,7 +5401,7 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
                     PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum)), cellFont));
                     PdfPCell cell30 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(expsum)), cellFont));
-                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(percentagesum)), cellFont));
+                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(percentagesum)), cellFont));
                     cell10.setPadding(10);
                     cell20.setPadding(10);
                     cell30.setPadding(10);
@@ -5354,7 +5423,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell50 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
             PdfPCell cell60 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
             PdfPCell cell70 = new PdfPCell(new Phrase( String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
-            PdfPCell cell80 = new PdfPCell(new Phrase( String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), cellFont));
+            PdfPCell cell80 = new PdfPCell(new Phrase( String.format("%1$0,1.8f", new BigDecimal(grTotalSum)), cellFont));
             cell50.setPadding(12);
             cell60.setPadding(12);
             cell70.setPadding(12);
@@ -5631,34 +5700,34 @@ public class MangeReportImpl implements MangeReportService {
                             XWPFTableRow tableRowOne111 = table11.getRow(r);
                             XWPFParagraph paragraphtableRowOne11 = tableRowOne111.getCell(0).addParagraph();
                             if (r == 0) {
-                                boldText(paragraphtableRowOne11.createRun(), 10, bHead.getSubHeadDescr(), true);
+                                boldText(paragraphtableRowOne11.createRun(), 10, bHead.getSubHeadDescr(), false);
                             } else {
-                                boldText(paragraphtableRowOne11.createRun(), 10, "", true);
+                                boldText(paragraphtableRowOne11.createRun(), 10, "", false);
                             }
                             XWPFParagraph paragraphtableRow11 = tableRowOne111.getCell(1).addParagraph();
                             if (r == 0) {
-                                boldText(paragraphtableRow11.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(IcgAmount)), true);
+                                boldText(paragraphtableRow11.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(IcgAmount)), false);
                             } else {
-                                boldText(paragraphtableRow11.createRun(), 10, "", true);
+                                boldText(paragraphtableRow11.createRun(), 10, "", false);
                             }
 
                             XWPFParagraph paragraphtableRow21 = tableRowOne111.getCell(2).addParagraph();
-                            boldText(paragraphtableRow21.createRun(), 10, unitN.getDescr(), true);
+                            boldText(paragraphtableRow21.createRun(), 10, unitN.getDescr(), false);
 
                             XWPFParagraph paragraphtableRow31 = tableRowOne111.getCell(3).addParagraph();
-                            boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), true);
+                            boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
 
                             XWPFParagraph paragraphtableRow41 = tableRowOne111.getCell(4).addParagraph();
-                            boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(eAmount)), true);
+                            boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(eAmount)), false);
 
                             XWPFParagraph paragraphtableRow51 = tableRowOne111.getCell(5).addParagraph();
-                            boldText(paragraphtableRow51.createRun(), 10, String.format("%1$0,1.9f", new BigDecimal(expnAmount)), true);
+                            boldText(paragraphtableRow51.createRun(), 10, String.format("%1$0,1.9f", new BigDecimal(expnAmount)), false);
 
                             XWPFParagraph paragraphtableRow61 = tableRowOne111.getCell(6).addParagraph();
-                            boldText(paragraphtableRow61.createRun(), 10, "", true);
+                            boldText(paragraphtableRow61.createRun(), 10, "", false);
 
                             XWPFParagraph paragraphtableRow71 = tableRowOne111.getCell(7).addParagraph();
-                            boldText(paragraphtableRow71.createRun(), 10, "", true);
+                            boldText(paragraphtableRow71.createRun(), 10, "", false);
 
                             count++;
                             sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
@@ -6026,7 +6095,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
         try {
-            Document document = new Document(PageSize.A4);
+            Document document = new Document(PageSize.A4.rotate());
 
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
@@ -6109,14 +6178,14 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell7 = new PdfPCell(new Phrase("To Station", cellFont));
                     PdfPCell cell8 = new PdfPCell(new Phrase(toStation, cellFont));
 
-                    cell1.setPadding(15);
-                    cell2.setPadding(15);
-                    cell3.setPadding(15);
-                    cell4.setPadding(15);
-                    cell5.setPadding(15);
-                    cell6.setPadding(15);
-                    cell7.setPadding(15);
-                    cell8.setPadding(15);
+                    cell1.setPadding(12);
+                    cell2.setPadding(12);
+                    cell3.setPadding(12);
+                    cell4.setPadding(12);
+                    cell5.setPadding(12);
+                    cell6.setPadding(12);
+                    cell7.setPadding(12);
+                    cell8.setPadding(12);
 
                     table1.addCell(cell1);
                     table1.addCell(cell2);
@@ -6186,12 +6255,26 @@ public class MangeReportImpl implements MangeReportService {
                         expAmount = eAmount;
                         balAmount = bAmount * amountUnit / reqAmount;
 
-                        table.addCell(finYear + " " + allocType.getAllocType().toUpperCase());
-                        table.addCell(subHead);
-                        table.addCell(String.format("%1$0,1.4f", new BigDecimal(allocAmount)));
-                        table.addCell(String.format("%1$0,1.4f", new BigDecimal(expAmount)));
-                        table.addCell(String.format("%1$0,1.4f", new BigDecimal(balAmount)));
-                        table.addCell(cbD);
+                        PdfPCell cell10a = new PdfPCell(new Phrase(finYear + " " + allocType.getAllocType().toUpperCase()));
+                        PdfPCell cell20a= new PdfPCell(new Phrase(subHead));
+                        PdfPCell cell40a = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(allocAmount))));
+                        PdfPCell cell50a = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(expAmount))));
+                        PdfPCell cell60a = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(balAmount))));
+                        PdfPCell cell70a = new PdfPCell(new Phrase(cbD));
+
+                        cell10a.setPadding(8);
+                        cell20a.setPadding(8);
+                        cell40a.setPadding(8);
+                        cell50a.setPadding(8);
+                        cell60a.setPadding(8);
+                        cell70a.setPadding(8);
+
+                        table.addCell(cell10a);
+                        table.addCell(cell20a);
+                        table.addCell(cell40a);
+                        table.addCell(cell50a);
+                        table.addCell(cell60a);
+                        table.addCell(cell70a);
 
                         grTotalAlloc += allocAmount;
                         grTotalAddition += expAmount;
@@ -6370,26 +6453,26 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne.createRun(), 12, "UNIT NAME", true);
 
                     XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
-                    boldText(paragraphtableRowOne1.createRun(), 10, unitN.getDescr(), true);
+                    boldText(paragraphtableRowOne1.createRun(), 10, unitN.getDescr(), false);
 
                     XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
                     boldText(paragraphtableRowOne2.createRun(), 12, "FROM STATION", true);
 
                     XWPFParagraph paragraphtableRowOne3 = tableRowOne.getCell(3).addParagraph();
-                    boldText(paragraphtableRowOne3.createRun(), 10, rebaseData.get(0).getFrmStationId(), true);
+                    boldText(paragraphtableRowOne3.createRun(), 10, rebaseData.get(0).getFrmStationId(), false);
 
                     XWPFTableRow tableRowTwo = table.getRow(1);
                     XWPFParagraph paragraphtableRowTwo = tableRowTwo.getCell(0).addParagraph();
                     boldText(paragraphtableRowTwo.createRun(), 12, "REBASE DATE", true);
 
                     XWPFParagraph paragraphtableRowTwo1 = tableRowTwo.getCell(1).addParagraph();
-                    boldText(paragraphtableRowTwo1.createRun(), 10, rebaseData.get(0).getOccuranceDate().toString(), true);
+                    boldText(paragraphtableRowTwo1.createRun(), 10, rebaseData.get(0).getOccuranceDate().toString(), false);
 
                     XWPFParagraph paragraphtableRowTwo2 = tableRowTwo.getCell(2).addParagraph();
                     boldText(paragraphtableRowTwo2.createRun(), 12, "TO STATION", true);
 
                     XWPFParagraph paragraphtableRowTwo3 = tableRowTwo.getCell(3).addParagraph();
-                    boldText(paragraphtableRowTwo3.createRun(), 10, toS.getStationName(), true);
+                    boldText(paragraphtableRowTwo3.createRun(), 10, toS.getStationName(), false);
 
                     XWPFParagraph spacingParagraph = document.createParagraph();
                     spacingParagraph.setSpacingAfter(20);
@@ -6440,19 +6523,19 @@ public class MangeReportImpl implements MangeReportService {
 
                         XWPFTableRow tableRows = table1.getRow(k + 1);
                         XWPFParagraph paragraphtableRow01 = tableRows.getCell(0).addParagraph();
-                        boldText(paragraphtableRow01.createRun(), 10, findyr.getFinYear() + " " + allocType.getAllocDesc().toUpperCase(), true);
+                        boldText(paragraphtableRow01.createRun(), 10, findyr.getFinYear() + " " + allocType.getAllocDesc().toUpperCase(), false);
 
                         XWPFParagraph paragraphtableRow11 = tableRows.getCell(1).addParagraph();
-                        boldText(paragraphtableRow11.createRun(), 10, bHead.getSubHeadDescr(), true);
+                        boldText(paragraphtableRow11.createRun(), 10, bHead.getSubHeadDescr(), false);
 
                         XWPFParagraph paragraphtableRow21 = tableRows.getCell(2).addParagraph();
-                        boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(rebaseData.get(k).getAllocAmount())), true);
+                        boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(rebaseData.get(k).getAllocAmount())), false);
 
                         XWPFParagraph paragraphtableRow31 = tableRows.getCell(3).addParagraph();
-                        boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(rebaseData.get(k).getExpAmount())), true);
+                        boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(rebaseData.get(k).getExpAmount())), false);
 
                         XWPFParagraph paragraphtableRow41 = tableRows.getCell(4).addParagraph();
-                        boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(rebaseData.get(k).getBalAmount())), true);
+                        boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(rebaseData.get(k).getBalAmount())), false);
                         if (rebaseData.get(k).getLastCbDate() != null) {
                             Date LastCbD = rebaseData.get(k).getLastCbDate();
                             SimpleDateFormat id = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
@@ -6460,10 +6543,10 @@ public class MangeReportImpl implements MangeReportService {
                             Date dateC = id.parse(LastCbD.toString());
                             String cbD = od.format(dateC);
                             XWPFParagraph paragraphtableRow51 = tableRows.getCell(5).addParagraph();
-                            boldText(paragraphtableRow51.createRun(), 10, cbD, true);
+                            boldText(paragraphtableRow51.createRun(), 10, cbD, false);
                         } else {
                             XWPFParagraph paragraphtableRow51 = tableRows.getCell(5).addParagraph();
-                            boldText(paragraphtableRow51.createRun(), 10, null, true);
+                            boldText(paragraphtableRow51.createRun(), 10, null, false);
                         }
                         Double sumExisting = Double.valueOf(rebaseData.get(k).getAllocAmount());
                         Double sumExp = Double.valueOf(rebaseData.get(k).getExpAmount());
