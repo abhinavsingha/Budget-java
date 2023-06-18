@@ -133,7 +133,7 @@ public class CdaParkingImpl implements CdaParkingService {
             }
 
 
-            List<BudgetAllocationDetails> budgetAllocationDetailsLists = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(cdaRequest.getCdaRequest().get(i).getAuthGroupId(), "0", "0");
+            List<BudgetAllocationDetails> budgetAllocationDetailsLists = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(cdaRequest.getCdaRequest().get(i).getAuthGroupId(), "0");
             if (budgetAllocationDetailsLists.size() == 0) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AUTH GROUP ID");
             }
