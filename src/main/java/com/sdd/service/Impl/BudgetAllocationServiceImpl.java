@@ -904,7 +904,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "GROUP ID CAN NOT BE BLANK");
         }
 
-        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(groupId, "0", "0");
+        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "0");
 
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
