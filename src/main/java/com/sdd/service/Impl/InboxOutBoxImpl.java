@@ -8,6 +8,7 @@ import com.sdd.exception.SDDException;
 import com.sdd.jwt.HeaderUtils;
 import com.sdd.jwt.JwtUtils;
 import com.sdd.jwtParse.TokenParseData;
+import com.sdd.request.CdaParkingCrAndDrResponse;
 import com.sdd.request.RebaseBudgetHistory;
 import com.sdd.response.*;
 import com.sdd.service.InboxOutBoxService;
@@ -28,47 +29,49 @@ import java.util.List;
 @Service
 public class InboxOutBoxImpl implements InboxOutBoxService {
 
-    @Autowired    
+    @Autowired
     HrDataRepository hrDataRepository;
 
-    @Autowired    
+    @Autowired
     CurrentStateRepository currentStateRepository;
 
+    @Autowired
+    CdaParkingTransRepository cdaParkingTransRepository;
 
-    @Autowired    
+    @Autowired
     RoleRepository roleRepository;
 
-    @Autowired    
+    @Autowired
     CgUnitRepository cgUnitRepository;
 
-    @Autowired    
+    @Autowired
     MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
 
-    @Autowired    
+    @Autowired
     AllocationRepository allocationRepository;
 
-    @Autowired    
+    @Autowired
     BudgetFinancialYearRepository budgetFinancialYearRepository;
 
-    @Autowired    
+    @Autowired
     private JwtUtils jwtUtils;
 
-    @Autowired    
+    @Autowired
     private HeaderUtils headerUtils;
 
-    @Autowired    
+    @Autowired
     AuthorityRepository authorityRepository;
 
-    @Autowired    
+    @Autowired
     private BudgetAllocationDetailsRepository budgetAllocationDetailsRepository;
 
-    @Autowired    
+    @Autowired
     private AmountUnitRepository amountUnitRepository;
 
-    @Autowired    
+    @Autowired
     private SubHeadRepository subHeadRepository;
 
-    @Autowired    
+    @Autowired
     private BudgetAllocationRepository budgetAllocationRepository;
 
 
@@ -105,15 +108,14 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         }
 
         if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER)) {
-            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(),"1"));
+            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
             archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
 
 
-            List<String> dataIscgBg =  new ArrayList<>();
+            List<String> dataIscgBg = new ArrayList<>();
             dataIscgBg.add("BG");
             dataIscgBg.add("BR");
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
-
 
 
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
@@ -133,6 +135,23 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                     data.setStatus(mangeInboxOutbox.getStatus());
                     data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
+
+                    Boolean isCda = true;
+                    List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(mangeInboxOutbox.getGroupId(), "0");
+                    for (Integer m = 0; m < budgetAllocations.size(); m++) {
+
+                        BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
+
+                        List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getTransactionId(), "0");
+                        if (cdaParkingList.size() > 0) {
+                            data.setIsCda(isCda);
+                        } else {
+                            isCda = false;
+                            data.setIsCda(isCda);
+                        }
+                    }
+
+                    data.setIsCda(isCda);
                     inboxList.add(data);
 
                 } else {
@@ -149,7 +168,22 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                     data.setType(mangeInboxOutbox.getType());
                     data.setStatus(mangeInboxOutbox.getStatus());
                     data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+                    Boolean isCda = true;
+                    List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(mangeInboxOutbox.getGroupId(), "0");
+                    for (Integer m = 0; m < budgetAllocations.size(); m++) {
 
+                        BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
+
+                        List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getTransactionId(), "0");
+                        if (cdaParkingList.size() > 0) {
+                            data.setIsCda(isCda);
+                        } else {
+                            isCda = false;
+                            data.setIsCda(isCda);
+                        }
+                    }
+
+                    data.setIsCda(isCda);
                     outBoxList.add(data);
                 }
 
@@ -157,15 +191,13 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         } else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
 //            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG", "0", "0");
 
-            List<String> dataIscgBg =  new ArrayList<>();
+            List<String> dataIscgBg = new ArrayList<>();
             dataIscgBg.add("BG");
             dataIscgBg.add("BR");
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
 
-            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(),"1"));
+            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
             archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
-
-
 
 
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
@@ -186,7 +218,22 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                         data.setType(mangeInboxOutbox.getType());
                         data.setStatus(mangeInboxOutbox.getStatus());
                         data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+                        Boolean isCda = true;
+                        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(mangeInboxOutbox.getGroupId(), "0");
+                        for (Integer m = 0; m < budgetAllocations.size(); m++) {
 
+                            BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
+
+                            List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getTransactionId(), "0");
+                            if (cdaParkingList.size() > 0) {
+                                data.setIsCda(isCda);
+                            } else {
+                                isCda = false;
+                                data.setIsCda(isCda);
+                            }
+                        }
+
+                        data.setIsCda(isCda);
                         inboxList.add(data);
 
                     } else {
@@ -203,7 +250,22 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                         data.setType(mangeInboxOutbox.getType());
                         data.setStatus(mangeInboxOutbox.getStatus());
                         data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+                        Boolean isCda = true;
+                        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(mangeInboxOutbox.getGroupId(), "0");
+                        for (Integer m = 0; m < budgetAllocations.size(); m++) {
 
+                            BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
+
+                            List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getTransactionId(), "0");
+                            if (cdaParkingList.size() > 0) {
+                                data.setIsCda(isCda);
+                            } else {
+                                isCda = false;
+                                data.setIsCda(isCda);
+                            }
+                        }
+
+                        data.setIsCda(isCda);
                         outBoxList.add(data);
                     }
 
@@ -211,9 +273,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
             }
         } else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
-            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(),"CB", "1"));
-            archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(),"CB", "1"));
-
+            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
 
 
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "0", "0");
@@ -256,8 +317,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
             }
         } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
-            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(),"CB", "1"));
-            archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(),"CB", "1"));
+            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
 
 
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "0", "0");
@@ -300,8 +361,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
             }
         } else if (getCurrentRole.contains(HelperUtils.CBAPPROVER)) {
-            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(),"CB", "1"));
-            archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(),"CB", "1"));
+            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
 
 
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "0", "0");
@@ -362,7 +423,6 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         }
 
 
-
         for (Integer i = 0; i < approvedMain.size(); i++) {
             InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
             MangeInboxOutbox mangeInboxOutbox = approvedMain.get(i);
@@ -382,7 +442,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             approvedList.add(data);
         }
 
-         for (Integer i = 0; i < archiveMain.size(); i++) {
+        for (Integer i = 0; i < archiveMain.size(); i++) {
             InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
             MangeInboxOutbox mangeInboxOutbox = archiveMain.get(i);
 
@@ -400,9 +460,6 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
             archivedList.add(data);
         }
-
-
-
 
 
         inboxOutBoxResponse.setApprovedList(approvedList);

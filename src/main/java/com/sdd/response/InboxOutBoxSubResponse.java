@@ -28,6 +28,6 @@ public class InboxOutBoxSubResponse {
    private String status;
    private AllocationType allocationType;
 
-
+   private Boolean isCda;
    private String msg;
 }
