@@ -1515,7 +1515,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "GROUP ID CAN NOT BE BLANK");
         }
 
-        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(groupId,  hrData.getUnitId());
+        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(groupId, hrData.getUnitId());
 
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
@@ -1930,6 +1930,16 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(budgetApproveRequest.getAuthGroupId(), hrData.getUnitId());
         if (mangeInboxOutbox != null) {
+
+
+            if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
+
+            } else {
+
+
+            }
+
+
             String toUnit = mangeInboxOutbox.getToUnit();
             String fromUnit = mangeInboxOutbox.getFromUnit();
             mangeInboxOutbox.setFromUnit(toUnit);
@@ -3516,6 +3526,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         String authgroupid = authRequest.getAuthGroupId();
 
 
+        List<MangeInboxOutbox> inboxList = mangeInboxOutBoxRepository.findByGroupId(authgroupid);
+
+
         HashMap<String, BudgetAllocation> totalUnit = new HashMap<String, BudgetAllocation>();
         for (Integer i = 0; i < budgetAllocationsList.size(); i++) {
             totalUnit.put(budgetAllocationsList.get(i).getToUnit(), budgetAllocationsList.get(i));
@@ -3532,6 +3545,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             mangeInboxOutbox.setToUnit(key);
+
+            if (inboxList.size() > 0) {
+                mangeInboxOutbox.setType(inboxList.get(0).getType());
+            }
+
+
             mangeInboxOutbox.setGroupId(authgroupid);
             mangeInboxOutbox.setFromUnit(hrDataCheck.getUnitId());
             mangeInboxOutbox.setRoleId(hrDataCheck.getRoleId());
