@@ -53,6 +53,8 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
     List<BudgetAllocation> findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(
             String subHeadId, String finYear, String allocationTypeId, String isREbision);
 
+    List<BudgetAllocation> findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(
+            String subHeadId,String frmUnit, String finYear, String allocationTypeId, String isRevision);
     List<BudgetAllocation> findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(
             String subHeadId, String allocationType, String isFalg, String isRevison);
 
