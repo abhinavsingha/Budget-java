@@ -135,27 +135,27 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                     data.setStatus(mangeInboxOutbox.getStatus());
                     data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
+                    if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
+                        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
+                        Boolean isCda = true;
+                        for (Integer m = 0; m < budgetAllocations.size(); m++) {
 
-                    List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
-                    Boolean isCda = true;
-                    for (Integer m = 0; m < budgetAllocations.size(); m++) {
+                            BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
 
-                        BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
+                            if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                                continue;
+                            }
 
-                        if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
-                            continue;
+                            List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
+                            if (cdaParkingList.size() > 0) {
+                                data.setIsCda(isCda);
+                            } else {
+                                isCda = false;
+                                data.setIsCda(isCda);
+                            }
                         }
-
-                        List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
-                        if (cdaParkingList.size() > 0) {
-                            data.setIsCda(isCda);
-                        } else {
-                            isCda = false;
-                            data.setIsCda(isCda);
-                        }
+                        data.setIsCda(isCda);
                     }
-
-                    data.setIsCda(isCda);
                     inboxList.add(data);
 
                 } else {
@@ -172,23 +172,26 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                     data.setType(mangeInboxOutbox.getType());
                     data.setStatus(mangeInboxOutbox.getStatus());
                     data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
-                    List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
-                    Boolean isCda = true;
-                    for (Integer m = 0; m < budgetAllocations.size(); m++) {
+                    if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
+                        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
+                        Boolean isCda = true;
+                        for (Integer m = 0; m < budgetAllocations.size(); m++) {
 
-                        BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
+                            BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
 
-                        if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
-                            continue;
+                            if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                                continue;
+                            }
+
+                            List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
+                            if (cdaParkingList.size() > 0) {
+                                data.setIsCda(isCda);
+                            } else {
+                                isCda = false;
+                                data.setIsCda(isCda);
+                            }
                         }
-
-                        List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
-                        if (cdaParkingList.size() > 0) {
-                            data.setIsCda(isCda);
-                        } else {
-                            isCda = false;
-                            data.setIsCda(isCda);
-                        }
+                        data.setIsCda(isCda);
                     }
                     outBoxList.add(data);
                 }
@@ -224,23 +227,28 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                         data.setType(mangeInboxOutbox.getType());
                         data.setStatus(mangeInboxOutbox.getStatus());
                         data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
-                        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
-                        Boolean isCda = true;
-                        for (Integer m = 0; m < budgetAllocations.size(); m++) {
 
-                            BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
+                        if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
 
-                            if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
-                                continue;
+                            List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
+                            Boolean isCda = true;
+                            for (Integer m = 0; m < budgetAllocations.size(); m++) {
+
+                                BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
+
+                                if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                                    continue;
+                                }
+
+                                List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
+                                if (cdaParkingList.size() > 0) {
+                                    data.setIsCda(isCda);
+                                } else {
+                                    isCda = false;
+                                    data.setIsCda(isCda);
+                                }
                             }
-
-                            List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
-                            if (cdaParkingList.size() > 0) {
-                                data.setIsCda(isCda);
-                            } else {
-                                isCda = false;
-                                data.setIsCda(isCda);
-                            }
+                            data.setIsCda(isCda);
                         }
                         inboxList.add(data);
 
@@ -257,23 +265,28 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                         data.setAmount(mangeInboxOutbox.getAmount());
                         data.setType(mangeInboxOutbox.getType());
                         data.setStatus(mangeInboxOutbox.getStatus());
-                        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
-                        Boolean isCda = true;
-                        for (Integer m = 0; m < budgetAllocations.size(); m++) {
 
-                            BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
+                        if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
 
-                            if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
-                                continue;
+                            List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
+                            Boolean isCda = true;
+                            for (Integer m = 0; m < budgetAllocations.size(); m++) {
+
+                                BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
+
+                                if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                                    continue;
+                                }
+
+                                List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
+                                if (cdaParkingList.size() > 0) {
+                                    data.setIsCda(isCda);
+                                } else {
+                                    isCda = false;
+                                    data.setIsCda(isCda);
+                                }
                             }
-
-                            List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
-                            if (cdaParkingList.size() > 0) {
-                                data.setIsCda(isCda);
-                            } else {
-                                isCda = false;
-                                data.setIsCda(isCda);
-                            }
+                            data.setIsCda(isCda);
                         }
                         outBoxList.add(data);
                     }
@@ -447,26 +460,29 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             data.setType(mangeInboxOutbox.getType());
             data.setStatus(mangeInboxOutbox.getStatus());
             data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
-            List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
-            Boolean isCda = true;
-            for (Integer m = 0; m < budgetAllocations.size(); m++) {
+            if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
 
-                BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
+                List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
+                Boolean isCda = true;
+                for (Integer m = 0; m < budgetAllocations.size(); m++) {
 
-                if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
-                    continue;
+                    BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
+
+                    if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                        continue;
+                    }
+
+                    List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
+                    if (cdaParkingList.size() > 0) {
+                        data.setIsCda(isCda);
+                    } else {
+                        isCda = false;
+                        data.setIsCda(isCda);
+                    }
                 }
 
-                List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
-                if (cdaParkingList.size() > 0) {
-                    data.setIsCda(isCda);
-                } else {
-                    isCda = false;
-                    data.setIsCda(isCda);
-                }
+                data.setIsCda(isCda);
             }
-
-            data.setIsCda(isCda);
             approvedList.add(data);
         }
 
@@ -485,26 +501,28 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             data.setType(mangeInboxOutbox.getType());
             data.setStatus(mangeInboxOutbox.getStatus());
             data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
-            List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
-            Boolean isCda = true;
-            for (Integer m = 0; m < budgetAllocations.size(); m++) {
+            if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
 
-                BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
+                List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
+                Boolean isCda = true;
+                for (Integer m = 0; m < budgetAllocations.size(); m++) {
 
-                if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
-                    continue;
+                    BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
+
+                    if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                        continue;
+                    }
+
+                    List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
+                    if (cdaParkingList.size() > 0) {
+                        data.setIsCda(isCda);
+                    } else {
+                        isCda = false;
+                        data.setIsCda(isCda);
+                    }
                 }
-
-                List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
-                if (cdaParkingList.size() > 0) {
-                    data.setIsCda(isCda);
-                } else {
-                    isCda = false;
-                    data.setIsCda(isCda);
-                }
+                data.setIsCda(isCda);
             }
-
-            data.setIsCda(isCda);
             archivedList.add(data);
         }
 

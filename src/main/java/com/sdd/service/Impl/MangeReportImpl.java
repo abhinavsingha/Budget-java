@@ -1105,7 +1105,8 @@ public class MangeReportImpl implements MangeReportService {
                                 if (cdaData.get(m).getTotalParkingAmount() == null) {
                                     amount = amount;
                                 } else {
-                                    amount = amount + Float.parseFloat(cdaData.get(m).getTotalParkingAmount());
+                                    AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
+                                    amount = amount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
                                     grandTotal = grandTotal + amount;
                                 }
                             }
@@ -1195,7 +1196,8 @@ public class MangeReportImpl implements MangeReportService {
                             if (cdaData.get(m).getTotalParkingAmount() == null) {
                                 amount = amount;
                             } else {
-                                amount = amount + Float.parseFloat(cdaData.get(m).getTotalParkingAmount());
+                                AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
+                                amount = amount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
                                 grandTotal = grandTotal + amount;
                             }
 
@@ -1316,7 +1318,8 @@ public class MangeReportImpl implements MangeReportService {
                             if (cdaData.get(m).getTotalParkingAmount() == null) {
                                 amount = amount;
                             } else {
-                                amount = amount + Float.parseFloat(cdaData.get(m).getTotalParkingAmount());
+                                AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
+                                amount = amount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
                                 grandTotal = grandTotal + amount;
                             }
                         }
@@ -1425,7 +1428,8 @@ public class MangeReportImpl implements MangeReportService {
                                 if (cdaData.get(m).getTotalParkingAmount() == null) {
                                     amount = amount;
                                 } else {
-                                    amount = amount + Float.parseFloat(cdaData.get(m).getTotalParkingAmount());
+                                    AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
+                                    amount = amount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
                                     grandTotal = grandTotal + amount;
                                 }
                             }
@@ -1747,7 +1751,8 @@ public class MangeReportImpl implements MangeReportService {
                                 if (cdaData.get(m).getTotalParkingAmount() == null) {
                                     amount = amount;
                                 } else {
-                                    amount = amount + Float.parseFloat(cdaData.get(m).getTotalParkingAmount());
+                                    AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
+                                    amount = amount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
                                     grandTotal = grandTotal + amount;
                                 }
                             }
@@ -1834,7 +1839,8 @@ public class MangeReportImpl implements MangeReportService {
                             if (cdaData.get(m).getTotalParkingAmount() == null) {
                                 amount = amount;
                             } else {
-                                amount = amount + Float.parseFloat(cdaData.get(m).getTotalParkingAmount());
+                                AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
+                                amount = amount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
                                 grandTotal = grandTotal + amount;
                             }
 
@@ -1955,7 +1961,8 @@ public class MangeReportImpl implements MangeReportService {
                             if (cdaData.get(m).getTotalParkingAmount() == null) {
                                 amount = amount;
                             } else {
-                                amount = amount + Float.parseFloat(cdaData.get(m).getTotalParkingAmount());
+                                AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
+                                amount = amount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
                                 grandTotal = grandTotal + amount;
                             }
                         }
@@ -2064,7 +2071,8 @@ public class MangeReportImpl implements MangeReportService {
                                 if (cdaData.get(m).getTotalParkingAmount() == null) {
                                     amount = amount;
                                 } else {
-                                    amount = amount + Float.parseFloat(cdaData.get(m).getTotalParkingAmount());
+                                    AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
+                                    amount = amount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
                                     grandTotal = grandTotal + amount;
                                 }
                             }
