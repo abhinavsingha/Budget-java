@@ -127,7 +127,7 @@ public class CdaParkingImpl implements CdaParkingService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AMOUNT TYPE ID");
             }
 
-            BudgetAllocation budgetAllocation = budgetAllocationRepository.findByAllocationIdAndIsFlagAndIsBudgetRevision(cdaRequest.getCdaRequest().get(i).getTransactionId(), "0", "0");
+            BudgetAllocation budgetAllocation = budgetAllocationRepository.findByAllocationId(cdaRequest.getCdaRequest().get(i).getTransactionId());
             if (budgetAllocation == null) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TRANSACTION ID");
             }
