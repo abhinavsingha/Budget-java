@@ -3791,7 +3791,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + allocType.toUpperCase() + "_Revised_Allocation-Report.pdf";
+            String path = folder.getAbsolutePath() + "/"+allocType.toUpperCase()+"_Revised_allocation-report.pdf";
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
@@ -3989,8 +3989,8 @@ public class MangeReportImpl implements MangeReportService {
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + allocType.toUpperCase() + "_Revised_allocation-report.pdf");
-            dto.setFileName(allocType.toUpperCase() + "_Revised_allocation-report.pdf");
+            dto.setPath(HelperUtils.FILEPATH +allocType.toUpperCase()+"_Revised_allocation-report.pdf");
+            dto.setFileName(allocType.toUpperCase()+"_Revised_allocation-report.pdf");
             dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
