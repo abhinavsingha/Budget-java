@@ -6060,6 +6060,7 @@ public class MangeReportImpl implements MangeReportService {
             String finyear = "";
             String unit = "";
 
+//A
             String RunitId = "";
             String uName = "";
             String frmStation = "";
