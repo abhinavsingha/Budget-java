@@ -287,7 +287,7 @@ public class PdfGenaratorUtilMain {
         phraseFooter.add(certifyd);
 
 
-        Chunk veriferSign = new Chunk("                                                                                                                                                                   " + cbReportResponse.getVerifer().getFullName() + " \n" + "                                                                                                                                                            " + cbReportResponse.getVerifer().getRank() + " \n\n", normalFont);
+        Chunk veriferSign = new Chunk("                                                                                                                                                            " + cbReportResponse.getVerifer().getFullName() + " \n" + "                                                                                                                                                     " + cbReportResponse.getVerifer().getRank() + " \n\n", normalFont);
         phraseFooter.add(veriferSign);
 
 
@@ -297,13 +297,13 @@ public class PdfGenaratorUtilMain {
 
 
         Chunk footer11 = new Chunk("Coast Guard Headquarters", font);
-        Chunk footer12 = new Chunk("                                                                                                                     " + cbReportResponse.getApprover().getFullName() + " \n", normalFont);
+        Chunk footer12 = new Chunk("                                                                                                              " + cbReportResponse.getApprover().getFullName() + " \n", normalFont);
         phraseFooter.add(footer11);
         phraseFooter.add(footer12);
 
 
         Chunk footer21 = new Chunk("National Stadium Complex", font);
-        Chunk footer22 = new Chunk("                                                                                                                " + cbReportResponse.getApprover().getRank() + " \n", normalFont);
+        Chunk footer22 = new Chunk("                                                                                                         " + cbReportResponse.getApprover().getRank() + " \n", normalFont);
         phraseFooter.add(footer21);
         phraseFooter.add(footer22);
 
