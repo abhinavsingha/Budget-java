@@ -4127,8 +4127,8 @@ public class MangeReportImpl implements MangeReportService {
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
-                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
-                //List<BudgetAllocation> reportDetails = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
 
                 BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
 
@@ -4151,7 +4151,7 @@ public class MangeReportImpl implements MangeReportService {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
                     amount = Double.valueOf(reportDetails.get(r).getAllocationAmount());
-                    if (reportDetails.get(r).getRevisedAmount() != null) {
+                    if (reportDetails.get(r).getRevisedAmount() != null || Double.valueOf(reportDetails.get(r).getRevisedAmount()) !=0) {
                         revisedAmount = Double.valueOf(reportDetails.get(r).getRevisedAmount());
                     } else
                         revisedAmount = 0.0;
@@ -4324,7 +4324,7 @@ public class MangeReportImpl implements MangeReportService {
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
         List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
-        List<BudgetAllocation> checks = check.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        List<BudgetAllocation> checks = check.stream().filter(e -> Double.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
         if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -4388,7 +4388,7 @@ public class MangeReportImpl implements MangeReportService {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
                     amount = Double.valueOf(reportDetails.get(r).getAllocationAmount());
-                    if (reportDetails.get(r).getRevisedAmount() != null) {
+                    if (reportDetails.get(r).getRevisedAmount() != null ||  Double.valueOf(reportDetails.get(r).getRevisedAmount()) !=0) {
                         revisedAmount = Double.valueOf(reportDetails.get(r).getRevisedAmount());
                     } else
                         revisedAmount = 0.0;
