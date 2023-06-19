@@ -136,7 +136,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                     data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
                     if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
-                        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
+                        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(mangeInboxOutbox.getGroupId(), hrDataCheck.getUnitId());
                         Boolean isCda = true;
                         for (Integer m = 0; m < budgetAllocations.size(); m++) {
 
@@ -173,7 +173,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                     data.setStatus(mangeInboxOutbox.getStatus());
                     data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
                     if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
-                        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
+                        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(mangeInboxOutbox.getGroupId(), hrDataCheck.getUnitId());
                         Boolean isCda = true;
                         for (Integer m = 0; m < budgetAllocations.size(); m++) {
 
@@ -230,7 +230,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
                         if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
 
-                            List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
+                            List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(mangeInboxOutbox.getGroupId(), hrDataCheck.getUnitId());
                             Boolean isCda = true;
                             for (Integer m = 0; m < budgetAllocations.size(); m++) {
 
@@ -268,7 +268,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
                         if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
 
-                            List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
+                            List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(mangeInboxOutbox.getGroupId(), hrDataCheck.getUnitId());
                             Boolean isCda = true;
                             for (Integer m = 0; m < budgetAllocations.size(); m++) {
 
@@ -462,7 +462,9 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
             if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
 
-                List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
+
+                List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(mangeInboxOutbox.getGroupId(), hrDataCheck.getUnitId());
+
                 Boolean isCda = true;
                 for (Integer m = 0; m < budgetAllocations.size(); m++) {
 
@@ -503,7 +505,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
             if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
 
-                List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(mangeInboxOutbox.getGroupId(), "0");
+                List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(mangeInboxOutbox.getGroupId(), hrDataCheck.getUnitId());
                 Boolean isCda = true;
                 for (Integer m = 0; m < budgetAllocations.size(); m++) {
 
@@ -795,7 +797,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         } catch (Exception e) {
         }
         if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER) || getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
-            List<BudgetAllocation> inboxOutboxesList = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(groupId, "0");
+            List<BudgetAllocation> inboxOutboxesList = budgetAllocationRepository.findByAuthGroupIdAndToUnit(groupId, hrDataCheck.getUnitId());
             if (inboxOutboxesList.size() > 0) {
                 for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
                     BudgetAllocation mangeInboxOutbox = inboxOutboxesList.get(i);
