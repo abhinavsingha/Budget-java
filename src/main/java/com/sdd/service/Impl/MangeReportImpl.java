@@ -3275,7 +3275,6 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(cella3);
                     count++;
                     sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
-                    gdTotal += sum;
 
                 }
                 if (count != 0) {
@@ -3289,6 +3288,7 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(cell11);
                     count = 0;
                 }
+                gdTotal += sum;
 
             }
             PdfPCell cell101 = new PdfPCell(new Phrase("GRAND TOTAL ", cellFont));
@@ -3475,7 +3475,6 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
                     count++;
                     sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
-                    gdTotal += sum;
 
                 }
                 if (count != 0) {
@@ -3490,6 +3489,7 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
                     count = 0;
                 }
+                gdTotal += sum;
 
             }
             XWPFTable table223 = document.createTable(1, 3);
@@ -3877,9 +3877,6 @@ public class MangeReportImpl implements MangeReportService {
                     count++;
                     sumExisting += Float.parseFloat(new BigDecimal(Double.toString(finAmount)).toPlainString());
                     sumRE += Float.parseFloat(new BigDecimal(Double.toString(reAmount)).toPlainString());
-                    grTotalAlloc += sumExisting;
-                    grTotalAddition += sumRE;
-                    grTotalSum += (sumExisting + sumRE);
 
                 }
                 if (count != 0) {
@@ -3915,6 +3912,9 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(cell40);
                     count = 0;
                 }
+                grTotalAlloc += sumExisting;
+                grTotalAddition += sumRE;
+                grTotalSum += (sumExisting + sumRE);
 
             }
             PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
@@ -4161,10 +4161,6 @@ public class MangeReportImpl implements MangeReportService {
                     sumExisting += Float.parseFloat(new BigDecimal(Double.toString(finAmount)).toPlainString());
                     sumRE += Float.parseFloat(new BigDecimal(Double.toString(reAmount)).toPlainString());
 
-                    grTotalAlloc += sumExisting;
-                    grTotalAddition += sumRE;
-                    grTotalSum += (sumExisting + sumRE);
-
                 }
                 total = sumExisting + sumRE;
                 Double ss2 = 0.0;
@@ -4191,6 +4187,10 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sumRE)), true);
                 XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
                 boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(total)), true);
+
+                grTotalAlloc += sumExisting;
+                grTotalAddition += sumRE;
+                grTotalSum += (sumExisting + sumRE);
             }
             XWPFTable table223 = document.createTable(1, 5);
             table223.setWidth("100%");
@@ -4599,10 +4599,6 @@ public class MangeReportImpl implements MangeReportService {
                     sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                     reSum += Float.parseFloat(new BigDecimal(reFinalAmount).toPlainString());
 
-                    grTotalAlloc += sum;
-                    grTotalAddition += reSum;
-
-
                 }
                 if (count != 0) {
                     PdfPCell cell20 = new PdfPCell(new Phrase(" TOTAL", cellFont));
@@ -4619,6 +4615,8 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(cell22);
                     count = 0;
                 }
+                grTotalAlloc += sum;
+                grTotalAddition += reSum;
 
             }
             PdfPCell cell210 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
@@ -4847,9 +4845,6 @@ public class MangeReportImpl implements MangeReportService {
                     sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                     reSum += Float.parseFloat(new BigDecimal(reFinalAmount).toPlainString());
 
-                    grTotalAlloc += sum;
-                    grTotalAddition += reSum;
-
                 }
                 if (count != 0) {
                     XWPFTable table222 = document.createTable(1, 4);
@@ -4865,6 +4860,8 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(reSum)), true);
                     count = 0;
                 }
+                grTotalAlloc += sum;
+                grTotalAddition += reSum;
             }
 
             XWPFTable table223 = document.createTable(1, 4);
@@ -5348,10 +5345,6 @@ public class MangeReportImpl implements MangeReportService {
                     expsum += Float.parseFloat(new BigDecimal(eAmount).toPlainString());
                     percentagesum += Float.parseFloat(new BigDecimal(expnAmount).toPlainString());
 
-                    grTotalAlloc += sum;
-                    grTotalAddition += expsum;
-                    grTotalSum += percentagesum;
-
                 }
                 if (count != 0) {
                     PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
@@ -5374,6 +5367,9 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(" ");
                     count = 0;
                 }
+                grTotalAlloc += sum;
+                grTotalAddition += expsum;
+                grTotalSum += percentagesum;
 
             }
             PdfPCell cell50 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
@@ -5692,11 +5688,6 @@ public class MangeReportImpl implements MangeReportService {
                     expsum += Float.parseFloat(new BigDecimal(eAmount).toPlainString());
                     percentagesum += Float.parseFloat(new BigDecimal(expnAmount).toPlainString());
 
-
-                    grTotalAlloc += sum;
-                    grTotalAddition += expsum;
-                    grTotalSum += percentagesum;
-
                 }
                 if (count != 0) {
 
@@ -5720,6 +5711,9 @@ public class MangeReportImpl implements MangeReportService {
                     XWPFParagraph paragraphtableRowOne2277 = tableRowOne222.getCell(7).addParagraph();
                     boldText(paragraphtableRowOne2277.createRun(), 12, "", true);
                 }
+                grTotalAlloc += sum;
+                grTotalAddition += expsum;
+                grTotalSum += percentagesum;
 
             }
             XWPFTable table220 = document.createTable(1, 8);
