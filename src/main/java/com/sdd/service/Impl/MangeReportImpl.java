@@ -3257,9 +3257,12 @@ public class MangeReportImpl implements MangeReportService {
             float gdTotal = 0;
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetailss = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId, allocationType, "0");
+                List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId, allocationType, "0");
+                List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 List<BudgetAllocation> reportDetails = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-
+                int sz = reportDetails.size();
+                if (sz <= 0)
+                    continue;
                 int count = 0;
                 float sum = 0;
                 Double amount;
@@ -3270,10 +3273,6 @@ public class MangeReportImpl implements MangeReportService {
 
                     for (Integer k = 0; k < units.size(); k++) {
                         if (units.get(k).getUnit().equalsIgnoreCase(row.getToUnit())) {
-
-                            if (row.getToUnit().equalsIgnoreCase(hrData.getUnitId())) {
-                                continue;
-                            } else
                                 amount = Double.valueOf(row.getAllocationAmount());
 
                             AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());

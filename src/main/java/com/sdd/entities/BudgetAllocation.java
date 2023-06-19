@@ -35,6 +35,9 @@ public class BudgetAllocation {
     @Column(name = "TO_UNIT")
     private String toUnit;
 
+    @Column(name = "FROM_UNIT")
+    private String fromUnit;
+
     @Column(name = "SUB_HEAD")
     private String subHead;
 

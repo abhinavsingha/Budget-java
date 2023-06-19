@@ -1873,6 +1873,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocation.setRefTransId(allocationDetails.get(i).getRefTransactionId());
                 budgetAllocation.setFinYear(allocationDetails.get(i).getFinYear());
                 budgetAllocation.setToUnit(allocationDetails.get(i).getToUnit());
+                budgetAllocation.setFromUnit(hrData.getUnitId());
                 budgetAllocation.setSubHead(allocationDetails.get(i).getSubHead());
                 budgetAllocation.setAllocationTypeId(allocationDetails.get(i).getAllocTypeId());
                 budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationDetails.get(i).getAllocationAmount()));
