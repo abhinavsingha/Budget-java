@@ -3420,7 +3420,7 @@ public class MangeReportImpl implements MangeReportService {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText(type.getAllocDesc().toUpperCase() + "_ALLOCATION REPORT");
+            headingRun.setText(type.getAllocDesc().toUpperCase() + " ALLOCATION REPORT");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
@@ -3788,7 +3788,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            paragraph.add(new Chunk(allocType.toUpperCase() + " " + "REVISED  ALLOCATION  REPORT", boldFont));
+            paragraph.add(new Chunk("REVISED"+" "+allocType.toUpperCase() +" "+" ALLOCATION  REPORT", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
@@ -4075,7 +4075,7 @@ public class MangeReportImpl implements MangeReportService {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText(allocType.toUpperCase() + "_REVISED_ALLOCATION REPORT");
+            headingRun.setText("REVISED"+" "+allocType.toUpperCase() +" "+"ALLOCATION REPORT");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
@@ -4553,7 +4553,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            paragraph.add(new Chunk("RE  ALLOCATION  REPORT" + ": " + findyr.getFinYear(), boldFont));
+            paragraph.add(new Chunk(types.getAllocDesc().toUpperCase()+" "+"ALLOCATION  REPORT" + ": " + findyr.getFinYear(), boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
@@ -4793,7 +4793,7 @@ public class MangeReportImpl implements MangeReportService {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText("RE  ALLOCATION  REPORT" + ": " + findyr.getFinYear());
+            headingRun.setText(types.getAllocDesc().toUpperCase() + " " +"ALLOCATION  REPORT" + ": " + findyr.getFinYear());
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
@@ -5249,7 +5249,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            paragraph.add(new Chunk(type.getAllocDesc().toUpperCase() + " " + "FER_ALLOCATION REPORT", boldFont));
+            paragraph.add(new Chunk(type.getAllocDesc().toUpperCase() + " " + "FER  ALLOCATION REPORT", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
@@ -5592,7 +5592,7 @@ public class MangeReportImpl implements MangeReportService {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText(type.getAllocDesc().toUpperCase() + "_FER" + "_ALLOCATION REPORT");
+            headingRun.setText(type.getAllocDesc().toUpperCase() + "FER" + "ALLOCATION REPORT");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
