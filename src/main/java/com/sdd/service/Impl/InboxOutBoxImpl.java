@@ -153,8 +153,10 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                                 isCda = false;
                                 data.setIsCda(isCda);
                             }
+                            data.setBudgetAllocation(budgetAllocationSubReport);
                         }
                         data.setIsCda(isCda);
+
                     }
                     inboxList.add(data);
 
@@ -190,6 +192,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                                 isCda = false;
                                 data.setIsCda(isCda);
                             }
+                            data.setBudgetAllocation(budgetAllocationSubReport);
                         }
                         data.setIsCda(isCda);
                     }
@@ -247,6 +250,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                                     isCda = false;
                                     data.setIsCda(isCda);
                                 }
+                                data.setBudgetAllocation(budgetAllocationSubReport);
                             }
                             data.setIsCda(isCda);
                         }
@@ -285,6 +289,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                                     isCda = false;
                                     data.setIsCda(isCda);
                                 }
+                                data.setBudgetAllocation(budgetAllocationSubReport);
                             }
                             data.setIsCda(isCda);
                         }
@@ -481,6 +486,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                         isCda = false;
                         data.setIsCda(isCda);
                     }
+                    data.setBudgetAllocation(budgetAllocationSubReport);
                 }
 
                 data.setIsCda(isCda);
@@ -522,6 +528,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                         isCda = false;
                         data.setIsCda(isCda);
                     }
+                    data.setBudgetAllocation(budgetAllocationSubReport);
                 }
                 data.setIsCda(isCda);
             }

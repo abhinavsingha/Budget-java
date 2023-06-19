@@ -1,6 +1,7 @@
 package com.sdd.response;
 
 import com.sdd.entities.AllocationType;
+import com.sdd.entities.BudgetAllocation;
 import com.sdd.entities.CgUnit;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,5 +30,6 @@ public class InboxOutBoxSubResponse {
    private AllocationType allocationType;
 
    private Boolean isCda;
+   private BudgetAllocation budgetAllocation;
    private String msg;
 }
