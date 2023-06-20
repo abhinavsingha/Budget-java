@@ -5344,7 +5344,7 @@ public class MangeReportImpl implements MangeReportService {
                 Double amount = Double.valueOf(0);
                 Double amountUnit;
                 Double finAmount;
-                Double eAmount;
+                Double eAmount=0.0;
                 Double expnAmount;
                 Double allAmount = 0.0;
 
@@ -5356,24 +5356,45 @@ public class MangeReportImpl implements MangeReportService {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
-                    String uid = row.getToUnit();
                     amountUnit = amountTypeObj.getAmount();
                     finAmount = amount * amountUnit / reqAmount;
-                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdate(uid, finYearId, subHeadId, "0");
+                    String uid = row.getToUnit();
+                    List<CgUnit> listOfSubUnit=cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
 
+                    double totalbill=0.0;
+                    if(listOfSubUnit.size()>0){
+                        for(CgUnit unitss:listOfSubUnit){
+                            String subUnit=unitss.getUnit();
+                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdate(subUnit, finYearId, subHeadId, "0");
+                            List<ContigentBill> expenditure = expenditure1.stream()
+                                    .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
+                            if (expenditure.size() > 0) {
+                                double totalAmount = 0.0;
+                                for (ContigentBill bill : expenditure) {
+                                    totalAmount += Double.parseDouble(bill.getCbAmount());
+                                }
+                                totalbill+=totalAmount;
+                            }
+                        }
+                        DecimalFormat decimalFormat = new DecimalFormat("#");
+                        String cbAmount = decimalFormat.format(totalbill);
+                        eAmount = Double.parseDouble(cbAmount);
+                    }
+                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdate(uid, finYearId, subHeadId, "0");
                     List<ContigentBill> expenditure = expenditure1.stream()
                             .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
+                    double totalAmount = 0.0;
                     if (expenditure.size() > 0) {
-                        double totalAmount = 0.0;
                         for (ContigentBill bill : expenditure) {
                             totalAmount += Double.parseDouble(bill.getCbAmount());
                         }
                         DecimalFormat decimalFormat = new DecimalFormat("#");
                         String cbAmount = decimalFormat.format(totalAmount);
                         eAmount = Double.parseDouble(cbAmount);
-                    } else {
-                        eAmount = 0.0;
                     }
+
+                    eAmount=totalAmount+totalbill;
+
                     if (finAmount != 0)
                         expnAmount = eAmount * 100 / (amount * amountUnit);
                     else

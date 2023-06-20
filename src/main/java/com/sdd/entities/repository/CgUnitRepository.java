@@ -14,6 +14,7 @@ public interface CgUnitRepository extends JpaRepository<CgUnit, Long> {
   String findUnitName(String unitId);
 
   List<CgUnit> findAllByOrderByDescrAsc();
+  List<CgUnit> findByUnitOrderByDescrAsc(String cbUnit);
 
   List<CgUnit> findByPurposeCodeOrPurposeCodeOrderByDescrAsc(String purpose, String purpose1);
 
