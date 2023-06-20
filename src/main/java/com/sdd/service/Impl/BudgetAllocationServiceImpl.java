@@ -1633,22 +1633,23 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
         if (cgUnit == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "USER UNIT IS INVALID.PLEASE CHECK");
-
         }
 
 
+        List<CgUnit> allUnit = new ArrayList<>();
         List<CgUnit> unit = new ArrayList<>();
         if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-            unit = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+            allUnit = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
         } else {
-            unit = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
+            allUnit.add(cgUnitRepository.findByUnit(hrData.getUnitId()));
+            allUnit.addAll(cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit()));
         }
-        if (unit.size() <= 0) {
+        if (allUnit.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT NOT FOUND");
         }
 
+        unit.addAll(removeDuplicates(allUnit));
 
-//        List<CgUnit> allUnitData = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
 
         for (Integer i = 0; i < unit.size(); i++) {
 
@@ -3620,6 +3621,29 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         return ResponseUtils.createSuccessResponse(cgUnitResponseList, new TypeReference<List<CgUnitResponse>>() {
         });
     }
+
+
+    public List<CgUnit> removeDuplicates(List<CgUnit> dataList) {
+        List<CgUnit> resultList = new ArrayList<CgUnit>();
+
+        // Convert array list to Linked list
+        LinkedList<CgUnit> linkedList = new LinkedList<CgUnit>();
+        for (CgUnit obj : dataList) {
+            linkedList.add(obj);
+        }
+
+        // Iterate through linked list and remove if values are duplicates
+        for (int i = 0; i < linkedList.size(); i++) {
+            for (int j = i + 1; j < linkedList.size(); j++) {
+                if (linkedList.get(j).equals(linkedList.get(i))) {
+                    linkedList.remove();
+                }
+            }
+        }
+        resultList.addAll(linkedList);
+        return resultList;
+    }
+
 
 }
 

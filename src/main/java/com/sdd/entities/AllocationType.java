@@ -38,6 +38,12 @@ public class AllocationType {
     @Column(name = "FIN_YEAR")
     private String finYear;
 
+    @Column(name = "MAJOR_MINER_HEAD")
+    private String majorMinerHead;
+
+    @Column(name = "SUB_HEAD_TYPE")
+    private String subHeadType;
+
 
     @Column(name = "CREATED_ON")
     private Timestamp createdOn;

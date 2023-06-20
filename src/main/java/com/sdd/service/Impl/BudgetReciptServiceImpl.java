@@ -100,6 +100,16 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         }
 
 
+        if (budgetReciptSaveRequest.getSubHeadType() == null || budgetReciptSaveRequest.getSubHeadType().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "SUB HEAD TYPE CAN NOT BE BLANK");
+        }
+
+
+        if (budgetReciptSaveRequest.getMajorMinerHead() == null || budgetReciptSaveRequest.getMajorMinerHead().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "MAJOR OR MINER HEAD CAN NOT BE BLANK");
+        }
+
+
         if (budgetReciptSaveRequest.getBudgetFinancialYearId() == null || budgetReciptSaveRequest.getBudgetFinancialYearId().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FINANCIAL ID CAN NOT BE BLANK");
         }
@@ -189,7 +199,11 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         }
 
 
-        AllocationType saveAllocationType = allocationRepository.findByAllocDescAndIsFlagAndFinYear(budgetReciptSaveRequest.getAllocationType(), "1", budgetReciptSaveRequest.getBudgetFinancialYearId());
+        AllocationType saveAllocationType = allocationRepository.findByAllocDescAndIsFlagAndFinYearAndMajorMinerHeadAndSubHeadType(budgetReciptSaveRequest.getAllocationType(), "1", budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getMajorMinerHead(), budgetReciptSaveRequest.getSubHeadType());
+        if (saveAllocationType != null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION NAME ALREADY USE.PLEASE CHANGE");
+        }
+
 
         if (saveAllocationType == null) {
 
@@ -209,6 +223,8 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             allocationType.setFinYear(budgetReciptSaveRequest.getBudgetFinancialYearId());
             allocationType.setAllocDesc(budgetReciptSaveRequest.getAllocationType());
             allocationType.setRemarks(budgetReciptSaveRequest.getAllocationType());
+            allocationType.setSubHeadType(budgetReciptSaveRequest.getSubHeadType());
+            allocationType.setMajorMinerHead(budgetReciptSaveRequest.getMajorMinerHead());
             allocationType.setIsFlag("1");
             saveAllocationType = allocationRepository.save(allocationType);
         }
