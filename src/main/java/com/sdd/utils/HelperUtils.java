@@ -46,6 +46,7 @@ public class HelperUtils {
 
     public static String LASTFOLDERPATH = "/webapps/bmsreport";
     public static String FILEPATH = "https://icg.net.in/bmsreport/";
+//    public static String FILEPATH = "https://icg.net.in/cgbmsreport/";
 
     public static String getDocumentId() {
         return "BM_DOC" + ConverterUtils.getRandomTimeStamp();
@@ -67,6 +68,7 @@ public class HelperUtils {
     public static String getCdaId() {
         return "CDA_ID" + ConverterUtils.getRandomTimeStamp();
     }
+
     public static String getCdaCrDrId() {
         return "CDR_ID" + ConverterUtils.getRandomTimeStamp();
     }
@@ -83,9 +85,11 @@ public class HelperUtils {
     public static String getAllocationTypeId() {
         return "ALL_ID" + ConverterUtils.getRandomTimeStamp();
     }
+
     public static String getBudgetAllocationTypeId() {
         return "BA_ID" + ConverterUtils.getRandomTimeStamp();
     }
+
     public static String getStateId() {
         return "ST_ID" + ConverterUtils.getRandomTimeStamp();
     }
