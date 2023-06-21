@@ -2158,6 +2158,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 //            if (status.equalsIgnoreCase("Approved")) {
             mangeInboxOutbox.setState("CR");
+            mangeInboxOutbox.setIsArchive("0");
+            mangeInboxOutbox.setIsApproved("0");
+            mangeInboxOutbox.setIsFlag("0");
 //            } else {
 //                mangeInboxOutbox.setState("AP");
 //            }
