@@ -86,7 +86,8 @@ public class CdaParkingImpl implements CdaParkingService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CDA PARKING");
         }
 
-
+        double cadTotalAmount = 0;
+        double totalAmount = 0;
         for (Integer i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
 
 
@@ -133,17 +134,10 @@ public class CdaParkingImpl implements CdaParkingService {
             }
 
 
-
-
             AmountUnit allocationAmountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType());
-            double totalAmount = (Double.parseDouble(budgetAllocation.getAllocationAmount()) + Double.parseDouble(budgetAllocation.getRevisedAmount())) * allocationAmountUnit.getAmount();
+            totalAmount = (Double.parseDouble(budgetAllocation.getAllocationAmount()) + Double.parseDouble(budgetAllocation.getRevisedAmount())) * allocationAmountUnit.getAmount();
 
-            double cadTotalAmount = Double.parseDouble(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()) * amountUnit.getAmount() ;
-
-            if(totalAmount > cadTotalAmount){
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA AMOUNT IS GREATER THAN ALLOCATION AMOUNT");
-            }
-
+            cadTotalAmount = cadTotalAmount + Double.parseDouble(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()) * amountUnit.getAmount();
 
 
             List<BudgetAllocationDetails> budgetAllocationDetailsLists = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(cdaRequest.getCdaRequest().get(i).getAuthGroupId(), "0");
@@ -167,6 +161,10 @@ public class CdaParkingImpl implements CdaParkingService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
             }
 
+        }
+
+        if (!(totalAmount == cadTotalAmount)) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA AMOUNT IS GREATER THAN ALLOCATION AMOUNT");
         }
 
         for (Integer b = 0; b < cdaRequest.getCdaRequest().size(); b++) {
@@ -374,7 +372,8 @@ public class CdaParkingImpl implements CdaParkingService {
         DefaultResponse defaultResponse = new DefaultResponse();
 
         String budgetHedaid = "";
-
+        double cadTotalAmount = 0;
+        double totalAmount = 0;
         for (Integer i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
 
 
@@ -408,9 +407,6 @@ public class CdaParkingImpl implements CdaParkingService {
             }
 
 
-
-
-
             if (cdaRequest.getCdaRequest().get(i).getTransactionId() == null || cdaRequest.getCdaRequest().get(i).getTransactionId().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TRANSACTION ID CAN NOT BE BLANK");
             }
@@ -427,14 +423,9 @@ public class CdaParkingImpl implements CdaParkingService {
             }
 
             AmountUnit allocationAmountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType());
-            double totalAmount = (Double.parseDouble(budgetAllocation.getAllocationAmount()) + Double.parseDouble(budgetAllocation.getRevisedAmount())) * allocationAmountUnit.getAmount();
+            totalAmount = (Double.parseDouble(budgetAllocation.getAllocationAmount()) + Double.parseDouble(budgetAllocation.getRevisedAmount())) * allocationAmountUnit.getAmount();
 
-            double cadTotalAmount = Double.parseDouble(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()) * amountUnit.getAmount() ;
-
-            if(totalAmount > cadTotalAmount){
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA AMOUNT IS GREATER THAN ALLOCATION AMOUNT");
-            }
-
+            cadTotalAmount = cadTotalAmount + Double.parseDouble(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()) * amountUnit.getAmount();
 
 
             List<BudgetAllocationDetails> budgetAllocationDetailsLists = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(cdaRequest.getAuthGroupId(), "0", "0");
@@ -449,7 +440,9 @@ public class CdaParkingImpl implements CdaParkingService {
             budgetHedaid = cdaRequest.getCdaRequest().get(i).getBudgetHeadId();
 
         }
-
+        if (!(totalAmount == cadTotalAmount)) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA AMOUNT IS GREATER THAN ALLOCATION AMOUNT");
+        }
 
         List<CdaParkingTrans> cdaParkingTransData = cdaParkingTransRepository.findByAuthGroupIdAndBudgetHeadIdAndIsFlag(cdaRequest.getAuthGroupId(), budgetHedaid, "0");
         List<CdaParkingCrAndDr> cdaParkingIsCrDr = parkingCrAndDrRepository.findByAuthGroupIdAndBudgetHeadIdAndIsFlag(cdaRequest.getAuthGroupId(), budgetHedaid, "0");

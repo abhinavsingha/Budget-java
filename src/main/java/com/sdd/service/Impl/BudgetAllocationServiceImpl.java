@@ -2134,7 +2134,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(allocationDetails.get(q).getAmountType());
                             double parkingAmount = Double.parseDouble(cdaParkingCrAndDr.get(m).getAmount()) * amountUnit.getAmount();
 
-                            double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
+                            double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
                             cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
                             cdaParkingTransRepository.save(cdaParkingTrans);
                         }

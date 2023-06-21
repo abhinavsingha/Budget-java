@@ -201,7 +201,6 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
             List<AllocationType> allocationTypes = allocationRepository.findByIsFlag("1");
             for (Integer j = 0; j < allocationTypes.size(); j++) {
-
                 AllocationType allocationTypeData = allocationTypes.get(j);
                 allocationTypeData.setIsFlag("0");
                 allocationRepository.save(allocationTypeData);
