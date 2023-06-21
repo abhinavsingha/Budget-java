@@ -339,9 +339,9 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         mangeInboxOutbox.setStatus("Fully Approved");
         mangeInboxOutbox.setState("CR");
         mangeInboxOutbox.setIsArchive("0");
-        mangeInboxOutbox.setIsApproved("1");
+        mangeInboxOutbox.setIsApproved("0");
         mangeInboxOutbox.setAllocationType(allocationTypeData);
-        mangeInboxOutbox.setIsFlag("1");
+        mangeInboxOutbox.setIsFlag("0");
         mangeInboxOutbox.setAmount(ConverterUtils.addDecimalPoint(amount + ""));
         mangeInboxOutbox.setIsBgcg("BR");
         mangeInboxOutBoxRepository.save(mangeInboxOutbox);

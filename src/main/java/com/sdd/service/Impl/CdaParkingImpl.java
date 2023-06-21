@@ -168,7 +168,6 @@ public class CdaParkingImpl implements CdaParkingService {
         }
 
         for (Integer b = 0; b < cdaRequest.getCdaRequest().size(); b++) {
-
             List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByAuthGroupIdAndTransactionIdAndIsFlag(cdaRequest.getCdaRequest().get(b).getAuthGroupId(), cdaRequest.getCdaRequest().get(b).getTransactionId(), "0");
             if (cdaParkingTransList.size() > 0) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA ALREADY SAVE.YOU CAN NOT CHANGE NOW.");
@@ -220,8 +219,33 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingCrAndDr.setTransactionId(saveCdaData.getTransactionId());
             cdaParkingCrAndDr.setAmountType(saveCdaData.getAmountType());
 
-
             parkingCrAndDrRepository.save(cdaParkingCrAndDr);
+        }
+
+
+        boolean allCda = false;
+        MangeInboxOutbox inboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(cdaRequest.getAuthGroupId(), hrData.getUnitId());
+        if (inboxOutboxList != null) {
+
+            List<BudgetAllocation> budgetAllocationList = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(cdaRequest.getAuthGroupId(), "0");
+            for (Integer i = 0; i < budgetAllocationList.size(); i++) {
+                BudgetAllocation budgetAllocation = budgetAllocationList.get(i);
+
+                if (Double.parseDouble(budgetAllocation.getAllocationAmount()) == 0) {
+                    continue;
+                }
+
+                List<CdaParkingTrans> cdaList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocation.getAllocationId(), "0");
+                if (cdaList.size() == 0) {
+                    allCda = true;
+                }
+            }
+        }
+
+        if (allCda && inboxOutboxList != null) {
+            inboxOutboxList.setIsArchive("1");
+            inboxOutboxList.setIsFlag("1");
+            mangeInboxOutBoxRepository.save(inboxOutboxList);
         }
 
 
