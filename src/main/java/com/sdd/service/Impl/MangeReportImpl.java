@@ -3177,26 +3177,6 @@ public class MangeReportImpl implements MangeReportService {
         }
 
 
-/*        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-        if (cgUnit == null) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
-        }
-        String dBunit = cgUnit.getDescr();
-        List<CgUnit> units = new ArrayList<>();
-        if (dBunit.equalsIgnoreCase("D(Budget)")) {
-            units = cgUnitRepository.findAllByOrderByDescrAsc();
-        } else {
-            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
-            } else {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-            }
-        }
-        if (units.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
-        }*/
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType().toUpperCase();
@@ -3760,26 +3740,6 @@ public class MangeReportImpl implements MangeReportService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
 
-/*        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-        if (cgUnit == null) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
-        }
-        String dBunit = cgUnit.getDescr();
-        List<CgUnit> units = new ArrayList<>();
-        if (dBunit.equalsIgnoreCase("D(Budget)")) {
-            units = cgUnitRepository.findAllByOrderByDescrAsc();
-        } else {
-            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
-            } else {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-            }
-        }
-        if (units.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
-        }*/
         try {
             Document document = new Document(PageSize.A4);
 
@@ -6846,13 +6806,6 @@ public class MangeReportImpl implements MangeReportService {
             }, "AUTHGROUP ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
 
-/*        AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
-        Double reqAmount = amountObj.getAmount();
-        String amountIn = amountObj.getAmountType();
-
-        AllocationType allockData = allocationRepository.findByAllocTypeId(allocationType);
-        String allocType = allockData.getAllocType();
-        BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);*/
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
         if (hrDataList.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
@@ -6869,450 +6822,241 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
+        List<BudgetAllocationDetails> check = budgetAllocationDetailsRepository.findByAuthGroupId(authGroupId);
+        List<BudgetAllocationDetails> checks = check.stream().filter(e -> Double.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
+        if (checks.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        String allocationType=checks.get(0).getAllocTypeId();
+        String finYearId=checks.get(0).getFinYear();
+        String amountTypeId=checks.get(0).getAmountType();
 
+        AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
+        Double reqAmount = amountObj.getAmount();
+        String amountIn = amountObj.getAmountType().toUpperCase();
+
+        AllocationType allockData = allocationRepository.findByAllocTypeId(allocationType);
+        String allocType = allockData.getAllocType();
+        BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
         List<String> rowData = budgetAllocationDetailsRepository.findSubHead(authGroupId);
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
-/*        String amtType = "";
-        String names = hrData.getFullName();
+
+        String amtType = "";
+        String names = approveName;
         String unitName = hrData.getUnit();
-        String rank = hrData.getRank();
+        String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
 
-        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-        if (cgUnit == null) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
-        }
-        String dBunit = cgUnit.getDescr();
-        List<CgUnit> units = new ArrayList<>();
-        if (dBunit.equalsIgnoreCase("D(Budget)")) {
-            units = cgUnitRepository.findAllByOrderByDescrAsc();
-        } else {
-            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
-            } else {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-            }
-        }
-        if (units.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
-        }*/
-        String htmlContent = new String();
         try {
-            //htmlContent = FileUtils.readFileToString(new File("src/main/resources/templates/re-allocation-report.html"), "UTF-8");
-            //htmlContent = FileUtils.readFileToString(new File(new File(".").getCanonicalPath()+"/webapps/budget/WEB-INF/classes/templates/re-allocation-report.html"), "UTF-8");
-            htmlContent = "<!DOCTYPE html>\n" +
-                    "<html lang=\"en\">\n" +
-                    "<head>\n" +
-                    "  <title> Revised Report</title>\n" +
-                    "  <meta charset=\"utf-8\"></meta>\n" +
-                    "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"></meta>\n" +
-                    "  \n" +
-                    "<style>\n" +
-                    ".bold{\n" +
-                    "\tfont-weight: bold !important;\n" +
-                    "}\n" +
-                    ".bbtm{\n" +
-                    "\tborder-bottom: 1px solid transparent !important;\n" +
-                    "}\n" +
-                    ".brtm{\n" +
-                    "\tborder-right: 1px solid transparent !important;\n" +
-                    "}\n" +
-                    ".bold{\n" +
-                    "\tfont-weight: bold;\n" +
-                    "}\n" +
-                    ".wrapper{\n" +
-                    "\twidth: 70%;\n" +
-                    "\tmargin: 100px auto;\n" +
-                    "}\n" +
-                    "\n" +
-                    ":root {\n" +
-                    "    --bg-table-stripe: #f6f6f5;\n" +
-                    "    --b-table: #e3e3e2;\n" +
-                    "    --caption: #242423;\n" +
-                    "}\n" +
-                    "th {\n" +
-                    "\ttext-align:left;\n" +
-                    "\tborder: 1px solid #242423 ;\n" +
-                    "}\n" +
-                    "td{\n" +
-                    "\tborder: 1px solid #242423 ;\n" +
-                    "}\n" +
-                    "\n" +
-                    "table {\n" +
-                    "    background-color: transparent;\n" +
-                    "    border-collapse:collapse;\n" +
-                    "  \tfont-family: Arial, Helvetica, sans-serif\n" +
-                    "}\n" +
-                    "\n" +
-                    "th {\n" +
-                    "    text-align:left\n" +
-                    "}\n" +
-                    "\n" +
-                    ".dcf-txt-center {\n" +
-                    "      text-align: center!important\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-txt-left {\n" +
-                    "      text-align: left!important\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-txt-right {\n" +
-                    "      text-align: right!important\n" +
-                    "    }\n" +
-                    "    \n" +
-                    ".dcf-table caption {\n" +
-                    "      color: var(--caption);\n" +
-                    "      font-size: 1.13em;\n" +
-                    "      font-weight: 700;\n" +
-                    "      padding-bottom: .56rem\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table thead {\n" +
-                    "      font-size: .84em\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table tbody {\n" +
-                    "      border-bottom: 1px solid var(--b-table);\n" +
-                    "      border-top: 1px solid var(--b-table);\n" +
-                    "      font-size: .84em\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table tfoot {\n" +
-                    "      font-size: .84em\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table td, .dcf-table th {\n" +
-                    "      padding-right: 1.78em\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table-bordered, .dcf-table-bordered td, .dcf-table-bordered th {\n" +
-                    "      border: 1px solid var(--b-table)\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table-bordered td, .dcf-table-bordered th, .dcf-table-striped td, .dcf-table-striped th {\n" +
-                    "      padding-left: 1em;\n" +
-                    "      padding-right: 1em\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table-bordered tr:not(:last-child), .dcf-table-striped tr:not(:last-child) {\n" +
-                    "      border-bottom: 1px solid var(--b-table)\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table-striped tbody tr:nth-of-type(2n) {\n" +
-                    "      background-color: transparent;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table thead td, .dcf-table thead th {\n" +
-                    "      padding-bottom: .75em;\n" +
-                    "      vertical-align: bottom\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table tbody td, .dcf-table tbody th, .dcf-table tfoot td, .dcf-table tfoot th {\n" +
-                    "      padding-top: .75em;\n" +
-                    "      vertical-align: top\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table tbody td, .dcf-table tbody th {\n" +
-                    "      padding-bottom: .75em\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-table-bordered thead th {\n" +
-                    "      padding-top: 1.33em\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    .dcf-wrapper-table-scroll {\n" +
-                    "      overflow-x: auto;\n" +
-                    "      -webkit-overflow-scrolling: touch;\n" +
-                    "      left: 50%;\n" +
-                    "      margin-left: -50vw;\n" +
-                    "      margin-right: -50vw;\n" +
-                    "      padding-bottom: 1em;\n" +
-                    "      position: relative;\n" +
-                    "      right: 50%;\n" +
-                    "      width: 100vw\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    @media only screen and (max-width:42.09em) {\n" +
-                    "      .dcf-table-responsive thead {\n" +
-                    "        clip: rect(0 0 0 0);\n" +
-                    "        -webkit-clip-path: inset(50%);\n" +
-                    "        clip-path: inset(50%);\n" +
-                    "        height: 1px;\n" +
-                    "        overflow: hidden;\n" +
-                    "        position: absolute;\n" +
-                    "        width: 1px;\n" +
-                    "        white-space: nowrap\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive tr {\n" +
-                    "        display: block\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive td {\n" +
-                    "        -webkit-column-gap: 3.16vw;\n" +
-                    "        -moz-column-gap: 3.16vw;\n" +
-                    "        column-gap: 3.16vw;\n" +
-                    "        display: grid;\n" +
-                    "        grid-template-columns: 1fr 2fr;\n" +
-                    "        text-align: left!important\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive.dcf-table-bordered, .dcf-table-responsive.dcf-table-bordered thead th {\n" +
-                    "        border-width: 0\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive.dcf-table-bordered tbody td {\n" +
-                    "        border-top-width: 0\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive:not(.dcf-table-bordered) tbody tr {\n" +
-                    "        padding-bottom: .75em\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive:not(.dcf-table-bordered) tbody td {\n" +
-                    "        padding-bottom: 0\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive:not(.dcf-table-bordered):not(.dcf-table-striped) tbody td {\n" +
-                    "        padding-right: 0\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive.dcf-table-bordered tbody tr:last-child td:last-child {\n" +
-                    "        border-bottom-width: 0\n" +
-                    "      }\n" +
-                    "      .dcf-table-responsive tbody td:before {\n" +
-                    "        content: attr(data-label);\n" +
-                    "        float: left;\n" +
-                    "        font-weight: 700;\n" +
-                    "        padding-right: 1.78em\n" +
-                    "      }\n" +
-                    "    }\n" +
-                    "\n" +
-                    ".dcf-overflow-x-auto {\n" +
-                    "      overflow-x: auto!important;\n" +
-                    "      -webkit-overflow-scrolling: touch\n" +
-                    "    }\n" +
-                    ".sign {\n" +
-                    "\t\t float: right;\n" +
-                    "\t\t padding-right: 20px;\n" +
-                    "\t\t padding-top: 20px;\n" +
-                    "\t\t width:27%;\n" +
-                    "\t }\n" +
-                    "\n" +
-                    ".count {\n" +
-                    "\ttext-align: center;\n" +
-                    "\tpadding-top: 200px;\n" +
-                    "}\n" +
-                    "\n" +
-                    ".table3 {\n" +
-                    "\tpadding-top: 55px;\n" +
-                    "}\n" +
-                    "\n" +
-                    ".tab {\n" +
-                    "\tpadding-left: 85px;\n" +
-                    "}\n" +
-                    ".table4{\n" +
-                    "\tpadding-top: 15px;\n" +
-                    "}\n" +
-                    ".wrap{\n" +
-                    "\twidth:70%;\n" +
-                    "\tmargin: 100px auto;\n" +
-                    "}\n" +
-                    ".date {\n" +
-                    "\tfloat: left;\n" +
-                    "\tpadding-left: 20px;\n" +
-                    "\tpadding-top: 20px;\n" +
-                    "\twidth:45%;\n" +
-                    "}\n" +
-                    "\n" +
-                    ".count {\n" +
-                    "\ttext-align: center;\n" +
-                    "\tpadding-top: 200px;\n" +
-                    "}\n" +
-                    "\n" +
-                    ".table3 {\n" +
-                    "\tpadding-top: 55px;\n" +
-                    "}\n" +
-                    "\n" +
-                    ".tab {\n" +
-                    "\tpadding-left: 85px;\n" +
-                    "}\n" +
-                    ".table4{\n" +
-                    "\tpadding-top: 15px;\n" +
-                    "}\n" +
-                    ".wrap{\n" +
-                    "\twidth:70%;\n" +
-                    "\tmargin: 100px auto;\n" +
-                    "}\n" +
-                    "    \n" +
-                    ".dcf-w-100\\% {\n" +
-                    "  width: 100%!important;\n" +
-                    "\t\t}\n" +
-                    "    \n" +
-                    "</style>\n" +
-                    "</head>\n" +
-                    "<body>\n" +
-                    "<div class=\"wrapper\"> \n" +
-                    "\t<h2 style=\"text-align: center;\">${allocaType_placeholder} ALLOCATION REPORT</h2><br></br>\n" +
-                    "\t<table class=\"dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%\">\n" +
-                    "\t\t<thead>\n" +
-                    "\t\t\t<tr>\n" +
-                    "\t\t\t\t<th class=\"dcf-txt-center bbtm\" scope=\"col\">UNIT</th>\n" +
-                    "\t\t\t\t<th scope=\"col\"></th>\n" +
-                    "\t\t\t\t<th class=\"dcf-txt-center\" scope=\"col\">${allocaType_placeholder} ${finYear_placeholder}  Allocation</th>\n" +
-                    "\t\t\t\t<th scope=\"col\"></th>\n" +
-                    "\t\t\t</tr>\n" +
-                    "\t\t</thead>\n" +
-                    "\t\t<tbody>\n" +
-                    "\n" +
-                    "\t\t\t<tr>\n" +
-                    "\t\t\t\t<td data-label=\"CGCs/RHQs/ADG(P) Directorates at CGHQ\"></td>\n" +
-                    "\t\t\t\t<td class=\"dcf-txt-center brtm bold\">Allocation Amount (in ${amountType_placeholder})</td>\n" +
-                    "\t\t\t\t<td class=\"dcf-txt-center brtm bold\" data-label=\"RE 2022-23 Allocation\">Additional/Withdrawal (in ${amountType_placeholder})</td>\n" +
-                    "\t\t\t\t<td class=\"dcf-txt-center bold\">Revised (in ${amountType_placeholder})</td>\n" +
-                    "\t\t\t</tr>\n" +
-                    "\n" +
-                    "\t\t\t${data_placeholder}\n" +
-                    "\n" +
-                    "\t\t</tbody>\n" +
-                    "\t</table>\n" +
-                    "\t<div class=\"sign\">\n" +
-                    "\t\t<ul style=\"list-style: none; margin-top: 0;\">\n" +
-                    "\t\t\t<li>${name_placeholder}</li>\n" +
-                    "\t\t\t<li>${unit_placeholder}</li>\n" +
-                    "\t\t\t<li>${rank_placeholder}</li>\n" +
-                    "\t\t</ul>\n" +
-                    "\t</div>\n" +
-                    "\t<div class=\"date\">\n" +
-                    "\t\tDate-${date_placeholder}\n" +
-                    "\t</div>\n" +
-                    "</div>\n" +
-                    "\n" +
-                    "</body>\n" +
-                    "</html>\n";
+            Document document = new Document(PageSize.A4);
 
-            StringBuilder sb = new StringBuilder();
+            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String path = folder.getAbsolutePath() + "/" + allocType.toUpperCase() + "_Revised_allocation-report" + ".pdf";
+            PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
+
+            document.open();
+            Paragraph paragraph = new Paragraph();
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+            paragraph.add(new Chunk("REVISED"+" "+allocType.toUpperCase() +" "+" ALLOCATION  REPORT", boldFont));
+            paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(paragraph);
+            document.add(new Paragraph("\n"));
+
+            PdfPTable tables = new PdfPTable(2);
+            tables.setWidthPercentage(100);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
+            PdfPCell cells = new PdfPCell(new Phrase(allocType.toUpperCase() + ": " + findyr.getFinYear() + " " + "ALLOCATION", cellFont));
+            PdfPCell cells0 = new PdfPCell(new Phrase("AMOUNT IN: (" + amountIn.toUpperCase() + ")", cellFont));
+            cells.setPadding(15);
+            cells0.setPadding(15);
+
+            tables.addCell(cells);
+            tables.addCell(cells0);
+            document.add(tables);
+
+            PdfPTable table = new PdfPTable(5);
+            table.setWidthPercentage(100);
+
+            PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
+            PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
+            PdfPCell cell3 = new PdfPCell(new Phrase("ALLOCATION AMOUNT", cellFont));
+            PdfPCell cell4 = new PdfPCell(new Phrase("ADDITIONAL AMOUNT", cellFont));
+            PdfPCell cell5 = new PdfPCell(new Phrase("REVISED AMOUNT", cellFont));
+            cell1.setPadding(10);
+            cell2.setPadding(10);
+            cell3.setPadding(10);
+            cell4.setPadding(10);
+            cell5.setPadding(10);
+
+            table.addCell(cell1);
+            table.addCell(cell2);
+            table.addCell(cell3);
+            table.addCell(cell4);
+            table.addCell(cell5);
+
             int i = 1;
-
-            String names = approveName;
-            String unitName = hrData.getUnit();
-            String rank = approveRank;
-            LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            String formattedDateTime = now.format(formatter);
             String finyear = "";
-            String amountTypeId = "";
-            String allocTypes = "";
+            String unit = "";
+            float grTotalAlloc = 0;
+            float grTotalAddition = 0;
+            float grTotalSum = 0;
             Double amount = Double.valueOf(0);
-            String amountUnit = "";
+            Double amountUnit;
             Double finAmount;
             Double revisedAmount;
             Double reAmount;
             Double s2 = 0.0;
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocationDetails> reportDetails = budgetAllocationDetailsRepository.findByAuthGroupIdAndSubHeadAndIsDelete(authGroupId, subHeadId, "0");
-   /*             if (reportDetails.size() <= 0) {
-                    return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                    }, "RECORD NOT FOUND OR EMPTY", HttpStatus.OK.value());
-                }*/
+                List<BudgetAllocationDetails> reportDetails1 = budgetAllocationDetailsRepository.findByAuthGroupIdAndSubHeadAndIsDelete(authGroupId, subHeadId, "0");
+                List<BudgetAllocationDetails> reportDetails = reportDetails1.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+
+                if (reportDetails.size() <= 0) {
+                    continue;
+                }
                 BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
 
                 int count = 0;
-                sb.append("<tr>");
-                sb.append("<td class=\"the\" ><b>").append(StringEscapeUtils.escapeHtml4(bHead.getSubHeadDescr())).append("</b></td>");
-                sb.append("<td class=\"the\"></td>");
-                sb.append("<td class=\"the\"></td>");
-                sb.append("<td class=\"the\"></td>");
-                sb.append("</tr>");
                 float sumExisting = 0;
                 float sumRE = 0;
                 float total = 0;
                 for (BudgetAllocationDetails row : reportDetails) {
-                    AllocationType allockData = allocationRepository.findByAllocTypeId(row.getAllocTypeId());
-                    BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(row.getFinYear());
-                    AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
-                    CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
-                    allocTypes = allockData.getAllocType();
-                    finyear = findyr.getFinYear();
-                    amountUnit = amountTypeObj.getAmountType();
-
                     amount = Double.valueOf(row.getAllocationAmount());
-                    if (row.getRevisedAmount() != null) {
+                    if (row.getRevisedAmount() != null || Double.valueOf(row.getRevisedAmount()) !=0) {
                         revisedAmount = Double.valueOf(row.getRevisedAmount());
                     } else
                         revisedAmount = 0.0;
 
-                    finAmount = amount;
-                    reAmount = revisedAmount;
+                    AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
+                    if (amountTypeObj == null) {
+                        return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+                        }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                    }
+                    amountUnit = amountTypeObj.getAmount();
+                    finAmount = amount * amountUnit / reqAmount;
+                    reAmount = revisedAmount * amountUnit / reqAmount;
                     String s = reAmount.toString();
                     if (s.contains("-")) {
                         String s1 = s.replace("-", "");
                         s2 = Double.parseDouble(s1);
                     }
+                    CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
 
-                    sb.append("<tr>");
-                    sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(unitN.getDescr())).append("</td>");
-                    sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(finAmount)))).append("</td>");
-                    if (reAmount < 0)
-                        sb.append("<td class=\"the\">(-)").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(s2)))).append("</td>");
-                    else if (reAmount > 0)
-                        sb.append("<td class=\"the\"> (+)").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(reAmount)))).append("</td>");
+                    PdfPCell cella1 = new PdfPCell(new Phrase(bHead.getSubHeadDescr()));
+                    PdfPCell cella2 = new PdfPCell(new Phrase(unitN.getDescr()));
+                    PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
+                    PdfPCell cella4 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", new BigDecimal(s2))));
+                    PdfPCell cella5 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", new BigDecimal(reAmount))));
+                    PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(reAmount))));
+                    PdfPCell cella7 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Double.toString(finAmount)) + Float.parseFloat(Double.toString(reAmount))))))));
+                    cella1.setPadding(8);
+                    cella2.setPadding(8);
+                    cella3.setPadding(8);
+                    cella4.setPadding(8);
+                    cella5.setPadding(8);
+                    cella6.setPadding(8);
+                    cella7.setPadding(8);
+
+
+                    if (count == 0)
+                        table.addCell(cella1);
                     else
-                        sb.append("<td class=\"the\">").append(StringEscapeUtils.escapeHtml4(String.format("%1$0,1.4f", new BigDecimal(reAmount)))).append("</td>");
-                    sb.append("<td class=\"the\">").append(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Double.toString(finAmount)) + Float.parseFloat(Double.toString(reAmount))))))).append("</td>");
-                    sb.append("</tr>");
+                        table.addCell("");
+                    table.addCell(cella2);
+                    table.addCell(cella3);
+                    if (reAmount < 0)
+                        table.addCell(cella4);
+                    else if (reAmount > 0)
+                        table.addCell(cella5);
+                    else
+                        table.addCell(cella6);
+                    table.addCell(cella7);
+
+                    count++;
                     sumExisting += Float.parseFloat(new BigDecimal(Double.toString(finAmount)).toPlainString());
                     sumRE += Float.parseFloat(new BigDecimal(Double.toString(reAmount)).toPlainString());
+
                 }
-                total = sumExisting + sumRE;
-                Double ss2 = 0.0;
-                String ss = Float.toString(sumRE);
-                if (ss.contains("-")) {
-                    String ss1 = ss.replace("-", "");
-                    ss2 = Double.parseDouble(ss1);
+                if (count != 0) {
+                    total = sumExisting + sumRE;
+                    Double ss2 = 0.0;
+                    String ss = Float.toString(sumRE);
+                    if (ss.contains("-")) {
+                        String ss1 = ss.replace("-", "");
+                        ss2 = Double.parseDouble(ss1);
+                    }
+                    PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
+                    PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sumExisting)), cellFont));
+                    PdfPCell cell301 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", new BigDecimal(ss2)), cellFont));
+                    PdfPCell cell302 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", new BigDecimal(sumRE)), cellFont));
+                    PdfPCell cell303 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sumRE)), cellFont));
+                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(total)), cellFont));
+                    cell10.setPadding(10);
+                    cell20.setPadding(10);
+                    cell301.setPadding(10);
+                    cell302.setPadding(10);
+                    cell303.setPadding(10);
+                    cell40.setPadding(10);
+
+                    table.addCell(" ");
+                    table.addCell(cell10);
+                    table.addCell(cell20);
+                    if (sumRE < 0)
+                        table.addCell(cell301);
+                    else if (sumRE > 0)
+                        table.addCell(cell302);
+                    else
+                        table.addCell(cell303);
+                    table.addCell(cell40);
+                    count = 0;
                 }
-                sb.append("<tr>");
-                sb.append("<td class=\"the bold\">").append("Total").append("</td>");
-                sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(sumExisting))).append("</td>");
-                if (sumRE < 0)
-                    sb.append("<td class=\"the bold\">(-)").append(String.format("%1$0,1.4f", new BigDecimal(ss2))).append("</td>");
-                else if (sumRE > 0)
-                    sb.append("<td class=\"the bold\">(+)").append(String.format("%1$0,1.4f", new BigDecimal(sumRE))).append("</td>");
-                else
-                    sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(sumRE))).append("</td>");
-                sb.append("<td class=\"the bold\">").append(String.format("%1$0,1.4f", new BigDecimal(total))).append("</td>");
-                sb.append("</tr>");
+                grTotalAlloc += sumExisting;
+                grTotalAddition += sumRE;
+                grTotalSum += (sumExisting + sumRE);
+
             }
-            if (sb.toString().isEmpty()) {
-                return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                }, "RECORD NOT FOUND", HttpStatus.OK.value());
-            }
+            PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
+            PdfPCell cell01 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
+            PdfPCell cell02 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
+            PdfPCell cell03 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), cellFont));
+            cell00.setPadding(12);
+            cell01.setPadding(12);
+            cell02.setPadding(12);
+            cell03.setPadding(12);
 
-            htmlContent = htmlContent.replace("${finYear_placeholder}", StringEscapeUtils.escapeHtml4(finyear));
-            htmlContent = htmlContent.replace("${amountType_placeholder}", StringEscapeUtils.escapeHtml4(amountUnit));
-            htmlContent = htmlContent.replace("${allocaType_placeholder}", StringEscapeUtils.escapeHtml4(allocTypes.toUpperCase()));
-            htmlContent = htmlContent.replace("${name_placeholder}", StringEscapeUtils.escapeHtml4(names));
-            htmlContent = htmlContent.replace("${unit_placeholder}", StringEscapeUtils.escapeHtml4(unitName));
-            htmlContent = htmlContent.replace("${rank_placeholder}", StringEscapeUtils.escapeHtml4(rank));
-            htmlContent = htmlContent.replace("${date_placeholder}", StringEscapeUtils.escapeHtml4(formattedDateTime));
+            table.addCell(" ");
+            table.addCell(cell00);
+            table.addCell(cell01);
+            table.addCell(cell02);
+            table.addCell(cell03);
 
+            document.add(table);
 
-            htmlContent = htmlContent.replace("${data_placeholder}", sb.toString());
-            String filepath = HelperUtils.FILEPATH + "/" + "Revision_Allocation-Report.pdf";
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
-            String filePath = folder.getAbsolutePath() + "/" + "Revision_Allocation-Report.pdf";
-            File file = new File(filePath);
-            generatePdf(htmlContent, file.getAbsolutePath());
-            //generatePdf(htmlContent, filepath);
-            FilePathResponse response = new FilePathResponse();
-            response.setPath(filepath);
-            response.setFileName("Revision_Allocation-Report.pdf");
+            document.add(new Paragraph("\n"));
+            Paragraph heading1 = new Paragraph(formattedDateTime);
+            heading1.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(heading1);
 
-            dtoList.add(response);
+            document.add(new Paragraph("\n"));
+            Paragraph heading2 = new Paragraph(names + "\n" + unitName + "\n" + rank);
+            heading2.setAlignment(Paragraph.ALIGN_RIGHT);
+            document.add(heading2);
+
+            document.close();
+            FilePathResponse dto = new FilePathResponse();
+            dto.setPath(HelperUtils.FILEPATH + allocType.toUpperCase() + "_Revised_allocation-report.pdf");
+            dto.setFileName(allocType.toUpperCase() + "_Revised_allocation-report.pdf");
+            dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
