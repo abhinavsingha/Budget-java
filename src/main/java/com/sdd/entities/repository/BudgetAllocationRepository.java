@@ -76,6 +76,14 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
             nativeQuery = true)
     List<String> findSubHead(String finYearId, String allocationTypeId,String frmUnit);
 
-    List<BudgetAllocation> findByAuthGroupIdAndIsFlag(String authGId,String isFlag);
+    List<BudgetAllocation> findByAuthGroupIdAndSubHeadAndToUnit(String authGId,String subHead,String toUnit);
     List<BudgetAllocation> findByAuthGroupIdAndIsFlagOrderBySubHeadAsc(String authGId,String isFlag);
+
+    List<BudgetAllocation> findByAuthGroupId(String authGroupId);
+
+    @Query(
+            value =
+                    "select SUB_HEAD from budgetallocation where AUTH_GROUP_ID=:authGroupId  group by SUB_HEAD",
+            nativeQuery = true)
+    List<String> findSubHeadByAuthGroupIds(String authGroupId);
 }
