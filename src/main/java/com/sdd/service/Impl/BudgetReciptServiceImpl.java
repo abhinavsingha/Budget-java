@@ -104,11 +104,9 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "SUB HEAD TYPE CAN NOT BE BLANK");
         }
 
-
         if (budgetReciptSaveRequest.getMajorMinerHead() == null || budgetReciptSaveRequest.getMajorMinerHead().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "MAJOR OR MINER HEAD CAN NOT BE BLANK");
         }
-
 
         if (budgetReciptSaveRequest.getBudgetFinancialYearId() == null || budgetReciptSaveRequest.getBudgetFinancialYearId().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FINANCIAL ID CAN NOT BE BLANK");
@@ -138,8 +136,6 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
 
         AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetReciptSaveRequest.getAmountTypeId());
-
-
         if (amountUnit == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AMOUNT TYPE ID");
         }
@@ -158,13 +154,11 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AUTHORITY DATE  CAN NOT BE BLANK");
             }
 
-
             CgUnit getAuthUnitId = cgUnitRepository.findByUnit(budgetReciptSaveRequest.getAuthListData().get(j).getAuthUnitId());
             if (getAuthUnitId == null) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO AUTHORITY UNIT ID");
             }
             ConverterUtils.checkDateIsvalidOrNor(budgetReciptSaveRequest.getAuthListData().get(j).getAuthDate());
-
 
         }
 
@@ -179,12 +173,10 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT CAN NOT BE BLANK");
             }
 
-
             BudgetHead subHeadData = subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(budgetReciptSaveRequest.getReceiptSubRequests().get(j).getBudgetHeadId());
             if (subHeadData == null) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID BUDGET HEAD ID ");
             }
-
         }
 
 
