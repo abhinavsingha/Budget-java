@@ -1470,7 +1470,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         mangeInboxOutbox.setState("AP");
         mangeInboxOutbox.setIsArchive("0");
         mangeInboxOutbox.setIsApproved("0");
-        mangeInboxOutbox.setIsFlag("1");
+        mangeInboxOutbox.setIsFlag("0");
         mangeInboxOutbox.setIsBgcg("BG");
 
         mangeInboxOutBoxRepository.save(mangeInboxOutbox);
@@ -1941,6 +1941,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             mangeInboxOutbox.setStatus(budgetApproveRequest.getStatus());
 //            if (status.equalsIgnoreCase("Approved")) {
             mangeInboxOutbox.setState("CR");
+            mangeInboxOutbox.setIsApproved("0");
+            mangeInboxOutbox.setIsArchive("0");
+            mangeInboxOutbox.setIsFlag("0");
 //            } else {
 //                mangeInboxOutbox.setState("AP");
 //            }
