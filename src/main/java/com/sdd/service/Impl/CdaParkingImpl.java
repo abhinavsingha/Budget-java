@@ -180,6 +180,9 @@ public class CdaParkingImpl implements CdaParkingService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DUPLICATE CDA FOUND.PLEASE CHECK");
         }
 
+
+        String groupId = "";
+
         for (Integer i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
             CdaParkingTrans cdaParkingTrans = new CdaParkingTrans();
 
@@ -197,6 +200,7 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingTrans.setAllocTypeId(cdaRequest.getCdaRequest().get(i).getAllocationTypeID());
             cdaParkingTrans.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             cdaParkingTrans.setAuthGroupId(cdaRequest.getCdaRequest().get(i).getAuthGroupId());
+            groupId = (cdaRequest.getCdaRequest().get(i).getAuthGroupId());
             cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
 
             CdaParkingTrans saveCdaData = cdaParkingTransRepository.save(cdaParkingTrans);
@@ -223,11 +227,11 @@ public class CdaParkingImpl implements CdaParkingService {
         }
 
 
-        boolean allCda = false;
-        MangeInboxOutbox inboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(cdaRequest.getAuthGroupId(), hrData.getUnitId());
+        boolean allCda = true;
+        MangeInboxOutbox inboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(groupId, hrData.getUnitId());
         if (inboxOutboxList != null) {
 
-            List<BudgetAllocation> budgetAllocationList = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(cdaRequest.getAuthGroupId(), "0");
+            List<BudgetAllocation> budgetAllocationList = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(groupId, "0");
             for (Integer i = 0; i < budgetAllocationList.size(); i++) {
                 BudgetAllocation budgetAllocation = budgetAllocationList.get(i);
 
@@ -237,13 +241,13 @@ public class CdaParkingImpl implements CdaParkingService {
 
                 List<CdaParkingTrans> cdaList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocation.getAllocationId(), "0");
                 if (cdaList.size() == 0) {
-                    allCda = true;
+                    allCda = false;
                 }
             }
         }
 
         if (allCda && inboxOutboxList != null) {
-            inboxOutboxList.setIsArchive("1");
+            inboxOutboxList.setIsApproved("1");
             inboxOutboxList.setIsFlag("1");
             mangeInboxOutBoxRepository.save(inboxOutboxList);
         }

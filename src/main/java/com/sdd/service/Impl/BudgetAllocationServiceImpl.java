@@ -1933,25 +1933,17 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         if (mangeInboxOutbox != null) {
 
 
-            if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
-
-            } else {
-
-
-            }
-
-
             String toUnit = mangeInboxOutbox.getToUnit();
             String fromUnit = mangeInboxOutbox.getFromUnit();
             mangeInboxOutbox.setFromUnit(toUnit);
             mangeInboxOutbox.setToUnit(fromUnit);
             mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             mangeInboxOutbox.setStatus(budgetApproveRequest.getStatus());
-            if (status.equalsIgnoreCase("Approved")) {
-                mangeInboxOutbox.setState("CR");
-            } else {
-                mangeInboxOutbox.setState("AP");
-            }
+//            if (status.equalsIgnoreCase("Approved")) {
+            mangeInboxOutbox.setState("CR");
+//            } else {
+//                mangeInboxOutbox.setState("AP");
+//            }
             mangeInboxOutBoxRepository.save(mangeInboxOutbox);
         }
 
@@ -2565,7 +2557,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                 AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
                 remainingCdaParkingAmount = remainingCdaParkingAmount + Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
-                allocationAmount = Double.parseDouble(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmount())  * amountUnit.getAmount();
+                allocationAmount = Double.parseDouble(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmount()) * amountUnit.getAmount();
 
             }
 
@@ -2792,7 +2784,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId(), "0");
                 AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
                 remainingCdaParkingAmount = remainingCdaParkingAmount + Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
-                allocationAmount = Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount())  * amountUnit.getAmount();
+                allocationAmount = Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()) * amountUnit.getAmount();
             }
 
             if (allocationAmount > remainingCdaParkingAmount) {
