@@ -191,11 +191,12 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         }
 
 
-        AllocationType saveAllocationType = allocationRepository.findByAllocDescAndIsFlagAndFinYearAndMajorMinerHeadAndSubHeadType(budgetReciptSaveRequest.getAllocationType(), "1", budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getMajorMinerHead(), budgetReciptSaveRequest.getSubHeadType());
-        if (saveAllocationType != null) {
+        AllocationType saveAllocationTypeMain = allocationRepository.findByAllocDescAndIsFlagAndFinYearAndMajorMinerHeadAndSubHeadType(budgetReciptSaveRequest.getAllocationType(), "1", budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getMajorMinerHead(), budgetReciptSaveRequest.getSubHeadType());
+        if (saveAllocationTypeMain != null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION NAME ALREADY USE.PLEASE CHANGE");
         }
 
+        AllocationType saveAllocationType = allocationRepository.findByAllocDescAndIsFlagAndFinYear(budgetReciptSaveRequest.getAllocationType(), "1", budgetReciptSaveRequest.getBudgetFinancialYearId());
 
         if (saveAllocationType == null) {
 
