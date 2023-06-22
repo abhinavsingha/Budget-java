@@ -5360,9 +5360,6 @@ public class MangeReportImpl implements MangeReportService {
                     continue;
                 }
 
-                XWPFTable table11 = document.createTable(sz, 4);
-                table11.setWidth("100%");
-
                 int count = 0;
                 float sum = 0;
                 Double amount = Double.valueOf(0);
@@ -5401,10 +5398,11 @@ public class MangeReportImpl implements MangeReportService {
 
                     BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
                     CgUnit unitN = cgUnitRepository.findByUnit(unitIds);
-
-                    XWPFTableRow tableRowOne111 = table11.getRow(r);
+                    XWPFTable table11 = document.createTable(1, 4);
+                    table11.setWidth("100%");
+                    XWPFTableRow tableRowOne111 = table11.getRow(0);
                     XWPFParagraph paragraphtableRowOne11 = tableRowOne111.getCell(0).addParagraph();
-                    if (r == 0) {
+                    if (count == 0) {
                         boldText(paragraphtableRowOne11.createRun(), 10, bHead.getSubHeadDescr(), false);
                     } else {
                         boldText(paragraphtableRowOne11.createRun(), 10, "", false);
