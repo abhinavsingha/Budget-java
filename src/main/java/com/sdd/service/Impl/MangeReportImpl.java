@@ -5145,26 +5145,6 @@ public class MangeReportImpl implements MangeReportService {
         }
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
-/*        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-        if (cgUnit == null) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
-        }
-        String dBunit = cgUnit.getDescr();
-        List<CgUnit> units = new ArrayList<>();
-        if (dBunit.equalsIgnoreCase("D(Budget)")) {
-            units = cgUnitRepository.findAllByOrderByDescrAsc();
-        } else {
-            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
-            } else {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-            }
-        }
-        if (units.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
-        }*/
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType().toUpperCase();
@@ -5254,6 +5234,7 @@ public class MangeReportImpl implements MangeReportService {
 
             int i = 1;
             float grTotalAlloc = 0;
+            float grTotalIcg=0;
             float grTotalAddition = 0;
             float grTotalSum = 0;
             String finyear = "";
@@ -5399,23 +5380,26 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(" ");
                     count = 0;
                 }
+                grTotalIcg += IcgAmount;
                 grTotalAlloc += sum;
                 grTotalAddition += expsum;
                 grTotalSum += percentagesum;
 
             }
             PdfPCell cell50 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
+            PdfPCell cell51 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalIcg)), cellFont));
             PdfPCell cell60 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
             PdfPCell cell70 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
-            PdfPCell cell80 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(grTotalSum)), cellFont));
+            PdfPCell cell80 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal((grTotalAddition/reqAmount)*100/grTotalAlloc)), cellFont));
             cell50.setPadding(12);
+            cell51.setPadding(12);
             cell60.setPadding(12);
             cell70.setPadding(12);
             cell80.setPadding(12);
 
-            table.addCell(" ");
-            table.addCell(" ");
             table.addCell(cell50);
+            table.addCell(cell51);
+            table.addCell("");
             table.addCell(cell60);
             table.addCell(cell70);
             table.addCell(cell80);
@@ -5514,26 +5498,7 @@ public class MangeReportImpl implements MangeReportService {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
-/*        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-        if (cgUnit == null) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
-        }
-        String dBunit = cgUnit.getDescr();
-        List<CgUnit> units = new ArrayList<>();
-        if (dBunit.equalsIgnoreCase("D(Budget)")) {
-            units = cgUnitRepository.findAllByOrderByDescrAsc();
-        } else {
-            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
-            } else {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-            }
-        }
-        if (units.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
-        }*/
+
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType();
@@ -5620,6 +5585,7 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne7.createRun(), 12, "% BILL CLEARANCE w.r.t : " + type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear(), true);
             Double IcgAmount = 0.0;
             float grTotalAlloc = 0;
+            float grTotalIcg=0;
             float grTotalAddition = 0;
             float grTotalSum = 0;
             for (String val : rowData) {
@@ -5770,6 +5736,7 @@ public class MangeReportImpl implements MangeReportService {
                     XWPFParagraph paragraphtableRowOne2277 = tableRowOne222.getCell(7).addParagraph();
                     boldText(paragraphtableRowOne2277.createRun(), 12, "", true);
                 }
+                grTotalIcg += IcgAmount;
                 grTotalAlloc += sum;
                 grTotalAddition += expsum;
                 grTotalSum += percentagesum;
@@ -5779,11 +5746,11 @@ public class MangeReportImpl implements MangeReportService {
             table220.setWidth("100%");
             XWPFTableRow tableRowOne220 = table220.getRow(0);
             XWPFParagraph paragraphtableRowOne220 = tableRowOne220.getCell(0).addParagraph();
-            boldText(paragraphtableRowOne220.createRun(), 12, "", true);
+            boldText(paragraphtableRowOne220.createRun(), 12, "GRAND TOTAL", true);
             XWPFParagraph paragraphtableRowOne1220 = tableRowOne220.getCell(1).addParagraph();
-            boldText(paragraphtableRowOne1220.createRun(), 12, "", true);
+            boldText(paragraphtableRowOne1220.createRun(), 12,  String.format("%1$0,1.4f", new BigDecimal(grTotalIcg)), true);
             XWPFParagraph paragraphtableRowOne2220 = tableRowOne220.getCell(2).addParagraph();
-            boldText(paragraphtableRowOne2220.createRun(), 12, " GRAND TOTAL", true);
+            boldText(paragraphtableRowOne2220.createRun(), 12, " ", true);
             XWPFParagraph paragraphtableRowOne2230 = tableRowOne220.getCell(3).addParagraph();
             boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), true);
             XWPFParagraph paragraphtableRowOne2200 = tableRowOne220.getCell(4).addParagraph();
@@ -5896,26 +5863,7 @@ public class MangeReportImpl implements MangeReportService {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
-       /* CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-        if (cgUnit == null) {
-            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
-            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
-        }
-        String dBunit = cgUnit.getDescr();
-        List<CgUnit> units = new ArrayList<>();
-        if (dBunit.equalsIgnoreCase("D(Budget)")) {
-            units = cgUnitRepository.findAllByOrderByDescrAsc();
-        } else {
-            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
-            } else {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-            }
-        }
-        if (units.size() <= 0) {
-            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
-        }*/
+
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType();
@@ -6025,10 +5973,17 @@ public class MangeReportImpl implements MangeReportService {
                         expnAmount = 0.0;
                     BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
                     CgUnit unitN = cgUnitRepository.findByUnit(reportDetails.get(r).getToUnit());
-
-                    subResp.setSubHead(bHead.getSubHeadDescr());
+                    if (r == 0){
+                        subResp.setSubHead(bHead.getSubHeadDescr());
+                    }else{
+                        subResp.setSubHead("");
+                    }
                     subResp.setUnitName(unitN.getDescr());
-                    subResp.setIcgAllocAmount(String.format("%1$0,1.4f", new BigDecimal(IcgAmount)));
+                    if (r == 0){
+                        subResp.setIcgAllocAmount(String.format("%1$0,1.4f", new BigDecimal(IcgAmount)));
+                    }else{
+                        subResp.setIcgAllocAmount("");
+                    }
                     subResp.setAllocAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
                     subResp.setBillSubmission(String.format("%1$0,1.4f", new BigDecimal(eAmount)));
                     subResp.setPercentageBill(String.format("%1$0,1.9f", new BigDecimal(expnAmount)));
