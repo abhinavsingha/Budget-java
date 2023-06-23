@@ -45,7 +45,7 @@ public class ReportController {
         return new ResponseEntity<>(mangeReportService.getReceiptReport(authgroupId), HttpStatus.OK);
     }
 
-    @GetMapping("/getConsolidateReceiptReportDoc/{authgroupId}")
+    @GetMapping("/getReceiptReportDoc/{authgroupId}")
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getReceiptReportDoc(@PathVariable("authgroupId") String authgroupId) {
         return new ResponseEntity<>(mangeReportService.getReceiptReportDoc(authgroupId), HttpStatus.OK);
     }

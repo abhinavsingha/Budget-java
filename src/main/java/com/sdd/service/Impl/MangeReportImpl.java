@@ -575,6 +575,10 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
 
+//        unitId
+//                AllocationType
+//        finYear
+
 
         String fileName = "BudgetReceipt" + hrData.getUnitId();
 
