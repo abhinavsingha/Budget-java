@@ -38,8 +38,6 @@ public class ReportController {
     }
 
 
-
-
     @GetMapping("/getReceiptReport/{authgroupId}")
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getReceiptReport(@PathVariable("authgroupId") String authgroupId) {
         return new ResponseEntity<>(mangeReportService.getReceiptReport(authgroupId), HttpStatus.OK);
@@ -51,22 +49,15 @@ public class ReportController {
     }
 
 
-
-
-
-
-    @GetMapping("/getConsolidateReceiptReport/{finYearId}/{allocationType}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getConsolidateReceiptReport(@PathVariable("finYearId") String finYearId,@PathVariable("allocationType") String allocationType) {
-        return new ResponseEntity<>(mangeReportService.getConsolidateReceiptReport(finYearId,allocationType), HttpStatus.OK);
+    @GetMapping("/getConsolidateReceiptReport/{finYearId}/{allocationType}/{amountType}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getConsolidateReceiptReport(@PathVariable("finYearId") String finYearId, @PathVariable("allocationType") String allocationType, @PathVariable("amountType") String amountType) {
+        return new ResponseEntity<>(mangeReportService.getConsolidateReceiptReport(finYearId, allocationType, amountType), HttpStatus.OK);
     }
 
-    @GetMapping("/getConsolidateReceiptReportDoc/{finYearId}/{allocationType}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getConsolidateReceiptReportDoc(@PathVariable("finYearId") String finYearId,@PathVariable("allocationType") String allocationType) {
-        return new ResponseEntity<>(mangeReportService.getConsolidateReceiptReportDoc(finYearId,allocationType), HttpStatus.OK);
+    @GetMapping("/getConsolidateReceiptReportDoc/{finYearId}/{allocationType}/{amountType}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getConsolidateReceiptReportDoc(@PathVariable("finYearId") String finYearId, @PathVariable("allocationType") String allocationType, @PathVariable("amountType") String amountType) {
+        return new ResponseEntity<>(mangeReportService.getConsolidateReceiptReportDoc(finYearId, allocationType, amountType), HttpStatus.OK);
     }
-
-
-
 
 
     @PostMapping("/getAllocationReportRevised")
@@ -151,17 +142,17 @@ public class ReportController {
     //  BE ALLOCATION REPORT
     @GetMapping("/getBEAllocationReport/{finYearId}/{allocationType}/{amountTypeId}/{status}")
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getBEAllocationReport(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "status") String status) {
-        return new ResponseEntity<>(mangeReportService.getBEAllocationReport(finYearId, allocationType, amountTypeId,status), HttpStatus.OK);
+        return new ResponseEntity<>(mangeReportService.getBEAllocationReport(finYearId, allocationType, amountTypeId, status), HttpStatus.OK);
     }
 
     @GetMapping("/getBEAllocationReportDoc/{finYearId}/{allocationType}/{amountTypeId}/{status}")
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getBEAllocationReportDoc(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "status") String status) {
-        return new ResponseEntity<>(mangeReportService.getBEAllocationReportDoc(finYearId, allocationType, amountTypeId,status), HttpStatus.OK);
+        return new ResponseEntity<>(mangeReportService.getBEAllocationReportDoc(finYearId, allocationType, amountTypeId, status), HttpStatus.OK);
     }
 
     @GetMapping("/getBEAllocationReportExcel/{finYearId}/{allocationType}/{amountTypeId}/{status}")
     public ResponseEntity<ApiResponse<List<BeReportResp>>> getBEAllocationReportExcel(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "status") String status) {
-        return new ResponseEntity<>(mangeReportService.getBEAllocationReportExcel(finYearId, allocationType, amountTypeId,status), HttpStatus.OK);
+        return new ResponseEntity<>(mangeReportService.getBEAllocationReportExcel(finYearId, allocationType, amountTypeId, status), HttpStatus.OK);
     }
 
     //  RE ALLOCATION REPORT

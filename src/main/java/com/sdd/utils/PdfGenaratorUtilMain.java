@@ -187,44 +187,52 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 8, 25f));
 
 
-        table.addCell(boldText(filePathResponse.getSubHeadKey(), 8, 25f));
-        table.addCell(boldText(filePathResponse.getRevenueOrCapital(), 8, 25f));
-        table.addCell(boldText("", 8, 25f));
-
-
         double grandTotal = 0;
         for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
             String key11 = entry11.getKey();
             List<ReportSubModel> tabData11 = entry11.getValue();
 
-//            table.addCell(normalText(key11, 8, 25f));
+            if (key11.equalsIgnoreCase("2037")) {
+                table.addCell(boldText(key11, 8, 25f));
+                table.addCell(boldText("REVENUE", 8, 25f));
+                table.addCell(boldText("", 8, 25f));
+            } else {
+                table.addCell(boldText(key11, 8, 25f));
+                table.addCell(boldText("CAPITAL", 8, 25f));
+                table.addCell(boldText("", 8, 25f));
+            }
 
             double allAmountData = 0;
             for (Integer i = 0; i < tabData11.size(); i++) {
 
-
-//                    table.addCell(normalText("", 8, 25f));
-//                    table.addCell(normalText(tabData11.get(i).getUnit(), 8, 25f));
-//                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 8, 25f));
-//
                 table.addCell(normalText("", 8, 25f));
-                table.addCell(normalText(key11, 8, 25f));
+                table.addCell(normalText(tabData11.get(i).getBudgetHead().getSubHeadDescr(), 8, 25f));
 //                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getUnit()), 8, 25f));
                 table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 8, 25f));
 
                 allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
                 grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
 
-
             }
 
-//            table.addCell(boldText("", 8, 25f));
-//            table.addCell(boldText(ConverterUtils.addDecimalPoint("Total Amount"), 8, 25f));
-//            table.addCell(boldText(ConverterUtils.addDecimalPoint(allAmountData + ""), 8, 25f));
+
+            if (key11.equalsIgnoreCase("2037")) {
+
+                table.addCell(boldText("", 8, 25f));
+                table.addCell(boldText(ConverterUtils.addDecimalPoint("Total Amount") + "(REVENUE)", 8, 25f));
+                table.addCell(boldText(ConverterUtils.addDecimalPoint(allAmountData + ""), 8, 25f));
+
+            } else {
+                table.addCell(boldText("", 8, 25f));
+                table.addCell(boldText(ConverterUtils.addDecimalPoint("Total Amount") + "(CAPITAL)", 8, 25f));
+                table.addCell(boldText(ConverterUtils.addDecimalPoint(allAmountData + ""), 8, 25f));
+            }
+
+
         }
 
         table.addCell(boldText("", 8, 25f));
-        table.addCell(boldText(ConverterUtils.addDecimalPoint("Grand Total") + "(" + filePathResponse.getRevenueOrCapital() + ")", 8, 25f));
+        table.addCell(boldText(ConverterUtils.addDecimalPoint("Grand Total"), 8, 25f));
         table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 8, 25f));
 
 

@@ -20,9 +20,9 @@ public interface MangeReportService {
     ApiResponse<List<FilePathResponse>> getReceiptReport(String reportRequest);
     ApiResponse<List<FilePathResponse>> getReceiptReportDoc(String reportRequest);
 
-    ApiResponse<List<FilePathResponse>> getConsolidateReceiptReport(String finYearId,String allocationType);
+    ApiResponse<List<FilePathResponse>> getConsolidateReceiptReport(String finYearId,String allocationType,String amountType);
 
-    ApiResponse<List<FilePathResponse>> getConsolidateReceiptReportDoc(String finYearId,String allocationType);
+    ApiResponse<List<FilePathResponse>> getConsolidateReceiptReportDoc(String finYearId,String allocationType,String amountType);
 
 
     ApiResponse<List<FilePathResponse>> getAllocationReportRevised(ReportRequest reportRequest);

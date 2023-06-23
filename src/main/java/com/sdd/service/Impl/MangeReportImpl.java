@@ -565,7 +565,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getConsolidateReceiptReport(String finYearId, String allocationTypeIdR) {
+    public ApiResponse<List<FilePathResponse>> getConsolidateReceiptReport(String finYearId, String allocationTypeIdR, String amountType) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -585,7 +585,9 @@ public class MangeReportImpl implements MangeReportService {
         if (allocationTypeIdR == null || allocationTypeIdR.isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION TYPE ID CAN NOT BE BLANK");
         }
-
+        if (amountType == null || amountType.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AMOUNT TYPE ID CAN NOT BE BLANK");
+        }
 
         String fileName = "BudgetReceipt" + hrData.getUnitId();
 
@@ -856,7 +858,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getConsolidateReceiptReportDoc(String finYearId, String allocationTypeIdR) {
+    public ApiResponse<List<FilePathResponse>> getConsolidateReceiptReportDoc(String finYearId, String allocationTypeIdR, String amountType) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -870,6 +872,9 @@ public class MangeReportImpl implements MangeReportService {
         }
         if (allocationTypeIdR == null || allocationTypeIdR.isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION TYPE ID CAN NOT BE BLANK");
+        }
+        if (amountType == null || amountType.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AMOUNT TYPE ID CAN NOT BE BLANK");
         }
 
         HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
