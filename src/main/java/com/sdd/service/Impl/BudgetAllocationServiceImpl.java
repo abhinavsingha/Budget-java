@@ -3561,7 +3561,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             mangeInboxOutbox.setAllocationType(tabData.getAllocationTypeId());
             mangeInboxOutbox.setIsFlag("1");
             mangeInboxOutbox.setIsArchive("0");
-            mangeInboxOutbox.setIsApproved("1");
+            mangeInboxOutbox.setIsApproved("0");
             mangeInboxOutbox.setAmount(ConverterUtils.addDecimalPoint(tabData.getAllocationAmount() + ""));
             mangeInboxOutbox.setIsBgcg("BR");
             mangeInboxOutbox.setState("CR");
