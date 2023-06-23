@@ -565,7 +565,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getConsolidateReceiptReport(String authGroupId) {
+    public ApiResponse<List<FilePathResponse>> getConsolidateReceiptReport(String finYearId, String allocationTypeIdR) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -579,17 +579,21 @@ public class MangeReportImpl implements MangeReportService {
 //                AllocationType
 //        finYear
 
+        if (finYearId == null || finYearId.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FIN YEAR ID CAN NOT BE BLANK");
+        }
+        if (allocationTypeIdR == null || allocationTypeIdR.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION TYPE ID CAN NOT BE BLANK");
+        }
+
 
         String fileName = "BudgetReceipt" + hrData.getUnitId();
 
         HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
         List<BudgetAllocationDetails> budgetAllocationReport = new ArrayList<BudgetAllocationDetails>();
-        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(authGroupId, "0");
 
-        } else {
-            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(authGroupId, "0");
-        }
+//        budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(authGroupId, "0");
+        budgetAllocationReport = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(hrData.getUnitId(), finYearId, allocationTypeIdR, "0", "0");
 
 
         if (budgetAllocationReport.size() <= 0) {
@@ -603,9 +607,9 @@ public class MangeReportImpl implements MangeReportService {
             CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationReport.get(j).getToUnit());
             AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationReport.get(j).getAmountType());
             key = budgetHead.getMajorHead();
-            if (hashMap.containsKey(budgetHead.getSubHeadDescr())) {
+            if (hashMap.containsKey(budgetHead.getMajorHead())) {
 
-                List<ReportSubModel> reportMaindata = hashMap.get(budgetHead.getSubHeadDescr());
+                List<ReportSubModel> reportMaindata = hashMap.get(budgetHead.getMajorHead());
                 ReportSubModel subModel = new ReportSubModel();
                 subModel.setType(budgetAllocationReport.get(j).getAllocTypeId());
                 subModel.setRemark(budgetAllocationReport.get(j).getTransactionId());
@@ -618,7 +622,7 @@ public class MangeReportImpl implements MangeReportService {
 
                 if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
-                    hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
+                    hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
             } else {
                 List<ReportSubModel> reportMaindata = new ArrayList<ReportSubModel>();
@@ -633,7 +637,7 @@ public class MangeReportImpl implements MangeReportService {
 
                 if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
-                    hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
+                    hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
             }
         }
@@ -852,7 +856,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getConsolidateReceiptReportDoc(String authGroupId) {
+    public ApiResponse<List<FilePathResponse>> getConsolidateReceiptReportDoc(String finYearId, String allocationTypeIdR) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -861,21 +865,17 @@ public class MangeReportImpl implements MangeReportService {
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
-
+        if (finYearId == null || finYearId.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FIN YEAR ID CAN NOT BE BLANK");
+        }
+        if (allocationTypeIdR == null || allocationTypeIdR.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION TYPE ID CAN NOT BE BLANK");
+        }
 
         HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
-//        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlagOrderBySubHeadAsc(authGroupId, "0");
 
         List<BudgetAllocationDetails> budgetAllocationReport = new ArrayList<BudgetAllocationDetails>();
-        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(authGroupId, "0");
-
-        } else {
-            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(authGroupId, "0");
-
-
-//            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndToUnitOrderByTransactionIdAsc(authGroupId, hrData.getUnitId());
-        }
+        budgetAllocationReport = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(hrData.getUnitId(), finYearId, allocationTypeIdR, "0", "0");
 
 
         if (budgetAllocationReport.size() <= 0) {
@@ -888,9 +888,9 @@ public class MangeReportImpl implements MangeReportService {
             CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationReport.get(j).getToUnit());
             AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationReport.get(j).getAmountType());
             key = budgetHead.getMajorHead();
-            if (hashMap.containsKey(budgetHead.getSubHeadDescr())) {
+            if (hashMap.containsKey(budgetHead.getMajorHead())) {
 
-                List<ReportSubModel> reportMaindata = hashMap.get(budgetHead.getSubHeadDescr());
+                List<ReportSubModel> reportMaindata = hashMap.get(budgetHead.getMajorHead());
                 ReportSubModel subModel = new ReportSubModel();
                 subModel.setType(budgetAllocationReport.get(j).getAllocTypeId());
                 subModel.setRemark(budgetAllocationReport.get(j).getTransactionId());
@@ -902,7 +902,7 @@ public class MangeReportImpl implements MangeReportService {
 
                 if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
-                    hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
+                    hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
             } else {
                 List<ReportSubModel> reportMaindata = new ArrayList<ReportSubModel>();
@@ -917,7 +917,7 @@ public class MangeReportImpl implements MangeReportService {
 
                 if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
-                    hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
+                    hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
             }
         }
@@ -2283,7 +2283,7 @@ public class MangeReportImpl implements MangeReportService {
 //
 //                try {
 //
-//                    
+//
 //                    File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
 //                    if (!folder.exists()) {
 //                        folder.mkdirs();

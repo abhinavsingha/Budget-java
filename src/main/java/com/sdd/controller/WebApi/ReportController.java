@@ -55,14 +55,14 @@ public class ReportController {
 
 
 
-    @GetMapping("/getConsolidateReceiptReport/{authgroupId}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getConsolidateReceiptReport(@PathVariable("authgroupId") String authgroupId) {
-        return new ResponseEntity<>(mangeReportService.getConsolidateReceiptReport(authgroupId), HttpStatus.OK);
+    @GetMapping("/getConsolidateReceiptReport/{finYearId}/{allocationType}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getConsolidateReceiptReport(@PathVariable("finYearId") String finYearId,@PathVariable("allocationType") String allocationType) {
+        return new ResponseEntity<>(mangeReportService.getConsolidateReceiptReport(finYearId,allocationType), HttpStatus.OK);
     }
 
-    @GetMapping("/getConsolidateReceiptReportDoc/{authgroupId}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getConsolidateReceiptReportDoc(@PathVariable("authgroupId") String authgroupId) {
-        return new ResponseEntity<>(mangeReportService.getConsolidateReceiptReportDoc(authgroupId), HttpStatus.OK);
+    @GetMapping("/getConsolidateReceiptReportDoc/{finYearId}/{allocationType}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getConsolidateReceiptReportDoc(@PathVariable("finYearId") String finYearId,@PathVariable("allocationType") String allocationType) {
+        return new ResponseEntity<>(mangeReportService.getConsolidateReceiptReportDoc(finYearId,allocationType), HttpStatus.OK);
     }
 
 
