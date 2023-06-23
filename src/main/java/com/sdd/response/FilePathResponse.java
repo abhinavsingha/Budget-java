@@ -18,7 +18,8 @@ public class FilePathResponse {
    String finYear;
    String amountType;
    String unit;
-   String SubHead;
+   String subHeadKey;
+   String revenueOrCapital;
    String type;
    String remark;
    HashMap<String, List<CDAReportResponse>> allCdaData;

@@ -45,11 +45,25 @@ public class ReportController {
         return new ResponseEntity<>(mangeReportService.getReceiptReport(authgroupId), HttpStatus.OK);
     }
 
-    @GetMapping("/getReceiptReportDoc/{authgroupId}")
+    @GetMapping("/getConsolidateReceiptReportDoc/{authgroupId}")
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getReceiptReportDoc(@PathVariable("authgroupId") String authgroupId) {
         return new ResponseEntity<>(mangeReportService.getReceiptReportDoc(authgroupId), HttpStatus.OK);
     }
 
+
+
+
+
+
+    @GetMapping("/getConsolidateReceiptReport/{authgroupId}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getConsolidateReceiptReport(@PathVariable("authgroupId") String authgroupId) {
+        return new ResponseEntity<>(mangeReportService.getConsolidateReceiptReport(authgroupId), HttpStatus.OK);
+    }
+
+    @GetMapping("/getConsolidateReceiptReportDoc/{authgroupId}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getConsolidateReceiptReportDoc(@PathVariable("authgroupId") String authgroupId) {
+        return new ResponseEntity<>(mangeReportService.getConsolidateReceiptReportDoc(authgroupId), HttpStatus.OK);
+    }
 
 
 
