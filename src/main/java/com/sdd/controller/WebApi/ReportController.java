@@ -38,6 +38,23 @@ public class ReportController {
     }
 
 
+
+
+    @GetMapping("/getReceiptReport/{authgroupId}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getReceiptReport(@PathVariable("authgroupId") String authgroupId) {
+        return new ResponseEntity<>(mangeReportService.getReceiptReport(authgroupId), HttpStatus.OK);
+    }
+
+    @GetMapping("/getReceiptReportDoc/{authgroupId}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getReceiptReportDoc(@PathVariable("authgroupId") String authgroupId) {
+        return new ResponseEntity<>(mangeReportService.getReceiptReportDoc(authgroupId), HttpStatus.OK);
+    }
+
+
+
+
+
+
     @PostMapping("/getAllocationReportRevised")
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getAllocationReportRevised(@RequestBody ReportRequest reportRequest) {
         return new ResponseEntity<>(mangeReportService.getAllocationReportRevised(reportRequest), HttpStatus.OK);

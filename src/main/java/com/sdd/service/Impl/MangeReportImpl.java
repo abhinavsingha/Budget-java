@@ -417,6 +417,320 @@ public class MangeReportImpl implements MangeReportService {
     }
 
 
+
+
+
+
+
+
+
+
+    @Override
+    public ApiResponse<List<FilePathResponse>> getReceiptReport(String authGroupId) {
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+
+
+        String fileName = "AllocationReport" + hrData.getUnitId();
+
+        HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
+        List<BudgetAllocationDetails> budgetAllocationReport = new ArrayList<BudgetAllocationDetails>();
+        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(authGroupId, "0");
+
+        } else {
+            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(authGroupId, "0");
+
+//            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndToUnitOrderByTransactionIdAsc(authGroupId, hrData.getUnitId());
+        }
+
+        List<MangeInboxOutbox> mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupId(authGroupId);
+
+        if (mangeInboxOutbox.size() > 0) {
+
+            if (mangeInboxOutbox.get(0).getIsBgcg().equalsIgnoreCase("BR")) {
+                fileName = "BudgetReceipt" + hrData.getUnitId();
+            } else {
+                fileName = "AllocationReport" + hrData.getUnitId();
+            }
+        }
+
+
+        if (budgetAllocationReport.size() <= 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
+        }
+
+
+        for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
+
+            BudgetHead budgetHead = subHeadRepository.findByBudgetCodeId(budgetAllocationReport.get(j).getSubHead());
+            CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationReport.get(j).getToUnit());
+            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationReport.get(j).getAmountType());
+
+            if (hashMap.containsKey(budgetHead.getSubHeadDescr())) {
+
+                List<ReportSubModel> reportMaindata = hashMap.get(budgetHead.getSubHeadDescr());
+                ReportSubModel subModel = new ReportSubModel();
+                subModel.setType(budgetAllocationReport.get(j).getAllocTypeId());
+                subModel.setRemark(budgetAllocationReport.get(j).getTransactionId());
+                subModel.setUnit(cgUnit.getDescr());
+                subModel.setAmountType(amountUnit.getAmountType());
+                subModel.setBudgetHead(budgetHead);
+                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
+                subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
+
+
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                    reportMaindata.add(subModel);
+                    hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
+                }
+            } else {
+                List<ReportSubModel> reportMaindata = new ArrayList<ReportSubModel>();
+                ReportSubModel subModel = new ReportSubModel();
+                subModel.setType(budgetAllocationReport.get(j).getAllocTypeId());
+                subModel.setRemark(budgetAllocationReport.get(j).getTransactionId());
+                subModel.setUnit(cgUnit.getDescr());
+                subModel.setBudgetHead(budgetHead);
+                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
+                subModel.setAmountType(amountUnit.getAmountType());
+                subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
+
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                    reportMaindata.add(subModel);
+                    hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
+                }
+            }
+        }
+
+
+        List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
+        FilePathResponse filePathResponse = new FilePathResponse();
+        List<ReportSubModel> tabData = new ArrayList<ReportSubModel>();
+        String key = "";
+        for (Map.Entry<String, List<ReportSubModel>> entry : hashMap.entrySet()) {
+            key = entry.getKey();
+            tabData.addAll(entry.getValue());
+
+
+            List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+            if (hrDataList.size() == 0) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+            }
+
+            String approverPId = "";
+
+            for (Integer k = 0; k < hrDataList.size(); k++) {
+                HrData findHrData = hrDataList.get(k);
+                if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                    approverPId = findHrData.getPid();
+                    filePathResponse.setApproveName(findHrData.getFullName());
+                    filePathResponse.setApproveRank(findHrData.getRank());
+                }
+            }
+
+            if (approverPId.isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO APPROVE ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
+            }
+
+        }
+
+
+        AllocationType allocationType = allocationRepository.findByAllocTypeId(tabData.get(0).getType());
+        BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(tabData.get(0).getFinYear());
+
+        filePathResponse.setFinYear(budgetFinancialYear.getFinYear());
+        filePathResponse.setUnit(tabData.get(0).getUnit());
+        filePathResponse.setSubHead(key);
+        filePathResponse.setType(allocationType.getAllocDesc());
+        filePathResponse.setAmountType(tabData.get(0).getAmountType());
+        filePathResponse.setRemark(tabData.get(0).getRemark());
+
+
+        try {
+            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
+            pdfGenaratorUtilMain.createPdfRecipt(hashMap, filePath, filePathResponse);
+            filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
+            filePathResponse.setFileName(fileName);
+            dtoList.add(filePathResponse);
+
+        } catch (Exception e) {
+            throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
+        }
+
+        return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+        });
+    }
+
+    @Override
+    public ApiResponse<List<FilePathResponse>> getReceiptReportDoc(String authGroupId) {
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+
+
+        HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
+//        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlagOrderBySubHeadAsc(authGroupId, "0");
+
+        List<BudgetAllocationDetails> budgetAllocationReport = new ArrayList<BudgetAllocationDetails>();
+        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(authGroupId, "0");
+
+        } else {
+            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(authGroupId, "0");
+
+
+//            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndToUnitOrderByTransactionIdAsc(authGroupId, hrData.getUnitId());
+        }
+
+
+        if (budgetAllocationReport.size() <= 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
+        }
+
+        for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
+
+            BudgetHead budgetHead = subHeadRepository.findByBudgetCodeId(budgetAllocationReport.get(j).getSubHead());
+            CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationReport.get(j).getToUnit());
+            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationReport.get(j).getAmountType());
+
+            if (hashMap.containsKey(budgetHead.getSubHeadDescr())) {
+
+                List<ReportSubModel> reportMaindata = hashMap.get(budgetHead.getSubHeadDescr());
+                ReportSubModel subModel = new ReportSubModel();
+                subModel.setType(budgetAllocationReport.get(j).getAllocTypeId());
+                subModel.setRemark(budgetAllocationReport.get(j).getTransactionId());
+                subModel.setUnit(cgUnit.getDescr());
+                subModel.setBudgetHead(budgetHead);
+                subModel.setAmountType(amountUnit.getAmountType());
+                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
+                subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
+
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                    reportMaindata.add(subModel);
+                    hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
+                }
+            } else {
+                List<ReportSubModel> reportMaindata = new ArrayList<ReportSubModel>();
+                ReportSubModel subModel = new ReportSubModel();
+                subModel.setType(budgetAllocationReport.get(j).getAllocTypeId());
+                subModel.setRemark(budgetAllocationReport.get(j).getTransactionId());
+                subModel.setUnit(cgUnit.getDescr());
+                subModel.setBudgetHead(budgetHead);
+                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
+                subModel.setAmountType(amountUnit.getAmountType());
+                subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
+
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                    reportMaindata.add(subModel);
+                    hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
+                }
+            }
+        }
+
+        List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
+
+        FilePathResponse filePathResponse = new FilePathResponse();
+        List<ReportSubModel> tabData = new ArrayList<ReportSubModel>();
+        String key = "";
+        for (Map.Entry<String, List<ReportSubModel>> entry : hashMap.entrySet()) {
+            key = entry.getKey();
+            tabData.addAll(entry.getValue());
+
+
+            List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+            if (hrDataList.size() == 0) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+            }
+
+            String approverPId = "";
+
+            for (Integer k = 0; k < hrDataList.size(); k++) {
+                HrData findHrData = hrDataList.get(k);
+                if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                    approverPId = findHrData.getPid();
+                    filePathResponse.setApproveName(findHrData.getFullName());
+                    filePathResponse.setApproveRank(findHrData.getRank());
+                }
+            }
+
+            if (approverPId.isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO APPROVE ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
+            }
+
+        }
+
+
+        AllocationType allocationType = allocationRepository.findByAllocTypeId(tabData.get(0).getType());
+        BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(tabData.get(0).getFinYear());
+
+        filePathResponse.setFinYear(budgetFinancialYear.getFinYear());
+        filePathResponse.setUnit(tabData.get(0).getUnit());
+        filePathResponse.setSubHead(key);
+        filePathResponse.setType(allocationType.getAllocDesc());
+        filePathResponse.setAmountType(tabData.get(0).getAmountType());
+        filePathResponse.setRemark(tabData.get(0).getRemark());
+
+
+        try {
+
+            String fileName = "AllocationReport" + hrData.getUnitId();
+            List<MangeInboxOutbox> mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupId(authGroupId);
+
+            if (mangeInboxOutbox.size() > 0) {
+
+                if (mangeInboxOutbox.get(0).getIsBgcg().equalsIgnoreCase("BR")) {
+                    fileName = "BudgetReceipt" + hrData.getUnitId();
+                } else {
+                    fileName = "AllocationReport" + hrData.getUnitId();
+                }
+            }
+            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
+            docxGenaratorUtil.createDocRecipt(hashMap, filePath, filePathResponse);
+            filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".docx");
+            filePathResponse.setFileName(fileName);
+            dtoList.add(filePathResponse);
+
+        } catch (Exception e) {
+            throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
+        }
+
+        return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+        });
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Override
     public ApiResponse<List<FilePathResponse>> getAllocationReportRevised(ReportRequest reportRequest) {
 

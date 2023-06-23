@@ -86,6 +86,75 @@ public class PdfGenaratorUtilMain {
     }
 
 
+
+    @SuppressWarnings("rawtypes")
+    public void createPdfRecipt(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse) throws Exception {
+
+        Document document = new Document();
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
+        document.open();
+
+
+        float[] pointColumnWidths = {150F, 150F, 150F};
+        PdfPTable table = new PdfPTable(3);
+        table.setWidths(pointColumnWidths);
+        table.setSpacingAfter(20);
+
+        table.addCell(boldText("SUB HEAD", 8, 25f));
+        table.addCell(boldText("UNIT NAME", 8, 25f));
+        table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 8, 25f));
+
+        double grandTotal = 0;
+        for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
+            String key11 = entry11.getKey();
+            List<ReportSubModel> tabData11 = entry11.getValue();
+
+            table.addCell(normalText(key11, 8, 25f));
+
+            double allAmountData = 0;
+            for (Integer i = 0; i < tabData11.size(); i++) {
+
+                if (i == 0) {
+                    table.addCell(normalText(tabData11.get(i).getUnit(), 8, 25f));
+                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 8, 25f));
+                } else {
+                    table.addCell(normalText("", 8, 25f));
+                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getUnit()), 8, 25f));
+                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 8, 25f));
+                }
+                allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
+                grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
+
+
+            }
+
+            table.addCell(boldText("", 8, 25f));
+            table.addCell(boldText(ConverterUtils.addDecimalPoint("Total Amount"), 8, 25f));
+            table.addCell(boldText(ConverterUtils.addDecimalPoint(allAmountData + ""), 8, 25f));
+        }
+
+        table.addCell(boldText(ConverterUtils.addDecimalPoint("Grand Total"), 8, 25f));
+        table.addCell(boldText("", 8, 25f));
+        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 8, 25f));
+
+
+        Phrase phrase = new Phrase();
+        Font font = new Font(Font.FontFamily.COURIER, 8, Font.BOLD);
+        Chunk approverName = new Chunk("           " + (filePathResponse.getApproveName() + "\n          " + filePathResponse.getApproveRank()), font);
+        phrase.add(approverName);
+        Paragraph paragraph = new Paragraph();
+        paragraph.add(phrase);
+        paragraph.setAlignment(Element.ALIGN_BOTTOM);
+
+        document.add(table);
+        document.add(paragraph);
+        document.close();
+
+    }
+
+
+
+
     public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal, HashMap<String, String> coloumWiseAmount) throws Exception {
 
 

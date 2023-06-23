@@ -14,8 +14,14 @@ public interface MangeReportService {
 
 
     ApiResponse<List<FilePathResponse>> getAllocationReport(String reportRequest);
-
     ApiResponse<List<FilePathResponse>> getAllocationReportDoc(String reportRequest);
+
+
+
+
+    ApiResponse<List<FilePathResponse>> getReceiptReport(String reportRequest);
+    ApiResponse<List<FilePathResponse>> getReceiptReportDoc(String reportRequest);
+
 
     ApiResponse<List<FilePathResponse>> getAllocationReportRevised(ReportRequest reportRequest);
 
