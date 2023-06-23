@@ -276,42 +276,47 @@ public class DocxGenaratorUtil {
 
                 XWPFTableRow tableRow = table.createRow();
                 tableRow.getCell(0).setText(key11);
+                if (key11.equalsIgnoreCase("2037")) {
+                    tableRow.getCell(1).setText("REVENUE");
+                } else {
+                    tableRow.getCell(1).setText("CAPITAL");
+                }
+
 
                 double allAmountData = 0;
                 for (Integer i = 0; i < tabData11.size(); i++) {
 
-//                    if (i == 0) {
-////                            tableRow.getCell(1).setText(tabData11.get(i).getUnit());
-//                        XWPFParagraph paragraph = tableRow.getCell(1).addParagraph();
-//                        normalText(paragraph.createRun(), 10, tabData11.get(i).getUnit(), false);
-//
-////                            tableRow.getCell(2).setText(tabData11.get(i).getAmount());
-//                        XWPFParagraph paragraph11 = tableRow.getCell(2).addParagraph();
-//                        normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), false);
-//
-//                    } else {
                     XWPFTableRow tableRow11 = table.createRow();
                     tableRow11.getCell(0).setText("");
 
                     XWPFParagraph paragraph = tableRow11.getCell(1).addParagraph();
-//                        normalText(paragraph.createRun(), 10, tabData11.get(i).getUnit(), false);
-                    normalText(paragraph.createRun(), 10, key11, false);
+                    normalText(paragraph.createRun(), 10, tabData11.get(i).getBudgetHead().getSubHeadDescr(), false);
 
                     XWPFParagraph paragraph11 = tableRow11.getCell(2).addParagraph();
                     normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), false);
-//                    }
+
 
                     allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
                     grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
 
                 }
 
-//                XWPFTableRow latRow = table.createRow();
-//                XWPFParagraph total1 = latRow.getCell(1).addParagraph();
-//                boldText(total1.createRun(), 10, "Total Amount", true);
-//                XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
-//                boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(allAmountData + ""), true);
+                if (key11.equalsIgnoreCase("2037")) {
 
+                    XWPFTableRow latRow = table.createRow();
+                    XWPFParagraph total1 = latRow.getCell(1).addParagraph();
+                    boldText(total1.createRun(), 10, "Total Amount" + "(REVENUE)", true);
+                    XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
+                    boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(allAmountData + ""), true);
+
+                } else {
+
+                    XWPFTableRow latRow = table.createRow();
+                    XWPFParagraph total1 = latRow.getCell(1).addParagraph();
+                    boldText(total1.createRun(), 10, "Total Amount" + "(CAPITAL)", true);
+                    XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
+                    boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(allAmountData + ""), true);
+                }
             }
 
 
