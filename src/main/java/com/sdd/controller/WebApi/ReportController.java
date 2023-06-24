@@ -219,6 +219,23 @@ public class ReportController {
         return new ResponseEntity<>(mangeReportService.getUnitRebaseReportExcel(fromDate, toDate), HttpStatus.OK);
     }
 
+    //  MA ALLOCATION REPORT
+    @GetMapping("/getMAAllocationReport/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{allocationTypeMA}/{amountTypeId}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getMAAllocationReport(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeBE") String allocationTypeBE, @PathVariable(value = "allocationTypeRE") String allocationTypeRE,@PathVariable(value = "allocationTypeMA") String allocationTypeMA, @PathVariable(value = "amountTypeId") String amountTypeId) {
+        return new ResponseEntity<>(mangeReportService.getMAAllocationReport(finYearId, allocationTypeBE, allocationTypeRE,allocationTypeMA, amountTypeId), HttpStatus.OK);
+    }
+
+    @GetMapping("/getMAAllocationReportDoc/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{allocationTypeMA}/{amountTypeId}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getMAAllocationReportDoc(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeBE") String allocationTypeBE, @PathVariable(value = "allocationTypeRE") String allocationTypeRE,@PathVariable(value = "allocationTypeMA") String allocationTypeMA, @PathVariable(value = "amountTypeId") String amountTypeId) {
+        return new ResponseEntity<>(mangeReportService.getMAAllocationReportDoc(finYearId, allocationTypeBE, allocationTypeRE,allocationTypeMA, amountTypeId), HttpStatus.OK);
+    }
+
+    @GetMapping("/getMAAllocationReportExcel/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{allocationTypeMA}/{amountTypeId}")
+    public ResponseEntity<ApiResponse<List<MAResponceReport>>> getMAAllocationReportExcel(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeBE") String allocationTypeBE, @PathVariable(value = "allocationTypeRE") String allocationTypeRE,@PathVariable(value = "allocationTypeMA") String allocationTypeMA, @PathVariable(value = "amountTypeId") String amountTypeId) {
+        return new ResponseEntity<>(mangeReportService.getMAAllocationReportExcel(finYearId, allocationTypeBE, allocationTypeRE,allocationTypeMA, amountTypeId), HttpStatus.OK);
+    }
+
+
     //  REVISED ALLOCATION REPORT
     @GetMapping("/getRevisedAllocationReport/{authGroupId}")
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getRevisedAllocationReport(@PathVariable(value = "authGroupId") String authGroupId) {

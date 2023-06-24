@@ -82,7 +82,13 @@ public interface MangeReportService {
     ApiResponse<List<FilePathResponse>> getUnitRebaseReportDoc(String fromDate, String toDate);
     ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseReportExcel(String fromDate, String toDate);
 
- //  REVISED ALLOCATION REPORT
+ //   MA ALLOCATION REPORT
+    ApiResponse<List<FilePathResponse>> getMAAllocationReport(String finYearId, String allocationTypeBE, String allocationTypeRE,String allocationTypeMA, String amountTypeId);
+    ApiResponse<List<FilePathResponse>> getMAAllocationReportDoc(String finYearId, String allocationTypeBE, String allocationTypeRE,String allocationTypeMA, String amountTypeId);
+    ApiResponse<List<MAResponceReport>> getMAAllocationReportExcel(String finYearId, String allocationTypeBE, String allocationTypeRE,String allocationTypeMA, String amountTypeId);
+
+
+    //  REVISED ALLOCATION REPORT
     ApiResponse<List<FilePathResponse>> getRevisedAllocationReport(String authGroupId);
 
 }
