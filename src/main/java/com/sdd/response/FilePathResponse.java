@@ -1,5 +1,6 @@
 package com.sdd.response;
 
+import com.sdd.utils.ReportSubModel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,6 +23,7 @@ public class FilePathResponse {
    String revenueOrCapital;
    String type;
    String remark;
+   HashMap<String, List<ReportSubModel>> reciptRespone;
    HashMap<String, List<CDAReportResponse>> allCdaData;
 
 

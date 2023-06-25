@@ -553,6 +553,7 @@ public class MangeReportImpl implements MangeReportService {
             pdfGenaratorUtilMain.createPdfRecipt(hashMap, filePath, filePathResponse);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             filePathResponse.setFileName(fileName);
+            filePathResponse.setReciptRespone(hashMap);
             dtoList.add(filePathResponse);
 
         } catch (Exception e) {
@@ -703,6 +704,7 @@ public class MangeReportImpl implements MangeReportService {
             pdfGenaratorUtilMain.createPdfConsolidateRecipt(hashMap, filePath, filePathResponse);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             filePathResponse.setFileName(fileName);
+            filePathResponse.setReciptRespone(hashMap);
             dtoList.add(filePathResponse);
 
         } catch (Exception e) {
@@ -845,6 +847,7 @@ public class MangeReportImpl implements MangeReportService {
             docxGenaratorUtil.createDocRecipt(hashMap, filePath, filePathResponse);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".docx");
             filePathResponse.setFileName(fileName);
+            filePathResponse.setReciptRespone(hashMap);
             dtoList.add(filePathResponse);
 
         } catch (Exception e) {
@@ -987,6 +990,7 @@ public class MangeReportImpl implements MangeReportService {
             docxGenaratorUtil.createDocConsolidateRecipt(hashMap, filePath, filePathResponse);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".docx");
             filePathResponse.setFileName(fileName);
+            filePathResponse.setReciptRespone(hashMap);
             dtoList.add(filePathResponse);
 
         } catch (Exception e) {
