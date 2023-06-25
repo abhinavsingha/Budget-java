@@ -732,15 +732,8 @@ public class MangeReportImpl implements MangeReportService {
 //        List<BudgetAllocation> budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlagOrderBySubHeadAsc(authGroupId, "0");
 
         List<BudgetAllocationDetails> budgetAllocationReport = new ArrayList<BudgetAllocationDetails>();
-        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(authGroupId, "0");
 
-        } else {
-            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(authGroupId, "0");
-
-
-//            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndToUnitOrderByTransactionIdAsc(authGroupId, hrData.getUnitId());
-        }
+        budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(authGroupId, "0");
 
 
         if (budgetAllocationReport.size() <= 0) {
@@ -7313,7 +7306,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getMAAllocationReport(String finYearId, String allocationTypeBE, String allocationTypeRE,String allocationTypeMA, String amountTypeId) {
+    public ApiResponse<List<FilePathResponse>> getMAAllocationReport(String finYearId, String allocationTypeBE, String allocationTypeRE, String allocationTypeMA, String amountTypeId) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -7344,7 +7337,7 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
-        if (allocationTypeBE.equalsIgnoreCase(allocationTypeRE) ||allocationTypeBE.equalsIgnoreCase(allocationTypeMA) ||allocationTypeRE.equalsIgnoreCase(allocationTypeMA)  ) {
+        if (allocationTypeBE.equalsIgnoreCase(allocationTypeRE) || allocationTypeBE.equalsIgnoreCase(allocationTypeMA) || allocationTypeRE.equalsIgnoreCase(allocationTypeMA)) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "BE or RE or MA ALLOCATION CAN NOT BE SAME", HttpStatus.OK.value());
         }
@@ -7405,7 +7398,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" +typesMA.getAllocDesc().toUpperCase()+"_Allocation-Report"+".pdf";
+            String path = folder.getAbsolutePath() + "/" + typesMA.getAllocDesc().toUpperCase() + "_Allocation-Report" + ".pdf";
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
@@ -7442,7 +7435,7 @@ public class MangeReportImpl implements MangeReportService {
             int i = 1;
             float grTotalAlloc = 0;
             float grTotalAddition = 0;
-            float grTotalMa=0;
+            float grTotalMa = 0;
             String finyear = "";
             String unit = "";
             for (String val : rowData) {
@@ -7460,11 +7453,11 @@ public class MangeReportImpl implements MangeReportService {
                 float reSum = 0;
                 float maSum = 0;
                 Double reAmountUnit = 0.0;
-                Double reFinalAmount=0.0;
+                Double reFinalAmount = 0.0;
                 Double reTotalAmount = 0.0;
 
                 Double maAmountUnit = 0.0;
-                Double maFinalAmount=0.0;
+                Double maFinalAmount = 0.0;
                 Double maTotalAmount = 0.0;
 
                 for (BudgetAllocation row : reportDetails) {
@@ -7473,7 +7466,7 @@ public class MangeReportImpl implements MangeReportService {
                     AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
                     if (amountTypeObj == null) {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                        }, type+" AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                        }, type + " AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
                     amount = Double.valueOf(row.getAllocationAmount());
                     amountUnit = amountTypeObj.getAmount();
@@ -7487,7 +7480,7 @@ public class MangeReportImpl implements MangeReportService {
                         AmountUnit amountTypeRe = amountUnitRepository.findByAmountTypeId(reData.get(0).getAmountType());
                         if (amountTypeRe == null) {
                             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                            }, types+" AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                            }, types + " AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                         }
                         reAmountUnit = amountTypeRe.getAmount();
                         reFinalAmount = reTotalAmount * reAmountUnit / reqAmount;
@@ -7501,13 +7494,13 @@ public class MangeReportImpl implements MangeReportService {
                         AmountUnit amountTypeMa = amountUnitRepository.findByAmountTypeId(maData.get(0).getAmountType());
                         if (amountTypeObj == null) {
                             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                            }, typesMA+" AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                            }, typesMA + " AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                         }
                         maAmountUnit = amountTypeMa.getAmount();
                         maFinalAmount = maTotalAmount * maAmountUnit / reqAmount;
                     }
 
-                    if (amount == 0 && reTotalAmount == 0 && maFinalAmount==0) {
+                    if (amount == 0 && reTotalAmount == 0 && maFinalAmount == 0) {
                         continue;
                     }
 
@@ -7593,8 +7586,8 @@ public class MangeReportImpl implements MangeReportService {
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH +typesMA.getAllocDesc().toUpperCase()+"_Allocation-Report.pdf");
-            dto.setFileName(typesMA.getAllocDesc().toUpperCase()+"_Allocation-Report.pdf");
+            dto.setPath(HelperUtils.FILEPATH + typesMA.getAllocDesc().toUpperCase() + "_Allocation-Report.pdf");
+            dto.setFileName(typesMA.getAllocDesc().toUpperCase() + "_Allocation-Report.pdf");
             dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -7606,7 +7599,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getMAAllocationReportDoc(String finYearId, String allocationTypeBE, String allocationTypeRE,String allocationTypeMA, String amountTypeId) {
+    public ApiResponse<List<FilePathResponse>> getMAAllocationReportDoc(String finYearId, String allocationTypeBE, String allocationTypeRE, String allocationTypeMA, String amountTypeId) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -7637,7 +7630,7 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
-        if (allocationTypeBE.equalsIgnoreCase(allocationTypeRE) ||allocationTypeBE.equalsIgnoreCase(allocationTypeMA) ||allocationTypeRE.equalsIgnoreCase(allocationTypeMA)  ) {
+        if (allocationTypeBE.equalsIgnoreCase(allocationTypeRE) || allocationTypeBE.equalsIgnoreCase(allocationTypeMA) || allocationTypeRE.equalsIgnoreCase(allocationTypeMA)) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "BE or RE or MA ALLOCATION CAN NOT BE SAME", HttpStatus.OK.value());
         }
@@ -7694,7 +7687,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" +typesMA.getAllocDesc().toUpperCase()+"_Allocation_Report"+".docx";
+            String path = folder.getAbsolutePath() + "/" + typesMA.getAllocDesc().toUpperCase() + "_Allocation_Report" + ".docx";
             FileOutputStream out = new FileOutputStream(new File(path));
 
             XWPFTable table = document.createTable(1, 5);
@@ -7714,7 +7707,7 @@ public class MangeReportImpl implements MangeReportService {
             int i = 1;
             float grTotalAlloc = 0;
             float grTotalAddition = 0;
-            float grTotalMA=0;
+            float grTotalMA = 0;
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationTypeBE, "0");
@@ -7733,12 +7726,12 @@ public class MangeReportImpl implements MangeReportService {
                 Double finAmount;
                 float reSum = 0;
                 Double reAmountUnit = 0.0;
-                Double reFinalAmount=0.0;
+                Double reFinalAmount = 0.0;
                 Double reTotalAmount = 0.0;
 
                 float maSum = 0;
                 Double maAmountUnit = 0.0;
-                Double maFinalAmount=0.0;
+                Double maFinalAmount = 0.0;
                 Double maTotalAmount = 0.0;
 
                 for (Integer r = 0; r < reportDetails.size(); r++) {
@@ -7747,7 +7740,7 @@ public class MangeReportImpl implements MangeReportService {
                     AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(reportDetails.get(r).getAmountType());
                     if (amountTypeObj == null) {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                        }, type+"  AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                        }, type + "  AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
                     amount = Double.valueOf(reportDetails.get(r).getAllocationAmount());
                     amountUnit = amountTypeObj.getAmount();
@@ -7761,7 +7754,7 @@ public class MangeReportImpl implements MangeReportService {
                         AmountUnit amountTypeRe = amountUnitRepository.findByAmountTypeId(reData.get(0).getAmountType());
                         if (amountTypeRe == null) {
                             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                            }, types+" AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                            }, types + " AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                         }
                         reAmountUnit = amountTypeRe.getAmount();
                         reFinalAmount = reTotalAmount * reAmountUnit / reqAmount;
@@ -7775,13 +7768,13 @@ public class MangeReportImpl implements MangeReportService {
                         AmountUnit amountTypeMa = amountUnitRepository.findByAmountTypeId(maData.get(0).getAmountType());
                         if (amountTypeObj == null) {
                             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                            }, typesMA+" AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                            }, typesMA + " AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                         }
                         maAmountUnit = amountTypeMa.getAmount();
                         maFinalAmount = maTotalAmount * maAmountUnit / reqAmount;
                     }
 
-                    if (amount == 0 && reTotalAmount == 0 && maFinalAmount==0 ) {
+                    if (amount == 0 && reTotalAmount == 0 && maFinalAmount == 0) {
                         continue;
                     }
 
@@ -7875,8 +7868,8 @@ public class MangeReportImpl implements MangeReportService {
             out.close();
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH +typesMA.getAllocDesc().toUpperCase() +"_Allocation_Report"+".docx");
-            dto.setFileName(typesMA.getAllocDesc().toUpperCase()+"_Allocation_Report.docx");
+            dto.setPath(HelperUtils.FILEPATH + typesMA.getAllocDesc().toUpperCase() + "_Allocation_Report" + ".docx");
+            dto.setFileName(typesMA.getAllocDesc().toUpperCase() + "_Allocation_Report.docx");
             dtoList.add(dto);
         } catch (Exception e) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
@@ -7886,7 +7879,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<MAResponceReport>> getMAAllocationReportExcel(String finYearId, String allocationTypeBE, String allocationTypeRE,String allocationTypeMA, String amountTypeId) {
+    public ApiResponse<List<MAResponceReport>> getMAAllocationReportExcel(String finYearId, String allocationTypeBE, String allocationTypeRE, String allocationTypeMA, String amountTypeId) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -7917,7 +7910,7 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<MAResponceReport>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
-        if (allocationTypeBE.equalsIgnoreCase(allocationTypeRE) ||allocationTypeBE.equalsIgnoreCase(allocationTypeMA) ||allocationTypeRE.equalsIgnoreCase(allocationTypeMA)  ) {
+        if (allocationTypeBE.equalsIgnoreCase(allocationTypeRE) || allocationTypeBE.equalsIgnoreCase(allocationTypeMA) || allocationTypeRE.equalsIgnoreCase(allocationTypeMA)) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<MAResponceReport>>() {
             }, "BE or RE or MA ALLOCATION CAN NOT BE SAME", HttpStatus.OK.value());
         }
@@ -7971,11 +7964,11 @@ public class MangeReportImpl implements MangeReportService {
                 Double finAmount;
                 float reSum = 0;
                 Double reAmountUnit = 0.0;
-                Double reFinalAmount=0.0;
+                Double reFinalAmount = 0.0;
                 Double reTotalAmount = 0.0;
                 float maSum = 0;
                 Double maAmountUnit = 0.0;
-                Double maFinalAmount=0.0;
+                Double maFinalAmount = 0.0;
                 Double maTotalAmount = 0.0;
 
                 for (Integer r = 0; r < reportDetails.size(); r++) {
@@ -7985,7 +7978,7 @@ public class MangeReportImpl implements MangeReportService {
                     AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(reportDetails.get(r).getAmountType());
                     if (amountTypeObj == null) {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<MAResponceReport>>() {
-                        }, type+"  AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                        }, type + "  AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
                     amount = Double.valueOf(reportDetails.get(r).getAllocationAmount());
                     amountUnit = amountTypeObj.getAmount();
@@ -7999,7 +7992,7 @@ public class MangeReportImpl implements MangeReportService {
                         AmountUnit amountTypeRe = amountUnitRepository.findByAmountTypeId(reData.get(0).getAmountType());
                         if (amountTypeObj == null) {
                             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<MAResponceReport>>() {
-                            }, types+"  AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                            }, types + "  AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                         }
                         reAmountUnit = amountTypeRe.getAmount();
                         reFinalAmount = reTotalAmount * reAmountUnit / reqAmount;
@@ -8012,13 +8005,13 @@ public class MangeReportImpl implements MangeReportService {
                         AmountUnit amountTypeMa = amountUnitRepository.findByAmountTypeId(maData.get(0).getAmountType());
                         if (amountTypeObj == null) {
                             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<MAResponceReport>>() {
-                            }, typesMA+"  AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                            }, typesMA + "  AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                         }
                         maAmountUnit = amountTypeMa.getAmount();
                         maFinalAmount = maTotalAmount * maAmountUnit / reqAmount;
                     }
 
-                    if (amount == 0 && reTotalAmount == 0 && maFinalAmount==0 ) {
+                    if (amount == 0 && reTotalAmount == 0 && maFinalAmount == 0) {
                         continue;
                     }
 

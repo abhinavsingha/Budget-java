@@ -144,14 +144,14 @@ public class DocxGenaratorUtil {
             boldText(paragraphtableRowOne11.createRun(), 10, filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", true);
 
 
-            XWPFTableRow tableRowOne11 = table.getRow(0);
+            XWPFTableRow tableRowOne11 = table.createRow();
             XWPFParagraph paragraphtableRowOne22 = tableRowOne11.getCell(0).addParagraph();
             boldText(paragraphtableRowOne22.createRun(), 10, filePathResponse.getSubHeadKey(), true);
 
-            XWPFParagraph paragraphtableRowOne111 = tableRowOne11.addNewTableCell().addParagraph();
+            XWPFParagraph paragraphtableRowOne111 = tableRowOne11.getCell(1).addParagraph();
             boldText(paragraphtableRowOne111.createRun(), 10, filePathResponse.getRevenueOrCapital(), true);
 
-            XWPFParagraph paragraphtableRowOne1111 = tableRowOne11.addNewTableCell().addParagraph();
+            XWPFParagraph paragraphtableRowOne1111 = tableRowOne11.getCell(2).addParagraph();
             boldText(paragraphtableRowOne1111.createRun(), 10, "", true);
 
 
@@ -160,8 +160,8 @@ public class DocxGenaratorUtil {
                 String key11 = entry11.getKey();
                 List<ReportSubModel> tabData11 = entry11.getValue();
 
-                XWPFTableRow tableRow = table.createRow();
-                tableRow.getCell(0).setText(key11);
+//                XWPFTableRow tableRow = table.createRow();
+//                tableRow.getCell(0).setText(key11);
 
                 double allAmountData = 0;
                 for (Integer i = 0; i < tabData11.size(); i++) {
@@ -240,15 +240,15 @@ public class DocxGenaratorUtil {
             boldText(paragraphtableRowOne11.createRun(), 10, filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", true);
 
 
-            XWPFTableRow tableRowOne11 = table.getRow(0);
-            XWPFParagraph paragraphtableRowOne22 = tableRowOne11.getCell(0).addParagraph();
-            boldText(paragraphtableRowOne22.createRun(), 10, filePathResponse.getSubHeadKey(), true);
-
-            XWPFParagraph paragraphtableRowOne111 = tableRowOne11.addNewTableCell().addParagraph();
-            boldText(paragraphtableRowOne111.createRun(), 10, filePathResponse.getRevenueOrCapital(), true);
-
-            XWPFParagraph paragraphtableRowOne1111 = tableRowOne11.addNewTableCell().addParagraph();
-            boldText(paragraphtableRowOne1111.createRun(), 10, "", true);
+//            XWPFTableRow tableRowOne11 = table.getRow(0);
+//            XWPFParagraph paragraphtableRowOne22 = tableRowOne11.getCell(0).addParagraph();
+//            boldText(paragraphtableRowOne22.createRun(), 10, filePathResponse.getSubHeadKey(), true);
+//
+//            XWPFParagraph paragraphtableRowOne111 = tableRowOne11.addNewTableCell().addParagraph();
+//            boldText(paragraphtableRowOne111.createRun(), 10, filePathResponse.getRevenueOrCapital(), true);
+//
+//            XWPFParagraph paragraphtableRowOne1111 = tableRowOne11.addNewTableCell().addParagraph();
+//            boldText(paragraphtableRowOne1111.createRun(), 10, "", true);
 
 
             double grandTotal = 0;
@@ -257,11 +257,15 @@ public class DocxGenaratorUtil {
                 List<ReportSubModel> tabData11 = entry11.getValue();
 
                 XWPFTableRow tableRow = table.createRow();
-                tableRow.getCell(0).setText(key11);
+                XWPFParagraph tableView = tableRow.getCell(0).addParagraph();
+                boldText(tableView.createRun(), 10, key11, true);
+
                 if (key11.equalsIgnoreCase("2037")) {
-                    tableRow.getCell(1).setText("REVENUE");
+                    XWPFParagraph tableView11 = tableRow.getCell(1).addParagraph();
+                    boldText(tableView11.createRun(), 10, "REVENUE", true);
                 } else {
-                    tableRow.getCell(1).setText("CAPITAL");
+                    XWPFParagraph tableView22 = tableRow.getCell(1).addParagraph();
+                    boldText(tableView22.createRun(), 10, "CAPITAL", true);
                 }
 
 
