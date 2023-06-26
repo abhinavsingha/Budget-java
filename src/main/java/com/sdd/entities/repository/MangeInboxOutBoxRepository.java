@@ -23,7 +23,7 @@ public interface MangeInboxOutBoxRepository extends JpaRepository<MangeInboxOutb
 
     List<MangeInboxOutbox> findByFromUnitAndIsBgcgOrderByCreatedOnAsc(String toUnit, String isBgOrCg);
 
-    MangeInboxOutbox findByGroupIdAndToUnit(String groupId, String toUnit);
+    List<MangeInboxOutbox> findByGroupIdAndToUnit(String groupId, String toUnit);
     List<MangeInboxOutbox> findByGroupId(String groupId);
 
     MangeInboxOutbox findByMangeInboxId(String msgId);

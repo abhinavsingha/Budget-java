@@ -828,24 +828,29 @@ public class ContingentServiceImpl implements ContingentService {
 
         }
 
-        MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(authGroupId, hrData.getUnitId());
+        List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(authGroupId, hrData.getUnitId());
 
-        mangeInboxOutbox.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
-        mangeInboxOutbox.setRemarks("Contingent Bill");
-        mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-        mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-        mangeInboxOutbox.setToUnit(hrData.getUnitId());
-        mangeInboxOutbox.setStatus("Pending");
-        mangeInboxOutbox.setGroupId(authGroupId);
-        mangeInboxOutbox.setFromUnit(hrData.getUnitId());
-        mangeInboxOutbox.setRoleId(hrData.getRoleId());
-        mangeInboxOutbox.setCreaterpId(hrData.getPid());
-        mangeInboxOutbox.setIsFlag("1");
-        mangeInboxOutbox.setState("VE");
-        mangeInboxOutbox.setIsBgcg("CB");
+        if (mangeInboxOutboxList.size() > 0) {
 
-        mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+            MangeInboxOutbox mangeInboxOutbox = mangeInboxOutboxList.get(0);
 
+            mangeInboxOutbox.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+            mangeInboxOutbox.setRemarks("Contingent Bill");
+            mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            mangeInboxOutbox.setToUnit(hrData.getUnitId());
+            mangeInboxOutbox.setStatus("Pending");
+            mangeInboxOutbox.setGroupId(authGroupId);
+            mangeInboxOutbox.setFromUnit(hrData.getUnitId());
+            mangeInboxOutbox.setRoleId(hrData.getRoleId());
+            mangeInboxOutbox.setCreaterpId(hrData.getPid());
+            mangeInboxOutbox.setIsFlag("1");
+            mangeInboxOutbox.setState("VE");
+            mangeInboxOutbox.setIsBgcg("CB");
+
+            mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+
+        }
 
         contingentSaveResponse.setMsg("Data Update Successfully");
         return ResponseUtils.createSuccessResponse(contingentSaveResponse, new TypeReference<ContingentSaveResponse>() {
@@ -1144,8 +1149,11 @@ public class ContingentServiceImpl implements ContingentService {
 
         }
 
-        MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(approveContigentBillRequest.getGroupId(), hrData.getUnitId());
-        if (mangeInboxOutbox != null) {
+        List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(approveContigentBillRequest.getGroupId(), hrData.getUnitId());
+        if (mangeInboxOutboxList.size() > 0) {
+
+            MangeInboxOutbox mangeInboxOutbox = mangeInboxOutboxList.get(0);
+
             String toUnit = mangeInboxOutbox.getToUnit();
             String fromUnit = mangeInboxOutbox.getFromUnit();
 
@@ -1226,8 +1234,11 @@ public class ContingentServiceImpl implements ContingentService {
         }
 
 
-        MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(approveContigentBillRequest.getGroupId(), hrData.getUnitId());
-        if (mangeInboxOutbox != null) {
+        List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(approveContigentBillRequest.getGroupId(), hrData.getUnitId());
+        if (mangeInboxOutboxList.size() > 0) {
+
+            MangeInboxOutbox mangeInboxOutbox = mangeInboxOutboxList.get(0);
+
             String toUnit = mangeInboxOutbox.getToUnit();
             String fromUnit = mangeInboxOutbox.getFromUnit();
 
@@ -1338,9 +1349,10 @@ public class ContingentServiceImpl implements ContingentService {
 
         }
 
-        MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(approveContigentBillRequest.getGroupId(), hrData.getUnitId());
-        if (mangeInboxOutbox != null) {
+        List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(approveContigentBillRequest.getGroupId(), hrData.getUnitId());
+        if (mangeInboxOutboxList.size() > 0) {
 
+            MangeInboxOutbox mangeInboxOutbox = mangeInboxOutboxList.get(0);
 
             if (status.equalsIgnoreCase("Verified")) {
                 mangeInboxOutbox.setState("AP");

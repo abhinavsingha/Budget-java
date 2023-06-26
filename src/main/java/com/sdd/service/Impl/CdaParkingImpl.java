@@ -228,8 +228,8 @@ public class CdaParkingImpl implements CdaParkingService {
 
 
         boolean allCda = true;
-        MangeInboxOutbox inboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(groupId, hrData.getUnitId());
-        if (inboxOutboxList != null) {
+        List<MangeInboxOutbox> inboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(groupId, hrData.getUnitId());
+        if (inboxOutboxList.size() > 0) {
 
             List<BudgetAllocation> budgetAllocationList = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(groupId, "0");
             for (Integer i = 0; i < budgetAllocationList.size(); i++) {
@@ -246,10 +246,13 @@ public class CdaParkingImpl implements CdaParkingService {
             }
         }
 
-        if (allCda && inboxOutboxList != null) {
-            inboxOutboxList.setIsApproved("1");
-            inboxOutboxList.setIsFlag("1");
-            mangeInboxOutBoxRepository.save(inboxOutboxList);
+        if (allCda && inboxOutboxList.size() > 0) {
+
+            MangeInboxOutbox inboxData = inboxOutboxList.get(0);
+
+            inboxData.setIsApproved("1");
+            inboxData.setIsFlag("1");
+            mangeInboxOutBoxRepository.save(inboxData);
         }
 
 

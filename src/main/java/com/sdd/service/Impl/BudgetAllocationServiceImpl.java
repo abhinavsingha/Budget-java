@@ -1929,9 +1929,10 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             }
         }
 
-        MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(budgetApproveRequest.getAuthGroupId(), hrData.getUnitId());
-        if (mangeInboxOutbox != null) {
+        List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(budgetApproveRequest.getAuthGroupId(), hrData.getUnitId());
+        if (mangeInboxOutboxList.size() > 0) {
 
+            MangeInboxOutbox   mangeInboxOutbox = mangeInboxOutboxList.get(0);
 
             String toUnit = mangeInboxOutbox.getToUnit();
             String fromUnit = mangeInboxOutbox.getFromUnit();
@@ -2151,8 +2152,14 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             }
         }
 
-        MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(budgetApproveRequest.getAuthGroupId(), hrData.getUnitId());
-        if (mangeInboxOutbox != null) {
+        List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(budgetApproveRequest.getAuthGroupId(), hrData.getUnitId());
+        if (mangeInboxOutboxList.size() > 0) {
+
+            MangeInboxOutbox   mangeInboxOutbox = mangeInboxOutboxList.get(0);
+
+
+
+
             mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             mangeInboxOutbox.setStatus(budgetApproveRequest.getStatus());
 
@@ -3572,8 +3579,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
-        MangeInboxOutbox mangeInboxOutbox11 = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(authgroupid, hrDataCheck.getUnitId());
-        if (mangeInboxOutbox11 != null) {
+        List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(authgroupid, hrDataCheck.getUnitId());
+        if (mangeInboxOutboxList.size() > 0) {
+
+            MangeInboxOutbox   mangeInboxOutbox11 = mangeInboxOutboxList.get(0);
+
             mangeInboxOutbox11.setStatus("Fully Approved");
             mangeInboxOutbox11.setIsApproved("1");
             mangeInboxOutBoxRepository.save(mangeInboxOutbox11);
