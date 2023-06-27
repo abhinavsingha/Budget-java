@@ -44,10 +44,13 @@ public class HelperUtils {
     public static String HEADUNITID = "001321";
 
 
+    // For UAT
     public static String LASTFOLDERPATH = "/webapps/bmsreport";
-//    public static String LASTFOLDERPATH = "/webapps/cgbmsreport";
     public static String FILEPATH = "https://icg.net.in/bmsreport/";
-//    public static String FILEPATH = "https://icg.net.in/cgbmsreport/";
+
+    // For PROD
+/*     public static String LASTFOLDERPATH = "/webapps/cgbmsreport";
+     public static String FILEPATH = "https://icg.net.in/cgbmsreport/";*/
 
     public static String getDocumentId() {
         return "BM_DOC" + ConverterUtils.getRandomTimeStamp();
