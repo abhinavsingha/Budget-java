@@ -5838,8 +5838,8 @@ public class MangeReportImpl implements MangeReportService {
                 String hrUnit = hrData.getUnitId();
                 System.out.println("Sorting " + subHeadId);
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
-                List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
-                List<BudgetAllocation> reportDetails = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+                //List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
                 if (reportDetails.size() <= 0) {
                     continue;
                 }
@@ -5917,7 +5917,7 @@ public class MangeReportImpl implements MangeReportService {
                     CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
 
                     PdfPCell cella1 = new PdfPCell(new Phrase(bHead.getSubHeadDescr()));
-                    PdfPCell cella2 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(IcgAmount))));
+                    PdfPCell cella2 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(IcgAmount)), cellFont));
                     PdfPCell cella3 = new PdfPCell(new Phrase(unitN.getDescr()));
                     PdfPCell cella4 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
                     PdfPCell cella5 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(eAmount))));
@@ -5951,9 +5951,43 @@ public class MangeReportImpl implements MangeReportService {
                     percentagesum += Float.parseFloat(new BigDecimal(expnAmount).toPlainString());
 
                 }
+                CgUnit hrunitN = cgUnitRepository.findByUnit(hrData.getUnitId());
+                double hrbalanceAmount = 0;
+                double hrallocationAmount = 0;
+                double hrAmountUnit=0.0;
+                    List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, hrData.getUnitId(), allocationType, "0");
+                    if (cdaParkingTrans.size() == 0) {
+                    } else {
+                        for (Integer k = 0; k < cdaParkingTrans.size(); k++) {
+                            AmountUnit dbudgetFin = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(k).getAmountType());
+                            hrAmountUnit = dbudgetFin.getAmount();
+                            hrbalanceAmount = hrbalanceAmount + Double.parseDouble(cdaParkingTrans.get(k).getRemainingCdaAmount());
+                            hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
+                        }
+                    }
+                double hrfinAmount=hrbalanceAmount * hrAmountUnit /reqAmount;
+                PdfPCell cell100 = new PdfPCell(new Phrase(hrunitN.getDescr()));
+                PdfPCell cell200 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(hrfinAmount))));
+                PdfPCell cell300 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(0))));
+                PdfPCell cell400 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(0))));
+                cell100.setPadding(10);
+                cell200.setPadding(10);
+                cell300.setPadding(10);
+                cell400.setPadding(10);
+
+
+                table.addCell(" ");
+                table.addCell(" ");
+                table.addCell(cell100);
+                table.addCell(cell200);
+                table.addCell(cell300);
+                table.addCell(cell400);
+                table.addCell(" ");
+                table.addCell(" ");
+
                 if (count != 0) {
                     PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
-                    PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum)), cellFont));
+                    PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum+hrfinAmount)), cellFont));
                     PdfPCell cell30 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(expsum)), cellFont));
                     PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(percentagesum)), cellFont));
                     cell10.setPadding(10);
@@ -5973,7 +6007,7 @@ public class MangeReportImpl implements MangeReportService {
                     count = 0;
                 }
                 grTotalIcg += IcgAmount;
-                grTotalAlloc += sum;
+                grTotalAlloc += sum+hrfinAmount;
                 grTotalAddition += expsum;
                 grTotalSum += percentagesum;
 
