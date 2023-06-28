@@ -4379,7 +4379,8 @@ public class MangeReportImpl implements MangeReportService {
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetailss = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
-                List<BudgetAllocation> reportDetails = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails1 = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails = reportDetails1.stream().filter(e -> Double.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
                 if (reportDetails.size() <= 0) {
                     continue;
                 }
@@ -4586,27 +4587,6 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
-/*
-        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-        if (cgUnit == null) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
-        }
-        String dBunit = cgUnit.getDescr();
-        List<CgUnit> units = new ArrayList<>();
-        if (dBunit.equalsIgnoreCase("D(Budget)")) {
-            units = cgUnitRepository.findAllByOrderByDescrAsc();
-        } else {
-            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
-            } else {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-            }
-        }
-        if (units.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
-        }*/
 
         try {
             XWPFDocument document = new XWPFDocument();
@@ -4667,7 +4647,8 @@ public class MangeReportImpl implements MangeReportService {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
                 List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
-                List<BudgetAllocation> reportDetails = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails1 = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails = reportDetails1.stream().filter(e -> Double.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
 
                 BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
 
@@ -4874,29 +4855,6 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
-/*
-
-        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-        if (cgUnit == null) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
-            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
-        }
-        String dBunit = cgUnit.getDescr();
-        List<CgUnit> units = new ArrayList<>();
-        if (dBunit.equalsIgnoreCase("D(Budget)")) {
-            units = cgUnitRepository.findAllByOrderByDescrAsc();
-        } else {
-            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
-            } else {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-            }
-        }
-        if (units.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
-        }
-*/
 
         try {
 
@@ -4911,7 +4869,8 @@ public class MangeReportImpl implements MangeReportService {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
                 List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
-                List<BudgetAllocation> reportDetails = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails1 = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails = reportDetails1.stream().filter(e -> Double.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
 
                 BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
 
@@ -5046,26 +5005,6 @@ public class MangeReportImpl implements MangeReportService {
         }
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
-/*        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-        if (cgUnit == null) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
-        }
-        String dBunit = cgUnit.getDescr();
-        List<CgUnit> units = new ArrayList<>();
-        if (dBunit.equalsIgnoreCase("D(Budget)")) {
-            units = cgUnitRepository.findAllByOrderByDescrAsc();
-        } else {
-            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
-            } else {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-            }
-        }
-        if (units.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
-        }*/
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType().toUpperCase();
@@ -5920,7 +5859,7 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cella2 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(IcgAmount)), cellFont));
                     PdfPCell cella3 = new PdfPCell(new Phrase(unitN.getDescr()));
                     PdfPCell cella4 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
-                    PdfPCell cella5 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(eAmount))));
+                    PdfPCell cella5 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(eAmount/reqAmount))));
                     PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(expnAmount))));
 
                     cella1.setPadding(8);
@@ -5968,7 +5907,7 @@ public class MangeReportImpl implements MangeReportService {
                 double hrfinAmount=hrbalanceAmount * hrAmountUnit /reqAmount;
                 PdfPCell cell100 = new PdfPCell(new Phrase(hrunitN.getDescr()));
                 PdfPCell cell200 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(hrfinAmount))));
-                PdfPCell cell300 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(0))));
+                PdfPCell cell300 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(0))));
                 PdfPCell cell400 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(0))));
                 cell100.setPadding(10);
                 cell200.setPadding(10);
@@ -5988,7 +5927,7 @@ public class MangeReportImpl implements MangeReportService {
                 if (count != 0) {
                     PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
                     PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum+hrfinAmount)), cellFont));
-                    PdfPCell cell30 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(expsum)), cellFont));
+                    PdfPCell cell30 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(expsum/reqAmount)), cellFont));
                     PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(percentagesum)), cellFont));
                     cell10.setPadding(10);
                     cell20.setPadding(10);
@@ -6015,7 +5954,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell50 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
             PdfPCell cell51 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalIcg)), cellFont));
             PdfPCell cell60 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
-            PdfPCell cell70 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
+            PdfPCell cell70 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(grTotalAddition/reqAmount)), cellFont));
             PdfPCell cell80 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal((grTotalAddition / reqAmount) * 100 / grTotalAlloc)), cellFont));
             cell50.setPadding(12);
             cell51.setPadding(12);
@@ -6323,10 +6262,10 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
 
                     XWPFParagraph paragraphtableRow41 = tableRowOne111.getCell(4).addParagraph();
-                    boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(eAmount)), false);
+                    boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.8f", new BigDecimal(eAmount/reqAmount)), false);
 
                     XWPFParagraph paragraphtableRow51 = tableRowOne111.getCell(5).addParagraph();
-                    boldText(paragraphtableRow51.createRun(), 10, String.format("%1$0,1.9f", new BigDecimal(expnAmount)), false);
+                    boldText(paragraphtableRow51.createRun(), 10, String.format("%1$0,1.8f", new BigDecimal(expnAmount)), false);
 
                     XWPFParagraph paragraphtableRow61 = tableRowOne111.getCell(6).addParagraph();
                     boldText(paragraphtableRow61.createRun(), 10, "", false);
@@ -6368,9 +6307,9 @@ public class MangeReportImpl implements MangeReportService {
                 XWPFParagraph hrcell03 = hrrow0.getCell(3).addParagraph();
                 boldText(hrcell03.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(hrfinAmount)), false);
                 XWPFParagraph hrcell04 = hrrow0.getCell(4).addParagraph();
-                boldText(hrcell04.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(0)), false);
+                boldText(hrcell04.createRun(), 12, String.format("%1$0,1.8f", new BigDecimal(0)), false);
                 XWPFParagraph hrcell05 = hrrow0.getCell(5).addParagraph();
-                boldText(hrcell05.createRun(), 12, String.format("%1$0,1.9f", new BigDecimal(0)), false);
+                boldText(hrcell05.createRun(), 12, String.format("%1$0,1.8f", new BigDecimal(0)), false);
                 XWPFParagraph hrcell06 = hrrow0.getCell(6).addParagraph();
                 boldText(hrcell06.createRun(), 12, "", false);
                 XWPFParagraph hrcell07 = hrrow0.getCell(7).addParagraph();
@@ -6390,9 +6329,9 @@ public class MangeReportImpl implements MangeReportService {
                     XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
                     boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum+hrfinAmount)), true);
                     XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
-                    boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(expsum)), true);
+                    boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.8f", new BigDecimal(expsum/reqAmount)), true);
                     XWPFParagraph paragraphtableRowOne2255 = tableRowOne222.getCell(5).addParagraph();
-                    boldText(paragraphtableRowOne2255.createRun(), 12, String.format("%1$0,1.9f", new BigDecimal(percentagesum)), true);
+                    boldText(paragraphtableRowOne2255.createRun(), 12, String.format("%1$0,1.8f", new BigDecimal(percentagesum)), true);
                     XWPFParagraph paragraphtableRowOne2266 = tableRowOne222.getCell(6).addParagraph();
                     boldText(paragraphtableRowOne2266.createRun(), 12, "", true);
                     XWPFParagraph paragraphtableRowOne2277 = tableRowOne222.getCell(7).addParagraph();
@@ -6416,9 +6355,9 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne2230 = tableRowOne220.getCell(3).addParagraph();
             boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), true);
             XWPFParagraph paragraphtableRowOne2200 = tableRowOne220.getCell(4).addParagraph();
-            boldText(paragraphtableRowOne2200.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), true);
+            boldText(paragraphtableRowOne2200.createRun(), 12, String.format("%1$0,1.8f", new BigDecimal(grTotalAddition/reqAmount)), true);
             XWPFParagraph paragraphtableRowOne2250 = tableRowOne220.getCell(5).addParagraph();
-            boldText(paragraphtableRowOne2250.createRun(), 12, String.format("%1$0,1.9f", new BigDecimal(grTotalSum)), true);
+            boldText(paragraphtableRowOne2250.createRun(), 12, String.format("%1$0,1.8f", new BigDecimal(grTotalSum)), true);
             XWPFParagraph paragraphtableRowOne2260 = tableRowOne220.getCell(6).addParagraph();
             boldText(paragraphtableRowOne2260.createRun(), 12, "", true);
             XWPFParagraph paragraphtableRowOne2270 = tableRowOne220.getCell(7).addParagraph();
@@ -6647,8 +6586,8 @@ public class MangeReportImpl implements MangeReportService {
                         subResp.setIcgAllocAmount("");
                     }
                     subResp.setAllocAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
-                    subResp.setBillSubmission(String.format("%1$0,1.4f", new BigDecimal(eAmount)));
-                    subResp.setPercentageBill(String.format("%1$0,1.9f", new BigDecimal(expnAmount)));
+                    subResp.setBillSubmission(String.format("%1$0,1.8f", new BigDecimal(eAmount/reqAmount)));
+                    subResp.setPercentageBill(String.format("%1$0,1.8f", new BigDecimal(expnAmount)));
                     subResp.setCgdaBooking("");
                     subResp.setPercentageBillClearnce("");
                     addRes.add(subResp);
@@ -6678,8 +6617,8 @@ public class MangeReportImpl implements MangeReportService {
                 subResponce.setUnitName(hrunitN.getDescr());
                 subResponce.setIcgAllocAmount("");
                 subResponce.setAllocAmount(String.format("%1$0,1.4f", new BigDecimal(hrfinAmount)));
-                subResponce.setBillSubmission(String.format("%1$0,1.4f", new BigDecimal(0)));
-                subResponce.setPercentageBill(String.format("%1$0,1.9f", new BigDecimal(0)));
+                subResponce.setBillSubmission(String.format("%1$0,1.8f", new BigDecimal(0)));
+                subResponce.setPercentageBill(String.format("%1$0,1.8f", new BigDecimal(0)));
                 subResponce.setCgdaBooking("");
                 subResponce.setPercentageBillClearnce("");
                 addRes.add(subResponce);
