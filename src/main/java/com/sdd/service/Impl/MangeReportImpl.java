@@ -5838,8 +5838,8 @@ public class MangeReportImpl implements MangeReportService {
                 String hrUnit = hrData.getUnitId();
                 System.out.println("Sorting " + subHeadId);
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
-                //List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
-                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
                 if (reportDetails.size() <= 0) {
                     continue;
                 }
@@ -6311,9 +6311,9 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     XWPFParagraph paragraphtableRow11 = tableRowOne111.getCell(1).addParagraph();
                     if (r == 0) {
-                        boldText(paragraphtableRow11.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(IcgAmount)), false);
+                        boldText(paragraphtableRow11.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(IcgAmount)), true);
                     } else {
-                        boldText(paragraphtableRow11.createRun(), 10, "", false);
+                        boldText(paragraphtableRow11.createRun(), 10, "", true);
                     }
 
                     XWPFParagraph paragraphtableRow21 = tableRowOne111.getCell(2).addParagraph();
@@ -6340,6 +6340,42 @@ public class MangeReportImpl implements MangeReportService {
                     percentagesum += Float.parseFloat(new BigDecimal(expnAmount).toPlainString());
 
                 }
+                CgUnit hrunitN = cgUnitRepository.findByUnit(hrData.getUnitId());
+                double hrbalanceAmount = 0;
+                double hrallocationAmount = 0;
+                double hrAmountUnit=0.0;
+                List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, hrData.getUnitId(), allocationType, "0");
+                if (cdaParkingTrans.size() == 0) {
+                } else {
+                    for (Integer k = 0; k < cdaParkingTrans.size(); k++) {
+                        AmountUnit dbudgetFin = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(k).getAmountType());
+                        hrAmountUnit = dbudgetFin.getAmount();
+                        hrbalanceAmount = hrbalanceAmount + Double.parseDouble(cdaParkingTrans.get(k).getRemainingCdaAmount());
+                        hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
+                    }
+                }
+                double hrfinAmount=hrbalanceAmount * hrAmountUnit /reqAmount;
+
+                XWPFTable hrrow = document.createTable(1, 8);
+                hrrow.setWidth("100%");
+                XWPFTableRow hrrow0 = hrrow.getRow(0);
+                XWPFParagraph hrcell0 = hrrow0.getCell(0).addParagraph();
+                boldText(hrcell0.createRun(), 12, "", false);
+                XWPFParagraph hrcell01 = hrrow0.getCell(1).addParagraph();
+                boldText(hrcell01.createRun(), 12, "", false);
+                XWPFParagraph hrcell02 = hrrow0.getCell(2).addParagraph();
+                boldText(hrcell02.createRun(), 12, hrunitN.getDescr(), false);
+                XWPFParagraph hrcell03 = hrrow0.getCell(3).addParagraph();
+                boldText(hrcell03.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(hrfinAmount)), false);
+                XWPFParagraph hrcell04 = hrrow0.getCell(4).addParagraph();
+                boldText(hrcell04.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(0)), false);
+                XWPFParagraph hrcell05 = hrrow0.getCell(5).addParagraph();
+                boldText(hrcell05.createRun(), 12, String.format("%1$0,1.9f", new BigDecimal(0)), false);
+                XWPFParagraph hrcell06 = hrrow0.getCell(6).addParagraph();
+                boldText(hrcell06.createRun(), 12, "", false);
+                XWPFParagraph hrcell07 = hrrow0.getCell(7).addParagraph();
+                boldText(hrcell07.createRun(), 12, "", false);
+
                 if (count != 0) {
 
                     XWPFTable table222 = document.createTable(1, 8);
@@ -6352,7 +6388,7 @@ public class MangeReportImpl implements MangeReportService {
                     XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
                     boldText(paragraphtableRowOne2222.createRun(), 12, "TOTAL", true);
                     XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
-                    boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
+                    boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum+hrfinAmount)), true);
                     XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
                     boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(expsum)), true);
                     XWPFParagraph paragraphtableRowOne2255 = tableRowOne222.getCell(5).addParagraph();
@@ -6363,7 +6399,7 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne2277.createRun(), 12, "", true);
                 }
                 grTotalIcg += IcgAmount;
-                grTotalAlloc += sum;
+                grTotalAlloc += sum+hrfinAmount;
                 grTotalAddition += expsum;
                 grTotalSum += percentagesum;
 
@@ -6622,6 +6658,31 @@ public class MangeReportImpl implements MangeReportService {
                     expsum += Float.parseFloat(new BigDecimal(eAmount).toPlainString());
                     percentagesum += Float.parseFloat(new BigDecimal(expnAmount).toPlainString());
                 }
+                FerSubResponse subResponce = new FerSubResponse();
+                CgUnit hrunitN = cgUnitRepository.findByUnit(hrData.getUnitId());
+                double hrbalanceAmount = 0;
+                double hrallocationAmount = 0;
+                double hrAmountUnit=0.0;
+                List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, hrData.getUnitId(), allocationType, "0");
+                if (cdaParkingTrans.size() == 0) {
+                } else {
+                    for (Integer k = 0; k < cdaParkingTrans.size(); k++) {
+                        AmountUnit dbudgetFin = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(k).getAmountType());
+                        hrAmountUnit = dbudgetFin.getAmount();
+                        hrbalanceAmount = hrbalanceAmount + Double.parseDouble(cdaParkingTrans.get(k).getRemainingCdaAmount());
+                        hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
+                    }
+                }
+                double hrfinAmount=hrbalanceAmount * hrAmountUnit /reqAmount;
+                subResponce.setSubHead("");
+                subResponce.setUnitName(hrunitN.getDescr());
+                subResponce.setIcgAllocAmount("");
+                subResponce.setAllocAmount(String.format("%1$0,1.4f", new BigDecimal(hrfinAmount)));
+                subResponce.setBillSubmission(String.format("%1$0,1.4f", new BigDecimal(0)));
+                subResponce.setPercentageBill(String.format("%1$0,1.9f", new BigDecimal(0)));
+                subResponce.setCgdaBooking("");
+                subResponce.setPercentageBillClearnce("");
+                addRes.add(subResponce);
 
             }
             res.setFerDetails(addRes);
