@@ -1931,24 +1931,30 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(budgetApproveRequest.getAuthGroupId(), hrData.getUnitId());
         if (mangeInboxOutboxList.size() > 0) {
+            for (Integer m = 0; m < mangeInboxOutboxList.size(); m++) {
 
-            MangeInboxOutbox   mangeInboxOutbox = mangeInboxOutboxList.get(0);
+                try {
+                    MangeInboxOutbox mangeInboxOutbox = mangeInboxOutboxList.get(m);
 
-            String toUnit = mangeInboxOutbox.getToUnit();
-            String fromUnit = mangeInboxOutbox.getFromUnit();
-            mangeInboxOutbox.setFromUnit(toUnit);
-            mangeInboxOutbox.setToUnit(fromUnit);
-            mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-            mangeInboxOutbox.setStatus(budgetApproveRequest.getStatus());
+                    String toUnit = mangeInboxOutbox.getToUnit();
+                    String fromUnit = mangeInboxOutbox.getFromUnit();
+                    mangeInboxOutbox.setFromUnit(toUnit);
+                    mangeInboxOutbox.setToUnit(fromUnit);
+                    mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                    mangeInboxOutbox.setStatus(budgetApproveRequest.getStatus());
 //            if (status.equalsIgnoreCase("Approved")) {
-            mangeInboxOutbox.setState("CR");
-            mangeInboxOutbox.setIsApproved("0");
-            mangeInboxOutbox.setIsArchive("0");
-            mangeInboxOutbox.setIsFlag("0");
+                    mangeInboxOutbox.setState("CR");
+                    mangeInboxOutbox.setIsApproved("0");
+                    mangeInboxOutbox.setIsArchive("0");
+                    mangeInboxOutbox.setIsFlag("0");
 //            } else {
 //                mangeInboxOutbox.setState("AP");
 //            }
-            mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+                    mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+                } catch (Exception e) {
+
+                }
+            }
         }
 
 
@@ -2154,25 +2160,23 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(budgetApproveRequest.getAuthGroupId(), hrData.getUnitId());
         if (mangeInboxOutboxList.size() > 0) {
+            for (Integer m = 0; m < mangeInboxOutboxList.size(); m++) {
 
-            MangeInboxOutbox   mangeInboxOutbox = mangeInboxOutboxList.get(0);
+                try {
+                    MangeInboxOutbox mangeInboxOutbox = mangeInboxOutboxList.get(m);
 
+                    mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                    mangeInboxOutbox.setStatus(budgetApproveRequest.getStatus());
 
+                    mangeInboxOutbox.setState("CR");
+                    mangeInboxOutbox.setIsArchive("0");
+                    mangeInboxOutbox.setIsApproved("0");
 
+                    mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+                } catch (Exception e) {
 
-            mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-            mangeInboxOutbox.setStatus(budgetApproveRequest.getStatus());
-
-//            if (status.equalsIgnoreCase("Approved")) {
-            mangeInboxOutbox.setState("CR");
-            mangeInboxOutbox.setIsArchive("0");
-            mangeInboxOutbox.setIsApproved("0");
-            mangeInboxOutbox.setIsFlag("0");
-//            } else {
-//                mangeInboxOutbox.setState("AP");
-//            }
-            mangeInboxOutBoxRepository.save(mangeInboxOutbox);
-
+                }
+            }
         }
 
 
@@ -3581,13 +3585,18 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(authgroupid, hrDataCheck.getUnitId());
         if (mangeInboxOutboxList.size() > 0) {
+            for (Integer m = 0; m < mangeInboxOutboxList.size(); m++) {
+                try {
+                    MangeInboxOutbox mangeInboxOutbox11 = mangeInboxOutboxList.get(m);
 
-            MangeInboxOutbox   mangeInboxOutbox11 = mangeInboxOutboxList.get(0);
+                    mangeInboxOutbox11.setStatus("Fully Approved");
+                    mangeInboxOutbox11.setIsApproved("1");
+                    mangeInboxOutBoxRepository.save(mangeInboxOutbox11);
 
-            mangeInboxOutbox11.setStatus("Fully Approved");
-            mangeInboxOutbox11.setIsApproved("1");
-            mangeInboxOutBoxRepository.save(mangeInboxOutbox11);
+                } catch (Exception e) {
 
+                }
+            }
         }
 
         defaultResponse.setMsg("DATA SAVE SUCCESSFULLY");
