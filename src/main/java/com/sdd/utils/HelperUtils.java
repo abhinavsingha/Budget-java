@@ -45,6 +45,7 @@ public class HelperUtils {
 
 
     public static String LASTFOLDERPATH = "/webapps/bmsreport";
+//    public static String LASTFOLDERPATH = "/webapps/cgbmsreport";
     public static String FILEPATH = "https://icg.net.in/bmsreport/";
 //    public static String FILEPATH = "https://icg.net.in/cgbmsreport/";
 
