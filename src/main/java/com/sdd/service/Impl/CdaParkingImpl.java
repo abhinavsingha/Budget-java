@@ -245,14 +245,11 @@ public class CdaParkingImpl implements CdaParkingService {
                     allCda = false;
                 }
             }
-
-
         }
 
         if (allCda && inboxOutboxList.size() > 0) {
             for (Integer m = 0; m < inboxOutboxList.size(); m++) {
                 MangeInboxOutbox inboxData = inboxOutboxList.get(m);
-
                 inboxData.setIsApproved("1");
                 inboxData.setIsFlag("1");
                 mangeInboxOutBoxRepository.save(inboxData);

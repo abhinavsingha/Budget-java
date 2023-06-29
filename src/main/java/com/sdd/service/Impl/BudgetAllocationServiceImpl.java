@@ -353,7 +353,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         List<CgUnit> unitDataList = new ArrayList<>();
         if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-            unitDataList = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
+            unitDataList = cgUnitRepository.findAll();
         } else {
             unitDataList = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
         }

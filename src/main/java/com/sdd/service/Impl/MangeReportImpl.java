@@ -441,8 +441,8 @@ public class MangeReportImpl implements MangeReportService {
         HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
         List<BudgetAllocation> budgetAllocationReport = new ArrayList<BudgetAllocation>();
 
-        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
-
+//        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
+        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnit(authGroupId, hrData.getUnitId());
 
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
@@ -738,7 +738,8 @@ public class MangeReportImpl implements MangeReportService {
 
         List<BudgetAllocation> budgetAllocationReport = new ArrayList<BudgetAllocation>();
 
-        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
+//        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
+        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnit(authGroupId, hrData.getUnitId());
 
 
         if (budgetAllocationReport.size() <= 0) {
