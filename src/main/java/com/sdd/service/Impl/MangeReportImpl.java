@@ -1521,7 +1521,7 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
 
-        String fileName = "CdaParkingReport" + hrData.getUnitId();
+        String fileName = "CdaParkingReport" + hrData.getUnitId() + HelperUtils.getCurrentTimeStamp();
         CDAReportSubResponse cadSubReport = new CDAReportSubResponse();
 
 
@@ -2181,7 +2181,7 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
 
-        String fileName = "CdaParkingReport" + hrData.getUnitId();
+        String fileName = "CdaParkingReport" + hrData.getUnitId() + HelperUtils.getCurrentTimeStamp();
         CDAReportSubResponse cadSubReport = new CDAReportSubResponse();
 
 

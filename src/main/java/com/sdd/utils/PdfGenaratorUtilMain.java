@@ -273,6 +273,13 @@ public class PdfGenaratorUtilMain {
         preface.setAlignment(Element.ALIGN_CENTER);
         preface.add(header);
 
+        String reOrCapital = "";
+//        if (key.equalsIgnoreCase("2037")) {
+//            reOrCapital = "REVENUE";
+//        } else {
+//              reOrCapital = "CAPITAL" ;
+//        }
+
         Chunk revenue = new Chunk("REVENUE" + "\n" + "\n", font);
         preface.add(revenue);
 
