@@ -2972,7 +2972,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + "UnitWise_Allocation" + ".pdf";
+            String path = folder.getAbsolutePath() + "/" + "UnitWise_Allocation"+HelperUtils.getCurrentTimeStamp() + ".pdf";
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
@@ -3077,8 +3077,8 @@ public class MangeReportImpl implements MangeReportService {
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + "UnitWise_Allocation" + ".pdf");
-            dto.setFileName("UnitWise_Allocation");
+            dto.setPath(HelperUtils.FILEPATH + "UnitWise_Allocation"+HelperUtils.getCurrentTimeStamp() + ".pdf");
+            dto.setFileName("UnitWise_Allocation"+HelperUtils.getCurrentTimeStamp());
             dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -3166,7 +3166,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + "UnitWise_Allocation_Report" + ".docx";
+            String path = folder.getAbsolutePath() + "/" + "UnitWise_Allocation_Report"+HelperUtils.getCurrentTimeStamp() + ".docx";
             FileOutputStream out = new FileOutputStream(new File(path));
 
             XWPFTable table = document.createTable(1, 2);
@@ -3261,8 +3261,8 @@ public class MangeReportImpl implements MangeReportService {
             out.close();
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + "UnitWise_Allocation_Report" + ".docx");
-            dto.setFileName("UnitWise_Allocation_Report");
+            dto.setPath(HelperUtils.FILEPATH + "UnitWise_Allocation_Report"+HelperUtils.getCurrentTimeStamp() + ".docx");
+            dto.setFileName("UnitWise_Allocation_Report"+HelperUtils.getCurrentTimeStamp());
             dtoList.add(dto);
         } catch (Exception e) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
@@ -3423,26 +3423,7 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
-/*        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-        if (cgUnit == null) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
-        }
-        String dBunit = cgUnit.getDescr();
-        List<CgUnit> units = new ArrayList<>();
-        if (dBunit.equalsIgnoreCase("D(Budget)")) {
-            units = cgUnitRepository.findAllByOrderByDescrAsc();
-        } else {
-            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
-            } else {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-            }
-        }
-        if (units.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
-        }*/
+
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(req.getAmountTypeId());
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType().toUpperCase();
@@ -3461,7 +3442,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + "subhead-wise-allocation-report" + ".pdf";
+            String path = folder.getAbsolutePath() + "/" + "subhead-wise-allocation-report"+HelperUtils.getCurrentTimeStamp() + ".pdf";
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
@@ -3566,8 +3547,8 @@ public class MangeReportImpl implements MangeReportService {
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + "subhead-wise-allocation-report" + ".pdf");
-            dto.setFileName("subhead-wise-allocation-report");
+            dto.setPath(HelperUtils.FILEPATH + "subhead-wise-allocation-report"+HelperUtils.getCurrentTimeStamp() + ".pdf");
+            dto.setFileName("subhead-wise-allocation-report"+HelperUtils.getCurrentTimeStamp());
             dtoList.add(dto);
 
         } catch (IOException e) {
@@ -3635,26 +3616,7 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
-/*        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-        if (cgUnit == null) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
-        }
-        String dBunit = cgUnit.getDescr();
-        List<CgUnit> units = new ArrayList<>();
-        if (dBunit.equalsIgnoreCase("D(Budget)")) {
-            units = cgUnitRepository.findAllByOrderByDescrAsc();
-        } else {
-            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
-            } else {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-            }
-        }
-        if (units.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
-        }*/
+
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(req.getAmountTypeId());
         Double reqAmount = amountObj.getAmount();
         String amountIn = amountObj.getAmountType();
@@ -3676,7 +3638,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + "SubHeadWise_Allocation_Report" + ".docx";
+            String path = folder.getAbsolutePath() + "/" + "SubHeadWise_Allocation_Report"+HelperUtils.getCurrentTimeStamp() + ".docx";
             FileOutputStream out = new FileOutputStream(new File(path));
 
             XWPFTable table = document.createTable(1, 2);
@@ -3772,8 +3734,8 @@ public class MangeReportImpl implements MangeReportService {
             out.close();
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + "SubHeadWise_Allocation_Report" + ".docx");
-            dto.setFileName("SubHeadWise_Allocation_Report");
+            dto.setPath(HelperUtils.FILEPATH + "SubHeadWise_Allocation_Report"+HelperUtils.getCurrentTimeStamp() + ".docx");
+            dto.setFileName("SubHeadWise_Allocation_Report"+HelperUtils.getCurrentTimeStamp());
             dtoList.add(dto);
         } catch (Exception e) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
@@ -3961,7 +3923,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "_AllocationReport" + ".pdf";
+            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "_AllocationReport"+HelperUtils.getCurrentTimeStamp() + ".pdf";
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
@@ -4071,8 +4033,8 @@ public class MangeReportImpl implements MangeReportService {
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + type.getAllocDesc().toUpperCase() + "_AllocationReport" + ".pdf");
-            dto.setFileName(type.getAllocDesc().toUpperCase() + "_AllocationReport" + ".pdf");
+            dto.setPath(HelperUtils.FILEPATH + type.getAllocDesc().toUpperCase() + "_AllocationReport"+HelperUtils.getCurrentTimeStamp() + ".pdf");
+            dto.setFileName(type.getAllocDesc().toUpperCase() + "_AllocationReport"+HelperUtils.getCurrentTimeStamp() + ".pdf");
             dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -4168,7 +4130,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "_Allocation_Report" + ".docx";
+            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "_Allocation_Report"+HelperUtils.getCurrentTimeStamp() + ".docx";
             FileOutputStream out = new FileOutputStream(new File(path));
             XWPFTable table = document.createTable(1, 3);
             table.setWidth("100%");
@@ -4279,8 +4241,8 @@ public class MangeReportImpl implements MangeReportService {
             out.close();
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + type.getAllocDesc().toUpperCase() + "_Allocation_Report" + ".docx");
-            dto.setFileName(type.getAllocDesc().toUpperCase() + "_Allocation_Report");
+            dto.setPath(HelperUtils.FILEPATH + type.getAllocDesc().toUpperCase() + "_Allocation_Report"+HelperUtils.getCurrentTimeStamp() + ".docx");
+            dto.setFileName(type.getAllocDesc().toUpperCase() + "_Allocation_Report"+HelperUtils.getCurrentTimeStamp());
             dtoList.add(dto);
         } catch (Exception e) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
@@ -4488,7 +4450,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + allocType.toUpperCase() + "_Revised_allocation-report" + ".pdf";
+            String path = folder.getAbsolutePath() + "/" + allocType.toUpperCase() + "_Revised_allocation-report"+HelperUtils.getCurrentTimeStamp() + ".pdf";
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
@@ -4682,8 +4644,8 @@ public class MangeReportImpl implements MangeReportService {
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + allocType.toUpperCase() + "_Revised_allocation-report.pdf");
-            dto.setFileName(allocType.toUpperCase() + "_Revised_allocation-report.pdf");
+            dto.setPath(HelperUtils.FILEPATH + allocType.toUpperCase() + "_Revised_allocation-report"+HelperUtils.getCurrentTimeStamp()+".pdf");
+            dto.setFileName(allocType.toUpperCase() + "_Revised_allocation-report"+HelperUtils.getCurrentTimeStamp()+".pdf");
             dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -4772,7 +4734,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + allocType.toUpperCase() + "_Revised_Allocation_Report" + ".docx";
+            String path = folder.getAbsolutePath() + "/" + allocType.toUpperCase() + "_Revised_Allocation_Report"+HelperUtils.getCurrentTimeStamp() + ".docx";
             FileOutputStream out = new FileOutputStream(new File(path));
 
             XWPFTable tab = document.createTable(1, 2);
@@ -4951,8 +4913,8 @@ public class MangeReportImpl implements MangeReportService {
             out.close();
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + allocType.toUpperCase() + "_Revised_Allocation_Report" + ".docx");
-            dto.setFileName(allocType.toUpperCase() + "_Revised_Allocation_Report");
+            dto.setPath(HelperUtils.FILEPATH + allocType.toUpperCase() + "_Revised_Allocation_Report"+HelperUtils.getCurrentTimeStamp() + ".docx");
+            dto.setFileName(allocType.toUpperCase() + "_Revised_Allocation_Report"+HelperUtils.getCurrentTimeStamp());
             dtoList.add(dto);
         } catch (Exception e) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
@@ -5192,7 +5154,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation-Report" + ".pdf";
+            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation-Report"+HelperUtils.getCurrentTimeStamp() + ".pdf";
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
@@ -5341,8 +5303,8 @@ public class MangeReportImpl implements MangeReportService {
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation-Report.pdf");
-            dto.setFileName(type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation-Report.pdf");
+            dto.setPath(HelperUtils.FILEPATH + type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation-Report"+HelperUtils.getCurrentTimeStamp()+".pdf");
+            dto.setFileName(type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation-Report"+HelperUtils.getCurrentTimeStamp()+".pdf");
             dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -5454,7 +5416,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation_Report" + ".docx";
+            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation_Report"+HelperUtils.getCurrentTimeStamp() + ".docx";
             FileOutputStream out = new FileOutputStream(new File(path));
             XWPFTable table = document.createTable(1, 4);
             table.setWidth("100%");
@@ -5597,8 +5559,8 @@ public class MangeReportImpl implements MangeReportService {
             out.close();
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation_Report" + ".docx");
-            dto.setFileName(type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation_Report");
+            dto.setPath(HelperUtils.FILEPATH + type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation_Report"+HelperUtils.getCurrentTimeStamp() + ".docx");
+            dto.setFileName(type.getAllocDesc().toUpperCase() + "And" + types.getAllocDesc().toUpperCase() + "_Allocation_Report"+HelperUtils.getCurrentTimeStamp());
             dtoList.add(dto);
         } catch (Exception e) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
@@ -5877,7 +5839,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "_FER-budget-report" + ".pdf";
+            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "_FER-budget-report"+HelperUtils.getCurrentTimeStamp() + ".pdf";
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
@@ -6155,8 +6117,8 @@ public class MangeReportImpl implements MangeReportService {
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + type.getAllocDesc().toUpperCase() + "_FER-budget-report.pdf");
-            dto.setFileName(type.getAllocDesc().toUpperCase() + "_FER-budget-report.pdf");
+            dto.setPath(HelperUtils.FILEPATH + type.getAllocDesc().toUpperCase() + "_FER-budget-report"+HelperUtils.getCurrentTimeStamp()+".pdf");
+            dto.setFileName(type.getAllocDesc().toUpperCase() + "_FER-budget-report"+HelperUtils.getCurrentTimeStamp()+".pdf");
             dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -6282,7 +6244,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "_FER" + "_Allocation_Report" + ".docx";
+            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "_FER" + "_Allocation_Report"+HelperUtils.getCurrentTimeStamp() + ".docx";
             FileOutputStream out = new FileOutputStream(new File(path));
             XWPFTable tab = document.createTable(2, 1);
             tab.setWidth("100%");
@@ -6559,8 +6521,8 @@ public class MangeReportImpl implements MangeReportService {
             out.close();
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + type.getAllocDesc().toUpperCase() + "_FER" + "_Allocation_Report" + ".docx");
-            dto.setFileName(type.getAllocDesc().toUpperCase() + "_FER" + "_Allocation_Report");
+            dto.setPath(HelperUtils.FILEPATH + type.getAllocDesc().toUpperCase() + "_FER" + "_Allocation_Report"+HelperUtils.getCurrentTimeStamp() + ".docx");
+            dto.setFileName(type.getAllocDesc().toUpperCase() + "_FER" + "_Allocation_Report"+HelperUtils.getCurrentTimeStamp());
             dtoList.add(dto);
         } catch (Exception e) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
@@ -6887,7 +6849,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + "Rebase_Report" + ".pdf";
+            String path = folder.getAbsolutePath() + "/" + "Rebase_Report" +HelperUtils.getCurrentTimeStamp()+ ".pdf";
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
@@ -7101,8 +7063,8 @@ public class MangeReportImpl implements MangeReportService {
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + "Rebase_Report.pdf");
-            dto.setFileName("Rebase_Report.pdf");
+            dto.setPath(HelperUtils.FILEPATH + "Rebase_Report"+HelperUtils.getCurrentTimeStamp()+".pdf");
+            dto.setFileName("Rebase_Report"+HelperUtils.getCurrentTimeStamp()+".pdf");
             dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -7193,7 +7155,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + "UnitRebaseReport" + ".docx";
+            String path = folder.getAbsolutePath() + "/" + "UnitRebaseReport" +HelperUtils.getCurrentTimeStamp()+ ".docx";
             FileOutputStream out = new FileOutputStream(new File(path));
             int count = 1;
             String RunitId = "";
@@ -7395,8 +7357,8 @@ public class MangeReportImpl implements MangeReportService {
             out.close();
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + "UnitRebaseReport" + ".docx");
-            dto.setFileName("UnitRebaseReport");
+            dto.setPath(HelperUtils.FILEPATH + "UnitRebaseReport" +HelperUtils.getCurrentTimeStamp()+ ".docx");
+            dto.setFileName("UnitRebaseReport"+HelperUtils.getCurrentTimeStamp());
             dtoList.add(dto);
         } catch (Exception e) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
@@ -7618,7 +7580,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + typesMA.getAllocDesc().toUpperCase() + "_Allocation-Report" + ".pdf";
+            String path = folder.getAbsolutePath() + "/" + typesMA.getAllocDesc().toUpperCase() + "_Allocation-Report" +HelperUtils.getCurrentTimeStamp()+ ".pdf";
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
@@ -7806,8 +7768,8 @@ public class MangeReportImpl implements MangeReportService {
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + typesMA.getAllocDesc().toUpperCase() + "_Allocation-Report.pdf");
-            dto.setFileName(typesMA.getAllocDesc().toUpperCase() + "_Allocation-Report.pdf");
+            dto.setPath(HelperUtils.FILEPATH + typesMA.getAllocDesc().toUpperCase() + "_Allocation-Report"+HelperUtils.getCurrentTimeStamp()+".pdf");
+            dto.setFileName(typesMA.getAllocDesc().toUpperCase() + "_Allocation-Report"+HelperUtils.getCurrentTimeStamp()+".pdf");
             dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -7907,7 +7869,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + typesMA.getAllocDesc().toUpperCase() + "_Allocation_Report" + ".docx";
+            String path = folder.getAbsolutePath() + "/" + typesMA.getAllocDesc().toUpperCase() + "_Allocation_Report" +HelperUtils.getCurrentTimeStamp()+ ".docx";
             FileOutputStream out = new FileOutputStream(new File(path));
 
             XWPFTable table = document.createTable(1, 5);
@@ -8088,8 +8050,8 @@ public class MangeReportImpl implements MangeReportService {
             out.close();
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + typesMA.getAllocDesc().toUpperCase() + "_Allocation_Report" + ".docx");
-            dto.setFileName(typesMA.getAllocDesc().toUpperCase() + "_Allocation_Report.docx");
+            dto.setPath(HelperUtils.FILEPATH + typesMA.getAllocDesc().toUpperCase() + "_Allocation_Report" +HelperUtils.getCurrentTimeStamp()+ ".docx");
+            dto.setFileName(typesMA.getAllocDesc().toUpperCase() + "_Allocation_Report"+HelperUtils.getCurrentTimeStamp()+".docx");
             dtoList.add(dto);
         } catch (Exception e) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
@@ -8344,7 +8306,7 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String path = folder.getAbsolutePath() + "/" + allocType.toUpperCase() + "_Revised_allocation-report" + ".pdf";
+            String path = folder.getAbsolutePath() + "/" + allocType.toUpperCase() + "_Revised_allocation-report" +HelperUtils.getCurrentTimeStamp()+ ".pdf";
             PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
 
             document.open();
@@ -8538,8 +8500,8 @@ public class MangeReportImpl implements MangeReportService {
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + allocType.toUpperCase() + "_Revised_allocation-report" + ".pdf");
-            dto.setFileName(allocType.toUpperCase() + "_Revised_allocation-report" + ".pdf");
+            dto.setPath(HelperUtils.FILEPATH + allocType.toUpperCase() + "_Revised_allocation-report" +HelperUtils.getCurrentTimeStamp()+ ".pdf");
+            dto.setFileName(allocType.toUpperCase() + "_Revised_allocation-report" +HelperUtils.getCurrentTimeStamp()+ ".pdf");
             dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
