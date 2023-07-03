@@ -79,7 +79,7 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
 
         UplaodMainFormDocumentsResponse uplaodDocuments = new UplaodMainFormDocumentsResponse();
 
-        File mainFilePath = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+        File mainFilePath = new File(HelperUtils.LASTFOLDERPATH);
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");

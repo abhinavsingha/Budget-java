@@ -164,6 +164,12 @@ public class CdaParkingImpl implements CdaParkingService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
             }
 
+
+            List<CdaParkingTrans> cdaParkingTransListData = cdaParkingTransRepository.findByTransactionId(cdaRequest.getCdaRequest().get(i).getAllocationTypeID());
+            if (cdaParkingTransListData.size() > 0) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA DATA ALREADY SAVE OR REVISED ALLOCATION.");
+            }
+
         }
 
         if (!(totalAmount == cadTotalAmount)) {
