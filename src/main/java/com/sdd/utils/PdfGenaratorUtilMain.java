@@ -274,13 +274,13 @@ public class PdfGenaratorUtilMain {
         preface.add(header);
 
         String reOrCapital = "";
-//        if (key.equalsIgnoreCase("2037")) {
-//            reOrCapital = "REVENUE";
-//        } else {
-//              reOrCapital = "CAPITAL" ;
-//        }
+        if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
+            reOrCapital = "REVENUE";
+        } else {
+              reOrCapital = "CAPITAL" ;
+        }
 
-        Chunk revenue = new Chunk("REVENUE" + "\n" + "\n", font);
+        Chunk revenue = new Chunk(reOrCapital + "\n" + "\n", font);
         preface.add(revenue);
 
         Chunk thiredHead = new Chunk("Major Head " + cadSubReport.getMajorHead() + ". Sub Major Head 00. Minor Head " + cadSubReport.getMinorHead() + ") (In " + cadSubReport.getAmountType() + ")" + "\n" + "\n" + "\n" + "\n", font);

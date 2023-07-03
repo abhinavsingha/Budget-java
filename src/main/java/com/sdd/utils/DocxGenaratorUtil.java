@@ -358,6 +358,13 @@ public class DocxGenaratorUtil {
             }
 
 
+            String reOrCapital = "";
+            if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
+                reOrCapital = "REVENUE";
+            } else {
+                reOrCapital = "CAPITAL" ;
+            }
+
             XWPFParagraph mainParagraph = document.createParagraph();
             mainParagraph.createRun().addBreak();
 
@@ -368,7 +375,7 @@ public class DocxGenaratorUtil {
 
             mainParagraph = document.createParagraph();
             mainParagraph.setAlignment(ParagraphAlignment.CENTER);
-            boldText(mainParagraph.createRun(), 20, "REVENUE", true);
+            boldText(mainParagraph.createRun(), 20, reOrCapital, true);
             mainParagraph.createRun().addBreak();
 
 
