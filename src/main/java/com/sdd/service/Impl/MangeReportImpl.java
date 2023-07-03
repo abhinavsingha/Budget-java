@@ -133,7 +133,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
 
-        String fileName = "AllocationReport" + hrData.getUnitId();
+        String fileName = "AllocationReport" + hrData.getUnitId() + HelperUtils.getCurrentTimeStamp();
 
         HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
         List<BudgetAllocationDetails> budgetAllocationReport = new ArrayList<BudgetAllocationDetails>();
@@ -151,9 +151,9 @@ public class MangeReportImpl implements MangeReportService {
         if (mangeInboxOutbox.size() > 0) {
 
             if (mangeInboxOutbox.get(0).getIsBgcg().equalsIgnoreCase("BR")) {
-                fileName = "BudgetReceipt" + hrData.getUnitId();
+                fileName = "BudgetReceipt" + hrData.getUnitId()+ HelperUtils.getCurrentTimeStamp();
             } else {
-                fileName = "AllocationReport" + hrData.getUnitId();
+                fileName = "AllocationReport" + hrData.getUnitId()+ HelperUtils.getCurrentTimeStamp();
             }
         }
 
@@ -392,15 +392,15 @@ public class MangeReportImpl implements MangeReportService {
 
         try {
 
-            String fileName = "AllocationReport" + hrData.getUnitId();
+            String fileName = "AllocationReport" + hrData.getUnitId()+ HelperUtils.getCurrentTimeStamp();
             List<MangeInboxOutbox> mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupId(authGroupId);
 
             if (mangeInboxOutbox.size() > 0) {
 
                 if (mangeInboxOutbox.get(0).getIsBgcg().equalsIgnoreCase("BR")) {
-                    fileName = "BudgetReceipt" + hrData.getUnitId();
+                    fileName = "BudgetReceipt" + hrData.getUnitId()+ HelperUtils.getCurrentTimeStamp();
                 } else {
-                    fileName = "AllocationReport" + hrData.getUnitId();
+                    fileName = "AllocationReport" + hrData.getUnitId()+ HelperUtils.getCurrentTimeStamp();
                 }
             }
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
@@ -436,7 +436,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
 
-        String fileName = "BudgetReceipt" + hrData.getUnitId();
+        String fileName = "BudgetReceipt" + hrData.getUnitId()+ HelperUtils.getCurrentTimeStamp();
 
         HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
         List<BudgetAllocation> budgetAllocationReport = new ArrayList<BudgetAllocation>();
@@ -590,7 +590,7 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AMOUNT TYPE ID CAN NOT BE BLANK");
         }
 
-        String fileName = "BudgetReceipt" + hrData.getUnitId();
+        String fileName = "BudgetReceipt" + hrData.getUnitId()+ HelperUtils.getCurrentTimeStamp();
 
         HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
         List<BudgetAllocationDetails> budgetAllocationReport = new ArrayList<BudgetAllocationDetails>();
@@ -840,7 +840,7 @@ public class MangeReportImpl implements MangeReportService {
 
         try {
 
-            String fileName = "BudgetReceipt" + hrData.getUnitId();
+            String fileName = "BudgetReceipt" + hrData.getUnitId()+ HelperUtils.getCurrentTimeStamp();
 
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
@@ -987,7 +987,7 @@ public class MangeReportImpl implements MangeReportService {
 
         try {
 
-            String fileName = "BudgetReceipt" + hrData.getUnitId();
+            String fileName = "BudgetReceipt" + hrData.getUnitId()+ HelperUtils.getCurrentTimeStamp();
 
             File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
@@ -1141,7 +1141,7 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND.");
         }
 
-        String fileName = "ContingentBill" + hrData.getUnitId() + cbData.getCbId();
+        String fileName = "ContingentBill" + hrData.getUnitId() + cbData.getCbId()+ HelperUtils.getCurrentTimeStamp();
 
 
         double allocationAmount = 0;
@@ -1271,7 +1271,7 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND.");
         }
 
-        String fileName = "ContingentBill" + hrData.getUnitId() + cbData.getCbId();
+        String fileName = "ContingentBill" + hrData.getUnitId() + cbData.getCbId()+ HelperUtils.getCurrentTimeStamp();
 
 
         double allocationAmount = 0;
