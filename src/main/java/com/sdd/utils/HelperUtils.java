@@ -45,12 +45,12 @@ public class HelperUtils {
 
 
     // For UAT
-    public static String LASTFOLDERPATH = "/webapps/bmsreport";
-    public static String FILEPATH = "https://icg.net.in/bmsreport/";
+//    public static String LASTFOLDERPATH = "/webapps/bmsreport";
+//    public static String FILEPATH = "https://icg.net.in/bmsreport/";
 
     // For PROD
-/*     public static String LASTFOLDERPATH = "/webapps/cgbmsreport";
-     public static String FILEPATH = "https://icg.net.in/cgbmsreport/";*/
+    public static String LASTFOLDERPATH = "C:/Program Files/Tomcat 9.0/webapps/cgbmsreport";
+    public static String FILEPATH = "https://icg.net.in/cgbmsreport/";
 
     public static String getDocumentId() {
         return "BM_DOC" + ConverterUtils.getRandomTimeStamp();
@@ -63,7 +63,6 @@ public class HelperUtils {
     public static Timestamp getCurrentTimeStamp() {
         return new Timestamp(new Date().getTime());
     }
-
 
     public static String getAuthorityId() {
         return "AU_ID" + ConverterUtils.getRandomTimeStamp();
@@ -80,7 +79,6 @@ public class HelperUtils {
     public static String getAuthorityGroupId() {
         return "AGU_ID" + ConverterUtils.getRandomTimeStamp();
     }
-
 
     public static String getContigentId() {
         return "CB_ID" + ConverterUtils.getRandomTimeStamp();
@@ -117,7 +115,6 @@ public class HelperUtils {
     public static String getBudgetAlloctionReportId() {
         return "BA_RP" + ConverterUtils.getRandomTimeStamp();
     }
-
 
     public static String getTransId() {
         return "TN_ID" + ConverterUtils.getRandomTimeStamp();

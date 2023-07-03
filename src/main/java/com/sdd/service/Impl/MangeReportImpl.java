@@ -256,7 +256,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
         try {
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -403,7 +403,7 @@ public class MangeReportImpl implements MangeReportService {
                     fileName = "AllocationReport" + hrData.getUnitId()+ System.currentTimeMillis();
                 }
             }
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -545,7 +545,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
         try {
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -702,7 +702,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
         try {
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -842,7 +842,7 @@ public class MangeReportImpl implements MangeReportService {
 
             String fileName = "BudgetReceipt" + hrData.getUnitId()+ System.currentTimeMillis();
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -989,7 +989,7 @@ public class MangeReportImpl implements MangeReportService {
 
             String fileName = "BudgetReceipt" + hrData.getUnitId()+ System.currentTimeMillis();
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -1095,7 +1095,7 @@ public class MangeReportImpl implements MangeReportService {
             try {
                 FilePathResponse dto = new FilePathResponse();
                 String templateName = "report-allocation-revised.html";
-                File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+                File folder = new File( HelperUtils.LASTFOLDERPATH);
                 if (!folder.exists()) {
                     folder.mkdirs();
                 }
@@ -1224,7 +1224,7 @@ public class MangeReportImpl implements MangeReportService {
 
         try {
             FilePathResponse dto = new FilePathResponse();
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -1354,7 +1354,7 @@ public class MangeReportImpl implements MangeReportService {
 
         try {
             XWPFDocument document = new XWPFDocument();
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -1672,7 +1672,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+                    File folder = new File( HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -1778,7 +1778,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+                    File folder = new File( HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -1885,7 +1885,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+                    File folder = new File( HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -2019,7 +2019,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+                    File folder = new File( HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -2147,7 +2147,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+                    File folder = new File( HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -2321,7 +2321,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+                    File folder = new File( HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -2401,7 +2401,7 @@ public class MangeReportImpl implements MangeReportService {
 //                try {
 //
 //
-//                    File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+//                    File folder = new File( HelperUtils.LASTFOLDERPATH);
 //                    if (!folder.exists()) {
 //                        folder.mkdirs();
 //                    }
@@ -2503,7 +2503,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+                    File folder = new File( HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -2607,7 +2607,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+                    File folder = new File( HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -2745,7 +2745,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+                    File folder = new File( HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -2874,7 +2874,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+                    File folder = new File( HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -2968,7 +2968,7 @@ public class MangeReportImpl implements MangeReportService {
         try {
             Document document = new Document(PageSize.A4);
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -3162,7 +3162,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph spacingParagraphss = document.createParagraph();
             spacingParagraphss.setSpacingAfter(20);
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -3438,7 +3438,7 @@ public class MangeReportImpl implements MangeReportService {
         try {
             Document document = new Document(PageSize.A4);
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -3634,7 +3634,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph spacingParagraphss = document.createParagraph();
             spacingParagraphss.setSpacingAfter(20);
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -3919,7 +3919,7 @@ public class MangeReportImpl implements MangeReportService {
 
         try {
             Document document = new Document(PageSize.A4);
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -4126,7 +4126,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph spacingParagraphss = document.createParagraph();
             spacingParagraphss.setSpacingAfter(20);
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -4446,7 +4446,7 @@ public class MangeReportImpl implements MangeReportService {
         try {
             Document document = new Document(PageSize.A4);
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -4730,7 +4730,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph spacingParagraphss = document.createParagraph();
             spacingParagraphss.setSpacingAfter(20);
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -5150,7 +5150,7 @@ public class MangeReportImpl implements MangeReportService {
         try {
             Document document = new Document(PageSize.A4);
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -5412,7 +5412,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph spacingParagraphss = document.createParagraph();
             spacingParagraphss.setSpacingAfter(20);
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -5835,7 +5835,7 @@ public class MangeReportImpl implements MangeReportService {
         try {
             Document document = new Document(PageSize.A4.rotate());
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -6240,7 +6240,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph spacingParagraphss = document.createParagraph();
             spacingParagraphss.setSpacingAfter(20);
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -6845,7 +6845,7 @@ public class MangeReportImpl implements MangeReportService {
         try {
             Document document = new Document(PageSize.A4.rotate());
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -7151,7 +7151,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph spacingParagraphss = document.createParagraph();
             spacingParagraphss.setSpacingAfter(20);
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -7576,7 +7576,7 @@ public class MangeReportImpl implements MangeReportService {
         try {
             Document document = new Document(PageSize.A4.rotate());
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -7865,7 +7865,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph spacingParagraphss = document.createParagraph();
             spacingParagraphss.setSpacingAfter(20);
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
@@ -8302,7 +8302,7 @@ public class MangeReportImpl implements MangeReportService {
         try {
             Document document = new Document(PageSize.A4);
 
-            File folder = new File(new File(".").getCanonicalPath() + HelperUtils.LASTFOLDERPATH);
+            File folder = new File( HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }

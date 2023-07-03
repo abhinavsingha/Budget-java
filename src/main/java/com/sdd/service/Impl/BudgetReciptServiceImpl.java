@@ -857,19 +857,19 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         List<CdaParking> totalCdaParkingAmount = new ArrayList<>();
 
 
-        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-            CdaParking cdaParking = new CdaParking();
-            cdaParking.setGinNo("112233");
-            cdaParking.setCdaName("All CDA");
+//        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+        CdaParking cdaParking = new CdaParking();
+        cdaParking.setGinNo("112233");
+        cdaParking.setCdaName("All CDA");
 
 
-            CdaParking cdaParking11 = new CdaParking();
-            cdaParking11.setGinNo("112244");
-            cdaParking11.setCdaName("Mumbai CDA");
+        CdaParking cdaParking11 = new CdaParking();
+        cdaParking11.setGinNo("112244");
+        cdaParking11.setCdaName("Mumbai CDA");
 
-            totalCdaParkingAmount.add(cdaParking);
-            totalCdaParkingAmount.add(cdaParking11);
-        }
+        totalCdaParkingAmount.add(cdaParking);
+        totalCdaParkingAmount.add(cdaParking11);
+//        }
 
         List<CdaParking> allCda = cdaParkingRepository.findAll();
         for (Integer i = 0; i < allCda.size(); i++) {
