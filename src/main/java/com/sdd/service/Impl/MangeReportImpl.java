@@ -1645,7 +1645,7 @@ public class MangeReportImpl implements MangeReportService {
 
                             if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
                                 Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
-                                coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                             } else {
                                 coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
@@ -1654,7 +1654,7 @@ public class MangeReportImpl implements MangeReportService {
 
                             totalAmount = totalAmount + amount;
                             cdaReportResponse = new CDAReportResponse();
-                            cdaReportResponse.setName(amount + "");
+                            cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
                             cdaReportList.add(cdaReportResponse);
                         }
                     } else {
@@ -1664,7 +1664,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
 
                     cdaReportResponse = new CDAReportResponse();
-                    cdaReportResponse.setName(totalAmount + "");
+                    cdaReportResponse.setName(ConverterUtils.addDecimalPoint(totalAmount + ""));
                     cdaReportResponse.setReportType("CDA Wise Report(ALL CDA)");
                     cdaReportList.add(cdaReportResponse);
                     allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
@@ -1672,7 +1672,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File( HelperUtils.LASTFOLDERPATH);
+                    File folder = new File(HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -1752,7 +1752,7 @@ public class MangeReportImpl implements MangeReportService {
 
                             if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
                                 Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
-                                coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                             } else {
                                 coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
@@ -1760,7 +1760,7 @@ public class MangeReportImpl implements MangeReportService {
 
                             totalAmount = totalAmount + amount;
                             cdaReportResponse = new CDAReportResponse();
-                            cdaReportResponse.setName(amount + "");
+                            cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
                             cdaReportList.add(cdaReportResponse);
                         }
                     } else {
@@ -1770,7 +1770,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
 
                     cdaReportResponse = new CDAReportResponse();
-                    cdaReportResponse.setName(totalAmount + "");
+                    cdaReportResponse.setName(ConverterUtils.addDecimalPoint(totalAmount + ""));
                     cdaReportResponse.setReportType("CDA Wise Report(Mumbai CDA)");
                     cdaReportList.add(cdaReportResponse);
                     allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
@@ -1778,7 +1778,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File( HelperUtils.LASTFOLDERPATH);
+                    File folder = new File(HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -1859,7 +1859,7 @@ public class MangeReportImpl implements MangeReportService {
 
                         if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
                             Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
-                            coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+                            coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                         } else {
                             coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
@@ -1867,7 +1867,7 @@ public class MangeReportImpl implements MangeReportService {
 
                         totalAmount = totalAmount + amount;
                         cdaReportResponse = new CDAReportResponse();
-                        cdaReportResponse.setName(amount + "");
+                        cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
                         cdaReportList.add(cdaReportResponse);
 
                     } else {
@@ -1877,7 +1877,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
 
                     cdaReportResponse = new CDAReportResponse();
-                    cdaReportResponse.setName(totalAmount + "");
+                    cdaReportResponse.setName(ConverterUtils.addDecimalPoint(totalAmount + ""));
                     cdaReportResponse.setReportType("CDA Wise Report(ALL CDA)");
                     cdaReportList.add(cdaReportResponse);
                     allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
@@ -1885,7 +1885,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File( HelperUtils.LASTFOLDERPATH);
+                    File folder = new File(HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -1993,7 +1993,7 @@ public class MangeReportImpl implements MangeReportService {
 
                         if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
                             Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
-                            coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+                            coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                         } else {
                             coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
@@ -2011,7 +2011,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
                 cdaReportResponse = new CDAReportResponse();
-                cdaReportResponse.setName(totalAmount + "");
+                cdaReportResponse.setName(ConverterUtils.addDecimalPoint(totalAmount + ""));
                 cdaReportResponse.setReportType("SubHead Wise CDA Report");
                 cdaReportList.add(cdaReportResponse);
                 allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
@@ -2019,7 +2019,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File( HelperUtils.LASTFOLDERPATH);
+                    File folder = new File(HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -2121,7 +2121,7 @@ public class MangeReportImpl implements MangeReportService {
 
                             if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
                                 Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
-                                coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                             } else {
                                 coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
@@ -2129,7 +2129,7 @@ public class MangeReportImpl implements MangeReportService {
 
                             totalAmount = totalAmount + amount;
                             cdaReportResponse = new CDAReportResponse();
-                            cdaReportResponse.setName(amount + "");
+                            cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
                             cdaReportList.add(cdaReportResponse);
                         }
                     } else {
@@ -2139,7 +2139,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
 
                     cdaReportResponse = new CDAReportResponse();
-                    cdaReportResponse.setName(totalAmount + "");
+                    cdaReportResponse.setName(ConverterUtils.addDecimalPoint(totalAmount + ""));
                     cdaReportResponse.setReportType("Unit Wise CDA Report");
                     cdaReportList.add(cdaReportResponse);
                     allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
@@ -2147,7 +2147,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File( HelperUtils.LASTFOLDERPATH);
+                    File folder = new File(HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -2295,7 +2295,7 @@ public class MangeReportImpl implements MangeReportService {
 
                             if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
                                 Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
-                                coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                             } else {
                                 coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
@@ -2303,7 +2303,7 @@ public class MangeReportImpl implements MangeReportService {
 
                             totalAmount = totalAmount + amount;
                             cdaReportResponse = new CDAReportResponse();
-                            cdaReportResponse.setName(amount + "");
+                            cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
                             cdaReportList.add(cdaReportResponse);
                         }
                     } else {
@@ -2313,7 +2313,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
 
                     cdaReportResponse = new CDAReportResponse();
-                    cdaReportResponse.setName(totalAmount + "");
+                    cdaReportResponse.setName(ConverterUtils.addDecimalPoint(totalAmount + ""));
                     cdaReportResponse.setReportType("CDA Wise Report(ALL CDA)");
                     cdaReportList.add(cdaReportResponse);
                     allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
@@ -2321,7 +2321,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File( HelperUtils.LASTFOLDERPATH);
+                    File folder = new File(HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -2478,14 +2478,14 @@ public class MangeReportImpl implements MangeReportService {
 
                             if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
                                 Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
-                                coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                             } else {
                                 coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
                             }
                             totalAmount = totalAmount + amount;
                             cdaReportResponse = new CDAReportResponse();
-                            cdaReportResponse.setName(amount + "");
+                            cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
                             cdaReportList.add(cdaReportResponse);
                         }
                     } else {
@@ -2495,7 +2495,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
 
                     cdaReportResponse = new CDAReportResponse();
-                    cdaReportResponse.setName(totalAmount + "");
+                    cdaReportResponse.setName(ConverterUtils.addDecimalPoint(totalAmount + ""));
                     cdaReportResponse.setReportType("CDA Wise Report(Mumbai CDA)");
                     cdaReportList.add(cdaReportResponse);
                     allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
@@ -2503,7 +2503,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File( HelperUtils.LASTFOLDERPATH);
+                    File folder = new File(HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -2581,7 +2581,7 @@ public class MangeReportImpl implements MangeReportService {
 
                         if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
                             Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
-                            coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+                            coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                         } else {
                             coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
@@ -2599,7 +2599,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
 
                     cdaReportResponse = new CDAReportResponse();
-                    cdaReportResponse.setName(totalAmount + "");
+                    cdaReportResponse.setName(ConverterUtils.addDecimalPoint(totalAmount + ""));
                     cdaReportResponse.setReportType("CDA Wise Report(ALL CDA)");
                     cdaReportList.add(cdaReportResponse);
                     allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
@@ -2607,7 +2607,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File( HelperUtils.LASTFOLDERPATH);
+                    File folder = new File(HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -2718,7 +2718,7 @@ public class MangeReportImpl implements MangeReportService {
 
                         if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
                             Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
-                            coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+                            coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                         } else {
                             coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
@@ -2727,7 +2727,7 @@ public class MangeReportImpl implements MangeReportService {
 
                         totalAmount = totalAmount + amount;
                         cdaReportResponse = new CDAReportResponse();
-                        cdaReportResponse.setName(amount + "");
+                        cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
                         cdaReportList.add(cdaReportResponse);
                     }
                 } else {
@@ -2737,7 +2737,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
                 cdaReportResponse = new CDAReportResponse();
-                cdaReportResponse.setName(totalAmount + "");
+                cdaReportResponse.setName(ConverterUtils.addDecimalPoint(totalAmount + ""));
                 cdaReportResponse.setReportType("SubHead Wise CDA Report");
                 cdaReportList.add(cdaReportResponse);
                 allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
@@ -2745,7 +2745,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File( HelperUtils.LASTFOLDERPATH);
+                    File folder = new File(HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -2847,7 +2847,7 @@ public class MangeReportImpl implements MangeReportService {
 
                             if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
                                 Double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
-                                coloumWiseAmount.put(ginWiseData.getCdaName(), (colmount + amount) + "");
+                                coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                             } else {
                                 coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
@@ -2856,7 +2856,7 @@ public class MangeReportImpl implements MangeReportService {
 
                             totalAmount = totalAmount + amount;
                             cdaReportResponse = new CDAReportResponse();
-                            cdaReportResponse.setName(amount + "");
+                            cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
                             cdaReportList.add(cdaReportResponse);
                         }
                     } else {
@@ -2866,7 +2866,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
 
                     cdaReportResponse = new CDAReportResponse();
-                    cdaReportResponse.setName(totalAmount + "");
+                    cdaReportResponse.setName(ConverterUtils.addDecimalPoint(totalAmount + ""));
                     cdaReportResponse.setReportType("Unit Wise CDA Report");
                     cdaReportList.add(cdaReportResponse);
                     allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
@@ -2874,7 +2874,7 @@ public class MangeReportImpl implements MangeReportService {
                 try {
 
 
-                    File folder = new File( HelperUtils.LASTFOLDERPATH);
+                    File folder = new File(HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();
                     }
@@ -2896,6 +2896,8 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<FilePathResponse>() {
         });
     }
+
+
 
 
     @Override
