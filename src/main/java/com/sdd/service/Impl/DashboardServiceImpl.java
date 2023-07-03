@@ -26,10 +26,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DashboardServiceImpl implements DashBoardService {
@@ -742,83 +748,112 @@ public class DashboardServiceImpl implements DashBoardService {
     getSubHeadWiseExpenditureByUnitIdFinYearIdAllocationTypeIdSubHeadTypeId(
             String unitId, String finYearId, String subHeadTypeId, String allocationTypeId) {
         try {
-            List<DashBoardExprnditureResponse> dashBoardExprnditureResponseList = new ArrayList<>();
+            List<DashBoardExprnditureResponse> dashBoardExprnditureResponseList = new ArrayList<DashBoardExprnditureResponse>();
 
             BudgetFinancialYear budgetFinancialYear =
                     budgetFinancialYearRepository.findBySerialNo(finYearId);
 
             CgUnit cgUnit = cgUnitRepository.findByUnit(unitId);
 
-            List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + unitId + "%");
+            List<BudgetHead> budgetHeadList = subHeadRepository.findBySubHeadTypeIdOrderBySerialNumberAsc(subHeadTypeId);
 
-            List<String> unitIds = new ArrayList<>();
-            for (CgUnit cgUnit1 : unitList) {
-                unitIds.add(cgUnit1.getUnit());
-            }
-
-            List<BudgetHead> budgetHeadList =
-                    subHeadRepository.findBySubHeadTypeIdOrderBySerialNumberAsc(subHeadTypeId);
-
-            for (BudgetHead budgetHead : budgetHeadList) {
-                DashBoardExprnditureResponse dashBoardExprnditureResponse =
-                        new DashBoardExprnditureResponse();
-                dashBoardExprnditureResponse.setBudgetFinancialYear(budgetFinancialYear);
-                dashBoardExprnditureResponse.setCgUnit(cgUnit);
-                dashBoardExprnditureResponse.setBudgetHead(budgetHead);
-
-                List<BudgetAllocation> budgetAllocationList =
-                        budgetAllocationRepository
-                                .findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(
-                                        unitId,
-                                        finYearId,
-                                        budgetHead.getBudgetCodeId(),
-                                        allocationTypeId,
-                                        "Approved",
-                                        "0",
-                                        "0");
-
-                double allocationAMount = 0;
-                for (Integer i = 0; i < budgetAllocationList.size(); i++) {
-                    AmountUnit amountUnit =
-                            amountUnitRepository.findByAmountTypeId(budgetAllocationList.get(i).getAmountType());
-                    allocationAMount =
-                            allocationAMount
-                                    + (Double.parseDouble(budgetAllocationList.get(i).getAllocationAmount())
-                                    * amountUnit.getAmount());
+            for (BudgetHead val : budgetHeadList) {
+                String subHeadId = val.getBudgetCodeId();
+                BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
+                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, unitId, finYearId, allocationTypeId, "0");
+                if (reportDetails.size() <= 0) {
+                    continue;
                 }
-                dashBoardExprnditureResponse.setAllocatedAmount(
-                        ConverterUtils.addDecimalPoint(allocationAMount + ""));
+                Double amount = 0.0;
+                Double amountUnit=0.0;
+                Double finAmount=0.0;
+                Double eAmount = 0.0;
+                Double expnAmount=0.0;
+                Double allAmount = 0.0;
 
-                List<ContigentBill> contigentBillList =
-                        contigentBillRepository
-                                .findByCbUnitIdInAndFinYearAndBudgetHeadIDAndAllocationIdAndIsUpdateOrderByCbDateDesc(
-                                        unitIds, finYearId, budgetHead.getBudgetCodeId(), allocationTypeId, "0");
+                for (Integer r = 0; r < reportDetails.size(); r++) {
 
-                if (contigentBillList.size() > 0) {
-                    Double amount = 0.0;
-                    for (ContigentBill contigentBill : contigentBillList) {
-                        amount = amount + Double.parseDouble(contigentBill.getCbAmount());
+                    DashBoardExprnditureResponse dashBoardExprnditureResponse = new DashBoardExprnditureResponse();
+                    amount = Double.valueOf(reportDetails.get(r).getAllocationAmount());
+
+                    String uid = reportDetails.get(r).getToUnit();
+                    finAmount = amount;
+                    List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
+
+                    double totalbill = 0.0;
+                    Timestamp lastCvDate;
+                    String cbD = "";
+
+                    if (unitList.size() > 0) {
+                        for (CgUnit unitss : unitList) {
+                            String subUnit = unitss.getUnit();
+                            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdate(subUnit, finYearId, subHeadId, "0");
+
+                            if (expenditure.size() > 0) {
+                                double totalAmount = 0.0;
+                                for (ContigentBill bill : expenditure) {
+                                    totalAmount += Double.parseDouble(bill.getCbAmount());
+                                    if(bill.getCbDate()!=null){
+                                        lastCvDate=bill.getCbDate();
+                                        SimpleDateFormat id = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                                        SimpleDateFormat od = new SimpleDateFormat("dd-MMMM-yyyy");
+                                        Date dateC = null;
+                                        try {
+                                            dateC = id.parse(lastCvDate.toString());
+                                        } catch (ParseException ex) {
+                                            throw new RuntimeException(ex);
+                                        }
+                                        cbD = od.format(dateC);
+                                    }else
+                                        cbD="";
+                                }
+                                totalbill += totalAmount;
+                            }
+                        }
+                        DecimalFormat decimalFormat = new DecimalFormat("#");
+                        String cbAmount = decimalFormat.format(totalbill);
+                        eAmount = Double.parseDouble(cbAmount);
                     }
-                    dashBoardExprnditureResponse.setExpenditureAmount(amount + "");
-                    dashBoardExprnditureResponse.setLastCBDate(contigentBillList.get(0).getCbDate() + "");
+                    List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdate(uid, finYearId, subHeadId, "0");
+                    double totalAmount = 0.0;
+                    if (expenditure.size() > 0) {
+                        for (ContigentBill bill : expenditure) {
+                            totalAmount += Double.parseDouble(bill.getCbAmount());
+                            if(bill.getCbDate()!=null){
+                                lastCvDate=bill.getCbDate();
+                                SimpleDateFormat id = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                                SimpleDateFormat od = new SimpleDateFormat("dd-MMMM-yyyy");
+                                Date dateC = id.parse(lastCvDate.toString());
+                                cbD = od.format(dateC);
+                            }else
+                                cbD="";
+                        }
+                        }
+                        DecimalFormat decimalFormat = new DecimalFormat("#");
+                        String cbAmount = decimalFormat.format(totalAmount);
+                        eAmount = Double.parseDouble(cbAmount);
+
+                    eAmount = totalAmount + totalbill;
+
+                    dashBoardExprnditureResponse.setCgUnit(cgUnit);
+                    dashBoardExprnditureResponse.setBudgetFinancialYear(budgetFinancialYear);
+                    dashBoardExprnditureResponse.setBudgetHead(bHead);
+                    dashBoardExprnditureResponse.setAllocatedAmount(finAmount.toString());
+                    dashBoardExprnditureResponse.setExpenditureAmount(eAmount.toString());
+                    dashBoardExprnditureResponse.setLastCBDate(cbD);
                     dashBoardExprnditureResponseList.add(dashBoardExprnditureResponse);
-                } else {
-                    dashBoardExprnditureResponse.setExpenditureAmount(0.0 + "");
-                    dashBoardExprnditureResponse.setLastCBDate("");
-                    dashBoardExprnditureResponseList.add(dashBoardExprnditureResponse);
+
                 }
+
             }
             return ResponseUtils.createSuccessResponse(
                     dashBoardExprnditureResponseList,
                     new TypeReference<List<DashBoardExprnditureResponse>>() {
                     });
         } catch (Exception e) {
-
             e.printStackTrace();
             throw new SDDException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server error.");
         }
-
-        //        return null;
     }
 
     public HrData getAuthorization(String userInfo) {

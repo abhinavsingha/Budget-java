@@ -5932,9 +5932,9 @@ public class MangeReportImpl implements MangeReportService {
                     IcgAmount = hrAllocAmount * hrAmountUnit / reqAmount;
                 }
                 int count = 0;
-                float sum = 0;
-                float expsum = 0;
-                float percentagesum = 0;
+                Double sum = 0.0;
+                Double expsum = 0.0;
+                Double percentagesum = 0.0;
                 Double amount = Double.valueOf(0);
                 Double amountUnit;
                 Double finAmount;
@@ -6027,9 +6027,9 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(" ");
 
                     count++;
-                    sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
-                    expsum += Float.parseFloat(new BigDecimal(eAmount).toPlainString());
-                    percentagesum += Float.parseFloat(new BigDecimal(expnAmount).toPlainString());
+                    sum += Double.parseDouble(new BigDecimal(finAmount).toPlainString());
+                    expsum += Double.parseDouble(new BigDecimal(eAmount).toPlainString());
+                    percentagesum += Double.parseDouble(new BigDecimal(expnAmount).toPlainString());
 
                 }
                 CgUnit hrunitN = cgUnitRepository.findByUnit(hrData.getUnitId());
@@ -6245,7 +6245,7 @@ public class MangeReportImpl implements MangeReportService {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText(type.getAllocDesc().toUpperCase() + "FER" + "ALLOCATION REPORT");
+            headingRun.setText(type.getAllocDesc().toUpperCase() +" "+ "FER" +" "+ "ALLOCATION REPORT");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
