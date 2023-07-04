@@ -21,6 +21,8 @@ public class DashBoardExprnditureResponse {
 
   String expenditureAmount;
 
+  String balAmount;
+
   String perAmount;
 
   String amountIn;

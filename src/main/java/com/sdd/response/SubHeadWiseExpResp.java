@@ -21,6 +21,8 @@ public class SubHeadWiseExpResp {
 
     String expenditureAmount;
 
+    String balAmount;
+
     String perAmount;
 
     String lastCBDate;

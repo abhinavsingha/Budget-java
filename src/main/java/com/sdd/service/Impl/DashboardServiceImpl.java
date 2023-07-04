@@ -882,6 +882,7 @@ public class DashboardServiceImpl implements DashBoardService {
                     else
                         dashBoardExprnditureResponse.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(0.0)));
                     dashBoardExprnditureResponse.setLastCBDate(cbD);
+                    dashBoardExprnditureResponse.setBalAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount-expAmount)));
                     dashBoardExprnditureResponse.setAmountIn(amountIn);
                     dashBoardExprnditureResponseList.add(dashBoardExprnditureResponse);
 
@@ -1039,6 +1040,7 @@ public class DashboardServiceImpl implements DashBoardService {
                 subResp.setAmountIn(amountIn);
                 subResp.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
                 subResp.setExpenditureAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount)));
+                subResp.setBalAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount-expAmount)));
                 if(finAmount!=0)
                 subResp.setPerAmount(String.format("%1$0,1.4f", new BigDecimal((expAmount*100)/finAmount)));
                 else
