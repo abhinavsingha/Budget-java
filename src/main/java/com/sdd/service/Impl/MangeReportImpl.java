@@ -1574,8 +1574,8 @@ public class MangeReportImpl implements MangeReportService {
         cadSubReport.setAmountType(amountUnit.getAmountType());
 
 
-        HashMap<String, String> coloumWiseAmount = new LinkedHashMap<String, String>();
         Float grandTotal = 0f;
+        Float allocationGrandTotal = 0f;
 
         List<CDAReportResponse> cdaReportList = new ArrayList<>();
         List<BudgetHead> subHeadsData = subHeadRepository.findByMajorHeadAndSubHeadTypeIdOrderBySerialNumberAsc(cdaReportRequest.getMajorHead(), cdaReportRequest.getSubHeadType());
@@ -1587,12 +1587,11 @@ public class MangeReportImpl implements MangeReportService {
             BudgetHead subHead = subHeadsData.get(i);
             cdaReportResponse.setName(subHead.getSubHeadDescr());
 
-            Float totalAmount = 0f;
-
 
             List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId());
 
             Float amount = 0f;
+            Float allocationAmount = 0f;
 
             for (int m = 0; m < cdaData.size(); m++) {
                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
@@ -1601,17 +1600,16 @@ public class MangeReportImpl implements MangeReportService {
                     AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
                     amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
                     grandTotal = grandTotal + amount;
+
+                    allocationAmount = allocationAmount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                    allocationGrandTotal = allocationGrandTotal +  allocationAmount;
                 }
             }
 
 
-            totalAmount = totalAmount + amount;
             cdaReportResponse = new CDAReportResponse();
             cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
-            cdaReportList.add(cdaReportResponse);
-
-            cdaReportResponse = new CDAReportResponse();
-            cdaReportResponse.setName(ConverterUtils.addDecimalPoint(totalAmount + ""));
+            cdaReportResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
             cdaReportResponse.setReportType("RESERVE FUND");
             cdaReportList.add(cdaReportResponse);
             allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
@@ -1625,7 +1623,7 @@ public class MangeReportImpl implements MangeReportService {
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
             File file = new File(filePath);
-            pdfGenaratorUtilMain.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount);
+            pdfGenaratorUtilMain.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal,allocationGrandTotal);
             dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             dtoList.setFileName(fileName);
             dtoList.setAllCdaData(allCdaData);

@@ -17,4 +17,6 @@ public class CDAReportResponse {
     private String reportType;
 
 
+    // Reserve Found Case
+    private String allocationAmount;
 }

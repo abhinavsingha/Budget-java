@@ -103,7 +103,7 @@ public class ReportController {
 
     @PostMapping("/getReservedFund")
     public ResponseEntity<ApiResponse<FilePathResponse>> getReservedFund(@RequestBody CDAReportRequest reportRequest) {
-        return new ResponseEntity<>(mangeReportService.getCdaParkingReport(reportRequest), HttpStatus.OK);
+        return new ResponseEntity<>(mangeReportService.getReservedFund(reportRequest), HttpStatus.OK);
     }
 
 
