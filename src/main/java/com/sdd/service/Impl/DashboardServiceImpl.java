@@ -750,10 +750,13 @@ public class DashboardServiceImpl implements DashBoardService {
         try {
             List<DashBoardExprnditureResponse> dashBoardExprnditureResponseList = new ArrayList<DashBoardExprnditureResponse>();
 
-            BudgetFinancialYear budgetFinancialYear =
-                    budgetFinancialYearRepository.findBySerialNo(finYearId);
+            BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
             CgUnit cgUnit = cgUnitRepository.findByUnit(unitId);
+
+            AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
+            Double reqAmount = amountObj.getAmount();
+            String amountIn = amountObj.getAmountType().toUpperCase();
 
             List<BudgetHead> budgetHeadList = subHeadRepository.findBySubHeadTypeIdOrderBySerialNumberAsc(subHeadTypeId);
 
@@ -775,9 +778,12 @@ public class DashboardServiceImpl implements DashBoardService {
 
                     DashBoardExprnditureResponse dashBoardExprnditureResponse = new DashBoardExprnditureResponse();
                     amount = Double.valueOf(reportDetails.get(r).getAllocationAmount());
+                    String amountType=reportDetails.get(r).getAmountType();
+                    AmountUnit amountObjs = amountUnitRepository.findByAmountTypeId(amountTypeId);
+                    Double amountUnits = amountObjs.getAmount();
 
                     String uid = reportDetails.get(r).getToUnit();
-                    finAmount = amount;
+                    finAmount = amount*amountUnits/reqAmount;
                     List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
 
                     double totalbill = 0.0;
@@ -834,14 +840,16 @@ public class DashboardServiceImpl implements DashBoardService {
                     eAmount = Double.parseDouble(cbAmount);
 
                     eAmount = totalAmount + totalbill;
+                    double expAmount=eAmount/reqAmount;
 
                     dashBoardExprnditureResponse.setCgUnit(cgUnit);
                     dashBoardExprnditureResponse.setBudgetFinancialYear(budgetFinancialYear);
                     dashBoardExprnditureResponse.setBudgetHead(bHead);
-                    dashBoardExprnditureResponse.setAllocatedAmount(finAmount.toString());
-                    dashBoardExprnditureResponse.setExpenditureAmount(eAmount.toString());
+                    dashBoardExprnditureResponse.setAllocatedAmount(String.valueOf(finAmount));
+                    dashBoardExprnditureResponse.setExpenditureAmount(String.valueOf(expAmount));
+                    dashBoardExprnditureResponse.setPerAmount(String.valueOf(expAmount*100/finAmount));
                     dashBoardExprnditureResponse.setLastCBDate(cbD);
-                    dashBoardExprnditureResponse.setAmountIn("");
+                    dashBoardExprnditureResponse.setAmountIn(amountIn);
                     dashBoardExprnditureResponseList.add(dashBoardExprnditureResponse);
 
                 }
@@ -878,6 +886,13 @@ public class DashboardServiceImpl implements DashBoardService {
                 String uId=val.getToUnit();
                 CgUnit cgUnit = cgUnitRepository.findByUnit(uId);
                 String uName=cgUnit.getDescr();
+
+                double amount = Double.parseDouble(val.getAllocationAmount());
+                String amountTypeid=val.getAmountType();
+                AmountUnit amountUnitObj = amountUnitRepository.findByAmountTypeId(amountTypeid);
+                double amountUnit = amountUnitObj.getAmount();
+
+                double finAmount=amount*amountUnit/reqAmount;
 
                 List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uId + "%");
 
@@ -936,15 +951,16 @@ public class DashboardServiceImpl implements DashBoardService {
                 eAmount = Double.parseDouble(cbAmount);
 
                 eAmount = totalAmount + totalbill;
+                double expAmount=eAmount/reqAmount;
 
                 SubHeadWiseExpResp subResp = new SubHeadWiseExpResp();
                 subResp.setUnitName(uName);
                 subResp.setFinYear(budgetFinancialYear.getFinYear());
                 subResp.setAllocType(type.getAllocDesc());
                 subResp.setAmountIn(amountIn);
-                subResp.setAllocatedAmount(val.getAllocationAmount());
-                subResp.setExpenditureAmount(String.valueOf(eAmount));
-                subResp.setPerAmount("");
+                subResp.setAllocatedAmount(String.valueOf(finAmount));
+                subResp.setExpenditureAmount(String.valueOf(expAmount));
+                subResp.setPerAmount(String.valueOf(expAmount*100/finAmount));
                 subResp.setLastCBDate(cbD);
                 resp.add(subResp);
             }
