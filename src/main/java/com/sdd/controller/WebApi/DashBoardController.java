@@ -2,6 +2,8 @@ package com.sdd.controller.WebApi;
 
 import com.sdd.entities.AmountUnit;
 import com.sdd.request.DashBoardRequest;
+import com.sdd.request.DashExpResquest;
+import com.sdd.request.UnitWiseAllocationReport;
 import com.sdd.response.*;
 import com.sdd.service.DashBoardService;
 import lombok.extern.slf4j.Slf4j;
@@ -52,8 +54,8 @@ public class DashBoardController {
     return new ResponseEntity<>(dashBoardService.getSubHeadWiseExpenditureByUnitIdFinYearIdAllocationTypeIdSubHeadTypeId(unitId, finYearId, subHeadTypeId, allocationTypeId,amountTypeId), HttpStatus.OK);
   }
 
-  @GetMapping("/getDashBordSubHeadwiseExpenditure/{subHeadId}/{finYearId}/{allocationTypeId}/{amounttypeId}")
-  public ResponseEntity<ApiResponse<List<SubHeadWiseExpResp>>> getDashBordSubHeadwiseExpenditure(@PathVariable(value = "subHeadId") String subHeadId, @PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeId") String allocationTypeId, @PathVariable(value = "amounttypeId") String amounttypeId) {
-    return new ResponseEntity<>(dashBoardService.getDashBordSubHeadwiseExpenditure(subHeadId, finYearId, allocationTypeId, amounttypeId), HttpStatus.OK);
+  @PostMapping("/getDashBordSubHeadwiseExpenditure")
+  public ResponseEntity<ApiResponse<List<SubHeadWiseExpResp>>> getDashBordSubHeadwiseExpenditure(@RequestBody DashExpResquest dashExpResquest ) {
+    return new ResponseEntity<>(dashBoardService.getDashBordSubHeadwiseExpenditure(dashExpResquest), HttpStatus.OK);
   }
 }

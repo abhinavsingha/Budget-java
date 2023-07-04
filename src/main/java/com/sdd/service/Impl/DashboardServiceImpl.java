@@ -9,6 +9,7 @@ import com.sdd.exception.SDDException;
 import com.sdd.jwt.HeaderUtils;
 import com.sdd.jwtParse.TokenParseData;
 import com.sdd.request.DashBoardRequest;
+import com.sdd.request.DashExpResquest;
 import com.sdd.response.*;
 import com.sdd.service.DashBoardService;
 import com.sdd.utils.ConverterUtils;
@@ -894,7 +895,7 @@ public class DashboardServiceImpl implements DashBoardService {
         }
     }
     @Override
-    public ApiResponse<List<SubHeadWiseExpResp>> getDashBordSubHeadwiseExpenditure(String subHeadId, String finYearId, String allocationTypeId, String amounttypeId) {
+    public ApiResponse<List<SubHeadWiseExpResp>> getDashBordSubHeadwiseExpenditure(DashExpResquest dashExpResquest) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
@@ -905,23 +906,28 @@ public class DashboardServiceImpl implements DashBoardService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
 
-        if (subHeadId == null || subHeadId.isEmpty()) {
+        if (dashExpResquest.getSubHeadId() == null || dashExpResquest.getSubHeadId().isEmpty()) {
             return ResponseUtils.createFailureResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {
             }, "SUBHEAD ID  CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
-        if (finYearId == null || finYearId.isEmpty()) {
+        if (dashExpResquest.getFinYearId() == null || dashExpResquest.getFinYearId().isEmpty()) {
             return ResponseUtils.createFailureResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {
             }, "FIN YEAR ID  CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
 
-        if (allocationTypeId == null || allocationTypeId.isEmpty()) {
+        if (dashExpResquest.getAllocationTypeId() == null || dashExpResquest.getAllocationTypeId().isEmpty()) {
             return ResponseUtils.createFailureResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {
             }, "ALLOCATION TYPE ID  CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
-        if (amounttypeId == null || amounttypeId.isEmpty()) {
+        if (dashExpResquest.getAmounttypeId() == null || dashExpResquest.getAmounttypeId().isEmpty()) {
             return ResponseUtils.createFailureResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {
             }, "AMOUNT TYPE ID   CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+
+        String finYearId=dashExpResquest.getFinYearId();
+        String subHeadId=dashExpResquest.getSubHeadId();
+        String amounttypeId=dashExpResquest.getAmounttypeId();
+        String allocationTypeId=dashExpResquest.getAllocationTypeId();
 
 
 
