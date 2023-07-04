@@ -744,11 +744,40 @@ public class DashboardServiceImpl implements DashBoardService {
     }
 
     @Override
-    public ApiResponse<List<DashBoardExprnditureResponse>>
-    getSubHeadWiseExpenditureByUnitIdFinYearIdAllocationTypeIdSubHeadTypeId(
-            String unitId, String finYearId, String subHeadTypeId, String allocationTypeId,String amountTypeId) {
+    public ApiResponse<List<DashBoardExprnditureResponse>> getSubHeadWiseExpenditureByUnitIdFinYearIdAllocationTypeIdSubHeadTypeId(String unitId, String finYearId, String subHeadTypeId, String allocationTypeId,String amountTypeId) {
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        List<DashBoardExprnditureResponse> dashBoardExprnditureResponseList = new ArrayList<DashBoardExprnditureResponse>();
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+
+        if (finYearId == null || finYearId.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dashBoardExprnditureResponseList, new TypeReference<List<DashBoardExprnditureResponse>>() {
+            }, "FINANCIAL YEAR CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (unitId == null || unitId.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dashBoardExprnditureResponseList, new TypeReference<List<DashBoardExprnditureResponse>>() {
+            }, "UNIT ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+
+        if (subHeadTypeId == null || subHeadTypeId.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dashBoardExprnditureResponseList, new TypeReference<List<DashBoardExprnditureResponse>>() {
+            }, "SUBHEAD TYPE  CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (allocationTypeId == null || allocationTypeId.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dashBoardExprnditureResponseList, new TypeReference<List<DashBoardExprnditureResponse>>() {
+            }, "ALLOCATION TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+
+        if (amountTypeId == null || amountTypeId.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dashBoardExprnditureResponseList, new TypeReference<List<DashBoardExprnditureResponse>>() {
+            }, "AMAOUNT TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
         try {
-            List<DashBoardExprnditureResponse> dashBoardExprnditureResponseList = new ArrayList<DashBoardExprnditureResponse>();
+
 
             BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
@@ -845,9 +874,9 @@ public class DashboardServiceImpl implements DashBoardService {
                     dashBoardExprnditureResponse.setCgUnit(cgUnit);
                     dashBoardExprnditureResponse.setBudgetFinancialYear(budgetFinancialYear);
                     dashBoardExprnditureResponse.setBudgetHead(bHead);
-                    dashBoardExprnditureResponse.setAllocatedAmount(String.valueOf(finAmount));
-                    dashBoardExprnditureResponse.setExpenditureAmount(String.valueOf(expAmount));
-                    dashBoardExprnditureResponse.setPerAmount(String.valueOf(expAmount*100/finAmount));
+                    dashBoardExprnditureResponse.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
+                    dashBoardExprnditureResponse.setExpenditureAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount)));
+                    dashBoardExprnditureResponse.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount*100/finAmount)));
                     dashBoardExprnditureResponse.setLastCBDate(cbD);
                     dashBoardExprnditureResponse.setAmountIn(amountIn);
                     dashBoardExprnditureResponseList.add(dashBoardExprnditureResponse);
@@ -871,6 +900,30 @@ public class DashboardServiceImpl implements DashBoardService {
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 
         List<SubHeadWiseExpResp> resp = new ArrayList<SubHeadWiseExpResp>();
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+
+        if (subHeadId == null || subHeadId.isEmpty()) {
+            return ResponseUtils.createFailureResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {
+            }, "SUBHEAD ID  CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (finYearId == null || finYearId.isEmpty()) {
+            return ResponseUtils.createFailureResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {
+            }, "FIN YEAR ID  CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+
+        if (allocationTypeId == null || allocationTypeId.isEmpty()) {
+            return ResponseUtils.createFailureResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {
+            }, "ALLOCATION TYPE ID  CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (amounttypeId == null || amounttypeId.isEmpty()) {
+            return ResponseUtils.createFailureResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {
+            }, "AMOUNT TYPE ID   CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+
+
 
         BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(finYearId);
         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
@@ -958,9 +1011,9 @@ public class DashboardServiceImpl implements DashBoardService {
                 subResp.setFinYear(budgetFinancialYear.getFinYear());
                 subResp.setAllocType(type.getAllocDesc());
                 subResp.setAmountIn(amountIn);
-                subResp.setAllocatedAmount(String.valueOf(finAmount));
-                subResp.setExpenditureAmount(String.valueOf(expAmount));
-                subResp.setPerAmount(String.valueOf(expAmount*100/finAmount));
+                subResp.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
+                subResp.setExpenditureAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount)));
+                subResp.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount*100/finAmount)));
                 subResp.setLastCBDate(cbD);
                 resp.add(subResp);
             }

@@ -6365,8 +6365,8 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cella2 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(IcgAmount)), cellFont));
                     PdfPCell cella3 = new PdfPCell(new Phrase(unitN.getDescr()));
                     PdfPCell cella4 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
-                    PdfPCell cella5 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(eAmount / reqAmount))));
-                    PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(expnAmount))));
+                    PdfPCell cella5 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(eAmount / reqAmount))));
+                    PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(expnAmount))));
 
                     cella1.setPadding(8);
                     cella2.setPadding(8);
@@ -6412,9 +6412,12 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 double hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
                 PdfPCell cell100 = new PdfPCell(new Phrase(hrunitN.getDescr()));
-                PdfPCell cell200 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(hrfinAmount))));
-                PdfPCell cell300 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(0))));
-                PdfPCell cell400 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(0))));
+
+                    PdfPCell cell200 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(hrfinAmount))));
+                    PdfPCell cell300 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(0))));
+                    PdfPCell cell400 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(0))));
+
+
                 cell100.setPadding(10);
                 cell200.setPadding(10);
                 cell300.setPadding(10);
@@ -6436,8 +6439,8 @@ public class MangeReportImpl implements MangeReportService {
                     double perc = (ex * 100) / tot;
                     PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
                     PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum + hrfinAmount)), cellFont));
-                    PdfPCell cell30 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(expsum / reqAmount)), cellFont));
-                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(perc)), cellFont));
+                    PdfPCell cell30 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(expsum / reqAmount)), cellFont));
+                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(perc)), cellFont));
                     cell10.setPadding(10);
                     cell20.setPadding(10);
                     cell30.setPadding(10);
@@ -6463,8 +6466,8 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell50 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
             PdfPCell cell51 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalIcg)), cellFont));
             PdfPCell cell60 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
-            PdfPCell cell70 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal(grTotalAddition / reqAmount)), cellFont));
-            PdfPCell cell80 = new PdfPCell(new Phrase(String.format("%1$0,1.8f", new BigDecimal((grTotalAddition / reqAmount) * 100 / grTotalAlloc)), cellFont));
+            PdfPCell cell70 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition / reqAmount)), cellFont));
+            PdfPCell cell80 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal((grTotalAddition / reqAmount) * 100 / grTotalAlloc)), cellFont));
             cell50.setPadding(12);
             cell51.setPadding(12);
             cell60.setPadding(12);
