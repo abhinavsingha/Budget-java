@@ -172,9 +172,9 @@ public class CdaParkingImpl implements CdaParkingService {
 
         }
 
-        if (!(totalAmount == cadTotalAmount)) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA AMOUNT IS GREATER THAN ALLOCATION AMOUNT");
-        }
+//        if (!(totalAmount == cadTotalAmount)) {
+//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA AMOUNT IS GREATER THAN ALLOCATION AMOUNT");
+//        }
 
         for (Integer b = 0; b < cdaRequest.getCdaRequest().size(); b++) {
             List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByAuthGroupIdAndTransactionIdAndIsFlag(cdaRequest.getCdaRequest().get(b).getAuthGroupId(), cdaRequest.getCdaRequest().get(b).getTransactionId(), "0");

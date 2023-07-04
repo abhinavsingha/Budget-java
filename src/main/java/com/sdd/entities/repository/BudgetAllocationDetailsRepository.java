@@ -21,13 +21,10 @@ public interface BudgetAllocationDetailsRepository extends JpaRepository<BudgetA
     List<BudgetAllocationDetails> findByToUnitAndFinYearAndIsDeleteAndIsBudgetRevision(String unitId,String finYear,String isDelete,String isRivision);
     List<BudgetAllocationDetails> findByToUnitAndFinYearAndIsDeleteAndStatusOrStatusAndIsBudgetRevision(String unitId,String finYear,String isDelete,String status,String statusR,String isRivision);
     List<BudgetAllocationDetails> findBySubHeadAndFinYearAndIsDeleteAndStatusAndIsBudgetRevision(String subHeadId,String finYear,String isDelete,String status,String isRivision);
-    List<BudgetAllocationDetails> findByFromUnitAndFinYearAndSubHeadAndIsDeleteAndIsBudgetRevision(String unitId,String finYear,String subHeadId,String isDelete,String isRivision);
     List<BudgetAllocationDetails> findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(String unitId,String finYear,String subHeadId,String allocationType,String status,String isdelete,String isRivision);
     List<BudgetAllocationDetails> findByFromUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(String unitId,String finYear,String subHeadId,String allocationType,String status,String isdelete,String isRivision);
-    List<BudgetAllocationDetails> findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(String unitId,String finYear,String subHeadId,String allocationType,String isDelete,String isRivision);
     List<BudgetAllocationDetails> findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatusIn(String unitId,String finYear,String subHeadId,String allocationType,String isDelete,String isRivision,List<String> cgUnits);
-    List<BudgetAllocationDetails> findByToUnitAndFinYearAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(String unitId,String finYear,String allocationType,String isDelete,String isRivision);
-    List<BudgetAllocationDetails> findByAuthGroupIdAndSubHeadAndIsDelete(String authGroupId,String subHead,String isDelete);
+    List<BudgetAllocationDetails> findByToUnitAndFinYearAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatus(String unitId,String finYear,String allocationType,String isDelete,String isRivision,String status);
     @Query(
             value =
                     "select BUDGET_HEAD from BudgetAllocationDetails where AUTH_GROUP_ID=:authGroupId  group by BUDGET_HEAD",
