@@ -335,6 +335,83 @@ public class PdfGenaratorUtilMain {
     }
 
 
+    public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal, HashMap<String, String> coloumWiseAmount) throws Exception {
+
+
+        Document document = new Document(PageSize.A4.rotate());
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
+        document.open();
+        document.newPage();
+
+
+        Font font = new Font(Font.FontFamily.COURIER, 15, Font.BOLD);
+        Chunk header = new Chunk("\n" + "CDA WISE/OBJECT HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() + "\n" + "\n", font);
+        Paragraph preface = new Paragraph();
+        preface.setAlignment(Element.ALIGN_CENTER);
+        preface.add(header);
+
+        String reOrCapital = "";
+        if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
+            reOrCapital = "REVENUE";
+        } else {
+              reOrCapital = "CAPITAL" ;
+        }
+
+        Chunk revenue = new Chunk(reOrCapital + "\n" + "\n", font);
+        preface.add(revenue);
+
+        Chunk thiredHead = new Chunk("Major Head " + cadSubReport.getMajorHead() + ". Sub Major Head 00. Minor Head " + cadSubReport.getMinorHead() + ") (In " + cadSubReport.getAmountType() + ")" + "\n" + "\n" + "\n" + "\n", font);
+        preface.add(thiredHead);
+
+
+        List<CDAReportResponse> tabData1 = map.get("Sub Head");
+//        float[] pointColumnWidths = {50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F};
+        PdfPTable table = new PdfPTable(tabData1.size() + 1);
+        table.setWidthPercentage(100);
+//        table.setWidths(pointColumnWidths);
+        table.setSpacingAfter(10);
+
+
+        table.addCell(boldText("object", 6, 35f));
+        for (Integer i = 0; i < tabData1.size(); i++) {
+            table.addCell(boldText(tabData1.get(i).getName(), 5, 20f));
+        }
+
+
+        for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
+            String key = entry.getKey();
+
+            if (!key.equalsIgnoreCase("Sub Head")) {
+                List<CDAReportResponse> tabData = entry.getValue();
+                table.addCell(boldText(key, 5, 35f));
+                for (Integer i = 0; i < tabData.size(); i++) {
+                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(i).getName()), 6, 20f));
+                }
+            }
+        }
+        table.addCell(boldText("Grand Total", 5, 20f));
+//        for (Integer i = 0; i < tabData1.size(); i++) {
+//            if (i == (tabData1.size() - 1)) {
+//
+//            } else {
+
+        for (Map.Entry<String, String> entry : coloumWiseAmount.entrySet()) {
+            String tabData = entry.getValue();
+            table.addCell(boldText(ConverterUtils.addDecimalPoint(tabData), 6, 20f));
+        }
+//            }
+//        }
+
+        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 6, 20f));
+
+
+        document.add(preface);
+        document.add(table);
+        document.close();
+
+    }
+
+
     @SuppressWarnings("rawtypes")
     public void createContigentBillReport(CbReportResponse cbReportResponse, String path) throws Exception {
 

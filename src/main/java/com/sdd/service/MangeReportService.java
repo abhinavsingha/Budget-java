@@ -40,6 +40,7 @@ public interface MangeReportService {
 //    ApiResponse<DefaultResponse> getConicalPath();
 
     ApiResponse<FilePathResponse> getCdaParkingReport(CDAReportRequest reportRequest);
+    ApiResponse<FilePathResponse> getReservedFund(CDAReportRequest reportRequest);
 
     ApiResponse<FilePathResponse> getCdaParkingReportDoc(CDAReportRequest reportRequest);
 
