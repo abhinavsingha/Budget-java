@@ -323,32 +323,29 @@ public class DocxGenaratorUtil {
             mainParagraph.createRun().addBreak();
 
             mainParagraph = document.createParagraph();
-            boldText(mainParagraph.createRun(), 10, ConverterUtils.addSpacaeInString(filePathResponse.getApproveName() + "", maxlength), true);
-            mainParagraph.setAlignment(ParagraphAlignment.LEFT);
+            boldText(mainParagraph.createRun(), 10, ConverterUtils.addSpacaeInStringInWord(filePathResponse.getApproveName() , maxlength), true);
+            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
 
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank() + "", maxlength), true);
-            mainParagraph.setAlignment(ParagraphAlignment.LEFT);
+            normalText(mainParagraph.createRun(), 10, ConverterUtils.addSpacaeInStringInWord(filePathResponse.getApproveRank() , maxlength), true);
+            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
 
 
 
-            mainParagraph = document.createParagraph();
-            mainParagraph.setAlignment(ParagraphAlignment.LEFT);
-
-            XWPFRun run = mainParagraph.createRun();
-            run.setText("Paragraph 1 LTR \n");
-            CTP ctp = mainParagraph.getCTP();
-            CTPPr ctppr;
-            if ((ctppr = ctp.getPPr()) == null) ctppr = ctp.addNewPPr();
-
-
-            run = mainParagraph.createRun();
-            run.setText(" عليكمn");
-
-            mainParagraph = document.createParagraph();
-            run = mainParagraph.createRun();
-            run.setText("Paragraph \n 3 LTR");
-            mainParagraph.setAlignment(ParagraphAlignment.LEFT);
+//            mainParagraph = document.createParagraph();
+//
+//
+//            XWPFRun run = mainParagraph.createRun();
+//
+//            run = mainParagraph.createRun();
+//            run.setText(" عليكمn        ");
+////            run.addTab();
+//            mainParagraph.setAlignment(ParagraphAlignment.BOTH);
+//
+//            mainParagraph = document.createParagraph();
+//            run = mainParagraph.createRun();
+//            run.setText("Paragraph  3 LTR");
+//            mainParagraph.setAlignment(ParagraphAlignment.BOTH);
 
 
             document.write(out);

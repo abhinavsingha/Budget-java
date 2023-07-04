@@ -28,39 +28,39 @@ import java.util.List;
 @Service
 public class BudgetFilterServiceImpl implements BudgetFilterService {
 
-    @Autowired    
+    @Autowired
     BudgetWiseFilrerRepository budgetWiseFilrerRepository;
 
-    @Autowired    
+    @Autowired
     CdaParkingTransRepository cdaParkingTransRepository;
 
-    @Autowired    
+    @Autowired
     CdaParkingRepository cdaParkingRepository;
 
 
-    @Autowired    
+    @Autowired
     BudgetFinancialYearRepository budgetFinancialYearRepository;
 
-    @Autowired    
+    @Autowired
     CgUnitRepository cgUnitRepository;
 
 
 //    @Autowired    
 //    BudgetAllocationRepository budgetAllocationRepository;
 
-    @Autowired    
+    @Autowired
     AmountUnitRepository amountUnitRepository;
 
-    @Autowired    
+    @Autowired
     private JwtUtils jwtUtils;
 
-    @Autowired    
+    @Autowired
     private HeaderUtils headerUtils;
 
-    @Autowired    
+    @Autowired
     SubHeadRepository subHeadRepository;
 
-    @Autowired    
+    @Autowired
     private HrDataRepository hrDataRepository;
 
     @Override
@@ -296,10 +296,6 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
 
                 List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(budgetFilterRequest.getFinyearId(), majorHedaData.get(i).getBudgetCodeId(), hrData.getUnitId(), budgetFilterRequest.getAllocationType(), "0");
 
-
-//                List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFilterRequest.getFinyearId(), majorHedaData.get(i).getBudgetCodeId(), budgetFilterRequest.getAllocationType(), "Approved", "0", "0");
-
-
                 for (Integer m = 0; m < cdaParkingTrans.size(); m++) {
                     amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(m).getAmountType());
                     amount = amount + Double.parseDouble(cdaParkingTrans.get(m).getRemainingCdaAmount());
@@ -313,6 +309,7 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
                     CdaFilterData cgUnitResponse = new CdaFilterData();
                     BeanUtils.copyProperties(cdaParkingTrans.get(h), cgUnitResponse);
                     cgUnitResponse.setGinNo(cdaParkingRepository.findByGinNo(cdaParkingTrans.get(h).getGinNo()));
+                    cgUnitResponse.setAmountType(amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(h).getAmountType()));
                     cdaTransData.add(cgUnitResponse);
                 }
 

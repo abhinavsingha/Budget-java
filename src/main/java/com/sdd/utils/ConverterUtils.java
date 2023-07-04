@@ -149,9 +149,19 @@ public class ConverterUtils {
         } else {
             return number + addSpace + " ";
         }
+    }
 
+    public static String addSpacaeInStringInWord(String number, int lenghtData) {
 
-
+        String addSpace = "";
+        for (Integer n = number.length(); n < lenghtData; n++) {
+            addSpace = addSpace + "   ";
+        }
+        if (number.length() == lenghtData) {
+            return number + addSpace;
+        } else {
+            return number + addSpace + "  ";
+        }
     }
 
     public static int getMaximumLength(int number1, int number2) {
