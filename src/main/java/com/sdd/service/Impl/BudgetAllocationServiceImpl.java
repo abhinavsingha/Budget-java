@@ -966,10 +966,16 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
             List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getTransactionId(), "0");
+//            List<CdaParkingTrans> cdaParkingListRevisionCase = cdaParkingTransRepository.findByTransactionId(budgetAllocationSubReport.getTransactionId());
             if (cdaParkingList.size() > 0) {
                 budgetAllocationReport.setIsCDAparking("1");
                 budgetAllocationReport.setCdaList(cdaParkingList);
-            } else {
+            }
+//            else if (cdaParkingListRevisionCase.size() > 0) {
+//                budgetAllocationReport.setIsCDAparking("2");
+//                budgetAllocationReport.setCdaList(cdaParkingList);
+//            }
+            else {
                 budgetAllocationReport.setIsCDAparking("0");
                 budgetAllocationReport.setCdaList(cdaParkingList);
             }

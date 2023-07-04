@@ -165,7 +165,7 @@ public class CdaParkingImpl implements CdaParkingService {
             }
 
 
-            List<CdaParkingTrans> cdaParkingTransListData = cdaParkingTransRepository.findByTransactionId(cdaRequest.getCdaRequest().get(i).getAllocationTypeID());
+            List<CdaParkingTrans> cdaParkingTransListData = cdaParkingTransRepository.findByTransactionId(cdaRequest.getCdaRequest().get(i).getTransactionId());
             if (cdaParkingTransListData.size() > 0) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA DATA ALREADY SAVE OR REVISED ALLOCATION.");
             }
