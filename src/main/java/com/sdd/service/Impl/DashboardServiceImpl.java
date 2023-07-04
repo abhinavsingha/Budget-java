@@ -877,7 +877,10 @@ public class DashboardServiceImpl implements DashBoardService {
                     dashBoardExprnditureResponse.setBudgetHead(bHead);
                     dashBoardExprnditureResponse.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
                     dashBoardExprnditureResponse.setExpenditureAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount)));
+                    if(finAmount!=0)
                     dashBoardExprnditureResponse.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount*100/finAmount)));
+                    else
+                        dashBoardExprnditureResponse.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(0.0)));
                     dashBoardExprnditureResponse.setLastCBDate(cbD);
                     dashBoardExprnditureResponse.setAmountIn(amountIn);
                     dashBoardExprnditureResponseList.add(dashBoardExprnditureResponse);
@@ -946,8 +949,8 @@ public class DashboardServiceImpl implements DashBoardService {
             }
             for (BudgetAllocation val : budgetAllocationsDetalis) {
                 String uId=val.getToUnit();
-                CgUnit cgUnit = cgUnitRepository.findByUnit(uId);
-                String uName=cgUnit.getDescr();
+                CgUnit unitN = cgUnitRepository.findByUnit(uId);
+                String uName=unitN.getDescr();
 
                 double amount = Double.parseDouble(val.getAllocationAmount());
                 String amountTypeid=val.getAmountType();
@@ -1022,7 +1025,10 @@ public class DashboardServiceImpl implements DashBoardService {
                 subResp.setAmountIn(amountIn);
                 subResp.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
                 subResp.setExpenditureAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount)));
-                subResp.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount*100/finAmount)));
+                if(finAmount!=0)
+                subResp.setPerAmount(String.format("%1$0,1.4f", new BigDecimal((expAmount*100)/finAmount)));
+                else
+                    subResp.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(0.0)));
                 subResp.setLastCBDate(cbD);
                 resp.add(subResp);
             }
