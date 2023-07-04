@@ -459,7 +459,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
         List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
 
-        List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getBudgetHeadId(), hrData.getUnitId(), "0", allocationType.get(0).getAllocTypeId());
+        List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getBudgetHeadId(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
 
         if (cdaParkingList.size() > 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA ALREADY PARKED.CAN NOT UPDATE AFTER CDA PARKING");

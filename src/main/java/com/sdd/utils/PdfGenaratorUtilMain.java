@@ -71,13 +71,15 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 8, 25f));
 
 
+        int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
+
         Phrase phrase = new Phrase();
         Font font = new Font(Font.FontFamily.COURIER, 8, Font.BOLD);
-        Chunk approverName = new Chunk("           " + (filePathResponse.getApproveName() + "\n          " + filePathResponse.getApproveRank()), font);
+        Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(), maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(), maxlength)), font);
         phrase.add(approverName);
         Paragraph paragraph = new Paragraph();
         paragraph.add(phrase);
-        paragraph.setAlignment(Element.ALIGN_BOTTOM);
+        paragraph.setAlignment(Element.ALIGN_RIGHT);
 
         document.add(table);
         document.add(paragraph);
@@ -110,14 +112,14 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText("", 8, 25f));
 
 
-        double grandTotal = 0;
+        Float grandTotal = 0f;
         for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
             String key11 = entry11.getKey();
             List<ReportSubModel> tabData11 = entry11.getValue();
 
 //            table.addCell(normalText(key11, 8, 25f));
 
-            double allAmountData = 0;
+            Float allAmountData = 0f;
             for (Integer i = 0; i < tabData11.size(); i++) {
 
 
@@ -130,8 +132,8 @@ public class PdfGenaratorUtilMain {
 //                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getUnit()), 8, 25f));
                 table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 8, 25f));
 
-                allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
-                grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
+                allAmountData = allAmountData + Float.parseFloat(tabData11.get(i).getAmount());
+                grandTotal = grandTotal + Float.parseFloat(tabData11.get(i).getAmount());
 
 
             }
@@ -146,19 +148,18 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 8, 25f));
 
 
+
+
+        int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
+
         Phrase phrase = new Phrase();
         Font font = new Font(Font.FontFamily.COURIER, 8, Font.BOLD);
-        Chunk approverName = new Chunk((filePathResponse.getApproveName() + "\n" + filePathResponse.getApproveRank()), font);
+        Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(), maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(), maxlength)), font);
         phrase.add(approverName);
         Paragraph paragraph = new Paragraph();
         paragraph.add(phrase);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
 
-
-//        document.add(new Paragraph("\n"));
-//        Paragraph heading2 = new Paragraph(filePathResponse.getApproveName() + "\n" + filePathResponse.getUnit() + "\n" + filePathResponse.getApproveRank());
-//        heading2.setAlignment(Paragraph.ALIGN_RIGHT);
-//        document.add(heading2);
 
 
         document.add(table);
@@ -236,11 +237,11 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 8, 25f));
 
 
-        int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), filePathResponse.getApproveRank().length());
-       
+        int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
+
         Phrase phrase = new Phrase();
         Font font = new Font(Font.FontFamily.COURIER, 8, Font.BOLD);
-        Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(),maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(),maxlength)), font);
+        Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(), maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(), maxlength)), font);
         phrase.add(approverName);
         Paragraph paragraph = new Paragraph();
         paragraph.add(phrase);
@@ -254,7 +255,7 @@ public class PdfGenaratorUtilMain {
     }
 
 
-    public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal, HashMap<String, String> coloumWiseAmount) throws Exception {
+    public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal, HashMap<String, String> coloumWiseAmount,FilePathResponse filePathResponse) throws Exception {
 
 
         Document document = new Document(PageSize.A4.rotate());
@@ -324,6 +325,17 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 6, 20f));
 
 
+        int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
+
+        Phrase phrase = new Phrase();
+        Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(), maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(), maxlength)), font);
+        phrase.add(approverName);
+        Paragraph paragraph = new Paragraph();
+        paragraph.add(phrase);
+        paragraph.setAlignment(Element.ALIGN_RIGHT);
+
+
+
         document.add(preface);
         document.add(table);
         document.close();
@@ -331,7 +343,7 @@ public class PdfGenaratorUtilMain {
     }
 
 
-    public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal, Float allocationGrandTotal) throws Exception {
+    public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal, Float allocationGrandTotal,FilePathResponse filePathResponse) throws Exception {
 
 
         Document document = new Document(PageSize.A4.rotate());
@@ -380,6 +392,18 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText("Grand Total", 8, 20f));
         table.addCell(boldText(ConverterUtils.addDecimalPoint(allocationGrandTotal + ""), 8, 20f));
         table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 8, 20f));
+
+
+
+        int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
+
+        Phrase phrase = new Phrase();
+        Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(), maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(), maxlength)), font);
+        phrase.add(approverName);
+        Paragraph paragraph = new Paragraph();
+        paragraph.add(phrase);
+        paragraph.setAlignment(Element.ALIGN_RIGHT);
+
 
         document.add(preface);
         document.add(table);

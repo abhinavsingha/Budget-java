@@ -119,13 +119,11 @@ public class ConverterUtils {
     }
 
 
-
     public static String getCurrentDate() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime now = LocalDateTime.now();
         return (dtf.format(now));
     }
-
 
 
     public static String addDecimalPoint(String number) {
@@ -140,24 +138,29 @@ public class ConverterUtils {
     }
 
 
-    public static String addSpacaeInString(String number,int lenghtData) {
+    public static String addSpacaeInString(String number, int lenghtData) {
 
         String addSpace = "";
         for (Integer n = number.length(); n < lenghtData; n++) {
-            addSpace = addSpace +" ";
+            addSpace = addSpace + " ";
         }
-        return number + addSpace;
+        if (number.length() == lenghtData) {
+            return number + addSpace;
+        } else {
+            return number + addSpace + " ";
+        }
+
+
+
     }
 
-    public static int getMaximumLength(int number1 ,int number2) {
-        if(number1 > number2){
+    public static int getMaximumLength(int number1, int number2) {
+        if (number1 > number2) {
             return number1;
-        }else {
+        } else {
             return number2;
         }
     }
-
-
 
 
     public static String checkDateIsvalidOrNor(String dt) {

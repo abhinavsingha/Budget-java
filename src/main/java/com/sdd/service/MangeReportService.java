@@ -14,6 +14,7 @@ public interface MangeReportService {
 
 
     ApiResponse<List<FilePathResponse>> getAllocationReport(String reportRequest);
+
     ApiResponse<List<FilePathResponse>> getAllocationReportDoc(String reportRequest);
 
 

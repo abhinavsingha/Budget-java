@@ -6,6 +6,7 @@ import com.sdd.response.CDAReportResponse;
 import com.sdd.response.CDAReportSubResponse;
 import com.sdd.response.FilePathResponse;
 import org.apache.poi.xwpf.usermodel.*;
+import org.openxmlformats.schemas.officeDocument.x2006.sharedTypes.STOnOff;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -155,7 +156,7 @@ public class DocxGenaratorUtil {
             boldText(paragraphtableRowOne1111.createRun(), 10, "", true);
 
 
-            double grandTotal = 0;
+            Float grandTotal = 0f;
             for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
                 String key11 = entry11.getKey();
                 List<ReportSubModel> tabData11 = entry11.getValue();
@@ -163,7 +164,7 @@ public class DocxGenaratorUtil {
 //                XWPFTableRow tableRow = table.createRow();
 //                tableRow.getCell(0).setText(key11);
 
-                double allAmountData = 0;
+                Float allAmountData = 0f;
                 for (Integer i = 0; i < tabData11.size(); i++) {
 
                     XWPFTableRow tableRow11 = table.createRow();
@@ -175,8 +176,8 @@ public class DocxGenaratorUtil {
                     XWPFParagraph paragraph11 = tableRow11.getCell(2).addParagraph();
                     normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), false);
 
-                    allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
-                    grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
+                    allAmountData = allAmountData + Float.parseFloat(tabData11.get(i).getAmount());
+                    grandTotal = grandTotal + Float.parseFloat(tabData11.get(i).getAmount());
 
                 }
 
@@ -314,18 +315,40 @@ public class DocxGenaratorUtil {
             XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
             boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(grandTotal + ""), true);
 
+            int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
+
 
             XWPFParagraph mainParagraph = document.createParagraph();
             mainParagraph = document.createParagraph();
             mainParagraph.createRun().addBreak();
 
             mainParagraph = document.createParagraph();
-            boldText(mainParagraph.createRun(), 10, filePathResponse.getApproveName() + "", true);
-            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
+            boldText(mainParagraph.createRun(), 10, ConverterUtils.addSpacaeInString(filePathResponse.getApproveName() + "", maxlength), true);
+            mainParagraph.setAlignment(ParagraphAlignment.LEFT);
 
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, filePathResponse.getApproveRank() + "", true);
-            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
+            normalText(mainParagraph.createRun(), 10, ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank() + "", maxlength), true);
+            mainParagraph.setAlignment(ParagraphAlignment.LEFT);
+
+
+            
+            mainParagraph = document.createParagraph();
+            mainParagraph.setAlignment(ParagraphAlignment.LEFT);
+
+            XWPFRun run = mainParagraph.createRun();
+            run.setText("Paragraph 1 LTR \n");
+            CTP ctp = mainParagraph.getCTP();
+            CTPPr ctppr;
+            if ((ctppr = ctp.getPPr()) == null) ctppr = ctp.addNewPPr();
+
+
+            run = mainParagraph.createRun();
+            run.setText(" عليكمn");
+
+            mainParagraph = document.createParagraph();
+            run = mainParagraph.createRun();
+            run.setText("Paragraph \n 3 LTR");
+            mainParagraph.setAlignment(ParagraphAlignment.LEFT);
 
 
             document.write(out);
@@ -563,4 +586,6 @@ public class DocxGenaratorUtil {
         run.setText(text);
         run.setBold(bold);
     }
+
+
 }

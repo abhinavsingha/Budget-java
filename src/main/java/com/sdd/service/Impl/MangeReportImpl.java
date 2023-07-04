@@ -442,7 +442,7 @@ public class MangeReportImpl implements MangeReportService {
         List<BudgetAllocation> budgetAllocationReport = new ArrayList<BudgetAllocation>();
 
 //        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
-        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnit(authGroupId, hrData.getUnitId());
+        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsBudgetRevisionAndIsFlag(authGroupId, hrData.getUnitId(), "0", "0");
 
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
@@ -739,7 +739,7 @@ public class MangeReportImpl implements MangeReportService {
         List<BudgetAllocation> budgetAllocationReport = new ArrayList<BudgetAllocation>();
 
 //        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
-        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnit(authGroupId, hrData.getUnitId());
+        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsBudgetRevisionAndIsFlag(authGroupId, hrData.getUnitId(), "0", "0");
 
 
         if (budgetAllocationReport.size() <= 0) {
@@ -1572,7 +1572,26 @@ public class MangeReportImpl implements MangeReportService {
         cadSubReport.setMinorHead(cdaReportRequest.getMinorHead());
         cadSubReport.setAllocationType(allocationType.getAllocDesc());
         cadSubReport.setAmountType(amountUnit.getAmountType());
+        FilePathResponse filePathResponse = new FilePathResponse();
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
 
+        String approverPId = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                filePathResponse.setApproveName(findHrData.getFullName());
+                filePathResponse.setApproveRank(findHrData.getRank());
+            }
+        }
+
+        if (approverPId.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO APPROVE ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
+        }
 
         Float grandTotal = 0f;
         Float allocationGrandTotal = 0f;
@@ -1602,7 +1621,7 @@ public class MangeReportImpl implements MangeReportService {
                     grandTotal = grandTotal + amount;
 
                     allocationAmount = allocationAmount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
-                    allocationGrandTotal = allocationGrandTotal +  allocationAmount;
+                    allocationGrandTotal = allocationGrandTotal + allocationAmount;
                 }
             }
 
@@ -1623,7 +1642,7 @@ public class MangeReportImpl implements MangeReportService {
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
             File file = new File(filePath);
-            pdfGenaratorUtilMain.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal,allocationGrandTotal);
+            pdfGenaratorUtilMain.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal, allocationGrandTotal, filePathResponse);
             dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             dtoList.setFileName(fileName);
             dtoList.setAllCdaData(allCdaData);
@@ -1732,7 +1751,7 @@ public class MangeReportImpl implements MangeReportService {
                     grandTotal = grandTotal + amount;
 
                     allocationAmount = allocationAmount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
-                    allocationGrandTotal = allocationGrandTotal +  allocationAmount;
+                    allocationGrandTotal = allocationGrandTotal + allocationAmount;
                 }
             }
 
@@ -1753,7 +1772,7 @@ public class MangeReportImpl implements MangeReportService {
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
             File file = new File(filePath);
-            docxGenaratorUtil.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal,allocationGrandTotal);
+            docxGenaratorUtil.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal, allocationGrandTotal);
             dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
             dtoList.setFileName(fileName);
             dtoList.setAllCdaData(allCdaData);
@@ -1826,6 +1845,28 @@ public class MangeReportImpl implements MangeReportService {
         if (allocationType == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
         }
+
+        FilePathResponse filePathResponse = new FilePathResponse();
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                filePathResponse.setApproveName(findHrData.getFullName());
+                filePathResponse.setApproveRank(findHrData.getRank());
+            }
+        }
+
+        if (approverPId.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO APPROVE ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
+        }
+
 
         cadSubReport.setFinYear(budgetFinancialYear.getFinYear());
         cadSubReport.setMajorHead(cdaReportRequest.getMajorHead());
@@ -1936,7 +1977,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -2043,7 +2084,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -2150,7 +2191,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -2284,7 +2325,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -2411,7 +2452,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
