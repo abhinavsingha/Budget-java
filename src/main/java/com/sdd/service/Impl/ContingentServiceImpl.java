@@ -280,12 +280,7 @@ public class ContingentServiceImpl implements ContingentService {
         }
 
 
-        AllocationType allocationTypeData = null;
 
-        List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
-        if (allocationType.size() > 0) {
-            allocationTypeData = allocationType.get(0);
-        }
 
 
         String authGroupId = HelperUtils.getAuthorityGroupId();
@@ -329,6 +324,12 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBill.setIsUpdate("0");
             contigentBill.setGst(contingentBillSaveRequest.getGst());
             contigentBill.setVendorName(contingentBillSaveRequest.getVendorName());
+
+
+            List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
+            contigentBill.setAllocationTypeId(allocationType.get(0).getAllocTypeId());
+
+
 
             contigentBill.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             contigentBill.setUpdatedOn(HelperUtils.getCurrentTimeStamp());

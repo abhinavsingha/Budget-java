@@ -23,8 +23,8 @@ public class ContigentBill {
     @Column(name = "CB_ID")
     private String cbId;
 
-    @Column(name = "ALLOCATION_ID")
-    private String allocationId;
+    @Column(name = "ALLOCATION_TYPE_ID")
+    private String allocationTypeId;
 
     @Column(name = "CB_NO")
     private String cbNo;

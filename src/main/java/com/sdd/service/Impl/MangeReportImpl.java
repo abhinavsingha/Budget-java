@@ -1640,6 +1640,136 @@ public class MangeReportImpl implements MangeReportService {
 
 
     @Override
+    public ApiResponse<FilePathResponse> getReservedFundDoc(CDAReportRequest cdaReportRequest) {
+        HashMap<String, List<CDAReportResponse>> allCdaData = new LinkedHashMap<String, List<CDAReportResponse>>();
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        FilePathResponse dtoList = new FilePathResponse();
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+
+        String fileName = "ReserveFund" + hrData.getUnitId() + System.currentTimeMillis();
+        CDAReportSubResponse cadSubReport = new CDAReportSubResponse();
+
+
+        if (cdaReportRequest.getCdaType() == null || cdaReportRequest.getCdaType().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA TYPE ID CAN NOT BE BLANK");
+        }
+
+        if (cdaReportRequest.getFinancialYearId() == null || cdaReportRequest.getFinancialYearId().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FIN YEAD ID CAN NOT BE BLANK");
+        }
+
+        if (cdaReportRequest.getAmountType() == null || cdaReportRequest.getAmountType().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AMOUNT TYPE ID CAN NOT BE BLANK");
+        }
+
+        if (cdaReportRequest.getMajorHead() == null || cdaReportRequest.getMajorHead().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "MAJOR HEAD ID CAN NOT BE BLANK");
+        }
+
+        if (cdaReportRequest.getSubHeadType() == null || cdaReportRequest.getSubHeadType().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "SUB HEAD TYPE ID CAN NOT BE BLANK");
+        }
+
+        if (cdaReportRequest.getAllocationTypeId() == null || cdaReportRequest.getAllocationTypeId().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION TYPE ID CAN NOT BE BLANK");
+        }
+
+        if (cdaReportRequest.getMinorHead() == null || cdaReportRequest.getMinorHead().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "MINOR HEAD ID CAN NOT BE BLANK:key - minorHead");
+        }
+
+        BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(cdaReportRequest.getFinancialYearId());
+        if (budgetFinancialYear == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID FINANCIAL YEAR ID");
+        }
+
+        AllocationType allocationType = allocationRepository.findByAllocTypeId(cdaReportRequest.getAllocationTypeId());
+        if (allocationType == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
+        }
+
+        AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaReportRequest.getAmountType());
+        if (allocationType == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
+        }
+
+        cadSubReport.setFinYear(budgetFinancialYear.getFinYear());
+        cadSubReport.setMajorHead(cdaReportRequest.getMajorHead());
+        cadSubReport.setMinorHead(cdaReportRequest.getMinorHead());
+        cadSubReport.setAllocationType(allocationType.getAllocDesc());
+        cadSubReport.setAmountType(amountUnit.getAmountType());
+
+
+        Float grandTotal = 0f;
+        Float allocationGrandTotal = 0f;
+
+        List<CDAReportResponse> cdaReportList = new ArrayList<>();
+        List<BudgetHead> subHeadsData = subHeadRepository.findByMajorHeadAndSubHeadTypeIdOrderBySerialNumberAsc(cdaReportRequest.getMajorHead(), cdaReportRequest.getSubHeadType());
+
+        for (int i = 0; i < subHeadsData.size(); i++) {
+            cdaReportList = new ArrayList<>();
+            CDAReportResponse cdaReportResponse = new CDAReportResponse();
+
+            BudgetHead subHead = subHeadsData.get(i);
+            cdaReportResponse.setName(subHead.getSubHeadDescr());
+
+
+            List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId());
+
+            Float amount = 0f;
+            Float allocationAmount = 0f;
+
+            for (int m = 0; m < cdaData.size(); m++) {
+                if (cdaData.get(m).getRemainingCdaAmount() == null) {
+                    amount = amount;
+                } else {
+                    AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
+                    amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                    grandTotal = grandTotal + amount;
+
+                    allocationAmount = allocationAmount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                    allocationGrandTotal = allocationGrandTotal +  allocationAmount;
+                }
+            }
+
+
+            cdaReportResponse = new CDAReportResponse();
+            cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
+            cdaReportResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
+            cdaReportResponse.setReportType("RESERVE FUND");
+            cdaReportList.add(cdaReportResponse);
+            allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
+        }
+        try {
+
+
+            File folder = new File(HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
+            File file = new File(filePath);
+            pdfGenaratorUtilMain.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal,allocationGrandTotal);
+            dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
+            dtoList.setFileName(fileName);
+            dtoList.setAllCdaData(allCdaData);
+
+
+        } catch (Exception e) {
+            throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
+        }
+
+
+        return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<FilePathResponse>() {
+        });
+    }
+
+
+    @Override
     public ApiResponse<FilePathResponse> getCdaParkingReport(CDAReportRequest cdaReportRequest) {
         HashMap<String, List<CDAReportResponse>> allCdaData = new LinkedHashMap<String, List<CDAReportResponse>>();
         String token = headerUtils.getTokeFromHeader();

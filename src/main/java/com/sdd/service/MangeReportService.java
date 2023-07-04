@@ -43,6 +43,8 @@ public interface MangeReportService {
 
     ApiResponse<FilePathResponse> getReservedFund(CDAReportRequest reportRequest);
 
+    ApiResponse<FilePathResponse> getReservedFundDoc(CDAReportRequest reportRequest);
+
     ApiResponse<FilePathResponse> getCdaParkingReportDoc(CDAReportRequest reportRequest);
 
 
