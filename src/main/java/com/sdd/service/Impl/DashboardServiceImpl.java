@@ -950,7 +950,11 @@ public class DashboardServiceImpl implements DashBoardService {
             for (BudgetAllocation val : budgetAllocationsDetalis) {
                 String uId=val.getToUnit();
                 CgUnit unitN = cgUnitRepository.findByUnit(uId);
-                String uName=unitN.getDescr();
+                String uName="";
+                if(unitN==null)
+                     uName=uId;
+                else
+                 uName=unitN.getDescr();
 
                 double amount = Double.parseDouble(val.getAllocationAmount());
                 String amountTypeid=val.getAmountType();
