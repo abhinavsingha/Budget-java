@@ -258,12 +258,14 @@ public class DocxGenaratorUtil {
 
                 XWPFTableRow tableRow = table.createRow();
                 XWPFParagraph tableView = tableRow.getCell(0).addParagraph();
-                boldText(tableView.createRun(), 10, key11, true);
+
 
                 if (key11.equalsIgnoreCase("2037")) {
+                    boldText(tableView.createRun(), 10, key11 + "\n00.102.06", true);
                     XWPFParagraph tableView11 = tableRow.getCell(1).addParagraph();
                     boldText(tableView11.createRun(), 10, "REVENUE", true);
                 } else {
+                    boldText(tableView.createRun(), 10, key11 + "\n00.037.01", true);
                     XWPFParagraph tableView22 = tableRow.getCell(1).addParagraph();
                     boldText(tableView22.createRun(), 10, "CAPITAL", true);
                 }
@@ -362,7 +364,7 @@ public class DocxGenaratorUtil {
             if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
                 reOrCapital = "REVENUE";
             } else {
-                reOrCapital = "CAPITAL" ;
+                reOrCapital = "CAPITAL";
             }
 
             XWPFParagraph mainParagraph = document.createParagraph();
@@ -441,6 +443,98 @@ public class DocxGenaratorUtil {
 
             XWPFParagraph paragraph11 = tableRow11.getCell(ih + 1).addParagraph();
             normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(grandTotal + ""), false);
+
+
+            document.write(out);
+            out.close();
+            document.close();
+
+        } catch (Exception e) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), e.toString());
+        }
+    }
+
+
+    public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal, Float allocationGrandTotal) throws Exception {
+
+        try {
+
+            XWPFDocument document = new XWPFDocument();
+            FileOutputStream out = new FileOutputStream(new File(path));
+            String reOrCapital = "";
+            if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
+                reOrCapital = "REVENUE";
+            } else {
+                reOrCapital = "CAPITAL";
+            }
+
+            XWPFParagraph mainParagraph = document.createParagraph();
+            mainParagraph.createRun().addBreak();
+
+            mainParagraph = document.createParagraph();
+            mainParagraph.setAlignment(ParagraphAlignment.CENTER);
+            boldText(mainParagraph.createRun(), 17, "\n" + "RESERVE FUND " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear(), true);
+            mainParagraph.createRun().addBreak();
+
+            mainParagraph = document.createParagraph();
+            mainParagraph.setAlignment(ParagraphAlignment.CENTER);
+            boldText(mainParagraph.createRun(), 17, reOrCapital, true);
+            mainParagraph.createRun().addBreak();
+
+
+            mainParagraph = document.createParagraph();
+            mainParagraph.setAlignment(ParagraphAlignment.CENTER);
+            boldText(mainParagraph.createRun(), 17, "Major Head " + cadSubReport.getMajorHead() + ". Sub Major Head 00. Minor Head " + cadSubReport.getMinorHead() + ") (In " + cadSubReport.getAmountType() + ")", true);
+
+            mainParagraph.createRun().addBreak();
+            mainParagraph.createRun().addBreak();
+            mainParagraph.createRun().addBreak();
+
+            XWPFTable table = document.createTable();
+            table.setWidth("100%");
+
+
+            XWPFTableRow tableRowOne = table.getRow(0);
+            XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
+            boldText(paragraphtableRowOne.createRun(), 15, "Sub Head", true);
+
+            XWPFParagraph paragraphtableRowTwo = tableRowOne.addNewTableCell().addParagraph();
+            boldText(paragraphtableRowTwo.createRun(), 15, "Allocation Amount", true);
+
+            XWPFParagraph paragraphtableRowThree = tableRowOne.addNewTableCell().addParagraph();
+            boldText(paragraphtableRowThree.createRun(), 15, "RESERVE FUND", true);
+
+
+            for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
+                String key = entry.getKey();
+
+                List<CDAReportResponse> tabData = entry.getValue();
+                XWPFTableRow tableRow11 = table.createRow();
+
+                XWPFParagraph paragraphtableRowOne11 = tableRow11.getCell(0).addParagraph();
+                boldText(paragraphtableRowOne11.createRun(), 12, key, true);
+
+
+                XWPFParagraph paragraph11 = tableRow11.getCell(1).addParagraph();
+                normalText(paragraph11.createRun(), 12, ConverterUtils.addDecimalPoint(tabData.get(0).getAllocationAmount()), false);
+
+
+                XWPFParagraph paragraph123 = tableRow11.getCell(2).addParagraph();
+                normalText(paragraph123.createRun(), 12, ConverterUtils.addDecimalPoint(tabData.get(0).getName()), false);
+
+            }
+
+            XWPFTableRow tableRow11 = table.createRow();
+            XWPFParagraph paragraph1234 = tableRow11.getCell(0).addParagraph();
+            boldText(paragraph1234.createRun(), 12, ConverterUtils.addDecimalPoint("Grand Total"), false);
+
+
+            XWPFParagraph paragraph11 = tableRow11.getCell(1).addParagraph();
+            normalText(paragraph11.createRun(), 12, ConverterUtils.addDecimalPoint(allocationGrandTotal + ""), false);
+
+
+            XWPFParagraph paragraph111 = tableRow11.getCell(2).addParagraph();
+            normalText(paragraph111.createRun(), 12, ConverterUtils.addDecimalPoint(grandTotal + ""), false);
 
 
             document.write(out);

@@ -193,12 +193,12 @@ public class PdfGenaratorUtilMain {
             List<ReportSubModel> tabData11 = entry11.getValue();
 
             if (key11.equalsIgnoreCase("2037")) {
-                table.addCell(boldText(key11, 8, 25f));
+                table.addCell(boldText(key11 + "\n00.102.06", 8, 25f));
                 table.addCell(boldText("REVENUE", 8, 25f));
                 table.addCell(boldText("", 8, 25f));
             } else {
                 table.addCell(boldText(key11, 8, 25f));
-                table.addCell(boldText("CAPITAL", 8, 25f));
+                table.addCell(boldText("CAPITAL" + "\n00.037.01", 8, 25f));
                 table.addCell(boldText("", 8, 25f));
             }
 
@@ -236,19 +236,15 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 8, 25f));
 
 
+        int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), filePathResponse.getApproveRank().length());
+       
         Phrase phrase = new Phrase();
         Font font = new Font(Font.FontFamily.COURIER, 8, Font.BOLD);
-        Chunk approverName = new Chunk((filePathResponse.getApproveName() + "\n" + filePathResponse.getApproveRank()), font);
+        Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(),maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(),maxlength)), font);
         phrase.add(approverName);
         Paragraph paragraph = new Paragraph();
         paragraph.add(phrase);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
-
-
-//        document.add(new Paragraph("\n"));
-//        Paragraph heading2 = new Paragraph(filePathResponse.getApproveName() + "\n" + filePathResponse.getUnit() + "\n" + filePathResponse.getApproveRank());
-//        heading2.setAlignment(Paragraph.ALIGN_RIGHT);
-//        document.add(heading2);
 
 
         document.add(table);

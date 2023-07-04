@@ -18,6 +18,7 @@ public interface MangeReportService {
 
 
     ApiResponse<List<FilePathResponse>> getReceiptReport(String reportRequest);
+
     ApiResponse<List<FilePathResponse>> getReceiptReportDoc(String reportRequest);
 
     ApiResponse<List<FilePathResponse>> getConsolidateReceiptReport(String finYearId,String allocationType,String amountType);

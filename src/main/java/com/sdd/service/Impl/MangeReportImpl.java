@@ -1751,10 +1751,10 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
+            String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
             File file = new File(filePath);
-            pdfGenaratorUtilMain.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal,allocationGrandTotal);
-            dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
+            docxGenaratorUtil.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal,allocationGrandTotal);
+            dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
             dtoList.setFileName(fileName);
             dtoList.setAllCdaData(allCdaData);
 

@@ -140,6 +140,26 @@ public class ConverterUtils {
     }
 
 
+    public static String addSpacaeInString(String number,int lenghtData) {
+
+        String addSpace = "";
+        for (Integer n = number.length(); n < lenghtData; n++) {
+            addSpace = addSpace +" ";
+        }
+        return number + addSpace;
+    }
+
+    public static int getMaximumLength(int number1 ,int number2) {
+        if(number1 > number2){
+            return number1;
+        }else {
+            return number2;
+        }
+    }
+
+
+
+
     public static String checkDateIsvalidOrNor(String dt) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
