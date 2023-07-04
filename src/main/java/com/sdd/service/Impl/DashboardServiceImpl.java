@@ -942,9 +942,17 @@ public class DashboardServiceImpl implements DashBoardService {
         String amountIn = amountObj.getAmountType().toUpperCase();
         AllocationType type = allocationRepository.findByAllocTypeId(allocationTypeId);
         try {
-            List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, hrData.getUnitId(), finYearId, allocationTypeId, "0");
-            List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, hrData.getUnitId(), finYearId, allocationTypeId, "0");
-            budgetAllocationsDetalis.addAll(budgetAllocationsDetalis.size(), budgetAllocationsDetalis1);
+            List<BudgetAllocation> budgetAllocationsDetalis;
+            if(hrData.getUnitId().equalsIgnoreCase("001321"))
+            {
+               budgetAllocationsDetalis = budgetAllocationRepository.findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, finYearId, allocationTypeId, "0");
+
+            }else{
+                 budgetAllocationsDetalis = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, hrData.getUnitId(), finYearId, allocationTypeId, "0");
+                List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, hrData.getUnitId(), finYearId, allocationTypeId, "0");
+                budgetAllocationsDetalis.addAll(budgetAllocationsDetalis.size(), budgetAllocationsDetalis1);
+            }
+
             if (budgetAllocationsDetalis.size()<=0) {
                 return ResponseUtils.createFailureResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {
                 }, "RECORD NOT FOUND", HttpStatus.OK.value());
