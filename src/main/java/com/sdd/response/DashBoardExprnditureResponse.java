@@ -21,5 +21,9 @@ public class DashBoardExprnditureResponse {
 
   String expenditureAmount;
 
+  String perAmount;
+
+  String amountIn;
+
   String lastCBDate;
 }

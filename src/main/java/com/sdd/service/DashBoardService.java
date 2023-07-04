@@ -2,10 +2,7 @@ package com.sdd.service;
 
 import com.sdd.entities.AmountUnit;
 import com.sdd.request.DashBoardRequest;
-import com.sdd.response.ApiResponse;
-import com.sdd.response.DashBoardExprnditureResponse;
-import com.sdd.response.DashBoardResponse;
-import com.sdd.response.UiResponse;
+import com.sdd.response.*;
 
 import java.util.List;
 
@@ -13,7 +10,7 @@ import java.util.List;
 public interface DashBoardService {
 
 
-	ApiResponse<DashBoardResponse> getDashBoardData(DashBoardRequest dashBoardRequest);
+    ApiResponse<DashBoardResponse> getDashBoardData(DashBoardRequest dashBoardRequest);
 
     ApiResponse<UiResponse> getUiData(String roleId);
 
@@ -24,5 +21,8 @@ public interface DashBoardService {
     ApiResponse<DashBoardResponse> updateInboxOutBox();
 
 
-    ApiResponse<List<DashBoardExprnditureResponse>> getSubHeadWiseExpenditureByUnitIdFinYearIdAllocationTypeIdSubHeadTypeId(String unitId,String finYearId,String subHeadTypeId,String allocationTypeId);
+    ApiResponse<List<DashBoardExprnditureResponse>> getSubHeadWiseExpenditureByUnitIdFinYearIdAllocationTypeIdSubHeadTypeId(String unitId,String finYearId,String subHeadTypeId,String allocationTypeId,String amountTypeId);
+
+    ApiResponse<List<SubHeadWiseExpResp>> getDashBordSubHeadwiseExpenditure(String subHeadId, String finYearId, String allocationTypeId, String amounttypeId);
+
 }

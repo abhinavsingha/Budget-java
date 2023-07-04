@@ -40,43 +40,43 @@ import java.util.stream.Collectors;
 @Service
 public class DashboardServiceImpl implements DashBoardService {
 
-    @Autowired    
+    @Autowired
     CurrentStateRepository currentStateRepository;
 
-    @Autowired    
+    @Autowired
     AmountUnitRepository amountUnitRepository;
 
-    @Autowired    
+    @Autowired
     AllocationRepository allocationRepository;
 
-    @Autowired    
+    @Autowired
     MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
 
-    @Autowired    
+    @Autowired
     SubHeadRepository subHeadRepository;
 
-    @Autowired    
+    @Autowired
     CgUnitRepository cgUnitRepository;
 
-    @Autowired    
+    @Autowired
     RoleRepository roleRepository;
 
-    @Autowired    
+    @Autowired
     BudgetFinancialYearRepository budgetFinancialYearRepository;
 
-    @Autowired    
+    @Autowired
     BudgetAllocationDetailsRepository budgetAllocationDetailsRepository;
 
-    @Autowired    
+    @Autowired
     BudgetAllocationRepository budgetAllocationRepository;
 
-    @Autowired    
+    @Autowired
     private ContigentBillRepository contigentBillRepository;
 
-    @Autowired    
+    @Autowired
     private HeaderUtils headerUtils;
 
-    @Autowired    
+    @Autowired
     private HrDataRepository hrDataRepository;
 
     @Override
@@ -746,7 +746,7 @@ public class DashboardServiceImpl implements DashBoardService {
     @Override
     public ApiResponse<List<DashBoardExprnditureResponse>>
     getSubHeadWiseExpenditureByUnitIdFinYearIdAllocationTypeIdSubHeadTypeId(
-            String unitId, String finYearId, String subHeadTypeId, String allocationTypeId) {
+            String unitId, String finYearId, String subHeadTypeId, String allocationTypeId,String amountTypeId) {
         try {
             List<DashBoardExprnditureResponse> dashBoardExprnditureResponseList = new ArrayList<DashBoardExprnditureResponse>();
 
@@ -828,10 +828,10 @@ public class DashboardServiceImpl implements DashBoardService {
                             }else
                                 cbD="";
                         }
-                        }
-                        DecimalFormat decimalFormat = new DecimalFormat("#");
-                        String cbAmount = decimalFormat.format(totalAmount);
-                        eAmount = Double.parseDouble(cbAmount);
+                    }
+                    DecimalFormat decimalFormat = new DecimalFormat("#");
+                    String cbAmount = decimalFormat.format(totalAmount);
+                    eAmount = Double.parseDouble(cbAmount);
 
                     eAmount = totalAmount + totalbill;
 
@@ -841,6 +841,7 @@ public class DashboardServiceImpl implements DashBoardService {
                     dashBoardExprnditureResponse.setAllocatedAmount(finAmount.toString());
                     dashBoardExprnditureResponse.setExpenditureAmount(eAmount.toString());
                     dashBoardExprnditureResponse.setLastCBDate(cbD);
+                    dashBoardExprnditureResponse.setAmountIn("");
                     dashBoardExprnditureResponseList.add(dashBoardExprnditureResponse);
 
                 }
@@ -850,6 +851,104 @@ public class DashboardServiceImpl implements DashBoardService {
                     dashBoardExprnditureResponseList,
                     new TypeReference<List<DashBoardExprnditureResponse>>() {
                     });
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SDDException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server error.");
+        }
+    }
+    @Override
+    public ApiResponse<List<SubHeadWiseExpResp>> getDashBordSubHeadwiseExpenditure(String subHeadId, String finYearId, String allocationTypeId, String amounttypeId) {
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        List<SubHeadWiseExpResp> resp = new ArrayList<SubHeadWiseExpResp>();
+
+        BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(finYearId);
+        BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
+        //CgUnit cgUnit = cgUnitRepository.findByUnit(unitId);
+        AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amounttypeId);
+        Double reqAmount = amountObj.getAmount();
+        String amountIn = amountObj.getAmountType().toUpperCase();
+        AllocationType type = allocationRepository.findByAllocTypeId(allocationTypeId);
+        try {
+            List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, hrData.getUnitId(), finYearId, allocationTypeId, "0");
+
+            for (BudgetAllocation val : budgetAllocationsDetalis) {
+                String uId=val.getToUnit();
+                CgUnit cgUnit = cgUnitRepository.findByUnit(uId);
+                String uName=cgUnit.getDescr();
+
+                List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uId + "%");
+
+                double totalbill = 0.0;
+                double eAmount =0.0;
+                Timestamp lastCvDate;
+                String cbD = "";
+
+                if (unitList.size() > 0) {
+                    for (CgUnit unitss : unitList) {
+                        String subUnit = unitss.getUnit();
+                        List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdate(subUnit, finYearId, subHeadId, "0");
+
+                        if (expenditure.size() > 0) {
+                            double totalAmount = 0.0;
+                            for (ContigentBill bill : expenditure) {
+                                totalAmount += Double.parseDouble(bill.getCbAmount());
+                                if(bill.getCbDate()!=null){
+                                    lastCvDate=bill.getCbDate();
+                                    SimpleDateFormat id = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                                    SimpleDateFormat od = new SimpleDateFormat("dd-MMMM-yyyy");
+                                    Date dateC = null;
+                                    try {
+                                        dateC = id.parse(lastCvDate.toString());
+                                    } catch (ParseException ex) {
+                                        throw new RuntimeException(ex);
+                                    }
+                                    cbD = od.format(dateC);
+                                }else
+                                    cbD="";
+                            }
+                            totalbill += totalAmount;
+                        }
+                    }
+                    DecimalFormat decimalFormat = new DecimalFormat("#");
+                    String cbAmount = decimalFormat.format(totalbill);
+                    eAmount = Double.parseDouble(cbAmount);
+                }
+                List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdate(uId, finYearId, subHeadId, "0");
+                double totalAmount = 0.0;
+                if (expenditure.size() > 0) {
+                    for (ContigentBill bill : expenditure) {
+                        totalAmount += Double.parseDouble(bill.getCbAmount());
+                        if(bill.getCbDate()!=null){
+                            lastCvDate=bill.getCbDate();
+                            SimpleDateFormat id = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                            SimpleDateFormat od = new SimpleDateFormat("dd-MMMM-yyyy");
+                            Date dateC = id.parse(lastCvDate.toString());
+                            cbD = od.format(dateC);
+                        }else
+                            cbD="";
+                    }
+                }
+                DecimalFormat decimalFormat = new DecimalFormat("#");
+                String cbAmount = decimalFormat.format(totalAmount);
+                eAmount = Double.parseDouble(cbAmount);
+
+                eAmount = totalAmount + totalbill;
+
+                SubHeadWiseExpResp subResp = new SubHeadWiseExpResp();
+                subResp.setUnitName(uName);
+                subResp.setFinYear(budgetFinancialYear.getFinYear());
+                subResp.setAllocType(type.getAllocDesc());
+                subResp.setAmountIn(amountIn);
+                subResp.setAllocatedAmount(val.getAllocationAmount());
+                subResp.setExpenditureAmount(String.valueOf(eAmount));
+                subResp.setPerAmount("");
+                subResp.setLastCBDate(cbD);
+                resp.add(subResp);
+            }
+            return ResponseUtils.createSuccessResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {});
         } catch (Exception e) {
             e.printStackTrace();
             throw new SDDException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server error.");
