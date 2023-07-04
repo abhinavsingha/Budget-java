@@ -934,7 +934,10 @@ public class DashboardServiceImpl implements DashBoardService {
         AllocationType type = allocationRepository.findByAllocTypeId(allocationTypeId);
         try {
             List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, hrData.getUnitId(), finYearId, allocationTypeId, "0");
-
+            if (budgetAllocationsDetalis.size()<=0) {
+                return ResponseUtils.createFailureResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {
+                }, "RECORD NOT FOUND", HttpStatus.OK.value());
+            }
             for (BudgetAllocation val : budgetAllocationsDetalis) {
                 String uId=val.getToUnit();
                 CgUnit cgUnit = cgUnitRepository.findByUnit(uId);
