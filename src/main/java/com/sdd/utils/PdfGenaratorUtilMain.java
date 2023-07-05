@@ -32,6 +32,7 @@ public class PdfGenaratorUtilMain {
         PdfPTable table = new PdfPTable(3);
         table.setWidths(pointColumnWidths);
         table.setSpacingAfter(20);
+        table.setWidthPercentage(100);
 
         table.addCell(boldText("SUB HEAD", 8, 25f));
         table.addCell(boldText("UNIT NAME", 8, 25f));
@@ -148,8 +149,6 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 8, 25f));
 
 
-
-
         int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
 
         Phrase phrase = new Phrase();
@@ -159,7 +158,6 @@ public class PdfGenaratorUtilMain {
         Paragraph paragraph = new Paragraph();
         paragraph.add(phrase);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
-
 
 
         document.add(table);
@@ -255,7 +253,7 @@ public class PdfGenaratorUtilMain {
     }
 
 
-    public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal, HashMap<String, String> coloumWiseAmount,FilePathResponse filePathResponse) throws Exception {
+    public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal, HashMap<String, String> coloumWiseAmount, FilePathResponse filePathResponse) throws Exception {
 
 
         Document document = new Document(PageSize.A4.rotate());
@@ -335,7 +333,6 @@ public class PdfGenaratorUtilMain {
         paragraph.setAlignment(Element.ALIGN_RIGHT);
 
 
-
         document.add(preface);
         document.add(table);
         document.close();
@@ -343,7 +340,7 @@ public class PdfGenaratorUtilMain {
     }
 
 
-    public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal, Float allocationGrandTotal,FilePathResponse filePathResponse) throws Exception {
+    public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal, Float allocationGrandTotal, FilePathResponse filePathResponse) throws Exception {
 
 
         Document document = new Document(PageSize.A4.rotate());
@@ -392,7 +389,6 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText("Grand Total", 8, 20f));
         table.addCell(boldText(ConverterUtils.addDecimalPoint(allocationGrandTotal + ""), 8, 20f));
         table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 8, 20f));
-
 
 
         int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
