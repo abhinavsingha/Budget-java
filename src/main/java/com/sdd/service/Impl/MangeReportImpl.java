@@ -1981,7 +1981,9 @@ public class MangeReportImpl implements MangeReportService {
                     throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
                 }
 
-            } else if (cdaReportRequest.getCdaType().contains("112244")) {
+            }
+
+            else if (cdaReportRequest.getCdaType().contains("112244")) {
 
 
                 List<CDAReportResponse> cdaReportList = new ArrayList<>();
@@ -2094,7 +2096,9 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
 
-            } else {
+            }
+
+            else {
 
                 List<CDAReportResponse> cdaReportList = new ArrayList<>();
                 CDAReportResponse cdaReportResponse = new CDAReportResponse();
@@ -2270,7 +2274,7 @@ public class MangeReportImpl implements MangeReportService {
                     for (int k = 0; k < cdaParkingTotalList.size(); k++) {
 
                         List<CdaParkingTrans> cdaData = new ArrayList<>();
-                        cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId()));
+                        cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), cdaReportRequest.getUnitId()));
 
 //
 //                        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
@@ -2352,7 +2356,10 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
 
-            } else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
+            }
+
+
+            else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
 
                 if (cdaReportRequest.getUnitId() == null || cdaReportRequest.getUnitId().isEmpty()) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT ID CAN NOT BE BLANK");
@@ -2407,7 +2414,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
                             List<CdaParkingTrans> cdaData = new ArrayList<>();
-                            cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId()));
+                            cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), cdaReportRequest.getUnitId()));
 
 //                            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
 //
@@ -2494,6 +2501,7 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<FilePathResponse>() {
         });
     }
+
 
 
     @Override
@@ -2976,7 +2984,9 @@ public class MangeReportImpl implements MangeReportService {
             }
 
 
-        } else {
+        }
+
+        else {
 
 //            01     SubHeadWise
 //            02     UnitWise
@@ -3038,7 +3048,7 @@ public class MangeReportImpl implements MangeReportService {
 //                        List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
 
                         List<CdaParkingTrans> cdaData = new ArrayList<>();
-                        cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId()));
+                        cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), cdaReportRequest.getUnitId()));
 
 //                        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
 //
@@ -3118,7 +3128,9 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
 
-            } else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
+            }
+
+            else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
 
                 if (cdaReportRequest.getUnitId() == null || cdaReportRequest.getUnitId().isEmpty()) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT ID CAN NOT BE BLANK");
@@ -3174,7 +3186,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
                             List<CdaParkingTrans> cdaData = new ArrayList<>();
-                            cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId()));
+                            cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), cdaReportRequest.getUnitId()));
 
 //                            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
 //
