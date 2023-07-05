@@ -196,8 +196,8 @@ public class PdfGenaratorUtilMain {
                 table.addCell(boldText("REVENUE", 8, 25f));
                 table.addCell(boldText("", 8, 25f));
             } else {
-                table.addCell(boldText(key11, 8, 25f));
-                table.addCell(boldText("CAPITAL" + "\n00.037.01", 8, 25f));
+                table.addCell(boldText(key11+ "\n00.037.01", 8, 25f));
+                table.addCell(boldText("CAPITAL" , 8, 25f));
                 table.addCell(boldText("", 8, 25f));
             }
 
