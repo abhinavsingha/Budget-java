@@ -1613,10 +1613,10 @@ public class MangeReportImpl implements MangeReportService {
                     amount = amount;
                 } else {
                     AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-                    amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                    amount =  (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
                     grandTotal = grandTotal + amount;
 
-                    allocationAmount = allocationAmount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                    allocationAmount =  (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
                     allocationGrandTotal = allocationGrandTotal + allocationAmount;
                 }
             }
@@ -1739,10 +1739,10 @@ public class MangeReportImpl implements MangeReportService {
                     amount = amount;
                 } else {
                     AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-                    amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                    amount = (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
                     grandTotal = grandTotal + amount;
 
-                    allocationAmount = allocationAmount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                    allocationAmount = (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
                     allocationGrandTotal = allocationGrandTotal + allocationAmount;
                 }
             }
