@@ -1609,16 +1609,17 @@ public class MangeReportImpl implements MangeReportService {
             Float allocationAmount = 0f;
 
             for (int m = 0; m < cdaData.size(); m++) {
-                if (cdaData.get(m).getRemainingCdaAmount() == null) {
-                    amount = amount;
-                } else {
-                    AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-                    amount =  (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
-                    grandTotal = grandTotal + amount;
 
-                    allocationAmount =  (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
-                    allocationGrandTotal = allocationGrandTotal + allocationAmount;
-                }
+                AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
+
+                grandTotal = grandTotal + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());;
+                amount = amount  + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());;;
+
+
+                allocationGrandTotal = allocationGrandTotal + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                allocationAmount = allocationAmount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+
+
             }
 
 
@@ -1735,16 +1736,17 @@ public class MangeReportImpl implements MangeReportService {
             Float allocationAmount = 0f;
 
             for (int m = 0; m < cdaData.size(); m++) {
-                if (cdaData.get(m).getRemainingCdaAmount() == null) {
-                    amount = amount;
-                } else {
-                    AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-                    amount = (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
-                    grandTotal = grandTotal + amount;
 
-                    allocationAmount = (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
-                    allocationGrandTotal = allocationGrandTotal + allocationAmount;
-                }
+                AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
+
+                grandTotal = grandTotal + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());;
+                amount = amount  + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());;;
+
+
+                allocationGrandTotal = allocationGrandTotal + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                allocationAmount = allocationAmount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+
+
             }
 
 
@@ -1981,9 +1983,7 @@ public class MangeReportImpl implements MangeReportService {
                     throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
                 }
 
-            }
-
-            else if (cdaReportRequest.getCdaType().contains("112244")) {
+            } else if (cdaReportRequest.getCdaType().contains("112244")) {
 
 
                 List<CDAReportResponse> cdaReportList = new ArrayList<>();
@@ -2096,9 +2096,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
 
-            }
-
-            else {
+            } else {
 
                 List<CDAReportResponse> cdaReportList = new ArrayList<>();
                 CDAReportResponse cdaReportResponse = new CDAReportResponse();
@@ -2356,10 +2354,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
 
-            }
-
-
-            else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
+            } else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
 
                 if (cdaReportRequest.getUnitId() == null || cdaReportRequest.getUnitId().isEmpty()) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT ID CAN NOT BE BLANK");
@@ -2501,7 +2496,6 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<FilePathResponse>() {
         });
     }
-
 
 
     @Override
@@ -2984,9 +2978,7 @@ public class MangeReportImpl implements MangeReportService {
             }
 
 
-        }
-
-        else {
+        } else {
 
 //            01     SubHeadWise
 //            02     UnitWise
@@ -3128,9 +3120,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
 
-            }
-
-            else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
+            } else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
 
                 if (cdaReportRequest.getUnitId() == null || cdaReportRequest.getUnitId().isEmpty()) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT ID CAN NOT BE BLANK");
@@ -6448,7 +6438,7 @@ public class MangeReportImpl implements MangeReportService {
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
                             String subUnit = unitss.getUnit();
-                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnit, finYearId, subHeadId,allocationType, "0");
+                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnit, finYearId, subHeadId, allocationType, "0");
                             List<ContigentBill> expenditure = expenditure1.stream()
                                     .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                             if (expenditure.size() > 0) {
@@ -6463,7 +6453,7 @@ public class MangeReportImpl implements MangeReportService {
                         String cbAmount = decimalFormat.format(totalbill);
                         eAmount = Double.parseDouble(cbAmount);
                     }
-                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(uid, finYearId, subHeadId,allocationType, "0");
+                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(uid, finYearId, subHeadId, allocationType, "0");
                     List<ContigentBill> expenditure = expenditure1.stream()
                             .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                     double totalAmount = 0.0;
@@ -6863,7 +6853,7 @@ public class MangeReportImpl implements MangeReportService {
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
                             String subUnit = unitss.getUnit();
-                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnit, finYearId, subHeadId,allocationType, "0");
+                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnit, finYearId, subHeadId, allocationType, "0");
                             List<ContigentBill> expenditure = expenditure1.stream()
                                     .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                             if (expenditure.size() > 0) {
@@ -6878,7 +6868,7 @@ public class MangeReportImpl implements MangeReportService {
                         String cbAmount = decimalFormat.format(totalbill);
                         eAmount = Double.parseDouble(cbAmount);
                     }
-                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(uid, finYearId, subHeadId,allocationType, "0");
+                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(uid, finYearId, subHeadId, allocationType, "0");
                     List<ContigentBill> expenditure = expenditure1.stream()
                             .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                     double totalAmount = 0.0;
@@ -7199,7 +7189,7 @@ public class MangeReportImpl implements MangeReportService {
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
                             String subUnit = unitss.getUnit();
-                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnit, finYearId, subHeadId,allocationType, "0");
+                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnit, finYearId, subHeadId, allocationType, "0");
                             List<ContigentBill> expenditure = expenditure1.stream()
                                     .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                             if (expenditure.size() > 0) {
@@ -7214,7 +7204,7 @@ public class MangeReportImpl implements MangeReportService {
                         String cbAmount = decimalFormat.format(totalbill);
                         eAmount = Double.parseDouble(cbAmount);
                     }
-                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(uid, finYearId, subHeadId,allocationType, "0");
+                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(uid, finYearId, subHeadId, allocationType, "0");
                     List<ContigentBill> expenditure = expenditure1.stream()
                             .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                     double totalAmount = 0.0;
