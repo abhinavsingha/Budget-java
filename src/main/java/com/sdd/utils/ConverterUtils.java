@@ -137,6 +137,17 @@ public class ConverterUtils {
         }
     }
 
+    public static Boolean isNumber(String number) {
+        try {
+            Float.parseFloat(number);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+
 
     public static String addSpacaeInString(String number, int lenghtData) {
 

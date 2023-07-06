@@ -464,6 +464,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
             MangeInboxOutbox mangeInboxOutbox = approvedMain.get(i);
 
+
+
             data.setGroupId(mangeInboxOutbox.getGroupId());
             data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
             data.setRemarks(mangeInboxOutbox.getRemarks());

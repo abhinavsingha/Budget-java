@@ -563,39 +563,39 @@ public class CdaParkingImpl implements CdaParkingService {
         }
 
 
-        CgUnit cgToUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-
-        String[] groupUnit = cgToUnit.getBudGroupUnit().split(",");
-        for (Integer i = 0; i < groupUnit.length; i++) {
-
-
-            MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
-
-            if (cgToUnit != null) {
-                mangeInboxOutbox.setType(cgToUnit.getDescr());
-            }
-
-            mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
-            mangeInboxOutbox.setRemarks("CDA Update");
-            mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-            mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-            mangeInboxOutbox.setToUnit(groupUnit[i]);
-            mangeInboxOutbox.setFromUnit(hrData.getUnitId());
-            mangeInboxOutbox.setGroupId(authGroupId);
-            mangeInboxOutbox.setRoleId(hrData.getRoleId());
-            mangeInboxOutbox.setCreaterpId(hrData.getPid());
-            mangeInboxOutbox.setApproverpId("");
-            mangeInboxOutbox.setIsFlag("1");
-            mangeInboxOutbox.setIsArchive("0");
-            mangeInboxOutbox.setIsApproved("0");
-            mangeInboxOutbox.setStatus("Approved");
-            mangeInboxOutbox.setIsBgcg("CDA");
-            mangeInboxOutbox.setState("CR");
-            mangeInboxOutbox.setIsRevision(0);
-            mangeInboxOutBoxRepository.save(mangeInboxOutbox);
-
-
-        }
+//        CgUnit cgToUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
+//
+//        String[] groupUnit = cgToUnit.getBudGroupUnit().split(",");
+//        for (Integer i = 0; i < groupUnit.length; i++) {
+//
+//
+//            MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
+//
+//            if (cgToUnit != null) {
+//                mangeInboxOutbox.setType(cgToUnit.getDescr());
+//            }
+//
+//            mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
+//            mangeInboxOutbox.setRemarks("CDA Update");
+//            mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+//            mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+//            mangeInboxOutbox.setToUnit(groupUnit[i]);
+//            mangeInboxOutbox.setFromUnit(hrData.getUnitId());
+//            mangeInboxOutbox.setGroupId(authGroupId);
+//            mangeInboxOutbox.setRoleId(hrData.getRoleId());
+//            mangeInboxOutbox.setCreaterpId(hrData.getPid());
+//            mangeInboxOutbox.setApproverpId("");
+//            mangeInboxOutbox.setIsFlag("1");
+//            mangeInboxOutbox.setIsArchive("0");
+//            mangeInboxOutbox.setIsApproved("0");
+//            mangeInboxOutbox.setStatus("Approved");
+//            mangeInboxOutbox.setIsBgcg("CDA");
+//            mangeInboxOutbox.setState("CR");
+//            mangeInboxOutbox.setIsRevision(0);
+//            mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+//
+//
+//        }
 
 
         defaultResponse.setMsg("CDA data update successfully");

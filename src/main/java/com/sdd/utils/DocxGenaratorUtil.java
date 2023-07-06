@@ -1,6 +1,7 @@
 package com.sdd.utils;
 
 
+import com.itextpdf.text.Element;
 import com.sdd.exception.SDDException;
 import com.sdd.response.CDAReportResponse;
 import com.sdd.response.CDAReportSubResponse;
@@ -62,10 +63,11 @@ public class DocxGenaratorUtil {
 //                            tableRow.getCell(1).setText(tabData11.get(i).getUnit());
                         XWPFParagraph paragraph = tableRow.getCell(1).addParagraph();
                         normalText(paragraph.createRun(), 10, tabData11.get(i).getUnit(), false);
-
+                        paragraph.setAlignment(ParagraphAlignment.RIGHT);
 //                            tableRow.getCell(2).setText(tabData11.get(i).getAmount());
                         XWPFParagraph paragraph11 = tableRow.getCell(2).addParagraph();
                         normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), false);
+                        paragraph11.setAlignment(ParagraphAlignment.RIGHT);
 
                     } else {
                         XWPFTableRow tableRow11 = table.createRow();
@@ -76,6 +78,7 @@ public class DocxGenaratorUtil {
 
                         XWPFParagraph paragraph11 = tableRow11.getCell(2).addParagraph();
                         normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), false);
+                        paragraph11.setAlignment(ParagraphAlignment.RIGHT);
                     }
 
                     allAmountData = allAmountData + Float.parseFloat(tabData11.get(i).getAmount());
@@ -88,7 +91,7 @@ public class DocxGenaratorUtil {
                 boldText(total1.createRun(), 10, "Total Amount", true);
                 XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
                 boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(allAmountData + ""), true);
-
+                total1111.setAlignment(ParagraphAlignment.RIGHT);
             }
 
 
@@ -97,7 +100,7 @@ public class DocxGenaratorUtil {
             boldText(total1.createRun(), 10, "Grand Total", true);
             XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
             boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(grandTotal + ""), true);
-
+            total1111.setAlignment(ParagraphAlignment.RIGHT);
 
             XWPFParagraph mainParagraph = document.createParagraph();
             mainParagraph = document.createParagraph();
@@ -190,7 +193,7 @@ public class DocxGenaratorUtil {
             boldText(total1.createRun(), 10, "Grand Total" + "(" + filePathResponse.getRevenueOrCapital() + ")", true);
             XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
             boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(grandTotal + ""), true);
-
+            total1111.setAlignment(ParagraphAlignment.RIGHT);
 
             XWPFParagraph mainParagraph = document.createParagraph();
             mainParagraph = document.createParagraph();
@@ -199,6 +202,7 @@ public class DocxGenaratorUtil {
             mainParagraph = document.createParagraph();
             boldText(mainParagraph.createRun(), 10, filePathResponse.getApproveName() + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
+
 
             mainParagraph = document.createParagraph();
             normalText(mainParagraph.createRun(), 10, filePathResponse.getApproveRank() + "", true);
@@ -242,17 +246,6 @@ public class DocxGenaratorUtil {
             boldText(paragraphtableRowOne11.createRun(), 10, filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", true);
 
 
-//            XWPFTableRow tableRowOne11 = table.getRow(0);
-//            XWPFParagraph paragraphtableRowOne22 = tableRowOne11.getCell(0).addParagraph();
-//            boldText(paragraphtableRowOne22.createRun(), 10, filePathResponse.getSubHeadKey(), true);
-//
-//            XWPFParagraph paragraphtableRowOne111 = tableRowOne11.addNewTableCell().addParagraph();
-//            boldText(paragraphtableRowOne111.createRun(), 10, filePathResponse.getRevenueOrCapital(), true);
-//
-//            XWPFParagraph paragraphtableRowOne1111 = tableRowOne11.addNewTableCell().addParagraph();
-//            boldText(paragraphtableRowOne1111.createRun(), 10, "", true);
-
-
             Float grandTotal = 0f;
             for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
                 String key11 = entry11.getKey();
@@ -284,7 +277,7 @@ public class DocxGenaratorUtil {
 
                     XWPFParagraph paragraph11 = tableRow11.getCell(2).addParagraph();
                     normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), false);
-
+                    paragraph11.setAlignment(ParagraphAlignment.RIGHT);
 
                     allAmountData = allAmountData + Float.parseFloat(tabData11.get(i).getAmount());
                     grandTotal = grandTotal + Float.parseFloat(tabData11.get(i).getAmount());
@@ -298,7 +291,7 @@ public class DocxGenaratorUtil {
                     boldText(total1.createRun(), 10, "Total Amount" + "(REVENUE)", true);
                     XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
                     boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(allAmountData + ""), true);
-
+                    total1111.setAlignment(ParagraphAlignment.RIGHT);
                 } else {
 
                     XWPFTableRow latRow = table.createRow();
@@ -306,6 +299,7 @@ public class DocxGenaratorUtil {
                     boldText(total1.createRun(), 10, "Total Amount" + "(CAPITAL)", true);
                     XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
                     boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(allAmountData + ""), true);
+                    total1111.setAlignment(ParagraphAlignment.RIGHT);
                 }
             }
 
@@ -315,6 +309,8 @@ public class DocxGenaratorUtil {
             boldText(total1.createRun(), 10, "Grand Total" + "(" + filePathResponse.getRevenueOrCapital() + ")", true);
             XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
             boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(grandTotal + ""), true);
+            total1111.setAlignment(ParagraphAlignment.RIGHT);
+
 
             int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
 
@@ -403,8 +399,20 @@ public class DocxGenaratorUtil {
 
 
             for (Integer i = 0; i < tabData1.size(); i++) {
-                XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
-                boldText(paragraphtableRowOne1.createRun(), 10, ConverterUtils.addDecimalPoint(tabData1.get(i).getName()), true);
+
+
+                Boolean isNumber = ConverterUtils.isNumber(tabData1.get(i).getName() + "");
+                if (isNumber) {
+
+                    XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
+                    boldText(paragraphtableRowOne1.createRun(), 10, ConverterUtils.addDecimalPoint(tabData1.get(i).getName()), true);
+                    paragraphtableRowOne1.setAlignment(ParagraphAlignment.RIGHT);
+                } else {
+                    XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
+                    boldText(paragraphtableRowOne1.createRun(), 10, ConverterUtils.addDecimalPoint(tabData1.get(i).getName()), true);
+                }
+
+
             }
 
             for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
@@ -419,8 +427,18 @@ public class DocxGenaratorUtil {
 
 
                     for (Integer i = 0; i < tabData.size(); i++) {
-                        XWPFParagraph paragraph11 = tableRow11.getCell(i + 1).addParagraph();
-                        normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(tabData.get(i).getName()), false);
+
+                        Boolean isNumber = ConverterUtils.isNumber(tabData.get(i).getName() + "");
+                        if (isNumber) {
+                            XWPFParagraph paragraph11 = tableRow11.getCell(i + 1).addParagraph();
+                            normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(tabData.get(i).getName()), false);
+                            paragraph11.setAlignment(ParagraphAlignment.RIGHT);
+                        } else {
+                            XWPFParagraph paragraph11 = tableRow11.getCell(i + 1).addParagraph();
+                            normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(tabData.get(i).getName()), false);
+                        }
+
+
                     }
                 }
             }
@@ -439,9 +457,21 @@ public class DocxGenaratorUtil {
 
             for (Map.Entry<String, String> entry : coloumWiseAmount.entrySet()) {
                 String tabData = entry.getValue();
-                XWPFParagraph paragraph11 = tableRow11.getCell(ih + 1).addParagraph();
-                normalText(paragraph11.createRun(), 10, tabData, false);
-                ih++;
+                Boolean isNumber = ConverterUtils.isNumber(tabData + "");
+                if (isNumber) {
+                    XWPFParagraph paragraph11 = tableRow11.getCell(ih + 1).addParagraph();
+                    normalText(paragraph11.createRun(), 10, tabData, false);
+                    ih++;
+                    paragraph11.setAlignment(ParagraphAlignment.RIGHT);
+                }else {
+                    XWPFParagraph paragraph11 = tableRow11.getCell(ih + 1).addParagraph();
+                    normalText(paragraph11.createRun(), 10, tabData, false);
+                    ih++;
+                }
+
+
+
+
             }
 
 
@@ -521,11 +551,11 @@ public class DocxGenaratorUtil {
 
                 XWPFParagraph paragraph11 = tableRow11.getCell(1).addParagraph();
                 normalText(paragraph11.createRun(), 12, ConverterUtils.addDecimalPoint(tabData.get(0).getAllocationAmount()), false);
-
+                paragraph11.setAlignment(ParagraphAlignment.RIGHT);
 
                 XWPFParagraph paragraph123 = tableRow11.getCell(2).addParagraph();
                 normalText(paragraph123.createRun(), 12, ConverterUtils.addDecimalPoint(tabData.get(0).getName()), false);
-
+                paragraph123.setAlignment(ParagraphAlignment.RIGHT);
             }
 
             XWPFTableRow tableRow11 = table.createRow();
@@ -535,11 +565,11 @@ public class DocxGenaratorUtil {
 
             XWPFParagraph paragraph11 = tableRow11.getCell(1).addParagraph();
             normalText(paragraph11.createRun(), 12, ConverterUtils.addDecimalPoint(allocationGrandTotal + ""), false);
-
+            paragraph11.setAlignment(ParagraphAlignment.RIGHT);
 
             XWPFParagraph paragraph111 = tableRow11.getCell(2).addParagraph();
             normalText(paragraph111.createRun(), 12, ConverterUtils.addDecimalPoint(grandTotal + ""), false);
-
+            paragraph111.setAlignment(ParagraphAlignment.RIGHT);
 
             document.write(out);
             out.close();
