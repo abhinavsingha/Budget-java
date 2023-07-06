@@ -264,6 +264,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetails.setAuthGroupId(authGroupId);
             budgetAllocationDetails.setRemarks("");
+
             budgetAllocationDetails.setPurposeCode("");
             budgetAllocationDetails.setRevisedAmount("0.0000");
             budgetAllocationDetails.setIsDelete("0");
@@ -342,6 +343,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         mangeInboxOutbox.setIsApproved("0");
         mangeInboxOutbox.setAllocationType(allocationTypeData);
         mangeInboxOutbox.setIsFlag("0");
+        mangeInboxOutbox.setType("Mod Receipt");
         mangeInboxOutbox.setAmount(ConverterUtils.addDecimalPoint(amount + ""));
         mangeInboxOutbox.setIsBgcg("BR");
         mangeInboxOutbox.setIsRevision(0);
