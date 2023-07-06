@@ -809,7 +809,7 @@ public class DashboardServiceImpl implements DashBoardService {
                     DashBoardExprnditureResponse dashBoardExprnditureResponse = new DashBoardExprnditureResponse();
                     amount = Double.valueOf(reportDetails.get(r).getAllocationAmount());
                     String amountType=reportDetails.get(r).getAmountType();
-                    AmountUnit amountObjs = amountUnitRepository.findByAmountTypeId(amountTypeId);
+                    AmountUnit amountObjs = amountUnitRepository.findByAmountTypeId(amountType);
                     Double amountUnits = amountObjs.getAmount();
 
                     String uid = reportDetails.get(r).getToUnit();
@@ -820,7 +820,7 @@ public class DashboardServiceImpl implements DashBoardService {
                     Timestamp lastCvDate;
                     String cbD = "";
 
-                    if (unitList.size() > 0) {
+/*                    if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
                             String subUnit = unitss.getUnit();
                             List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnit, finYearId, subHeadId,allocationTypeId, "0");
@@ -849,7 +849,7 @@ public class DashboardServiceImpl implements DashBoardService {
                         DecimalFormat decimalFormat = new DecimalFormat("#");
                         String cbAmount = decimalFormat.format(totalbill);
                         eAmount = Double.parseDouble(cbAmount);
-                    }
+                    }*/
                     List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(uid, finYearId, subHeadId,allocationTypeId, "0");
                     double totalAmount = 0.0;
                     if (expenditure.size() > 0) {
@@ -869,7 +869,7 @@ public class DashboardServiceImpl implements DashBoardService {
                     String cbAmount = decimalFormat.format(totalAmount);
                     eAmount = Double.parseDouble(cbAmount);
 
-                    eAmount = totalAmount + totalbill;
+                    //eAmount = totalAmount + totalbill;
                     double expAmount=eAmount/reqAmount;
 
                     dashBoardExprnditureResponse.setCgUnit(cgUnit);
@@ -981,7 +981,7 @@ public class DashboardServiceImpl implements DashBoardService {
                 Timestamp lastCvDate;
                 String cbD = "";
 
-                if (unitList.size() > 0) {
+/*                if (unitList.size() > 0) {
                     for (CgUnit unitss : unitList) {
                         String subUnit = unitss.getUnit();
                         List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnit, finYearId, subHeadId,allocationTypeId, "0");
@@ -1010,7 +1010,7 @@ public class DashboardServiceImpl implements DashBoardService {
                     DecimalFormat decimalFormat = new DecimalFormat("#");
                     String cbAmount = decimalFormat.format(totalbill);
                     eAmount = Double.parseDouble(cbAmount);
-                }
+                }*/
                 List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(uId, finYearId, subHeadId,allocationTypeId, "0");
                 double totalAmount = 0.0;
                 if (expenditure.size() > 0) {
@@ -1030,8 +1030,8 @@ public class DashboardServiceImpl implements DashBoardService {
                 String cbAmount = decimalFormat.format(totalAmount);
                 eAmount = Double.parseDouble(cbAmount);
 
-                eAmount = totalAmount + totalbill;
-                double expAmount=eAmount/reqAmount;
+                double expndAmount = eAmount + totalbill;
+                double expAmount=expndAmount/reqAmount;
 
                 SubHeadWiseExpResp subResp = new SubHeadWiseExpResp();
                 subResp.setUnitName(uName);

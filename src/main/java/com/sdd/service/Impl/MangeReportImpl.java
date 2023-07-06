@@ -3443,8 +3443,32 @@ public class MangeReportImpl implements MangeReportService {
             table.addCell(cell21);
 
             document.add(table);
-
             document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n"));
+
+            PdfPTable tables1 = new PdfPTable(4);
+            tables1.setWidthPercentage(100);
+
+            PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
+            PdfPCell cell200 = new PdfPCell(new Phrase(""));
+            PdfPCell cell300 = new PdfPCell(new Phrase(""));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
+
+            cell100.setBorder(0);
+            cell200.setBorder(0);
+            cell300.setBorder(0);
+            cell400.setBorder(0);
+            cell400.setPadding(20);
+
+            tables1.addCell(cell100);
+            tables1.addCell(cell200);
+            tables1.addCell(cell300);
+            tables1.addCell(cell400);
+            document.add(tables1);
+
+
+/*            document.add(new Paragraph("\n"));
             Paragraph heading1 = new Paragraph(formattedDateTime);
             heading1.setAlignment(Paragraph.ALIGN_LEFT);
             document.add(heading1);
@@ -3452,7 +3476,7 @@ public class MangeReportImpl implements MangeReportService {
             document.add(new Paragraph("\n"));
             Paragraph heading2 = new Paragraph(names + "\n" + unitName + "\n" + rank);
             heading2.setAlignment(Paragraph.ALIGN_RIGHT);
-            document.add(heading2);
+            document.add(heading2);*/
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
@@ -3917,14 +3941,36 @@ public class MangeReportImpl implements MangeReportService {
             document.add(table);
 
             document.add(new Paragraph("\n"));
-            Paragraph heading1 = new Paragraph(formattedDateTime);
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n"));
+
+            PdfPTable tables1 = new PdfPTable(4);
+            tables1.setWidthPercentage(100);
+
+            PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
+            PdfPCell cell2000 = new PdfPCell(new Phrase(""));
+            PdfPCell cell300 = new PdfPCell(new Phrase(""));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
+
+            cell100.setBorder(0);
+            cell2000.setBorder(0);
+            cell300.setBorder(0);
+            cell400.setBorder(0);
+            cell400.setPadding(20);
+
+            tables1.addCell(cell100);
+            tables1.addCell(cell2000);
+            tables1.addCell(cell300);
+            tables1.addCell(cell400);
+            document.add(tables1);
+ /*           Paragraph heading1 = new Paragraph(formattedDateTime);
             heading1.setAlignment(Paragraph.ALIGN_LEFT);
             document.add(heading1);
 
             document.add(new Paragraph("\n"));
             Paragraph heading2 = new Paragraph(names + "\n" + unitName + "\n" + rank);
             heading2.setAlignment(Paragraph.ALIGN_RIGHT);
-            document.add(heading2);
+            document.add(heading2);*/
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
@@ -4405,14 +4451,36 @@ public class MangeReportImpl implements MangeReportService {
             document.add(table);
 
             document.add(new Paragraph("\n"));
-            Paragraph heading1 = new Paragraph(formattedDateTime);
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n"));
+
+            PdfPTable tables1 = new PdfPTable(4);
+            tables1.setWidthPercentage(100);
+
+            PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
+            PdfPCell cell200 = new PdfPCell(new Phrase(""));
+            PdfPCell cell300 = new PdfPCell(new Phrase(""));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
+
+            cell100.setBorder(0);
+            cell200.setBorder(0);
+            cell300.setBorder(0);
+            cell400.setBorder(0);
+            cell400.setPadding(20);
+
+            tables1.addCell(cell100);
+            tables1.addCell(cell200);
+            tables1.addCell(cell300);
+            tables1.addCell(cell400);
+            document.add(tables1);
+/*            Paragraph heading1 = new Paragraph(formattedDateTime);
             heading1.setAlignment(Paragraph.ALIGN_LEFT);
             document.add(heading1);
 
             document.add(new Paragraph("\n"));
             Paragraph heading2 = new Paragraph(names + "\n" + unitName + "\n" + rank);
             heading2.setAlignment(Paragraph.ALIGN_RIGHT);
-            document.add(heading2);
+            document.add(heading2);*/
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
@@ -5018,14 +5086,36 @@ public class MangeReportImpl implements MangeReportService {
             document.add(table);
 
             document.add(new Paragraph("\n"));
-            Paragraph heading1 = new Paragraph(formattedDateTime);
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n"));
+
+            PdfPTable tables1 = new PdfPTable(4);
+            tables1.setWidthPercentage(100);
+
+            PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
+            PdfPCell cell200 = new PdfPCell(new Phrase(""));
+            PdfPCell cell300 = new PdfPCell(new Phrase(""));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
+
+            cell100.setBorder(0);
+            cell200.setBorder(0);
+            cell300.setBorder(0);
+            cell400.setBorder(0);
+            cell400.setPadding(20);
+
+            tables1.addCell(cell100);
+            tables1.addCell(cell200);
+            tables1.addCell(cell300);
+            tables1.addCell(cell400);
+            document.add(tables1);
+/*            Paragraph heading1 = new Paragraph(formattedDateTime);
             heading1.setAlignment(Paragraph.ALIGN_LEFT);
             document.add(heading1);
 
             document.add(new Paragraph("\n"));
             Paragraph heading2 = new Paragraph(names + "\n" + unitName + "\n" + rank);
             heading2.setAlignment(Paragraph.ALIGN_RIGHT);
-            document.add(heading2);
+            document.add(heading2);*/
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
@@ -5679,14 +5769,36 @@ public class MangeReportImpl implements MangeReportService {
             document.add(table);
 
             document.add(new Paragraph("\n"));
-            Paragraph heading1 = new Paragraph(formattedDateTime);
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n"));
+
+            PdfPTable tables1 = new PdfPTable(4);
+            tables1.setWidthPercentage(100);
+
+            PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
+            PdfPCell cell200 = new PdfPCell(new Phrase(""));
+            PdfPCell cell300 = new PdfPCell(new Phrase(""));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
+
+            cell100.setBorder(0);
+            cell200.setBorder(0);
+            cell300.setBorder(0);
+            cell400.setBorder(0);
+            cell400.setPadding(20);
+
+            tables1.addCell(cell100);
+            tables1.addCell(cell200);
+            tables1.addCell(cell300);
+            tables1.addCell(cell400);
+            document.add(tables1);
+/*            Paragraph heading1 = new Paragraph(formattedDateTime);
             heading1.setAlignment(Paragraph.ALIGN_LEFT);
             document.add(heading1);
 
             document.add(new Paragraph("\n"));
             Paragraph heading2 = new Paragraph(names + "\n" + unitName + "\n" + rank);
             heading2.setAlignment(Paragraph.ALIGN_RIGHT);
-            document.add(heading2);
+            document.add(heading2);*/
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
@@ -6498,14 +6610,36 @@ public class MangeReportImpl implements MangeReportService {
             document.add(table);
 
             document.add(new Paragraph("\n"));
-            Paragraph heading1 = new Paragraph(formattedDateTime);
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n"));
+
+            PdfPTable tables1 = new PdfPTable(4);
+            tables1.setWidthPercentage(100);
+
+            PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
+            PdfPCell cell200 = new PdfPCell(new Phrase(""));
+            PdfPCell cell300 = new PdfPCell(new Phrase(""));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
+
+            cell100.setBorder(0);
+            cell200.setBorder(0);
+            cell300.setBorder(0);
+            cell400.setBorder(0);
+            cell400.setPadding(20);
+
+            tables1.addCell(cell100);
+            tables1.addCell(cell200);
+            tables1.addCell(cell300);
+            tables1.addCell(cell400);
+            document.add(tables1);
+/*            Paragraph heading1 = new Paragraph(formattedDateTime);
             heading1.setAlignment(Paragraph.ALIGN_LEFT);
             document.add(heading1);
 
             document.add(new Paragraph("\n"));
             Paragraph heading2 = new Paragraph(names + "\n" + unitName + "\n" + rank);
             heading2.setAlignment(Paragraph.ALIGN_RIGHT);
-            document.add(heading2);
+            document.add(heading2);*/
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
@@ -7446,14 +7580,36 @@ public class MangeReportImpl implements MangeReportService {
 
 
             document.add(new Paragraph("\n"));
-            Paragraph heading1 = new Paragraph(formattedDateTime);
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n"));
+
+            PdfPTable tables1 = new PdfPTable(4);
+            tables1.setWidthPercentage(100);
+
+            PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
+            PdfPCell cell200 = new PdfPCell(new Phrase(""));
+            PdfPCell cell300 = new PdfPCell(new Phrase(""));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
+
+            cell100.setBorder(0);
+            cell200.setBorder(0);
+            cell300.setBorder(0);
+            cell400.setBorder(0);
+            cell400.setPadding(20);
+
+            tables1.addCell(cell100);
+            tables1.addCell(cell200);
+            tables1.addCell(cell300);
+            tables1.addCell(cell400);
+            document.add(tables1);
+/*            Paragraph heading1 = new Paragraph(formattedDateTime);
             heading1.setAlignment(Paragraph.ALIGN_LEFT);
             document.add(heading1);
 
             document.add(new Paragraph("\n"));
             Paragraph heading2 = new Paragraph(names + "\n" + unitName + "\n" + rank);
             heading2.setAlignment(Paragraph.ALIGN_RIGHT);
-            document.add(heading2);
+            document.add(heading2);*/
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
@@ -8153,14 +8309,36 @@ public class MangeReportImpl implements MangeReportService {
             document.add(table);
 
             document.add(new Paragraph("\n"));
-            Paragraph heading1 = new Paragraph(formattedDateTime);
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n"));
+
+            PdfPTable tables1 = new PdfPTable(4);
+            tables1.setWidthPercentage(100);
+
+            PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
+            PdfPCell cell200 = new PdfPCell(new Phrase(""));
+            PdfPCell cell300 = new PdfPCell(new Phrase(""));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
+
+            cell100.setBorder(0);
+            cell200.setBorder(0);
+            cell300.setBorder(0);
+            cell400.setBorder(0);
+            cell400.setPadding(20);
+
+            tables1.addCell(cell100);
+            tables1.addCell(cell200);
+            tables1.addCell(cell300);
+            tables1.addCell(cell400);
+            document.add(tables1);
+/*            Paragraph heading1 = new Paragraph(formattedDateTime);
             heading1.setAlignment(Paragraph.ALIGN_LEFT);
             document.add(heading1);
 
             document.add(new Paragraph("\n"));
             Paragraph heading2 = new Paragraph(names + "\n" + unitName + "\n" + rank);
             heading2.setAlignment(Paragraph.ALIGN_RIGHT);
-            document.add(heading2);
+            document.add(heading2);*/
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
@@ -8887,14 +9065,36 @@ public class MangeReportImpl implements MangeReportService {
             document.add(table);
 
             document.add(new Paragraph("\n"));
-            Paragraph heading1 = new Paragraph(formattedDateTime);
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n"));
+
+            PdfPTable tables1 = new PdfPTable(4);
+            tables1.setWidthPercentage(100);
+
+            PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
+            PdfPCell cell200 = new PdfPCell(new Phrase(""));
+            PdfPCell cell300 = new PdfPCell(new Phrase(""));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
+
+            cell100.setBorder(0);
+            cell200.setBorder(0);
+            cell300.setBorder(0);
+            cell400.setBorder(0);
+            cell400.setPadding(20);
+
+            tables1.addCell(cell100);
+            tables1.addCell(cell200);
+            tables1.addCell(cell300);
+            tables1.addCell(cell400);
+            document.add(tables1);
+/*            Paragraph heading1 = new Paragraph(formattedDateTime);
             heading1.setAlignment(Paragraph.ALIGN_LEFT);
             document.add(heading1);
 
             document.add(new Paragraph("\n"));
             Paragraph heading2 = new Paragraph(names + "\n" + unitName + "\n" + rank);
             heading2.setAlignment(Paragraph.ALIGN_RIGHT);
-            document.add(heading2);
+            document.add(heading2);*/
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
