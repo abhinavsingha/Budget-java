@@ -27,6 +27,7 @@ public class InboxOutBoxSubResponse {
    private String amount;
    private String type;
    private String status;
+   private Integer isRevision;
    private AllocationType allocationType;
 
    private Boolean isCda;

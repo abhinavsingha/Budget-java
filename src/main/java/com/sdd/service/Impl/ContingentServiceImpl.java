@@ -440,7 +440,7 @@ public class ContingentServiceImpl implements ContingentService {
         mangeInboxOutbox.setIsApproved("0");
         mangeInboxOutbox.setState("VE");
         mangeInboxOutbox.setIsBgcg("CB");
-
+        mangeInboxOutbox.setIsRevision(0);
         mangeInboxOutBoxRepository.save(mangeInboxOutbox);
 
 

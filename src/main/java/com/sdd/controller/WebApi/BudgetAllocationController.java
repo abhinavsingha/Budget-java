@@ -79,7 +79,6 @@ public class BudgetAllocationController {
     }
 
 
-
     @GetMapping("/getCgUnitDataWithPurposeCode")
     public ResponseEntity<ApiResponse<List<CgUnitResponse>>> getCgUnitDataWithPurposeCode() {
         return new ResponseEntity<>(budgetAllocationService.getCgUnitDataWithPurposeCode(), HttpStatus.OK);
@@ -150,6 +149,11 @@ public class BudgetAllocationController {
         return new ResponseEntity<>(budgetAllocationService.getAllGroupIdAndUnitId(groupId), HttpStatus.OK);
     }
 
+    @GetMapping("/getAllGroupIdAndUnitIdRevisionCase/{groupId}")
+    public ResponseEntity<ApiResponse<BudgetAllocationResponse>> getAllGroupIdAndUnitIdRevisionCase(@PathVariable("groupId") String groupId) {
+        return new ResponseEntity<>(budgetAllocationService.getAllGroupIdAndUnitId(groupId), HttpStatus.OK);
+    }
+
 
     @PostMapping("/saveBudgetAllocationSubHeadWise")
     public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> saveBudgetAllocationSubHeadWise(@RequestBody BudgetAllocationSaveRequest budgetAllocationSaveRequest) {
@@ -197,6 +201,13 @@ public class BudgetAllocationController {
     public ResponseEntity<ApiResponse<DefaultResponse>> saveAuthData(@RequestBody AuthRequest authRequest) {
         return new ResponseEntity<>(budgetAllocationService.saveAuthData(authRequest), HttpStatus.OK);
     }
+
+
+    @PostMapping("/saveAuthDataRevision")
+    public ResponseEntity<ApiResponse<DefaultResponse>> saveAuthDataRevision(@RequestBody AuthRequest authRequest) {
+        return new ResponseEntity<>(budgetAllocationService.saveAuthDataRevision(authRequest), HttpStatus.OK);
+    }
+
 
 
     @GetMapping("/getApprovedBudgetData")

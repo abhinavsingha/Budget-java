@@ -591,7 +591,7 @@ public class CdaParkingImpl implements CdaParkingService {
             mangeInboxOutbox.setStatus("Approved");
             mangeInboxOutbox.setIsBgcg("CDA");
             mangeInboxOutbox.setState("CR");
-
+            mangeInboxOutbox.setIsRevision(0);
             mangeInboxOutBoxRepository.save(mangeInboxOutbox);
 
 

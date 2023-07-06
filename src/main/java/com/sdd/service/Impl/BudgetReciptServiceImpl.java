@@ -344,6 +344,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         mangeInboxOutbox.setIsFlag("0");
         mangeInboxOutbox.setAmount(ConverterUtils.addDecimalPoint(amount + ""));
         mangeInboxOutbox.setIsBgcg("BR");
+        mangeInboxOutbox.setIsRevision(0);
         mangeInboxOutBoxRepository.save(mangeInboxOutbox);
 
 

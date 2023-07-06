@@ -69,6 +69,9 @@ public class MangeInboxOutbox {
     @Column(name = "STATE")
     private String state;
 
+    @Column(name = "IS_REVISION")
+    private Integer isRevision = 0;
+
     @Column(name = "ALLOCATION_TYPE")
     private String allocationType;
 

@@ -61,6 +61,8 @@ public interface BudgetAllocationService {
 
 	ApiResponse<DefaultResponse> saveAuthData(AuthRequest authRequest);
 
+	ApiResponse<DefaultResponse> saveAuthDataRevision(AuthRequest authRequest);
+
 	ApiResponse<List<BudgetReviResp>>  getBudgetRevisionData(BudgetReviReq budgetRivRequest);
 
 	ApiResponse<BudgetAllocationResponse> getApprovedBudgetData();
@@ -70,6 +72,8 @@ public interface BudgetAllocationService {
 	ApiResponse<List<SubHeadVotedOrChargedType>> getSubHeadType();
 
 	ApiResponse<BudgetAllocationResponse> getAllGroupIdAndUnitId(String groupId);
+
+	ApiResponse<BudgetAllocationResponse> getAllGroupIdAndUnitIdRevisionCase(String groupId);
 
 	ApiResponse<BudgetAllocationResponse> getBudgetAllocationDataGroupId(String groupId);
 

@@ -386,6 +386,7 @@ public class PdfGenaratorUtilMain {
             table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(0).getAllocationAmount()), 8, 20f));
             table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(0).getName()), 8, 20f));
         }
+
         table.addCell(boldText("Grand Total", 8, 20f));
         table.addCell(boldText(ConverterUtils.addDecimalPoint(allocationGrandTotal + ""), 8, 20f));
         table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 8, 20f));
