@@ -8988,7 +8988,6 @@ public class MangeReportImpl implements MangeReportService {
                     cella6.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                     cella7.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 
-
                     if (count == 0)
                         table.addCell(cella1);
                     else
