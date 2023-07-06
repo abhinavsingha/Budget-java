@@ -510,12 +510,12 @@ public class PdfGenaratorUtilMain {
 
         table.addCell(normalText("01", 9, 50f));
         table.addCell(normalText("Expenditure incurred towards quaterly payment for the 3rd otr from 01 Sep 22 to 30 Nov 22 in respect of Hirring of Designer/Developer IT Manpower (Project-SDOT) through " + cbReportResponse.getCbData().getVendorName() + " vibe Invoiice/bill " + cbReportResponse.getCbData().getInvoiceNO() + " Dated " + cbReportResponse.getCbData().getInvoiceDate(), 10, 50f));
-        table.addCell(normalText(ConverterUtils.addDecimalPoint("(INR)" + bill.toString()), 9, 50f));
+        table.addCell(normalText(ConverterUtils.addDecimalPoint("(INR)" + bill.toString()), 9, 50f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
 
 
         table.addCell(normalText("", 9, 25f));
         table.addCell(normalText("GST " + cbReportResponse.getCbData().getGst() + " % ", 9, 25f));
-        table.addCell(normalText(ConverterUtils.addDecimalPoint("(INR)" + String.format("%.2f", gst)), 9, 25f));
+        table.addCell(normalText(ConverterUtils.addDecimalPoint("(INR)" + String.format("%.2f", gst)), 9, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
 
 
         table.addCell(normalText("", 9, 25f));

@@ -18,4 +18,6 @@ public class BudgetApproveRequest {
     private String status;
     private List<CdaCrDrAllocationRequest> cdaParkingId;
 
+//    private String revisionType;
+
 }

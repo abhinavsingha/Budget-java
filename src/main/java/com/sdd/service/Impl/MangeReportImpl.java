@@ -395,14 +395,14 @@ public class MangeReportImpl implements MangeReportService {
             String fileName = "AllocationReport" + hrData.getUnitId() + System.currentTimeMillis();
             List<MangeInboxOutbox> mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupId(authGroupId);
 
-            if (mangeInboxOutbox.size() > 0) {
-
-                if (mangeInboxOutbox.get(0).getIsBgcg().equalsIgnoreCase("BR")) {
-                    fileName = "BudgetReceipt" + hrData.getUnitId() + System.currentTimeMillis();
-                } else {
-                    fileName = "AllocationReport" + hrData.getUnitId() + System.currentTimeMillis();
-                }
-            }
+//            if (mangeInboxOutbox.size() > 0) {
+//
+//                if (mangeInboxOutbox.get(0).getIsBgcg().equalsIgnoreCase("BR")) {
+//                    fileName = "BudgetReceipt" + hrData.getUnitId() + System.currentTimeMillis();
+//                } else {
+//                    fileName = "AllocationReport" + hrData.getUnitId() + System.currentTimeMillis();
+//                }
+//            }
             File folder = new File(HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
