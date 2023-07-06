@@ -197,8 +197,8 @@ public class PdfGenaratorUtilMain {
                 table.addCell(boldText("REVENUE", 8, 25f));
                 table.addCell(boldText("", 8, 25f));
             } else {
-                table.addCell(boldText(key11+ "\n00.037.01", 8, 25f));
-                table.addCell(boldText("CAPITAL" , 8, 25f));
+                table.addCell(boldText(key11 + "\n00.037.01", 8, 25f));
+                table.addCell(boldText("CAPITAL", 8, 25f));
                 table.addCell(boldText("", 8, 25f));
             }
 
@@ -585,7 +585,7 @@ public class PdfGenaratorUtilMain {
 
     private PdfPCell boldText(String text, int fontSize, float cellHeight) {
         Phrase phrase = new Phrase();
-        Font font = new Font(Font.FontFamily.COURIER, fontSize, Font.BOLD);
+        Font font = new Font(Font.FontFamily.COURIER, Font.BOLD);
         Chunk world = new Chunk(text, font);
         phrase.add(world);
         Paragraph paragraph = new Paragraph();
@@ -599,7 +599,7 @@ public class PdfGenaratorUtilMain {
     private PdfPCell normalText(String text, int fontSize, float cellHeight) {
 
         Phrase phrase = new Phrase();
-        Font font = new Font(Font.FontFamily.HELVETICA, fontSize, Font.NORMAL);
+        Font font = new Font(Font.FontFamily.HELVETICA, Font.NORMAL);
         Chunk world = new Chunk(text, font);
         phrase.add(world);
         Paragraph paragraph = new Paragraph();

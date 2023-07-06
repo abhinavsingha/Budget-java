@@ -223,7 +223,7 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingCrAndDr.setGinNo(saveCdaData.getGinNo());
             cdaParkingCrAndDr.setUnitId(saveCdaData.getUnitId());
             cdaParkingCrAndDr.setAuthGroupId(saveCdaData.getAuthGroupId());
-            cdaParkingCrAndDr.setAmount(saveCdaData.getAmountType());
+            cdaParkingCrAndDr.setAmount(saveCdaData.getTotalParkingAmount());
             cdaParkingCrAndDr.setIscrdr("CR");
             cdaParkingCrAndDr.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
