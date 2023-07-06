@@ -2,6 +2,7 @@ package com.sdd.entities.repository;
 
 
 import com.sdd.entities.AllocationType;
+import com.sdd.entities.BudgetAllocation;
 import com.sdd.entities.BudgetAllocationDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,9 +30,17 @@ public interface BudgetAllocationDetailsRepository extends JpaRepository<BudgetA
             value =
                     "select BUDGET_HEAD from BudgetAllocationDetails where AUTH_GROUP_ID=:authGroupId  group by BUDGET_HEAD",
             nativeQuery = true)
-    List<String> findSubHead(String authGroupId);
+    List<BudgetAllocationDetails> findSubHead(String authGroupId);
+
+    @Query(
+            value =
+                    "select BUDGET_HEAD from BudgetAllocationDetails where AUTH_GROUP_ID=:authGroupId  group by BUDGET_HEAD",
+            nativeQuery = true)
+    List<String> findSubHeadByAuthGroupIds(String authGroupId);
 
     List<BudgetAllocationDetails> findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(String authGroupId, String s);
     List<BudgetAllocationDetails> findByAuthGroupId(String authGroupId);
+
+    List<BudgetAllocationDetails> findByAuthGroupIdAndSubHead(String authGId, String subHead);
     List<BudgetAllocationDetails> findByAuthGroupIdAndToUnitOrderByTransactionIdAsc(String authGroupId,String toUnitid);
 }
