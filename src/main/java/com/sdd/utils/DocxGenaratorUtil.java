@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.List;
 
@@ -323,29 +324,12 @@ public class DocxGenaratorUtil {
             mainParagraph.createRun().addBreak();
 
             mainParagraph = document.createParagraph();
-            boldText(mainParagraph.createRun(), 10, ConverterUtils.addSpacaeInStringInWord(filePathResponse.getApproveName() , maxlength), true);
+            boldText(mainParagraph.createRun(), 10, ConverterUtils.addSpacaeInStringInWord(filePathResponse.getApproveName(), maxlength), true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
 
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, ConverterUtils.addSpacaeInStringInWord(filePathResponse.getApproveRank() , maxlength), true);
+            normalText(mainParagraph.createRun(), 10, ConverterUtils.addSpacaeInStringInWord(filePathResponse.getApproveRank(), maxlength), true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
-
-
-
-//            mainParagraph = document.createParagraph();
-//
-//
-//            XWPFRun run = mainParagraph.createRun();
-//
-//            run = mainParagraph.createRun();
-//            run.setText(" عليكمn        ");
-////            run.addTab();
-//            mainParagraph.setAlignment(ParagraphAlignment.BOTH);
-//
-//            mainParagraph = document.createParagraph();
-//            run = mainParagraph.createRun();
-//            run.setText("Paragraph  3 LTR");
-//            mainParagraph.setAlignment(ParagraphAlignment.BOTH);
 
 
             document.write(out);
