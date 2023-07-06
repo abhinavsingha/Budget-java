@@ -34,48 +34,48 @@ public class PdfGenaratorUtilMain {
         table.setSpacingAfter(20);
         table.setWidthPercentage(100);
 
-        table.addCell(boldText("SUB HEAD", 8, 25f));
-        table.addCell(boldText("UNIT NAME", 8, 25f));
-        table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 8, 25f));
+        table.addCell(boldText("SUB HEAD", 10, 25f));
+        table.addCell(boldText("UNIT NAME", 10, 25f));
+        table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 10, 25f));
 
-        double grandTotal = 0;
+        Float grandTotal = 0f;
         for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
             String key11 = entry11.getKey();
             List<ReportSubModel> tabData11 = entry11.getValue();
 
-            table.addCell(normalText(key11, 8, 25f));
+            table.addCell(normalText(key11, 10, 25f));
 
-            double allAmountData = 0;
+            Float allAmountData = 0f;
             for (Integer i = 0; i < tabData11.size(); i++) {
 
                 if (i == 0) {
-                    table.addCell(normalText(tabData11.get(i).getUnit(), 8, 25f));
-                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 8, 25f));
+                    table.addCell(normalText(tabData11.get(i).getUnit(), 10, 25f));
+                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 10, 25f));
                 } else {
-                    table.addCell(normalText("", 8, 25f));
-                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getUnit()), 8, 25f));
-                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 8, 25f));
+                    table.addCell(normalText("", 10, 25f));
+                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getUnit()), 10, 25f));
+                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 10, 25f));
                 }
-                allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
-                grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
+                allAmountData = allAmountData + Float.parseFloat(tabData11.get(i).getAmount());
+                grandTotal = grandTotal + Float.parseFloat(tabData11.get(i).getAmount());
 
 
             }
 
-            table.addCell(boldText("", 8, 25f));
-            table.addCell(boldText(ConverterUtils.addDecimalPoint("Total Amount"), 8, 25f));
-            table.addCell(boldText(ConverterUtils.addDecimalPoint(allAmountData + ""), 8, 25f));
+            table.addCell(boldText("", 10, 25f));
+            table.addCell(boldText(ConverterUtils.addDecimalPoint("Total Amount"), 10, 25f));
+            table.addCell(boldText(ConverterUtils.addDecimalPoint(allAmountData + ""), 10, 25f));
         }
 
-        table.addCell(boldText(ConverterUtils.addDecimalPoint("Grand Total"), 8, 25f));
-        table.addCell(boldText("", 8, 25f));
-        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 8, 25f));
+        table.addCell(boldText(ConverterUtils.addDecimalPoint("Grand Total"), 10, 25f));
+        table.addCell(boldText("", 10, 25f));
+        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 10, 25f));
 
 
         int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
 
         Phrase phrase = new Phrase();
-        Font font = new Font(Font.FontFamily.COURIER, 8, Font.BOLD);
+        Font font = new Font(Font.FontFamily.COURIER, 10, Font.BOLD);
         Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(), maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(), maxlength)), font);
         phrase.add(approverName);
         Paragraph paragraph = new Paragraph();
@@ -103,14 +103,14 @@ public class PdfGenaratorUtilMain {
         table.setWidthPercentage(100);
         table.setSpacingAfter(20);
 
-        table.addCell(boldText("MAJOR/MINOR/SUB HEAD", 8, 25f));
-        table.addCell(boldText("OBJECT HEAD", 8, 25f));
-        table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 8, 25f));
+        table.addCell(boldText("MAJOR/MINOR/SUB HEAD", 10, 25f));
+        table.addCell(boldText("OBJECT HEAD", 10, 25f));
+        table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 10, 25f));
 
 
-        table.addCell(boldText(filePathResponse.getSubHeadKey(), 8, 25f));
-        table.addCell(boldText(filePathResponse.getRevenueOrCapital(), 8, 25f));
-        table.addCell(boldText("", 8, 25f));
+        table.addCell(boldText(filePathResponse.getSubHeadKey(), 10, 25f));
+        table.addCell(boldText(filePathResponse.getRevenueOrCapital(), 10, 25f));
+        table.addCell(boldText("", 10, 25f));
 
 
         Float grandTotal = 0f;
@@ -118,20 +118,20 @@ public class PdfGenaratorUtilMain {
             String key11 = entry11.getKey();
             List<ReportSubModel> tabData11 = entry11.getValue();
 
-//            table.addCell(normalText(key11, 8, 25f));
+//            table.addCell(normalText(key11, 10, 25f));
 
             Float allAmountData = 0f;
             for (Integer i = 0; i < tabData11.size(); i++) {
 
 
-//                    table.addCell(normalText("", 8, 25f));
-//                    table.addCell(normalText(tabData11.get(i).getUnit(), 8, 25f));
-//                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 8, 25f));
+//                    table.addCell(normalText("", 10, 25f));
+//                    table.addCell(normalText(tabData11.get(i).getUnit(), 10, 25f));
+//                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 10, 25f));
 //
-                table.addCell(normalText("", 8, 25f));
-                table.addCell(normalText(key11, 8, 25f));
-//                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getUnit()), 8, 25f));
-                table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 8, 25f));
+                table.addCell(normalText("", 10, 25f));
+                table.addCell(normalText(key11, 10, 25f));
+//                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getUnit()), 10, 25f));
+                table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 10, 25f));
 
                 allAmountData = allAmountData + Float.parseFloat(tabData11.get(i).getAmount());
                 grandTotal = grandTotal + Float.parseFloat(tabData11.get(i).getAmount());
@@ -139,20 +139,20 @@ public class PdfGenaratorUtilMain {
 
             }
 
-//            table.addCell(boldText("", 8, 25f));
-//            table.addCell(boldText(ConverterUtils.addDecimalPoint("Total Amount"), 8, 25f));
-//            table.addCell(boldText(ConverterUtils.addDecimalPoint(allAmountData + ""), 8, 25f));
+//            table.addCell(boldText("", 10, 25f));
+//            table.addCell(boldText(ConverterUtils.addDecimalPoint("Total Amount"), 10, 25f));
+//            table.addCell(boldText(ConverterUtils.addDecimalPoint(allAmountData + ""), 10, 25f));
         }
 
-        table.addCell(boldText("", 8, 25f));
-        table.addCell(boldText(ConverterUtils.addDecimalPoint("Grand Total") + "(" + filePathResponse.getRevenueOrCapital() + ")", 8, 25f));
-        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 8, 25f));
+        table.addCell(boldText("", 10, 25f));
+        table.addCell(boldText(ConverterUtils.addDecimalPoint("Grand Total") + "(" + filePathResponse.getRevenueOrCapital() + ")", 10, 25f));
+        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 10, 25f));
 
 
         int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
 
         Phrase phrase = new Phrase();
-        Font font = new Font(Font.FontFamily.COURIER, 8, Font.BOLD);
+        Font font = new Font(Font.FontFamily.COURIER, 10, Font.BOLD);
         Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(), maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(), maxlength)), font);
         phrase.add(approverName);
         Paragraph paragraph = new Paragraph();
@@ -182,64 +182,64 @@ public class PdfGenaratorUtilMain {
         table.setSpacingAfter(20);
 
 
-        table.addCell(boldText("MAJOR/MINOR/SUB HEAD", 8, 25f));
-        table.addCell(boldText("OBJECT HEAD", 8, 25f));
-        table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 8, 25f));
+        table.addCell(boldText("MAJOR/MINOR/SUB HEAD", 10, 25f));
+        table.addCell(boldText("OBJECT HEAD", 10, 25f));
+        table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 10, 25f));
 
 
-        double grandTotal = 0;
+        Float grandTotal = 0f;
         for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
             String key11 = entry11.getKey();
             List<ReportSubModel> tabData11 = entry11.getValue();
 
             if (key11.equalsIgnoreCase("2037")) {
-                table.addCell(boldText(key11 + "\n00.102.06", 8, 25f));
-                table.addCell(boldText("REVENUE", 8, 25f));
-                table.addCell(boldText("", 8, 25f));
+                table.addCell(boldText(key11 + "\n00.102.06", 10, 25f));
+                table.addCell(boldText("REVENUE", 10, 25f));
+                table.addCell(boldText("", 10, 25f));
             } else {
-                table.addCell(boldText(key11 + "\n00.037.01", 8, 25f));
-                table.addCell(boldText("CAPITAL", 8, 25f));
-                table.addCell(boldText("", 8, 25f));
+                table.addCell(boldText(key11 + "\n00.037.01", 10, 25f));
+                table.addCell(boldText("CAPITAL", 10, 25f));
+                table.addCell(boldText("", 10, 25f));
             }
 
-            double allAmountData = 0;
+            Float allAmountData = 0f;
             for (Integer i = 0; i < tabData11.size(); i++) {
 
-                table.addCell(normalText("", 8, 25f));
-                table.addCell(normalText(tabData11.get(i).getBudgetHead().getSubHeadDescr(), 8, 25f));
-//                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getUnit()), 8, 25f));
-                table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 8, 25f));
+                table.addCell(normalText("", 10, 25f));
+                table.addCell(normalText(tabData11.get(i).getBudgetHead().getSubHeadDescr(), 10, 25f));
+//                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getUnit()), 10, 25f));
+                table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 10, 25f));
 
-                allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
-                grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
+                allAmountData = allAmountData + Float.parseFloat(tabData11.get(i).getAmount());
+                grandTotal = grandTotal + Float.parseFloat(tabData11.get(i).getAmount());
 
             }
 
 
             if (key11.equalsIgnoreCase("2037")) {
 
-                table.addCell(boldText("", 8, 25f));
-                table.addCell(boldText(ConverterUtils.addDecimalPoint("Total Amount") + "(REVENUE)", 8, 25f));
-                table.addCell(boldText(ConverterUtils.addDecimalPoint(allAmountData + ""), 8, 25f));
+                table.addCell(boldText("", 10, 25f));
+                table.addCell(boldText(ConverterUtils.addDecimalPoint("Total Amount") + "(REVENUE)", 10, 25f));
+                table.addCell(boldText(ConverterUtils.addDecimalPoint(allAmountData + ""), 10, 25f));
 
             } else {
-                table.addCell(boldText("", 8, 25f));
-                table.addCell(boldText(ConverterUtils.addDecimalPoint("Total Amount") + "(CAPITAL)", 8, 25f));
-                table.addCell(boldText(ConverterUtils.addDecimalPoint(allAmountData + ""), 8, 25f));
+                table.addCell(boldText("", 10, 25f));
+                table.addCell(boldText(ConverterUtils.addDecimalPoint("Total Amount") + "(CAPITAL)", 10, 25f));
+                table.addCell(boldText(ConverterUtils.addDecimalPoint(allAmountData + ""), 10, 25f));
             }
 
 
         }
 
-        table.addCell(boldText("", 8, 25f));
-        table.addCell(boldText(ConverterUtils.addDecimalPoint("Grand Total"), 8, 25f));
-        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 8, 25f));
+        table.addCell(boldText("", 10, 25f));
+        table.addCell(boldText(ConverterUtils.addDecimalPoint("Grand Total"), 10, 25f));
+        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 10, 25f));
 
 
         int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
 
         Phrase phrase = new Phrase();
-        Font font = new Font(Font.FontFamily.COURIER, 8, Font.BOLD);
+        Font font = new Font(Font.FontFamily.COURIER, 10, Font.BOLD);
         Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(), maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(), maxlength)), font);
         phrase.add(approverName);
         Paragraph paragraph = new Paragraph();
@@ -383,14 +383,14 @@ public class PdfGenaratorUtilMain {
             String key = entry.getKey();
 
             List<CDAReportResponse> tabData = entry.getValue();
-            table.addCell(boldText(key, 8, 35f));
-            table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(0).getAllocationAmount()), 8, 20f));
-            table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(0).getName()), 8, 20f));
+            table.addCell(boldText(key, 10, 35f));
+            table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(0).getAllocationAmount()), 10, 20f));
+            table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(0).getName()), 10, 20f));
         }
 
-        table.addCell(boldText("Grand Total", 8, 20f));
-        table.addCell(boldText(ConverterUtils.addDecimalPoint(allocationGrandTotal + ""), 8, 20f));
-        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 8, 20f));
+        table.addCell(boldText("Grand Total", 10, 20f));
+        table.addCell(boldText(ConverterUtils.addDecimalPoint(allocationGrandTotal + ""), 10, 20f));
+        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 10, 20f));
 
 
         int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
@@ -585,7 +585,7 @@ public class PdfGenaratorUtilMain {
 
     private PdfPCell boldText(String text, int fontSize, float cellHeight) {
         Phrase phrase = new Phrase();
-        Font font = new Font(Font.FontFamily.COURIER, Font.BOLD);
+        Font font = new Font(Font.FontFamily.COURIER, fontSize,Font.BOLD);
         Chunk world = new Chunk(text, font);
         phrase.add(world);
         Paragraph paragraph = new Paragraph();
@@ -599,7 +599,7 @@ public class PdfGenaratorUtilMain {
     private PdfPCell normalText(String text, int fontSize, float cellHeight) {
 
         Phrase phrase = new Phrase();
-        Font font = new Font(Font.FontFamily.HELVETICA, Font.NORMAL);
+        Font font = new Font(Font.FontFamily.HELVETICA,fontSize, Font.NORMAL);
         Chunk world = new Chunk(text, font);
         phrase.add(world);
         Paragraph paragraph = new Paragraph();

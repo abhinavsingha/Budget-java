@@ -10,7 +10,6 @@ import java.util.List;
 public interface CdaParkingTransRepository extends JpaRepository<CdaParkingTrans, String> {
 
 
-    List<CdaParkingTrans> findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(String finYearId, String budgetHeadId, String ginNo, String isFlag, String allocationTypeId);
 
     List<CdaParkingTrans> findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(String finYearId, String budgetHeadId, String isFlag, String allocationTypeId, String unitId);
 

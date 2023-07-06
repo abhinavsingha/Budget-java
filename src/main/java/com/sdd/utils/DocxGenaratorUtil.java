@@ -47,7 +47,7 @@ public class DocxGenaratorUtil {
             XWPFParagraph paragraphtableRowOne11 = tableRowOne.addNewTableCell().addParagraph();
             boldText(paragraphtableRowOne11.createRun(), 10, filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", true);
 
-            double grandTotal = 0;
+            Float grandTotal = 0f;
             for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
                 String key11 = entry11.getKey();
                 List<ReportSubModel> tabData11 = entry11.getValue();
@@ -55,7 +55,7 @@ public class DocxGenaratorUtil {
                 XWPFTableRow tableRow = table.createRow();
                 tableRow.getCell(0).setText(key11);
 
-                double allAmountData = 0;
+                Float allAmountData = 0f;
                 for (Integer i = 0; i < tabData11.size(); i++) {
 
                     if (i == 0) {
@@ -78,8 +78,8 @@ public class DocxGenaratorUtil {
                         normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), false);
                     }
 
-                    allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
-                    grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
+                    allAmountData = allAmountData + Float.parseFloat(tabData11.get(i).getAmount());
+                    grandTotal = grandTotal + Float.parseFloat(tabData11.get(i).getAmount());
 
                 }
 
@@ -253,7 +253,7 @@ public class DocxGenaratorUtil {
 //            boldText(paragraphtableRowOne1111.createRun(), 10, "", true);
 
 
-            double grandTotal = 0;
+            Float grandTotal = 0f;
             for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
                 String key11 = entry11.getKey();
                 List<ReportSubModel> tabData11 = entry11.getValue();
@@ -273,7 +273,7 @@ public class DocxGenaratorUtil {
                 }
 
 
-                double allAmountData = 0;
+                Float allAmountData = 0f;
                 for (Integer i = 0; i < tabData11.size(); i++) {
 
                     XWPFTableRow tableRow11 = table.createRow();
@@ -286,8 +286,8 @@ public class DocxGenaratorUtil {
                     normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), false);
 
 
-                    allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
-                    grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
+                    allAmountData = allAmountData + Float.parseFloat(tabData11.get(i).getAmount());
+                    grandTotal = grandTotal + Float.parseFloat(tabData11.get(i).getAmount());
 
                 }
 

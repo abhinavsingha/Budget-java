@@ -2015,10 +2015,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 BudgetAllocation saveData = budgetAllocationRepository.save(budgetAllocation);
 
             } else {
+                CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByCdaCrdrIdAndIsFlag(budgetApproveRequest.getCdaParkingId().get(i).getCdacrDrId(), "0");
 
                 BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.getFinYear());
 
-                List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(finYear.getFinYear(), allocationData.getSubHead(), "0", allocationData.getAllocTypeId(), hrData.getUnitId());
+                List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(finYear.getSerialNo(), allocationData.getSubHead(),cdaParkingCrAndDr.getGinNo(), "0", allocationData.getAllocTypeId(), hrData.getUnitId());
                 for (Integer x = 0; x < cdaParkingTransList.size(); x++) {
 
                     CdaParkingTrans cdaParkingTrans = cdaParkingTransList.get(x);
@@ -2034,7 +2035,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
                     cdaParkingTransRepository.save(cdaParkingTrans);
 
-
                 }
             }
         }
@@ -2042,8 +2042,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 //        if (!budgetApproveRequest.getStatus().equalsIgnoreCase("Approved")) {
 //            for (Integer i = 0; i < budgetApproveRequest.getCdaParkingId().size(); i++) {
-//
-//                String authGroupId = budgetApproveRequest.getAuthGroupId();
 //
 //                CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByCdaCrdrIdAndIsFlag(budgetApproveRequest.getCdaParkingId().get(i).getCdacrDrId(), "0");
 //
