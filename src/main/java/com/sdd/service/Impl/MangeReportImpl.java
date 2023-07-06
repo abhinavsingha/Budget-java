@@ -3331,7 +3331,7 @@ public class MangeReportImpl implements MangeReportService {
         String unitName = hrData.getUnit();
         String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String formattedDateTime = now.format(formatter);
         try {
             Document document = new Document(PageSize.A4);
@@ -3443,7 +3443,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
             PdfPCell cell200 = new PdfPCell(new Phrase(""));
             PdfPCell cell300 = new PdfPCell(new Phrase(""));
-            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
 
             cell100.setBorder(0);
             cell200.setBorder(0);
@@ -3635,7 +3635,7 @@ public class MangeReportImpl implements MangeReportService {
             String unitName = hrData.getUnit();
             String rank = approveRank;
             LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String formattedDateTime = now.format(formatter);
             XWPFParagraph mainParagraph = document.createParagraph();
             mainParagraph = document.createParagraph();
@@ -3826,7 +3826,7 @@ public class MangeReportImpl implements MangeReportService {
         String unitName = hrData.getUnit();
         String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String formattedDateTime = now.format(formatter);
 
         try {
@@ -3940,8 +3940,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
             PdfPCell cell2000 = new PdfPCell(new Phrase(""));
             PdfPCell cell300 = new PdfPCell(new Phrase(""));
-            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
-
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
             cell100.setBorder(0);
             cell2000.setBorder(0);
             cell300.setBorder(0);
@@ -4132,7 +4131,7 @@ public class MangeReportImpl implements MangeReportService {
             String unitName = hrData.getUnit();
             String rank = approveRank;
             LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String formattedDateTime = now.format(formatter);
             XWPFParagraph mainParagraph = document.createParagraph();
             mainParagraph = document.createParagraph();
@@ -4143,10 +4142,10 @@ public class MangeReportImpl implements MangeReportService {
             normalText(mainParagraph.createRun(), 10, names + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, unitName + "", true);
+            normalText(mainParagraph.createRun(), 10, rank + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, rank + "", true);
+            normalText(mainParagraph.createRun(), 10, unitName + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             document.write(out);
             out.close();
@@ -4332,7 +4331,7 @@ public class MangeReportImpl implements MangeReportService {
         String unitName = hrData.getUnit();
         String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String formattedDateTime = now.format(formatter);
 
         try {
@@ -4450,7 +4449,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
             PdfPCell cell200 = new PdfPCell(new Phrase(""));
             PdfPCell cell300 = new PdfPCell(new Phrase(""));
-            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
 
             cell100.setBorder(0);
             cell200.setBorder(0);
@@ -4663,7 +4662,7 @@ public class MangeReportImpl implements MangeReportService {
             String unitName = hrData.getUnit();
             String rank = approveRank;
             LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String formattedDateTime = now.format(formatter);
             XWPFParagraph mainParagraph = document.createParagraph();
             mainParagraph = document.createParagraph();
@@ -4674,10 +4673,10 @@ public class MangeReportImpl implements MangeReportService {
             normalText(mainParagraph.createRun(), 10, names + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, unitName + "", true);
+            normalText(mainParagraph.createRun(), 10, rank + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, rank + "", true);
+            normalText(mainParagraph.createRun(), 10, unitName + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             document.write(out);
             out.close();
@@ -4882,7 +4881,7 @@ public class MangeReportImpl implements MangeReportService {
         String unitName = hrData.getUnit();
         String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String formattedDateTime = now.format(formatter);
 
         try {
@@ -5085,7 +5084,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
             PdfPCell cell200 = new PdfPCell(new Phrase(""));
             PdfPCell cell300 = new PdfPCell(new Phrase(""));
-            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
 
             cell100.setBorder(0);
             cell200.setBorder(0);
@@ -5359,7 +5358,7 @@ public class MangeReportImpl implements MangeReportService {
             String unitName = hrData.getUnit();
             String rank = approveRank;
             LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String formattedDateTime = now.format(formatter);
             XWPFParagraph mainParagraph = document.createParagraph();
             mainParagraph = document.createParagraph();
@@ -5370,10 +5369,10 @@ public class MangeReportImpl implements MangeReportService {
             normalText(mainParagraph.createRun(), 10, names + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, unitName + "", true);
+            normalText(mainParagraph.createRun(), 10, rank + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, rank + "", true);
+            normalText(mainParagraph.createRun(), 10, unitName + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             document.write(out);
             out.close();
@@ -5609,7 +5608,7 @@ public class MangeReportImpl implements MangeReportService {
         String unitName = hrData.getUnit();
         String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String formattedDateTime = now.format(formatter);
 
 
@@ -5768,7 +5767,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
             PdfPCell cell200 = new PdfPCell(new Phrase(""));
             PdfPCell cell300 = new PdfPCell(new Phrase(""));
-            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
 
             cell100.setBorder(0);
             cell200.setBorder(0);
@@ -6029,7 +6028,7 @@ public class MangeReportImpl implements MangeReportService {
             String unitName = hrData.getUnit();
             String rank = approveRank;
             LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String formattedDateTime = now.format(formatter);
             XWPFParagraph mainParagraph = document.createParagraph();
             mainParagraph = document.createParagraph();
@@ -6040,10 +6039,10 @@ public class MangeReportImpl implements MangeReportService {
             normalText(mainParagraph.createRun(), 10, names + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, unitName + "", true);
+            normalText(mainParagraph.createRun(), 10, rank + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, rank + "", true);
+            normalText(mainParagraph.createRun(), 10, unitName + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             document.write(out);
             out.close();
@@ -6304,7 +6303,7 @@ public class MangeReportImpl implements MangeReportService {
         String unitName = hrData.getUnit();
         String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String formattedDateTime = now.format(formatter);
 
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -6609,7 +6608,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
             PdfPCell cell200 = new PdfPCell(new Phrase(""));
             PdfPCell cell300 = new PdfPCell(new Phrase(""));
-            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
 
             cell100.setBorder(0);
             cell200.setBorder(0);
@@ -7018,7 +7017,7 @@ public class MangeReportImpl implements MangeReportService {
             String unitName = hrData.getUnit();
             String rank = approveRank;
             LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String formattedDateTime = now.format(formatter);
             XWPFParagraph mainParagraph = document.createParagraph();
             mainParagraph = document.createParagraph();
@@ -7029,10 +7028,10 @@ public class MangeReportImpl implements MangeReportService {
             normalText(mainParagraph.createRun(), 10, names + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, unitName + "", true);
+            normalText(mainParagraph.createRun(), 10, rank + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, rank + "", true);
+            normalText(mainParagraph.createRun(), 10, unitName + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             document.write(out);
             out.close();
@@ -7335,7 +7334,7 @@ public class MangeReportImpl implements MangeReportService {
         String unitName = hrData.getUnit();
         String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String formattedDateTime = now.format(formatter);
 
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -7579,7 +7578,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
             PdfPCell cell200 = new PdfPCell(new Phrase(""));
             PdfPCell cell300 = new PdfPCell(new Phrase(""));
-            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
 
             cell100.setBorder(0);
             cell200.setBorder(0);
@@ -7878,7 +7877,7 @@ public class MangeReportImpl implements MangeReportService {
             String unitName = hrDataCheck.getUnit();
             String rank = approveRank;
             LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String formattedDateTime = now.format(formatter);
             XWPFParagraph mainParagraph = document.createParagraph();
             mainParagraph = document.createParagraph();
@@ -7889,10 +7888,10 @@ public class MangeReportImpl implements MangeReportService {
             normalText(mainParagraph.createRun(), 10, names + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, unitName + "", true);
+            normalText(mainParagraph.createRun(), 10, rank + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, rank + "", true);
+            normalText(mainParagraph.createRun(), 10, unitName + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             document.write(out);
             out.close();
@@ -8110,7 +8109,7 @@ public class MangeReportImpl implements MangeReportService {
         String unitName = hrData.getUnit();
         String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String formattedDateTime = now.format(formatter);
 
 
@@ -8308,8 +8307,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
             PdfPCell cell200 = new PdfPCell(new Phrase(""));
             PdfPCell cell300 = new PdfPCell(new Phrase(""));
-            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
-
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
             cell100.setBorder(0);
             cell200.setBorder(0);
             cell300.setBorder(0);
@@ -8595,7 +8593,7 @@ public class MangeReportImpl implements MangeReportService {
             String unitName = hrData.getUnit();
             String rank = approveRank;
             LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String formattedDateTime = now.format(formatter);
             XWPFParagraph mainParagraph = document.createParagraph();
             mainParagraph = document.createParagraph();
@@ -8606,10 +8604,10 @@ public class MangeReportImpl implements MangeReportService {
             normalText(mainParagraph.createRun(), 10, names + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, unitName + "", true);
+            normalText(mainParagraph.createRun(), 10, rank + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, rank + "", true);
+            normalText(mainParagraph.createRun(), 10, unitName + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             document.write(out);
             out.close();
@@ -8861,7 +8859,7 @@ public class MangeReportImpl implements MangeReportService {
         String unitName = hrData.getUnit();
         String rank = approveRank;
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String formattedDateTime = now.format(formatter);
 
         try {
@@ -9064,7 +9062,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
             PdfPCell cell200 = new PdfPCell(new Phrase(""));
             PdfPCell cell300 = new PdfPCell(new Phrase(""));
-            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + unitName + "\n" + rank));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
 
             cell100.setBorder(0);
             cell200.setBorder(0);
