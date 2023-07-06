@@ -4777,7 +4777,6 @@ public class MangeReportImpl implements MangeReportService {
         String amountIn = amountObj.getAmountType();
 
         try {
-
             int i = 1;
             for (String val : rowData) {
                 String subHeadId = val;
@@ -4816,7 +4815,6 @@ public class MangeReportImpl implements MangeReportService {
                     resp.setUnitName(unitN.getDescr());
                     resp.setAllocationAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
                     sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
-
                     dtoList.add(resp);
                     count++;
                 }
