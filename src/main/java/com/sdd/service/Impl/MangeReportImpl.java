@@ -483,7 +483,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
-                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
+                subModel.setAmount(Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount())+"");
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
