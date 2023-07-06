@@ -3624,6 +3624,7 @@ public class MangeReportImpl implements MangeReportService {
                 boldText(paragraphtableRow21.createRun(), 10, type.getAllocDesc().toUpperCase(), false);
 
                 XWPFParagraph paragraphtableRow31 = tableRows.getCell(3).addParagraph();
+                paragraphtableRow31.setAlignment(ParagraphAlignment.RIGHT);
                 boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
                 count++;
                 sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
@@ -3639,6 +3640,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
             boldText(paragraphtableRowOne2222.createRun(), 12, "", true);
             XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
+            paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
 
             String names = approveName;
@@ -3656,10 +3658,10 @@ public class MangeReportImpl implements MangeReportService {
             normalText(mainParagraph.createRun(), 10, names + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, unitName + "", true);
+            normalText(mainParagraph.createRun(), 10, rank + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             mainParagraph = document.createParagraph();
-            normalText(mainParagraph.createRun(), 10, rank + "", true);
+            normalText(mainParagraph.createRun(), 10, unitName + "", true);
             mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             document.write(out);
             out.close();
@@ -4121,6 +4123,7 @@ public class MangeReportImpl implements MangeReportService {
                 boldText(paragraphtableRow21.createRun(), 10, type.getAllocDesc().toUpperCase(), false);
 
                 XWPFParagraph paragraphtableRow31 = tableRows.getCell(3).addParagraph();
+                paragraphtableRow31.setAlignment(ParagraphAlignment.RIGHT);
                 boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
                 i++;
                 sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
@@ -4135,6 +4138,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
             boldText(paragraphtableRowOne2222.createRun(), 12, "", true);
             XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
+            paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
 
             String names = approveName;
@@ -4638,6 +4642,7 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRow11.createRun(), 10, unitN.getDescr(), false);
 
                     XWPFParagraph paragraphtableRow21 = tableRowOne111.getCell(2).addParagraph();
+                    paragraphtableRow21.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
                     count++;
                     sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
@@ -4652,6 +4657,7 @@ public class MangeReportImpl implements MangeReportService {
                     XWPFParagraph paragraphtableRowOne1222 = tableRowOne222.getCell(1).addParagraph();
                     boldText(paragraphtableRowOne1222.createRun(), 12, "TOTAL ", true);
                     XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
+                    paragraphtableRowOne2222.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
                     count = 0;
                 }
@@ -4666,6 +4672,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne1223 = tableRowOne223.getCell(1).addParagraph();
             boldText(paragraphtableRowOne1223.createRun(), 12, "GRAND TOTAL ", true);
             XWPFParagraph paragraphtableRowOne2223 = tableRowOne223.getCell(2).addParagraph();
+            paragraphtableRowOne2223.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(gdTotal)), true);
 
             String names = approveName;
@@ -5303,9 +5310,11 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRow11.createRun(), 10, unitN.getDescr(), false);
 
                     XWPFParagraph paragraphtableRow21 = tableRowOne111.getCell(2).addParagraph();
+                    paragraphtableRow21.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
 
                     XWPFParagraph paragraphtableRow31 = tableRowOne111.getCell(3).addParagraph();
+                    paragraphtableRow31.setAlignment(ParagraphAlignment.RIGHT);
                     if (reAmount < 0)
                         boldText(paragraphtableRow31.createRun(), 10, "(-)" + String.format("%1$0,1.4f", new BigDecimal(s2)), false);
                     else if (reAmount > 0)
@@ -5314,6 +5323,7 @@ public class MangeReportImpl implements MangeReportService {
                         boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(reAmount)), false);
 
                     XWPFParagraph paragraphtableRow41 = tableRowOne111.getCell(4).addParagraph();
+                    paragraphtableRow41.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(add)), false);
 
                     sumExisting += Float.parseFloat(new BigDecimal(Float.toString(finAmount)).toPlainString());
@@ -5335,8 +5345,10 @@ public class MangeReportImpl implements MangeReportService {
                 XWPFParagraph paragraphtableRowOne1222 = tableRowOne222.getCell(1).addParagraph();
                 boldText(paragraphtableRowOne1222.createRun(), 12, "TOTAL ", true);
                 XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
+                paragraphtableRowOne2222.setAlignment(ParagraphAlignment.RIGHT);
                 boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sumExisting)), true);
                 XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
+                paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
                 if (sumRE < 0)
                     boldText(paragraphtableRowOne2233.createRun(), 12, "(-)" + String.format("%1$0,1.4f", new BigDecimal(ss2)), true);
                 else if (sumRE > 0)
@@ -5344,6 +5356,7 @@ public class MangeReportImpl implements MangeReportService {
                 else
                     boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sumRE)), true);
                 XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
+                paragraphtableRowOne2244.setAlignment(ParagraphAlignment.RIGHT);
                 boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(total)), true);
 
                 grTotalAlloc += sumExisting;
@@ -5358,10 +5371,13 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne1223 = tableRowOne223.getCell(1).addParagraph();
             boldText(paragraphtableRowOne1223.createRun(), 12, "GRAND TOTAL ", true);
             XWPFParagraph paragraphtableRowOne2223 = tableRowOne223.getCell(2).addParagraph();
+            paragraphtableRowOne2223.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), true);
             XWPFParagraph paragraphtableRowOne2234 = tableRowOne223.getCell(3).addParagraph();
+            paragraphtableRowOne2234.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2234.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), true);
             XWPFParagraph paragraphtableRowOne2245 = tableRowOne223.getCell(4).addParagraph();
+            paragraphtableRowOne2245.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2245.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), true);
 
             String names = approveName;
@@ -5994,9 +6010,11 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRow11.createRun(), 10, unitN.getDescr(), false);
 
                     XWPFParagraph paragraphtableRow21 = tableRowOne111.getCell(2).addParagraph();
+                    paragraphtableRow21.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
 
                     XWPFParagraph paragraphtableRow31 = tableRowOne111.getCell(3).addParagraph();
+                    paragraphtableRow31.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(reFinalAmount)), false);
 
                     count++;
@@ -6013,8 +6031,10 @@ public class MangeReportImpl implements MangeReportService {
                     XWPFParagraph paragraphtableRowOne1222 = tableRowOne222.getCell(1).addParagraph();
                     boldText(paragraphtableRowOne1222.createRun(), 12, "TOTAL ", true);
                     XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
+                    paragraphtableRowOne2222.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
                     XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
+                    paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(reSum)), true);
                     count = 0;
                 }
@@ -6030,8 +6050,10 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne1220 = tableRowOne223.getCell(1).addParagraph();
             boldText(paragraphtableRowOne1220.createRun(), 12, "GRAND TOTAL ", true);
             XWPFParagraph paragraphtableRowOne2220 = tableRowOne223.getCell(2).addParagraph();
+            paragraphtableRowOne2220.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2220.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), true);
             XWPFParagraph paragraphtableRowOne2230 = tableRowOne223.getCell(3).addParagraph();
+            paragraphtableRowOne2230.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), true);
 
             String names = approveName;
@@ -6907,6 +6929,7 @@ public class MangeReportImpl implements MangeReportService {
                         boldText(paragraphtableRowOne11.createRun(), 10, "", false);
                     }
                     XWPFParagraph paragraphtableRow11 = tableRowOne111.getCell(1).addParagraph();
+                    paragraphtableRow11.setAlignment(ParagraphAlignment.RIGHT);
                     if (r == 0) {
                         boldText(paragraphtableRow11.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(IcgAmount)), true);
                     } else {
@@ -6917,12 +6940,15 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRow21.createRun(), 10, unitN.getDescr(), false);
 
                     XWPFParagraph paragraphtableRow31 = tableRowOne111.getCell(3).addParagraph();
+                    paragraphtableRow31.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
 
                     XWPFParagraph paragraphtableRow41 = tableRowOne111.getCell(4).addParagraph();
+                    paragraphtableRow41.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(eAmount / reqAmount)), false);
 
                     XWPFParagraph paragraphtableRow51 = tableRowOne111.getCell(5).addParagraph();
+                    paragraphtableRow51.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow51.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(expnAmount)), false);
 
                     XWPFParagraph paragraphtableRow61 = tableRowOne111.getCell(6).addParagraph();
@@ -6963,10 +6989,13 @@ public class MangeReportImpl implements MangeReportService {
                 XWPFParagraph hrcell02 = hrrow0.getCell(2).addParagraph();
                 boldText(hrcell02.createRun(), 12, hrunitN.getDescr(), false);
                 XWPFParagraph hrcell03 = hrrow0.getCell(3).addParagraph();
+                hrcell03.setAlignment(ParagraphAlignment.RIGHT);
                 boldText(hrcell03.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(hrfinAmount)), false);
                 XWPFParagraph hrcell04 = hrrow0.getCell(4).addParagraph();
+                hrcell04.setAlignment(ParagraphAlignment.RIGHT);
                 boldText(hrcell04.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(0)), false);
                 XWPFParagraph hrcell05 = hrrow0.getCell(5).addParagraph();
+                hrcell05.setAlignment(ParagraphAlignment.RIGHT);
                 boldText(hrcell05.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(0)), false);
                 XWPFParagraph hrcell06 = hrrow0.getCell(6).addParagraph();
                 boldText(hrcell06.createRun(), 12, "", false);
@@ -6987,10 +7016,13 @@ public class MangeReportImpl implements MangeReportService {
                     XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
                     boldText(paragraphtableRowOne2222.createRun(), 12, "TOTAL", true);
                     XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
+                    paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum + hrfinAmount)), true);
                     XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
+                    paragraphtableRowOne2244.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(expsum / reqAmount)), true);
                     XWPFParagraph paragraphtableRowOne2255 = tableRowOne222.getCell(5).addParagraph();
+                    paragraphtableRowOne2255.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRowOne2255.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(perc)), true);
                     XWPFParagraph paragraphtableRowOne2266 = tableRowOne222.getCell(6).addParagraph();
                     boldText(paragraphtableRowOne2266.createRun(), 12, "", true);
@@ -7009,14 +7041,18 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne220 = tableRowOne220.getCell(0).addParagraph();
             boldText(paragraphtableRowOne220.createRun(), 12, "GRAND TOTAL", true);
             XWPFParagraph paragraphtableRowOne1220 = tableRowOne220.getCell(1).addParagraph();
+            paragraphtableRowOne1220.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne1220.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalIcg)), true);
             XWPFParagraph paragraphtableRowOne2220 = tableRowOne220.getCell(2).addParagraph();
             boldText(paragraphtableRowOne2220.createRun(), 12, " ", true);
             XWPFParagraph paragraphtableRowOne2230 = tableRowOne220.getCell(3).addParagraph();
+            paragraphtableRowOne2230.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), true);
             XWPFParagraph paragraphtableRowOne2200 = tableRowOne220.getCell(4).addParagraph();
+            paragraphtableRowOne2200.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2200.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAddition / reqAmount)), true);
             XWPFParagraph paragraphtableRowOne2250 = tableRowOne220.getCell(5).addParagraph();
+            paragraphtableRowOne2250.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2250.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal((grTotalAddition / reqAmount) * 100 / grTotalAlloc)), true);
             XWPFParagraph paragraphtableRowOne2260 = tableRowOne220.getCell(6).addParagraph();
             boldText(paragraphtableRowOne2260.createRun(), 12, "", true);
@@ -7830,12 +7866,15 @@ public class MangeReportImpl implements MangeReportService {
                         boldText(paragraphtableRow11.createRun(), 10, bHead.getSubHeadDescr(), false);
 
                         XWPFParagraph paragraphtableRow21 = tableRows.getCell(2).addParagraph();
+                        paragraphtableRow21.setAlignment(ParagraphAlignment.RIGHT);
                         boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(rebaseData.get(k).getAllocAmount())), false);
 
                         XWPFParagraph paragraphtableRow31 = tableRows.getCell(3).addParagraph();
+                        paragraphtableRow31.setAlignment(ParagraphAlignment.RIGHT);
                         boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(rebaseData.get(k).getExpAmount())), false);
 
                         XWPFParagraph paragraphtableRow41 = tableRows.getCell(4).addParagraph();
+                        paragraphtableRow41.setAlignment(ParagraphAlignment.RIGHT);
                         boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(rebaseData.get(k).getBalAmount())), false);
                         if (rebaseData.get(k).getLastCbDate() != null) {
                             Date LastCbD = rebaseData.get(k).getLastCbDate();
@@ -7872,12 +7911,15 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRow11.createRun(), 12, "GRAND TOTAL", true);
 
                     XWPFParagraph paragraphtableRow21 = tableRow111.getCell(2).addParagraph();
+                    paragraphtableRow21.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow21.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), true);
 
                     XWPFParagraph paragraphtableRow31 = tableRow111.getCell(3).addParagraph();
+                    paragraphtableRow31.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow31.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), true);
 
                     XWPFParagraph paragraphtableRow41 = tableRow111.getCell(4).addParagraph();
+                    paragraphtableRow41.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow41.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), true);
 
                     XWPFParagraph paragraphtableRow51 = tableRow111.getCell(5).addParagraph();
@@ -8551,12 +8593,15 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRow11.createRun(), 10, unitN.getDescr(), false);
 
                     XWPFParagraph paragraphtableRow21 = tableRowOne111.getCell(2).addParagraph();
+                    paragraphtableRow21.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
 
                     XWPFParagraph paragraphtableRow31 = tableRowOne111.getCell(3).addParagraph();
+                    paragraphtableRow31.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(reFinalAmount)), false);
 
                     XWPFParagraph paragraphtableRow41 = tableRowOne111.getCell(4).addParagraph();
+                    paragraphtableRow41.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(maFinalAmount)), false);
 
                     count++;
@@ -8574,10 +8619,13 @@ public class MangeReportImpl implements MangeReportService {
                     XWPFParagraph paragraphtableRowOne1222 = tableRowOne222.getCell(1).addParagraph();
                     boldText(paragraphtableRowOne1222.createRun(), 12, "TOTAL ", true);
                     XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
+                    paragraphtableRowOne2222.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
                     XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
+                    paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(reSum)), true);
                     XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
+                    paragraphtableRowOne2244.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(maSum)), true);
                     count = 0;
                 }
@@ -8594,10 +8642,13 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne1220 = tableRowOne223.getCell(1).addParagraph();
             boldText(paragraphtableRowOne1220.createRun(), 12, "GRAND TOTAL ", true);
             XWPFParagraph paragraphtableRowOne2220 = tableRowOne223.getCell(2).addParagraph();
+            paragraphtableRowOne2220.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2220.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), true);
             XWPFParagraph paragraphtableRowOne2230 = tableRowOne223.getCell(3).addParagraph();
+            paragraphtableRowOne2230.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), true);
             XWPFParagraph paragraphtableRowOne1111 = tableRowOne223.getCell(4).addParagraph();
+            paragraphtableRowOne1111.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne1111.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalMA)), true);
 
             String names = approveName;
