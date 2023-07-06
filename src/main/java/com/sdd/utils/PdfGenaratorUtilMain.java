@@ -104,7 +104,7 @@ public class PdfGenaratorUtilMain {
         table.setSpacingAfter(20);
 
         table.addCell(boldText("MAJOR/MINOR/SUB HEAD", 8, 25f));
-        table.addCell(boldText("DETAILED HEAD", 8, 25f));
+        table.addCell(boldText("OBJECT HEAD", 8, 25f));
         table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 8, 25f));
 
 
@@ -181,8 +181,9 @@ public class PdfGenaratorUtilMain {
         table.setWidthPercentage(100);
         table.setSpacingAfter(20);
 
+
         table.addCell(boldText("MAJOR/MINOR/SUB HEAD", 8, 25f));
-        table.addCell(boldText("DETAILED HEAD", 8, 25f));
+        table.addCell(boldText("OBJECT HEAD", 8, 25f));
         table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 8, 25f));
 
 

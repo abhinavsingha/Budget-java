@@ -151,7 +151,7 @@ public class BudgetAllocationController {
 
     @GetMapping("/getAllGroupIdAndUnitIdRevisionCase/{groupId}")
     public ResponseEntity<ApiResponse<BudgetAllocationResponse>> getAllGroupIdAndUnitIdRevisionCase(@PathVariable("groupId") String groupId) {
-        return new ResponseEntity<>(budgetAllocationService.getAllGroupIdAndUnitId(groupId), HttpStatus.OK);
+        return new ResponseEntity<>(budgetAllocationService.getAllGroupIdAndUnitIdRevisionCase(groupId), HttpStatus.OK);
     }
 
 

@@ -1622,6 +1622,9 @@ public class MangeReportImpl implements MangeReportService {
 
             }
 
+            if(amount == 0){
+                continue;
+            }
 
             cdaReportResponse = new CDAReportResponse();
             cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
@@ -1745,10 +1748,11 @@ public class MangeReportImpl implements MangeReportService {
 
                 allocationGrandTotal = allocationGrandTotal + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
                 allocationAmount = allocationAmount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
-
-
+                
             }
-
+            if(amount == 0){
+                continue;
+            }
 
             cdaReportResponse = new CDAReportResponse();
             cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
