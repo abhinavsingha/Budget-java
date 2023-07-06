@@ -3380,7 +3380,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell01 = new PdfPCell(new Phrase("S.L", cellFont1));
             PdfPCell cell02 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD", cellFont1));
             PdfPCell cell03 = new PdfPCell(new Phrase("ALLOCATION TYPE", cellFont1));
-            PdfPCell cell04 = new PdfPCell(new Phrase("AMOUNT IN :(" + amountIn + ")", cellFont1));
+            PdfPCell cell04 = new PdfPCell(new Phrase("AMOUNT : (₹ IN " + amountIn + ")", cellFont1));
             cell01.setPadding(10);
             cell02.setPadding(10);
             cell03.setPadding(10);
@@ -3594,7 +3594,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRow2 = tableRow.getCell(2).addParagraph();
             boldText(paragraphtableRow2.createRun(), 12, "ALLOCATION TYPE", true);
             XWPFParagraph paragraphtableRow3 = tableRow.getCell(3).addParagraph();
-            boldText(paragraphtableRow3.createRun(), 12, "ALLOCATION AMOUNT IN:  (" + amountIn + ")", true);
+            boldText(paragraphtableRow3.createRun(), 12, "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", true);
 
             int count = 1;
             Float amount;
@@ -3875,7 +3875,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell10 = new PdfPCell(new Phrase("S.L", cellFont));
             PdfPCell cell20 = new PdfPCell(new Phrase("UNIT", cellFont));
             PdfPCell cell30 = new PdfPCell(new Phrase("ALLOCATION TYPE", cellFont));
-            PdfPCell cell40 = new PdfPCell(new Phrase("AMOUNT IN :(" + amountIn + ")", cellFont));
+            PdfPCell cell40 = new PdfPCell(new Phrase("AMOUNT : (₹ IN " + amountIn + ")", cellFont));
             cell10.setPadding(10);
             cell20.setPadding(10);
             cell30.setPadding(10);
@@ -4089,7 +4089,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRow2 = tableRow.getCell(2).addParagraph();
             boldText(paragraphtableRow2.createRun(), 12, "ALLOCATION TYPE", true);
             XWPFParagraph paragraphtableRow3 = tableRow.getCell(3).addParagraph();
-            boldText(paragraphtableRow3.createRun(), 12, "ALLOCATION AMOUNT IN:  (" + amountIn + ")", true);
+            boldText(paragraphtableRow3.createRun(), 12, "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", true);
 
 
             int i = 1;
@@ -4357,7 +4357,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            paragraph.add(new Chunk(type.getAllocDesc().toUpperCase() + " " + "ALLOCATION REPORT", boldFont));
+            paragraph.add(new Chunk(type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear()+ " " + "ALLOCATION REPORT", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
@@ -4368,7 +4368,7 @@ public class MangeReportImpl implements MangeReportService {
             Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
             PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
-            PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear() + " " + "ALLOCATION IN: (" + amountIn + ")", cellFont));
+            PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", cellFont));
             cell1.setPadding(10);
             cell2.setPadding(10);
             cell3.setPadding(10);
@@ -4581,7 +4581,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String timemilisec = String.valueOf(System.currentTimeMillis());
-            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "_Allocation_Report" + timemilisec + ".docx";
+            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear()+" "+ "_Allocation_Report" + timemilisec + ".docx";
             FileOutputStream out = new FileOutputStream(new File(path));
             XWPFTable table = document.createTable(1, 3);
             table.setWidth("100%");
@@ -4591,7 +4591,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
             boldText(paragraphtableRowOne1.createRun(), 12, "UNIT ", true);
             XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
-            boldText(paragraphtableRowOne2.createRun(), 12, type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear() + " " + "ALLOCATION IN: (" + amountIn + ")", true);
+            boldText(paragraphtableRowOne2.createRun(), 12, type.getAllocDesc().toUpperCase()+ " " + "ALLOCATION ( ₹ IN:" + amountIn + ")", true);
 
             float gdTotal = 0;
             int i = 1;
@@ -4917,7 +4917,7 @@ public class MangeReportImpl implements MangeReportService {
             tables.setWidthPercentage(100);
             Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
             PdfPCell cells = new PdfPCell(new Phrase(allocType.toUpperCase() + ": " + findyr.getFinYear() + " " + "ALLOCATION", cellFont));
-            PdfPCell cells0 = new PdfPCell(new Phrase("AMOUNT IN: (" + amountIn.toUpperCase() + ")", cellFont));
+            PdfPCell cells0 = new PdfPCell(new Phrase("AMOUNT : (₹ IN " + amountIn + ")", cellFont));
             cells.setPadding(15);
             cells0.setPadding(15);
 
@@ -5218,7 +5218,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraph11 = tab1.getCell(0).addParagraph();
             boldText(paragraph11.createRun(), 10, allocType.toUpperCase() + " :" + findyr.getFinYear() + " :" + "ALLOCATION", true);
             XWPFParagraph paragraph22 = tab1.getCell(1).addParagraph();
-            boldText(paragraph22.createRun(), 10, "AMOUNT IN :( " + amountIn.toUpperCase() + " )", true);
+            boldText(paragraph22.createRun(), 10, "AMOUNT : (₹ IN " + amountIn.toUpperCase() + ")", true);
             XWPFParagraph zz = document.createParagraph();
             zz.setSpacingAfter(1);
 
@@ -5646,8 +5646,8 @@ public class MangeReportImpl implements MangeReportService {
             Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
             PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
-            PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT IN: (" + amountIn + ")", cellFont));
-            PdfPCell cell4 = new PdfPCell(new Phrase(types.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT IN: (" + amountIn + ")", cellFont));
+            PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", cellFont));
+            PdfPCell cell4 = new PdfPCell(new Phrase(types.getAllocDesc().toUpperCase() + " " +"ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", cellFont));
 
             cell1.setPadding(10);
             cell2.setPadding(10);
@@ -5925,9 +5925,9 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
             boldText(paragraphtableRowOne1.createRun(), 12, "UNIT ", true);
             XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
-            boldText(paragraphtableRowOne2.createRun(), 12, type.getAllocDesc().toUpperCase() + " " + "ALLOCATION IN:" + " (" + amountIn + " )", true);
+            boldText(paragraphtableRowOne2.createRun(), 12, type.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", true);
             XWPFParagraph paragraphtableRowOne3 = tableRowOne.getCell(3).addParagraph();
-            boldText(paragraphtableRowOne3.createRun(), 12, types.getAllocDesc().toUpperCase() + " " + "ALLOCATION IN:" + " (" + amountIn + " )", true);
+            boldText(paragraphtableRowOne3.createRun(), 12, types.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", true);
 
             int i = 1;
             float grTotalAlloc = 0;
@@ -6355,7 +6355,7 @@ public class MangeReportImpl implements MangeReportService {
             Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
             PdfPCell cell1ss = new PdfPCell(new Phrase(" COAST GUARD BUDGET : FY : " + findyr.getFinYear(), cellFont));
             cell1ss.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-            PdfPCell cell1ss1 = new PdfPCell(new Phrase("AMOUNT IN:  (" + amountIn.toUpperCase() + ")", cellFont));
+            PdfPCell cell1ss1 = new PdfPCell(new Phrase("AMOUNT : (₹ IN " + amountIn + ")", cellFont));
             cell1ss1.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell1ss.setPadding(15);
             cell1ss1.setPadding(15);
@@ -6781,7 +6781,7 @@ public class MangeReportImpl implements MangeReportService {
 
             XWPFTableRow tabRow1 = tab.getRow(1);
             XWPFParagraph paragraph2 = tabRow1.getCell(0).addParagraph();
-            boldText(paragraph2.createRun(), 10, "( " + amountIn + " )", true);
+            boldText(paragraph2.createRun(), 10, "AMOUNT : (₹ IN " + amountIn + ")", true);
             paragraph2.setAlignment(ParagraphAlignment.RIGHT);
 
             XWPFParagraph sp = document.createParagraph();
@@ -7479,9 +7479,9 @@ public class MangeReportImpl implements MangeReportService {
                     table.setWidthPercentage(100);
                     PdfPCell cell10 = new PdfPCell(new Phrase("FINANCIAL YEAR & ALLOCATION TYPE ", cellFont));
                     PdfPCell cell20 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD", cellFont));
-                    PdfPCell cell40 = new PdfPCell(new Phrase("ALLOCATION IN: ( " + amountIn + ")", cellFont));
-                    PdfPCell cell50 = new PdfPCell(new Phrase("EXPENDITURE IN: (INR)", cellFont));
-                    PdfPCell cell60 = new PdfPCell(new Phrase("BALANCE IN : ( " + amountIn + ")", cellFont));
+                    PdfPCell cell40 = new PdfPCell(new Phrase("ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", cellFont));
+                    PdfPCell cell50 = new PdfPCell(new Phrase("EXPENDITURE AMOUNT : (₹ IN " + amountIn + ")", cellFont));
+                    PdfPCell cell60 = new PdfPCell(new Phrase("BALANCE AMOUNT : (₹ IN " + amountIn + ")", cellFont));
                     PdfPCell cell70 = new PdfPCell(new Phrase("LAST CB DATE", cellFont));
 
                     cell10.setPadding(10);
@@ -7728,6 +7728,7 @@ public class MangeReportImpl implements MangeReportService {
                     CgUnit unitN = cgUnitRepository.findByUnit(RunitId);
                     CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
                     AmountUnit amountTypeObjs = amountUnitRepository.findByAmountTypeId(rebaseData.get(0).getAmountType());
+                    String amountIn=amountTypeObjs.getAmountType().toUpperCase();
 
                     rebase.setUnitName(unitN.getDescr());
                     rebase.setDateOfRebase(rebaseData.get(0).getOccuranceDate());
@@ -7789,13 +7790,13 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRow1.createRun(), 12, "SUB HEAD", true);
 
                     XWPFParagraph paragraphtableRow2 = tableRow.getCell(2).addParagraph();
-                    boldText(paragraphtableRow2.createRun(), 12, "ALLOCATION IN: (" + amountTypeObjs.getAmountType() + ")", true);
+                    boldText(paragraphtableRow2.createRun(), 12, "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", true);
 
                     XWPFParagraph paragraphtableRow3 = tableRow.getCell(3).addParagraph();
-                    boldText(paragraphtableRow3.createRun(), 12, "EXPENDITURE : (INR)", true);
+                    boldText(paragraphtableRow3.createRun(), 12, "EXPENDITURE AMOUNT : (₹ IN " + amountIn + ")", true);
 
                     XWPFParagraph paragraphtableRow4 = tableRow.getCell(4).addParagraph();
-                    boldText(paragraphtableRow4.createRun(), 12, "BALANCE IN: (" + amountTypeObjs.getAmountType() + ")", true);
+                    boldText(paragraphtableRow4.createRun(), 12, "BALANCE AMOUNT : (₹ IN " + amountIn + ")", true);
 
                     XWPFParagraph paragraphtableRow5 = tableRow.getCell(5).addParagraph();
                     boldText(paragraphtableRow5.createRun(), 12, "LAST CB DATE:", true);
@@ -8147,9 +8148,9 @@ public class MangeReportImpl implements MangeReportService {
             Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
             PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
-            PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT IN: (" + amountIn + ")", cellFont));
-            PdfPCell cell4 = new PdfPCell(new Phrase(types.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT IN: (" + amountIn + ")", cellFont));
-            PdfPCell cell5 = new PdfPCell(new Phrase(typesMA.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT IN: (" + amountIn + ")", cellFont));
+            PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", cellFont));
+            PdfPCell cell4 = new PdfPCell(new Phrase(types.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", cellFont));
+            PdfPCell cell5 = new PdfPCell(new Phrase(typesMA.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", cellFont));
 
             cell1.setPadding(10);
             cell2.setPadding(10);
@@ -8453,11 +8454,11 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
             boldText(paragraphtableRowOne1.createRun(), 12, "UNIT ", true);
             XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
-            boldText(paragraphtableRowOne2.createRun(), 12, type.getAllocDesc().toUpperCase() + " " + "ALLOCATION IN:" + " (" + amountIn + " )", true);
+            boldText(paragraphtableRowOne2.createRun(), 12, type.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", true);
             XWPFParagraph paragraphtableRowOne3 = tableRowOne.getCell(3).addParagraph();
-            boldText(paragraphtableRowOne3.createRun(), 12, types.getAllocDesc().toUpperCase() + " " + "ALLOCATION IN:" + " (" + amountIn + " )", true);
+            boldText(paragraphtableRowOne3.createRun(), 12, types.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", true);
             XWPFParagraph paragraphtableRowOne4 = tableRowOne.getCell(4).addParagraph();
-            boldText(paragraphtableRowOne4.createRun(), 12, typesMA.getAllocDesc().toUpperCase() + " " + "ALLOCATION IN:" + " (" + amountIn + " )", true);
+            boldText(paragraphtableRowOne4.createRun(), 12, typesMA.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", true);
 
             int i = 1;
             float grTotalAlloc = 0;
@@ -8895,7 +8896,7 @@ public class MangeReportImpl implements MangeReportService {
             tables.setWidthPercentage(100);
             Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
             PdfPCell cells = new PdfPCell(new Phrase(allocType.toUpperCase() + ": " + findyr.getFinYear() + " " + "ALLOCATION", cellFont));
-            PdfPCell cells0 = new PdfPCell(new Phrase("AMOUNT IN: (" + amountIn.toUpperCase() + ")", cellFont));
+            PdfPCell cells0 = new PdfPCell(new Phrase("AMOUNT : (₹ IN " + amountIn + ")", cellFont));
             cells.setPadding(15);
             cells0.setPadding(15);
 
