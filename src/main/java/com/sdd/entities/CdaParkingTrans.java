@@ -49,10 +49,10 @@ public class CdaParkingTrans {
     @Column(name = "CREATED_ON")
     private Timestamp createdOn;
 
-    @Column(name = "UPDATED_ON", nullable = false)
+    @Column(name = "UPDATED_ON")
     private Timestamp updatedOn;
 
-    @Column(name = "ALLOC_TYPE_ID", nullable = false)
+    @Column(name = "ALLOC_TYPE_ID")
     private String allocTypeId;
 
     @Column(name = "isFlag")

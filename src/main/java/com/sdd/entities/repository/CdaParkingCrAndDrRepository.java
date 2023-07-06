@@ -13,4 +13,6 @@ public interface CdaParkingCrAndDrRepository extends JpaRepository<CdaParkingCrA
     List<CdaParkingCrAndDr> findByAuthGroupIdAndBudgetHeadIdAndIsFlag(String authGroupId, String budgetHedaid, String s);
     List<CdaParkingCrAndDr> findByTransactionIdAndIsFlag(String authGroupId,  String s);
     CdaParkingCrAndDr findByCdaCrdrIdAndIsFlag(String authGroupId,  String s);
+
+    CdaParkingCrAndDr findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(String finYearId, String budgetHeadID, String andGinNo,String  isflag,String  allocation,String unitId);
 }
