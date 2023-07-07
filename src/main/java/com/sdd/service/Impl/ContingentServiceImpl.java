@@ -280,9 +280,6 @@ public class ContingentServiceImpl implements ContingentService {
         }
 
 
-
-
-
         String authGroupId = HelperUtils.getAuthorityGroupId();
         String toUnitId = "";
 
@@ -330,7 +327,6 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBill.setAllocationTypeId(allocationType.get(0).getAllocTypeId());
 
 
-
             contigentBill.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             contigentBill.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             contigentBill.setInvoiceNO(contingentBillSaveRequest.getInvoiceNo());
@@ -364,6 +360,7 @@ public class ContingentServiceImpl implements ContingentService {
                 cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 cdaParkingCrAndDr.setAllocTypeId("");
                 cdaParkingCrAndDr.setIsFlag("0");
+                cdaParkingCrAndDr.setIsRevision(0);
                 cdaParkingCrAndDr.setTransactionId(saveData.getCbId());
                 cdaParkingCrAndDr.setAmountType(null);
 
@@ -719,7 +716,7 @@ public class ContingentServiceImpl implements ContingentService {
 
             if (contigentBill1 != null) {
 
-                CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByCdaCrdrIdAndIsFlagAndIsRevision(contigentBill1.getCbId(), "0",0);
+                CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByCdaCrdrIdAndIsFlagAndIsRevision(contigentBill1.getCbId(), "0", 0);
                 CdaParkingTrans cdaParkingTrans11 = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(cdaParkingCrAndDr.getCdaParkingTrans(), "0");
                 AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans11.getAmountType());
 
@@ -803,6 +800,7 @@ public class ContingentServiceImpl implements ContingentService {
                 cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 cdaParkingCrAndDr.setAllocTypeId("");
                 cdaParkingCrAndDr.setIsFlag("0");
+                cdaParkingCrAndDr.setIsRevision(0);
                 cdaParkingCrAndDr.setTransactionId(saveData.getCbId());
                 cdaParkingCrAndDr.setAmountType(null);
 
@@ -918,7 +916,7 @@ public class ContingentServiceImpl implements ContingentService {
 
             contingentBill.setAuthoritiesList(authoritiesList);
 
-            List<CdaParkingCrAndDr> cdaCrDrTransData = parkingCrAndDrRepository.findByTransactionIdAndIsFlagAndIsRevision(contigentBill.getCbId(), "0",0);
+            List<CdaParkingCrAndDr> cdaCrDrTransData = parkingCrAndDrRepository.findByTransactionIdAndIsFlagAndIsRevision(contigentBill.getCbId(), "0", 0);
             List<CdaParkingCrAndDrResponse> data = new ArrayList<>();
             for (Integer m = 0; m < cdaCrDrTransData.size(); m++) {
                 CdaParkingCrAndDr cdaParkingCrAndDr = cdaCrDrTransData.get(m);
@@ -1019,7 +1017,7 @@ public class ContingentServiceImpl implements ContingentService {
             contingentBill.setBudgetHeadID(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(contigentBill.getBudgetHeadID()));
             contingentBill.setAuthoritiesList(authoritiesList);
 
-            List<CdaParkingCrAndDr> cdaCrDrTransData = parkingCrAndDrRepository.findByTransactionIdAndIsFlagAndIsRevision(contigentBill.getCbId(), "0",0);
+            List<CdaParkingCrAndDr> cdaCrDrTransData = parkingCrAndDrRepository.findByTransactionIdAndIsFlagAndIsRevision(contigentBill.getCbId(), "0", 0);
             List<CdaParkingCrAndDrResponse> data = new ArrayList<>();
             for (Integer m = 0; m < cdaCrDrTransData.size(); m++) {
                 CdaParkingCrAndDr cdaParkingCrAndDr = cdaCrDrTransData.get(m);
@@ -1134,7 +1132,7 @@ public class ContingentServiceImpl implements ContingentService {
 
             for (Integer i = 0; i < approveContigentBillRequest.getCdaParkingId().size(); i++) {
 
-                CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByCdaCrdrIdAndIsFlagAndIsRevision(approveContigentBillRequest.getCdaParkingId().get(i).getCdacrDrId(), "0",0);
+                CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByCdaCrdrIdAndIsFlagAndIsRevision(approveContigentBillRequest.getCdaParkingId().get(i).getCdacrDrId(), "0", 0);
 
                 CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(cdaParkingCrAndDr.getCdaParkingTrans(), "0");
                 AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
@@ -1334,7 +1332,7 @@ public class ContingentServiceImpl implements ContingentService {
 
             for (Integer i = 0; i < approveContigentBillRequest.getCdaParkingId().size(); i++) {
 
-                CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByCdaCrdrIdAndIsFlagAndIsRevision(approveContigentBillRequest.getCdaParkingId().get(i).getCdacrDrId(), "0",0);
+                CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByCdaCrdrIdAndIsFlagAndIsRevision(approveContigentBillRequest.getCdaParkingId().get(i).getCdacrDrId(), "0", 0);
 
                 CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(cdaParkingCrAndDr.getCdaParkingTrans(), "0");
                 AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());

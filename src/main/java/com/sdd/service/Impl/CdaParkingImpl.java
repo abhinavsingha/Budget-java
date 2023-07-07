@@ -231,7 +231,7 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingCrAndDr.setIsFlag("0");
             cdaParkingCrAndDr.setTransactionId(saveCdaData.getTransactionId());
             cdaParkingCrAndDr.setAmountType(saveCdaData.getAmountType());
-
+            cdaParkingCrAndDr.setIsRevision(0);
             parkingCrAndDrRepository.save(cdaParkingCrAndDr);
         }
 
@@ -492,7 +492,7 @@ public class CdaParkingImpl implements CdaParkingService {
         }
 
         List<CdaParkingTrans> cdaParkingTransData = cdaParkingTransRepository.findByAuthGroupIdAndBudgetHeadIdAndIsFlag(cdaRequest.getAuthGroupId(), budgetHedaid, "0");
-        List<CdaParkingCrAndDr> cdaParkingIsCrDr = parkingCrAndDrRepository.findByAuthGroupIdAndBudgetHeadIdAndIsFlagAndIsRevision(cdaRequest.getAuthGroupId(), budgetHedaid, "0",0);
+        List<CdaParkingCrAndDr> cdaParkingIsCrDr = parkingCrAndDrRepository.findByAuthGroupIdAndBudgetHeadIdAndIsFlagAndIsRevision(cdaRequest.getAuthGroupId(), budgetHedaid, "0", 0);
 
 
         for (Integer i = 0; i < cdaParkingTransData.size(); i++) {
@@ -555,6 +555,7 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             cdaParkingCrAndDr.setAllocTypeId(saveCdaData.getAllocTypeId());
             cdaParkingCrAndDr.setIsFlag("0");
+            cdaParkingCrAndDr.setIsRevision(0);
             cdaParkingCrAndDr.setTransactionId(saveCdaData.getTransactionId());
             cdaParkingCrAndDr.setAmountType(saveCdaData.getAmountType());
 
