@@ -1617,14 +1617,13 @@ public class MangeReportImpl implements MangeReportService {
                 amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
 
 
-
                 allocationGrandTotal = allocationGrandTotal + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
                 allocationAmount = allocationAmount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
 
 
             }
 
-            if (allocationGrandTotal == 0) {
+            if (allocationGrandTotal < 0) {
                 continue;
             }
 
@@ -1749,12 +1748,11 @@ public class MangeReportImpl implements MangeReportService {
                 amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
 
 
-
                 allocationGrandTotal = allocationGrandTotal + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
                 allocationAmount = allocationAmount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
 
             }
-            if (allocationGrandTotal == 0) {
+            if (allocationGrandTotal < 0) {
                 continue;
             }
 
@@ -4359,7 +4357,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            paragraph.add(new Chunk(type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear()+ " " + "ALLOCATION REPORT", boldFont));
+            paragraph.add(new Chunk(type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear() + " " + "ALLOCATION REPORT", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
@@ -4583,7 +4581,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String timemilisec = String.valueOf(System.currentTimeMillis());
-            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear()+" "+ "_Allocation_Report" + timemilisec + ".docx";
+            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear() + " " + "_Allocation_Report" + timemilisec + ".docx";
             FileOutputStream out = new FileOutputStream(new File(path));
             XWPFTable table = document.createTable(1, 3);
             table.setWidth("100%");
@@ -4593,7 +4591,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
             boldText(paragraphtableRowOne1.createRun(), 12, "UNIT ", true);
             XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
-            boldText(paragraphtableRowOne2.createRun(), 12, type.getAllocDesc().toUpperCase()+ " " + "ALLOCATION ( ₹ IN:" + amountIn + ")", true);
+            boldText(paragraphtableRowOne2.createRun(), 12, type.getAllocDesc().toUpperCase() + " " + "ALLOCATION ( ₹ IN:" + amountIn + ")", true);
 
             float gdTotal = 0;
             int i = 1;
@@ -5659,7 +5657,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
             PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", cellFont));
-            PdfPCell cell4 = new PdfPCell(new Phrase(types.getAllocDesc().toUpperCase() + " " +"ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", cellFont));
+            PdfPCell cell4 = new PdfPCell(new Phrase(types.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", cellFont));
 
             cell1.setPadding(10);
             cell2.setPadding(10);
@@ -7760,7 +7758,7 @@ public class MangeReportImpl implements MangeReportService {
                     CgUnit unitN = cgUnitRepository.findByUnit(RunitId);
                     CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
                     AmountUnit amountTypeObjs = amountUnitRepository.findByAmountTypeId(rebaseData.get(0).getAmountType());
-                    String amountIn=amountTypeObjs.getAmountType().toUpperCase();
+                    String amountIn = amountTypeObjs.getAmountType().toUpperCase();
 
                     rebase.setUnitName(unitN.getDescr());
                     rebase.setDateOfRebase(rebaseData.get(0).getOccuranceDate());
