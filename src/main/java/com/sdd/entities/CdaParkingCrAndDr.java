@@ -66,4 +66,7 @@ public class CdaParkingCrAndDr {
     @Column(name = "CDA_PARKING_TRANS")
     private String cdaParkingTrans;
 
+    @Column(name = "IS_REVISION")
+    private Integer isRevision;
+
 }

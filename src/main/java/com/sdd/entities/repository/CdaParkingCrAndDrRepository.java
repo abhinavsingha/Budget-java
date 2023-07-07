@@ -10,9 +10,9 @@ import java.util.List;
 public interface CdaParkingCrAndDrRepository extends JpaRepository<CdaParkingCrAndDr, String> {
 
 
-    List<CdaParkingCrAndDr> findByAuthGroupIdAndBudgetHeadIdAndIsFlag(String authGroupId, String budgetHedaid, String s);
-    List<CdaParkingCrAndDr> findByTransactionIdAndIsFlag(String authGroupId,  String s);
-    CdaParkingCrAndDr findByCdaCrdrIdAndIsFlag(String authGroupId,  String s);
+    List<CdaParkingCrAndDr> findByAuthGroupIdAndBudgetHeadIdAndIsFlagAndIsRevision(String authGroupId, String budgetHedaid, String s,  Integer isRevision);
+    List<CdaParkingCrAndDr> findByTransactionIdAndIsFlagAndIsRevision(String authGroupId,  String s,  Integer isRevision);
+    CdaParkingCrAndDr findByCdaCrdrIdAndIsFlagAndIsRevision(String authGroupId,  String s,  Integer isRevision);
 
-    CdaParkingCrAndDr findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(String finYearId, String budgetHeadID, String andGinNo,String  isflag,String  allocation,String unitId);
+    CdaParkingCrAndDr findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitIdAndIsRevision(String finYearId, String budgetHeadID, String andGinNo,String  isflag,String  allocation,String unitId,  Integer isRevision);
 }
