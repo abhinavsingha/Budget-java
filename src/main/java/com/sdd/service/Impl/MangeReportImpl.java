@@ -4587,7 +4587,7 @@ public class MangeReportImpl implements MangeReportService {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText(type.getAllocDesc().toUpperCase() + " ALLOCATION REPORT");
+            headingRun.setText(type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear() + " " + "ALLOCATION REPORT");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
@@ -4599,7 +4599,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String timemilisec = String.valueOf(System.currentTimeMillis());
-            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear() + " " + "_Allocation_Report" + timemilisec + ".docx";
+            String path = folder.getAbsolutePath() + "/" + type.getAllocDesc().toUpperCase() + "_Allocation_Report" + timemilisec + ".docx";
             FileOutputStream out = new FileOutputStream(new File(path));
             XWPFTable table = document.createTable(1, 3);
             table.setWidth("100%");
