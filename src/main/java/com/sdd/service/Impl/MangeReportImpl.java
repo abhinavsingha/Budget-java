@@ -2246,7 +2246,11 @@ public class MangeReportImpl implements MangeReportService {
 
             }
 
-        } else {
+        }
+
+
+
+        else {
 
             if (cdaReportRequest.getReportType() == null || cdaReportRequest.getReportType().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REPORT TYPE CAN NOT BE BLANK");

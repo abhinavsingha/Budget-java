@@ -1030,6 +1030,10 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "0");
 
+//        if (budgetAllocations.size() == 0) {
+//            budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "1");
+//
+//        }
 
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
@@ -1369,8 +1373,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
 //            if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId().equalsIgnoreCase(hrData.getUnitId())) {
-                budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()));
-                budgetAllocationDetails.setRevisedAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRevisedAmount()));
+            budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()));
+            budgetAllocationDetails.setRevisedAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRevisedAmount()));
 
 //            } else {
 //
@@ -1469,7 +1473,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                     List<CdaParkingCrAndDr> cdaParkingCrAndDr = parkingCrAndDrRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitIdAndIsRevision(cdaParkingTrans.getFinYearId(), cdaParkingTrans.getBudgetHeadId(), cdaParkingTrans.getGinNo(), "0", cdaParkingTrans.getAllocTypeId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), 0);
                     for (Integer q = 0; q < cdaParkingTransList.size(); q++) {
-                        CdaParkingCrAndDr cddata = cdaParkingCrAndDr.get(i);
+                        CdaParkingCrAndDr cddata = cdaParkingCrAndDr.get(q);
                         cddata.setIsFlag("1");
                         parkingCrAndDrRepository.save(cddata);
                     }
@@ -1664,6 +1668,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsFlag(groupId, hrData.getUnitId(), "0");
 
+        if(budgetAllocations.size() == 0){
+            budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsFlag(groupId, hrData.getUnitId(), "1");
+        }
 
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
