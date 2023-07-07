@@ -5360,6 +5360,7 @@ public class MangeReportImpl implements MangeReportService {
                     finAmount = amount * amountUnit / reqAmount;
                     reAmount = revisedAmount * amountUnit / reqAmount;
                     Float add = finAmount + reAmount;
+                    float newAllocAmount =finAmount-reAmount;
                     String s = reAmount.toString();
                     if (s.contains("-")) {
                         String s1 = s.replace("-", "");
@@ -5380,7 +5381,7 @@ public class MangeReportImpl implements MangeReportService {
 
                     XWPFParagraph paragraphtableRow21 = tableRowOne111.getCell(2).addParagraph();
                     paragraphtableRow21.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
+                    boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(newAllocAmount)), false);
 
                     XWPFParagraph paragraphtableRow31 = tableRowOne111.getCell(3).addParagraph();
                     paragraphtableRow31.setAlignment(ParagraphAlignment.RIGHT);
@@ -5393,9 +5394,9 @@ public class MangeReportImpl implements MangeReportService {
 
                     XWPFParagraph paragraphtableRow41 = tableRowOne111.getCell(4).addParagraph();
                     paragraphtableRow41.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(add)), false);
+                    boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
 
-                    sumExisting += Float.parseFloat(new BigDecimal(Float.toString(finAmount)).toPlainString());
+                    sumExisting += Float.parseFloat(new BigDecimal(Float.toString(newAllocAmount)).toPlainString());
                     sumRE += Float.parseFloat(new BigDecimal(Float.toString(reAmount)).toPlainString());
 
                 }
@@ -5607,6 +5608,7 @@ public class MangeReportImpl implements MangeReportService {
                     finAmount = amount * amountUnit / reqAmount;
                     reAmount = revisedAmount * amountUnit / reqAmount;
                     Float add = finAmount + reAmount;
+                    float newAllocAmount =finAmount-reAmount;
                     String s = reAmount.toString();
                     if (s.contains("-")) {
                         String s1 = s.replace("-", "");
@@ -5624,7 +5626,7 @@ public class MangeReportImpl implements MangeReportService {
                         res.setBudgetHead("");
                     }
                     res.setUnitName(unitN.getDescr());
-                    res.setAllocationAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
+                    res.setAllocationAmount(String.format("%1$0,1.4f", new BigDecimal(newAllocAmount)));
                     if (reAmount < 0)
                         res.setAdditionalAmount("(-)" + String.format("%1$0,1.4f", new BigDecimal(s2)));
                     else if (reAmount > 0)
@@ -5632,11 +5634,11 @@ public class MangeReportImpl implements MangeReportService {
                     else
                         res.setAdditionalAmount(String.format("%1$0,1.4f", new BigDecimal(reAmount)));
 
-                    res.setTotalAmount(String.format("%1$0,1.4f", new BigDecimal(add)));
+                    res.setTotalAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
 
                     dtoList.add(res);
 
-                    sumExisting += Float.parseFloat(new BigDecimal(Float.toString(finAmount)).toPlainString());
+                    sumExisting += Float.parseFloat(new BigDecimal(Float.toString(newAllocAmount)).toPlainString());
                     sumRE += Float.parseFloat(new BigDecimal(Float.toString(reAmount)).toPlainString());
 
                 }
