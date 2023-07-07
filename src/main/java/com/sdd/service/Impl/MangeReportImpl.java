@@ -30,6 +30,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -3429,9 +3430,11 @@ public class MangeReportImpl implements MangeReportService {
                 i++;
                 sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
             }
+            BigDecimal decimal = new BigDecimal(sum);
+            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
             Font cellFont2 = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
             PdfPCell cell20 = new PdfPCell(new Phrase("TOTAL", cellFont2));
-            PdfPCell cell21 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum)), cellFont2));
+            PdfPCell cell21 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont2));
             cell20.setPadding(10);
             cell21.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 
@@ -3628,6 +3631,9 @@ public class MangeReportImpl implements MangeReportService {
                 sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
 
             }
+            BigDecimal decimal = new BigDecimal(sum);
+            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
             XWPFTable table222 = document.createTable(1, 4);
             table222.setWidth("100%");
             XWPFTableRow tableRowOne222 = table222.getRow(0);
@@ -3639,7 +3645,7 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne2222.createRun(), 12, "", true);
             XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
             paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
+            boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
 
             String names = approveName;
             String unitName = hrData.getUnit();
@@ -3927,8 +3933,11 @@ public class MangeReportImpl implements MangeReportService {
                 i++;
                 sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
             }
+            BigDecimal decimal = new BigDecimal(sum);
+            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
             PdfPCell cell110 = new PdfPCell(new Phrase("TOTAL", cellFont));
-            PdfPCell cell200 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum)), cellFont));
+            PdfPCell cell200 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
             cell110.setPadding(10);
             cell200.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 
@@ -4126,6 +4135,9 @@ public class MangeReportImpl implements MangeReportService {
                 i++;
                 sum += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
             }
+            BigDecimal decimal = new BigDecimal(sum);
+            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
             XWPFTable table222 = document.createTable(1, 4);
             table222.setWidth("100%");
             XWPFTableRow tableRowOne222 = table222.getRow(0);
@@ -4137,7 +4149,7 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne2222.createRun(), 12, "", true);
             XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
             paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
+            boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
 
             String names = approveName;
             String unitName = hrData.getUnit();
@@ -4427,10 +4439,11 @@ public class MangeReportImpl implements MangeReportService {
                     sum += finAmount;
 
                 }
-                float roundSum = Math.round(sum);
+                BigDecimal decimal = new BigDecimal(sum);
+                BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
                 if (count != 0) {
                     PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL ", cellFont));
-                    PdfPCell cell11 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(roundSum)), cellFont));
+                    PdfPCell cell11 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
                     cell10.setPadding(10);
                     cell11.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 
@@ -4442,9 +4455,10 @@ public class MangeReportImpl implements MangeReportService {
                 gdTotal += sum;
 
             }
-            float roundGrand = Math.round(gdTotal);
+            BigDecimal decimal = new BigDecimal(gdTotal);
+            BigDecimal roundedAmounts = decimal.setScale(4, RoundingMode.HALF_UP);
             PdfPCell cell101 = new PdfPCell(new Phrase("GRAND TOTAL ", cellFont));
-            PdfPCell cell111 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(roundGrand)), cellFont));
+            PdfPCell cell111 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmounts), cellFont));
             cell101.setPadding(12);
             cell111.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             table.addCell("");
@@ -4648,7 +4662,8 @@ public class MangeReportImpl implements MangeReportService {
                     sum += finAmount;
 
                 }
-                float roundSum = Math.round(sum);
+                BigDecimal decimal = new BigDecimal(gdTotal);
+                BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
                 if (count != 0) {
                     XWPFTable table222 = document.createTable(1, 3);
                     table222.setWidth("100%");
@@ -4659,13 +4674,14 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne1222.createRun(), 12, "TOTAL ", true);
                     XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
                     paragraphtableRowOne2222.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(roundSum)), true);
+                    boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
                     count = 0;
                 }
                 gdTotal += sum;
 
             }
-            float roundGrand = Math.round(gdTotal);
+            BigDecimal decimal = new BigDecimal(gdTotal);
+            BigDecimal roundedAmounts = decimal.setScale(4, RoundingMode.HALF_UP);
             XWPFTable table223 = document.createTable(1, 3);
             table223.setWidth("100%");
             XWPFTableRow tableRowOne223 = table223.getRow(0);
@@ -4675,7 +4691,7 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne1223.createRun(), 12, "GRAND TOTAL ", true);
             XWPFParagraph paragraphtableRowOne2223 = tableRowOne223.getCell(2).addParagraph();
             paragraphtableRowOne2223.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(roundGrand)), true);
+            boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f", roundedAmounts), true);
 
             String names = approveName;
             String unitName = hrData.getUnit();
@@ -5074,10 +5090,19 @@ public class MangeReportImpl implements MangeReportService {
                 grTotalSum += (sumExisting + sumRE);
 
             }
+            BigDecimal decimal = new BigDecimal(grTotalAlloc);
+            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal1 = new BigDecimal(grTotalAddition);
+            BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal2 = new BigDecimal(grTotalSum);
+            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+
             PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-            PdfPCell cell01 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
-            PdfPCell cell02 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
-            PdfPCell cell03 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), cellFont));
+            PdfPCell cell01 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
+            PdfPCell cell02 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
+            PdfPCell cell03 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount2), cellFont));
             cell00.setPadding(12);
             cell01.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell02.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -5363,6 +5388,15 @@ public class MangeReportImpl implements MangeReportService {
                 grTotalAddition += sumRE;
                 grTotalSum += (sumExisting + sumRE);
             }
+            BigDecimal decimal = new BigDecimal(grTotalAlloc);
+            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal1 = new BigDecimal(grTotalAddition);
+            BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal2 = new BigDecimal(grTotalSum);
+            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+
             XWPFTable table223 = document.createTable(1, 5);
             table223.setWidth("100%");
             XWPFTableRow tableRowOne223 = table223.getRow(0);
@@ -5372,13 +5406,13 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne1223.createRun(), 12, "GRAND TOTAL ", true);
             XWPFParagraph paragraphtableRowOne2223 = tableRowOne223.getCell(2).addParagraph();
             paragraphtableRowOne2223.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), true);
+            boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f",roundedAmount), true);
             XWPFParagraph paragraphtableRowOne2234 = tableRowOne223.getCell(3).addParagraph();
             paragraphtableRowOne2234.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2234.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), true);
+            boldText(paragraphtableRowOne2234.createRun(), 12, String.format("%1$0,1.4f", roundedAmount1), true);
             XWPFParagraph paragraphtableRowOne2245 = tableRowOne223.getCell(4).addParagraph();
             paragraphtableRowOne2245.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2245.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), true);
+            boldText(paragraphtableRowOne2245.createRun(), 12, String.format("%1$0,1.4f", roundedAmount2), true);
 
             String names = approveName;
             String unitName = hrData.getUnit();
@@ -5750,10 +5784,15 @@ public class MangeReportImpl implements MangeReportService {
                     reSum += Float.parseFloat(new BigDecimal(reFinalAmount).toPlainString());
 
                 }
+                BigDecimal decimal = new BigDecimal(sum);
+                BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+                BigDecimal decimal1 = new BigDecimal(reSum);
+                BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
                 if (count != 0) {
                     PdfPCell cell20 = new PdfPCell(new Phrase(" TOTAL", cellFont));
-                    PdfPCell cell21 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum)), cellFont));
-                    PdfPCell cell22 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(reSum)), cellFont));
+                    PdfPCell cell21 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
+                    PdfPCell cell22 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
 
                     cell20.setPadding(10);
                     cell21.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -5769,9 +5808,15 @@ public class MangeReportImpl implements MangeReportService {
                 grTotalAddition += reSum;
 
             }
+            BigDecimal decimal = new BigDecimal(grTotalAlloc);
+            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal1 = new BigDecimal(grTotalAddition);
+            BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
             PdfPCell cell210 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-            PdfPCell cell211 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
-            PdfPCell cell212 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
+            PdfPCell cell211 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
+            PdfPCell cell212 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
             cell210.setPadding(12);
             cell211.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell212.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -6022,6 +6067,12 @@ public class MangeReportImpl implements MangeReportService {
                     reSum += Float.parseFloat(new BigDecimal(reFinalAmount).toPlainString());
 
                 }
+                BigDecimal decimal = new BigDecimal(sum);
+                BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+                BigDecimal decimal1 = new BigDecimal(reSum);
+                BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
                 if (count != 0) {
                     XWPFTable table222 = document.createTable(1, 4);
                     table222.setWidth("100%");
@@ -6032,16 +6083,20 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne1222.createRun(), 12, "TOTAL ", true);
                     XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
                     paragraphtableRowOne2222.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
+                    boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
                     XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
                     paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(reSum)), true);
+                    boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", roundedAmount1), true);
                     count = 0;
                 }
                 grTotalAlloc += sum;
                 grTotalAddition += reSum;
             }
+            BigDecimal decimal = new BigDecimal(grTotalAlloc);
+            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
 
+            BigDecimal decimal1 = new BigDecimal(grTotalAddition);
+            BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
             XWPFTable table223 = document.createTable(1, 4);
             table223.setWidth("100%");
             XWPFTableRow tableRowOne223 = table223.getRow(0);
@@ -6051,10 +6106,10 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne1220.createRun(), 12, "GRAND TOTAL ", true);
             XWPFParagraph paragraphtableRowOne2220 = tableRowOne223.getCell(2).addParagraph();
             paragraphtableRowOne2220.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2220.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), true);
+            boldText(paragraphtableRowOne2220.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
             XWPFParagraph paragraphtableRowOne2230 = tableRowOne223.getCell(3).addParagraph();
             paragraphtableRowOne2230.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), true);
+            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", roundedAmount1), true);
 
             String names = approveName;
             String unitName = hrData.getUnit();
@@ -6608,11 +6663,23 @@ public class MangeReportImpl implements MangeReportService {
                 grTotalSum += percentagesum;
 
             }
+            BigDecimal decimal = new BigDecimal(grTotalIcg);
+            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal1 = new BigDecimal(grTotalAlloc);
+            BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal2 = new BigDecimal(grTotalAddition / reqAmount);
+            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal3 = new BigDecimal((grTotalAddition / reqAmount) * 100 / grTotalAlloc);
+            BigDecimal roundedAmount3 = decimal3.setScale(4, RoundingMode.HALF_UP);
+
             PdfPCell cell50 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-            PdfPCell cell51 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalIcg)), cellFont));
-            PdfPCell cell60 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
-            PdfPCell cell70 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition / reqAmount)), cellFont));
-            PdfPCell cell80 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal((grTotalAddition / reqAmount) * 100 / grTotalAlloc)), cellFont));
+            PdfPCell cell51 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
+            PdfPCell cell60 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
+            PdfPCell cell70 = new PdfPCell(new Phrase(String.format("%1$0,1.4f",roundedAmount2), cellFont));
+            PdfPCell cell80 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount3), cellFont));
             cell50.setPadding(12);
             cell51.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell60.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -7035,6 +7102,19 @@ public class MangeReportImpl implements MangeReportService {
                 grTotalSum += percentagesum;
 
             }
+
+            BigDecimal decimal = new BigDecimal(grTotalIcg);
+            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal1 = new BigDecimal(grTotalAlloc);
+            BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal2 = new BigDecimal(grTotalAddition / reqAmount);
+            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal3 = new BigDecimal((grTotalAddition / reqAmount) * 100 / grTotalAlloc);
+            BigDecimal roundedAmount3 = decimal3.setScale(4, RoundingMode.HALF_UP);
+
             XWPFTable table220 = document.createTable(1, 8);
             table220.setWidth("100%");
             XWPFTableRow tableRowOne220 = table220.getRow(0);
@@ -7042,18 +7122,18 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne220.createRun(), 12, "GRAND TOTAL", true);
             XWPFParagraph paragraphtableRowOne1220 = tableRowOne220.getCell(1).addParagraph();
             paragraphtableRowOne1220.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne1220.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalIcg)), true);
+            boldText(paragraphtableRowOne1220.createRun(), 12, String.format("%1$0,1.4f",roundedAmount), true);
             XWPFParagraph paragraphtableRowOne2220 = tableRowOne220.getCell(2).addParagraph();
             boldText(paragraphtableRowOne2220.createRun(), 12, " ", true);
             XWPFParagraph paragraphtableRowOne2230 = tableRowOne220.getCell(3).addParagraph();
             paragraphtableRowOne2230.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), true);
+            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f",roundedAmount1), true);
             XWPFParagraph paragraphtableRowOne2200 = tableRowOne220.getCell(4).addParagraph();
             paragraphtableRowOne2200.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2200.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAddition / reqAmount)), true);
+            boldText(paragraphtableRowOne2200.createRun(), 12, String.format("%1$0,1.4f", roundedAmount2), true);
             XWPFParagraph paragraphtableRowOne2250 = tableRowOne220.getCell(5).addParagraph();
             paragraphtableRowOne2250.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2250.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal((grTotalAddition / reqAmount) * 100 / grTotalAlloc)), true);
+            boldText(paragraphtableRowOne2250.createRun(), 12, String.format("%1$0,1.4f", roundedAmount3), true);
             XWPFParagraph paragraphtableRowOne2260 = tableRowOne220.getCell(6).addParagraph();
             boldText(paragraphtableRowOne2260.createRun(), 12, "", true);
             XWPFParagraph paragraphtableRowOne2270 = tableRowOne220.getCell(7).addParagraph();
@@ -7592,10 +7672,19 @@ public class MangeReportImpl implements MangeReportService {
                         grTotalAddition += expAmount;
                         grTotalSum += balAmount;
                     }
+                    BigDecimal decimal = new BigDecimal(grTotalAlloc);
+                    BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+                    BigDecimal decimal1 = new BigDecimal(grTotalAddition);
+                    BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+                    BigDecimal decimal2 = new BigDecimal(grTotalSum);
+                    BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+
                     PdfPCell cell99 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-                    PdfPCell cell88 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
-                    PdfPCell cell77 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
-                    PdfPCell cell66 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), cellFont));
+                    PdfPCell cell88 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
+                    PdfPCell cell77 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
+                    PdfPCell cell66 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount2), cellFont));
 
                     cell99.setPadding(12);
                     cell88.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -7900,6 +7989,15 @@ public class MangeReportImpl implements MangeReportService {
                     rebase.setList(addRes);
                     responce.add(rebase);
 
+                    BigDecimal decimal = new BigDecimal(grTotalAlloc);
+                    BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+                    BigDecimal decimal1 = new BigDecimal(grTotalAddition);
+                    BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+                    BigDecimal decimal2 = new BigDecimal(grTotalSum);
+                    BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+
                     XWPFTable table111 = document.createTable(1, 6);
                     table111.setWidth("100%");
 
@@ -7912,15 +8010,15 @@ public class MangeReportImpl implements MangeReportService {
 
                     XWPFParagraph paragraphtableRow21 = tableRow111.getCell(2).addParagraph();
                     paragraphtableRow21.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(paragraphtableRow21.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), true);
+                    boldText(paragraphtableRow21.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
 
                     XWPFParagraph paragraphtableRow31 = tableRow111.getCell(3).addParagraph();
                     paragraphtableRow31.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(paragraphtableRow31.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), true);
+                    boldText(paragraphtableRow31.createRun(), 12, String.format("%1$0,1.4f", roundedAmount1), true);
 
                     XWPFParagraph paragraphtableRow41 = tableRow111.getCell(4).addParagraph();
                     paragraphtableRow41.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(paragraphtableRow41.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), true);
+                    boldText(paragraphtableRow41.createRun(), 12, String.format("%1$0,1.4f", roundedAmount2), true);
 
                     XWPFParagraph paragraphtableRow51 = tableRow111.getCell(5).addParagraph();
                     boldText(paragraphtableRow51.createRun(), 12, "       ", true);
@@ -8310,11 +8408,20 @@ public class MangeReportImpl implements MangeReportService {
                     maSum += Float.parseFloat(new BigDecimal(maFinalAmount).toPlainString());
 
                 }
+                BigDecimal decimal = new BigDecimal(sum);
+                BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+                BigDecimal decimal1 = new BigDecimal(reSum);
+                BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+                BigDecimal decimal2 = new BigDecimal(maSum);
+                BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+
                 if (count != 0) {
                     PdfPCell cell20 = new PdfPCell(new Phrase(" TOTAL", cellFont));
-                    PdfPCell cell21 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sum)), cellFont));
-                    PdfPCell cell22 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(reSum)), cellFont));
-                    PdfPCell cell23 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(maSum)), cellFont));
+                    PdfPCell cell21 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
+                    PdfPCell cell22 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
+                    PdfPCell cell23 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount2), cellFont));
 
                     cell20.setPadding(10);
                     cell21.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -8333,10 +8440,19 @@ public class MangeReportImpl implements MangeReportService {
                 grTotalMa += maSum;
 
             }
+            BigDecimal decimal = new BigDecimal(grTotalAlloc);
+            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal1 = new BigDecimal(grTotalAddition);
+            BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal2 = new BigDecimal(grTotalMa);
+            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+
             PdfPCell cell210 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-            PdfPCell cell211 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
-            PdfPCell cell212 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
-            PdfPCell cell213 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalMa)), cellFont));
+            PdfPCell cell211 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
+            PdfPCell cell212 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
+            PdfPCell cell213 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount2), cellFont));
             cell210.setPadding(12);
             cell211.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell212.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -8610,6 +8726,15 @@ public class MangeReportImpl implements MangeReportService {
                     maSum += Float.parseFloat(new BigDecimal(maFinalAmount).toPlainString());
 
                 }
+                BigDecimal decimal = new BigDecimal(sum);
+                BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+                BigDecimal decimal1 = new BigDecimal(reSum);
+                BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+                BigDecimal decimal2 = new BigDecimal(maSum);
+                BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+
                 if (count != 0) {
                     XWPFTable table222 = document.createTable(1, 5);
                     table222.setWidth("100%");
@@ -8620,19 +8745,27 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne1222.createRun(), 12, "TOTAL ", true);
                     XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
                     paragraphtableRowOne2222.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(sum)), true);
+                    boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
                     XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
                     paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(reSum)), true);
+                    boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", roundedAmount1), true);
                     XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
                     paragraphtableRowOne2244.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(maSum)), true);
+                    boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", roundedAmount2), true);
                     count = 0;
                 }
                 grTotalAlloc += sum;
                 grTotalAddition += reSum;
                 grTotalMA += reSum;
             }
+            BigDecimal decimal = new BigDecimal(grTotalAlloc);
+            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal1 = new BigDecimal(grTotalAddition);
+            BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal2 = new BigDecimal(grTotalMA);
+            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
 
             XWPFTable table223 = document.createTable(1, 5);
             table223.setWidth("100%");
@@ -8643,13 +8776,13 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne1220.createRun(), 12, "GRAND TOTAL ", true);
             XWPFParagraph paragraphtableRowOne2220 = tableRowOne223.getCell(2).addParagraph();
             paragraphtableRowOne2220.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2220.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), true);
+            boldText(paragraphtableRowOne2220.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
             XWPFParagraph paragraphtableRowOne2230 = tableRowOne223.getCell(3).addParagraph();
             paragraphtableRowOne2230.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), true);
+            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", roundedAmount1), true);
             XWPFParagraph paragraphtableRowOne1111 = tableRowOne223.getCell(4).addParagraph();
             paragraphtableRowOne1111.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne1111.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(grTotalMA)), true);
+            boldText(paragraphtableRowOne1111.createRun(), 12, String.format("%1$0,1.4f", roundedAmount2), true);
 
             String names = approveName;
             String unitName = hrData.getUnit();
@@ -9096,10 +9229,19 @@ public class MangeReportImpl implements MangeReportService {
                 grTotalSum += (sumExisting + sumRE);
 
             }
+            BigDecimal decimal = new BigDecimal(grTotalAlloc);
+            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal1 = new BigDecimal(grTotalAddition);
+            BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal2 = new BigDecimal(grTotalSum);
+            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+
             PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-            PdfPCell cell01 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAlloc)), cellFont));
-            PdfPCell cell02 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalAddition)), cellFont));
-            PdfPCell cell03 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(grTotalSum)), cellFont));
+            PdfPCell cell01 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
+            PdfPCell cell02 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
+            PdfPCell cell03 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount2), cellFont));
             cell00.setPadding(12);
             cell01.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell02.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
