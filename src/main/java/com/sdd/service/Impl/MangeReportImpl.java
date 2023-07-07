@@ -1623,16 +1623,16 @@ public class MangeReportImpl implements MangeReportService {
 
             }
 
-            if (allocationGrandTotal < 0) {
-                continue;
+            if (Float.parseFloat(allocationGrandTotal + "") > 0.0f) {
+                cdaReportResponse = new CDAReportResponse();
+                cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
+                cdaReportResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
+                cdaReportResponse.setReportType("RESERVE FUND");
+                cdaReportList.add(cdaReportResponse);
+                allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
             }
 
-            cdaReportResponse = new CDAReportResponse();
-            cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
-            cdaReportResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
-            cdaReportResponse.setReportType("RESERVE FUND");
-            cdaReportList.add(cdaReportResponse);
-            allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
+
         }
         try {
 
@@ -1752,7 +1752,7 @@ public class MangeReportImpl implements MangeReportService {
                 allocationAmount = allocationAmount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
 
             }
-            if (allocationGrandTotal < 0) {
+            if (Float.parseFloat(allocationGrandTotal + "") <= 0.0f) {
                 continue;
             }
 
