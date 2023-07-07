@@ -4685,7 +4685,7 @@ public class MangeReportImpl implements MangeReportService {
                     sum += finAmount;
 
                 }
-                BigDecimal decimal = new BigDecimal(gdTotal);
+                BigDecimal decimal = new BigDecimal(sum);
                 BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
                 if (count != 0) {
                     XWPFTable table222 = document.createTable(1, 3);
