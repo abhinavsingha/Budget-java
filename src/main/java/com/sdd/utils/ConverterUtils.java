@@ -85,32 +85,6 @@ public class ConverterUtils {
 
     }
 
-    public static long timeDiffer(Timestamp dateStart, Timestamp enddate) {
-
-
-        Date d1 = null;
-        Date d2 = null;
-        try {
-            d1 = new Date(dateStart.getTime());
-            d2 = new Date(enddate.getTime());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        long diff = d2.getTime() - d1.getTime();
-
-        long diffDays = diff / (60 * 60 * 1000 * 24);
-//        long diffSeconds = diff / 1000;
-//        long diffMinutes = diff / (60 * 1000);
-//        long diffHours = diff / (60 * 60 * 1000);
-//        System.out.println("Time in seconds: " + diffSeconds + " seconds.");
-//        System.out.println("Time in minutes: " + diffMinutes + " minutes.");
-//        System.out.println("Time in hours: " + diffHours + " hours.");
-//        System.out.println("Time in Day: " + diffDays + " hours.");
-        return diffDays;
-
-    }
-
 
     public static File getComplaintPathOnly(String fileExtn, String fileName, String fileDestPath) {
         Path path = Paths.get(fileDestPath);
@@ -131,7 +105,7 @@ public class ConverterUtils {
             if (number == null) {
                 return "0.0000";
             }
-            return String.format("%.4f", Double.parseDouble(number));
+            return String.format("%.4g%n", Double.parseDouble(number));
         } catch (Exception e) {
             return number;
         }
