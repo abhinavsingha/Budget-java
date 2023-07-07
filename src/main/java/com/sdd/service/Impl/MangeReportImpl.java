@@ -1623,14 +1623,16 @@ public class MangeReportImpl implements MangeReportService {
 
             }
 
-            if (Float.parseFloat(allocationGrandTotal + "") > 0.0f) {
-                cdaReportResponse = new CDAReportResponse();
-                cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
-                cdaReportResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
-                cdaReportResponse.setReportType("RESERVE FUND");
-                cdaReportList.add(cdaReportResponse);
-                allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
+            if (allocationGrandTotal <= 0) {
+                continue;
             }
+
+            cdaReportResponse = new CDAReportResponse();
+            cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
+            cdaReportResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
+            cdaReportResponse.setReportType("RESERVE FUND");
+            cdaReportList.add(cdaReportResponse);
+            allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
 
 
         }
@@ -1752,16 +1754,16 @@ public class MangeReportImpl implements MangeReportService {
                 allocationAmount = allocationAmount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
 
             }
-            if (Float.parseFloat(allocationGrandTotal + "") <= 0.0f) {
-                continue;
+            if (Double.parseDouble(allocationGrandTotal + "") > 0) {
+                cdaReportResponse = new CDAReportResponse();
+                cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
+                cdaReportResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
+                cdaReportResponse.setReportType("RESERVE FUND");
+                cdaReportList.add(cdaReportResponse);
+                allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
             }
 
-            cdaReportResponse = new CDAReportResponse();
-            cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
-            cdaReportResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
-            cdaReportResponse.setReportType("RESERVE FUND");
-            cdaReportList.add(cdaReportResponse);
-            allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
+
         }
         try {
 
@@ -4425,7 +4427,7 @@ public class MangeReportImpl implements MangeReportService {
                     sum += finAmount;
 
                 }
-                float roundSum=Math.round(sum);
+                float roundSum = Math.round(sum);
                 if (count != 0) {
                     PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL ", cellFont));
                     PdfPCell cell11 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(roundSum)), cellFont));
@@ -4440,7 +4442,7 @@ public class MangeReportImpl implements MangeReportService {
                 gdTotal += sum;
 
             }
-            float roundGrand=Math.round(gdTotal);
+            float roundGrand = Math.round(gdTotal);
             PdfPCell cell101 = new PdfPCell(new Phrase("GRAND TOTAL ", cellFont));
             PdfPCell cell111 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(roundGrand)), cellFont));
             cell101.setPadding(12);
@@ -4646,7 +4648,7 @@ public class MangeReportImpl implements MangeReportService {
                     sum += finAmount;
 
                 }
-                float roundSum=Math.round(sum);
+                float roundSum = Math.round(sum);
                 if (count != 0) {
                     XWPFTable table222 = document.createTable(1, 3);
                     table222.setWidth("100%");
@@ -4663,7 +4665,7 @@ public class MangeReportImpl implements MangeReportService {
                 gdTotal += sum;
 
             }
-            float roundGrand=Math.round(gdTotal);
+            float roundGrand = Math.round(gdTotal);
             XWPFTable table223 = document.createTable(1, 3);
             table223.setWidth("100%");
             XWPFTableRow tableRowOne223 = table223.getRow(0);

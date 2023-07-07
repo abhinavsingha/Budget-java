@@ -81,7 +81,6 @@ public interface BudgetAllocationService {
 
 	ApiResponse<DefaultResponse> saveAuthDataRevision(AuthRequest authRequest);
 
-
 	ApiResponse<List<CgUnitResponse>> getAllCgUnitData();
 
 	ApiResponse<List<AllocationType>> getAllocationByFinYear(String finyear);

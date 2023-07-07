@@ -1349,10 +1349,10 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             }
 
 
-//            List<BudgetAllocationDetails> budgetAllocationsDetalis11 = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "Pending", "0", "1");
-//            if (budgetAllocationsDetalis11.size() > 0) {
-//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY REVISED FOR THIS UNIT CURRENTLY NOT APPROVED. PLEASE APPROVED PREVIOUS REVISION");
-//            }
+            List<BudgetAllocationDetails> budgetAllocationsDetalis11 = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "Pending", "0", "1");
+            if (budgetAllocationsDetalis11.size() > 0) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY REVISED FOR THIS UNIT CURRENTLY NOT APPROVED. PLEASE APPROVED PREVIOUS REVISION");
+            }
 
 
         }
@@ -1435,12 +1435,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(revisonData.getAmountTypeId());
                     double parkingAmount = Double.parseDouble(revisonData.getCdaParkingId().get(m).getCdaAmount()) * amountUnit.getAmount();
 
-                    double bakiPesa = 0;
-                    if (parkingAmount < 0) {
-                        bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
-                    } else {
-                        bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
-                    }
+                    double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
 
 
 //                    double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
@@ -1538,6 +1533,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsFlag(groupId, hrData.getUnitId(), "0");
 
 
+        if (budgetAllocations.size() == 0) {
+            budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsFlag(groupId, hrData.getUnitId(), "1");
+        }
+
+
 //      ABhi Termrealy hai
 //        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(groupId, hrData.getUnitId());
 
@@ -1555,6 +1555,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setReturnRemarks(budgetAllocationSubReport.getReturnRemarks());
             budgetAllocationReport.setRefTransactionId(budgetAllocationSubReport.getRefTransId());
             budgetAllocationReport.setUserId(budgetAllocationSubReport.getUserId());
+            budgetAllocationReport.setIsFlag(budgetAllocationSubReport.getIsFlag());
+            budgetAllocationReport.setIsBudgetRevision(budgetAllocationSubReport.getIsBudgetRevision());
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getCreatedOn());
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
 
@@ -1646,7 +1648,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "GROUP ID CAN NOT BE BLANK");
         }
 
-        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsFlag(groupId, hrData.getUnitId(), "1");
+        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsFlag(groupId, hrData.getUnitId(), "0");
 
 
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
@@ -3853,11 +3855,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AUTH DATA ALREADY UPDATE.NOW YOU CAN NOT UPDATED.");
         }
 
+        List<BudgetAllocation> budgetAllocationsListData = new ArrayList<>();
 
-        List<BudgetAllocation> budgetAllocationsList = budgetAllocationRepository.findByAuthGroupIdAndIsFlagAndIsBudgetRevision(authRequest.getAuthGroupId(), "1", "1");
-        if (budgetAllocationsList.size() <= 0) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND.");
-        }
+//        List<BudgetAllocation> budgetAllocationsList = budgetAllocationRepository.findByAuthGroupIdAndIsFlagAndIsBudgetRevision(authRequest.getAuthGroupId(), "1", "1");
+//        if (budgetAllocationsList.size() <= 0) {
+//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND.");
+//        }
 
         if (authRequest.getAuthGroupId() == null || authRequest.getAuthGroupId().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO AUTH GROUP ID");
@@ -3896,10 +3899,17 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 double revisedAmount = 0;
                 List<BudgetAllocation> data = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(allocationDetails.get(i).getToUnit(), allocationDetails.get(i).getFinYear(), allocationDetails.get(i).getSubHead(), allocationDetails.get(i).getAllocTypeId(), "Approved", "0", "0");
                 for (Integer m = 0; m < data.size(); m++) {
-                    data.get(m).setIsFlag("1");
-                    totalAmount = totalAmount + Double.parseDouble(data.get(m).getAllocationAmount());
-                    revisedAmount = revisedAmount + Double.parseDouble(data.get(m).getRevisedAmount());
-                    data.get(m).setIsBudgetRevision("1");
+                    data.get(m).setIsFlag("0");
+//                    totalAmount = totalAmount + Double.parseDouble(data.get(m).getAllocationAmount());
+
+                    AmountUnit amountType = amountUnitRepository.findByAmountTypeId(data.get(m).getAmountType());
+                    AmountUnit convertedAmount = amountUnitRepository.findByAmountTypeId(allocationDetails.get(i).getAmountType());
+
+
+                    revisedAmount = revisedAmount + (Double.parseDouble(allocationDetails.get(i).getRevisedAmount()) * amountType.getAmount());
+                    data.get(m).setIsBudgetRevision("0");
+
+                    revisedAmount = revisedAmount / convertedAmount.getAmount();
                     budgetAllocationRepository.save(data.get(m));
                 }
 
@@ -3932,9 +3942,17 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 double revisedAmount = 0;
                 List<BudgetAllocation> data = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(allocationDetails.get(i).getToUnit(), allocationDetails.get(i).getFinYear(), allocationDetails.get(i).getSubHead(), allocationDetails.get(i).getAllocTypeId(), "Approved", "0", "0");
                 for (Integer m = 0; m < data.size(); m++) {
-                    totalAmount = totalAmount + Double.parseDouble(data.get(m).getAllocationAmount());
-                    revisedAmount = revisedAmount + Double.parseDouble(data.get(m).getRevisedAmount());
+
+                    AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(data.get(m).getAmountType());
+
+                    totalAmount = totalAmount + (Double.parseDouble(data.get(m).getAllocationAmount()) * amountUnit.getAmount());
                 }
+
+                revisedAmount = Double.parseDouble(allocationData.getRevisedAmount());
+
+                AmountUnit convertedAmount = amountUnitRepository.findByAmountTypeId(allocationData.getAmountType());
+
+                totalAmount = totalAmount / convertedAmount.getAmount();
 
 
 //                BudgetAllocationDetails budgetAllocationDetails = allocationDetails.get(i);
@@ -3948,12 +3966,10 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                 }
 
-                revisedAmount = revisedAmount + Double.parseDouble(allocationData.getRevisedAmount());
-
                 BudgetAllocation budgetAllocation = new BudgetAllocation();
                 budgetAllocation.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                 budgetAllocation.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
-                budgetAllocation.setIsFlag("1");
+                budgetAllocation.setIsFlag("0");
                 budgetAllocation.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                 budgetAllocation.setRefTransId(allocationDetails.get(i).getRefTransactionId());
                 budgetAllocation.setFinYear(allocationDetails.get(i).getFinYear());
@@ -3961,17 +3977,17 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocation.setFromUnit(hrData.getUnitId());
                 budgetAllocation.setSubHead(allocationDetails.get(i).getSubHead());
                 budgetAllocation.setAllocationTypeId(allocationDetails.get(i).getAllocTypeId());
-                budgetAllocation.setIsBudgetRevision("1");
+                budgetAllocation.setIsBudgetRevision("0");
                 budgetAllocation.setUnallocatedAmount("0.0000");
                 budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(totalAmount + ""));
                 budgetAllocation.setRevisedAmount(ConverterUtils.addDecimalPoint(revisedAmount + ""));
                 budgetAllocation.setUserId(allocationDetails.get(i).getUserId());
-                budgetAllocation.setStatus("Pending");
+                budgetAllocation.setStatus("Approved");
                 budgetAllocation.setAmountType(allocationDetails.get(i).getAmountType());
                 budgetAllocation.setAuthGroupId(allocationDetails.get(i).getAuthGroupId());
 
                 budgetAllocationRepository.save(budgetAllocation);
-
+                budgetAllocationsListData.add(budgetAllocation);
 
             }
 
@@ -3979,13 +3995,13 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
-        for (Integer i = 0; i < budgetAllocationsList.size(); i++) {
-
-            BudgetAllocation budgetAllocationData = budgetAllocationsList.get(i);
-            budgetAllocationData.setStatus("Approved");
-            budgetAllocationRepository.save(budgetAllocationData);
-
-        }
+//        for (Integer i = 0; i < budgetAllocationsList.size(); i++) {
+//
+//            BudgetAllocation budgetAllocationData = budgetAllocationsList.get(i);
+//            budgetAllocationData.setStatus("Approved");
+//            budgetAllocationRepository.save(budgetAllocationData);
+//
+//        }
 
 
         Authority authority = new Authority();
@@ -4006,8 +4022,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
         HashMap<String, BudgetAllocation> totalUnit = new HashMap<String, BudgetAllocation>();
-        for (Integer i = 0; i < budgetAllocationsList.size(); i++) {
-            totalUnit.put(budgetAllocationsList.get(i).getToUnit(), budgetAllocationsList.get(i));
+        for (Integer i = 0; i < budgetAllocationsListData.size(); i++) {
+            totalUnit.put(budgetAllocationsListData.get(i).getToUnit(), budgetAllocationsListData.get(i));
         }
 
         for (Map.Entry<String, BudgetAllocation> entry : totalUnit.entrySet()) {
