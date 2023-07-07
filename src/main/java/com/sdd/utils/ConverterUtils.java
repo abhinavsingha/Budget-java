@@ -136,11 +136,11 @@ public class ConverterUtils {
             DecimalFormat df = new DecimalFormat("#.####");
             String dat23 = df.format(Double.parseDouble(amoumt));
 
-            if(!(dat23.contains("."))){
-                dat23 = dat23+".0000";
+            if (!(dat23.contains("."))) {
+                dat23 = dat23 + ".0000";
             }
-
-            return dat23;
+            String amoumt11 = String.format("%.4f", Double.parseDouble(dat23));
+            return amoumt11;
         } catch (Exception e) {
             return number;
         }
