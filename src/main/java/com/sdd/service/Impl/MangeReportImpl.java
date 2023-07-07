@@ -5030,6 +5030,7 @@ public class MangeReportImpl implements MangeReportService {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
+                    float newAllocAmount=0;
                     amountUnit = Float.parseFloat(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
                     reAmount = revisedAmount * amountUnit / reqAmount;
@@ -5038,15 +5039,17 @@ public class MangeReportImpl implements MangeReportService {
                         String s1 = s.replace("-", "");
                         s2 = Float.parseFloat(s1);
                     }
+
+                    newAllocAmount =finAmount-reAmount;
                     CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
 
                     PdfPCell cella1 = new PdfPCell(new Phrase(bHead.getSubHeadDescr()));
                     PdfPCell cella2 = new PdfPCell(new Phrase(unitN.getDescr()));
-                    PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
+                    PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(newAllocAmount))));
                     PdfPCell cella4 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", new BigDecimal(s2))));
                     PdfPCell cella5 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", new BigDecimal(reAmount))));
                     PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(reAmount))));
-                    PdfPCell cella7 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Float.toString(finAmount)) + Float.parseFloat(Float.toString(reAmount))))))));
+                    PdfPCell cella7 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Float.toString(finAmount))))))));
                     cella1.setPadding(8);
                     cella2.setPadding(8);
                     cella3.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -5071,7 +5074,7 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(cella7);
 
                     count++;
-                    sumExisting += Float.parseFloat(new BigDecimal(Float.toString(finAmount)).toPlainString());
+                    sumExisting += Float.parseFloat(new BigDecimal(Float.toString(newAllocAmount)).toPlainString());
                     sumRE += Float.parseFloat(new BigDecimal(Float.toString(reAmount)).toPlainString());
 
                 }
