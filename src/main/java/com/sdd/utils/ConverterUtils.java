@@ -131,7 +131,7 @@ public class ConverterUtils {
             if (number == null) {
                 return "0.0000";
             }
-            return String.format("%.4f", Double.parseDouble(number));
+            return Math.round(Float.parseFloat(String.format("%.4f", Double.parseDouble(number))))+"";
         } catch (Exception e) {
             return number;
         }
@@ -145,8 +145,6 @@ public class ConverterUtils {
             return false;
         }
     }
-
-
 
 
     public static String addSpacaeInString(String number, int lenghtData) {

@@ -23,8 +23,6 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
     List<BudgetAllocation> findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(
             String toUnit, String finYear, String allocationTypeId, String isRevision);
 
-    List<BudgetAllocation> findByAuthGroupIdAndIsFlagAndToUnitAndIsBudgetRevision(
-            String unitId, String isFlag, String toUnit, String isRevison);
 
     List<BudgetAllocation> findByAuthGroupIdAndIsFlagAndToUnit(
             String unitId, String isFlag, String toUnit);
@@ -67,7 +65,6 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
             String isRevision);
 
 
-    BudgetAllocation findByAllocationIdAndIsFlagAndIsBudgetRevision(String transactionId, String s, String d);
     BudgetAllocation findByAllocationId(String transactionId);
     List<BudgetAllocation> findBySubHeadAndFinYearAndAllocationTypeIdAndIsBudgetRevision(
             String subHeadId, String finYear, String allocationTypeId, String isREbision);
@@ -79,8 +76,6 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
             String subHeadId,String toUnit, String finYear, String allocationTypeId, String isRevision);
 
 
-    List<BudgetAllocation> findBySubHeadAndAllocationTypeIdAndIsFlagAndIsBudgetRevision(
-            String subHeadId, String allocationType, String isFalg, String isRevison);
 
     @Query(
             value =
@@ -88,18 +83,10 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
             nativeQuery = true)
     List<String> findSubHead(String finYearId, String allocationTypeId,String frmUnit);
 
-    List<BudgetAllocation> findByAuthGroupIdAndSubHeadAndToUnit(String authGId,String subHead,String toUnit);
 
-    List<BudgetAllocation> findByAuthGroupIdAndSubHead(String authGId,String subHead);
-    List<BudgetAllocation> findByAuthGroupIdAndIsFlagOrderBySubHeadAsc(String authGId,String isFlag);
 
     List<BudgetAllocation> findByAuthGroupId(String authGroupId);
 
-    @Query(
-            value =
-                    "select SUB_HEAD from budgetallocation where AUTH_GROUP_ID=:authGroupId  group by SUB_HEAD",
-            nativeQuery = true)
-    List<String> findSubHeadByAuthGroupIds(String authGroupId);
 
     List<BudgetAllocation> findByAuthGroupIdAndIsFlag(String authGroupId, String s);
 }
