@@ -9270,12 +9270,24 @@ public class MangeReportImpl implements MangeReportService {
                         String ss1 = ss.replace("-", "");
                         ss2 = Float.parseFloat(ss1);
                     }
+                    BigDecimal decimal = new BigDecimal(sumExisting);
+                    BigDecimal sumExistingRound = decimal.setScale(4, RoundingMode.HALF_UP);
+
+                    BigDecimal decimal1 = new BigDecimal(sumRE);
+                    BigDecimal sumRERound = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+                    BigDecimal decimal2 = new BigDecimal(total);
+                    BigDecimal totalRound = decimal2.setScale(4, RoundingMode.HALF_UP);
+
+                    BigDecimal decimal3 = new BigDecimal(ss2);
+                    BigDecimal ss2Round = decimal3.setScale(4, RoundingMode.HALF_UP);
+
                     PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
-                    PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sumExisting)), cellFont));
-                    PdfPCell cell301 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", new BigDecimal(ss2)), cellFont));
-                    PdfPCell cell302 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", new BigDecimal(sumRE)), cellFont));
-                    PdfPCell cell303 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(sumRE)), cellFont));
-                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(total)), cellFont));
+                    PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", sumExistingRound), cellFont));
+                    PdfPCell cell301 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", ss2Round), cellFont));
+                    PdfPCell cell302 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", sumRERound), cellFont));
+                    PdfPCell cell303 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", sumRERound), cellFont));
+                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", totalRound), cellFont));
                     cell10.setPadding(10);
                     cell20.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                     cell301.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
