@@ -4610,6 +4610,7 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne1.createRun(), 12, "UNIT ", true);
             XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
             boldText(paragraphtableRowOne2.createRun(), 12, type.getAllocDesc().toUpperCase() + " " + "ALLOCATION ( ₹ IN:" + amountIn + ")", true);
+//
 
             float gdTotal = 0;
             int i = 1;
