@@ -469,7 +469,11 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setBudgetHead(budgetHead);
-                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
+
+                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getRevisedAmount());
+
+
+                subModel.setAmount(addData + "");
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
 
@@ -484,7 +488,13 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
-                subModel.setAmount(Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount()) + "");
+
+                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getRevisedAmount());
+
+
+                subModel.setAmount(addData + "");
+
+//                subModel.setAmount(Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount()) + "");
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
@@ -503,30 +513,28 @@ public class MangeReportImpl implements MangeReportService {
         for (Map.Entry<String, List<ReportSubModel>> entry : hashMap.entrySet()) {
 
             tabData.addAll(entry.getValue());
-
-
-            List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
-            if (hrDataList.size() == 0) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
-            }
-
-            String approverPId = "";
-
-            for (Integer k = 0; k < hrDataList.size(); k++) {
-                HrData findHrData = hrDataList.get(k);
-                if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
-                    approverPId = findHrData.getPid();
-                    filePathResponse.setApproveName(findHrData.getFullName());
-                    filePathResponse.setApproveRank(findHrData.getRank());
-                }
-            }
-
-            if (approverPId.isEmpty()) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO APPROVE ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
-            }
-
         }
 
+
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                filePathResponse.setApproveName(findHrData.getFullName());
+                filePathResponse.setApproveRank(findHrData.getRank());
+            }
+        }
+
+        if (approverPId.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO APPROVE ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
+        }
 
         AllocationType allocationType = allocationRepository.findByAllocTypeId(tabData.get(0).getType());
         BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(tabData.get(0).getFinYear());
@@ -766,7 +774,13 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
                 subModel.setAmountType(amountUnit.getAmountType());
-                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
+
+                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getRevisedAmount());
+
+
+                subModel.setAmount(addData + "");
+
+//                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
                 if (Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
@@ -780,7 +794,15 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
-                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
+
+
+                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getRevisedAmount());
+
+
+                subModel.setAmount(addData + "");
+
+
+//                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
@@ -5407,7 +5429,7 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne1223.createRun(), 12, "GRAND TOTAL ", true);
             XWPFParagraph paragraphtableRowOne2223 = tableRowOne223.getCell(2).addParagraph();
             paragraphtableRowOne2223.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f",roundedAmount), true);
+            boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
             XWPFParagraph paragraphtableRowOne2234 = tableRowOne223.getCell(3).addParagraph();
             paragraphtableRowOne2234.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2234.createRun(), 12, String.format("%1$0,1.4f", roundedAmount1), true);
@@ -6679,7 +6701,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell50 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
             PdfPCell cell51 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
             PdfPCell cell60 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
-            PdfPCell cell70 = new PdfPCell(new Phrase(String.format("%1$0,1.4f",roundedAmount2), cellFont));
+            PdfPCell cell70 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount2), cellFont));
             PdfPCell cell80 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount3), cellFont));
             cell50.setPadding(12);
             cell51.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -7123,12 +7145,12 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne220.createRun(), 12, "GRAND TOTAL", true);
             XWPFParagraph paragraphtableRowOne1220 = tableRowOne220.getCell(1).addParagraph();
             paragraphtableRowOne1220.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne1220.createRun(), 12, String.format("%1$0,1.4f",roundedAmount), true);
+            boldText(paragraphtableRowOne1220.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
             XWPFParagraph paragraphtableRowOne2220 = tableRowOne220.getCell(2).addParagraph();
             boldText(paragraphtableRowOne2220.createRun(), 12, " ", true);
             XWPFParagraph paragraphtableRowOne2230 = tableRowOne220.getCell(3).addParagraph();
             paragraphtableRowOne2230.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f",roundedAmount1), true);
+            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", roundedAmount1), true);
             XWPFParagraph paragraphtableRowOne2200 = tableRowOne220.getCell(4).addParagraph();
             paragraphtableRowOne2200.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2200.createRun(), 12, String.format("%1$0,1.4f", roundedAmount2), true);

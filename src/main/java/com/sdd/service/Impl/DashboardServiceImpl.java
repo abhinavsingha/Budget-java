@@ -90,7 +90,7 @@ public class DashboardServiceImpl implements DashBoardService {
                         currentLoggedInUser.getPreferred_username(), "1");
         List<InboxOutBoxResponse> defaultResponse = new ArrayList<InboxOutBoxResponse>();
 
-        List<BudgetAllocationDetails> budgetList = new ArrayList<>();
+//        List<BudgetAllocationDetails> budgetList = new ArrayList<>();
 
         if (hrDataCheck == null) {
             hrDataCheck = getAuthorization(currentLoggedInUser.getPreferred_username());
@@ -99,36 +99,36 @@ public class DashboardServiceImpl implements DashBoardService {
             }
         }
 
-        if (dashBoardRequest.getToUnitId() == null || dashBoardRequest.getToUnitId().isEmpty()) {
-            budgetList = budgetAllocationDetailsRepository.findAll();
-        } else {
-            CgUnit cgFromUnit = cgUnitRepository.findByUnit(dashBoardRequest.getToUnitId());
-            if (cgFromUnit == null) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO UNIT ID");
-            } else {
-                budgetList =
-                        budgetAllocationDetailsRepository.findByToUnitAndIsDeleteAndIsBudgetRevision(
-                                dashBoardRequest.getToUnitId(), "0", "0");
-            }
-        }
+//        if (dashBoardRequest.getToUnitId() == null || dashBoardRequest.getToUnitId().isEmpty()) {
+//            budgetList = budgetAllocationDetailsRepository.findAll();
+//        } else {
+//            CgUnit cgFromUnit = cgUnitRepository.findByUnit(dashBoardRequest.getToUnitId());
+//            if (cgFromUnit == null) {
+//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO UNIT ID");
+//            } else {
+//                budgetList =
+//                        budgetAllocationDetailsRepository.findByToUnitAndIsDeleteAndIsBudgetRevision(
+//                                dashBoardRequest.getToUnitId(), "0", "0");
+//            }
+//        }
 
-        if (dashBoardRequest.getBudgetFinancialYearId() == null
-                || dashBoardRequest.getBudgetFinancialYearId().isEmpty()) {
-
-        } else {
-            BudgetFinancialYear budgetFinancialYear =
-                    budgetFinancialYearRepository.findBySerialNo(dashBoardRequest.getBudgetFinancialYearId());
-            if (budgetFinancialYear == null) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID FINANCIAL YEAR ID");
-            } else {
-                budgetList =
-                        budgetAllocationDetailsRepository.findByToUnitAndFinYearAndIsDeleteAndIsBudgetRevision(
-                                dashBoardRequest.getToUnitId(),
-                                dashBoardRequest.getBudgetFinancialYearId(),
-                                "0",
-                                "0");
-            }
-        }
+//        if (dashBoardRequest.getBudgetFinancialYearId() == null
+//                || dashBoardRequest.getBudgetFinancialYearId().isEmpty()) {
+//
+//        } else {
+//            BudgetFinancialYear budgetFinancialYear =
+//                    budgetFinancialYearRepository.findBySerialNo(dashBoardRequest.getBudgetFinancialYearId());
+//            if (budgetFinancialYear == null) {
+//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID FINANCIAL YEAR ID");
+//            } else {
+//                budgetList =
+//                        budgetAllocationDetailsRepository.findByToUnitAndFinYearAndIsDeleteAndIsBudgetRevision(
+//                                dashBoardRequest.getToUnitId(),
+//                                dashBoardRequest.getBudgetFinancialYearId(),
+//                                "0",
+//                                "0");
+//            }
+//        }
 
         HradataResponse hradataResponse = new HradataResponse();
 
@@ -398,7 +398,7 @@ public class DashboardServiceImpl implements DashBoardService {
 
         List<String> subHeadWise = new ArrayList<String>();
 
-        SubHeadWiseExpenditueResponse subHeadWiseExpenditueResponse =
+//        SubHeadWiseExpenditueResponse subHeadWiseExpenditueResponse =
                 new SubHeadWiseExpenditueResponse();
         List<String> subhead = new ArrayList<String>();
         List<String> allocatedSubHead = new ArrayList<String>();
@@ -431,28 +431,28 @@ public class DashboardServiceImpl implements DashBoardService {
             expenditureSubHead.add(expenditure + "");
         }
 
-        subHeadWiseExpenditueResponse.setSubhead(subHeadWise);
-        subHeadWiseExpenditueResponse.setAllocatedSubHead(allocatedSubHead);
-        subHeadWiseExpenditueResponse.setExpenditureSubHead(expenditureSubHead);
+//        subHeadWiseExpenditueResponse.setSubhead(subHeadWise);
+//        subHeadWiseExpenditueResponse.setAllocatedSubHead(allocatedSubHead);
+//        subHeadWiseExpenditueResponse.setExpenditureSubHead(expenditureSubHead);
 
-        dashBoardResponse.setSubHeadWiseExpenditure(subHeadWiseExpenditueResponse);
+//        dashBoardResponse.setSubHeadWiseExpenditure(subHeadWiseExpenditueResponse);
 
-        List<DashBoardSubResponse> dashBoardList = new ArrayList<DashBoardSubResponse>();
-        for (int i = 0; i < budgetList.size(); i++) {
-            DashBoardSubResponse dashBoardData = new DashBoardSubResponse();
-
-            dashBoardData.setLastCBDate(budgetList.get(i).getAllocationDate());
-            dashBoardData.setAllocatedAmount(budgetList.get(i).getAllocationAmount());
-            dashBoardData.setFinancialYearId(
-                    budgetFinancialYearRepository.findBySerialNo(budgetList.get(i).getFinYear()));
-            dashBoardData.setSubHead(
-                    subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(
-                            budgetList.get(i).getSubHead()));
-            dashBoardData.setUnit(cgUnitRepository.findByUnit(budgetList.get(i).getToUnit()));
-            dashBoardData.setStatus(budgetList.get(i).getStatus());
-            dashBoardData.setAuthGroupId(budgetList.get(i).getAuthGroupId());
-            dashBoardList.add(dashBoardData);
-        }
+//        List<DashBoardSubResponse> dashBoardList = new ArrayList<DashBoardSubResponse>();
+//        for (int i = 0; i < budgetList.size(); i++) {
+//            DashBoardSubResponse dashBoardData = new DashBoardSubResponse();
+//
+//            dashBoardData.setLastCBDate(budgetList.get(i).getAllocationDate());
+//            dashBoardData.setAllocatedAmount(budgetList.get(i).getAllocationAmount());
+//            dashBoardData.setFinancialYearId(
+//                    budgetFinancialYearRepository.findBySerialNo(budgetList.get(i).getFinYear()));
+//            dashBoardData.setSubHead(
+//                    subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(
+//                            budgetList.get(i).getSubHead()));
+//            dashBoardData.setUnit(cgUnitRepository.findByUnit(budgetList.get(i).getToUnit()));
+//            dashBoardData.setStatus(budgetList.get(i).getStatus());
+//            dashBoardData.setAuthGroupId(budgetList.get(i).getAuthGroupId());
+//            dashBoardList.add(dashBoardData);
+//        }
 
         dashBoardResponse.setInbox(inboxList.size() + "");
         dashBoardResponse.setApproved(arrpovedLis.size() + "");
