@@ -486,13 +486,13 @@ public class PdfGenaratorUtilMain {
         phrase.add(normalTexet);
 
 
-        Chunk totalAmount = new Chunk("Total Amount/ Budget allotted                                                                   (INR)  " + cbReportResponse.getAllocatedAmount() + " \n", normalFont);
+        Chunk totalAmount = new Chunk("Total Amount/ Budget allotted                                                                          (INR)  " + cbReportResponse.getAllocatedAmount() + " \n", normalFont);
         phrase.add(totalAmount);
 
-        Chunk progressiveExpen = new Chunk("Progressive expenditure including this bill                                                (INR)  " + cbReportResponse.getExpenditureAmount() + " \n", normalFont);
+        Chunk progressiveExpen = new Chunk("Progressive expenditure including this bill                                                       (INR)  " + cbReportResponse.getExpenditureAmount() + " \n", normalFont);
         phrase.add(progressiveExpen);
 
-        Chunk balanceAmount = new Chunk("Progressive expenditure including this bill                                                (INR)  " + cbReportResponse.getRemeningAmount() + " \n\n", normalFont);
+        Chunk balanceAmount = new Chunk("Balance Fund                                                                                         (INR)  " + cbReportResponse.getRemeningAmount() + " \n\n", normalFont);
         phrase.add(balanceAmount);
 
 
@@ -563,7 +563,7 @@ public class PdfGenaratorUtilMain {
         Chunk certifyc5 = new Chunk(", -preventive & other function 06 CG Organisation under Sub Head: ", normalFont);
         Chunk certifyc6 = new Chunk(cbReportResponse.getBudgetHead().getSubHeadDescr(), font);
         Chunk certifyc7 = new Chunk(".Category Code ", normalFont);
-        Chunk certifyc8 = new Chunk(cbReportResponse.getBudgetHead().getBudgetCodeId() + " \n", font);
+        Chunk certifyc8 = new Chunk(cbReportResponse.getBudgetHead().getBudgetHeadId() + " \n", font);
         phraseFooter.add(certifyc1);
         phraseFooter.add(certifyc2);
         phraseFooter.add(certifyc3);
