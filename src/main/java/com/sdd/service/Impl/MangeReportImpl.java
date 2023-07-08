@@ -183,7 +183,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
 
-                if (Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -198,7 +198,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -325,7 +325,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -340,7 +340,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -452,7 +452,7 @@ public class MangeReportImpl implements MangeReportService {
         String key = "";
         for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
 
-            if (Float.parseFloat(budgetAllocationReport.get(j).getRevisedAmount()) > 0) {
+            if (Double.parseDouble(budgetAllocationReport.get(j).getRevisedAmount()) > 0) {
                 continue;
             }
 
@@ -477,7 +477,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
 
-                if (Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -494,11 +494,11 @@ public class MangeReportImpl implements MangeReportService {
 
                 subModel.setAmount(addData + "");
 
-//                subModel.setAmount(Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount()) + "");
+//                subModel.setAmount(Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + "");
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -616,7 +616,7 @@ public class MangeReportImpl implements MangeReportService {
         for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
 
 
-            if (Float.parseFloat(budgetAllocationReport.get(j).getRevisedAmount()) > 0) {
+            if (Double.parseDouble(budgetAllocationReport.get(j).getRevisedAmount()) > 0) {
                 continue;
             }
 
@@ -638,7 +638,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
 
-                if (Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -653,7 +653,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -757,7 +757,7 @@ public class MangeReportImpl implements MangeReportService {
         String key = "";
         for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
 
-            if (Float.parseFloat(budgetAllocationReport.get(j).getRevisedAmount()) > 0) {
+            if (Double.parseDouble(budgetAllocationReport.get(j).getRevisedAmount()) > 0) {
                 continue;
             }
 
@@ -783,7 +783,7 @@ public class MangeReportImpl implements MangeReportService {
 //                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -806,7 +806,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -917,7 +917,7 @@ public class MangeReportImpl implements MangeReportService {
         String key = "";
         for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
 
-            if (Float.parseFloat(budgetAllocationReport.get(j).getRevisedAmount()) > 0) {
+            if (Double.parseDouble(budgetAllocationReport.get(j).getRevisedAmount()) > 0) {
                 continue;
             }
 
@@ -937,7 +937,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -952,7 +952,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Float.parseFloat(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -1175,8 +1175,8 @@ public class MangeReportImpl implements MangeReportService {
             allocationAmount = 0;
             for (Integer i = 0; i < modBudgetAllocations.size(); i++) {
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(modBudgetAllocations.get(i).getAmountType());
-                allocationAmount = allocationAmount + (Float.parseFloat(modBudgetAllocations.get(i).getAllocationAmount()) * amountUnit.getAmount());
-//                balanceAmount = balanceAmount + (Float.parseDouble(modBudgetAllocations.get(i).getBalanceAmount()) * amountUnit.getAmount());
+                allocationAmount = allocationAmount + (Double.parseDouble(modBudgetAllocations.get(i).getAllocationAmount()) * amountUnit.getAmount());
+//                balanceAmount = balanceAmount + (double.parseDouble(modBudgetAllocations.get(i).getBalanceAmount()) * amountUnit.getAmount());
             }
         }
 
@@ -1206,14 +1206,14 @@ public class MangeReportImpl implements MangeReportService {
         }
 
 
-        Float expenditure = 0f;
+        double expenditure = 0;
         List<ContigentBill> cbExpendure = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdate(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0");
         if (cbExpendure.size() == 0) {
 
         } else {
-            expenditure = 0f;
+            expenditure = 0;
             for (Integer i = 0; i < cbExpendure.size(); i++) {
-                expenditure = expenditure + Float.parseFloat(cbExpendure.get(i).getCbAmount());
+                expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
             }
         }
         List<Authority> authorityDetails = authorityRepository.findByAuthGroupId(cbData.getAuthGroupId());
@@ -1230,7 +1230,7 @@ public class MangeReportImpl implements MangeReportService {
         cbReportResponse.setGetGst(cbData.getGst());
         cbReportResponse.setOnAurthyData(cbData.getAuthorityDetails());
         cbReportResponse.setExpenditureAmount(String.format("%.2f", expenditure));
-        cbReportResponse.setCurrentBillAmount(String.format("%.2f", Float.parseFloat(cbData.getCbAmount())));
+        cbReportResponse.setCurrentBillAmount(String.format("%.2f", Double.parseDouble(cbData.getCbAmount())));
         cbReportResponse.setAllocatedAmount(String.format("%.2f", allocationAmount));
         cbReportResponse.setCbData(cbData);
         cbReportResponse.setUnitData(unit);
@@ -1305,8 +1305,8 @@ public class MangeReportImpl implements MangeReportService {
             allocationAmount = 0;
             for (Integer i = 0; i < modBudgetAllocations.size(); i++) {
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(modBudgetAllocations.get(i).getAmountType());
-                allocationAmount = allocationAmount + (Float.parseFloat(modBudgetAllocations.get(i).getAllocationAmount()) * amountUnit.getAmount());
-//                balanceAmount = balanceAmount + (Float.parseFloat(modBudgetAllocations.get(i).getBalanceAmount()) * amountUnit.getAmount());
+                allocationAmount = allocationAmount + (Double.parseDouble(modBudgetAllocations.get(i).getAllocationAmount()) * amountUnit.getAmount());
+//                balanceAmount = balanceAmount + (Double.parseDouble(modBudgetAllocations.get(i).getBalanceAmount()) * amountUnit.getAmount());
             }
         }
 
@@ -1343,7 +1343,7 @@ public class MangeReportImpl implements MangeReportService {
         } else {
             expenditure = 0;
             for (Integer i = 0; i < cbExpendure.size(); i++) {
-                expenditure = expenditure + Float.parseFloat(cbExpendure.get(i).getCbAmount());
+                expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
             }
         }
         List<Authority> authorityDetails = authorityRepository.findByAuthGroupId(cbData.getAuthGroupId());
@@ -1360,7 +1360,7 @@ public class MangeReportImpl implements MangeReportService {
         cbReportResponse.setGetGst(cbData.getGst());
         cbReportResponse.setOnAurthyData(cbData.getAuthorityDetails());
         cbReportResponse.setExpenditureAmount(String.format("%.2f", expenditure));
-        cbReportResponse.setCurrentBillAmount(String.format("%.2f", Float.parseFloat(cbData.getCbAmount())));
+        cbReportResponse.setCurrentBillAmount(String.format("%.2f", Double.parseDouble(cbData.getCbAmount())));
         cbReportResponse.setAllocatedAmount(String.format("%.2f", allocationAmount));
         cbReportResponse.setCbData(cbData);
         cbReportResponse.setUnitData(unit);
@@ -1429,7 +1429,7 @@ public class MangeReportImpl implements MangeReportService {
 //                    }
 //
 //
-//                    allAmountData = allAmountData + Float.parseFloat(tabData11.get(i).getAmount());
+//                    allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
 //
 //                    XWPFTableRow latRow = table.createRow();
 //
@@ -1612,8 +1612,8 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO APPROVE ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
         }
 
-        Float grandTotal = 0f;
-        Float allocationGrandTotal = 0f;
+        double grandTotal = 0;
+        double allocationGrandTotal = 0;
 
         List<CDAReportResponse> cdaReportList = new ArrayList<>();
         List<BudgetHead> subHeadsData = subHeadRepository.findByMajorHeadAndSubHeadTypeIdOrderBySerialNumberAsc(cdaReportRequest.getMajorHead(), cdaReportRequest.getSubHeadType());
@@ -1628,27 +1628,27 @@ public class MangeReportImpl implements MangeReportService {
 
             List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId());
 
-            Float amount = 0f;
-            Float allocationAmount = 0f;
+            double amount = 0;
+            double allocationAmount = 0;
 
             for (int m = 0; m < cdaData.size(); m++) {
 
                 AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
 
-                grandTotal = grandTotal + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                grandTotal = grandTotal + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
 
-                amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
 
 
-                allocationGrandTotal = allocationGrandTotal + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
-                allocationAmount = allocationAmount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                allocationGrandTotal = allocationGrandTotal + (Double.parseDouble(cdaData.get(m).getTotalParkingAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
+                allocationAmount = allocationAmount + (Double.parseDouble(cdaData.get(m).getTotalParkingAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
 
 
             }
 
-            if (allocationGrandTotal <= 0) {
-                continue;
-            }
+//            if (allocationGrandTotal <= 0) {
+//                continue;
+//            }
 
             cdaReportResponse = new CDAReportResponse();
             cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
@@ -1745,8 +1745,8 @@ public class MangeReportImpl implements MangeReportService {
         cadSubReport.setAmountType(amountUnit.getAmountType());
 
 
-        Float grandTotal = 0f;
-        Float allocationGrandTotal = 0f;
+        double grandTotal = 0;
+        double allocationGrandTotal = 0;
 
         List<CDAReportResponse> cdaReportList = new ArrayList<>();
         List<BudgetHead> subHeadsData = subHeadRepository.findByMajorHeadAndSubHeadTypeIdOrderBySerialNumberAsc(cdaReportRequest.getMajorHead(), cdaReportRequest.getSubHeadType());
@@ -1761,20 +1761,20 @@ public class MangeReportImpl implements MangeReportService {
 
             List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId());
 
-            Float amount = 0f;
-            Float allocationAmount = 0f;
+            double amount = 0;
+            double allocationAmount = 0;
 
             for (int m = 0; m < cdaData.size(); m++) {
 
                 AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
 
-                grandTotal = grandTotal + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                grandTotal = grandTotal + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
 
-                amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
 
 
-                allocationGrandTotal = allocationGrandTotal + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
-                allocationAmount = allocationAmount + (Float.parseFloat(cdaData.get(m).getTotalParkingAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                allocationGrandTotal = allocationGrandTotal + (Double.parseDouble(cdaData.get(m).getTotalParkingAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
+                allocationAmount = allocationAmount + (Double.parseDouble(cdaData.get(m).getTotalParkingAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
 
             }
             if (Double.parseDouble(allocationGrandTotal + "") > 0) {
@@ -1907,7 +1907,7 @@ public class MangeReportImpl implements MangeReportService {
 //        MumBai Cda 112233
 
 
-        Float grandTotal = 0f;
+        double grandTotal = 0;
         if (cdaReportRequest.getBudgetHeadId() == null && cdaReportRequest.getUnitId() == null) {
             if (cdaReportRequest.getCdaType().contains("112233")) {
 
@@ -1934,7 +1934,7 @@ public class MangeReportImpl implements MangeReportService {
                     BudgetHead subHead = subHeadsData.get(i);
                     cdaReportResponse.setName(subHead.getSubHeadDescr());
 
-                    Float totalAmount = 0f;
+                    double totalAmount = 0;
                     if (cdaParkingTotalList.size() > 0) {
                         for (int k = 0; k < cdaParkingTotalList.size(); k++) {
                             List<CdaParkingTrans> cdaData = new ArrayList<CdaParkingTrans>();
@@ -1955,14 +1955,14 @@ public class MangeReportImpl implements MangeReportService {
 //                            }
 
 
-                            Float amount = 0f;
+                            double amount = 0;
 
                             for (int m = 0; m < cdaData.size(); m++) {
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                     amount = amount;
                                 } else {
                                     AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-                                    amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                                    amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                                     grandTotal = grandTotal + amount;
                                 }
                             }
@@ -1971,7 +1971,7 @@ public class MangeReportImpl implements MangeReportService {
                             CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
 
                             if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
-                                Float colmount = Float.parseFloat(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                                double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
                                 coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                             } else {
@@ -2039,7 +2039,7 @@ public class MangeReportImpl implements MangeReportService {
                     BudgetHead subHead = subHeadsData.get(i);
                     cdaReportResponse.setName(subHead.getSubHeadDescr());
 
-                    Float totalAmount = 0f;
+                    double totalAmount = 0;
                     if (cdaParkingTotalList.size() > 0) {
                         for (int k = 0; k < cdaParkingTotalList.size(); k++) {
 
@@ -2069,14 +2069,14 @@ public class MangeReportImpl implements MangeReportService {
 //                            List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
 
 
-                            Float amount = 0f;
+                            double amount = 0;
 
                             for (int m = 0; m < cdaData.size(); m++) {
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                     amount = amount;
                                 } else {
                                     AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-                                    amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                                    amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                                     grandTotal = grandTotal + amount;
                                 }
                             }
@@ -2085,7 +2085,7 @@ public class MangeReportImpl implements MangeReportService {
                             CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
 
                             if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
-                                Float colmount = Float.parseFloat(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                                double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
                                 coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                             } else {
@@ -2156,7 +2156,7 @@ public class MangeReportImpl implements MangeReportService {
                     BudgetHead subHead = subHeadsData.get(i);
                     cdaReportResponse.setName(subHead.getSubHeadDescr());
 
-                    Float totalAmount = 0f;
+                    double totalAmount = 0;
                     if (cdaParkingTotalList != null) {
 //                        for (int k = 0; k < cdaParkingTotalList.size(); k++) {
 //                        List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
@@ -2185,14 +2185,14 @@ public class MangeReportImpl implements MangeReportService {
 //                        }
 
 
-                        Float amount = 0f;
+                        double amount = 0;
 
                         for (int m = 0; m < cdaData.size(); m++) {
                             if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                 amount = amount;
                             } else {
                                 AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-                                amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                                amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                                 grandTotal = grandTotal + amount;
                             }
 
@@ -2201,7 +2201,7 @@ public class MangeReportImpl implements MangeReportService {
                         CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.getGinNo());
 
                         if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
-                            Float colmount = Float.parseFloat(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                            double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
                             coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                         } else {
@@ -2298,7 +2298,7 @@ public class MangeReportImpl implements MangeReportService {
 
                 cdaReportResponse.setName(subHead.getSubHeadDescr());
 
-                Float totalAmount = 0f;
+                double totalAmount = 0;
                 if (cdaParkingTotalList.size() > 0) {
                     for (int k = 0; k < cdaParkingTotalList.size(); k++) {
 
@@ -2328,14 +2328,14 @@ public class MangeReportImpl implements MangeReportService {
 //                        List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
 
 
-                        Float amount = 0f;
+                        double amount = 0;
 
                         for (int m = 0; m < cdaData.size(); m++) {
                             if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                 amount = amount;
                             } else {
                                 AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-                                amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                                amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                                 grandTotal = grandTotal + amount;
                             }
                         }
@@ -2343,7 +2343,7 @@ public class MangeReportImpl implements MangeReportService {
                         CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
 
                         if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
-                            Float colmount = Float.parseFloat(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                            double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
                             coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                         } else {
@@ -2434,7 +2434,7 @@ public class MangeReportImpl implements MangeReportService {
                     BudgetHead subHead = subHeadsData.get(i);
                     cdaReportResponse.setName(subHead.getSubHeadDescr());
 
-                    Float totalAmount = 0f;
+                    double totalAmount = 0;
                     if (cdaParkingTotalList.size() > 0) {
                         for (int k = 0; k < cdaParkingTotalList.size(); k++) {
 
@@ -2464,14 +2464,14 @@ public class MangeReportImpl implements MangeReportService {
 
 
 //                            List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), cgUnit.getUnit());
-                            Float amount = 0f;
+                            double amount = 0;
 
                             for (int m = 0; m < cdaData.size(); m++) {
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                     amount = amount;
                                 } else {
                                     AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-                                    amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                                    amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                                     grandTotal = grandTotal + amount;
                                 }
                             }
@@ -2479,7 +2479,7 @@ public class MangeReportImpl implements MangeReportService {
                             CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
 
                             if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
-                                Float colmount = Float.parseFloat(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                                double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
                                 coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                             } else {
@@ -2590,7 +2590,7 @@ public class MangeReportImpl implements MangeReportService {
         cadSubReport.setAmountType(amountUnit.getAmountType());
 
         HashMap<String, String> coloumWiseAmount = new LinkedHashMap<String, String>();
-        Float grandTotal = 0f;
+        double grandTotal = 0;
         if (cdaReportRequest.getBudgetHeadId() == null && cdaReportRequest.getUnitId() == null) {
             if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID) && cdaReportRequest.getCdaType().contains("112233")) {
 
@@ -2616,7 +2616,7 @@ public class MangeReportImpl implements MangeReportService {
                     BudgetHead subHead = subHeadsData.get(i);
                     cdaReportResponse.setName(subHead.getSubHeadDescr());
 
-                    Float totalAmount = 0f;
+                    double totalAmount = 0;
                     if (cdaParkingTotalList.size() > 0) {
                         for (int k = 0; k < cdaParkingTotalList.size(); k++) {
 
@@ -2645,14 +2645,14 @@ public class MangeReportImpl implements MangeReportService {
 //                            }
 
 //                            List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
-                            Float amount = 0f;
+                            double amount = 0;
 
                             for (int m = 0; m < cdaData.size(); m++) {
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                     amount = amount;
                                 } else {
                                     AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-                                    amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                                    amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                                     grandTotal = grandTotal + amount;
                                 }
 
@@ -2661,7 +2661,7 @@ public class MangeReportImpl implements MangeReportService {
                             CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
 
                             if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
-                                Float colmount = Float.parseFloat(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                                double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
                                 coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                             } else {
@@ -2732,17 +2732,17 @@ public class MangeReportImpl implements MangeReportService {
 //
 //                    CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
 //                    List<CgUnit> unitDataList = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-//                    Float totalAmount = 0f;
+//                    double totalAmount = 0;
 //                    for (int s = 0; s < cdaParkingTotalList.size(); s++) {
 //                        if (cdaParkingTotalList.size() > 0) {
 //                            for (int k = 0; k < cdaParkingTotalList.size(); k++) {
 //                                List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", unitDataList.get(s).getUnit());
-//                                Float amount = 0f;
+//                                double amount = 0;
 //                                for (int m = 0; m < cdaData.size(); m++) {
 //                                    if (cdaData.get(m).getTotalParkingAmount() == null) {
 //                                        amount = amount;
 //                                    } else {
-//                                        amount = amount + Float.parseFloat(cdaData.get(m).getTotalParkingAmount());
+//                                        amount = amount + double.parseFloat(cdaData.get(m).getTotalParkingAmount());
 //                                        grandTotal = grandTotal + amount;
 //                                    }
 //                                }
@@ -2808,7 +2808,7 @@ public class MangeReportImpl implements MangeReportService {
                     BudgetHead subHead = subHeadsData.get(i);
                     cdaReportResponse.setName(subHead.getSubHeadDescr());
 
-                    Float totalAmount = 0f;
+                    double totalAmount = 0;
                     if (cdaParkingTotalList.size() > 0) {
                         for (int k = 0; k < cdaParkingTotalList.size(); k++) {
 //                            List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
@@ -2837,14 +2837,14 @@ public class MangeReportImpl implements MangeReportService {
 //                            }
 
 
-                            Float amount = 0f;
+                            double amount = 0;
 
                             for (int m = 0; m < cdaData.size(); m++) {
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                     amount = amount;
                                 } else {
                                     AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-                                    amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                                    amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                                     grandTotal = grandTotal + amount;
                                 }
                             }
@@ -2852,7 +2852,7 @@ public class MangeReportImpl implements MangeReportService {
                             CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
 
                             if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
-                                Float colmount = Float.parseFloat(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                                double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
                                 coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                             } else {
@@ -2921,7 +2921,7 @@ public class MangeReportImpl implements MangeReportService {
                     BudgetHead subHead = subHeadsData.get(i);
                     cdaReportResponse.setName(subHead.getSubHeadDescr());
 
-                    Float totalAmount = 0f;
+                    double totalAmount = 0;
                     if (cdaParkingTotalList != null) {
 //                        for (int k = 0; k < cdaParkingTotalList.size(); k++) {
 //                        List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
@@ -2947,14 +2947,14 @@ public class MangeReportImpl implements MangeReportService {
 ////                            cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitIdIn(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitIds);
 //                        }
 
-                        Float amount = 0f;
+                        double amount = 0;
 
                         for (int m = 0; m < cdaData.size(); m++) {
                             if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                 amount = amount;
                             } else {
                                 AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-                                amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                                amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                                 grandTotal = grandTotal + amount;
                             }
 
@@ -2963,7 +2963,7 @@ public class MangeReportImpl implements MangeReportService {
                         CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.getGinNo());
 
                         if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
-                            Float colmount = Float.parseFloat(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                            double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
                             coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                         } else {
@@ -3065,7 +3065,7 @@ public class MangeReportImpl implements MangeReportService {
 
                 cdaReportResponse.setName(subHead.getSubHeadDescr());
 
-                Float totalAmount = 0f;
+                double totalAmount = 0;
                 if (cdaParkingTotalList.size() > 0) {
                     for (int k = 0; k < cdaParkingTotalList.size(); k++) {
 //                        List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
@@ -3094,21 +3094,21 @@ public class MangeReportImpl implements MangeReportService {
 //                        }
 
 
-                        Float amount = 0f;
+                        double amount = 0;
 
                         for (int m = 0; m < cdaData.size(); m++) {
                             if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                 amount = amount;
                             } else {
                                 AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-                                amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                                amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                                 grandTotal = grandTotal + amount;
                             }
                         }
                         CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
 
                         if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
-                            Float colmount = Float.parseFloat(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                            double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
                             coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                         } else {
@@ -3200,7 +3200,7 @@ public class MangeReportImpl implements MangeReportService {
                     BudgetHead subHead = subHeadsData.get(i);
                     cdaReportResponse.setName(subHead.getSubHeadDescr());
 
-                    Float totalAmount = 0f;
+                    double totalAmount = 0;
                     if (cdaParkingTotalList.size() > 0) {
                         for (int k = 0; k < cdaParkingTotalList.size(); k++) {
 //                            List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), cgUnit.getUnit());
@@ -3230,14 +3230,14 @@ public class MangeReportImpl implements MangeReportService {
 //                            }
 
 
-                            Float amount = 0f;
+                            double amount = 0;
 
                             for (int m = 0; m < cdaData.size(); m++) {
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                     amount = amount;
                                 } else {
                                     AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-                                    amount = amount + (Float.parseFloat(cdaData.get(m).getRemainingCdaAmount()) * Float.parseFloat(cdaAMount.getAmount().toString())) / Float.parseFloat(amountUnit.getAmount().toString());
+                                    amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                                     grandTotal = grandTotal + amount;
                                 }
                             }
@@ -3245,7 +3245,7 @@ public class MangeReportImpl implements MangeReportService {
                             CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
 
                             if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
-                                Float colmount = Float.parseFloat(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                                double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
                                 coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
 
                             } else {

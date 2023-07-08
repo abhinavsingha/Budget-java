@@ -38,14 +38,14 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText("UNIT NAME", 10, 25f));
         table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 10, 25f));
 
-        Float grandTotal = 0f;
+        double grandTotal = 0f;
         for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
             String key11 = entry11.getKey();
             List<ReportSubModel> tabData11 = entry11.getValue();
 
             table.addCell(normalText(key11, 10, 25f));
 
-            Float allAmountData = 0f;
+            double allAmountData = 0f;
             for (Integer i = 0; i < tabData11.size(); i++) {
 
                 if (i == 0) {
@@ -64,8 +64,8 @@ public class PdfGenaratorUtilMain {
                         table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 10, 25f));
                     }
                 }
-                allAmountData = allAmountData + Float.parseFloat(tabData11.get(i).getAmount());
-                grandTotal = grandTotal + Float.parseFloat(tabData11.get(i).getAmount());
+                allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
+                grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
             }
 
             table.addCell(boldText("", 10, 25f));
@@ -119,12 +119,12 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText("", 10, 25f));
 
 
-        Float grandTotal = 0f;
+        double grandTotal = 0f;
         for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
             String key11 = entry11.getKey();
             List<ReportSubModel> tabData11 = entry11.getValue();
 
-            Float allAmountData = 0f;
+            double allAmountData = 0f;
             for (Integer i = 0; i < tabData11.size(); i++) {
 
 
@@ -140,8 +140,8 @@ public class PdfGenaratorUtilMain {
                 }
 
 
-                allAmountData = allAmountData + Float.parseFloat(tabData11.get(i).getAmount());
-                grandTotal = grandTotal + Float.parseFloat(tabData11.get(i).getAmount());
+                allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
+                grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
 
             }
         }
@@ -189,7 +189,7 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 10, 25f));
 
 
-        Float grandTotal = 0f;
+        double grandTotal = 0f;
         for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
             String key11 = entry11.getKey();
             List<ReportSubModel> tabData11 = entry11.getValue();
@@ -204,7 +204,7 @@ public class PdfGenaratorUtilMain {
                 table.addCell(boldText("", 10, 25f));
             }
 
-            Float allAmountData = 0f;
+            double allAmountData = 0f;
             for (Integer i = 0; i < tabData11.size(); i++) {
 
                 table.addCell(normalText("", 10, 25f));
@@ -212,8 +212,8 @@ public class PdfGenaratorUtilMain {
 //                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getUnit()), 10, 25f));
                 table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), 10, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
 
-                allAmountData = allAmountData + Float.parseFloat(tabData11.get(i).getAmount());
-                grandTotal = grandTotal + Float.parseFloat(tabData11.get(i).getAmount());
+                allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
+                grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
 
             }
 
@@ -256,7 +256,7 @@ public class PdfGenaratorUtilMain {
     }
 
 
-    public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal, HashMap<String, String> coloumWiseAmount, FilePathResponse filePathResponse) throws Exception {
+    public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, HashMap<String, String> coloumWiseAmount, FilePathResponse filePathResponse) throws Exception {
 
 
         Document document = new Document(PageSize.A4.rotate());
@@ -357,7 +357,7 @@ public class PdfGenaratorUtilMain {
     }
 
 
-    public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, Float grandTotal, Float allocationGrandTotal, FilePathResponse filePathResponse) throws Exception {
+    public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, double allocationGrandTotal, FilePathResponse filePathResponse) throws Exception {
 
 
         Document document = new Document(PageSize.A4.rotate());
@@ -443,11 +443,11 @@ public class PdfGenaratorUtilMain {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = dateFormat.format(cbReportResponse.getCbData().getCbDate());
-        Float bill = (Float.parseFloat(cbReportResponse.getCurrentBillAmount()));
-        bill = bill * 100 / (100 + Float.parseFloat(cbReportResponse.getGetGst()));
+        Double bill = (Double.parseDouble(cbReportResponse.getCurrentBillAmount()));
+        bill = bill * 100 / (100 + Double.parseDouble(cbReportResponse.getGetGst()));
         String billFormat = String.format("%.2f", bill);
-        bill = Float.parseFloat(billFormat);
-        Float gst = (Float.parseFloat(cbReportResponse.getCurrentBillAmount()));
+        bill = Double.parseDouble(billFormat);
+        double gst = (Double.parseDouble(cbReportResponse.getCurrentBillAmount()));
         gst = gst - bill;
 
         Document document = new Document();
@@ -652,7 +652,7 @@ public class PdfGenaratorUtilMain {
     private static String convertDecimaltoString(String str) {
         String words = "";
 
-        float x = Float.parseFloat(str);
+        double x = Double.parseDouble(str);
         String whole = convertNumberToWords((long) x);
         long y = Long.parseLong(str.substring(str.indexOf('.') + 1));
         String decimal = (convertDecimalToWords(y, str.substring(str.indexOf('.') + 1).length()));

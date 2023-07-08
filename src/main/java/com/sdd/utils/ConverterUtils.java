@@ -131,7 +131,16 @@ public class ConverterUtils {
             if (number == null) {
                 return "0.0000";
             }
-            return String.format("%.4f", Double.parseDouble(number));
+
+            String amoumt = String.format("%.4f", Double.parseDouble(number));
+            DecimalFormat df = new DecimalFormat("#.####");
+            String dat23 = df.format(Double.parseDouble(amoumt));
+
+            if(!(dat23.contains("."))){
+                dat23 = dat23+".0000";
+            }
+
+            return dat23;
         } catch (Exception e) {
             return number;
         }

@@ -1367,8 +1367,23 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
 
+
+//            if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId().equalsIgnoreCase(hrData.getUnitId())) {
+                budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()));
+                budgetAllocationDetails.setRevisedAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRevisedAmount()));
+
+//            } else {
+//
+//                double amount = Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount());
+//                double amountRevisd =Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRevisedAmount());
+//                budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint((amount+amountRevisd)+""));
+//                budgetAllocationDetails.setRevisedAmount(ConverterUtils.addDecimalPoint(amountRevisd+""));
+//
+//
+//            }
+
+
             budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
-            budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()));
             budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetails.setAllocTypeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId());
             budgetAllocationDetails.setFinYear(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId());
@@ -1382,7 +1397,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationDetails.setRemarks(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRemark());
             budgetAllocationDetails.setIsDelete("0");
             budgetAllocationDetails.setIsBudgetRevision("1");
-            budgetAllocationDetails.setRevisedAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRevisedAmount()));
             budgetAllocationDetails.setRefTransactionId(refTransID);
             budgetAllocationDetails.setUserId(hrData.getPid());
             budgetAllocationDetails.setAmountType(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
@@ -1793,9 +1807,10 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 BudgetReviResp res = new BudgetReviResp();
                 res.setUnit(cgUnitRepository.findByUnit(budgetAllocationsDetalis.get(m).getToUnit()));
 
-                double totalAmount = Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount()) + Double.parseDouble(budgetAllocationsDetalis.get(m).getRevisedAmount());
+//                double totalAmount = Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount()) + Double.parseDouble(budgetAllocationsDetalis.get(m).getRevisedAmount());
+                double totalAmount = Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount());
 
-                res.setAllocationAmount(totalAmount+"");
+                res.setAllocationAmount(totalAmount + "");
 
                 List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsFlagAndIsUpdateOrderByCbDateDesc(unit.get(i).getUnit(), budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), "0", "0");
 
@@ -3981,7 +3996,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocation.setAllocationTypeId(allocationDetails.get(i).getAllocTypeId());
                 budgetAllocation.setIsBudgetRevision("0");
                 budgetAllocation.setUnallocatedAmount("0.0000");
-                budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(totalAmount + ""));
+                budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint((revisedAmount + totalAmount) + ""));
                 budgetAllocation.setRevisedAmount(ConverterUtils.addDecimalPoint(revisedAmount + ""));
                 budgetAllocation.setUserId(allocationDetails.get(i).getUserId());
                 budgetAllocation.setStatus("Approved");
