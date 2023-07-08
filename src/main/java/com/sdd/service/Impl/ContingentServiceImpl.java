@@ -869,7 +869,8 @@ public class ContingentServiceImpl implements ContingentService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.");
         }
 
-        List<ContigentBill> cbData = contigentBillRepository.findByCbUnitIdAndIsFlagAndIsUpdate(hrData.getUnitId(), "0", "0");
+//        List<ContigentBill> cbData = contigentBillRepository.findByCbUnitIdAndIsFlagAndIsUpdate(hrData.getUnitId(), "0", "0");
+        List<ContigentBill> cbData = contigentBillRepository.findByCbUnitId(hrData.getUnitId());
         if (cbData.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND.");
         }
