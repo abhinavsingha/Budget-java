@@ -142,8 +142,16 @@ public class DocxGenaratorUtil {
             XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
             boldText(paragraphtableRowOne.createRun(), 10, "MAJOR/MINOR/SUB HEAD", true);
 
-            XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
-            boldText(paragraphtableRowOne1.createRun(), 10, "DETAILED HEAD", true);
+
+            if (filePathResponse.getSubHeadKey().equalsIgnoreCase("2037")) {
+                XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
+                boldText(paragraphtableRowOne1.createRun(), 10, "REVENUE OBJECT HEAD", true);
+
+            } else {
+                XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
+                boldText(paragraphtableRowOne1.createRun(), 10, "CAPITAL DETAILED HEAD", true);
+            }
+
 
             XWPFParagraph paragraphtableRowOne11 = tableRowOne.addNewTableCell().addParagraph();
             boldText(paragraphtableRowOne11.createRun(), 10, filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", true);
@@ -179,6 +187,7 @@ public class DocxGenaratorUtil {
 
                     XWPFParagraph paragraph11 = tableRow11.getCell(2).addParagraph();
                     normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), false);
+                    paragraph11.setAlignment(ParagraphAlignment.RIGHT);
 
                     allAmountData = allAmountData + Float.parseFloat(tabData11.get(i).getAmount());
                     grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
@@ -463,13 +472,11 @@ public class DocxGenaratorUtil {
                     normalText(paragraph11.createRun(), 10, tabData, false);
                     ih++;
                     paragraph11.setAlignment(ParagraphAlignment.RIGHT);
-                }else {
+                } else {
                     XWPFParagraph paragraph11 = tableRow11.getCell(ih + 1).addParagraph();
                     normalText(paragraph11.createRun(), 10, tabData, false);
                     ih++;
                 }
-
-
 
 
             }
