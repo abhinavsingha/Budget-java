@@ -359,77 +359,76 @@ public class DashboardServiceImpl implements DashBoardService {
             subHeadData.put(budgetHeadId.getSubHeadTypeId(), budgetHeadId);
         }
 
-        UnitWiseExpenditueResponse unitWiseExpenditueResponse = new UnitWiseExpenditueResponse();
-        List<String> unit = new ArrayList<String>();
-        List<String> unitByAllocationAmount = new ArrayList<String>();
-        List<String> unitByExpendureAmount = new ArrayList<String>();
-
-        for (Map.Entry<String, CgUnit> entry : cgunitData.entrySet()) {
-            CgUnit unitData = entry.getValue();
-
-            List<BudgetAllocation> budgetAllocationList =
-                    budgetAllocationRepository.findByToUnitAndFinYearAndIsFlagAndIsBudgetRevision(
-                            unitData.getUnit(), "01", "0", "0");
-            double allocationAmount = 0;
-            for (int i = 0; i < budgetAllocationList.size(); i++) {
-                allocationAmount =
-                        allocationAmount
-                                + Double.parseDouble(budgetAllocationList.get(i).getAllocationAmount());
-            }
-
-            double expenditure = 0;
-            List<ContigentBill> cbExpendure =
-                    contigentBillRepository.findByCbUnitIdAndIsFlagAndIsUpdate(unitData.getUnit(), "0", "0");
-
-            for (Integer i = 0; i < cbExpendure.size(); i++) {
-                expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
-            }
-
-            unit.add(unitData.getCgUnitShort());
-            unitByAllocationAmount.add(allocationAmount + "");
-            unitByExpendureAmount.add(expenditure + "");
-        }
-
-        unitWiseExpenditueResponse.setUnitWise(unit);
-        unitWiseExpenditueResponse.setExpenditureUnit(unitByExpendureAmount);
-        unitWiseExpenditueResponse.setAllocatedUnit(unitByAllocationAmount);
-
-        dashBoardResponse.setUnitWiseExpenditure(unitWiseExpenditueResponse);
-
-        List<String> subHeadWise = new ArrayList<String>();
+//        UnitWiseExpenditueResponse unitWiseExpenditueResponse = new UnitWiseExpenditueResponse();
+//        List<String> unit = new ArrayList<String>();
+//        List<String> unitByAllocationAmount = new ArrayList<String>();
+//        List<String> unitByExpendureAmount = new ArrayList<String>();
+//
+//        for (Map.Entry<String, CgUnit> entry : cgunitData.entrySet()) {
+//            CgUnit unitData = entry.getValue();
+//
+//            List<BudgetAllocation> budgetAllocationList =
+//                    budgetAllocationRepository.findByToUnitAndFinYearAndIsFlagAndIsBudgetRevision(
+//                            unitData.getUnit(), "01", "0", "0");
+//            double allocationAmount = 0;
+//            for (int i = 0; i < budgetAllocationList.size(); i++) {
+//                allocationAmount =
+//                        allocationAmount
+//                                + Double.parseDouble(budgetAllocationList.get(i).getAllocationAmount());
+//            }
+//
+//            double expenditure = 0;
+//            List<ContigentBill> cbExpendure =
+//                    contigentBillRepository.findByCbUnitIdAndIsFlagAndIsUpdate(unitData.getUnit(), "0", "0");
+//
+//            for (Integer i = 0; i < cbExpendure.size(); i++) {
+//                expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
+//            }
+//
+//            unit.add(unitData.getCgUnitShort());
+//            unitByAllocationAmount.add(allocationAmount + "");
+//            unitByExpendureAmount.add(expenditure + "");
+//        }
+//
+//        unitWiseExpenditueResponse.setUnitWise(unit);
+//        unitWiseExpenditueResponse.setExpenditureUnit(unitByExpendureAmount);
+//        unitWiseExpenditueResponse.setAllocatedUnit(unitByAllocationAmount);
+//
+//
+//        List<String> subHeadWise = new ArrayList<String>();
 
 //        SubHeadWiseExpenditueResponse subHeadWiseExpenditueResponse =
-                new SubHeadWiseExpenditueResponse();
-        List<String> subhead = new ArrayList<String>();
-        List<String> allocatedSubHead = new ArrayList<String>();
-        List<String> expenditureSubHead = new ArrayList<String>();
-
-        for (Map.Entry<String, BudgetHead> entry : subHeadData.entrySet()) {
-            String key = entry.getKey();
-            BudgetHead subHeadD = entry.getValue();
-
-            List<BudgetAllocation> budgetAllocationList =
-                    budgetAllocationRepository.findByToUnitAndFinYearAndIsFlagAndIsBudgetRevision(
-                            hrDataCheck.getUnit(), "01", "1", "0");
-            double allocationAmount = 0;
-            for (int i = 0; i < budgetAllocationList.size(); i++) {
-                allocationAmount =
-                        allocationAmount
-                                + Double.parseDouble(budgetAllocationList.get(i).getAllocationAmount());
-            }
-
-            double expenditure = 0;
-            List<ContigentBill> cbExpendure =
-                    contigentBillRepository.findByBudgetHeadIDAndIsFlagAndIsUpdate(subHeadD.getBudgetCodeId(), "0", "0");
-
-            for (Integer i = 0; i < cbExpendure.size(); i++) {
-                expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
-            }
-
-            subHeadWise.add(subHeadD.getSubheadShort());
-            allocatedSubHead.add(allocationAmount + "");
-            expenditureSubHead.add(expenditure + "");
-        }
+//                new SubHeadWiseExpenditueResponse();
+//        List<String> subhead = new ArrayList<String>();
+//        List<String> allocatedSubHead = new ArrayList<String>();
+//        List<String> expenditureSubHead = new ArrayList<String>();
+//
+//        for (Map.Entry<String, BudgetHead> entry : subHeadData.entrySet()) {
+//            String key = entry.getKey();
+//            BudgetHead subHeadD = entry.getValue();
+//
+//            List<BudgetAllocation> budgetAllocationList =
+//                    budgetAllocationRepository.findByToUnitAndFinYearAndIsFlagAndIsBudgetRevision(
+//                            hrDataCheck.getUnit(), "01", "1", "0");
+//            double allocationAmount = 0;
+//            for (int i = 0; i < budgetAllocationList.size(); i++) {
+//                allocationAmount =
+//                        allocationAmount
+//                                + Double.parseDouble(budgetAllocationList.get(i).getAllocationAmount());
+//            }
+//
+//            double expenditure = 0;
+//            List<ContigentBill> cbExpendure =
+//                    contigentBillRepository.findByBudgetHeadIDAndIsFlagAndIsUpdate(subHeadD.getBudgetCodeId(), "0", "0");
+//
+//            for (Integer i = 0; i < cbExpendure.size(); i++) {
+//                expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
+//            }
+//
+////            subHeadWise.add(subHeadD.getSubheadShort());
+//            allocatedSubHead.add(allocationAmount + "");
+//            expenditureSubHead.add(expenditure + "");
+//        }
 
 //        subHeadWiseExpenditueResponse.setSubhead(subHeadWise);
 //        subHeadWiseExpenditueResponse.setAllocatedSubHead(allocatedSubHead);
