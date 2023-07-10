@@ -3352,7 +3352,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(reportRequest.getAmountTypeId());
-        Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
+        double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType().toUpperCase();
         List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0");
         List<BudgetAllocation> budgetAllocationsDetalis2 = budgetAllocationsDetalis1.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
@@ -3422,13 +3422,13 @@ public class MangeReportImpl implements MangeReportService {
             int i = 1;
             String finyear = "";
             String unit = "";
-            Float amount;
-            Float amountUnit;
-            Float finAmount;
+            double amount;
+            double amountUnit;
+            double finAmount;
             Float sum = 0.0f;
             for (BudgetAllocation row : budgetAllocationsDetalis) {
                 finyear = findyr.getFinYear();
-                amount = Float.valueOf(row.getAllocationAmount());
+                amount = Double.parseDouble(row.getAllocationAmount());
                 AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
                 if (amountTypeObj == null) {
                     return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -3625,12 +3625,12 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRow3.createRun(), 12, "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", true);
 
             int count = 1;
-            Float amount;
-            Float amountUnit;
-            Float finAmount;
+            double amount;
+            double amountUnit;
+            double finAmount;
             Float sum = 0.0f;
             for (Integer k = 0; k < budgetAllocationsDetalis.size(); k++) {
-                amount = Float.valueOf(budgetAllocationsDetalis.get(k).getAllocationAmount());
+                amount = Double.parseDouble(budgetAllocationsDetalis.get(k).getAllocationAmount());
                 AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(k).getAmountType());
                 if (amountTypeObj == null) {
                     return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -3771,12 +3771,12 @@ public class MangeReportImpl implements MangeReportService {
         try {
 
             int count = 1;
-            Float amount;
-            Float amountUnit;
-            Float finAmount;
+            double amount;
+            double amountUnit;
+            double finAmount;
             Float sum = 0.0f;
             for (Integer k = 0; k < budgetAllocationsDetalis.size(); k++) {
-                amount = Float.valueOf(budgetAllocationsDetalis.get(k).getAllocationAmount());
+                amount = Double.parseDouble(budgetAllocationsDetalis.get(k).getAllocationAmount());
                 AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(k).getAmountType());
                 if (amountTypeObj == null) {
                     return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
@@ -3862,7 +3862,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(req.getAmountTypeId());
-        Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
+        double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType().toUpperCase();
 
         String names = approveName;
@@ -3922,9 +3922,9 @@ public class MangeReportImpl implements MangeReportService {
             int i = 1;
             String finyear = "";
             String unit = "";
-            Float amount = 0.0f;
-            Float amountUnit;
-            Float finAmount;
+            double amount = 0.0;
+            double amountUnit;
+            double finAmount;
             float sum = 0;
             for (BudgetAllocation row : budgetAllocationsDetalis) {
 
@@ -3939,7 +3939,7 @@ public class MangeReportImpl implements MangeReportService {
                 if (row.getToUnit().equalsIgnoreCase(hrData.getUnitId())) {
                     continue;
                 } else
-                    amount = Float.valueOf(row.getAllocationAmount());
+                    amount = Double.parseDouble(row.getAllocationAmount());
 
                 finAmount = amount * amountUnit / reqAmount;
 
@@ -4080,7 +4080,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(req.getAmountTypeId());
-        Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
+        double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType();
 
         try {
@@ -4129,9 +4129,9 @@ public class MangeReportImpl implements MangeReportService {
 
 
             int i = 1;
-            Float amount = 0.0f;
-            Float amountUnit;
-            Float finAmount;
+            double amount = 0.0;
+            double amountUnit;
+            double finAmount;
             float sum = 0;
             for (Integer r = 0; r < budgetAllocationsDetalis.size(); r++) {
 
@@ -4142,8 +4142,8 @@ public class MangeReportImpl implements MangeReportService {
                     return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                     }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                 }
-                amountUnit = Float.parseFloat(amountTypeObj.getAmount() + "");
-                amount = Float.valueOf(budgetAllocationsDetalis.get(r).getAllocationAmount());
+                amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
+                amount = Double.parseDouble(budgetAllocationsDetalis.get(r).getAllocationAmount());
                 finAmount = amount * amountUnit / reqAmount;
 
                 XWPFTableRow tableRows = table1.getRow(r + 1);
@@ -4270,15 +4270,15 @@ public class MangeReportImpl implements MangeReportService {
         }
 
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(req.getAmountTypeId());
-        Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
+        double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType();
 
         try {
 
             int i = 1;
-            Float amount = 0.0f;
-            Float amountUnit;
-            Float finAmount;
+            double amount = 0.0f;
+            double amountUnit;
+            double finAmount;
             float sum = 0;
             for (Integer r = 0; r < budgetAllocationsDetalis.size(); r++) {
                 AllocationType type = allocationRepository.findByAllocTypeId(budgetAllocationsDetalis.get(r).getAllocationTypeId());
@@ -4288,8 +4288,8 @@ public class MangeReportImpl implements MangeReportService {
                     return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
                     }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                 }
-                amountUnit = Float.parseFloat(amountTypeObj.getAmount() + "");
-                amount = Float.valueOf(budgetAllocationsDetalis.get(r).getAllocationAmount());
+                amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
+                amount = Double.parseDouble(budgetAllocationsDetalis.get(r).getAllocationAmount());
                 finAmount = amount * amountUnit / reqAmount;
 
                 BeReportResp resp = new BeReportResp();
@@ -4485,7 +4485,7 @@ public class MangeReportImpl implements MangeReportService {
             BigDecimal decimal = new BigDecimal(gdTotal);
             BigDecimal roundedAmounts = decimal.setScale(4, RoundingMode.HALF_UP);
             PdfPCell cell101 = new PdfPCell(new Phrase("GRAND TOTAL ", cellFont));
-            PdfPCell cell111 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmounts), cellFont));
+            PdfPCell cell111 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", gdTotal), cellFont));
             cell101.setPadding(12);
             cell111.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             table.addCell("");
@@ -4719,7 +4719,7 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne1223.createRun(), 12, "GRAND TOTAL ", true);
             XWPFParagraph paragraphtableRowOne2223 = tableRowOne223.getCell(2).addParagraph();
             paragraphtableRowOne2223.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f", roundedAmounts), true);
+            boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f", gdTotal), true);
 
             String names = approveName;
             String unitName = hrData.getUnit();
@@ -4916,7 +4916,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
-        Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
+        double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType().toUpperCase();
 
         AllocationType allockData = allocationRepository.findByAllocTypeId(allocationType);
@@ -4999,15 +4999,15 @@ public class MangeReportImpl implements MangeReportService {
             int i = 1;
             String finyear = "";
             String unit = "";
-            float grTotalAlloc = 0;
-            float grTotalAddition = 0;
-            float grTotalSum = 0;
-            Float amount = Float.valueOf(0);
-            Float amountUnit;
-            Float finAmount;
-            Float revisedAmount;
-            Float reAmount;
-            Float s2 = 0.0f;
+            double grTotalAlloc = 0;
+            double grTotalAddition = 0;
+            double grTotalSum = 0;
+            double amount = Float.valueOf(0);
+            double amountUnit;
+            double finAmount;
+            double revisedAmount;
+            double reAmount;
+            double s2 = 0.0;
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetailss = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
@@ -5035,11 +5035,11 @@ public class MangeReportImpl implements MangeReportService {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
-                    float newAllocAmount=0;
-                    amountUnit = Float.parseFloat(amountTypeObj.getAmount() + "");
+                    double newAllocAmount=0;
+                    amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
                     reAmount = revisedAmount * amountUnit / reqAmount;
-                    String s = reAmount.toString();
+                    String s = String.valueOf(reAmount);
                     if (s.contains("-")) {
                         String s1 = s.replace("-", "");
                         s2 = Float.parseFloat(s1);
@@ -5054,7 +5054,7 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cella4 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", new BigDecimal(s2))));
                     PdfPCell cella5 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", new BigDecimal(reAmount))));
                     PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(reAmount))));
-                    PdfPCell cella7 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Float.toString(finAmount))))))));
+                    PdfPCell cella7 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Double.toString(finAmount))))))));
                     cella1.setPadding(8);
                     cella2.setPadding(8);
                     cella3.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -5079,8 +5079,8 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(cella7);
 
                     count++;
-                    sumExisting += Float.parseFloat(new BigDecimal(Float.toString(newAllocAmount)).toPlainString());
-                    sumRE += Float.parseFloat(new BigDecimal(Float.toString(reAmount)).toPlainString());
+                    sumExisting += Float.parseFloat(new BigDecimal(Double.toString(newAllocAmount)).toPlainString());
+                    sumRE += Float.parseFloat(new BigDecimal(Double.toString(reAmount)).toPlainString());
 
                 }
                 BigDecimal decimal = new BigDecimal(sumExisting);
@@ -5110,7 +5110,7 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell301 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", roundedAmount3), cellFont));
                     PdfPCell cell302 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", roundedAmount1), cellFont));
                     PdfPCell cell303 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
-                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f",roundedAmount2), cellFont));
+                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f",sumExisting+sumRE), cellFont));
                     cell10.setPadding(10);
                     cell20.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                     cell301.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -5145,9 +5145,9 @@ public class MangeReportImpl implements MangeReportService {
             BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
 
             PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-            PdfPCell cell01 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
-            PdfPCell cell02 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
-            PdfPCell cell03 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount2), cellFont));
+            PdfPCell cell01 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAlloc), cellFont));
+            PdfPCell cell02 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAddition), cellFont));
+            PdfPCell cell03 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalSum), cellFont));
             cell00.setPadding(12);
             cell01.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell02.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -5248,7 +5248,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
-        Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
+        double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType();
 
         AllocationType allockData = allocationRepository.findByAllocTypeId(allocationType);
@@ -5318,12 +5318,12 @@ public class MangeReportImpl implements MangeReportService {
             float grTotalAlloc = 0;
             float grTotalAddition = 0;
             float grTotalSum = 0;
-            Float amount = Float.valueOf(0);
-            Float amountUnit;
-            Float finAmount;
-            Float revisedAmount;
-            Float reAmount;
-            Float s2 = 0.0f;
+            double amount = 0.0;
+            double amountUnit;
+            double finAmount;
+            double revisedAmount;
+            double reAmount;
+            double s2 = 0.0;
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
@@ -5351,18 +5351,18 @@ public class MangeReportImpl implements MangeReportService {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
-                    amount = Float.valueOf(reportDetails.get(r).getAllocationAmount());
+                    amount = Double.parseDouble(reportDetails.get(r).getAllocationAmount());
                     if (reportDetails.get(r).getRevisedAmount() != null || Float.valueOf(reportDetails.get(r).getRevisedAmount()) != 0) {
-                        revisedAmount = Float.valueOf(reportDetails.get(r).getRevisedAmount());
+                        revisedAmount = Double.parseDouble(reportDetails.get(r).getRevisedAmount());
                     } else
                         revisedAmount = 0.0f;
 
-                    amountUnit = Float.parseFloat(amountTypeObj.getAmount() + "");
+                    amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
                     reAmount = revisedAmount * amountUnit / reqAmount;
-                    Float add = finAmount + reAmount;
-                    float newAllocAmount =finAmount-reAmount;
-                    String s = reAmount.toString();
+                    double add = finAmount + reAmount;
+                    double newAllocAmount =finAmount-reAmount;
+                    String s = String.valueOf(reAmount);
                     if (s.contains("-")) {
                         String s1 = s.replace("-", "");
                         s2 = Float.parseFloat(s1);
@@ -5397,8 +5397,8 @@ public class MangeReportImpl implements MangeReportService {
                     paragraphtableRow41.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
 
-                    sumExisting += Float.parseFloat(new BigDecimal(Float.toString(newAllocAmount)).toPlainString());
-                    sumRE += Float.parseFloat(new BigDecimal(Float.toString(reAmount)).toPlainString());
+                    sumExisting += Float.parseFloat(new BigDecimal(Double.toString(newAllocAmount)).toPlainString());
+                    sumRE += Float.parseFloat(new BigDecimal(Double.toString(reAmount)).toPlainString());
 
                 }
                 BigDecimal decimal = new BigDecimal(sumExisting);
