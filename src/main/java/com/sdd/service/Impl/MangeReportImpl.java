@@ -5721,7 +5721,7 @@ public class MangeReportImpl implements MangeReportService {
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
-        Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
+        double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType().toUpperCase();
 
         String amtType = "";
@@ -5786,25 +5786,25 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 int count = 0;
                 float sum = 0;
-                Float amount = Float.valueOf(0);
-                Float amountUnit;
-                Float finAmount;
+                double amount = 0.0;
+                double amountUnit;
+                double finAmount;
                 float reSum = 0;
-                Float reAmountUnit = 0.0f;
-                Float reFinalAmount;
-                Float reTotalAmount = 0.0f;
+                double reAmountUnit = 0.0;
+                double reFinalAmount;
+                double reTotalAmount = 0.0;
 
                 for (BudgetAllocation row : reportDetails) {
 
                     String unitIds = row.getToUnit();
-                    amount = Float.valueOf(row.getAllocationAmount());
+                    amount = Double.parseDouble(row.getAllocationAmount());
                     List<BudgetAllocation> reData = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0");
                     if (reData.size() <= 0) {
                         reFinalAmount = 0.0000f;
                     } else {
-                        reTotalAmount = Float.valueOf(reData.get(0).getAllocationAmount());
+                        reTotalAmount = Double.parseDouble(reData.get(0).getAllocationAmount());
                         AmountUnit amountTypeRe = amountUnitRepository.findByAmountTypeId(reData.get(0).getAmountType());
-                        reAmountUnit = Float.parseFloat(amountTypeRe.getAmount() + "");
+                        reAmountUnit = Double.parseDouble(amountTypeRe.getAmount() + "");
                         reFinalAmount = reTotalAmount * reAmountUnit / reqAmount;
                     }
                     if (amount == 0 && reTotalAmount == 0) {
@@ -5816,7 +5816,7 @@ public class MangeReportImpl implements MangeReportService {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
-                    amountUnit = Float.parseFloat(amountTypeObj.getAmount() + "");
+                    amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
 
                     BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
@@ -6016,7 +6016,7 @@ public class MangeReportImpl implements MangeReportService {
             }, "UNIT NOT FOUND", HttpStatus.OK.value());
         }*/
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
-        Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
+        double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType();
 
         try {
@@ -6067,13 +6067,13 @@ public class MangeReportImpl implements MangeReportService {
 
                 int count = 0;
                 float sum = 0;
-                Float amount = Float.valueOf(0);
-                Float amountUnit;
-                Float finAmount;
-                Float reSum = 0f;
-                Float reAmountUnit = 0f;
-                Float reFinalAmount = 0f;
-                Float reTotalAmount = 0f;
+                double amount = 0.0;
+                double amountUnit;
+                double finAmount;
+                float reSum = 0;
+                double reAmountUnit = 0.0;
+                double reFinalAmount = 0.0;
+                double reTotalAmount = 0.0;
 
                 for (Integer r = 0; r < reportDetails.size(); r++) {
 
@@ -6082,9 +6082,9 @@ public class MangeReportImpl implements MangeReportService {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
-                    amount = Float.valueOf(reportDetails.get(r).getAllocationAmount());
+                    amount = Double.parseDouble(reportDetails.get(r).getAllocationAmount());
                     String unitIds = reportDetails.get(r).getToUnit();
-                    amountUnit = Float.parseFloat(amountTypeObj.getAmount() + "");
+                    amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
                     List<BudgetAllocation> reDatas = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0");
                     List<BudgetAllocation> reData = reDatas.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
@@ -6092,9 +6092,9 @@ public class MangeReportImpl implements MangeReportService {
                     if (reData.size() <= 0) {
                         reFinalAmount = 0f;
                     } else {
-                        reTotalAmount = Float.valueOf(reData.get(0).getAllocationAmount());
+                        reTotalAmount = Double.parseDouble(reData.get(0).getAllocationAmount());
                         AmountUnit amountTypeRe = amountUnitRepository.findByAmountTypeId(reData.get(0).getAmountType());
-                        reAmountUnit = Float.parseFloat(amountTypeRe.getAmount() + "");
+                        reAmountUnit = Double.parseDouble(amountTypeRe.getAmount() + "");
                         reFinalAmount = reTotalAmount * reAmountUnit / reqAmount;
                     }
                     if (amount == 0 && reTotalAmount == 0) {
@@ -6288,7 +6288,7 @@ public class MangeReportImpl implements MangeReportService {
             }, "UNIT NOT FOUND", HttpStatus.OK.value());
         }*/
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
-        Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
+        double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType();
 
         try {
@@ -6305,13 +6305,13 @@ public class MangeReportImpl implements MangeReportService {
 
                 int count = 0;
                 float sum = 0;
-                Float amount = Float.valueOf(0);
-                Float amountUnit;
-                Float finAmount;
+                double amount = 0.0;
+                double amountUnit;
+                double finAmount;
                 float reSum = 0;
-                Float reAmountUnit = 0.0f;
-                Float reFinalAmount;
-                Float reTotalAmount = 0.0f;
+                double reAmountUnit = 0.0;
+                double reFinalAmount;
+                double reTotalAmount = 0.0;
 
                 for (Integer r = 0; r < reportDetails.size(); r++) {
 
@@ -6320,9 +6320,9 @@ public class MangeReportImpl implements MangeReportService {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BEREResponce>>() {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
-                    amount = Float.valueOf(reportDetails.get(r).getAllocationAmount());
+                    amount = Double.parseDouble(reportDetails.get(r).getAllocationAmount());
                     String unitIds = reportDetails.get(r).getToUnit();
-                    amountUnit = Float.parseFloat(amountTypeObj.getAmount() + "");
+                    amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
                     List<BudgetAllocation> reDatas = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0");
                     List<BudgetAllocation> reData = reDatas.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
@@ -6330,9 +6330,9 @@ public class MangeReportImpl implements MangeReportService {
                     if (reData.size() <= 0) {
                         reFinalAmount = 0.0000f;
                     } else {
-                        reTotalAmount = Float.valueOf(reData.get(0).getAllocationAmount());
+                        reTotalAmount = Double.parseDouble(reData.get(0).getAllocationAmount());
                         AmountUnit amountTypeRe = amountUnitRepository.findByAmountTypeId(reData.get(0).getAmountType());
-                        reAmountUnit = Float.parseFloat(amountTypeRe.getAmount() + "");
+                        reAmountUnit = Double.parseDouble(amountTypeRe.getAmount() + "");
                         reFinalAmount = reTotalAmount * reAmountUnit / reqAmount;
                     }
                     if (amount == 0 && reTotalAmount == 0) {
@@ -6443,7 +6443,7 @@ public class MangeReportImpl implements MangeReportService {
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
-        Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
+        double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType().toUpperCase();
 
         String amtType = "";
@@ -6538,7 +6538,7 @@ public class MangeReportImpl implements MangeReportService {
             String finyear = "";
             String unit = "";
 
-            Float IcgAmount = 0.0f;
+            double IcgAmount = 0.0;
             for (String val : rowData) {
                 String subHeadId = val;
                 String hrUnit = hrData.getUnitId();
@@ -6551,37 +6551,37 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 List<BudgetAllocation> hrDetails = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(hrUnit, finYearId, subHeadId, allocationType, "0");
                 if (hrDetails.size() > 0) {
-                    Float hrAllocAmount = Float.valueOf(hrDetails.get(0).getAllocationAmount());
+                    double hrAllocAmount = Double.parseDouble(hrDetails.get(0).getAllocationAmount());
                     AmountUnit hrAmount = amountUnitRepository.findByAmountTypeId(hrDetails.get(0).getAmountType());
-                    Float hrAmountUnit = Float.parseFloat(hrAmount.getAmount() + "");
+                    double hrAmountUnit = Double.parseDouble(hrAmount.getAmount() + "");
                     IcgAmount = hrAllocAmount * hrAmountUnit / reqAmount;
                 }
                 int count = 0;
                 Float sum = 0.0f;
                 Float expsum = 0.0f;
                 Float percentagesum = 0.0f;
-                Float amount = Float.valueOf(0);
-                Float amountUnit;
-                Float finAmount;
-                Float eAmount = 0.0f;
-                Float expnAmount;
-                Float allAmount = 0.0f;
+                double amount = 0.0;
+                double amountUnit;
+                double finAmount;
+                double eAmount = 0.0;
+                double expnAmount;
+                double allAmount = 0.0;
 
                 for (BudgetAllocation row : reportDetails) {
 
-                    amount = Float.valueOf(row.getAllocationAmount());
+                    amount = Double.parseDouble(row.getAllocationAmount());
                     AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
                     if (amountTypeObj == null) {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
-                    amountUnit = Float.parseFloat(amountTypeObj.getAmount() + "");
+                    amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
                     String uid = row.getToUnit();
                     List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
                     //List<CgUnit> listOfSubUnit=cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
 
-                    Float totalbill = 0.0f;
+                    double totalbill = 0.0;
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
                             String subUnit = unitss.getUnit();
@@ -6589,28 +6589,28 @@ public class MangeReportImpl implements MangeReportService {
                             List<ContigentBill> expenditure = expenditure1.stream()
                                     .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                             if (expenditure.size() > 0) {
-                                Float totalAmount = 0.0f;
+                                double totalAmount = 0.0;
                                 for (ContigentBill bill : expenditure) {
-                                    totalAmount += Float.parseFloat(bill.getCbAmount());
+                                    totalAmount += Double.parseDouble(bill.getCbAmount());
                                 }
                                 totalbill += totalAmount;
                             }
                         }
                         DecimalFormat decimalFormat = new DecimalFormat("#");
                         String cbAmount = decimalFormat.format(totalbill);
-                        eAmount = Float.parseFloat(cbAmount);
+                        eAmount = Double.parseDouble(cbAmount);
                     }
                     List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(uid, finYearId, subHeadId, allocationType, "0");
                     List<ContigentBill> expenditure = expenditure1.stream()
                             .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
-                    Float totalAmount = 0.0f;
+                    double totalAmount = 0.0;
                     if (expenditure.size() > 0) {
                         for (ContigentBill bill : expenditure) {
-                            totalAmount += Float.parseFloat(bill.getCbAmount());
+                            totalAmount += Double.parseDouble(bill.getCbAmount());
                         }
                         DecimalFormat decimalFormat = new DecimalFormat("#");
                         String cbAmount = decimalFormat.format(totalAmount);
-                        eAmount = Float.parseFloat(cbAmount);
+                        eAmount = Double.parseDouble(cbAmount);
                     }
 
                     eAmount = totalAmount + totalbill;
@@ -6667,8 +6667,8 @@ public class MangeReportImpl implements MangeReportService {
                     for (Integer k = 0; k < cdaParkingTrans.size(); k++) {
                         AmountUnit dbudgetFin = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(k).getAmountType());
                         hrAmountUnit = dbudgetFin.getAmount();
-                        hrbalanceAmount = hrbalanceAmount + Float.parseFloat(cdaParkingTrans.get(k).getRemainingCdaAmount());
-                        hrallocationAmount = hrallocationAmount + Float.parseFloat(cdaParkingTrans.get(k).getTotalParkingAmount());
+                        hrbalanceAmount = hrbalanceAmount + Double.parseDouble(cdaParkingTrans.get(k).getRemainingCdaAmount());
+                        hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
                     }
                 }
                 double hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
@@ -6882,7 +6882,7 @@ public class MangeReportImpl implements MangeReportService {
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
-        Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
+        double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType();
 
         try {
@@ -6966,9 +6966,9 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne6.createRun(), 12, "CGDA BOOKING UPTO : " + formattedDate, true);
             XWPFParagraph paragraphtableRowOne7 = tableRowOne.getCell(7).addParagraph();
             boldText(paragraphtableRowOne7.createRun(), 12, "% BILL CLEARANCE w.r.t : " + type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear(), true);
-            Float IcgAmount = 0.0f;
-            Float grTotalAlloc = 0f;
-            Float grTotalIcg = 0f;
+            double IcgAmount = 0.0;
+            double grTotalAlloc = 0.0;
+            double grTotalIcg = 0.0;
             Float grTotalAddition = 0f;
             Float grTotalSum = 0f;
             for (String val : rowData) {
@@ -6980,9 +6980,9 @@ public class MangeReportImpl implements MangeReportService {
                 String hrUnit = hrData.getUnitId();
                 List<BudgetAllocation> hrDetails = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(hrUnit, finYearId, subHeadId, allocationType, "0");
                 if (hrDetails.size() > 0) {
-                    Float hrAllocAmount = Float.valueOf(hrDetails.get(0).getAllocationAmount());
+                    double hrAllocAmount = Double.parseDouble(hrDetails.get(0).getAllocationAmount());
                     AmountUnit hrAmount = amountUnitRepository.findByAmountTypeId(hrDetails.get(0).getAmountType());
-                    Float hrAmountUnit = Float.parseFloat(hrAmount.getAmount() + "");
+                    double hrAmountUnit = Double.parseDouble(hrAmount.getAmount() + "");
                     IcgAmount = hrAllocAmount * hrAmountUnit / reqAmount;
                 }
 
@@ -6997,23 +6997,23 @@ public class MangeReportImpl implements MangeReportService {
                 float sum = 0;
                 float expsum = 0;
                 float percentagesum = 0;
-                Float amount = Float.valueOf(0);
-                Float amountUnit;
-                Float finAmount;
-                Float eAmount = 0.0f;
-                Float expnAmount;
-                Float allAmount = 0.0f;
+                double amount = 0.0;
+                double amountUnit;
+                double finAmount;
+                double eAmount = 0.0;
+                double expnAmount;
+                double allAmount = 0.0;
 
                 for (Integer r = 0; r < reportDetails.size(); r++) {
 
-                    amount = Float.valueOf(reportDetails.get(r).getAllocationAmount());
+                    amount = Double.parseDouble(reportDetails.get(r).getAllocationAmount());
                     AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(reportDetails.get(r).getAmountType());
                     if (amountTypeObj == null) {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
                     String uid = reportDetails.get(r).getToUnit();
-                    amountUnit = Float.parseFloat(amountTypeObj.getAmount() + "");
+                    amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
                     List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
                     //List<CgUnit> listOfSubUnit=cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
@@ -7115,7 +7115,7 @@ public class MangeReportImpl implements MangeReportService {
                         hrallocationAmount = hrallocationAmount + Float.parseFloat(cdaParkingTrans.get(k).getTotalParkingAmount());
                     }
                 }
-                Float hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
+                double hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
 
                 XWPFTable hrrow = document.createTable(1, 8);
                 hrrow.setWidth("100%");
