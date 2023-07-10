@@ -4421,7 +4421,7 @@ public class MangeReportImpl implements MangeReportService {
             int i = 1;
             String finyear = "";
             String unit = "";
-            double gdTotal = 0.0;
+            float gdTotal = 0;
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocationDetails> reportDetail = budgetAllocationDetailsRepository.findBySubHeadAndFromUnitAndFinYearAndAllocTypeIdAndIsBudgetRevision(subHeadId, hrData.getUnitId(), finYearId, allocationType, "0");
@@ -4432,13 +4432,13 @@ public class MangeReportImpl implements MangeReportService {
                 if (sz <= 0)
                     continue;
                 int count = 0;
-                double sum = 0.0;
+                float sum = 0;
                 double amount;
                 double amountUnit;
                 double finAmount;
 
                 for (BudgetAllocationDetails row : reportDetails) {
-                    amount = Float.valueOf(row.getAllocationAmount());
+                    amount = Double.parseDouble(row.getAllocationAmount());
                     AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
                     if (amountTypeObj == null) {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -4451,7 +4451,7 @@ public class MangeReportImpl implements MangeReportService {
 
                     PdfPCell cella1 = new PdfPCell(new Phrase(bHead.getSubHeadDescr()));
                     PdfPCell cella2 = new PdfPCell(new Phrase(unitN.getDescr()));
-                    PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", finAmount)));
+                    PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
                     cella1.setPadding(8);
                     cella2.setPadding(8);
                     cella3.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -4463,7 +4463,7 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(cella2);
                     table.addCell(cella3);
                     count++;
-                    sum += finAmount;
+                    sum += Float.parseFloat(String.valueOf(finAmount));
 
                 }
                 BigDecimal decimal = new BigDecimal(sum);
@@ -4639,7 +4639,7 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne2.createRun(), 12, type.getAllocDesc().toUpperCase() + " " + "ALLOCATION ( ₹ IN:" + amountIn + ")", true);
 //
 
-            double gdTotal = 0.0;
+            float gdTotal = 0;
             int i = 1;
             for (String val : rowData) {
                 String subHeadId = val;
@@ -4655,7 +4655,7 @@ public class MangeReportImpl implements MangeReportService {
                 table11.setWidth("100%");
 
                 int count = 0;
-                double sum = 0.0;
+                float sum = 0;
                 double amount;
                 double amountUnit;
                 double finAmount=0.0;
@@ -4687,7 +4687,7 @@ public class MangeReportImpl implements MangeReportService {
                     paragraphtableRow21.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", finAmount), false);
                     count++;
-                    sum += finAmount;
+                    sum += Float.parseFloat(String.valueOf(finAmount));
 
                 }
                 BigDecimal decimal = new BigDecimal(sum);
