@@ -132,6 +132,10 @@ public class ContingentServiceImpl implements ContingentService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB NUMBER CAN NOT BE BLANK");
             }
 
+            if (contingentBillSaveRequest.getSectionNumber() == null || contingentBillSaveRequest.getSectionNumber().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "SECTION NUMBER CAN NOT BE BLANK");
+            }
+
             if (contingentBillSaveRequest.getRemark() == null || contingentBillSaveRequest.getRemark().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REMARK CAN NOT BE BLANK");
             }
@@ -319,6 +323,7 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBill.setAuthGroupId(authGroupId);
             contigentBill.setIsFlag("0");
             contigentBill.setIsUpdate("0");
+            contigentBill.setSectionNumber(contingentBillSaveRequest.getSectionNumber());
             contigentBill.setGst(contingentBillSaveRequest.getGst());
             contigentBill.setVendorName(contingentBillSaveRequest.getVendorName());
 
@@ -520,6 +525,10 @@ public class ContingentServiceImpl implements ContingentService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION TYPE ID UPLOAD ID CAN NOT BE BLANK");
             }
 
+            if (contingentBillSaveRequest.getSectionNumber() == null || contingentBillSaveRequest.getSectionNumber().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "SECTION NUMBER CAN NOT BE BLANK");
+            }
+
 //            if (!(contingentBillSaveRequest.getUnit().equalsIgnoreCase(hrData.getUnitId()))) {
 //                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB UNIT IS NOT SAME FOR LOGIN UNIT");
 //            }
@@ -707,7 +716,8 @@ public class ContingentServiceImpl implements ContingentService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO CB VERIFIER ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
         }
 //        String toUnitId = "";
-        String authGroupId = HelperUtils.getAuthorityGroupId();;
+        String authGroupId = HelperUtils.getAuthorityGroupId();
+        ;
         for (Integer i = 0; i < contingentBillSaveRequestList.size(); i++) {
 
 //            ContigentBill contigentBill1 = contigentBillRepository.findByCbId(contingentBillSaveRequestList.get(i).getContingentBilId());
@@ -765,12 +775,12 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBill.setAuthGroupId(authGroupId);
             contigentBill.setIsFlag("0");
             contigentBill.setIsUpdate("0");
+            contigentBill.setSectionNumber(contingentBillSaveRequest.getSectionNumber());
             contigentBill.setGst(contingentBillSaveRequest.getGst());
             contigentBill.setVendorName(contingentBillSaveRequest.getVendorName());
 
             List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
             contigentBill.setAllocationTypeId(allocationType.get(0).getAllocTypeId());
-
 
 
             contigentBill.setCreatedOn(HelperUtils.getCurrentTimeStamp());

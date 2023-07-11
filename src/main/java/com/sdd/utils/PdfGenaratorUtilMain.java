@@ -486,13 +486,13 @@ public class PdfGenaratorUtilMain {
         phrase.add(normalTexet);
 
 
-        Chunk totalAmount = new Chunk("Total Amount/ Budget allotted                                                                          (INR)  " + cbReportResponse.getAllocatedAmount() + " \n", normalFont);
+        Chunk totalAmount = new Chunk("Total Amount/ Budget allotted                                                                                    (INR)  " + cbReportResponse.getAllocatedAmount() + " \n", normalFont);
         phrase.add(totalAmount);
 
-        Chunk progressiveExpen = new Chunk("Progressive expenditure including this bill                                                       (INR)  " + cbReportResponse.getExpenditureAmount() + " \n", normalFont);
+        Chunk progressiveExpen = new Chunk("Progressive expenditure including this bill                                                                 (INR)  " + cbReportResponse.getExpenditureAmount() + " \n", normalFont);
         phrase.add(progressiveExpen);
 
-        Chunk balanceAmount = new Chunk("Balance Fund                                                                                         (INR)  " + cbReportResponse.getRemeningAmount() + " \n\n", normalFont);
+        Chunk balanceAmount = new Chunk("Balance Fund                                                                                                               (INR)  " + cbReportResponse.getRemeningAmount() + " \n\n", normalFont);
         phrase.add(balanceAmount);
 
 
@@ -501,7 +501,7 @@ public class PdfGenaratorUtilMain {
 
 
         Chunk authorityb1 = new Chunk("               : (b) " + cbReportResponse.getUnitData().getDescr() + "  Sanction No. ", normalFont);
-        Chunk authorityb2 = new Chunk(cbReportResponse.getAuthorityDetails().getAuthority() + " \n\n\n", font);
+        Chunk authorityb2 = new Chunk(cbReportResponse.getCbData().getSectionNumber() + " \n\n\n", font);
         phrase.add(authorityb1);
         phrase.add(authorityb2);
 
@@ -531,7 +531,7 @@ public class PdfGenaratorUtilMain {
         table.addCell(normalText(ConverterUtils.addDecimalPoint("(INR)" + cbReportResponse.getCurrentBillAmount()), 9, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
 
         table.addCell(normalText("", 9, 25f));
-        table.addCell(boldText("Amount in words (Rupees " + convertDecimaltoString(cbReportResponse.getCurrentBillAmount()) + ")", 9, 25f));
+        table.addCell(boldText("Amount in words (Rupees " + convertDecimaltoString(cbReportResponse.getCurrentBillAmount()) + ")", 9, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);;
         table.addCell(normalText("", 9, 25f));
 
 

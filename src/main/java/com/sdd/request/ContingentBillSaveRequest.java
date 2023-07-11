@@ -28,6 +28,7 @@ public class ContingentBillSaveRequest {
     private String invoiceNo;
     private String gst;
     private String invoiceDate;
+    private String sectionNumber;
     private String invoiceUploadId;
 
 

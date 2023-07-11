@@ -56,31 +56,34 @@ public class ContigentBill {
     @Column(name = "CREATED_ON")
     private Timestamp createdOn;
 
-    @Column(name = "UPDATED_ON", nullable = false)
+    @Column(name = "UPDATED_ON")
     private Timestamp updatedOn;
 
-    @Column(name = "AUTH_GROUP_ID", nullable = false)
+    @Column(name = "AUTH_GROUP_ID")
     private String authGroupId;
 
-    @Column(name = "VENDOR_NAME", nullable = false)
+    @Column(name = "SECTION_NUMBER")
+    private String sectionNumber;
+
+    @Column(name = "VENDOR_NAME")
     private String vendorName;
 
-    @Column(name = "INVOICE_NO", nullable = false)
+    @Column(name = "INVOICE_NO")
     private String invoiceNO;
 
-    @Column(name = "INVOICE_DATE", nullable = false)
+    @Column(name = "INVOICE_DATE")
     private String invoiceDate;
 
-    @Column(name = "FILE_ID", nullable = false)
+    @Column(name = "FILE_ID")
     private String fileID;
 
-    @Column(name = "FILE_DATE", nullable = false)
+    @Column(name = "FILE_DATE")
     private String fileDate;
 
     @Column(name = "INVOICE_UPLOAD_ID")
     private String invoiceUploadId;
 
-    @Column(name = "PROGRESSIVE_AMOUNT", nullable = false)
+    @Column(name = "PROGRESSIVE_AMOUNT")
     private String progressiveAmount;
 
     @Column(name = "ON_ACCOUNT_OF")
