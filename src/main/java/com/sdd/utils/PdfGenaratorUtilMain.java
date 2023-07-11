@@ -122,9 +122,19 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 10, 25f));
 
 
-        table.addCell(boldText(filePathResponse.getSubHeadKey(), 10, 25f));
-        table.addCell(boldText(filePathResponse.getRevenueOrCapital(), 10, 25f));
-        table.addCell(boldText("", 10, 25f));
+
+        if (filePathResponse.getSubHeadKey().equalsIgnoreCase("2037")) {
+            table.addCell(boldText(filePathResponse.getSubHeadKey()+"\n00.102.06", 10, 25f));
+            table.addCell(boldText(filePathResponse.getRevenueOrCapital(), 10, 25f));
+            table.addCell(boldText("", 10, 25f));
+        } else {
+            table.addCell(boldText(filePathResponse.getSubHeadKey()+"\n00.037.01", 10, 25f));
+            table.addCell(boldText(filePathResponse.getRevenueOrCapital(), 10, 25f));
+            table.addCell(boldText("", 10, 25f));
+        }
+
+
+
 
 
         double grandTotal = 0f;

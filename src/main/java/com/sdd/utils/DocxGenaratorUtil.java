@@ -158,8 +158,21 @@ public class DocxGenaratorUtil {
 
 
             XWPFTableRow tableRowOne11 = table.createRow();
-            XWPFParagraph paragraphtableRowOne22 = tableRowOne11.getCell(0).addParagraph();
-            boldText(paragraphtableRowOne22.createRun(), 10, filePathResponse.getSubHeadKey(), true);
+//            XWPFParagraph paragraphtableRowOne22 = tableRowOne11.getCell(0).addParagraph();
+//            boldText(paragraphtableRowOne22.createRun(), 10, filePathResponse.getSubHeadKey(), true);
+
+
+
+            if (filePathResponse.getSubHeadKey().equalsIgnoreCase("2037")) {
+                XWPFParagraph paragraphtableRowOne22 = tableRowOne11.getCell(0).addParagraph();
+                boldText(paragraphtableRowOne22.createRun(), 10, filePathResponse.getSubHeadKey()+ "\n00.102.06", true);
+            } else {
+                XWPFParagraph paragraphtableRowOne22 = tableRowOne11.getCell(0).addParagraph();
+                boldText(paragraphtableRowOne22.createRun(), 10, filePathResponse.getSubHeadKey()+ "\n00.037.01", true);
+            }
+
+
+
 
             XWPFParagraph paragraphtableRowOne111 = tableRowOne11.getCell(1).addParagraph();
             boldText(paragraphtableRowOne111.createRun(), 10, filePathResponse.getRevenueOrCapital(), true);
