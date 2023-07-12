@@ -4312,7 +4312,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getBEAllocationReport(String finYearId, String allocationType, String amountTypeId, String status) {
+    public ApiResponse<List<FilePathResponse>> getBEAllocationReport(String finYearId, String allocationType, String amountTypeId, String status, String majorHd) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -4337,6 +4337,10 @@ public class MangeReportImpl implements MangeReportService {
         if (status == null || status.isEmpty()) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "REPORT STATUS CAN NOT BE BLANK", HttpStatus.OK.value());
+        }
+        if (majorHd == null || majorHd.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "MAJOR HEAD CAN NOT BE BLANK", HttpStatus.OK.value());
         }
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
         if (hrDataList.size() == 0) {
@@ -4365,7 +4369,9 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
-        List<String> rowDatas = budgetAllocationDetailsRepository.findSubHead(finYearId, allocationType, hrData.getUnitId());
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
+        //List<String> rowDatas = budgetAllocationDetailsRepository.findSubHead(finYearId, allocationType, hrData.getUnitId());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -4541,7 +4547,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getBEAllocationReportDoc(String finYearId, String allocationType, String amountTypeId, String status) {
+    public ApiResponse<List<FilePathResponse>> getBEAllocationReportDoc(String finYearId, String allocationType, String amountTypeId, String status, String majorHd) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -4566,6 +4572,10 @@ public class MangeReportImpl implements MangeReportService {
         if (status == null || status.isEmpty()) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "REPORT STATUS CAN NOT BE BLANK", HttpStatus.OK.value());
+        }
+        if (majorHd == null || majorHd.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "MAJOR HEAD CAN NOT BE BLANK", HttpStatus.OK.value());
         }
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
         if (hrDataList.size() == 0) {
@@ -4595,8 +4605,9 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
-
-        List<String> rowDatas = budgetAllocationDetailsRepository.findSubHead(finYearId, allocationType, hrData.getUnitId());
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
+        //List<String> rowDatas = budgetAllocationDetailsRepository.findSubHead(finYearId, allocationType, hrData.getUnitId());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
 
         if (rowData.size() <= 0) {
@@ -4756,7 +4767,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<BeReportResp>> getBEAllocationReportExcel(String finYearId, String allocationType, String amountTypeId, String status) {
+    public ApiResponse<List<BeReportResp>> getBEAllocationReportExcel(String finYearId, String allocationType, String amountTypeId, String status, String majorHd) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -4781,6 +4792,10 @@ public class MangeReportImpl implements MangeReportService {
         if (status == null || status.isEmpty()) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
             }, "REPORT STATUS CAN NOT BE BLANK", HttpStatus.OK.value());
+        }
+        if (majorHd == null || majorHd.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
+            }, "MAJOR HEAD CAN NOT BE BLANK", HttpStatus.OK.value());
         }
 
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
@@ -4811,8 +4826,9 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
-
-        List<String> rowDatas = budgetAllocationDetailsRepository.findSubHead(finYearId, allocationType, hrData.getUnitId());
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
+        //List<String> rowDatas = budgetAllocationDetailsRepository.findSubHead(finYearId, allocationType, hrData.getUnitId());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
 
         if (rowData.size() <= 0) {
