@@ -3333,6 +3333,10 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "ALLOCATION TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        if (reportRequest.getMajorHd() == null || reportRequest.getMajorHd().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
         if (hrDataList.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
@@ -3350,14 +3354,26 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
+        String bHeadType="";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(reportRequest.getMajorHd());
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
+        if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+        }
 
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(reportRequest.getAmountTypeId());
         double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType().toUpperCase();
         List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0");
-        List<BudgetAllocation> budgetAllocationsDetalis2 = budgetAllocationsDetalis1.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
-        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis2.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-
+        List<BudgetAllocation> budgetAllocationsDetalis2 = budgetAllocationsDetalis1.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocation> budgetAllocationsDetalis3 = budgetAllocationsDetalis2.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
+        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis3.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
         if (budgetAllocationsDetalis.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -3404,7 +3420,7 @@ public class MangeReportImpl implements MangeReportService {
             table.setWidthPercentage(100);
             Font cellFont1 = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
             PdfPCell cell01 = new PdfPCell(new Phrase("S.L", cellFont1));
-            PdfPCell cell02 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD", cellFont1));
+            PdfPCell cell02 = new PdfPCell(new Phrase(bHeadType, cellFont1));
             PdfPCell cell03 = new PdfPCell(new Phrase("ALLOCATION TYPE", cellFont1));
             PdfPCell cell04 = new PdfPCell(new Phrase("AMOUNT : (₹ IN " + amountIn + ")", cellFont1));
             cell01.setPadding(10);
@@ -3548,6 +3564,10 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "ALLOCATION TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        if (reportRequest.getMajorHd() == null || reportRequest.getMajorHd().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
         if (hrDataList.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
@@ -3566,15 +3586,29 @@ public class MangeReportImpl implements MangeReportService {
             }
         }
 
+        String bHeadType="";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(reportRequest.getMajorHd());
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
+        if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+
+
         CgUnit subUnit = cgUnitRepository.findByUnit(reportRequest.getUnitId());
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(reportRequest.getFinYearId());
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(reportRequest.getAmountTypeId());
         Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType();
         List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0");
-        List<BudgetAllocation> budgetAllocationsDetalis2 = budgetAllocationsDetalis1.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
-        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis2.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-
+        List<BudgetAllocation> budgetAllocationsDetalis2 = budgetAllocationsDetalis1.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocation> budgetAllocationsDetalis3 = budgetAllocationsDetalis2.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
+        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis3.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
         if (budgetAllocationsDetalis.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -3618,7 +3652,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRow0 = tableRow.getCell(0).addParagraph();
             boldText(paragraphtableRow0.createRun(), 12, "SERIAL NO", true);
             XWPFParagraph paragraphtableRow1 = tableRow.getCell(1).addParagraph();
-            boldText(paragraphtableRow1.createRun(), 12, "SUB HEAD", true);
+            boldText(paragraphtableRow1.createRun(), 12, bHeadType, true);
             XWPFParagraph paragraphtableRow2 = tableRow.getCell(2).addParagraph();
             boldText(paragraphtableRow2.createRun(), 12, "ALLOCATION TYPE", true);
             XWPFParagraph paragraphtableRow3 = tableRow.getCell(3).addParagraph();
@@ -3736,6 +3770,10 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
             }, "ALLOCATION TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        if (reportRequest.getMajorHd() == null || reportRequest.getMajorHd().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
         if (hrDataList.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
@@ -3753,18 +3791,29 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
-
+        String bHeadType="";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(reportRequest.getMajorHd());
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
+        if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>()  {
+            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+        }
         CgUnit subUnit = cgUnitRepository.findByUnit(reportRequest.getUnitId());
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(reportRequest.getFinYearId());
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(reportRequest.getAmountTypeId());
         Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType();
         List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0");
-        List<BudgetAllocation> budgetAllocationsDetalis2 = budgetAllocationsDetalis1.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
-        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis2.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-
+        List<BudgetAllocation> budgetAllocationsDetalis2 = budgetAllocationsDetalis1.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocation> budgetAllocationsDetalis3 = budgetAllocationsDetalis2.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
+        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis3.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
         if (budgetAllocationsDetalis.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>()  {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
         int size = budgetAllocationsDetalis.size();
@@ -3851,7 +3900,13 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
+        String bHeadType="";
         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(req.getSubHeadId());
+        if(bHead.getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+bHead.getRemark()+" "+"HEAD";
+
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(req.getFinYearId());
         List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getSubHeadId(), hrData.getUnitId(), req.getFinYearId(), req.getAllocationTypeId(), "0");
         List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis1.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
@@ -3895,7 +3950,7 @@ public class MangeReportImpl implements MangeReportService {
             table1.setWidthPercentage(100);
             Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
             PdfPCell cell1 = new PdfPCell(new Phrase("FINANCIAL YEAR : " + findyr.getFinYear(), cellFont));
-            PdfPCell cell2 = new PdfPCell(new Phrase("SUBHEAD :" + bHead.getSubHeadDescr(), cellFont));
+            PdfPCell cell2 = new PdfPCell(new Phrase(bHeadType+" :" + bHead.getSubHeadDescr(), cellFont));
             cell1.setPadding(15);
             cell2.setPadding(15);
 
@@ -4066,9 +4121,14 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
+        String bHeadType="";
+        BudgetHead bHead = subHeadRepository.findByBudgetCodeId(req.getSubHeadId());
+        if(bHead.getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+bHead.getRemark()+" "+"HEAD";
 
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(req.getFinYearId());
-        BudgetHead bHead = subHeadRepository.findByBudgetCodeId(req.getSubHeadId());
         List<BudgetAllocation> budgetAllocationsDetaliss = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getSubHeadId(), hrData.getUnitId(), req.getFinYearId(), req.getAllocationTypeId(), "0");
         List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationsDetaliss.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
         List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis1.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
@@ -4110,7 +4170,7 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
             boldText(paragraphtableRowOne.createRun(), 12, "FINANCIAL YEAR : " + findyr.getFinYear(), true);
             XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
-            boldText(paragraphtableRowOne1.createRun(), 12, "SUBHEAD : " + bHead.getSubHeadDescr(), true);
+            boldText(paragraphtableRowOne1.createRun(), 12, bHeadType+": " + bHead.getSubHeadDescr(), true);
 
             XWPFParagraph spacingParagraph = document.createParagraph();
             spacingParagraph.setSpacingAfter(0);
@@ -4362,18 +4422,25 @@ public class MangeReportImpl implements MangeReportService {
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
         AllocationType type = allocationRepository.findByAllocTypeId(allocationType);
 
-        List<BudgetAllocationDetails> check = budgetAllocationDetailsRepository.findByFromUnitAndFinYearAndAllocTypeIdAndIsBudgetRevision(hrData.getUnitId(), finYearId, allocationType, "0");
-        List<BudgetAllocationDetails> checks1 = check.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-        List<BudgetAllocationDetails> checks = checks1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
-        if (checks.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "RECORD NOT FOUND", HttpStatus.OK.value());
-        }
+
+        String bHeadType="";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
         List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
-        //List<String> rowDatas = budgetAllocationDetailsRepository.findSubHead(finYearId, allocationType, hrData.getUnitId());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, bHeadType+" "+"RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+
+        List<BudgetAllocationDetails> check = budgetAllocationDetailsRepository.findByFromUnitAndFinYearAndAllocTypeIdAndIsBudgetRevision(hrData.getUnitId(), finYearId, allocationType, "0");
+        List<BudgetAllocationDetails> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocationDetails> checks1 = mrge.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        List<BudgetAllocationDetails> checks = checks1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+        if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
@@ -4413,7 +4480,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPTable table = new PdfPTable(3);
             table.setWidthPercentage(100);
             Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
-            PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
+            PdfPCell cell1 = new PdfPCell(new Phrase(bHeadType, cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
             PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", cellFont));
             cell1.setPadding(10);
@@ -4474,6 +4541,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 BigDecimal decimal = new BigDecimal(sum);
                 BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+                double sumTotal=Double.parseDouble(String.valueOf(roundedAmount));
                 if (count != 0) {
                     PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL ", cellFont));
                     PdfPCell cell11 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
@@ -4485,7 +4553,7 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(cell11);
                     count = 0;
                 }
-                gdTotal += sum;
+                gdTotal += sumTotal;
 
             }
             BigDecimal decimal = new BigDecimal(gdTotal);
@@ -4523,14 +4591,6 @@ public class MangeReportImpl implements MangeReportService {
             tables1.addCell(cell300);
             tables1.addCell(cell400);
             document.add(tables1);
-/*            Paragraph heading1 = new Paragraph(formattedDateTime);
-            heading1.setAlignment(Paragraph.ALIGN_LEFT);
-            document.add(heading1);
-
-            document.add(new Paragraph("\n"));
-            Paragraph heading2 = new Paragraph(names + "\n" + unitName + "\n" + rank);
-            heading2.setAlignment(Paragraph.ALIGN_RIGHT);
-            document.add(heading2);*/
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
@@ -4597,20 +4657,24 @@ public class MangeReportImpl implements MangeReportService {
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
         AllocationType type = allocationRepository.findByAllocTypeId(allocationType);
 
-        List<BudgetAllocationDetails> check = budgetAllocationDetailsRepository.findByFromUnitAndFinYearAndAllocTypeIdAndIsBudgetRevision(hrData.getUnitId(), finYearId, allocationType, "0");
-        List<BudgetAllocationDetails> checks1 = check.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-        List<BudgetAllocationDetails> checks = checks1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
 
-        if (checks.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "RECORD NOT FOUND", HttpStatus.OK.value());
-        }
+        String bHeadType="";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
         List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
-        //List<String> rowDatas = budgetAllocationDetailsRepository.findSubHead(finYearId, allocationType, hrData.getUnitId());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
-
         if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, bHeadType+" "+"RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        List<BudgetAllocationDetails> check = budgetAllocationDetailsRepository.findByFromUnitAndFinYearAndAllocTypeIdAndIsBudgetRevision(hrData.getUnitId(), finYearId, allocationType, "0");
+        List<BudgetAllocationDetails> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocationDetails> checks1 = mrge.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        List<BudgetAllocationDetails> checks = checks1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+        if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
@@ -4643,7 +4707,7 @@ public class MangeReportImpl implements MangeReportService {
             table.setWidth("100%");
             XWPFTableRow tableRowOne = table.getRow(0);
             XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
-            boldText(paragraphtableRowOne.createRun(), 12, "REVENUE OBJECT HEAD ", true);
+            boldText(paragraphtableRowOne.createRun(), 12, bHeadType, true);
             XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
             boldText(paragraphtableRowOne1.createRun(), 12, "UNIT ", true);
             XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
@@ -4703,6 +4767,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 BigDecimal decimal = new BigDecimal(sum);
                 BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+                double sumTotal=Double.parseDouble(String.valueOf(roundedAmount));
                 if (count != 0) {
                     XWPFTable table222 = document.createTable(1, 3);
                     table222.setWidth("100%");
@@ -4716,7 +4781,7 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
                     count = 0;
                 }
-                gdTotal += sum;
+                gdTotal += sumTotal;
 
             }
             BigDecimal decimal = new BigDecimal(gdTotal);
@@ -4818,20 +4883,24 @@ public class MangeReportImpl implements MangeReportService {
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
         AllocationType type = allocationRepository.findByAllocTypeId(allocationType);
 
-        List<BudgetAllocationDetails> check = budgetAllocationDetailsRepository.findByFromUnitAndFinYearAndAllocTypeIdAndIsBudgetRevision(hrData.getUnitId(), finYearId, allocationType, "0");
-        List<BudgetAllocationDetails> checks1 = check.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-        List<BudgetAllocationDetails> checks = checks1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
-
-        if (checks.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
-            }, "RECORD NOT FOUND", HttpStatus.OK.value());
-        }
+        String bHeadType="";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
         List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
-        //List<String> rowDatas = budgetAllocationDetailsRepository.findSubHead(finYearId, allocationType, hrData.getUnitId());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
-
         if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>(){
+            }, bHeadType+" "+"RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+
+        List<BudgetAllocationDetails> check = budgetAllocationDetailsRepository.findByFromUnitAndFinYearAndAllocTypeIdAndIsBudgetRevision(hrData.getUnitId(), finYearId, allocationType, "0");
+        List<BudgetAllocationDetails> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocationDetails> checks1 = mrge.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        List<BudgetAllocationDetails> checks = checks1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+        if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
@@ -4891,7 +4960,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getREAllocationReport(String finYearId, String allocationType, String amountTypeId) {
+    public ApiResponse<List<FilePathResponse>> getREAllocationReport(String finYearId, String allocationType, String amountTypeId,String majorHd) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -4912,6 +4981,10 @@ public class MangeReportImpl implements MangeReportService {
         if (amountTypeId == null || amountTypeId.isEmpty()) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (majorHd == null || majorHd.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
         if (hrDataList.size() == 0) {
@@ -4939,20 +5012,27 @@ public class MangeReportImpl implements MangeReportService {
         String allocType = allockData.getAllocType();
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
+
+        String bHeadType="";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
+        if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, bHeadType+" "+"RECORD NOT FOUND", HttpStatus.OK.value());
+        }
         List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
-        List<BudgetAllocation> checks = check.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
+        List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocation> checks = mrge.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
         if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
 
-
-        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType, frmUnit);
-        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
-        if (rowData.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "RECORD NOT FOUND", HttpStatus.OK.value());
-        }
         String amtType = "";
         String names = approveName;
         String unitName = hrData.getUnit();
@@ -4995,7 +5075,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPTable table = new PdfPTable(5);
             table.setWidthPercentage(100);
 
-            PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
+            PdfPCell cell1 = new PdfPCell(new Phrase(bHeadType, cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
             PdfPCell cell3 = new PdfPCell(new Phrase("ALLOCATION AMOUNT", cellFont));
             PdfPCell cell4 = new PdfPCell(new Phrase("ADDITIONAL AMOUNT", cellFont));
@@ -5018,7 +5098,7 @@ public class MangeReportImpl implements MangeReportService {
             double grTotalAlloc = 0;
             double grTotalAddition = 0;
             double grTotalSum = 0;
-            double amount = Float.valueOf(0);
+            double amount =0.0;
             double amountUnit;
             double finAmount;
             double revisedAmount;
@@ -5105,6 +5185,10 @@ public class MangeReportImpl implements MangeReportService {
                 BigDecimal decimal1 = new BigDecimal(sumRE);
                 BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
 
+                double totSum1=Double.parseDouble(String.valueOf(roundedAmount));
+                double totSum2=Double.parseDouble(String.valueOf(roundedAmount1));
+                double totSum=totSum1+totSum2;
+
                 BigDecimal decimal2 = new BigDecimal(sumExisting+sumRE);
                 BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
 
@@ -5126,7 +5210,7 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell301 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", roundedAmount3), cellFont));
                     PdfPCell cell302 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", roundedAmount1), cellFont));
                     PdfPCell cell303 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
-                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f",sumExisting+sumRE), cellFont));
+                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f",totSum), cellFont));
                     cell10.setPadding(10);
                     cell20.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                     cell301.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -5146,24 +5230,24 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(cell40);
                     count = 0;
                 }
-                grTotalAlloc += sumExisting;
-                grTotalAddition += sumRE;
+                grTotalAlloc += totSum1;
+                grTotalAddition += totSum2;
                 grTotalSum += (sumExisting + sumRE);
 
             }
-            BigDecimal decimal = new BigDecimal(grTotalAlloc);
+/*            BigDecimal decimal = new BigDecimal(grTotalAlloc);
             BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
 
             BigDecimal decimal1 = new BigDecimal(grTotalAddition);
             BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
 
             BigDecimal decimal2 = new BigDecimal(grTotalSum);
-            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);*/
 
             PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
             PdfPCell cell01 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAlloc), cellFont));
             PdfPCell cell02 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAddition), cellFont));
-            PdfPCell cell03 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalSum), cellFont));
+            PdfPCell cell03 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAlloc+grTotalAddition), cellFont));
             cell00.setPadding(12);
             cell01.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell02.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -5200,14 +5284,6 @@ public class MangeReportImpl implements MangeReportService {
             tables1.addCell(cell300);
             tables1.addCell(cell400);
             document.add(tables1);
-/*            Paragraph heading1 = new Paragraph(formattedDateTime);
-            heading1.setAlignment(Paragraph.ALIGN_LEFT);
-            document.add(heading1);
-
-            document.add(new Paragraph("\n"));
-            Paragraph heading2 = new Paragraph(names + "\n" + unitName + "\n" + rank);
-            heading2.setAlignment(Paragraph.ALIGN_RIGHT);
-            document.add(heading2);*/
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
@@ -5224,7 +5300,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getREAllocationReportDoc(String finYearId, String allocationType, String amountTypeId) {
+    public ApiResponse<List<FilePathResponse>> getREAllocationReportDoc(String finYearId, String allocationType, String amountTypeId,String majorHd) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -5271,15 +5347,22 @@ public class MangeReportImpl implements MangeReportService {
         String allocType = allockData.getAllocType();
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
-        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
-        List<BudgetAllocation> checks = check.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
-        if (checks.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "RECORD NOT FOUND", HttpStatus.OK.value());
-        }
-        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType, frmUnit);
+        String bHeadType="";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, bHeadType+" "+"RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
+        List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocation> checks = mrge.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
+        if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
@@ -5319,7 +5402,7 @@ public class MangeReportImpl implements MangeReportService {
             table.setWidth("100%");
             XWPFTableRow tableRowOne = table.getRow(0);
             XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
-            boldText(paragraphtableRowOne.createRun(), 12, "REVENUE OBJECT HEAD ", true);
+            boldText(paragraphtableRowOne.createRun(), 12, bHeadType, true);
             XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
             boldText(paragraphtableRowOne1.createRun(), 12, "UNIT ", true);
             XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
@@ -5423,6 +5506,10 @@ public class MangeReportImpl implements MangeReportService {
                 BigDecimal decimal1 = new BigDecimal(sumRE);
                 BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
 
+                double totSum1=Double.parseDouble(String.valueOf(roundedAmount));
+                double totSum2=Double.parseDouble(String.valueOf(roundedAmount1));
+                double totSum=totSum1+totSum2;
+
                 BigDecimal decimal2 = new BigDecimal(sumExisting+sumRE);
                 BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
 
@@ -5458,20 +5545,20 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", roundedAmount1), true);
                 XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
                 paragraphtableRowOne2244.setAlignment(ParagraphAlignment.RIGHT);
-                boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", roundedAmount2), true);
+                boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", totSum), true);
 
-                grTotalAlloc += sumExisting;
-                grTotalAddition += sumRE;
+                grTotalAlloc += totSum1;
+                grTotalAddition += totSum2;
                 grTotalSum += (sumExisting + sumRE);
             }
-            BigDecimal decimal = new BigDecimal(grTotalAlloc);
+/*            BigDecimal decimal = new BigDecimal(grTotalAlloc);
             BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
 
             BigDecimal decimal1 = new BigDecimal(grTotalAddition);
             BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
 
             BigDecimal decimal2 = new BigDecimal(grTotalSum);
-            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);*/
 
             XWPFTable table223 = document.createTable(1, 5);
             table223.setWidth("100%");
@@ -5482,13 +5569,13 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne1223.createRun(), 12, "GRAND TOTAL ", true);
             XWPFParagraph paragraphtableRowOne2223 = tableRowOne223.getCell(2).addParagraph();
             paragraphtableRowOne2223.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
+            boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f", grTotalAlloc), true);
             XWPFParagraph paragraphtableRowOne2234 = tableRowOne223.getCell(3).addParagraph();
             paragraphtableRowOne2234.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2234.createRun(), 12, String.format("%1$0,1.4f", roundedAmount1), true);
+            boldText(paragraphtableRowOne2234.createRun(), 12, String.format("%1$0,1.4f", grTotalAddition), true);
             XWPFParagraph paragraphtableRowOne2245 = tableRowOne223.getCell(4).addParagraph();
             paragraphtableRowOne2245.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2245.createRun(), 12, String.format("%1$0,1.4f", roundedAmount2), true);
+            boldText(paragraphtableRowOne2245.createRun(), 12, String.format("%1$0,1.4f", grTotalAlloc+grTotalAddition), true);
 
             String names = approveName;
             String unitName = hrData.getUnit();
@@ -5525,7 +5612,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<RivisionReportResp>> getREAllocationReportExcel(String finYearId, String allocationType, String amountTypeId) {
+    public ApiResponse<List<RivisionReportResp>> getREAllocationReportExcel(String finYearId, String allocationType, String amountTypeId,String majorHd) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -5546,6 +5633,10 @@ public class MangeReportImpl implements MangeReportService {
         if (amountTypeId == null || amountTypeId.isEmpty()) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (majorHd == null || majorHd.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
         if (hrDataList.size() == 0) {
@@ -5573,15 +5664,22 @@ public class MangeReportImpl implements MangeReportService {
         String allocType = allockData.getAllocType().toUpperCase();
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
-        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
-        List<BudgetAllocation> checks = check.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
-        if (checks.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
-            }, "RECORD NOT FOUND", HttpStatus.OK.value());
-        }
-        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType, frmUnit);
+        String bHeadType="";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
+            }, bHeadType+" "+"RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
+        List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocation> checks = mrge.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
+        if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
@@ -5669,7 +5767,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getBEREAllocationReport(String finYearId, String allocationTypeBE, String allocationTypeRE, String amountTypeId) {
+    public ApiResponse<List<FilePathResponse>> getBEREAllocationReport(String finYearId, String allocationTypeBE, String allocationTypeRE, String amountTypeId,String majorHd) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -5696,10 +5794,15 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        if (majorHd == null || majorHd.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
         if (allocationTypeBE.equalsIgnoreCase(allocationTypeRE)) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "BE or RE ALLOCATION CAN NOT BE SAME", HttpStatus.OK.value());
         }
+
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
         if (hrDataList.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
@@ -5721,21 +5824,27 @@ public class MangeReportImpl implements MangeReportService {
         AllocationType type = allocationRepository.findByAllocTypeId(allocationTypeBE);
         AllocationType types = allocationRepository.findByAllocTypeId(allocationTypeRE);
 
-/*        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationTypeBE, "0");
-        List<BudgetAllocation> checks = check.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-        if (checks.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "RECORD NOT FOUND", HttpStatus.OK.value());
-        }*/
-
-        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationTypeBE, frmUnit);
+        String bHeadType="";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, bHeadType+" "+"RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationTypeBE, "0");
+        List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocation> checks = mrge.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        if (checks.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
-        BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
+        BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType().toUpperCase();
@@ -5771,7 +5880,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPTable table = new PdfPTable(4);
             table.setWidthPercentage(100);
             Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
-            PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
+            PdfPCell cell1 = new PdfPCell(new Phrase(bHeadType, cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
             PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", cellFont));
             PdfPCell cell4 = new PdfPCell(new Phrase(types.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", cellFont));
@@ -5866,6 +5975,11 @@ public class MangeReportImpl implements MangeReportService {
 
                 BigDecimal decimal1 = new BigDecimal(reSum);
                 BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+                double totSum1=Double.parseDouble(String.valueOf(roundedAmount));
+                double totSum2=Double.parseDouble(String.valueOf(roundedAmount1));
+                double totSum=totSum1+totSum2;
+
                 if (count != 0) {
                     PdfPCell cell20 = new PdfPCell(new Phrase(" TOTAL", cellFont));
                     PdfPCell cell21 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
@@ -5881,8 +5995,8 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(cell22);
                     count = 0;
                 }
-                grTotalAlloc += sum;
-                grTotalAddition += reSum;
+                grTotalAlloc += totSum1;
+                grTotalAddition += totSum2;
 
             }
             BigDecimal decimal = new BigDecimal(grTotalAlloc);
@@ -5892,8 +6006,8 @@ public class MangeReportImpl implements MangeReportService {
             BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
 
             PdfPCell cell210 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-            PdfPCell cell211 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
-            PdfPCell cell212 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
+            PdfPCell cell211 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAlloc), cellFont));
+            PdfPCell cell212 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAddition), cellFont));
             cell210.setPadding(12);
             cell211.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell212.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -5928,14 +6042,6 @@ public class MangeReportImpl implements MangeReportService {
             tables1.addCell(cell300);
             tables1.addCell(cell400);
             document.add(tables1);
-/*            Paragraph heading1 = new Paragraph(formattedDateTime);
-            heading1.setAlignment(Paragraph.ALIGN_LEFT);
-            document.add(heading1);
-
-            document.add(new Paragraph("\n"));
-            Paragraph heading2 = new Paragraph(names + "\n" + unitName + "\n" + rank);
-            heading2.setAlignment(Paragraph.ALIGN_RIGHT);
-            document.add(heading2);*/
 
             document.close();
             FilePathResponse dto = new FilePathResponse();
@@ -5952,7 +6058,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getBEREAllocationReportDoc(String finYearId, String allocationTypeBE, String allocationTypeRE, String amountTypeId) {
+    public ApiResponse<List<FilePathResponse>> getBEREAllocationReportDoc(String finYearId, String allocationTypeBE, String allocationTypeRE, String amountTypeId,String majorHd) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -5979,6 +6085,10 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        if (majorHd == null || majorHd.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
         if (allocationTypeBE.equalsIgnoreCase(allocationTypeRE)) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "BE or RE ALLOCATION CAN NOT BE SAME", HttpStatus.OK.value());
@@ -6003,34 +6113,28 @@ public class MangeReportImpl implements MangeReportService {
         AllocationType type = allocationRepository.findByAllocTypeId(allocationTypeBE);
         AllocationType types = allocationRepository.findByAllocTypeId(allocationTypeRE);
 
-        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationTypeBE, frmUnit);
+
+        String bHeadType="";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, bHeadType+" "+"RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationTypeBE, "0");
+        List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocation> checks = mrge.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        if (checks.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
+
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
-/*
-        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-        if (cgUnit == null) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
-        }
-        String dBunit = cgUnit.getDescr();
-        List<CgUnit> units = new ArrayList<>();
-        if (dBunit.equalsIgnoreCase("D(Budget)")) {
-            units = cgUnitRepository.findAllByOrderByDescrAsc();
-        } else {
-            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
-            } else {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-            }
-        }
-        if (units.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
-        }*/
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType();
@@ -6059,7 +6163,7 @@ public class MangeReportImpl implements MangeReportService {
             table.setWidth("100%");
             XWPFTableRow tableRowOne = table.getRow(0);
             XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
-            boldText(paragraphtableRowOne.createRun(), 12, "REVENUE OBJECT HEAD ", true);
+            boldText(paragraphtableRowOne.createRun(), 12, bHeadType, true);
             XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
             boldText(paragraphtableRowOne1.createRun(), 12, "UNIT ", true);
             XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
@@ -6150,6 +6254,10 @@ public class MangeReportImpl implements MangeReportService {
                 BigDecimal decimal1 = new BigDecimal(reSum);
                 BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
 
+                double totSum1=Double.parseDouble(String.valueOf(roundedAmount));
+                double totSum2=Double.parseDouble(String.valueOf(roundedAmount1));
+                double totSum=totSum1+totSum2;
+
                 if (count != 0) {
                     XWPFTable table222 = document.createTable(1, 4);
                     table222.setWidth("100%");
@@ -6166,8 +6274,8 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", roundedAmount1), true);
                     count = 0;
                 }
-                grTotalAlloc += sum;
-                grTotalAddition += reSum;
+                grTotalAlloc += totSum1;
+                grTotalAddition += totSum2;
             }
             BigDecimal decimal = new BigDecimal(grTotalAlloc);
             BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
@@ -6183,10 +6291,10 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne1220.createRun(), 12, "GRAND TOTAL ", true);
             XWPFParagraph paragraphtableRowOne2220 = tableRowOne223.getCell(2).addParagraph();
             paragraphtableRowOne2220.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2220.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
+            boldText(paragraphtableRowOne2220.createRun(), 12, String.format("%1$0,1.4f", grTotalAlloc), true);
             XWPFParagraph paragraphtableRowOne2230 = tableRowOne223.getCell(3).addParagraph();
             paragraphtableRowOne2230.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", roundedAmount1), true);
+            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", grTotalAddition), true);
 
             String names = approveName;
             String unitName = hrData.getUnit();
@@ -6223,7 +6331,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<BEREResponce>> getBEREAllocationReportExcel(String finYearId, String allocationTypeBE, String allocationTypeRE, String amountTypeId) {
+    public ApiResponse<List<BEREResponce>> getBEREAllocationReportExcel(String finYearId, String allocationTypeBE, String allocationTypeRE, String amountTypeId,String majorHd) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -6250,6 +6358,10 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BEREResponce>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        if (majorHd == null || majorHd.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BEREResponce>>(){
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
         if (allocationTypeBE.equalsIgnoreCase(allocationTypeRE)) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BEREResponce>>() {
             }, "BE or RE ALLOCATION CAN NOT BE SAME", HttpStatus.OK.value());
@@ -6275,34 +6387,27 @@ public class MangeReportImpl implements MangeReportService {
         AllocationType type = allocationRepository.findByAllocTypeId(allocationTypeBE);
         AllocationType types = allocationRepository.findByAllocTypeId(allocationTypeRE);
 
-        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationTypeBE, frmUnit);
+
+        String bHeadType="";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BEREResponce>>() {
+            }, bHeadType+" "+"RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationTypeBE, "0");
+        List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocation> checks = mrge.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        if (checks.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BEREResponce>>(){
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
-
-/*        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-        if (cgUnit == null) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BEREResponce>>() {
-            }, "USER UNIT IS INVALID.PLEASE CHECK", HttpStatus.OK.value());
-        }
-        String dBunit = cgUnit.getDescr();
-        List<CgUnit> units = new ArrayList<>();
-        if (dBunit.equalsIgnoreCase("D(Budget)")) {
-            units = cgUnitRepository.findAllByOrderByDescrAsc();
-        } else {
-            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getSubUnit());
-            } else {
-                units = cgUnitRepository.findBySubUnitOrderByDescrAsc(cgUnit.getUnit());
-            }
-        }
-        if (units.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BEREResponce>>() {
-            }, "UNIT NOT FOUND", HttpStatus.OK.value());
-        }*/
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType();
@@ -6391,7 +6496,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getMainBEAllocationReport(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate) {
+    public ApiResponse<List<FilePathResponse>> getMainBEAllocationReport(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate,String majorHd) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -6424,6 +6529,11 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "TO DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        if (majorHd == null || majorHd.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
         if (hrDataList.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
@@ -6441,23 +6551,30 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
+
+        AllocationType type = allocationRepository.findByAllocTypeId(allocationType);
+
+        String bHeadType="";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
+        if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, bHeadType+" "+"RECORD NOT FOUND", HttpStatus.OK.value());
+        }
         List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
-        List<BudgetAllocation> checks = check.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocation> checks = mrge.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
         if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
 
-        AllocationType type = allocationRepository.findByAllocTypeId(allocationType);
-        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType, frmUnit);
-        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
-
-        if (rowData.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "RECORD NOT FOUND", HttpStatus.OK.value());
-        }
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
-
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType().toUpperCase();
@@ -6520,7 +6637,7 @@ public class MangeReportImpl implements MangeReportService {
 
             PdfPTable table = new PdfPTable(8);
             table.setWidthPercentage(100);
-            PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
+            PdfPCell cell1 = new PdfPCell(new Phrase(bHeadType, cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear() + " " + " Allocation to ICG", cellFont));
             PdfPCell cell3 = new PdfPCell(new Phrase("UNIT", cellFont));
             PdfPCell cell4 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase() + ": " + findyr.getFinYear() + " " + " Allocation", cellFont));
@@ -6710,20 +6827,24 @@ public class MangeReportImpl implements MangeReportService {
                 table.addCell(" ");
                 table.addCell(" ");
 
+                double tot = sum + hrfinAmount;
+                double ex = expsum / reqAmount;
+                double perc = (ex * 100) / tot;
+
+                BigDecimal decimal = new BigDecimal(tot);
+                BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+                BigDecimal decimal1 = new BigDecimal(ex);
+                BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+                BigDecimal decimal2 = new BigDecimal(perc);
+                BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+
+                double totSum1=Double.parseDouble(String.valueOf(roundedAmount));
+                double totSum2=Double.parseDouble(String.valueOf(roundedAmount1));
+                double totSum3=Double.parseDouble(String.valueOf(roundedAmount2));
+
                 if (count != 0) {
-                    double tot = sum + hrfinAmount;
-                    double ex = expsum / reqAmount;
-                    double perc = (ex * 100) / tot;
-
-                    BigDecimal decimal = new BigDecimal(tot);
-                    BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
-
-                    BigDecimal decimal1 = new BigDecimal(ex);
-                    BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
-
-                    BigDecimal decimal2 = new BigDecimal(perc);
-                    BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
-
                     PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
                     PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
                     PdfPCell cell30 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
@@ -6732,7 +6853,6 @@ public class MangeReportImpl implements MangeReportService {
                     cell20.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                     cell30.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                     cell40.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-
 
                     table.addCell(" ");
                     table.addCell(" ");
@@ -6745,12 +6865,12 @@ public class MangeReportImpl implements MangeReportService {
                     count = 0;
                 }
                 grTotalIcg += IcgAmount;
-                grTotalAlloc += sum + hrfinAmount;
-                grTotalAddition += expsum;
-                grTotalSum += percentagesum;
+                grTotalAlloc += totSum1;
+                grTotalAddition += totSum2;
+                grTotalSum += totSum3;
 
             }
-            BigDecimal decimal = new BigDecimal(grTotalIcg);
+/*            BigDecimal decimal = new BigDecimal(grTotalIcg);
             BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
 
             BigDecimal decimal1 = new BigDecimal(grTotalAlloc);
@@ -6760,13 +6880,13 @@ public class MangeReportImpl implements MangeReportService {
             BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
 
             BigDecimal decimal3 = new BigDecimal((grTotalAddition / reqAmount) * 100 / grTotalAlloc);
-            BigDecimal roundedAmount3 = decimal3.setScale(4, RoundingMode.HALF_UP);
+            BigDecimal roundedAmount3 = decimal3.setScale(4, RoundingMode.HALF_UP);*/
 
             PdfPCell cell50 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-            PdfPCell cell51 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
-            PdfPCell cell60 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
-            PdfPCell cell70 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount2), cellFont));
-            PdfPCell cell80 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount3), cellFont));
+            PdfPCell cell51 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalIcg), cellFont));
+            PdfPCell cell60 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAlloc), cellFont));
+            PdfPCell cell70 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAddition), cellFont));
+            PdfPCell cell80 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalSum), cellFont));
             cell50.setPadding(12);
             cell51.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell60.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -6831,7 +6951,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getMainBEAllocationReportDoc(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate) {
+    public ApiResponse<List<FilePathResponse>> getMainBEAllocationReportDoc(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate,String majorHd) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -6864,6 +6984,10 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "TO DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        if (majorHd == null || majorHd.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
         if (hrDataList.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
@@ -6881,22 +7005,30 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
+
+        AllocationType type = allocationRepository.findByAllocTypeId(allocationType);
+
+        String bHeadType="";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
+        if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, bHeadType+" "+"RECORD NOT FOUND", HttpStatus.OK.value());
+        }
         List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
-        List<BudgetAllocation> checks = check.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocation> checks = mrge.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
         if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
-        AllocationType type = allocationRepository.findByAllocTypeId(allocationType);
-        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType, frmUnit);
-        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
 
-        if (rowData.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "RECORD NOT FOUND", HttpStatus.OK.value());
-        }
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
-
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType();
@@ -6967,7 +7099,7 @@ public class MangeReportImpl implements MangeReportService {
             table.setWidth("100%");
             XWPFTableRow tableRowOne = table.getRow(0);
             XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
-            boldText(paragraphtableRowOne.createRun(), 12, "REVENUE OBJECT HEAD ", true);
+            boldText(paragraphtableRowOne.createRun(), 12, bHeadType, true);
             XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
             boldText(paragraphtableRowOne1.createRun(), 12, type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear() + " " + "ALLOCATION TO ICG", true);
             XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
@@ -6985,8 +7117,8 @@ public class MangeReportImpl implements MangeReportService {
             double IcgAmount = 0.0;
             double grTotalAlloc = 0.0;
             double grTotalIcg = 0.0;
-            Float grTotalAddition = 0f;
-            Float grTotalSum = 0f;
+            double grTotalAddition = 0.0;
+            double grTotalSum = 0.0;
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
@@ -7156,20 +7288,24 @@ public class MangeReportImpl implements MangeReportService {
                 XWPFParagraph hrcell07 = hrrow0.getCell(7).addParagraph();
                 boldText(hrcell07.createRun(), 12, "", false);
 
+                double tot = sum + hrfinAmount;
+                double ex = expsum / reqAmount;
+                double perc = (ex * 100) / tot;
+
+                BigDecimal decimal = new BigDecimal(tot);
+                BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+                BigDecimal decimal1 = new BigDecimal(ex);
+                BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+                BigDecimal decimal2 = new BigDecimal(perc);
+                BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+
+                double totSum1=Double.parseDouble(String.valueOf(roundedAmount));
+                double totSum2=Double.parseDouble(String.valueOf(roundedAmount1));
+                double totSum3=Double.parseDouble(String.valueOf(roundedAmount2));
+
                 if (count != 0) {
-                    double tot = sum + hrfinAmount;
-                    double ex = expsum / reqAmount;
-                    double perc = (ex * 100) / tot;
-
-                    BigDecimal decimal = new BigDecimal(tot);
-                    BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
-
-                    BigDecimal decimal1 = new BigDecimal(ex);
-                    BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
-
-                    BigDecimal decimal2 = new BigDecimal(perc);
-                    BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
-
                     XWPFTable table222 = document.createTable(1, 8);
                     table222.setWidth("100%");
                     XWPFTableRow tableRowOne222 = table222.getRow(0);
@@ -7194,13 +7330,13 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne2277.createRun(), 12, "", true);
                 }
                 grTotalIcg += IcgAmount;
-                grTotalAlloc += sum + hrfinAmount;
-                grTotalAddition += expsum;
-                grTotalSum += percentagesum;
+                grTotalAlloc += totSum1;
+                grTotalAddition += totSum2;
+                grTotalSum += totSum3;
 
             }
 
-            BigDecimal decimal = new BigDecimal(grTotalIcg);
+/*            BigDecimal decimal = new BigDecimal(grTotalIcg);
             BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
 
             BigDecimal decimal1 = new BigDecimal(grTotalAlloc);
@@ -7210,7 +7346,7 @@ public class MangeReportImpl implements MangeReportService {
             BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
 
             BigDecimal decimal3 = new BigDecimal((grTotalAddition / reqAmount) * 100 / grTotalAlloc);
-            BigDecimal roundedAmount3 = decimal3.setScale(4, RoundingMode.HALF_UP);
+            BigDecimal roundedAmount3 = decimal3.setScale(4, RoundingMode.HALF_UP);*/
 
             XWPFTable table220 = document.createTable(1, 8);
             table220.setWidth("100%");
@@ -7219,18 +7355,18 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne220.createRun(), 12, "GRAND TOTAL", true);
             XWPFParagraph paragraphtableRowOne1220 = tableRowOne220.getCell(1).addParagraph();
             paragraphtableRowOne1220.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne1220.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
+            boldText(paragraphtableRowOne1220.createRun(), 12, String.format("%1$0,1.4f", grTotalIcg), true);
             XWPFParagraph paragraphtableRowOne2220 = tableRowOne220.getCell(2).addParagraph();
             boldText(paragraphtableRowOne2220.createRun(), 12, " ", true);
             XWPFParagraph paragraphtableRowOne2230 = tableRowOne220.getCell(3).addParagraph();
             paragraphtableRowOne2230.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", roundedAmount1), true);
+            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", grTotalAlloc), true);
             XWPFParagraph paragraphtableRowOne2200 = tableRowOne220.getCell(4).addParagraph();
             paragraphtableRowOne2200.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2200.createRun(), 12, String.format("%1$0,1.4f", roundedAmount2), true);
+            boldText(paragraphtableRowOne2200.createRun(), 12, String.format("%1$0,1.4f", grTotalAddition), true);
             XWPFParagraph paragraphtableRowOne2250 = tableRowOne220.getCell(5).addParagraph();
             paragraphtableRowOne2250.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2250.createRun(), 12, String.format("%1$0,1.4f", roundedAmount3), true);
+            boldText(paragraphtableRowOne2250.createRun(), 12, String.format("%1$0,1.4f", grTotalSum), true);
             XWPFParagraph paragraphtableRowOne2260 = tableRowOne220.getCell(6).addParagraph();
             boldText(paragraphtableRowOne2260.createRun(), 12, "", true);
             XWPFParagraph paragraphtableRowOne2270 = tableRowOne220.getCell(7).addParagraph();
@@ -7271,7 +7407,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FerResponse>> getMainBEAllocationReportExcel(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate) {
+    public ApiResponse<List<FerResponse>> getMainBEAllocationReportExcel(String finYearId, String allocationType, String amountTypeId, String fromDate, String toDate,String majorHd) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -7304,6 +7440,10 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
             }, "TO DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        if (majorHd == null || majorHd.isEmpty()) {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
         if (hrDataList.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
@@ -7321,26 +7461,32 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
-        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
-        List<BudgetAllocation> checks = check.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-        if (checks.size() <= 0) {
-            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
-            }, "RECORD NOT FOUND", HttpStatus.OK.value());
-        }
 
         AllocationType type = allocationRepository.findByAllocTypeId(allocationType);
-        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationType, frmUnit);
-        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
-
-        if (rowData.size() <= 0) {
-            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
-            }, "RECORD NOT FOUND", HttpStatus.OK.value());
-        }
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
-
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType();
+        String bHeadType="";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
+        if (rowData.size() <= 0) {
+           return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>()  {
+            }, bHeadType+" "+"RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
+        List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocation> checks = mrge.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        if (checks.size() <= 0) {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>()  {
+            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+
 
         try {
             int i = 1;
@@ -8276,7 +8422,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getMAAllocationReport(String finYearId, String allocationTypeBE, String allocationTypeRE, String allocationTypeMA, String amountTypeId) {
+    public ApiResponse<List<FilePathResponse>> getMAAllocationReport(String finYearId, String allocationTypeBE, String allocationTypeRE, String allocationTypeMA, String amountTypeId,String majorHd) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -8307,6 +8453,10 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        if (majorHd == null || majorHd.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
         if (allocationTypeBE.equalsIgnoreCase(allocationTypeRE) || allocationTypeBE.equalsIgnoreCase(allocationTypeMA) || allocationTypeRE.equalsIgnoreCase(allocationTypeMA)) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "BE or RE or MA ALLOCATION CAN NOT BE SAME", HttpStatus.OK.value());
@@ -8333,21 +8483,28 @@ public class MangeReportImpl implements MangeReportService {
         AllocationType types = allocationRepository.findByAllocTypeId(allocationTypeRE);
         AllocationType typesMA = allocationRepository.findByAllocTypeId(allocationTypeMA);
 
-/*        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationTypeBE, "0");
-        List<BudgetAllocation> checks = check.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-        if (checks.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "RECORD NOT FOUND", HttpStatus.OK.value());
-        }*/
 
-        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationTypeBE, frmUnit);
+        String bHeadType="";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, bHeadType+" "+"RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationTypeBE, "0");
+        List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocation> checks = mrge.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        if (checks.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
-        BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
+        BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType().toUpperCase();
@@ -8383,7 +8540,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPTable table = new PdfPTable(5);
             table.setWidthPercentage(100);
             Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
-            PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
+            PdfPCell cell1 = new PdfPCell(new Phrase(bHeadType, cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
             PdfPCell cell3 = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", cellFont));
             PdfPCell cell4 = new PdfPCell(new Phrase(types.getAllocDesc().toUpperCase() + " " + "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", cellFont));
@@ -8418,18 +8575,19 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 int count = 0;
                 float sum = 0;
-                Float amount = Float.valueOf(0);
-                Float amountUnit;
-                Float finAmount;
                 float reSum = 0;
                 float maSum = 0;
-                Float reAmountUnit = 0.0f;
-                Float reFinalAmount = 0.0f;
-                Float reTotalAmount = 0.0f;
+                double amount =0.0;
+                double amountUnit;
+                double finAmount;
 
-                Float maAmountUnit = 0.0f;
-                Float maFinalAmount = 0.0f;
-                Float maTotalAmount = 0.0f;
+                double reAmountUnit = 0.0;
+                double reFinalAmount = 0.0;
+                double reTotalAmount = 0.0;
+
+                double maAmountUnit = 0.0;
+                double maFinalAmount = 0.0;
+                double maTotalAmount = 0.0;
 
                 for (BudgetAllocation row : reportDetails) {
 
@@ -8439,21 +8597,21 @@ public class MangeReportImpl implements MangeReportService {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                         }, type + " AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
-                    amount = Float.valueOf(row.getAllocationAmount());
-                    amountUnit = Float.parseFloat(amountTypeObj.getAmount() + "");
+                    amount = Double.parseDouble(row.getAllocationAmount());
+                    amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
 
                     List<BudgetAllocation> reData = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0");
                     if (reData.size() <= 0) {
                         reFinalAmount = 0.0000f;
                     } else {
-                        reTotalAmount = Float.valueOf(reData.get(0).getAllocationAmount());
+                        reTotalAmount = Double.parseDouble(reData.get(0).getAllocationAmount());
                         AmountUnit amountTypeRe = amountUnitRepository.findByAmountTypeId(reData.get(0).getAmountType());
                         if (amountTypeRe == null) {
                             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                             }, types + " AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                         }
-                        reAmountUnit = Float.parseFloat(amountTypeRe.getAmount() + "");
+                        reAmountUnit = Double.parseDouble(amountTypeRe.getAmount() + "");
                         reFinalAmount = reTotalAmount * reAmountUnit / reqAmount;
                     }
 
@@ -8461,13 +8619,13 @@ public class MangeReportImpl implements MangeReportService {
                     if (maData.size() <= 0) {
                         maFinalAmount = 0.0000f;
                     } else {
-                        maTotalAmount = Float.valueOf(reData.get(0).getAllocationAmount());
+                        maTotalAmount = Double.parseDouble(reData.get(0).getAllocationAmount());
                         AmountUnit amountTypeMa = amountUnitRepository.findByAmountTypeId(maData.get(0).getAmountType());
                         if (amountTypeObj == null) {
                             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                             }, typesMA + " AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                         }
-                        maAmountUnit = Float.parseFloat(amountTypeMa.getAmount() + "");
+                        maAmountUnit = Double.parseDouble(amountTypeMa.getAmount() + "");
                         maFinalAmount = maTotalAmount * maAmountUnit / reqAmount;
                     }
 
@@ -8514,6 +8672,10 @@ public class MangeReportImpl implements MangeReportService {
                 BigDecimal decimal2 = new BigDecimal(maSum);
                 BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
 
+                double totSum1=Double.parseDouble(String.valueOf(roundedAmount));
+                double totSum2=Double.parseDouble(String.valueOf(roundedAmount1));
+                double totSum3=Double.parseDouble(String.valueOf(roundedAmount2));
+
                 if (count != 0) {
                     PdfPCell cell20 = new PdfPCell(new Phrase(" TOTAL", cellFont));
                     PdfPCell cell21 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
@@ -8532,24 +8694,24 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(cell23);
                     count = 0;
                 }
-                grTotalAlloc += sum;
-                grTotalAddition += reSum;
-                grTotalMa += maSum;
+                grTotalAlloc += totSum1;
+                grTotalAddition += totSum2;
+                grTotalMa += totSum3;
 
             }
-            BigDecimal decimal = new BigDecimal(grTotalAlloc);
+/*            BigDecimal decimal = new BigDecimal(grTotalAlloc);
             BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
 
             BigDecimal decimal1 = new BigDecimal(grTotalAddition);
             BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
 
             BigDecimal decimal2 = new BigDecimal(grTotalMa);
-            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);*/
 
             PdfPCell cell210 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-            PdfPCell cell211 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
-            PdfPCell cell212 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
-            PdfPCell cell213 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount2), cellFont));
+            PdfPCell cell211 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAlloc), cellFont));
+            PdfPCell cell212 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAddition), cellFont));
+            PdfPCell cell213 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalMa), cellFont));
             cell210.setPadding(12);
             cell211.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell212.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -8609,7 +8771,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getMAAllocationReportDoc(String finYearId, String allocationTypeBE, String allocationTypeRE, String allocationTypeMA, String amountTypeId) {
+    public ApiResponse<List<FilePathResponse>> getMAAllocationReportDoc(String finYearId, String allocationTypeBE, String allocationTypeRE, String allocationTypeMA, String amountTypeId,String majorHd) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -8635,6 +8797,10 @@ public class MangeReportImpl implements MangeReportService {
         if (allocationTypeMA == null || allocationTypeMA.isEmpty()) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "ALLOCATION TYPE MA CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (majorHd == null || majorHd.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
         if (amountTypeId == null || amountTypeId.isEmpty()) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
@@ -8665,9 +8831,22 @@ public class MangeReportImpl implements MangeReportService {
         AllocationType types = allocationRepository.findByAllocTypeId(allocationTypeRE);
         AllocationType typesMA = allocationRepository.findByAllocTypeId(allocationTypeMA);
 
-        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationTypeBE, frmUnit);
+        String bHeadType="";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, bHeadType+" "+"RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationTypeBE, "0");
+        List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocation> checks = mrge.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
@@ -8705,7 +8884,7 @@ public class MangeReportImpl implements MangeReportService {
             table.setWidth("100%");
             XWPFTableRow tableRowOne = table.getRow(0);
             XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
-            boldText(paragraphtableRowOne.createRun(), 12, "REVENUE OBJECT HEAD ", true);
+            boldText(paragraphtableRowOne.createRun(), 12, bHeadType, true);
             XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
             boldText(paragraphtableRowOne1.createRun(), 12, "UNIT ", true);
             XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
@@ -8732,18 +8911,20 @@ public class MangeReportImpl implements MangeReportService {
 
                 int count = 0;
                 float sum = 0;
-                Float amount = Float.valueOf(0);
-                Float amountUnit;
-                Float finAmount;
                 float reSum = 0;
-                Float reAmountUnit = 0.0f;
-                Float reFinalAmount = 0.0f;
-                Float reTotalAmount = 0.0f;
-
                 float maSum = 0;
-                Float maAmountUnit = 0.0f;
-                Float maFinalAmount = 0.0f;
-                Float maTotalAmount = 0.0f;
+
+                double amount = 0.0;
+                double amountUnit;
+                double finAmount;
+
+                double reAmountUnit = 0.0;
+                double reFinalAmount = 0.0;
+                double reTotalAmount = 0.0;
+
+                double maAmountUnit = 0.0;
+                double maFinalAmount = 0.0;
+                double maTotalAmount = 0.0;
 
                 for (Integer r = 0; r < reportDetails.size(); r++) {
 
@@ -8753,21 +8934,21 @@ public class MangeReportImpl implements MangeReportService {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                         }, type + "  AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
-                    amount = Float.valueOf(reportDetails.get(r).getAllocationAmount());
-                    amountUnit = Float.parseFloat(amountTypeObj.getAmount() + "");
+                    amount = Double.parseDouble(reportDetails.get(r).getAllocationAmount());
+                    amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
 
                     List<BudgetAllocation> reData = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0");
                     if (reData.size() <= 0) {
                         reFinalAmount = 0.0000f;
                     } else {
-                        reTotalAmount = Float.valueOf(reData.get(0).getAllocationAmount());
+                        reTotalAmount = Double.parseDouble(reData.get(0).getAllocationAmount());
                         AmountUnit amountTypeRe = amountUnitRepository.findByAmountTypeId(reData.get(0).getAmountType());
                         if (amountTypeRe == null) {
                             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                             }, types + " AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                         }
-                        reAmountUnit = Float.parseFloat(amountTypeRe.getAmount() + "");
+                        reAmountUnit = Double.parseDouble(amountTypeRe.getAmount() + "");
                         reFinalAmount = reTotalAmount * reAmountUnit / reqAmount;
                     }
 
@@ -8775,13 +8956,13 @@ public class MangeReportImpl implements MangeReportService {
                     if (maData.size() <= 0) {
                         maFinalAmount = 0.0000f;
                     } else {
-                        maTotalAmount = Float.valueOf(reData.get(0).getAllocationAmount());
+                        maTotalAmount = Double.parseDouble(reData.get(0).getAllocationAmount());
                         AmountUnit amountTypeMa = amountUnitRepository.findByAmountTypeId(maData.get(0).getAmountType());
                         if (amountTypeObj == null) {
                             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                             }, typesMA + " AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                         }
-                        maAmountUnit = Float.parseFloat(amountTypeMa.getAmount() + "");
+                        maAmountUnit = Double.parseDouble(amountTypeMa.getAmount() + "");
                         maFinalAmount = maTotalAmount * maAmountUnit / reqAmount;
                     }
 
@@ -8832,6 +9013,10 @@ public class MangeReportImpl implements MangeReportService {
                 BigDecimal decimal2 = new BigDecimal(maSum);
                 BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
 
+                double totSum1=Double.parseDouble(String.valueOf(roundedAmount));
+                double totSum2=Double.parseDouble(String.valueOf(roundedAmount1));
+                double totSum3=Double.parseDouble(String.valueOf(roundedAmount2));
+
                 if (count != 0) {
                     XWPFTable table222 = document.createTable(1, 5);
                     table222.setWidth("100%");
@@ -8851,18 +9036,18 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", roundedAmount2), true);
                     count = 0;
                 }
-                grTotalAlloc += sum;
-                grTotalAddition += reSum;
-                grTotalMA += reSum;
+                grTotalAlloc += totSum1;
+                grTotalAddition += totSum2;
+                grTotalMA += totSum3;
             }
-            BigDecimal decimal = new BigDecimal(grTotalAlloc);
+/*            BigDecimal decimal = new BigDecimal(grTotalAlloc);
             BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
 
             BigDecimal decimal1 = new BigDecimal(grTotalAddition);
             BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
 
             BigDecimal decimal2 = new BigDecimal(grTotalMA);
-            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);*/
 
             XWPFTable table223 = document.createTable(1, 5);
             table223.setWidth("100%");
@@ -8873,13 +9058,13 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne1220.createRun(), 12, "GRAND TOTAL ", true);
             XWPFParagraph paragraphtableRowOne2220 = tableRowOne223.getCell(2).addParagraph();
             paragraphtableRowOne2220.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2220.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
+            boldText(paragraphtableRowOne2220.createRun(), 12, String.format("%1$0,1.4f", grTotalAlloc), true);
             XWPFParagraph paragraphtableRowOne2230 = tableRowOne223.getCell(3).addParagraph();
             paragraphtableRowOne2230.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", roundedAmount1), true);
+            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", grTotalAddition), true);
             XWPFParagraph paragraphtableRowOne1111 = tableRowOne223.getCell(4).addParagraph();
             paragraphtableRowOne1111.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne1111.createRun(), 12, String.format("%1$0,1.4f", roundedAmount2), true);
+            boldText(paragraphtableRowOne1111.createRun(), 12, String.format("%1$0,1.4f", grTotalMA), true);
 
             String names = approveName;
             String unitName = hrData.getUnit();
@@ -8916,7 +9101,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<MAResponceReport>> getMAAllocationReportExcel(String finYearId, String allocationTypeBE, String allocationTypeRE, String allocationTypeMA, String amountTypeId) {
+    public ApiResponse<List<MAResponceReport>> getMAAllocationReportExcel(String finYearId, String allocationTypeBE, String allocationTypeRE, String allocationTypeMA, String amountTypeId,String majorHd) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -8947,6 +9132,10 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<MAResponceReport>>() {
             }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
+        if (majorHd == null || majorHd.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<MAResponceReport>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
         if (allocationTypeBE.equalsIgnoreCase(allocationTypeRE) || allocationTypeBE.equalsIgnoreCase(allocationTypeMA) || allocationTypeRE.equalsIgnoreCase(allocationTypeMA)) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<MAResponceReport>>() {
             }, "BE or RE or MA ALLOCATION CAN NOT BE SAME", HttpStatus.OK.value());
@@ -8973,9 +9162,22 @@ public class MangeReportImpl implements MangeReportService {
         AllocationType types = allocationRepository.findByAllocTypeId(allocationTypeRE);
         AllocationType typesMA = allocationRepository.findByAllocTypeId(allocationTypeMA);
 
-        List<String> rowDatas = budgetAllocationRepository.findSubHead(finYearId, allocationTypeBE, frmUnit);
+        String bHeadType="";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        if(rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")){
+            bHeadType="DETAILED OBJECT HEAD";
+        }else
+            bHeadType="DETAILED"+" "+rowDatas0.get(0).getRemark()+" "+"HEAD";
+        List<String> rowDatas=rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<MAResponceReport>>() {
+            }, bHeadType+" "+"RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationTypeBE, "0");
+        List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocation> checks = mrge.stream().filter(e -> Float.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<MAResponceReport>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }

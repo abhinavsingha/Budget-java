@@ -168,51 +168,51 @@ public class ReportController {
     }
 
     //  RE ALLOCATION REPORT
-    @GetMapping("/getREAllocationReport/{finYearId}/{allocationType}/{amountTypeId}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getREAllocationReport(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId) {
-        return new ResponseEntity<>(mangeReportService.getREAllocationReport(finYearId, allocationType, amountTypeId), HttpStatus.OK);
+    @GetMapping("/getREAllocationReport/{finYearId}/{allocationType}/{amountTypeId}/{majorHd}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getREAllocationReport(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "majorHd") String majorHd) {
+        return new ResponseEntity<>(mangeReportService.getREAllocationReport(finYearId, allocationType, amountTypeId,majorHd), HttpStatus.OK);
     }
 
-    @GetMapping("/getREAllocationReportDoc/{finYearId}/{allocationType}/{amountTypeId}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getREAllocationReportDoc(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId) {
-        return new ResponseEntity<>(mangeReportService.getREAllocationReportDoc(finYearId, allocationType, amountTypeId), HttpStatus.OK);
+    @GetMapping("/getREAllocationReportDoc/{finYearId}/{allocationType}/{amountTypeId}/{majorHd}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getREAllocationReportDoc(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "majorHd") String majorHd) {
+        return new ResponseEntity<>(mangeReportService.getREAllocationReportDoc(finYearId, allocationType, amountTypeId,majorHd), HttpStatus.OK);
     }
 
-    @GetMapping("/getREAllocationReportExcel/{finYearId}/{allocationType}/{amountTypeId}")
-    public ResponseEntity<ApiResponse<List<RivisionReportResp>>> getREAllocationReportExcel(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId) {
-        return new ResponseEntity<>(mangeReportService.getREAllocationReportExcel(finYearId, allocationType, amountTypeId), HttpStatus.OK);
+    @GetMapping("/getREAllocationReportExcel/{finYearId}/{allocationType}/{amountTypeId}/{majorHd}")
+    public ResponseEntity<ApiResponse<List<RivisionReportResp>>> getREAllocationReportExcel(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "majorHd") String majorHd) {
+        return new ResponseEntity<>(mangeReportService.getREAllocationReportExcel(finYearId, allocationType, amountTypeId,majorHd), HttpStatus.OK);
     }
 
     //  BEandRE ALLOCATION REPORT
-    @GetMapping("/getBEREAllocationReport/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{amountTypeId}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getBEREAllocationReport(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeBE") String allocationTypeBE, @PathVariable(value = "allocationTypeRE") String allocationTypeRE, @PathVariable(value = "amountTypeId") String amountTypeId) {
-        return new ResponseEntity<>(mangeReportService.getBEREAllocationReport(finYearId, allocationTypeBE, allocationTypeRE, amountTypeId), HttpStatus.OK);
+    @GetMapping("/getBEREAllocationReport/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{amountTypeId}/{majorHd}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getBEREAllocationReport(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeBE") String allocationTypeBE, @PathVariable(value = "allocationTypeRE") String allocationTypeRE, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "majorHd") String majorHd) {
+        return new ResponseEntity<>(mangeReportService.getBEREAllocationReport(finYearId, allocationTypeBE, allocationTypeRE, amountTypeId,majorHd), HttpStatus.OK);
     }
 
-    @GetMapping("/getBEREAllocationReportDoc/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{amountTypeId}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getBEREAllocationReportDoc(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeBE") String allocationTypeBE, @PathVariable(value = "allocationTypeRE") String allocationTypeRE, @PathVariable(value = "amountTypeId") String amountTypeId) {
-        return new ResponseEntity<>(mangeReportService.getBEREAllocationReportDoc(finYearId, allocationTypeBE, allocationTypeRE, amountTypeId), HttpStatus.OK);
+    @GetMapping("/getBEREAllocationReportDoc/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{amountTypeId}/{majorHd}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getBEREAllocationReportDoc(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeBE") String allocationTypeBE, @PathVariable(value = "allocationTypeRE") String allocationTypeRE, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "majorHd") String majorHd) {
+        return new ResponseEntity<>(mangeReportService.getBEREAllocationReportDoc(finYearId, allocationTypeBE, allocationTypeRE, amountTypeId,majorHd), HttpStatus.OK);
     }
 
-    @GetMapping("/getBEREAllocationReportExcel/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{amountTypeId}")
-    public ResponseEntity<ApiResponse<List<BEREResponce>>> getBEREAllocationReportExcel(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeBE") String allocationTypeBE, @PathVariable(value = "allocationTypeRE") String allocationTypeRE, @PathVariable(value = "amountTypeId") String amountTypeId) {
-        return new ResponseEntity<>(mangeReportService.getBEREAllocationReportExcel(finYearId, allocationTypeBE, allocationTypeRE, amountTypeId), HttpStatus.OK);
+    @GetMapping("/getBEREAllocationReportExcel/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{amountTypeId}/{majorHd}")
+    public ResponseEntity<ApiResponse<List<BEREResponce>>> getBEREAllocationReportExcel(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeBE") String allocationTypeBE, @PathVariable(value = "allocationTypeRE") String allocationTypeRE, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "majorHd") String majorHd) {
+        return new ResponseEntity<>(mangeReportService.getBEREAllocationReportExcel(finYearId, allocationTypeBE, allocationTypeRE, amountTypeId,majorHd), HttpStatus.OK);
     }
 
     //  FER ALLOCATION REPORT
-    @GetMapping("/getMainBEAllocationReport/{finYearId}/{allocationType}/{amountTypeId}/{fromDate}/{toDate}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getMainBEAllocationReport(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "fromDate") String fromDate, @PathVariable(value = "toDate") String toDate) {
-        return new ResponseEntity<>(mangeReportService.getMainBEAllocationReport(finYearId, allocationType, amountTypeId, fromDate, toDate), HttpStatus.OK);
+    @GetMapping("/getMainBEAllocationReport/{finYearId}/{allocationType}/{amountTypeId}/{fromDate}/{toDate}/{majorHd}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getMainBEAllocationReport(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "fromDate") String fromDate, @PathVariable(value = "toDate") String toDate, @PathVariable(value = "majorHd") String majorHd) {
+        return new ResponseEntity<>(mangeReportService.getMainBEAllocationReport(finYearId, allocationType, amountTypeId, fromDate, toDate,majorHd), HttpStatus.OK);
     }
 
-    @GetMapping("/getMainBEAllocationReportDoc/{finYearId}/{allocationType}/{amountTypeId}/{fromDate}/{toDate}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getMainBEAllocationReportDoc(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "fromDate") String fromDate, @PathVariable(value = "toDate") String toDate) {
-        return new ResponseEntity<>(mangeReportService.getMainBEAllocationReportDoc(finYearId, allocationType, amountTypeId, fromDate, toDate), HttpStatus.OK);
+    @GetMapping("/getMainBEAllocationReportDoc/{finYearId}/{allocationType}/{amountTypeId}/{fromDate}/{toDate}/{majorHd}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getMainBEAllocationReportDoc(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "fromDate") String fromDate, @PathVariable(value = "toDate") String toDate, @PathVariable(value = "majorHd") String majorHd) {
+        return new ResponseEntity<>(mangeReportService.getMainBEAllocationReportDoc(finYearId, allocationType, amountTypeId, fromDate, toDate,majorHd), HttpStatus.OK);
     }
 
-    @GetMapping("/getMainBEAllocationReportExcel/{finYearId}/{allocationType}/{amountTypeId}/{fromDate}/{toDate}")
-    public ResponseEntity<ApiResponse<List<FerResponse>>> getMainBEAllocationReportExcel(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "fromDate") String fromDate, @PathVariable(value = "toDate") String toDate) {
-        return new ResponseEntity<>(mangeReportService.getMainBEAllocationReportExcel(finYearId, allocationType, amountTypeId, fromDate, toDate), HttpStatus.OK);
+    @GetMapping("/getMainBEAllocationReportExcel/{finYearId}/{allocationType}/{amountTypeId}/{fromDate}/{toDate}/{majorHd}")
+    public ResponseEntity<ApiResponse<List<FerResponse>>> getMainBEAllocationReportExcel(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "fromDate") String fromDate, @PathVariable(value = "toDate") String toDate, @PathVariable(value = "majorHd") String majorHd) {
+        return new ResponseEntity<>(mangeReportService.getMainBEAllocationReportExcel(finYearId, allocationType, amountTypeId, fromDate, toDate,majorHd), HttpStatus.OK);
     }
 
     //  UNIT REBASE ALLOCATION REPORT
@@ -232,19 +232,19 @@ public class ReportController {
     }
 
     //  MA ALLOCATION REPORT
-    @GetMapping("/getMAAllocationReport/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{allocationTypeMA}/{amountTypeId}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getMAAllocationReport(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeBE") String allocationTypeBE, @PathVariable(value = "allocationTypeRE") String allocationTypeRE,@PathVariable(value = "allocationTypeMA") String allocationTypeMA, @PathVariable(value = "amountTypeId") String amountTypeId) {
-        return new ResponseEntity<>(mangeReportService.getMAAllocationReport(finYearId, allocationTypeBE, allocationTypeRE,allocationTypeMA, amountTypeId), HttpStatus.OK);
+    @GetMapping("/getMAAllocationReport/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{allocationTypeMA}/{amountTypeId}/{majorHd}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getMAAllocationReport(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeBE") String allocationTypeBE, @PathVariable(value = "allocationTypeRE") String allocationTypeRE,@PathVariable(value = "allocationTypeMA") String allocationTypeMA, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "majorHd") String majorHd) {
+        return new ResponseEntity<>(mangeReportService.getMAAllocationReport(finYearId, allocationTypeBE, allocationTypeRE,allocationTypeMA, amountTypeId,majorHd), HttpStatus.OK);
     }
 
-    @GetMapping("/getMAAllocationReportDoc/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{allocationTypeMA}/{amountTypeId}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getMAAllocationReportDoc(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeBE") String allocationTypeBE, @PathVariable(value = "allocationTypeRE") String allocationTypeRE,@PathVariable(value = "allocationTypeMA") String allocationTypeMA, @PathVariable(value = "amountTypeId") String amountTypeId) {
-        return new ResponseEntity<>(mangeReportService.getMAAllocationReportDoc(finYearId, allocationTypeBE, allocationTypeRE,allocationTypeMA, amountTypeId), HttpStatus.OK);
+    @GetMapping("/getMAAllocationReportDoc/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{allocationTypeMA}/{amountTypeId}/{majorHd}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getMAAllocationReportDoc(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeBE") String allocationTypeBE, @PathVariable(value = "allocationTypeRE") String allocationTypeRE,@PathVariable(value = "allocationTypeMA") String allocationTypeMA, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "majorHd") String majorHd) {
+        return new ResponseEntity<>(mangeReportService.getMAAllocationReportDoc(finYearId, allocationTypeBE, allocationTypeRE,allocationTypeMA, amountTypeId,majorHd), HttpStatus.OK);
     }
 
-    @GetMapping("/getMAAllocationReportExcel/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{allocationTypeMA}/{amountTypeId}")
-    public ResponseEntity<ApiResponse<List<MAResponceReport>>> getMAAllocationReportExcel(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeBE") String allocationTypeBE, @PathVariable(value = "allocationTypeRE") String allocationTypeRE,@PathVariable(value = "allocationTypeMA") String allocationTypeMA, @PathVariable(value = "amountTypeId") String amountTypeId) {
-        return new ResponseEntity<>(mangeReportService.getMAAllocationReportExcel(finYearId, allocationTypeBE, allocationTypeRE,allocationTypeMA, amountTypeId), HttpStatus.OK);
+    @GetMapping("/getMAAllocationReportExcel/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{allocationTypeMA}/{amountTypeId}/{majorHd}")
+    public ResponseEntity<ApiResponse<List<MAResponceReport>>> getMAAllocationReportExcel(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeBE") String allocationTypeBE, @PathVariable(value = "allocationTypeRE") String allocationTypeRE,@PathVariable(value = "allocationTypeMA") String allocationTypeMA, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "majorHd") String majorHd) {
+        return new ResponseEntity<>(mangeReportService.getMAAllocationReportExcel(finYearId, allocationTypeBE, allocationTypeRE,allocationTypeMA, amountTypeId,majorHd), HttpStatus.OK);
     }
 
 

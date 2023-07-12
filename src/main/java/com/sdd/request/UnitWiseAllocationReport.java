@@ -10,5 +10,6 @@ public class UnitWiseAllocationReport {
     private String unitId;
     private String amountTypeId;
     private String allocationTypeId;
+    private String majorHd;
 
 }
