@@ -49,6 +49,9 @@ public class BudgetRebase {
     @Column(name = "BUDGETHEAD_ID")
     private String budgetHeadId;
 
+    @Column(name = "ALLOC_FROM_UNIT")
+    private String allocFromUnit;
+
     @Column(name = "ALLOC_AMOUNT")
     private String allocAmount;
 
@@ -57,6 +60,9 @@ public class BudgetRebase {
 
     @Column(name = "BAL_AMOUNT")
     private String balAmount;
+
+    @Column(name = "CDA_BAL_AMOUNT")
+    private String remCdaBal;
 
     @Column(name = "AMOUNT_TYPE")
     private String amountType;

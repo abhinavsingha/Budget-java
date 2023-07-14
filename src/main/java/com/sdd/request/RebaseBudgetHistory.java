@@ -15,12 +15,14 @@ import java.util.List;
 @Setter
 public class RebaseBudgetHistory {
     private String unit;
+    private String fromUnit;
     private String finYear;
     private String authGrupId;
     private BudgetHead subHead;
     private String allocatedAmount;
     private String expenditureAmount;
     private String remBal;
+    private String remCdaBal;
     private String status;
     private AmountUnit amountType;
     private AllocationType allocationType;

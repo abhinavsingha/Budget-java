@@ -335,6 +335,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
             amountUnit = amountTypeObj.getAmount();
             String allocId = allocationData.get(i).getAllocationTypeId();
             Double aAmount = Double.parseDouble(allocationData.get(i).getAllocationAmount());
+            CgUnit frmUnit = cgUnitRepository.findByUnit(allocationData.get(i).getFromUnit());
+            rebase.setFromUnit(frmUnit.getDescr());
             rebase.setUnit(unitdata.getDescr());
             rebase.setFinYear(Finyr.getFinYear());
             rebase.setAllocatedAmount(allocationData.get(i).getAllocationAmount());
@@ -346,6 +348,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             String bHead = allocationData.get(i).getSubHead();
             List<CdaParkingTrans> cdaDetails = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear, bHead, unit, allocId, "0");
             List<CdaDetailsForRebaseResponse> addRes = new ArrayList<CdaDetailsForRebaseResponse>();
+            double remCdaBal=0.0;
             if (cdaDetails.size() > 0) {
                 for (int j = 0; j < cdaDetails.size(); j++) {
                     CdaDetailsForRebaseResponse cda = new CdaDetailsForRebaseResponse();
@@ -355,12 +358,13 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     cda.setRemainingCdaAmount(cdaDetails.get(j).getRemainingCdaAmount());
                     cda.setRemarks(cdaDetails.get(j).getRemarks());
                     cda.setSubHeadId(cdaDetails.get(j).getBudgetHeadId());
+                    remCdaBal += Double.parseDouble(cdaDetails.get(j).getRemainingCdaAmount());
                     addRes.add(cda);
-
                 }
             }
+            rebase.setRemCdaBal(String.valueOf(remCdaBal));
             rebase.setCdaData(addRes);
-            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndStatusAndIsUpdateAndIsFlag(unit, finYear, bHead, "Approved", "0", "0");
+            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(unit, finYear, bHead, allocId,  "0");
             if (expenditure.size() > 0) {
                 double totalAmount = 0.0;
                 for (ContigentBill amount : expenditure) {
