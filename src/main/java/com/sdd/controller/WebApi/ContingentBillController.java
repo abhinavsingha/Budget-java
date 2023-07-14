@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class ContingentBillController {
 
-	@Autowired    
+	@Autowired
 	private ContingentService contingentService;
 
 	@PostMapping("/saveContingentBill")
@@ -45,6 +45,11 @@ public class ContingentBillController {
 	@GetMapping("/getCbGroupId/{groupId}")
 	public ResponseEntity<ApiResponse<List<ContingentBillResponse>>> getCbGroupId(@PathVariable("groupId") String groupId) {
 		return new ResponseEntity<>(contingentService.getContingentBillGroupId(groupId), HttpStatus.OK);
+	}
+
+	@GetMapping("/getMaxSectionNumber")
+	public ResponseEntity<ApiResponse<ContigentSectionResp>> getMaxSectionNumber() {
+		return new ResponseEntity<>(contingentService.getMaxSectionNumber(), HttpStatus.OK);
 	}
 
 	@PostMapping("/approveContingentBill")

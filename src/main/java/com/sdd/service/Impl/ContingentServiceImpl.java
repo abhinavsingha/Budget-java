@@ -48,6 +48,10 @@ public class ContingentServiceImpl implements ContingentService {
     BudgetFinancialYearRepository budgetFinancialYearRepository;
 
     @Autowired
+    CurrentStateRepository currentStateRepository;
+
+
+    @Autowired
     BudgetAllocationRepository budgetAllocationRepository;
 
     @Autowired
@@ -1058,6 +1062,52 @@ public class ContingentServiceImpl implements ContingentService {
         }
 
         return ResponseUtils.createSuccessResponse(contingentBillListData, new TypeReference<List<ContingentBillResponse>>() {
+        });
+    }
+
+    @Override
+    public ApiResponse<ContigentSectionResp> getMaxSectionNumber() {
+        ContigentSectionResp contingentBillListData = new ContigentSectionResp();
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.");
+        }
+
+        List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
+        if (allocationType.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID.");
+        }
+
+        BudgetFinancialYear budgetFinancialYear;
+        CurrntStateType stateList1 = currentStateRepository.findByTypeAndIsFlag("FINYEAR", "1");
+        if (stateList1 == null) {
+            budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo("01");
+
+        } else {
+            budgetFinancialYear =
+                    budgetFinancialYearRepository.findBySerialNo(stateList1.getStateId());
+
+        }
+
+        int maxNumber = 0;
+        List<ContigentBill> masNumberList = contigentBillRepository.findByAllocationTypeIdAndCbUnitIdAndFinYear(allocationType.get(0).getAllocTypeId(), hrData.getUnitId(), budgetFinancialYear.getSerialNo());
+        if (masNumberList.size() == 0) {
+            contingentBillListData.setSectionNumber("01");
+        } else {
+            for (Integer i = 0; i < masNumberList.size(); i++) {
+
+                int number = Integer.parseInt(masNumberList.get(i).getSectionNumber());
+                if (number > maxNumber) {
+                    maxNumber = number;
+                }
+            }
+            contingentBillListData.setSectionNumber(maxNumber + "");
+        }
+
+        return ResponseUtils.createSuccessResponse(contingentBillListData, new TypeReference<ContigentSectionResp>() {
         });
     }
 

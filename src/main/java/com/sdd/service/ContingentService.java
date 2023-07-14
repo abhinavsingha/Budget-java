@@ -15,13 +15,15 @@ public interface ContingentService {
 
 
 
-	ApiResponse<ContingentSaveResponse> saveContingentBill(ArrayList<ContingentBillSaveRequest> budgetAllocationReportRequest);
+    ApiResponse<ContingentSaveResponse> saveContingentBill(ArrayList<ContingentBillSaveRequest> budgetAllocationReportRequest);
 
     ApiResponse<ContingentSaveResponse> updateContingentBill(ArrayList<ContingentBillSaveRequest> contingentBillSaveRequest);
 
     ApiResponse<List<ContingentBillResponse>> getContingentBill();
 
     ApiResponse<List<ContingentBillResponse>> getContingentBillGroupId(String groupId);
+
+    ApiResponse<ContigentSectionResp> getMaxSectionNumber();
 
     ApiResponse<ContingentSaveResponse>  approveContingentBill(ApproveContigentBillRequest approveContigentBillRequest);
 
