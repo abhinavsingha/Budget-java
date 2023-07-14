@@ -2,6 +2,7 @@ package com.sdd.utils;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
+import com.sdd.entities.HrData;
 import com.sdd.response.CDAReportResponse;
 import com.sdd.response.CDAReportSubResponse;
 import com.sdd.response.CbReportResponse;
@@ -34,9 +35,16 @@ public class PdfGenaratorUtilMain {
         table.setSpacingAfter(20);
         table.setWidthPercentage(100);
 
-        table.addCell(boldText("SUB HEAD", 10, 25f));
+
+        if (filePathResponse.getSubHeadKey().contains("2037")) {
+            table.addCell(boldText("OBJECT HEAD", 10, 25f));
+        } else {
+            table.addCell(boldText("DETAILED HEAD", 10, 25f));
+        }
+
+
         table.addCell(boldText("UNIT NAME", 10, 25f));
-        table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 10, 25f));
+        table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + "ALLOCATION (In " + filePathResponse.getAmountType() + ")", 10, 25f));
 
         double grandTotal = 0f;
         for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
@@ -122,19 +130,15 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 10, 25f));
 
 
-
         if (filePathResponse.getSubHeadKey().equalsIgnoreCase("2037")) {
-            table.addCell(boldText(filePathResponse.getSubHeadKey()+"\n00.102.06", 10, 25f));
+            table.addCell(boldText(filePathResponse.getSubHeadKey() + "\n00.102.06", 10, 25f));
             table.addCell(boldText(filePathResponse.getRevenueOrCapital(), 10, 25f));
             table.addCell(boldText("", 10, 25f));
         } else {
-            table.addCell(boldText(filePathResponse.getSubHeadKey()+"\n00.037.01", 10, 25f));
+            table.addCell(boldText(filePathResponse.getSubHeadKey() + "\n00.037.01", 10, 25f));
             table.addCell(boldText(filePathResponse.getRevenueOrCapital(), 10, 25f));
             table.addCell(boldText("", 10, 25f));
         }
-
-
-
 
 
         double grandTotal = 0f;
@@ -457,7 +461,7 @@ public class PdfGenaratorUtilMain {
 
 
     @SuppressWarnings("rawtypes")
-    public void createContigentBillReport(CbReportResponse cbReportResponse, String path) throws Exception {
+    public void createContigentBillReport(CbReportResponse cbReportResponse, String path, HrData hrData) throws Exception {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = dateFormat.format(cbReportResponse.getCbData().getCbDate());
@@ -528,20 +532,21 @@ public class PdfGenaratorUtilMain {
 
         table.addCell(normalText("01", 9, 50f));
         table.addCell(normalText("Expenditure incurred towards quaterly payment for the 3rd otr from 01 Sep 22 to 30 Nov 22 in respect of Hirring of Designer/Developer IT Manpower (Project-SDOT) through " + cbReportResponse.getCbData().getVendorName() + " vibe Invoiice/bill " + cbReportResponse.getCbData().getInvoiceNO() + " Dated " + cbReportResponse.getCbData().getInvoiceDate(), 10, 50f));
-        table.addCell(normalText(ConverterUtils.addDecimalPoint("(INR)" + bill.toString()), 9, 50f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+        table.addCell(normalText(ConverterUtils.addDecimalPoint( bill.toString()), 9, 50f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
 
 
         table.addCell(normalText("", 9, 25f));
         table.addCell(normalText("GST " + cbReportResponse.getCbData().getGst() + " % ", 9, 25f));
-        table.addCell(normalText(ConverterUtils.addDecimalPoint("(INR)" + String.format("%.2f", gst)), 9, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+        table.addCell(normalText(ConverterUtils.addDecimalPoint( String.format("%.2f", gst)), 9, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
 
 
         table.addCell(normalText("", 9, 25f));
         table.addCell(normalText("TOTAL ", 9, 25f));
-        table.addCell(normalText(ConverterUtils.addDecimalPoint("(INR)" + cbReportResponse.getCurrentBillAmount()), 9, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+        table.addCell(normalText(ConverterUtils.addDecimalPoint( cbReportResponse.getCurrentBillAmount()), 9, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
 
         table.addCell(normalText("", 9, 25f));
-        table.addCell(boldText("Amount in words (Rupees " + convertDecimaltoString(cbReportResponse.getCurrentBillAmount()) + ")", 9, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);;
+        table.addCell(boldText("Amount in words (Rupees " + convertDecimaltoString(cbReportResponse.getCurrentBillAmount()) + ")", 9, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+        ;
         table.addCell(normalText("", 9, 25f));
 
 
@@ -567,10 +572,10 @@ public class PdfGenaratorUtilMain {
 
 
         Chunk certifyc1 = new Chunk("(c) The Expenditure incurred is creditable to Major Head ", normalFont);
-        Chunk certifyc2 = new Chunk(cbReportResponse.getBudgetHead().getMajorHead(), font);
-        Chunk certifyc3 = new Chunk(" Customs, Sub Major Head 00, Minor Head ", normalFont);
+        Chunk certifyc2 = new Chunk(cbReportResponse.getBudgetHead().getMajorHead()+",", font);
+        Chunk certifyc3 = new Chunk(" Sub Major Head 00, Minor Head ", normalFont);
         Chunk certifyc4 = new Chunk(cbReportResponse.getBudgetHead().getMinorHead(), font);
-        Chunk certifyc5 = new Chunk(", -preventive & other function 06 CG Organisation under Sub Head: ", normalFont);
+        Chunk certifyc5 = new Chunk(", " +cbReportResponse.getBudgetHead().getDetailHeadType()+":", normalFont);
         Chunk certifyc6 = new Chunk(cbReportResponse.getBudgetHead().getSubHeadDescr(), font);
         Chunk certifyc7 = new Chunk(".Category Code ", normalFont);
         Chunk certifyc8 = new Chunk(cbReportResponse.getBudgetHead().getBudgetHeadId() + " \n", font);
@@ -587,34 +592,61 @@ public class PdfGenaratorUtilMain {
         phraseFooter.add(certifyd);
 
 
-        Chunk veriferSign = new Chunk("                                                                                                                                                 " + cbReportResponse.getVerifer().getFullName() + " \n" + "                                                                                                                                          " + cbReportResponse.getVerifer().getRank() + " \n\n", normalFont);
-        phraseFooter.add(veriferSign);
+
+        PdfPTable tables1 = new PdfPTable(4);
+        tables1.setWidthPercentage(100);
+
+        PdfPCell cell100 = new PdfPCell(new Phrase(""));
+        PdfPCell cell200 = new PdfPCell(new Phrase(""));
+        PdfPCell cell300 = new PdfPCell(new Phrase(""));
+        PdfPCell cell400 = new PdfPCell(new Phrase(cbReportResponse.getVerifer().getFullName() + " \n" + cbReportResponse.getVerifer().getRank()));
+
+        cell100.setBorder(0);
+        cell200.setBorder(0);
+        cell300.setBorder(0);
+        cell400.setBorder(0);
+        cell400.setPadding(20);
+
+        tables1.addCell(cell100);
+        tables1.addCell(cell200);
+        tables1.addCell(cell300);
+        tables1.addCell(cell400);
+
+        phraseFooter.add(tables1);
+
+
 
 
         Font counterSign = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
-        Chunk counterSigner = new Chunk("                                                           COUNTERSIGNED" + " \n" + " \n", counterSign);
+        Chunk counterSigner = new Chunk("                                                               COUNTERSIGNED" + " \n" + " \n", counterSign);
         phraseFooter.add(counterSigner);
 
 
-        Chunk footer11 = new Chunk("Coast Guard Headquarters", font);
-        Chunk footer12 = new Chunk("                                                                                                    " + cbReportResponse.getApprover().getFullName() + " \n", normalFont);
-        phraseFooter.add(footer11);
-        phraseFooter.add(footer12);
 
+        PdfPTable tables11 = new PdfPTable(4);
+        tables11.setWidthPercentage(100);
 
-        Chunk footer21 = new Chunk("National Stadium Complex", font);
-        Chunk footer22 = new Chunk("                                                                                               " + cbReportResponse.getApprover().getRank() + " \n", normalFont);
-        phraseFooter.add(footer21);
-        phraseFooter.add(footer22);
+        PdfPCell cell10011 = new PdfPCell(new Phrase(hrData.getUnit()));
+        PdfPCell cell20011 = new PdfPCell(new Phrase(""));
+        PdfPCell cell30011 = new PdfPCell(new Phrase(""));
+        PdfPCell cell40011 = new PdfPCell(new Phrase(cbReportResponse.getApprover().getFullName() + " \n" + cbReportResponse.getApprover().getRank()));
 
+        cell10011.setBorder(0);
+        cell20011.setBorder(0);
+        cell30011.setBorder(0);
+        cell40011.setBorder(0);
+        cell40011.setPadding(20);
 
-        Chunk footer3 = new Chunk("New Delhi-110001 " + "\n\n", font);
-        phraseFooter.add(footer3);
+        tables11.addCell(cell10011);
+        tables11.addCell(cell20011);
+        tables11.addCell(cell30011);
+        tables11.addCell(cell40011);
+
+        phraseFooter.add(tables11);
 
 
         Chunk fileNumber = new Chunk("File No. " + cbReportResponse.getCbData().getFileID() + "\n", font);
         phraseFooter.add(fileNumber);
-
 
         Chunk fileDated = new Chunk("Date " + date(cbReportResponse.getCbData().getFileDate()) + "\n\n", font);
         phraseFooter.add(fileDated);

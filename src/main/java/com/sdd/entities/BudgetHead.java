@@ -58,4 +58,7 @@ public class BudgetHead {
 
   @Column(name = "SERIAL_NUMBER")
   private String serialNumber;
+
+  @Column(name = "Detail_Head_type")
+  private String detailHeadType;
 }

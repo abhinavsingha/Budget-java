@@ -147,16 +147,16 @@ public class MangeReportImpl implements MangeReportService {
 //            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndToUnitOrderByTransactionIdAsc(authGroupId, hrData.getUnitId());
         }
 
-        List<MangeInboxOutbox> mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupId(authGroupId);
-
-        if (mangeInboxOutbox.size() > 0) {
-
-            if (mangeInboxOutbox.get(0).getIsBgcg().equalsIgnoreCase("BR")) {
-                fileName = "BudgetReceipt" + hrData.getUnitId() + System.currentTimeMillis();
-            } else {
-                fileName = "AllocationReport" + hrData.getUnitId() + System.currentTimeMillis();
-            }
-        }
+//        List<MangeInboxOutbox> mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupId(authGroupId);
+//
+//        if (mangeInboxOutbox.size() > 0) {
+//
+//            if (mangeInboxOutbox.get(0).getIsBgcg().equalsIgnoreCase("BR")) {
+//                fileName = "BudgetReceipt" + hrData.getUnitId() + System.currentTimeMillis();
+//            } else {
+//                fileName = "AllocationReport" + hrData.getUnitId() + System.currentTimeMillis();
+//            }
+//        }
 
 
         if (budgetAllocationReport.size() <= 0) {
@@ -210,31 +210,31 @@ public class MangeReportImpl implements MangeReportService {
         FilePathResponse filePathResponse = new FilePathResponse();
         List<ReportSubModel> tabData = new ArrayList<ReportSubModel>();
 
+
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                filePathResponse.setApproveName(findHrData.getFullName());
+                filePathResponse.setApproveRank(findHrData.getRank());
+            }
+        }
+
+        if (approverPId.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO APPROVE ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
+        }
+
+
         for (Map.Entry<String, List<ReportSubModel>> entry : hashMap.entrySet()) {
-            key = entry.getKey();
+            String key111 = entry.getKey();
             tabData.addAll(entry.getValue());
-
-
-            List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
-            if (hrDataList.size() == 0) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
-            }
-
-            String approverPId = "";
-
-            for (Integer k = 0; k < hrDataList.size(); k++) {
-                HrData findHrData = hrDataList.get(k);
-                if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
-                    approverPId = findHrData.getPid();
-                    filePathResponse.setApproveName(findHrData.getFullName());
-                    filePathResponse.setApproveRank(findHrData.getRank());
-                }
-            }
-
-            if (approverPId.isEmpty()) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO APPROVE ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
-            }
-
         }
 
 
@@ -297,9 +297,6 @@ public class MangeReportImpl implements MangeReportService {
 
         } else {
             budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(authGroupId, "0");
-
-
-//            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndToUnitOrderByTransactionIdAsc(authGroupId, hrData.getUnitId());
         }
 
 
@@ -307,12 +304,14 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
         }
 
+        String key = "";
+
         for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
 
             BudgetHead budgetHead = subHeadRepository.findByBudgetCodeId(budgetAllocationReport.get(j).getSubHead());
             CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationReport.get(j).getToUnit());
             AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationReport.get(j).getAmountType());
-
+            key = budgetHead.getMajorHead();
             if (hashMap.containsKey(budgetHead.getSubHeadDescr())) {
 
                 List<ReportSubModel> reportMaindata = hashMap.get(budgetHead.getSubHeadDescr());
@@ -351,32 +350,30 @@ public class MangeReportImpl implements MangeReportService {
 
         FilePathResponse filePathResponse = new FilePathResponse();
         List<ReportSubModel> tabData = new ArrayList<ReportSubModel>();
-        String key = "";
+
+
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                filePathResponse.setApproveName(findHrData.getFullName());
+                filePathResponse.setApproveRank(findHrData.getRank());
+            }
+        }
+
+        if (approverPId.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO APPROVE ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
+        }
+
         for (Map.Entry<String, List<ReportSubModel>> entry : hashMap.entrySet()) {
-            key = entry.getKey();
             tabData.addAll(entry.getValue());
-
-
-            List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
-            if (hrDataList.size() == 0) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
-            }
-
-            String approverPId = "";
-
-            for (Integer k = 0; k < hrDataList.size(); k++) {
-                HrData findHrData = hrDataList.get(k);
-                if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
-                    approverPId = findHrData.getPid();
-                    filePathResponse.setApproveName(findHrData.getFullName());
-                    filePathResponse.setApproveRank(findHrData.getRank());
-                }
-            }
-
-            if (approverPId.isEmpty()) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO APPROVE ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
-            }
-
         }
 
 
@@ -385,25 +382,24 @@ public class MangeReportImpl implements MangeReportService {
 
         filePathResponse.setFinYear(budgetFinancialYear.getFinYear());
         filePathResponse.setUnit(tabData.get(0).getUnit());
-//        filePathResponse.setSubHead(key);
+
         filePathResponse.setType(allocationType.getAllocDesc());
         filePathResponse.setAmountType(tabData.get(0).getAmountType());
         filePathResponse.setRemark(tabData.get(0).getRemark());
 
 
+        filePathResponse.setSubHeadKey(key);
+        if (key.equalsIgnoreCase("2037")) {
+            filePathResponse.setRevenueOrCapital("REVENUE");
+        } else {
+            filePathResponse.setRevenueOrCapital("CAPITAL");
+        }
+
+
         try {
 
             String fileName = "AllocationReport" + hrData.getUnitId() + System.currentTimeMillis();
-            List<MangeInboxOutbox> mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupId(authGroupId);
 
-//            if (mangeInboxOutbox.size() > 0) {
-//
-//                if (mangeInboxOutbox.get(0).getIsBgcg().equalsIgnoreCase("BR")) {
-//                    fileName = "BudgetReceipt" + hrData.getUnitId() + System.currentTimeMillis();
-//                } else {
-//                    fileName = "AllocationReport" + hrData.getUnitId() + System.currentTimeMillis();
-//                }
-//            }
             File folder = new File(HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
@@ -1169,18 +1165,6 @@ public class MangeReportImpl implements MangeReportService {
 
         double allocationAmount = 0;
         double balanceAmount = 0;
-        List<BudgetAllocation> modBudgetAllocations = budgetAllocationRepository.findByToUnitAndSubHeadAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0");
-        if (modBudgetAllocations.size() == 0) {
-
-        } else {
-            allocationAmount = 0;
-            for (Integer i = 0; i < modBudgetAllocations.size(); i++) {
-                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(modBudgetAllocations.get(i).getAmountType());
-                allocationAmount = allocationAmount + (Double.parseDouble(modBudgetAllocations.get(i).getAllocationAmount()) * amountUnit.getAmount());
-//                balanceAmount = balanceAmount + (double.parseDouble(modBudgetAllocations.get(i).getBalanceAmount()) * amountUnit.getAmount());
-            }
-        }
-
 
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
         if (hrDataList.size() == 0) {
@@ -1232,7 +1216,27 @@ public class MangeReportImpl implements MangeReportService {
         cbReportResponse.setOnAurthyData(cbData.getAuthorityDetails());
         cbReportResponse.setExpenditureAmount(String.format("%.2f", expenditure));
         cbReportResponse.setCurrentBillAmount(String.format("%.2f", Double.parseDouble(cbData.getCbAmount())));
+
+
+        List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
+        if (allocationType.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
+        }
+
+
+        List<CdaParkingTrans> cdaAmountList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cbData.getFinYear(), cbData.getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
+        for (Integer k = 0; k < cdaAmountList.size(); k++) {
+
+            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaAmountList.get(k).getAmountType());
+
+            balanceAmount = balanceAmount + (Double.parseDouble(cdaAmountList.get(k).getRemainingCdaAmount()) * amountUnit.getAmount());
+            allocationAmount = allocationAmount + (Double.parseDouble(cdaAmountList.get(k).getTotalParkingAmount()) * amountUnit.getAmount());
+        }
+
+
         cbReportResponse.setAllocatedAmount(String.format("%.2f", allocationAmount));
+
+
         cbReportResponse.setCbData(cbData);
         cbReportResponse.setUnitData(unit);
         cbReportResponse.setBudgetHead(budgetHead);
@@ -1253,7 +1257,7 @@ public class MangeReportImpl implements MangeReportService {
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
 //            pdfGenaratorUtil.createCbReportPdfSample(templateName, cbReportResponse, file);
-            pdfGenaratorUtilMain.createContigentBillReport(cbReportResponse, filePath);
+            pdfGenaratorUtilMain.createContigentBillReport(cbReportResponse, filePath,hrData);
             dto.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             dto.setFileName(fileName);
             dtoList.add(dto);
@@ -1261,6 +1265,7 @@ public class MangeReportImpl implements MangeReportService {
         } catch (Exception e) {
             throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
         }
+
 
 //        }
 
@@ -2247,11 +2252,7 @@ public class MangeReportImpl implements MangeReportService {
 
             }
 
-        }
-
-
-
-        else {
+        } else {
 
             if (cdaReportRequest.getReportType() == null || cdaReportRequest.getReportType().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REPORT TYPE CAN NOT BE BLANK");
