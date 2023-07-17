@@ -928,6 +928,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setRemarks(budgetAllocationSubReport.getRemarks());
             budgetAllocationReport.setRefTransactionId(budgetAllocationSubReport.getRefTransactionId());
             budgetAllocationReport.setUserId(budgetAllocationSubReport.getUserId());
+            budgetAllocationReport.setIsTYpe(budgetAllocationSubReport.getIsTYpe());
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
 
@@ -1063,6 +1064,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setReturnRemarks(budgetAllocationSubReport.getReturnRemarks());
             budgetAllocationReport.setRefTransactionId(budgetAllocationSubReport.getRefTransactionId());
             budgetAllocationReport.setUserId(budgetAllocationSubReport.getUserId());
+            budgetAllocationReport.setIsTYpe(budgetAllocationSubReport.getIsTYpe());
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
             budgetAllocationReport.setCreatedOn(budgetAllocationSubReport.getCreatedOn());
@@ -1413,6 +1415,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationDetails.setAuthGroupId(authGrouPid);
             budgetAllocationDetails.setRemarks(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRemark());
             budgetAllocationDetails.setIsDelete("0");
+            budgetAllocationDetails.setIsTYpe("R");
             budgetAllocationDetails.setIsBudgetRevision("1");
             budgetAllocationDetails.setRefTransactionId(refTransID);
             budgetAllocationDetails.setUserId(hrData.getPid());
@@ -1587,6 +1590,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setRefTransactionId(budgetAllocationSubReport.getRefTransId());
             budgetAllocationReport.setUserId(budgetAllocationSubReport.getUserId());
             budgetAllocationReport.setIsFlag(budgetAllocationSubReport.getIsFlag());
+            budgetAllocationReport.setIsTYpe(budgetAllocationSubReport.getIsTYpe());
             budgetAllocationReport.setIsBudgetRevision(budgetAllocationSubReport.getIsBudgetRevision());
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getCreatedOn());
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
@@ -1714,6 +1718,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setReturnRemarks(budgetAllocationSubReport.getReturnRemarks());
             budgetAllocationReport.setRefTransactionId(budgetAllocationSubReport.getRefTransId());
             budgetAllocationReport.setUserId(budgetAllocationSubReport.getUserId());
+            budgetAllocationReport.setIsTYpe(budgetAllocationSubReport.getIsTYpe());
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getCreatedOn());
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
 
@@ -2072,6 +2077,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocation.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                 budgetAllocation.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
                 budgetAllocation.setIsFlag("0");
+                budgetAllocation.setIsTYpe(allocationDetails.get(i).getIsTYpe());
                 budgetAllocation.setIsBudgetRevision("0");
                 budgetAllocation.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                 budgetAllocation.setRefTransId(allocationDetails.get(i).getRefTransactionId());
@@ -2898,6 +2904,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationDetails.setAuthGroupId(authGrouPid);
             budgetAllocationDetails.setRemarks(budgetAllocationSaveRequest.getBudgetRequest().get(i).getRemark());
             budgetAllocationDetails.setIsDelete("0");
+            budgetAllocationDetails.setIsTYpe("S");
             budgetAllocationDetails.setIsBudgetRevision("0");
             budgetAllocationDetails.setRevisedAmount("0.0000");
 //            budgetAllocationDetails.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmount()));
@@ -3183,6 +3190,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationDetails.setRefTransactionId(refTransID);
             budgetAllocationDetails.setUserId(hrData.getPid());
             budgetAllocationDetails.setIsDelete("0");
+            budgetAllocationDetails.setIsTYpe("U");
             budgetAllocationDetails.setIsBudgetRevision("0");
             budgetAllocationDetails.setAmountType(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
             budgetAllocationDetails.setRevisedAmount("0.0000");
@@ -4046,6 +4054,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocation.setToUnit(allocationDetails.get(i).getToUnit());
                 budgetAllocation.setFromUnit(hrData.getUnitId());
                 budgetAllocation.setSubHead(allocationDetails.get(i).getSubHead());
+                budgetAllocation.setIsTYpe(allocationDetails.get(i).getIsTYpe());
                 budgetAllocation.setAllocationTypeId(allocationDetails.get(i).getAllocTypeId());
                 budgetAllocation.setIsBudgetRevision("0");
                 budgetAllocation.setUnallocatedAmount("0.0000");

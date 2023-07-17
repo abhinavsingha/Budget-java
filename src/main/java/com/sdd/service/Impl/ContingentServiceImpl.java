@@ -1104,7 +1104,7 @@ public class ContingentServiceImpl implements ContingentService {
                     maxNumber = number;
                 }
             }
-            contingentBillListData.setSectionNumber(maxNumber + "");
+            contingentBillListData.setSectionNumber((maxNumber+1) + "");
         }
 
         return ResponseUtils.createSuccessResponse(contingentBillListData, new TypeReference<ContigentSectionResp>() {

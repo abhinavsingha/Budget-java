@@ -92,4 +92,7 @@ public class BudgetAllocationDetails {
     private String returnRemarks;
 
 
+    @Column(name = "IS_TYPE")
+    private String isTYpe;
+
 }

@@ -39,6 +39,7 @@ public class BudgetAllocationSubResponse {
     private String remarks;
     private String refTransactionId;
     private String userId;
+    private String isTYpe;
     private Timestamp createdOn;
     private Timestamp updatedOn;
     private String revisedAmount;
