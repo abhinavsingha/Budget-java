@@ -597,7 +597,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 List<CdaParkingTrans> cdaDetails = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear, budHd, headUnit, allocTypeId, "0");
                 if (cdaDetails.size() > 0) {
                     Double totatA = Double.parseDouble(cdaDetails.get(0).getTotalParkingAmount());
-                    Double addition = totatA ;
+                    Double addition = totatA+0.0 ;
                     cdaDetails.get(0).setTotalParkingAmount(Double.toString(addition));
                     cdaParkingTransRepository.save(cdaDetails.get(0));
                 }
