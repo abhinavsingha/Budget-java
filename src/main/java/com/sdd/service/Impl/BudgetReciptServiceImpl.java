@@ -259,7 +259,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             budgetAllocationDetails.setToUnit(budgetHeadUit.getUnit());
             budgetAllocationDetails.setSubHead(subHeadData.getBudgetCodeId());
             budgetAllocationDetails.setStatus("Approved");
-            budgetAllocationDetails.setIsTYpe("R");
+            budgetAllocationDetails.setIsTYpe("M");
             budgetAllocationDetails.setIsBudgetRevision("0");
             budgetAllocationDetails.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());

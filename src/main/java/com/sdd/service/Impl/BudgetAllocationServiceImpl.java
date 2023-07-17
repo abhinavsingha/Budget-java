@@ -4569,6 +4569,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
+
+
         List<BudgetAllocationDetails> allocationDetails = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(authRequest.getAuthGroupId(), "0");
 
 
@@ -4614,30 +4616,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     revisedAmount = revisedAmount / convertedAmount.getAmount();
                     budgetAllocationRepository.save(data.get(m));
                 }
-
-//                    revisedAmount = revisedAmount + Double.parseDouble(allocationData.getRevisedAmount());
-
-//                    BudgetAllocation budgetAllocation = new BudgetAllocation();
-//                    budgetAllocation.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
-//                    budgetAllocation.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
-//                    budgetAllocation.setIsFlag("0");
-//                    budgetAllocation.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-//                    budgetAllocation.setRefTransId(allocationDetails.get(i).getRefTransactionId());
-//                    budgetAllocation.setFinYear(allocationDetails.get(i).getFinYear());
-//                    budgetAllocation.setToUnit(allocationDetails.get(i).getToUnit());
-//                    budgetAllocation.setFromUnit(hrData.getUnitId());
-//                    budgetAllocation.setSubHead(allocationDetails.get(i).getSubHead());
-//                    budgetAllocation.setAllocationTypeId(allocationDetails.get(i).getAllocTypeId());
-//                    budgetAllocation.setIsBudgetRevision("0");
-//                    budgetAllocation.setUnallocatedAmount("0.0000");
-//                    budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(totalAmount + ""));
-//                    budgetAllocation.setRevisedAmount(ConverterUtils.addDecimalPoint(revisedAmount + ""));
-//                    budgetAllocation.setUserId(allocationDetails.get(i).getUserId());
-//                    budgetAllocation.setStatus("Pending");
-//                    budgetAllocation.setAmountType(allocationDetails.get(i).getAmountType());
-//                    budgetAllocation.setAuthGroupId(allocationDetails.get(i).getAuthGroupId());
-
-//                    budgetAllocationRepository.save(budgetAllocation);
 
             } else {
                 double totalAmount = 0;
