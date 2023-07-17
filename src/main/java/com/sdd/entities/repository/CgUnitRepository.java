@@ -10,6 +10,8 @@ public interface CgUnitRepository extends JpaRepository<CgUnit, Long> {
 
   CgUnit findByUnit(String cbUnit);
 
+  CgUnit findByCgUnitShort(String unitShort);
+
   @Query(value = "SELECT DESCR FROM cgunit where UNIT=:unitId", nativeQuery = true)
   String findUnitName(String unitId);
 
@@ -26,6 +28,8 @@ public interface CgUnitRepository extends JpaRepository<CgUnit, Long> {
   List<CgUnit> findByPurposeCodeOrderByDescrAsc(String purpose);
 
   List<CgUnit> findByBudGroupUnitLike(String unitId);
+
+  CgUnit findByStationId(String stationId);
 
   //    CgUnit findByUnit(String authorityUnit);
 }
