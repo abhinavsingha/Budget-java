@@ -9569,7 +9569,7 @@ public class MangeReportImpl implements MangeReportService {
                 grTotalAlloc += sumExisting;
                 grTotalAddition += sumRE;
                 grTotalSum += (sumExisting + sumRE);
-
+//
             }
             BigDecimal decimal = new BigDecimal(grTotalAlloc);
             BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
