@@ -1264,8 +1264,8 @@ public class MangeReportImpl implements MangeReportService {
         cbReportResponse.setCbData(cbData);
         cbReportResponse.setUnitData(unit);
         cbReportResponse.setBudgetHead(budgetHead);
-        cbReportResponse.setBalanceAmount(String.format("%.2f", (balanceAmount)));
-        cbReportResponse.setRemeningAmount(String.format("%.2f", ((balanceAmount))));
+        cbReportResponse.setBalanceAmount(String.format("%.2f", (allocationAmount - progressiveAmount)));
+        cbReportResponse.setRemeningAmount(String.format("%.2f", ((allocationAmount - progressiveAmount))));
 
         String hindiAmount = ConverterUtils.convert((new Float(cbData.getCbAmount())).longValue());
         cbReportResponse.setHindiAmount(hindiAmount);
