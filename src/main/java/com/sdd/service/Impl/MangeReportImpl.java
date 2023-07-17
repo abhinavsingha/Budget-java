@@ -9356,7 +9356,7 @@ public class MangeReportImpl implements MangeReportService {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
         String status=checks.get(0).getStatus();
-        if (status.equalsIgnoreCase("Pending")) {
+        if (!status.equalsIgnoreCase("Pending")) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "PENDING RECORD NOT FOUND", HttpStatus.OK.value());
         }
