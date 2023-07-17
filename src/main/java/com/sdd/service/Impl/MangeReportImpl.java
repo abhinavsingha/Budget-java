@@ -1191,16 +1191,25 @@ public class MangeReportImpl implements MangeReportService {
         }
 
 
-        double expenditure = 0;
-        List<ContigentBill> cbExpendure = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdate(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0");
-        if (cbExpendure.size() == 0) {
+//        double expenditure = 0;
+//        List<ContigentBill> cbExpendure = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdate(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0");
+//        if (cbExpendure.size() == 0) {
+//
+//        } else {
+//            expenditure = 0;
+//            for (Integer i = 0; i < cbExpendure.size(); i++) {
+//                expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
+//            }
+//        }
 
-        } else {
-            expenditure = 0;
-            for (Integer i = 0; i < cbExpendure.size(); i++) {
-                expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
-            }
+        List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
+        if (allocationType.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
         }
+
+
+
+
         List<Authority> authorityDetails = authorityRepository.findByAuthGroupId(cbData.getAuthGroupId());
         CgUnit unit = cgUnitRepository.findByUnit(cbData.getCbUnitId());
         BudgetHead budgetHead = subHeadRepository.findByBudgetCodeId(cbData.getBudgetHeadID());
@@ -1211,24 +1220,39 @@ public class MangeReportImpl implements MangeReportService {
         cbReportResponse.setApprover(approverId);
         cbReportResponse.setVerifer(verifer);
 
+
+        double progressiveAmount = 0;
+        String sectionNumber = cbData.getSectionNumber();
+        List<ContigentBill> totalContigentBill = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdateAndAndAllocTypeAndAndFinYearId(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0",allocationType.get(0).getAllocTypeId(),cbData.getFinYear());
+//        List<CdaParkingTrans> cdaAmountList123123 = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cbData.getFinYear(), cbData.getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
+
+        if (totalContigentBill.size() == 0) {
+            progressiveAmount = 0;;
+        } else {
+            for (Integer i = 0; i < totalContigentBill.size(); i++) {
+                if(Integer.parseInt(sectionNumber) <= Integer.parseInt(totalContigentBill.get(i).getSectionNumber())){
+                    progressiveAmount = progressiveAmount + Double.parseDouble(totalContigentBill.get(i).getCbAmount());
+                }
+            }
+        }
+
+
+
+
+
         cbReportResponse.setOnAccountData(cbData.getOnAccountOf());
         cbReportResponse.setGetGst(cbData.getGst());
         cbReportResponse.setOnAurthyData(cbData.getAuthorityDetails());
-        cbReportResponse.setExpenditureAmount(String.format("%.2f", expenditure));
+        cbReportResponse.setExpenditureAmount(String.format("%.2f", progressiveAmount));
         cbReportResponse.setCurrentBillAmount(String.format("%.2f", Double.parseDouble(cbData.getCbAmount())));
 
 
-        List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
-        if (allocationType.size() == 0) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
-        }
 
 
         List<CdaParkingTrans> cdaAmountList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cbData.getFinYear(), cbData.getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
         for (Integer k = 0; k < cdaAmountList.size(); k++) {
 
             AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaAmountList.get(k).getAmountType());
-
             balanceAmount = balanceAmount + (Double.parseDouble(cdaAmountList.get(k).getRemainingCdaAmount()) * amountUnit.getAmount());
             allocationAmount = allocationAmount + (Double.parseDouble(cdaAmountList.get(k).getTotalParkingAmount()) * amountUnit.getAmount());
         }
@@ -1240,8 +1264,8 @@ public class MangeReportImpl implements MangeReportService {
         cbReportResponse.setCbData(cbData);
         cbReportResponse.setUnitData(unit);
         cbReportResponse.setBudgetHead(budgetHead);
-        cbReportResponse.setBalanceAmount(String.format("%.2f", (balanceAmount - expenditure)));
-        cbReportResponse.setRemeningAmount(String.format("%.2f", ((balanceAmount - expenditure))));
+        cbReportResponse.setBalanceAmount(String.format("%.2f", (balanceAmount)));
+        cbReportResponse.setRemeningAmount(String.format("%.2f", ((balanceAmount))));
 
         String hindiAmount = ConverterUtils.convert((new Float(cbData.getCbAmount())).longValue());
         cbReportResponse.setHindiAmount(hindiAmount);

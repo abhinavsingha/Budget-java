@@ -578,7 +578,7 @@ public class PdfGenaratorUtilMain {
         Chunk certifyc5 = new Chunk(", " +cbReportResponse.getBudgetHead().getDetailHeadType()+":", normalFont);
         Chunk certifyc6 = new Chunk(cbReportResponse.getBudgetHead().getSubHeadDescr(), font);
 //        Chunk certifyc7 = new Chunk(".Category Code ", normalFont);
-        Chunk certifyc8 = new Chunk(cbReportResponse.getBudgetHead().getBudgetHeadId() + " \n", font);
+//        Chunk certifyc8 = new Chunk(cbReportResponse.getBudgetHead().getBudgetHeadId() + " \n", font);
         phraseFooter.add(certifyc1);
         phraseFooter.add(certifyc2);
         phraseFooter.add(certifyc3);
@@ -586,7 +586,7 @@ public class PdfGenaratorUtilMain {
         phraseFooter.add(certifyc5);
         phraseFooter.add(certifyc6);
 //        phraseFooter.add(certifyc7);
-        phraseFooter.add(certifyc8);
+//        phraseFooter.add(certifyc8);
 
         Chunk certifyd = new Chunk("(d) The expenditure has been incurred in the interest of the state." + " \n \n", normalFont);
         phraseFooter.add(certifyd);
