@@ -1223,14 +1223,14 @@ public class MangeReportImpl implements MangeReportService {
 
         double progressiveAmount = 0;
         String sectionNumber = cbData.getSectionNumber();
-        List<ContigentBill> totalContigentBill = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdateAndAndAllocTypeAndAndFinYearId(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0",allocationType.get(0).getAllocTypeId(),cbData.getFinYear());
+        List<ContigentBill> totalContigentBill = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdateAndAllocationTypeIdAndFinYear(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0",allocationType.get(0).getAllocTypeId(),cbData.getFinYear());
 //        List<CdaParkingTrans> cdaAmountList123123 = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cbData.getFinYear(), cbData.getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
 
         if (totalContigentBill.size() == 0) {
             progressiveAmount = 0;;
         } else {
             for (Integer i = 0; i < totalContigentBill.size(); i++) {
-                if(Integer.parseInt(sectionNumber) <= Integer.parseInt(totalContigentBill.get(i).getSectionNumber())){
+                if(Integer.parseInt(sectionNumber) >= Integer.parseInt(totalContigentBill.get(i).getSectionNumber())){
                     progressiveAmount = progressiveAmount + Double.parseDouble(totalContigentBill.get(i).getCbAmount());
                 }
             }
