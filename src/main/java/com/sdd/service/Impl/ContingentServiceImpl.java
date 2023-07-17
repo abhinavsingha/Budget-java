@@ -1092,7 +1092,7 @@ public class ContingentServiceImpl implements ContingentService {
 
         }
 
-        int maxNumber = 0;
+        int maxNumber = 1;
         List<ContigentBill> masNumberList = contigentBillRepository.findByAllocationTypeIdAndCbUnitIdAndFinYear(allocationType.get(0).getAllocTypeId(), hrData.getUnitId(), budgetFinancialYear.getSerialNo());
         if (masNumberList.size() == 0) {
             contingentBillListData.setSectionNumber("01");

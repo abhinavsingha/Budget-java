@@ -33,7 +33,7 @@ public class HelperUtils {
     public static final String NOTDELETE = "1";
 
 
-    
+
     public static String SYSTEMADMIN = "120";
     public static String UNITADMIN = "119";
     public static String BUDGETMANGER = "118";
@@ -46,12 +46,12 @@ public class HelperUtils {
 
 
 //     For UAT
-    public static String LASTFOLDERPATH = "C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/bmsreport";
-    public static String FILEPATH = "https://icg.net.in/bmsreport/";
+//    public static String LASTFOLDERPATH = "C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/bmsreport";
+//    public static String FILEPATH = "https://icg.net.in/bmsreport/";
 
     // For PROD
-//    public static String LASTFOLDERPATH = "C:/Program Files/Tomcat 9.0/webapps/cgbmsreport";
-//    public static String FILEPATH = "https://icg.net.in/cgbmsreport/";
+    public static String LASTFOLDERPATH = "C:/Program Files/Tomcat 9.0/webapps/cgbmsreport";
+    public static String FILEPATH = "https://icg.net.in/cgbmsreport/";
 
     public static String getDocumentId() {
         return "BM_DOC" + ConverterUtils.getRandomTimeStamp();
