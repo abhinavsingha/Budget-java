@@ -335,8 +335,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
             amountUnit = amountTypeObj.getAmount();
             String allocId = allocationData.get(i).getAllocationTypeId();
             Double aAmount = Double.parseDouble(allocationData.get(i).getAllocationAmount());
-            CgUnit frmUnit = cgUnitRepository.findByUnit(allocationData.get(i).getFromUnit());
-            rebase.setFromUnit(frmUnit.getDescr());
+            //CgUnit frmUnit = cgUnitRepository.findByUnit(allocationData.get(i).getFromUnit());
+            rebase.setFromUnit(cgUnitRepository.findByUnit(allocationData.get(i).getFromUnit()));
             rebase.setUnit(unitdata.getDescr());
             rebase.setFinYear(Finyr.getFinYear());
             rebase.setAllocatedAmount(allocationData.get(i).getAllocationAmount());
@@ -358,7 +358,15 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     cda.setRemainingCdaAmount(cdaDetails.get(j).getRemainingCdaAmount());
                     cda.setRemarks(cdaDetails.get(j).getRemarks());
                     cda.setSubHeadId(cdaDetails.get(j).getBudgetHeadId());
-                    remCdaBal += Double.parseDouble(cdaDetails.get(j).getRemainingCdaAmount());
+                    AmountUnit cdaAmtObj = amountUnitRepository.findByAmountTypeId(cdaDetails.get(j).getAmountType());
+                    if (cdaAmtObj == null) {
+                        return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
+                        }, "CDA AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                    }
+                    double cdaAmtUnit=cdaAmtObj.getAmount();
+                    double cdabal=Double.parseDouble(cdaDetails.get(j).getRemainingCdaAmount());
+                    double finCdaBal=cdabal*cdaAmtUnit/amountUnit;
+                    remCdaBal += finCdaBal;
                     addRes.add(cda);
                 }
             }
@@ -371,11 +379,11 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     totalAmount += Double.parseDouble(amount.getCbAmount());
                 }
                 DecimalFormat decimalFormat = new DecimalFormat("#");
-                String eAmount = decimalFormat.format(totalAmount);
+                String eAmount = decimalFormat.format(totalAmount/amountUnit);
                 rebase.setExpenditureAmount(eAmount);
-                Double bal = aAmount * amountUnit - totalAmount;
-                Double remBal = bal / amountUnit;
-                rebase.setRemBal(Double.toString(remBal));
+                Double bal = aAmount - totalAmount/amountUnit;
+                //Double remBal = bal / amountUnit;
+                rebase.setRemBal(Double.toString(bal));
                 rebase.setLastCbDate(expenditure.get(0).getCbDate());
             } else {
                 rebase.setExpenditureAmount("0.0000");
@@ -568,7 +576,9 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 budgetRebase.setAllocAmount(req.getUnitRebaseRequests().get(l).getAllocAmount());
                 budgetRebase.setExpAmount(req.getUnitRebaseRequests().get(l).getExpAmount());
                 budgetRebase.setBalAmount(req.getUnitRebaseRequests().get(l).getBalAmount());
+                budgetRebase.setRemCdaBal("0.0");
                 budgetRebase.setAmountType(req.getUnitRebaseRequests().get(l).getAmountType());
+                budgetRebase.setAllocFromUnit("0000");
                 if (req.getUnitRebaseRequests().get(l).getLastCbDate() != null)
                     budgetRebase.setLastCbDate(ConverterUtils.convertDateTotimeStamp(req.getUnitRebaseRequests().get(l).getLastCbDate()));
                 budgetRebase.setAuthorityId(authorityId);
@@ -577,30 +587,17 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                 budgetRebaseRepository.save(budgetRebase);
 
-                List<BudgetAllocation> allocationDatas = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(rebaseUnitId, finYear, budHd, allocTypeId, "Approved", "0", "0");
-                //allocationDatas.get(0).setAllocationAmount("0.0000");
-                //budgetAllocationRepository.save(allocationDatas.get(0));
                 List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear, budHd, rebaseUnitId, allocTypeId, "0");
                 if (cdaDetail.size() > 0) {
                     for (int j = 0; j < cdaDetail.size(); j++) {
-                        cdaDetail.get(j).setRemainingCdaAmount("0.0000");
-                        cdaDetail.get(j).setTotalParkingAmount("0.0000");
+                        cdaDetail.get(j).setIsFlag("1");
                         cdaParkingTransRepository.save(cdaDetail.get(j));
                     }
-                }
-                Double balAmnt = 0.0;
-                List<BudgetAllocation> allocationData = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(headUnit, finYear, budHd, allocTypeId, "Approved", "0", "0");
-                if (allocationData.size() > 0) {
-                    Double alAmnt = Double.parseDouble(allocationData.get(0).getAllocationAmount());
-                    balAmnt = Double.parseDouble(req.getUnitRebaseRequests().get(l).getBalAmount());
-                    Double add = alAmnt + balAmnt;
-                    allocationData.get(0).setAllocationAmount(Double.toString(add));
-                    budgetAllocationRepository.save(allocationData.get(0));
                 }
                 List<CdaParkingTrans> cdaDetails = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear, budHd, headUnit, allocTypeId, "0");
                 if (cdaDetails.size() > 0) {
                     Double totatA = Double.parseDouble(cdaDetails.get(0).getTotalParkingAmount());
-                    Double addition = totatA + balAmnt;
+                    Double addition = totatA ;
                     cdaDetails.get(0).setTotalParkingAmount(Double.toString(addition));
                     cdaParkingTransRepository.save(cdaDetails.get(0));
                 }

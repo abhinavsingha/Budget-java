@@ -3,6 +3,7 @@ package com.sdd.request;
 import com.sdd.entities.AllocationType;
 import com.sdd.entities.AmountUnit;
 import com.sdd.entities.BudgetHead;
+import com.sdd.entities.CgUnit;
 import com.sdd.response.CdaDetailsForRebaseResponse;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,7 @@ import java.util.List;
 @Setter
 public class RebaseBudgetHistory {
     private String unit;
-    private String fromUnit;
+    private CgUnit fromUnit;
     private String finYear;
     private String authGrupId;
     private BudgetHead subHead;
