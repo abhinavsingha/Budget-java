@@ -9355,6 +9355,11 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
+        String status=checks.get(0).getStatus();
+        if (status.equalsIgnoreCase("Pending")) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "PENDING RECORD NOT FOUND", HttpStatus.OK.value());
+        }
         String allocationType = checks.get(0).getAllocTypeId();
         String finYearId = checks.get(0).getFinYear();
         String amountTypeId = checks.get(0).getAmountType();
@@ -9475,7 +9480,7 @@ public class MangeReportImpl implements MangeReportService {
                     finAmount = amount;
                     reAmount = revisedAmount;
                     String s = reAmount.toString();
-                    float newAllocAmount = finAmount - reAmount;
+                    float newAllocAmount = finAmount + reAmount;
                     if (s.contains("-")) {
                         String s1 = s.replace("-", "");
                         s2 = Float.parseFloat(s1);
@@ -9484,11 +9489,11 @@ public class MangeReportImpl implements MangeReportService {
 
                     PdfPCell cella1 = new PdfPCell(new Phrase(bHead.getSubHeadDescr()));
                     PdfPCell cella2 = new PdfPCell(new Phrase(unitN.getDescr()));
-                    PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(newAllocAmount))));
+                    PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
                     PdfPCell cella4 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", new BigDecimal(s2))));
                     PdfPCell cella5 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", new BigDecimal(reAmount))));
                     PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(reAmount))));
-                    PdfPCell cella7 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Float.toString(finAmount))))))));
+                    PdfPCell cella7 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Float.toString(newAllocAmount))))))));
                     cella1.setPadding(8);
                     cella2.setPadding(8);
                     cella3.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -9512,7 +9517,7 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(cella7);
 
                     count++;
-                    sumExisting += Float.parseFloat(new BigDecimal(Float.toString(newAllocAmount)).toPlainString());
+                    sumExisting += Float.parseFloat(new BigDecimal(Float.toString(finAmount)).toPlainString());
                     sumRE += Float.parseFloat(new BigDecimal(Float.toString(reAmount)).toPlainString());
 
                 }
