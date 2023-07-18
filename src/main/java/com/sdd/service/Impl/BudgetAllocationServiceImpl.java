@@ -3285,6 +3285,609 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
     @Override
     @Transactional
+    public ApiResponse<BudgetAllocationSaveResponse> saveBudgetAllocationSubHeadWiseEdit(BudgetAllocationSaveRequestEdit budgetAllocationSaveRequest) {
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE BUDGET ALLOCATION");
+        } else {
+            if (!hrData.getRoleId().contains(HelperUtils.BUDGETMANGER)) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE BUDGET ALLOCATION");
+
+            }
+        }
+        BudgetAllocationSaveResponse response = new BudgetAllocationSaveResponse();
+
+        if (budgetAllocationSaveRequest.getMsgId() == null || budgetAllocationSaveRequest.getMsgId().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "MSG ID CAN NOT BE BLANK");
+        }
+
+        MangeInboxOutbox mangeInboxOutboxCheck = mangeInboxOutBoxRepository.findByMangeInboxId(budgetAllocationSaveRequest.getMsgId());
+        if (mangeInboxOutboxCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID MSG ID");
+        }
+
+
+        if (budgetAllocationSaveRequest.getBudgetRequest().size() <= 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND. PLEASE TRY AGAIN");
+        }
+        List<String> dataIscgBg = new ArrayList<>();
+        dataIscgBg.add("Pending");
+        dataIscgBg.add("Approved");
+
+        for (Integer i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
+            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatusIn(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId(), "0", "0", dataIscgBg);
+            if (budgetAllocationDetailsList.size() > 0) {
+                CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId());
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY ALLOCATED " + cgUnit.getDescr() + " . CAN NOT ASSIGN AGAIN");
+            }
+        }
+
+        for (Integer i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
+
+
+            if (budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId() == null || budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION TYPE ID ID CAN NOT BE BLANK");
+            }
+
+            if (budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmount() == null || budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmount().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AMOUNT CAN NOT BE BLANK");
+            }
+
+            if (budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId() == null || budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET FINANCIAL ID ID CAN NOT BE BLANK");
+            }
+
+
+            if (budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId() == null || budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "SUB HEAD ID ID CAN NOT BE BLANK");
+            }
+
+            if (budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId() == null || budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO UNIT CAN NOT BE BLANK");
+            }
+
+            BudgetHead budgetHeadId = subHeadRepository.findByBudgetCodeId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId());
+            if (budgetHeadId == null) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID SUB HEAD ID");
+            }
+
+            BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId());
+            if (budgetFinancialYear == null) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID FINANCIAL YEAR ID");
+            }
+
+            CgUnit cgToUnit = cgUnitRepository.findByUnit(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId());
+            if (cgToUnit == null) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO UNIT ID");
+            }
+
+            AllocationType allocationType = allocationRepository.findByAllocTypeId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId());
+            if (allocationType == null) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
+            }
+
+            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmountTypeId());
+            if (amountUnit == null) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AMOUNT TYPE ID");
+            }
+
+            List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndIsFlag(budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), hrData.getUnitId(), "0");
+
+            if (cdaParkingList.size() == 0) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "PLEASE ADD CDA IN BUDGET RECEIPT.THAN TRY AGAIN");
+            }
+
+
+            for (Integer m = 0; m < budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().size(); m++) {
+
+                if (budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId() == null || budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId().isEmpty()) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA ID CAN NOT BE BLANK");
+                }
+
+                CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId(), "0");
+                if (cdaParkingTrans == null) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CDA PARKING ID");
+                }
+                if (budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount() == null || budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount().isEmpty()) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA AMOUNT CAN NOT BE BLANK");
+                }
+
+            }
+
+            double remainingCdaParkingAmount = 0;
+            double allocationAmount = 0;
+            for (Integer m = 0; m < budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().size(); m++) {
+                CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId(), "0");
+
+
+                AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+                remainingCdaParkingAmount = remainingCdaParkingAmount + remainingCdaParkingAmount + (Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount());
+                allocationAmount = Double.parseDouble(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmount()) * amountUnit.getAmount();
+
+            }
+
+            if (allocationAmount > remainingCdaParkingAmount) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT IS GREATER THAN CDA REMAINING AMOUNT");
+            }
+
+        }
+
+
+        for (Integer i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
+
+            BudgetAllocationSubRequestEdit budgetAllocationSubRequest = budgetAllocationSaveRequest.getBudgetRequest().get(i);
+            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdate(budgetAllocationSubRequest.getToUnitId(), budgetAllocationSubRequest.getSubHeadId(), "0", "0");
+
+            double totalCbAmount = 0;
+            for (Integer f = 0; f < contigentBills.size(); f++) {
+                totalCbAmount = totalCbAmount + Double.parseDouble(contigentBills.get(f).getCbAmount());
+            }
+
+            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSubRequest.getAmountTypeId());
+            double allocationAmount = Double.parseDouble(budgetAllocationSubRequest.getAmount()) * amountUnit.getAmount();
+
+            if (totalCbAmount > allocationAmount) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT IS SMALLER THAN CDA UNIT EXPENDITURE AMOUNT");
+            }
+        }
+
+
+        for (Integer i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
+
+
+            for (Integer m = 0; m < budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().size(); m++) {
+
+                CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId(), "0");
+                AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+
+                double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+
+                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmountTypeId());
+                double parkingAmount = Double.parseDouble(budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount()) * amountUnit.getAmount();
+
+                if (parkingAmount > remainingCdaParkingAmount) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION NOT COMPLETE.AMOUNT MISMATCH");
+                }
+
+
+//                double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
+//                cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+//                cdaParkingTransRepository.save(cdaParkingTrans);
+            }
+
+        }
+
+
+        for (Integer i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
+
+            BudgetAllocationDetails budgetAllocationDetails = budgetAllocationDetailsRepository.findByTransactionId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getTransactionId());
+            if (budgetAllocationDetails == null) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TRANSACTION ID");
+            }
+
+        }
+
+
+        String authGrouPid = "";
+        String type = "";
+        String refTransID = HelperUtils.getBudgetAlloctionRefrensId();
+
+        for (Integer i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
+
+            BudgetAllocationDetails budgetAllocationDetails = budgetAllocationDetailsRepository.findByTransactionId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getTransactionId());
+            ;
+            authGrouPid = budgetAllocationDetails.getAuthGroupId();
+
+//            budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
+            budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmount()));
+//            budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
+//            budgetAllocationDetails.setAllocTypeId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId());
+//            budgetAllocationDetails.setFinYear(budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId());
+//            budgetAllocationDetails.setFromUnit(hrData.getUnitId());
+//            budgetAllocationDetails.setToUnit(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId());
+//            budgetAllocationDetails.setSubHead(budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId());
+            budgetAllocationDetails.setStatus("Pending");
+//            budgetAllocationDetails.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+//            budgetAllocationDetails.setAuthGroupId(authGrouPid);
+//            budgetAllocationDetails.setRemarks(budgetAllocationSaveRequest.getBudgetRequest().get(i).getRemark());
+            budgetAllocationDetails.setIsDelete("0");
+            budgetAllocationDetails.setIsTYpe("S");
+//            budgetAllocationDetails.setIsBudgetRevision("0");
+            budgetAllocationDetails.setRevisedAmount("0.0000");
+//            budgetAllocationDetails.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmount()));
+//            budgetAllocationDetails.setRefTransactionId(refTransID);
+//            budgetAllocationDetails.setUserId(hrData.getPid());
+//            budgetAllocationDetails.setAmountType(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmountTypeId());
+//            budgetAllocationDetails.setTransactionId(HelperUtils.getTransId());
+            type = budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId();
+            BudgetAllocationDetails saveData = budgetAllocationDetailsRepository.save(budgetAllocationDetails);
+
+
+            List<CdaParkingCrAndDr> cdaCrDrTransData = parkingCrAndDrRepository.findByTransactionIdAndIsFlagAndIsRevision(budgetAllocationSaveRequest.getBudgetRequest().get(i).getTransactionId(), "0", 0);
+
+
+            for (Integer m = 0; m < cdaCrDrTransData.size(); m++) {
+
+                CdaParkingCrAndDr cdaParkingCrAndDr = cdaCrDrTransData.get(m);
+                cdaParkingCrAndDr.setIsFlag("2");
+                parkingCrAndDrRepository.save(cdaParkingCrAndDr);
+
+            }
+
+
+            for (Integer m = 0; m < budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().size(); m++) {
+                CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId(), "0");
+
+
+                CdaParkingCrAndDr cdaParkingCrAndDr = new CdaParkingCrAndDr();
+                cdaParkingCrAndDr.setCdaCrdrId(HelperUtils.getCdaCrDrId());
+                cdaParkingCrAndDr.setCdaParkingTrans(budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId());
+                cdaParkingCrAndDr.setFinYearId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId());
+                cdaParkingCrAndDr.setBudgetHeadId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId());
+                cdaParkingCrAndDr.setGinNo(cdaParkingTrans.getGinNo());
+                cdaParkingCrAndDr.setUnitId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId());
+                cdaParkingCrAndDr.setAuthGroupId(authGrouPid);
+                cdaParkingCrAndDr.setAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount()));
+                cdaParkingCrAndDr.setIscrdr("DR");
+                cdaParkingCrAndDr.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+                cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                cdaParkingCrAndDr.setAllocTypeId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId());
+                cdaParkingCrAndDr.setIsFlag("0");
+                cdaParkingCrAndDr.setIsRevision(0);
+                cdaParkingCrAndDr.setTransactionId(saveData.getTransactionId());
+                cdaParkingCrAndDr.setAmountType(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmountTypeId());
+
+                parkingCrAndDrRepository.save(cdaParkingCrAndDr);
+
+            }
+
+        }
+
+
+        for (Integer i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
+
+
+            for (Integer m = 0; m < budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().size(); m++) {
+
+                CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId(), "0");
+                AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+
+                double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+
+                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmountTypeId());
+                double parkingAmount = Double.parseDouble(budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount()) * amountUnit.getAmount();
+
+                double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
+                cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                cdaParkingTransRepository.save(cdaParkingTrans);
+            }
+
+        }
+
+
+        BudgetHead budgetHeadId = subHeadRepository.findByBudgetCodeId(type);
+
+        MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByMangeInboxId(budgetAllocationSaveRequest.getMsgId());
+
+        mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+        mangeInboxOutbox.setState("AP");
+        mangeInboxOutbox.setApproverpId("");
+        mangeInboxOutbox.setIsFlag("1");
+        mangeInboxOutbox.setIsArchive("0");
+        mangeInboxOutbox.setIsApproved("0");
+        mangeInboxOutbox.setIsRevision(0);
+        mangeInboxOutbox.setStatus("Pending");
+        mangeInboxOutbox.setIsBgcg("BG");
+
+        mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+
+
+        response.setMsg("Data save successfully");
+        return ResponseUtils.createSuccessResponse(response, new TypeReference<BudgetAllocationSaveResponse>() {
+        });
+    }
+
+
+    @Override
+    @Transactional
+    public ApiResponse<BudgetAllocationSaveResponse> saveBudgetAllocationUnitWiseEdit(BudgetAllocationSaveUnitRequestEdit budgetAllocationSaveRequestList) {
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE BUDGET ALLOCATION");
+        } else {
+            if (!hrData.getRoleId().contains(HelperUtils.BUDGETMANGER)) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE BUDGET ALLOCATION");
+
+            }
+        }
+
+        if (budgetAllocationSaveRequestList.getBudgetRequest().size() <= 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND. PLEASE TRY AGAIN");
+
+        }
+        BudgetAllocationSaveResponse response = new BudgetAllocationSaveResponse();
+        List<String> dataIscgBg = new ArrayList<>();
+        dataIscgBg.add("Pending");
+        dataIscgBg.add("Approved");
+
+        for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
+            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatusIn(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0", "0", dataIscgBg);
+            if (budgetAllocationDetailsList.size() > 0) {
+                CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationDetailsList.get(i).getToUnit());
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY ALLOCATED " + cgUnit.getDescr() + " . CAN NOT ASSIGN AGAIN");
+            }
+        }
+
+        if (budgetAllocationSaveRequestList.getMsgId() == null || budgetAllocationSaveRequestList.getMsgId().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "MSG ID CAN NOT BE BLANK");
+        }
+        MangeInboxOutbox mangeInboxOutboxCheck = mangeInboxOutBoxRepository.findByMangeInboxId(budgetAllocationSaveRequestList.getMsgId());
+        if (mangeInboxOutboxCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID MSG ID");
+        }
+
+
+        for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
+
+
+            if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId() == null || budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION TYPE ID ID CAN NOT BE BLANK");
+            }
+
+            if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount() == null || budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AMOUNT CAN NOT BE BLANK");
+            }
+
+
+            if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId() == null || budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET FINANCIAL ID ID CAN NOT BE BLANK");
+            }
+
+            if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId() == null || budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "SUB HEAD ID ID CAN NOT BE BLANK");
+            }
+
+            if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId() == null || budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO UNIT CAN NOT BE BLANK");
+            }
+
+
+            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
+            if (amountUnit == null) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AMOUNT TYPE ID");
+            }
+
+
+            for (Integer m = 0; m < budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().size(); m++) {
+
+                if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId() == null || budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId().isEmpty()) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA ID CAN NOT BE BLANK");
+                }
+
+
+                CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId(), "0");
+                if (cdaParkingTrans == null) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CDA PARKING ID");
+                }
+                if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount() == null || budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount().isEmpty()) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA AMOUNT CAN NOT BE BLANK");
+                }
+            }
+
+            double remainingCdaParkingAmount = 0;
+            double allocationAmount = 0;
+            for (Integer m = 0; m < budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().size(); m++) {
+                CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId(), "0");
+                AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+                remainingCdaParkingAmount = remainingCdaParkingAmount + Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+                allocationAmount = Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()) * amountUnit.getAmount();
+            }
+
+            if (allocationAmount > remainingCdaParkingAmount) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT IS GREATER THAN CDA REMAINING AMOUNT");
+            }
+
+            BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId());
+            if (budgetFinancialYear == null) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID FINANCIAL YEAR ID");
+            }
+
+            CgUnit cgToUnit = cgUnitRepository.findByUnit(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
+            if (cgToUnit == null) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO UNIT ID");
+            }
+            AllocationType allocationType = allocationRepository.findByAllocTypeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId());
+            if (allocationType == null) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
+            }
+            BudgetHead budgetHeadId = subHeadRepository.findByBudgetCodeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId());
+            if (budgetHeadId == null) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID SUB HEAD ID");
+            }
+
+
+            double totalAMount = Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount());
+
+            if (totalAMount > 0) {
+                List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), hrData.getUnitId(), "0");
+                if (cdaParkingList.size() <= 0) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "PLEASE ADD CDA IN BUDGET RECEIPT.THAN TRY AGAIN");
+                }
+            }
+
+        }
+
+        for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
+
+            BudgetAllocationDetails budgetAllocationDetails = budgetAllocationDetailsRepository.findByTransactionId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getTransactionId());
+            if (budgetAllocationDetails == null) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TRANSACTION ID");
+            }
+        }
+
+
+        for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
+
+            BudgetAllocationSubRequestEdit budgetAllocationSubRequest = budgetAllocationSaveRequestList.getBudgetRequest().get(i);
+            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdate(budgetAllocationSubRequest.getToUnitId(), budgetAllocationSubRequest.getSubHeadId(), "0", "0");
+
+            double totalCbAmount = 0;
+            for (Integer f = 0; f < contigentBills.size(); f++) {
+                totalCbAmount = totalCbAmount + Double.parseDouble(contigentBills.get(f).getCbAmount());
+            }
+
+            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSubRequest.getAmountTypeId());
+            double allocationAmount = Double.parseDouble(budgetAllocationSubRequest.getAmount()) * amountUnit.getAmount();
+
+            if (totalCbAmount > allocationAmount) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT IS SMALLER THAN CDA UNIT EXPENDITURE AMOUNT");
+            }
+        }
+
+
+        for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
+
+
+            for (Integer m = 0; m < budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().size(); m++) {
+
+                CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId(), "0");
+                AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+
+                double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+
+                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
+                double parkingAmount = Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount()) * amountUnit.getAmount();
+
+                if (parkingAmount > remainingCdaParkingAmount) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION NOT COMPLETE.AMOUNT MISMATCH");
+                }
+            }
+        }
+
+
+        String type = "";
+        String authGrouPid = "";
+        String refTransID = HelperUtils.getBudgetAlloctionRefrensId();
+
+        for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
+
+            BudgetAllocationDetails budgetAllocationDetails = budgetAllocationDetailsRepository.findByTransactionId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getTransactionId());
+            authGrouPid = budgetAllocationDetails.getAuthGroupId();
+//            budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
+            budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()));
+//            budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
+//            budgetAllocationDetails.setAllocTypeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId());
+//            budgetAllocationDetails.setFinYear(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId());
+//            budgetAllocationDetails.setFromUnit(hrData.getUnitId());
+//            budgetAllocationDetails.setToUnit(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
+//            budgetAllocationDetails.setSubHead(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId());
+            budgetAllocationDetails.setStatus("Pending");
+//            budgetAllocationDetails.setRemarks(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRemark());
+//            budgetAllocationDetails.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+//            budgetAllocationDetails.setAuthGroupId(authGrouPid);
+//            budgetAllocationDetails.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()));
+//            budgetAllocationDetails.setRefTransactionId(refTransID);
+//            budgetAllocationDetails.setUserId(hrData.getPid());
+            budgetAllocationDetails.setIsDelete("0");
+            budgetAllocationDetails.setIsTYpe("U");
+//            budgetAllocationDetails.setIsBudgetRevision("0");
+//            budgetAllocationDetails.setAmountType(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
+//            budgetAllocationDetails.setRevisedAmount("0.0000");
+//            budgetAllocationDetails.setTransactionId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getTransactionId());
+            type = budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId();
+            BudgetAllocationDetails saveData = budgetAllocationDetailsRepository.save(budgetAllocationDetails);
+
+
+            List<CdaParkingCrAndDr> cdaCrDrTransData = parkingCrAndDrRepository.findByTransactionIdAndIsFlagAndIsRevision(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getTransactionId(), "0", 0);
+
+            for (Integer m = 0; m < cdaCrDrTransData.size(); m++) {
+
+                CdaParkingCrAndDr cdaParkingCrAndDr = cdaCrDrTransData.get(m);
+                cdaParkingCrAndDr.setIsFlag("2");
+                parkingCrAndDrRepository.save(cdaParkingCrAndDr);
+
+            }
+
+
+            for (Integer m = 0; m < budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().size(); m++) {
+                CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId(), "0");
+
+                CdaParkingCrAndDr cdaParkingCrAndDr = new CdaParkingCrAndDr();
+                cdaParkingCrAndDr.setCdaCrdrId(HelperUtils.getCdaCrDrId());
+                cdaParkingCrAndDr.setCdaParkingTrans(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId());
+                cdaParkingCrAndDr.setFinYearId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId());
+                cdaParkingCrAndDr.setBudgetHeadId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId());
+                cdaParkingCrAndDr.setGinNo(cdaParkingTrans.getGinNo());
+                cdaParkingCrAndDr.setUnitId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
+                cdaParkingCrAndDr.setAuthGroupId(authGrouPid);
+                cdaParkingCrAndDr.setAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount()));
+                cdaParkingCrAndDr.setIscrdr("DR");
+                cdaParkingCrAndDr.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+                cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                cdaParkingCrAndDr.setAllocTypeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId());
+                cdaParkingCrAndDr.setIsFlag("0");
+                cdaParkingCrAndDr.setIsRevision(0);
+                cdaParkingCrAndDr.setTransactionId(saveData.getTransactionId());
+                cdaParkingCrAndDr.setAmountType(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
+
+                parkingCrAndDrRepository.save(cdaParkingCrAndDr);
+
+            }
+
+        }
+
+
+        //remainingBalance
+        for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
+
+
+            for (Integer m = 0; m < budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().size(); m++) {
+                CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId(), "0");
+                AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+
+                double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+
+                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
+                double parkingAmount = Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount()) * amountUnit.getAmount();
+
+                double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
+                cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                cdaParkingTransRepository.save(cdaParkingTrans);
+            }
+
+        }
+
+
+        MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByMangeInboxId(budgetAllocationSaveRequestList.getMsgId());
+
+        mangeInboxOutbox.setRemarks("Budget Allocation Unit Wise");
+        mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+        mangeInboxOutbox.setStatus("Pending");
+        mangeInboxOutbox.setState("AP");
+        mangeInboxOutbox.setIsFlag("1");
+        mangeInboxOutbox.setIsArchive("0");
+        mangeInboxOutbox.setIsRevision(0);
+        mangeInboxOutbox.setIsApproved("0");
+        mangeInboxOutbox.setIsBgcg("BG");
+
+        mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+
+
+        response.setMsg("Data save successfully");
+        return ResponseUtils.createSuccessResponse(response, new TypeReference<BudgetAllocationSaveResponse>() {
+        });
+    }
+
+
+    @Override
+    @Transactional
     public ApiResponse<List<FindBudgetResponse>> findBudgetAllocationFinYearAndUnit(FindBudgetRequest findBudgetRequest) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);

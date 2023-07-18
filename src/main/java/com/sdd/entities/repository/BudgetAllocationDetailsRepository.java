@@ -39,6 +39,7 @@ public interface BudgetAllocationDetailsRepository extends JpaRepository<BudgetA
     List<String> findSubHead(String finYearId, String allocationTypeId,String frmUnit);
 
     List<BudgetAllocationDetails> findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(String authGroupId, String s);
+    BudgetAllocationDetails findByTransactionId(String transId);
     List<BudgetAllocationDetails> findByAuthGroupId(String authGroupId);
 
     List<BudgetAllocationDetails> findByAuthGroupIdAndSubHead(String authGId, String subHead);

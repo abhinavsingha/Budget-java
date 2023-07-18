@@ -19,6 +19,10 @@ public interface BudgetAllocationService {
 
 	ApiResponse<BudgetAllocationSaveResponse> saveBudgetAllocationUnitWise(BudgetAllocationSaveUnitRequest budgetAllocationSaveUnitRequest);
 
+	ApiResponse<BudgetAllocationSaveResponse> saveBudgetAllocationSubHeadWiseEdit(BudgetAllocationSaveRequestEdit budgetAllocationSaveRequestEdit);
+
+	ApiResponse<BudgetAllocationSaveResponse> saveBudgetAllocationUnitWiseEdit(BudgetAllocationSaveUnitRequestEdit budgetAllocationSaveUnitRequestEdit);
+
 	ApiResponse<List<FindBudgetResponse>> findBudgetAllocationFinYearAndUnit(FindBudgetRequest findBudgetRequest);
 
 	ApiResponse<List<BudgetFinancialYear>> getBudgetFinYear();

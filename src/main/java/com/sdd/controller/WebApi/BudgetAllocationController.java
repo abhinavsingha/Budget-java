@@ -167,6 +167,23 @@ public class BudgetAllocationController {
     }
 
 
+
+
+    @PostMapping("/saveBudgetAllocationSubHeadWiseEdit")
+    public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> saveBudgetAllocationSubHeadWiseEdit(@RequestBody BudgetAllocationSaveRequestEdit budgetAllocationSaveRequestEdit) {
+        return new ResponseEntity<>(budgetAllocationService.saveBudgetAllocationSubHeadWiseEdit(budgetAllocationSaveRequestEdit), HttpStatus.OK);
+    }
+
+
+    @PostMapping("/saveBudgetAllocationUnitWiseEdit")
+    public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> saveBudgetAllocationUnitWiseEdit(@RequestBody BudgetAllocationSaveUnitRequestEdit budgetAllocationSaveUnitRequestEdit) {
+        return new ResponseEntity<>(budgetAllocationService.saveBudgetAllocationUnitWiseEdit(budgetAllocationSaveUnitRequestEdit), HttpStatus.OK);
+    }
+
+
+
+
+
     @PostMapping("/updateBudgetAllocation")
     public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> updateBudgetAllocationSubHeadWise(@RequestBody BudgetAllocationUpdateRequest budgetAllocationSaveRequest) {
         return new ResponseEntity<>(budgetAllocationService.updateBudgetAllocationSubHeadWise(budgetAllocationSaveRequest), HttpStatus.OK);
