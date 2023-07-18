@@ -484,19 +484,19 @@ public class PdfGenaratorUtilMain {
 
         Chunk billNumber1 = new Chunk("Contingent Bill No. ", normalFont);
         Chunk billNumber2 = new Chunk(cbReportResponse.getCbData().getCbNo() + "                           ", font);
-        Chunk billNumber3 = new Chunk("                                             " + " Dated: ", normalFont);
-        Chunk billNumber4 = new Chunk(date(dateString) + " \n\n", font);
+        Chunk billNumber3 = new Chunk("                                        " + " Dated: ", normalFont);
+        Chunk billNumber4 = new Chunk(date(dateString) + " \n", font);
         phrase.add(billNumber1);
         phrase.add(billNumber2);
         phrase.add(billNumber3);
         phrase.add(billNumber4);
 
-        Font fontHeader = new Font(Font.FontFamily.TIMES_ROMAN, 11, Font.BOLD);
+        Font fontHeader = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
         Chunk contigentBill = new Chunk("                                                                                   " + "CONTINGENT BILL  " + " \n\n", fontHeader);
         phrase.add(contigentBill);
 
 
-        Chunk normalTexet = new Chunk(cbReportResponse.getOnAccountData() + " \n\n", normalFont);
+        Chunk normalTexet = new Chunk(cbReportResponse.getOnAccountData() + " \n", normalFont);
         phrase.add(normalTexet);
 
 
@@ -515,7 +515,7 @@ public class PdfGenaratorUtilMain {
 
 
         Chunk authorityb1 = new Chunk("               : (b) " + cbReportResponse.getUnitData().getDescr() + "  Sanction No. ", normalFont);
-        Chunk authorityb2 = new Chunk(cbReportResponse.getCbData().getSectionNumber() + " \n\n\n", font);
+        Chunk authorityb2 = new Chunk(cbReportResponse.getCbData().getSectionNumber() + " \n\n", font);
         phrase.add(authorityb1);
         phrase.add(authorityb2);
 
@@ -588,7 +588,7 @@ public class PdfGenaratorUtilMain {
 //        phraseFooter.add(certifyc7);
 //        phraseFooter.add(certifyc8);
 
-        Chunk certifyd = new Chunk("(d) The expenditure has been incurred in the interest of the state." + " \n \n", normalFont);
+        Chunk certifyd = new Chunk("(d) The expenditure has been incurred in the interest of the state." + " \n ", normalFont);
         phraseFooter.add(certifyd);
 
 
@@ -618,7 +618,7 @@ public class PdfGenaratorUtilMain {
 
 
         Font counterSign = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
-        Chunk counterSigner = new Chunk("                                                               COUNTERSIGNED" + " \n" + " \n", counterSign);
+        Chunk counterSigner = new Chunk("                                                               COUNTERSIGNED" + " \n" , counterSign);
         phraseFooter.add(counterSigner);
 
 
@@ -648,7 +648,7 @@ public class PdfGenaratorUtilMain {
         Chunk fileNumber = new Chunk("File No. " + cbReportResponse.getCbData().getFileID() + "\n", font);
         phraseFooter.add(fileNumber);
 
-        Chunk fileDated = new Chunk("Date " + date(cbReportResponse.getCbData().getFileDate()) + "\n\n", font);
+        Chunk fileDated = new Chunk("Date " + date(cbReportResponse.getCbData().getFileDate()) + "\n", font);
         phraseFooter.add(fileDated);
 
 
