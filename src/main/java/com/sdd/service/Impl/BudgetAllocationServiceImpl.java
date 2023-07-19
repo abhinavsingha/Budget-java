@@ -546,7 +546,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         List<BudgetAllocationSubResponse> budgetAllocationList = new ArrayList<BudgetAllocationSubResponse>();
 
 
-        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndIsDeleteAndStatusOrStatusAndIsBudgetRevision(budgetAllocationReportRequest.getToUnitId(), budgetAllocationReportRequest.getBudgetFinancialYearId(), "0", "Pending", "Returned", "0");
+        List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndIsDeleteAndStatusOrStatusAndIsBudgetRevision(budgetAllocationReportRequest.getToUnitId(), budgetAllocationReportRequest.getBudgetFinancialYearId(), "0", "Pending", "Rejected", "0");
         String authgroupId = "";
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
@@ -2046,13 +2046,13 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 //        }
 
 
-        if (budgetApproveRequest.getStatus().contains("Returned") || budgetApproveRequest.getStatus().contains("Approved")) {
+        if (budgetApproveRequest.getStatus().contains("Rejected") || budgetApproveRequest.getStatus().contains("Approved")) {
 
         } else {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID STATUS");
         }
 
-        if (budgetApproveRequest.getStatus().equalsIgnoreCase("Returned")) {
+        if (budgetApproveRequest.getStatus().equalsIgnoreCase("Rejected")) {
             if (budgetApproveRequest.getRemarks() == null || budgetApproveRequest.getRemarks().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REMARK CAN NOT BE BLANK");
             }
@@ -2212,14 +2212,14 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
-        if (budgetApproveRequest.getStatus().contains("Returned") || budgetApproveRequest.getStatus().contains("Approved")) {
+        if (budgetApproveRequest.getStatus().contains("Rejected") || budgetApproveRequest.getStatus().contains("Approved")) {
 
         } else {
 
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID STATUS");
         }
 
-        if (budgetApproveRequest.getStatus().equalsIgnoreCase("Returned")) {
+        if (budgetApproveRequest.getStatus().equalsIgnoreCase("Rejected")) {
             if (budgetApproveRequest.getRemarks() == null || budgetApproveRequest.getRemarks().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REMARK CAN NOT BE BLANK");
             }

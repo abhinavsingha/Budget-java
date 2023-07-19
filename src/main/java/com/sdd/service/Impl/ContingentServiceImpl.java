@@ -497,7 +497,7 @@ public class ContingentServiceImpl implements ContingentService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CONTINGENT BILL ID");
             }
 
-            if (contigentBill.getStatus().equalsIgnoreCase("Pending") || contigentBill.getStatus().equalsIgnoreCase("Returned")) {
+            if (contigentBill.getStatus().equalsIgnoreCase("Pending") || contigentBill.getStatus().equalsIgnoreCase("Rejected")) {
 
             } else {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "APPROVED CONTINGENT BILL CAN NOT BE UPDATED");
@@ -1132,7 +1132,7 @@ public class ContingentServiceImpl implements ContingentService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB GROUP ID NOT BE BLANK");
         }
 
-        if (approveContigentBillRequest.getStatus().equalsIgnoreCase("Returned") || approveContigentBillRequest.getStatus().equalsIgnoreCase("Approved")) {
+        if (approveContigentBillRequest.getStatus().equalsIgnoreCase("Rejected") || approveContigentBillRequest.getStatus().equalsIgnoreCase("Approved")) {
 
         } else {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID STATUS");
@@ -1165,8 +1165,8 @@ public class ContingentServiceImpl implements ContingentService {
 //            ContigentBill contigentBill = cbData.get(j);
 //            if (contigentBill.getStatus().equalsIgnoreCase("Verified")) {
 //
-//            } else if (contigentBill.getStatus().equalsIgnoreCase("Pending") || contigentBill.getStatus().equalsIgnoreCase("Returned")) {
-//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "PENDING OR Returned CONTINGENT BILL CAN NOT BE UPDATED.VERIFIED FIRST");
+//            } else if (contigentBill.getStatus().equalsIgnoreCase("Pending") || contigentBill.getStatus().equalsIgnoreCase("Rejected")) {
+//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "PENDING OR Rejected CONTINGENT BILL CAN NOT BE UPDATED.VERIFIED FIRST");
 //            } else {
 //                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "APPROVED CONTINGENT BILL OR VERIFIED CONTINGENT BILL CAN NOT BE UPDATED");
 //            }
@@ -1186,7 +1186,7 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBill.setRemarks(approveContigentBillRequest.getRemarks());
             contigentBill.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             status = approveContigentBillRequest.getStatus();
-            if (status.equalsIgnoreCase("Returned") || status.equalsIgnoreCase("Reject")) {
+            if (status.equalsIgnoreCase("Rejected") || status.equalsIgnoreCase("Reject")) {
                 contigentBill.setIsFlag("1");
             } else {
                 contigentBill.setIsFlag("0");
@@ -1194,7 +1194,7 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBillRepository.save(contigentBill);
         }
 
-        if (status.equalsIgnoreCase("Returned") || status.equalsIgnoreCase("Reject")) {
+        if (status.equalsIgnoreCase("Rejected") || status.equalsIgnoreCase("Reject")) {
 
 
             for (Integer i = 0; i < approveContigentBillRequest.getCdaParkingId().size(); i++) {
@@ -1282,7 +1282,7 @@ public class ContingentServiceImpl implements ContingentService {
 
         for (Integer j = 0; j < cbData.size(); j++) {
             ContigentBill contigentBill = cbData.get(j);
-            if (contigentBill.getStatus().equalsIgnoreCase("Pending") || contigentBill.getStatus().equalsIgnoreCase("Returned") || contigentBill.getStatus().equalsIgnoreCase("Verified")) {
+            if (contigentBill.getStatus().equalsIgnoreCase("Pending") || contigentBill.getStatus().equalsIgnoreCase("Rejected") || contigentBill.getStatus().equalsIgnoreCase("Verified")) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "THIS CONTINGENT BILL NOT BE APPROVED");
             }
 
@@ -1346,7 +1346,7 @@ public class ContingentServiceImpl implements ContingentService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB GROUP ID NOT BE BLANK");
         }
 
-        if (approveContigentBillRequest.getStatus().equalsIgnoreCase("Returned") || approveContigentBillRequest.getStatus().equalsIgnoreCase("Pending") || approveContigentBillRequest.getStatus().equalsIgnoreCase("Verified")) {
+        if (approveContigentBillRequest.getStatus().equalsIgnoreCase("Rejected") || approveContigentBillRequest.getStatus().equalsIgnoreCase("Pending") || approveContigentBillRequest.getStatus().equalsIgnoreCase("Verified")) {
 
         } else {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID STATUS");
@@ -1383,7 +1383,7 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBill.setRemarks(approveContigentBillRequest.getRemarks());
             contigentBill.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             status = approveContigentBillRequest.getStatus();
-            if (status.equalsIgnoreCase("Returned") || status.equalsIgnoreCase("Reject")) {
+            if (status.equalsIgnoreCase("Rejected") || status.equalsIgnoreCase("Reject")) {
                 contigentBill.setIsFlag("1");
             } else {
                 contigentBill.setIsFlag("0");
@@ -1394,7 +1394,7 @@ public class ContingentServiceImpl implements ContingentService {
         }
 
 
-        if (status.equalsIgnoreCase("Returned") || status.equalsIgnoreCase("Reject")) {
+        if (status.equalsIgnoreCase("Rejected") || status.equalsIgnoreCase("Reject")) {
 
 
             for (Integer i = 0; i < approveContigentBillRequest.getCdaParkingId().size(); i++) {
@@ -1422,7 +1422,7 @@ public class ContingentServiceImpl implements ContingentService {
 
             if (status.equalsIgnoreCase("Verified")) {
                 mangeInboxOutbox.setState("AP");
-            } else if (status.equalsIgnoreCase("Returned") || status.equalsIgnoreCase("Reject")) {
+            } else if (status.equalsIgnoreCase("Rejected") || status.equalsIgnoreCase("Reject")) {
                 mangeInboxOutbox.setState("CR");
             }
 
