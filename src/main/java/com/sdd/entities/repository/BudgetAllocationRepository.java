@@ -93,4 +93,5 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
 
     List<BudgetAllocation> findByAuthGroupIdAndIsFlag(String authGroupId, String s);
 
+    List<BudgetAllocation> findByAuthGroupIdAndSubHead(String authGroupId, String subHeadId);
 }

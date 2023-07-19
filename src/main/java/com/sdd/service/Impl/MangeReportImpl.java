@@ -9974,6 +9974,340 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
     }
+    @Override
+    public ApiResponse<List<FilePathResponse>> getRevisedAllocationAprReport(String authGroupId) {
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+        if (authGroupId == null || authGroupId.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "AUTHGROUP ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+        List<BudgetAllocation> check = budgetAllocationRepository.findByAuthGroupId(authGroupId);
+        List<BudgetAllocation> checks = check.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
+        if (checks.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        String status = checks.get(0).getStatus();
+        String subHd = checks.get(0).getSubHead();
+        String bHeadType = "";
+        BudgetHead bHeadids = subHeadRepository.findByBudgetCodeId(subHd);
+        if (bHeadids.getRemark().equalsIgnoreCase("REVENUE")) {
+            bHeadType = "REVENUE OBJECT HEAD";
+        } else
+            bHeadType = "CAPITAL DETAILED HEAD";
+        if (!status.equalsIgnoreCase("Pending")) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "PENDING RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        String allocationType = checks.get(0).getAllocTypeId();
+        String finYearId = checks.get(0).getFinYear();
+        String amountTypeId = checks.get(0).getAmountType();
+
+        AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
+        Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
+        String amountIn = amountObj.getAmountType().toUpperCase();
+
+        AllocationType allockData = allocationRepository.findByAllocTypeId(allocationType);
+        String allocType = allockData.getAllocType();
+        BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
+
+        List<String> rowData = budgetAllocationDetailsRepository.findSubHeadByAuthGroupIds(authGroupId);
+        if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "RECORD NOT FOUNDS", HttpStatus.OK.value());
+        }
+
+        String amtType = "";
+        String names = approveName;
+        String unitName = hrData.getUnit();
+        String rank = approveRank;
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formattedDateTime = now.format(formatter);
+
+        try {
+            Document document = new Document(PageSize.A4);
+
+            File folder = new File(HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String timemilisec = String.valueOf(System.currentTimeMillis());
+            String path = folder.getAbsolutePath() + "/" + allocType.toUpperCase() + "_Revised_allocation-report" + timemilisec + ".pdf";
+            PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
+
+            document.open();
+            Paragraph paragraph = new Paragraph();
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+            paragraph.add(new Chunk("REVISED" + " " + allocType.toUpperCase() + " " + " ALLOCATION  REPORT", boldFont));
+            paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(paragraph);
+            document.add(new Paragraph("\n"));
+
+            PdfPTable tables = new PdfPTable(2);
+            tables.setWidthPercentage(100);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
+            PdfPCell cells = new PdfPCell(new Phrase(allocType.toUpperCase() + ": " + findyr.getFinYear() + " " + "ALLOCATION", cellFont));
+            PdfPCell cells0 = new PdfPCell(new Phrase("AMOUNT : (₹ IN " + amountIn + ")", cellFont));
+            cells.setPadding(15);
+            cells0.setPadding(15);
+
+            tables.addCell(cells);
+            tables.addCell(cells0);
+            document.add(tables);
+
+            PdfPTable table = new PdfPTable(5);
+            table.setWidthPercentage(100);
+
+            PdfPCell cell1 = new PdfPCell(new Phrase(bHeadType, cellFont));
+            PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
+            PdfPCell cell3 = new PdfPCell(new Phrase("ALLOCATION AMOUNT", cellFont));
+            PdfPCell cell4 = new PdfPCell(new Phrase("ADDITIONAL AMOUNT", cellFont));
+            PdfPCell cell5 = new PdfPCell(new Phrase("REVISED AMOUNT", cellFont));
+            cell1.setPadding(10);
+            cell2.setPadding(10);
+            cell3.setPadding(10);
+            cell4.setPadding(10);
+            cell5.setPadding(10);
+
+            table.addCell(cell1);
+            table.addCell(cell2);
+            table.addCell(cell3);
+            table.addCell(cell4);
+            table.addCell(cell5);
+
+            int i = 1;
+            String finyear = "";
+            String unit = "";
+            float grTotalAlloc = 0;
+            float grTotalAddition = 0;
+            float grTotalSum = 0;
+            Float amount = Float.valueOf(0);
+            Float amountUnit;
+            Float finAmount;
+            Float revisedAmount;
+            Float reAmount;
+            Float s2 = 0.0f;
+            for (String val : rowData) {
+                String subHeadId = val;
+                List<BudgetAllocation> reportDetails1 = budgetAllocationRepository.findByAuthGroupIdAndSubHead(authGroupId, subHeadId);
+                List<BudgetAllocation> reportDetails;
+                if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID))
+                    reportDetails = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
+                else
+                    reportDetails = reportDetails1.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+
+                if (reportDetails.size() <= 0) {
+                    continue;
+                }
+                BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
+
+                int count = 0;
+                float sumExisting = 0;
+                float sumRE = 0;
+                float total = 0;
+                for (BudgetAllocation row : reportDetails) {
+                    amount = Float.valueOf(row.getAllocationAmount());
+                    if (row.getRevisedAmount() != null || Float.valueOf(row.getRevisedAmount()) != 0) {
+                        revisedAmount = Float.valueOf(row.getRevisedAmount());
+                    } else
+                        revisedAmount = 0.0f;
+
+                    AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
+                    if (amountTypeObj == null) {
+                        return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+                        }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                    }
+                    amountUnit = Float.parseFloat(amountTypeObj.getAmount() + "");
+                    finAmount = amount;
+                    reAmount = revisedAmount;
+                    String s = reAmount.toString();
+                    float newAllocAmount = finAmount + reAmount;
+                    if (s.contains("-")) {
+                        String s1 = s.replace("-", "");
+                        s2 = Float.parseFloat(s1);
+                    }
+                    CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
+
+                    PdfPCell cella1 = new PdfPCell(new Phrase(bHead.getSubHeadDescr()));
+                    PdfPCell cella2 = new PdfPCell(new Phrase(unitN.getDescr()));
+                    PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
+                    PdfPCell cella4 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", new BigDecimal(s2))));
+                    PdfPCell cella5 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", new BigDecimal(reAmount))));
+                    PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(reAmount))));
+                    PdfPCell cella7 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Float.toString(newAllocAmount))))))));
+                    cella1.setPadding(8);
+                    cella2.setPadding(8);
+                    cella3.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    cella4.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    cella5.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    cella6.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    cella7.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+
+                    if (count == 0)
+                        table.addCell(cella1);
+                    else
+                        table.addCell("");
+                    table.addCell(cella2);
+                    table.addCell(cella3);
+                    if (reAmount < 0)
+                        table.addCell(cella4);
+                    else if (reAmount > 0)
+                        table.addCell(cella5);
+                    else
+                        table.addCell(cella6);
+                    table.addCell(cella7);
+
+                    count++;
+                    sumExisting += Float.parseFloat(new BigDecimal(Float.toString(finAmount)).toPlainString());
+                    sumRE += Float.parseFloat(new BigDecimal(Float.toString(reAmount)).toPlainString());
+
+                }
+                if (count != 0) {
+                    total = sumExisting + sumRE;
+                    Float ss2 = 0.0f;
+                    String ss = Float.toString(sumRE);
+                    if (ss.contains("-")) {
+                        String ss1 = ss.replace("-", "");
+                        ss2 = Float.parseFloat(ss1);
+                    }
+                    BigDecimal decimal = new BigDecimal(sumExisting);
+                    BigDecimal sumExistingRound = decimal.setScale(4, RoundingMode.HALF_UP);
+
+                    BigDecimal decimal1 = new BigDecimal(sumRE);
+                    BigDecimal sumRERound = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+                    BigDecimal decimal2 = new BigDecimal(total);
+                    BigDecimal totalRound = decimal2.setScale(4, RoundingMode.HALF_UP);
+
+                    BigDecimal decimal3 = new BigDecimal(ss2);
+                    BigDecimal ss2Round = decimal3.setScale(4, RoundingMode.HALF_UP);
+
+                    PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
+                    PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", sumExistingRound), cellFont));
+                    PdfPCell cell301 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", ss2Round), cellFont));
+                    PdfPCell cell302 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", sumRERound), cellFont));
+                    PdfPCell cell303 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", sumRERound), cellFont));
+                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", totalRound), cellFont));
+                    cell10.setPadding(10);
+                    cell20.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    cell301.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    cell302.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    cell303.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    cell40.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+
+                    table.addCell(" ");
+                    table.addCell(cell10);
+                    table.addCell(cell20);
+                    if (sumRE < 0)
+                        table.addCell(cell301);
+                    else if (sumRE > 0)
+                        table.addCell(cell302);
+                    else
+                        table.addCell(cell303);
+                    table.addCell(cell40);
+                    count = 0;
+                }
+                grTotalAlloc += sumExisting;
+                grTotalAddition += sumRE;
+                grTotalSum += (sumExisting + sumRE);
+//
+            }
+            BigDecimal decimal = new BigDecimal(grTotalAlloc);
+            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal1 = new BigDecimal(grTotalAddition);
+            BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal decimal2 = new BigDecimal(grTotalSum);
+            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+
+            PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
+            PdfPCell cell01 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
+            PdfPCell cell02 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
+            PdfPCell cell03 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount2), cellFont));
+            cell00.setPadding(12);
+            cell01.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+            cell02.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+            cell03.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+
+            table.addCell(" ");
+            table.addCell(cell00);
+            table.addCell(cell01);
+            table.addCell(cell02);
+            table.addCell(cell03);
+
+            document.add(table);
+
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n"));
+
+            PdfPTable tables1 = new PdfPTable(4);
+            tables1.setWidthPercentage(100);
+
+            PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
+            PdfPCell cell200 = new PdfPCell(new Phrase(""));
+            PdfPCell cell300 = new PdfPCell(new Phrase(""));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
+
+            cell100.setBorder(0);
+            cell200.setBorder(0);
+            cell300.setBorder(0);
+            cell400.setBorder(0);
+            cell400.setPadding(20);
+
+            tables1.addCell(cell100);
+            tables1.addCell(cell200);
+            tables1.addCell(cell300);
+            tables1.addCell(cell400);
+            document.add(tables1);
+/*            Paragraph heading1 = new Paragraph(formattedDateTime);
+            heading1.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(heading1);
+
+            document.add(new Paragraph("\n"));
+            Paragraph heading2 = new Paragraph(names + "\n" + unitName + "\n" + rank);
+            heading2.setAlignment(Paragraph.ALIGN_RIGHT);
+            document.add(heading2);*/
+
+            document.close();
+            FilePathResponse dto = new FilePathResponse();
+            dto.setPath(HelperUtils.FILEPATH + allocType.toUpperCase() + "_Revised_allocation-report" + timemilisec + ".pdf");
+            dto.setFileName(allocType.toUpperCase() + "_Revised_allocation-report" + timemilisec + ".pdf");
+            dtoList.add(dto);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+        });
+    }
 
 
     public static void generatePdf(String htmlContent, String outputPdfFile) throws Exception {

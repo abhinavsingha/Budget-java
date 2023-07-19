@@ -110,6 +110,7 @@ public interface MangeReportService {
 
     //  REVISED ALLOCATION REPORT
     ApiResponse<List<FilePathResponse>> getRevisedAllocationReport(String authGroupId);
+    ApiResponse<List<FilePathResponse>> getRevisedAllocationAprReport(String authGroupId);
 
 }
 

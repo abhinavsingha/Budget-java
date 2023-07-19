@@ -272,5 +272,10 @@ public class ReportController {
         return new ResponseEntity<>(mangeReportService.getRevisedAllocationReport(authGroupId), HttpStatus.OK);
     }
 
+    @GetMapping("/getRevisedAllocationAprReport/{authGroupId}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getRevisedAllocationAprReport(@PathVariable(value = "authGroupId") String authGroupId) {
+        return new ResponseEntity<>(mangeReportService.getRevisedAllocationAprReport(authGroupId), HttpStatus.OK);
+    }
+
 
 }
