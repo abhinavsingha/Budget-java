@@ -306,7 +306,7 @@ public class DocxGenaratorUtil {
                 if (key11.equalsIgnoreCase("2037")) {
                     boldText(tableView.createRun(), 10, key11 + "\n00.102.06", true);
                     XWPFParagraph tableView11 = tableRow.getCell(1).addParagraph();
-                    boldText(tableView11.createRun(), 10, "REVENUE OBJET HEAD", true);
+                    boldText(tableView11.createRun(), 10, "REVENUE OBJECT HEAD", true);
                 } else {
                     boldText(tableView.createRun(), 10, key11 + "\n00.037.01", true);
                     XWPFParagraph tableView22 = tableRow.getCell(1).addParagraph();
