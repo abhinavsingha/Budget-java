@@ -9498,8 +9498,11 @@ public class MangeReportImpl implements MangeReportService {
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocationDetails> reportDetails1 = budgetAllocationDetailsRepository.findByAuthGroupIdAndSubHead(authGroupId, subHeadId);
-                List<BudgetAllocationDetails> reportDetails11 = reportDetails1.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
-                List<BudgetAllocationDetails> reportDetails = reportDetails11.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
+                List<BudgetAllocationDetails> reportDetails;
+                if(hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID))
+                 reportDetails = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
+                else
+                reportDetails = reportDetails1.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
 
                 if (reportDetails.size() <= 0) {
                     continue;
