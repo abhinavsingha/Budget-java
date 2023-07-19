@@ -9781,11 +9781,13 @@ public class MangeReportImpl implements MangeReportService {
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocationDetails> reportDetails1 = budgetAllocationDetailsRepository.findByAuthGroupIdAndSubHead(authGroupId, subHeadId);
+                List<BudgetAllocationDetails> reportDetails2 = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
+
                 List<BudgetAllocationDetails> reportDetails;
                 if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID))
-                    reportDetails = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
+                    reportDetails = reportDetails2.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 else
-                    reportDetails = reportDetails1.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                    reportDetails = reportDetails2.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
 
                 if (reportDetails.size() <= 0) {
                     continue;
@@ -10019,11 +10021,11 @@ public class MangeReportImpl implements MangeReportService {
             bHeadType = "REVENUE OBJECT HEAD";
         } else
             bHeadType = "CAPITAL DETAILED HEAD";
-        if (!status.equalsIgnoreCase("Pending")) {
+/*        if (!status.equalsIgnoreCase("Pending")) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "PENDING RECORD NOT FOUND", HttpStatus.OK.value());
-        }
-        String allocationType = checks.get(0).getAllocTypeId();
+        }*/
+        String allocationType = checks.get(0).getAllocationTypeId();
         String finYearId = checks.get(0).getFinYear();
         String amountTypeId = checks.get(0).getAmountType();
 
@@ -10115,11 +10117,12 @@ public class MangeReportImpl implements MangeReportService {
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetails1 = budgetAllocationRepository.findByAuthGroupIdAndSubHead(authGroupId, subHeadId);
+                List<BudgetAllocation> reportDetails2 = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
                 List<BudgetAllocation> reportDetails;
                 if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID))
-                    reportDetails = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
+                    reportDetails = reportDetails2.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 else
-                    reportDetails = reportDetails1.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                    reportDetails = reportDetails2.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
 
                 if (reportDetails.size() <= 0) {
                     continue;
