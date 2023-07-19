@@ -40,7 +40,7 @@ public class DocxGenaratorUtil {
 
             XWPFTableRow tableRowOne = table.getRow(0);
             XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
-            boldText(paragraphtableRowOne.createRun(), 10, "SUB HEAD", true);
+            boldText(paragraphtableRowOne.createRun(), 10, "OBJECT HEAD", true);
 
             XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
             boldText(paragraphtableRowOne1.createRun(), 10, "UNIT NAME", true);
@@ -108,10 +108,11 @@ public class DocxGenaratorUtil {
 
             mainParagraph = document.createParagraph();
             boldText(mainParagraph.createRun(), 10, filePathResponse.getApproveName() + "", true);
+            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
 
             mainParagraph = document.createParagraph();
             normalText(mainParagraph.createRun(), 10, filePathResponse.getApproveRank() + "", true);
-
+            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
             document.write(out);
             out.close();
             document.close();
@@ -162,16 +163,13 @@ public class DocxGenaratorUtil {
 //            boldText(paragraphtableRowOne22.createRun(), 10, filePathResponse.getSubHeadKey(), true);
 
 
-
             if (filePathResponse.getSubHeadKey().equalsIgnoreCase("2037")) {
                 XWPFParagraph paragraphtableRowOne22 = tableRowOne11.getCell(0).addParagraph();
-                boldText(paragraphtableRowOne22.createRun(), 10, filePathResponse.getSubHeadKey()+ "\n00.102.06", true);
+                boldText(paragraphtableRowOne22.createRun(), 10, filePathResponse.getSubHeadKey() + "\n00.102.06", true);
             } else {
                 XWPFParagraph paragraphtableRowOne22 = tableRowOne11.getCell(0).addParagraph();
-                boldText(paragraphtableRowOne22.createRun(), 10, filePathResponse.getSubHeadKey()+ "\n00.037.01", true);
+                boldText(paragraphtableRowOne22.createRun(), 10, filePathResponse.getSubHeadKey() + "\n00.037.01", true);
             }
-
-
 
 
             XWPFParagraph paragraphtableRowOne111 = tableRowOne11.getCell(1).addParagraph();
