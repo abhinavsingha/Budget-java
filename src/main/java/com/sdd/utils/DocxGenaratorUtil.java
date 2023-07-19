@@ -255,15 +255,37 @@ public class DocxGenaratorUtil {
 //                XWPFRun run = para.createRun();
 
 
-            XWPFTableRow tableRowOne = table.getRow(0);
-            XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
-            boldText(paragraphtableRowOne.createRun(), 10, "MAJOR/MINOR/SUB HEAD", true);
+            String key = "";
+            for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
+                key = entry11.getKey();
+            }
 
-            XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
-            boldText(paragraphtableRowOne1.createRun(), 10, "DETAILED HEAD", true);
 
-            XWPFParagraph paragraphtableRowOne11 = tableRowOne.addNewTableCell().addParagraph();
-            boldText(paragraphtableRowOne11.createRun(), 10, filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", true);
+            if (key.equalsIgnoreCase("2037")) {
+
+                XWPFTableRow tableRowOne = table.getRow(0);
+                XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
+                boldText(paragraphtableRowOne.createRun(), 10, "MAJOR/MINOR/SUB HEAD", true);
+
+                XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
+                boldText(paragraphtableRowOne1.createRun(), 10, "OBJECT HEAD", true);
+
+                XWPFParagraph paragraphtableRowOne11 = tableRowOne.addNewTableCell().addParagraph();
+                boldText(paragraphtableRowOne11.createRun(), 10, filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", true);
+
+            } else {
+
+                XWPFTableRow tableRowOne = table.getRow(0);
+                XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
+                boldText(paragraphtableRowOne.createRun(), 10, "MAJOR/MINOR/SUB HEAD", true);
+
+                XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
+                boldText(paragraphtableRowOne1.createRun(), 10, "DETAILED HEAD", true);
+
+                XWPFParagraph paragraphtableRowOne11 = tableRowOne.addNewTableCell().addParagraph();
+                boldText(paragraphtableRowOne11.createRun(), 10, filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", true);
+
+            }
 
 
             double grandTotal = 0f;
