@@ -1905,15 +1905,15 @@ public class MangeReportImpl implements MangeReportService {
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
         if (hrDataList.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
-        }
+        } findHrData.getPid();
+        filePathRespo
 
         String approverPId = "";
 
         for (Integer k = 0; k < hrDataList.size(); k++) {
             HrData findHrData = hrDataList.get(k);
             if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
-                approverPId = findHrData.getPid();
-                filePathResponse.setApproveName(findHrData.getFullName());
+                approverPId =nse.setApproveName(findHrData.getFullName());
                 filePathResponse.setApproveRank(findHrData.getRank());
             }
         }

@@ -95,10 +95,6 @@ public class ReportController {
     }
 
 
-    @PostMapping("/getCdaParkingReport")
-    public ResponseEntity<ApiResponse<FilePathResponse>> getCdaParkingReport(@RequestBody CDAReportRequest reportRequest) {
-        return new ResponseEntity<>(mangeReportService.getCdaParkingReport(reportRequest), HttpStatus.OK);
-    }
 
 
     @PostMapping("/getReservedFund")
@@ -118,6 +114,11 @@ public class ReportController {
         return new ResponseEntity<>(mangeReportService.getCdaParkingReportDoc(reportRequest), HttpStatus.OK);
     }
 
+
+    @PostMapping("/getCdaParkingReport")
+    public ResponseEntity<ApiResponse<FilePathResponse>> getCdaParkingReport(@RequestBody CDAReportRequest reportRequest) {
+        return new ResponseEntity<>(mangeReportService.getCdaParkingReport(reportRequest), HttpStatus.OK);
+    }
 
     //  UNIT WISE ALLOCATION REPORT
     @PostMapping("/getUnitWiseAllocationReport")

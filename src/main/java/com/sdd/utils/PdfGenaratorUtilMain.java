@@ -212,16 +212,16 @@ public class PdfGenaratorUtilMain {
         }
 
 
-        if (key.equalsIgnoreCase("2037")) {
+//        if (key.equalsIgnoreCase("2037")) {
             table.addCell(boldText("MAJOR/MINOR/SUB HEAD", 10, 25f));
-            table.addCell(boldText("SUB HEAD", 10, 25f));
+            table.addCell(boldText("OBJET HEAD", 10, 25f));
             table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 10, 25f));
 
-        } else {
-            table.addCell(boldText("MAJOR/MINOR/SUB HEAD", 10, 25f));
-            table.addCell(boldText("OBJECT HEAD", 10, 25f));
-            table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 10, 25f));
-        }
+//        } else {
+//            table.addCell(boldText("MAJOR/MINOR/SUB HEAD", 10, 25f));
+//            table.addCell(boldText("OBJECT HEAD", 10, 25f));
+//            table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 10, 25f));
+//        }
 
 
 
@@ -233,11 +233,11 @@ public class PdfGenaratorUtilMain {
 
             if (key11.equalsIgnoreCase("2037")) {
                 table.addCell(boldText(key11 + "\n00.102.06", 10, 25f));
-                table.addCell(boldText("REVENUE", 10, 25f));
+                table.addCell(boldText("REVENUE OBJET HEAD", 10, 25f));
                 table.addCell(boldText("", 10, 25f));
             } else {
                 table.addCell(boldText(key11 + "\n00.037.01", 10, 25f));
-                table.addCell(boldText("CAPITAL", 10, 25f));
+                table.addCell(boldText("CAPITAL DETAILED HEAD", 10, 25f));
                 table.addCell(boldText("", 10, 25f));
             }
 
@@ -303,10 +303,19 @@ public class PdfGenaratorUtilMain {
 
 
         Font font = new Font(Font.FontFamily.COURIER, 15, Font.BOLD);
-        Chunk header = new Chunk("\n" + "CDA WISE/OBJECT HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() + "\n" + "\n", font);
         Paragraph preface = new Paragraph();
         preface.setAlignment(Element.ALIGN_CENTER);
-        preface.add(header);
+
+        if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
+            Chunk header = new Chunk("\n" + "CDA WISE/OBJECT HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() + "\n" + "\n", font);
+            preface.add(header);
+        } else {
+            Chunk header = new Chunk("\n" + "CDA WISE/DETAILED HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() + "\n" + "\n", font);
+            preface.add(header);
+        }
+
+
+
 
         String reOrCapital = "";
         if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
@@ -427,7 +436,13 @@ public class PdfGenaratorUtilMain {
         table.setWidthPercentage(100);
         table.setSpacingAfter(10);
 
-        table.addCell(boldText("Sub Head", 10, 20f));
+        if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
+            table.addCell(boldText("Revenue Object Head", 10, 20f));
+        } else {
+            table.addCell(boldText("Capital Detailed Head", 10, 20f));
+        }
+
+
         table.addCell(boldText("Allocation Amount", 10, 20f));
         table.addCell(boldText("Reserve Fund", 10, 20f));
 

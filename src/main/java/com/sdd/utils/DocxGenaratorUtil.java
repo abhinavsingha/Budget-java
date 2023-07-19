@@ -1,7 +1,10 @@
 package com.sdd.utils;
 
 
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
 import com.sdd.exception.SDDException;
 import com.sdd.response.CDAReportResponse;
 import com.sdd.response.CDAReportSubResponse;
@@ -261,7 +264,7 @@ public class DocxGenaratorUtil {
             }
 
 
-            if (key.equalsIgnoreCase("2037")) {
+//            if (key.equalsIgnoreCase("2037")) {
 
                 XWPFTableRow tableRowOne = table.getRow(0);
                 XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
@@ -273,19 +276,19 @@ public class DocxGenaratorUtil {
                 XWPFParagraph paragraphtableRowOne11 = tableRowOne.addNewTableCell().addParagraph();
                 boldText(paragraphtableRowOne11.createRun(), 10, filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", true);
 
-            } else {
-
-                XWPFTableRow tableRowOne = table.getRow(0);
-                XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
-                boldText(paragraphtableRowOne.createRun(), 10, "MAJOR/MINOR/SUB HEAD", true);
-
-                XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
-                boldText(paragraphtableRowOne1.createRun(), 10, "DETAILED HEAD", true);
-
-                XWPFParagraph paragraphtableRowOne11 = tableRowOne.addNewTableCell().addParagraph();
-                boldText(paragraphtableRowOne11.createRun(), 10, filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", true);
-
-            }
+//            } else {
+//
+//                XWPFTableRow tableRowOne = table.getRow(0);
+//                XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
+//                boldText(paragraphtableRowOne.createRun(), 10, "MAJOR/MINOR/SUB HEAD", true);
+//
+//                XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
+//                boldText(paragraphtableRowOne1.createRun(), 10, "DETAILED HEAD", true);
+//
+//                XWPFParagraph paragraphtableRowOne11 = tableRowOne.addNewTableCell().addParagraph();
+//                boldText(paragraphtableRowOne11.createRun(), 10, filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", true);
+//
+//            }
 
 
             double grandTotal = 0f;
@@ -300,11 +303,11 @@ public class DocxGenaratorUtil {
                 if (key11.equalsIgnoreCase("2037")) {
                     boldText(tableView.createRun(), 10, key11 + "\n00.102.06", true);
                     XWPFParagraph tableView11 = tableRow.getCell(1).addParagraph();
-                    boldText(tableView11.createRun(), 10, "REVENUE", true);
+                    boldText(tableView11.createRun(), 10, "REVENUE OBJET HEAD", true);
                 } else {
                     boldText(tableView.createRun(), 10, key11 + "\n00.037.01", true);
                     XWPFParagraph tableView22 = tableRow.getCell(1).addParagraph();
-                    boldText(tableView22.createRun(), 10, "CAPITAL", true);
+                    boldText(tableView22.createRun(), 10, "CAPITAL DETAILED HEAD", true);
                 }
 
 
@@ -414,8 +417,16 @@ public class DocxGenaratorUtil {
 
             mainParagraph = document.createParagraph();
             mainParagraph.setAlignment(ParagraphAlignment.CENTER);
-            boldText(mainParagraph.createRun(), 20, "\n" + "CDA WISE/OBJECT HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear(), true);
-            mainParagraph.createRun().addBreak();
+
+
+            if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
+                boldText(mainParagraph.createRun(), 20, "\n" + "CDA WISE/OBJECT HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear(), true);
+                mainParagraph.createRun().addBreak();
+            } else {
+                boldText(mainParagraph.createRun(), 20, "\n" + "CDA WISE/DETAILED HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear(), true);
+                mainParagraph.createRun().addBreak();
+            }
+
 
             mainParagraph = document.createParagraph();
             mainParagraph.setAlignment(ParagraphAlignment.CENTER);
@@ -550,6 +561,9 @@ public class DocxGenaratorUtil {
             boldText(mainParagraph.createRun(), 17, "\n" + "RESERVE FUND " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear(), true);
             mainParagraph.createRun().addBreak();
 
+
+
+
             mainParagraph = document.createParagraph();
             mainParagraph.setAlignment(ParagraphAlignment.CENTER);
             boldText(mainParagraph.createRun(), 17, reOrCapital, true);
@@ -568,15 +582,31 @@ public class DocxGenaratorUtil {
             table.setWidth("100%");
 
 
-            XWPFTableRow tableRowOne = table.getRow(0);
-            XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
-            boldText(paragraphtableRowOne.createRun(), 15, "Sub Head", true);
 
-            XWPFParagraph paragraphtableRowTwo = tableRowOne.addNewTableCell().addParagraph();
-            boldText(paragraphtableRowTwo.createRun(), 15, "Allocation Amount", true);
+            if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
+                XWPFTableRow tableRowOne = table.getRow(0);
+                XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
+                boldText(paragraphtableRowOne.createRun(), 15, "Revenue Object Head", true);
 
-            XWPFParagraph paragraphtableRowThree = tableRowOne.addNewTableCell().addParagraph();
-            boldText(paragraphtableRowThree.createRun(), 15, "RESERVE FUND", true);
+                XWPFParagraph paragraphtableRowTwo = tableRowOne.addNewTableCell().addParagraph();
+                boldText(paragraphtableRowTwo.createRun(), 15, "Allocation Amount", true);
+
+                XWPFParagraph paragraphtableRowThree = tableRowOne.addNewTableCell().addParagraph();
+                boldText(paragraphtableRowThree.createRun(), 15, "RESERVE FUND", true);
+
+            } else {
+                XWPFTableRow tableRowOne = table.getRow(0);
+                XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
+                boldText(paragraphtableRowOne.createRun(), 15, "Capital Detailed Head", true);
+
+                XWPFParagraph paragraphtableRowTwo = tableRowOne.addNewTableCell().addParagraph();
+                boldText(paragraphtableRowTwo.createRun(), 15, "Allocation Amount", true);
+
+                XWPFParagraph paragraphtableRowThree = tableRowOne.addNewTableCell().addParagraph();
+                boldText(paragraphtableRowThree.createRun(), 15, "RESERVE FUND", true);
+
+            }
+
 
 
             for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
