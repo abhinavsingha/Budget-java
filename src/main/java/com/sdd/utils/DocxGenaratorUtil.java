@@ -589,24 +589,24 @@ public class DocxGenaratorUtil {
             if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
                 XWPFTableRow tableRowOne = table.getRow(0);
                 XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
-                boldText(paragraphtableRowOne.createRun(), 15, "Revenue Object Head", true);
+                boldText(paragraphtableRowOne.createRun(), 13, "Revenue Object Head", true);
 
                 XWPFParagraph paragraphtableRowTwo = tableRowOne.addNewTableCell().addParagraph();
-                boldText(paragraphtableRowTwo.createRun(), 15, "Allocation Amount", true);
+                boldText(paragraphtableRowTwo.createRun(), 13, "Allocation Amount", true);
 
                 XWPFParagraph paragraphtableRowThree = tableRowOne.addNewTableCell().addParagraph();
-                boldText(paragraphtableRowThree.createRun(), 15, "Reserve Fund", true);
+                boldText(paragraphtableRowThree.createRun(), 13, "Reserve Fund", true);
 
             } else {
                 XWPFTableRow tableRowOne = table.getRow(0);
                 XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
-                boldText(paragraphtableRowOne.createRun(), 15, "Capital Detailed Head", true);
+                boldText(paragraphtableRowOne.createRun(), 13, "Capital Detailed Head", true);
 
                 XWPFParagraph paragraphtableRowTwo = tableRowOne.addNewTableCell().addParagraph();
-                boldText(paragraphtableRowTwo.createRun(), 15, "Allocation Amount", true);
+                boldText(paragraphtableRowTwo.createRun(), 13, "Allocation Amount", true);
 
                 XWPFParagraph paragraphtableRowThree = tableRowOne.addNewTableCell().addParagraph();
-                boldText(paragraphtableRowThree.createRun(), 15, "RESERVE FUND", true);
+                boldText(paragraphtableRowThree.createRun(), 13, "Reserve Fund", true);
 
             }
 
@@ -633,15 +633,15 @@ public class DocxGenaratorUtil {
 
             XWPFTableRow tableRow11 = table.createRow();
             XWPFParagraph paragraph1234 = tableRow11.getCell(0).addParagraph();
-            boldText(paragraph1234.createRun(), 12, ConverterUtils.addDecimalPoint("Grand Total"), false);
+            boldText(paragraph1234.createRun(), 13, ConverterUtils.addDecimalPoint("Grand Total"), true);
 
 
             XWPFParagraph paragraph11 = tableRow11.getCell(1).addParagraph();
-            normalText(paragraph11.createRun(), 12, ConverterUtils.addDecimalPoint(allocationGrandTotal + ""), false);
+            normalText(paragraph11.createRun(), 13, ConverterUtils.addDecimalPoint(allocationGrandTotal + ""), true);
             paragraph11.setAlignment(ParagraphAlignment.RIGHT);
 
             XWPFParagraph paragraph111 = tableRow11.getCell(2).addParagraph();
-            normalText(paragraph111.createRun(), 12, ConverterUtils.addDecimalPoint(grandTotal + ""), false);
+            normalText(paragraph111.createRun(), 13, ConverterUtils.addDecimalPoint(grandTotal + ""), true);
             paragraph111.setAlignment(ParagraphAlignment.RIGHT);
 
             document.write(out);
