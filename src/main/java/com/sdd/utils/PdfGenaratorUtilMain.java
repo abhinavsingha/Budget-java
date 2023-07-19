@@ -437,41 +437,41 @@ public class PdfGenaratorUtilMain {
         table.setSpacingAfter(10);
 
         if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
-            table.addCell(boldText("Revenue Object Head", 10, 20f));
+            table.addCell(boldText("Revenue Object Head", 12, 20f));
         } else {
-            table.addCell(boldText("Capital Detailed Head", 10, 20f));
+            table.addCell(boldText("Capital Detailed Head", 12, 20f));
         }
 
 
-        table.addCell(boldText("Allocation Amount", 10, 20f));
-        table.addCell(boldText("Reserve Fund", 10, 20f));
+        table.addCell(boldText("Allocation Amount", 12, 20f));
+        table.addCell(boldText("Reserve Fund", 12, 20f));
 
 
         for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
             String key = entry.getKey();
 
             List<CDAReportResponse> tabData = entry.getValue();
-            table.addCell(boldText(key, 10, 35f));
+            table.addCell(boldText(key, 12, 35f));
 
             Boolean isNumber = ConverterUtils.isNumber(tabData.get(0).getAllocationAmount() + "");
             if (isNumber) {
-                table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(0).getAllocationAmount()), 10, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+                table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(0).getAllocationAmount()), 12, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
             } else {
-                table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(0).getAllocationAmount()), 10, 20f));
+                table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(0).getAllocationAmount()), 12, 20f));
             }
 
 
             Boolean isNumber11 = ConverterUtils.isNumber(tabData.get(0).getName() + "");
             if (isNumber11) {
-                table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(0).getName()), 10, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+                table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(0).getName()), 12, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
             } else {
-                table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(0).getName()), 10, 20f));
+                table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(0).getName()), 12, 20f));
             }
         }
 
-        table.addCell(boldText("Grand Total", 10, 20f));
-        table.addCell(boldText(ConverterUtils.addDecimalPoint(allocationGrandTotal + ""), 10, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
-        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 10, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+        table.addCell(boldText("Grand Total", 13, 20f));
+        table.addCell(boldText(ConverterUtils.addDecimalPoint(allocationGrandTotal + ""), 13, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 13, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
 
 
         int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
