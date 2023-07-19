@@ -40,10 +40,16 @@ public class DocxGenaratorUtil {
 //                XWPFParagraph para = document.createParagraph();
 //                XWPFRun run = para.createRun();
 
-
             XWPFTableRow tableRowOne = table.getRow(0);
-            XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
-            boldText(paragraphtableRowOne.createRun(), 10, "OBJECT HEAD", true);
+            if (filePathResponse.getSubHeadKey().contains("2037")) {
+
+                XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
+                boldText(paragraphtableRowOne.createRun(), 10, "OBJECT HEAD", true);
+            } else {
+                XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
+                boldText(paragraphtableRowOne.createRun(), 10, "DETAILED HEAD", true);
+            }
+
 
             XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
             boldText(paragraphtableRowOne1.createRun(), 10, "UNIT NAME", true);
@@ -66,8 +72,7 @@ public class DocxGenaratorUtil {
 //                            tableRow.getCell(1).setText(tabData11.get(i).getUnit());
                         XWPFParagraph paragraph = tableRow.getCell(1).addParagraph();
                         normalText(paragraph.createRun(), 10, tabData11.get(i).getUnit(), false);
-                        paragraph.setAlignment(ParagraphAlignment.RIGHT);
-//                            tableRow.getCell(2).setText(tabData11.get(i).getAmount());
+
                         XWPFParagraph paragraph11 = tableRow.getCell(2).addParagraph();
                         normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(tabData11.get(i).getAmount()), false);
                         paragraph11.setAlignment(ParagraphAlignment.RIGHT);
