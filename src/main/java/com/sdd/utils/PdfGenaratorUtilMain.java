@@ -336,10 +336,10 @@ public class PdfGenaratorUtilMain {
         PdfPTable table = new PdfPTable(tabData1.size() + 1);
         table.setWidthPercentage(100);
 //        table.setWidths(pointColumnWidths);
-        table.setSpacingAfter(10);
+        table.setSpacingAfter(5);
 
 
-        table.addCell(boldText("object", 6, 35f));
+        table.addCell(boldText("object", 7, 35f));
         for (Integer i = 0; i < tabData1.size(); i++) {
             table.addCell(boldText(tabData1.get(i).getName(), 5, 20f));
         }
@@ -350,19 +350,19 @@ public class PdfGenaratorUtilMain {
 
             if (!key.equalsIgnoreCase("Sub Head")) {
                 List<CDAReportResponse> tabData = entry.getValue();
-                table.addCell(boldText(key, 5, 35f));
+                table.addCell(boldText(key, 7, 35f));
                 for (Integer i = 0; i < tabData.size(); i++) {
 
                     Boolean isNumber = ConverterUtils.isNumber(tabData.get(i).getName() + "");
                     if (isNumber) {
-                        table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(i).getName()), 6, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(i).getName()), 7, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
                     } else {
-                        table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(i).getName()), 6, 20f));
+                        table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(i).getName()), 7, 20f));
                     }
                 }
             }
         }
-        table.addCell(boldText("Grand Total", 5, 20f));
+        table.addCell(boldText("Grand Total", 7, 20f));
 //        for (Integer i = 0; i < tabData1.size(); i++) {
 //            if (i == (tabData1.size() - 1)) {
 //
@@ -373,9 +373,9 @@ public class PdfGenaratorUtilMain {
 
             Boolean isNumber = ConverterUtils.isNumber(tabData + "");
             if (isNumber) {
-                table.addCell(boldText(ConverterUtils.addDecimalPoint(tabData), 6, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+                table.addCell(boldText(ConverterUtils.addDecimalPoint(tabData), 7, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
             } else {
-                table.addCell(boldText(ConverterUtils.addDecimalPoint(tabData), 6, 20f));
+                table.addCell(boldText(ConverterUtils.addDecimalPoint(tabData), 7, 20f));
             }
 
 
@@ -383,7 +383,7 @@ public class PdfGenaratorUtilMain {
 //            }
 //        }
 
-        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 6, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 7, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
 
 
         int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());

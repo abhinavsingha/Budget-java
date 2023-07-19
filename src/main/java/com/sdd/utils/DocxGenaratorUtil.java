@@ -212,7 +212,6 @@ public class DocxGenaratorUtil {
                     grandTotal = grandTotal + Double.parseDouble(tabData11.get(i).getAmount());
 
                 }
-
             }
 
 
@@ -240,7 +239,6 @@ public class DocxGenaratorUtil {
             document.write(out);
             out.close();
             document.close();
-
 
         } catch (Exception e) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), e.toString());
