@@ -442,7 +442,14 @@ public class MangeReportImpl implements MangeReportService {
         budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsBudgetRevisionAndIsFlag(authGroupId, hrData.getUnitId(), "0", "0");
 
         if (budgetAllocationReport.size() <= 0) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT IS ZERO.YOU CAN NOT DOWNLOAD ZERO ALLOCATION REPORT");
+        }
+
+
+        if(budgetAllocationReport.size() ==1){
+            if (Double.parseDouble(budgetAllocationReport.get(0).getRevisedAmount()) == 0) {
+                continue;
+            }
         }
 
         String key = "";
