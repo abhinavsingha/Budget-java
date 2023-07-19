@@ -3396,9 +3396,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(reportRequest.getMajorHd());
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = rowDatas0.get(0).getRemark() + " "+ "DETAILED" + " " + "HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -3628,9 +3628,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(reportRequest.getMajorHd());
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = rowDatas0.get(0).getRemark() + " "+ "DETAILED" + " " + "HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -3942,9 +3942,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(req.getSubHeadId());
         if (bHead.getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + bHead.getRemark() + " " + "HEAD";
+            bHeadType = bHead.getRemark() + " "+ "DETAILED" + " " + "HEAD";
 
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(req.getFinYearId());
         List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getSubHeadId(), hrData.getUnitId(), req.getFinYearId(), req.getAllocationTypeId(), "0");
@@ -4163,9 +4163,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(req.getSubHeadId());
         if (bHead.getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + bHead.getRemark() + " " + "HEAD";
+            bHeadType = bHead.getRemark() + " "+ "DETAILED" + " " + "HEAD";
 
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(req.getFinYearId());
         List<BudgetAllocation> budgetAllocationsDetaliss = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getSubHeadId(), hrData.getUnitId(), req.getFinYearId(), req.getAllocationTypeId(), "0");
@@ -4465,9 +4465,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = "CAPITAL DETAILED HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -4700,9 +4700,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = "CAPITAL DETAILED HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -4925,9 +4925,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = "CAPITAL DETAILED HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -5055,9 +5055,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = "CAPITAL DETAILED HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -5389,9 +5389,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = "CAPITAL DETAILED HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -5706,9 +5706,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = "CAPITAL DETAILED HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -5866,9 +5866,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = "CAPITAL DETAILED HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -6156,9 +6156,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = "CAPITAL DETAILED HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -6430,9 +6430,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = "CAPITAL DETAILED HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -6596,9 +6596,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = "CAPITAL DETAILED HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -7050,9 +7050,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = "CAPITAL DETAILED HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -7509,9 +7509,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = "CAPITAL DETAILED HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -8526,9 +8526,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = "CAPITAL DETAILED HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -8873,9 +8873,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = "CAPITAL DETAILED HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -9204,9 +9204,9 @@ public class MangeReportImpl implements MangeReportService {
         String bHeadType = "";
         List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
         if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
-            bHeadType = "DETAILED OBJECT HEAD";
+            bHeadType = "REVENUE OBJECT HEAD";
         } else
-            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+            bHeadType = "CAPITAL DETAILED HEAD";
         List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
         List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
         if (rowData.size() <= 0) {
@@ -9370,6 +9370,13 @@ public class MangeReportImpl implements MangeReportService {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
         String status=checks.get(0).getStatus();
+        String subHd=checks.get(0).getSubHead();
+        String bHeadType="";
+        BudgetHead bHeadids = subHeadRepository.findByBudgetCodeId(subHd);
+        if (bHeadids.getRemark().equalsIgnoreCase("REVENUE")) {
+            bHeadType = "REVENUE OBJECT HEAD";
+        } else
+            bHeadType = "CAPITAL DETAILED HEAD";
         if (!status.equalsIgnoreCase("Pending")) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "PENDING RECORD NOT FOUND", HttpStatus.OK.value());
@@ -9434,7 +9441,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPTable table = new PdfPTable(5);
             table.setWidthPercentage(100);
 
-            PdfPCell cell1 = new PdfPCell(new Phrase("REVENUE OBJECT HEAD ", cellFont));
+            PdfPCell cell1 = new PdfPCell(new Phrase(bHeadType, cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
             PdfPCell cell3 = new PdfPCell(new Phrase("ALLOCATION AMOUNT", cellFont));
             PdfPCell cell4 = new PdfPCell(new Phrase("ADDITIONAL AMOUNT", cellFont));
