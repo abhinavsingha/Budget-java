@@ -484,6 +484,7 @@ public class MangeReportImpl implements MangeReportService {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
+
             } else {
                 List<ReportSubModel> reportMaindata = new ArrayList<ReportSubModel>();
                 ReportSubModel subModel = new ReportSubModel();
@@ -600,6 +601,11 @@ public class MangeReportImpl implements MangeReportService {
         }
         if (amountType == null || amountType.isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AMOUNT TYPE ID CAN NOT BE BLANK");
+        }
+
+        AmountUnit amountUnitServer = amountUnitRepository.findByAmountTypeId(amountType);
+        if(amountUnitServer == null){
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AMOUNT TYPE ID");
         }
 
         String fileName = "BudgetReceipt" + hrData.getUnitId() + System.currentTimeMillis();

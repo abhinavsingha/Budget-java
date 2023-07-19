@@ -332,16 +332,17 @@ public class PdfGenaratorUtilMain {
 
 
         List<CDAReportResponse> tabData1 = map.get("Sub Head");
-//        float[] pointColumnWidths = {50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F};
         PdfPTable table = new PdfPTable(tabData1.size() + 1);
+
+//        float[] pointColumnWidths = {50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F};
         table.setWidthPercentage(100);
 //        table.setWidths(pointColumnWidths);
-        table.setSpacingAfter(5);
+        table.setSpacingAfter(1);
 
 
-        table.addCell(boldText("object", 7, 35f));
+        table.addCell(boldText("object", 6, 35f));
         for (Integer i = 0; i < tabData1.size(); i++) {
-            table.addCell(boldText(tabData1.get(i).getName(), 5, 20f));
+            table.addCell(boldText(tabData1.get(i).getName(), 6, 20f));
         }
 
 
@@ -355,18 +356,20 @@ public class PdfGenaratorUtilMain {
 
                     Boolean isNumber = ConverterUtils.isNumber(tabData.get(i).getName() + "");
                     if (isNumber) {
+//                        float[] columnWidths = new float[]{20f};
+//                        table.setWidths(columnWidths);
                         table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(i).getName()), 7, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
                     } else {
+
+//                        PdfPCell cell = new PdfPCell(new Phrase(" Date" ));
+//                        float[] columnWidths = new float[]{50f};
+//                        table.setWidths(columnWidths);
                         table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(i).getName()), 7, 20f));
                     }
                 }
             }
         }
-        table.addCell(boldText("Grand Total", 7, 20f));
-//        for (Integer i = 0; i < tabData1.size(); i++) {
-//            if (i == (tabData1.size() - 1)) {
-//
-//            } else {
+        table.addCell(boldText("Grand Total"+tabData1.size(), 7, 20f));
 
         for (Map.Entry<String, String> entry : coloumWiseAmount.entrySet()) {
             String tabData = entry.getValue();
@@ -380,8 +383,6 @@ public class PdfGenaratorUtilMain {
 
 
         }
-//            }
-//        }
 
         table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 7, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
 
