@@ -15,7 +15,6 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @NoArgsConstructor
-@Transactional
 @Table(name = "CdaParkingTrans")
 public class CdaParkingTrans {
     @Id

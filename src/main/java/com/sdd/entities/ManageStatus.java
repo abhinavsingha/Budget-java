@@ -14,7 +14,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Transactional
 @Table(name = "MsgStatus")
 public class ManageStatus {
 

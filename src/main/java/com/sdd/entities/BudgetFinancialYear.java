@@ -16,7 +16,6 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-@Transactional
 @Table(name = "BudgetFinancialYear")
 public class BudgetFinancialYear {
     @Id

@@ -15,7 +15,6 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @NoArgsConstructor
-@Transactional
 @Table(name = "BudgetHead")
 public class BudgetHead {
 

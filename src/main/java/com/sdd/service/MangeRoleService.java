@@ -12,5 +12,7 @@ public interface MangeRoleService {
 
 	ApiResponse<List<Role>> getAllRole();
 
+	ApiResponse<List<Role>> getAllRoleMain();
+
 	ApiResponse<Role> getRoleById( String roleId);
 }

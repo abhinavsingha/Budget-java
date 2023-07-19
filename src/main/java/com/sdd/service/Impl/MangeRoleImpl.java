@@ -83,6 +83,55 @@ public class MangeRoleImpl implements MangeRoleService {
 
     }
 
+
+    public ApiResponse<List<Role>> getAllRoleMain() {
+        String token = headerUtils.getTokeFromHeader();
+
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(),"1");
+        List<Role> getAllRole = new ArrayList<>();
+
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        } else {
+
+
+            HrData hrData = hrDataRepository.findByPidAndIsActive(hrDataCheck.getPid(),"1");
+            String cuurentRole = hrData.getRoleId().split(",")[0];
+            CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
+            List<Role> getAllRoleMainData = roleRepository.findAll();
+
+            for (Integer j = 0; j < getAllRoleMainData.size(); j++) {
+
+
+
+
+            }
+
+
+//            if (cuurentRole.equalsIgnoreCase(HelperUtils.SYSTEMADMIN)) {
+//
+//
+//            } else if (cuurentRole.equalsIgnoreCase(HelperUtils.UNITADMIN)) {
+//                if (cgUnit.getPurposeCode().equalsIgnoreCase("0")) {
+//                    getAllRole = roleRepository.findByPurposeCodeOrPurposeCode("0", "1");
+////                    getAllRole = roleRepository.findByPurposeCode(cgUnit.getPurposeCode());
+//                } else if (cgUnit.getPurposeCode().equalsIgnoreCase("1")) {
+//                    getAllRole = roleRepository.findByPurposeCodeOrPurposeCode("0", "1");
+////                    getAllRole = roleRepository.findByPurposeCode(cgUnit.getPurposeCode());
+//                }
+//
+//            }
+
+
+        }
+
+
+        return ResponseUtils.createSuccessResponse(getAllRole, new TypeReference<List<Role>>() {
+        });
+
+    }
+
     @Override
     public ApiResponse<Role> getRoleById(String roleId) {
         String token = headerUtils.getTokeFromHeader();

@@ -16,7 +16,6 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-@Transactional
 @Table(name = "FileUpload")
 public class FileUpload {
 

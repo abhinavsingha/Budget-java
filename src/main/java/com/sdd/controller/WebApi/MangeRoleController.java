@@ -29,6 +29,12 @@ public class MangeRoleController {
 	}
 
 
+	@GetMapping("/getAllRoleMain")
+	public ResponseEntity<ApiResponse<List<Role>>> getAllRoleMain() {
+		return new ResponseEntity<>(mangeRoleService.getAllRoleMain(), HttpStatus.OK);
+	}
+
+
 
 	@GetMapping("/getRoleById/{roleId}")
 	public ResponseEntity<ApiResponse<Role>> getRoleById(@PathVariable(value = "roleId") String roleId) {

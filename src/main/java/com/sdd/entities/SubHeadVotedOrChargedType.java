@@ -15,7 +15,6 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @NoArgsConstructor
-@Transactional
 @Table(name = "SUBHEAD_CHARGED_VOTED")
 public class SubHeadVotedOrChargedType {
     @Id

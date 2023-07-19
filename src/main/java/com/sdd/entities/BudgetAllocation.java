@@ -16,7 +16,6 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @NoArgsConstructor
-@Transactional
 @Table(name = "BudgetAllocation")
 public class BudgetAllocation {
     @Id
