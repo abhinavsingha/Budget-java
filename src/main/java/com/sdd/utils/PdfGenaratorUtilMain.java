@@ -496,8 +496,8 @@ public class PdfGenaratorUtilMain {
         phrase.add(contigentBill);
 
 
-        Chunk normalTexet = new Chunk(cbReportResponse.getOnAccountData() + " \n", normalFont);
-        phrase.add(normalTexet);
+//        Chunk normalTexet = new Chunk(cbReportResponse.getOnAccountData() + " \n", normalFont);
+//        phrase.add(normalTexet);
 
 
         Chunk totalAmount = new Chunk("Total Amount/ Budget allotted                                                                                    (INR)  " + cbReportResponse.getAllocatedAmount() + " \n", normalFont);
@@ -531,18 +531,19 @@ public class PdfGenaratorUtilMain {
         table.addCell(boldText("Amount (in INR)", 10, 25f));
 
         table.addCell(normalText("01", 9, 50f));
-        table.addCell(normalText("Expenditure incurred towards quaterly payment for the 3rd otr from 01 Sep 22 to 30 Nov 22 in respect of Hirring of Designer/Developer IT Manpower (Project-SDOT) through " + cbReportResponse.getCbData().getVendorName() + " vibe Invoiice/bill " + cbReportResponse.getCbData().getInvoiceNO() + " Dated " + cbReportResponse.getCbData().getInvoiceDate(), 10, 50f));
-        table.addCell(normalText(ConverterUtils.addDecimalPoint( bill.toString()), 9, 50f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+//        table.addCell(normalText("Expenditure incurred towards quaterly payment for the 3rd otr from 01 Sep 22 to 30 Nov 22 in respect of Hirring of Designer/Developer IT Manpower (Project-SDOT) through " + cbReportResponse.getCbData().getVendorName() + " vibe Invoiice/bill " + cbReportResponse.getCbData().getInvoiceNO() + " Dated " + cbReportResponse.getCbData().getInvoiceDate(), 10, 50f));
+        table.addCell(normalText(cbReportResponse.getOnAccountData(), 10, 50f));
+        table.addCell(normalText(ConverterUtils.addDecimalPoint(bill.toString()), 9, 50f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
 
 
         table.addCell(normalText("", 9, 25f));
         table.addCell(normalText("GST " + cbReportResponse.getCbData().getGst() + " % ", 9, 25f));
-        table.addCell(normalText(ConverterUtils.addDecimalPoint( String.format("%.2f", gst)), 9, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+        table.addCell(normalText(ConverterUtils.addDecimalPoint(String.format("%.2f", gst)), 9, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
 
 
         table.addCell(normalText("", 9, 25f));
         table.addCell(normalText("TOTAL ", 9, 25f));
-        table.addCell(normalText(ConverterUtils.addDecimalPoint( cbReportResponse.getCurrentBillAmount()), 9, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+        table.addCell(normalText(ConverterUtils.addDecimalPoint(cbReportResponse.getCurrentBillAmount()), 9, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
 
         table.addCell(normalText("", 9, 25f));
         table.addCell(boldText("Amount in words (Rupees " + convertDecimaltoString(cbReportResponse.getCurrentBillAmount()) + ")", 9, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -572,11 +573,11 @@ public class PdfGenaratorUtilMain {
 
 
         Chunk certifyc1 = new Chunk("(c) The Expenditure incurred is creditable to Major Head ", normalFont);
-        Chunk certifyc2 = new Chunk(cbReportResponse.getBudgetHead().getMajorHead()+",", font);
+        Chunk certifyc2 = new Chunk(cbReportResponse.getBudgetHead().getMajorHead() + ",", font);
         Chunk certifyc3 = new Chunk(" Sub Major Head 00, Minor Head ", normalFont);
         Chunk certifyc4 = new Chunk(cbReportResponse.getBudgetHead().getMinorHead(), font);
-        Chunk certifyc5 = new Chunk(", " +cbReportResponse.getBudgetHead().getDetailHeadType()+":", normalFont);
-        Chunk certifyc6 = new Chunk(cbReportResponse.getBudgetHead().getSubHeadDescr()+ " \n", font);
+        Chunk certifyc5 = new Chunk(", " + cbReportResponse.getBudgetHead().getDetailHeadType() + ":", normalFont);
+        Chunk certifyc6 = new Chunk(cbReportResponse.getBudgetHead().getSubHeadDescr() + " \n", font);
 //        Chunk certifyc7 = new Chunk(".Category Code ", normalFont);
 //        Chunk certifyc8 = new Chunk(cbReportResponse.getBudgetHead().getBudgetHeadId() + " \n", font);
         phraseFooter.add(certifyc1);
@@ -590,7 +591,6 @@ public class PdfGenaratorUtilMain {
 
         Chunk certifyd = new Chunk("(d) The expenditure has been incurred in the interest of the state." + " \n ", normalFont);
         phraseFooter.add(certifyd);
-
 
 
         PdfPTable tables1 = new PdfPTable(4);
@@ -615,12 +615,9 @@ public class PdfGenaratorUtilMain {
         phraseFooter.add(tables1);
 
 
-
-
         Font counterSign = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
-        Chunk counterSigner = new Chunk("                                                               COUNTERSIGNED" + " \n" , counterSign);
+        Chunk counterSigner = new Chunk("                                                               COUNTERSIGNED" + " \n", counterSign);
         phraseFooter.add(counterSigner);
-
 
 
         PdfPTable tables11 = new PdfPTable(4);

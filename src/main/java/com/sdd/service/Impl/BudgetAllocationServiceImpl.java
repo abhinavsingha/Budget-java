@@ -3585,6 +3585,27 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         mangeInboxOutBoxRepository.save(mangeInboxOutbox);
 
 
+
+//        MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
+//        mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
+//        mangeInboxOutbox.setRemarks("Budget Allocation SubHead Wise");
+//        mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+//        mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+//        mangeInboxOutbox.setToUnit(hrData.getUnitId());
+//        mangeInboxOutbox.setFromUnit(hrData.getUnitId());
+//        mangeInboxOutbox.setGroupId(authGrouPid);
+//        mangeInboxOutbox.setType(budgetHeadId.getSubHeadDescr());
+//        mangeInboxOutbox.setRoleId(hrData.getRoleId());
+//        mangeInboxOutbox.setCreaterpId(hrData.getPid());
+//        mangeInboxOutbox.setState("AP");
+//        mangeInboxOutbox.setApproverpId("");
+//        mangeInboxOutbox.setIsFlag("1");
+//        mangeInboxOutbox.setIsArchive("0");
+//        mangeInboxOutbox.setIsApproved("0");
+//        mangeInboxOutbox.setIsRevision(0);
+//        mangeInboxOutbox.setStatus("Pending");
+//        mangeInboxOutbox.setIsBgcg("BG");
+
         response.setMsg("Data save successfully");
         return ResponseUtils.createSuccessResponse(response, new TypeReference<BudgetAllocationSaveResponse>() {
         });
