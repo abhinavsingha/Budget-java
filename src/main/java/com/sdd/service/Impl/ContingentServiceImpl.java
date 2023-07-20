@@ -370,7 +370,7 @@ public class ContingentServiceImpl implements ContingentService {
                 double parkingAmount = Double.parseDouble(contingentBillSaveRequestList.get(i).getCdaParkingId().get(m).getCdaAmount());
 
                 double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
-                cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                cdaParkingTrans.setRemainingCdaAmount(bakiPesa + "");
                 cdaParkingTransRepository.save(cdaParkingTrans);
             }
 
@@ -486,11 +486,6 @@ public class ContingentServiceImpl implements ContingentService {
             }
 
 
-//            ContigentBill contigentBill1 = contigentBillRepository.findByCbIdAndIsFlag(contingentBillSaveRequest.getContingentBilId(), "0");
-
-//            if (contigentBill1 == null) {
-//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID OLD CB ID CAN NOT BE BLANK");
-//            }
 
             if (contingentBillSaveRequest.getCbAmount() == null || contingentBillSaveRequest.getCbAmount().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB AMOUNT CAN NOT BE BLANK");
@@ -774,6 +769,8 @@ public class ContingentServiceImpl implements ContingentService {
         }
 
 
+
+
         for (Integer i = 0; i < contingentBillSaveRequestList.size(); i++) {
 
             for (Integer m = 0; m < contingentBillSaveRequestList.get(i).getCdaParkingId().size(); m++) {
@@ -785,7 +782,7 @@ public class ContingentServiceImpl implements ContingentService {
                 double parkingAmount = Double.parseDouble(contingentBillSaveRequestList.get(i).getCdaParkingId().get(m).getCdaAmount());
 
                 double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
-                cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                cdaParkingTrans.setRemainingCdaAmount(bakiPesa +"");
                 cdaParkingTransRepository.save(cdaParkingTrans);
             }
 
