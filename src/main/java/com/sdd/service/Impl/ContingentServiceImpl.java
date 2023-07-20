@@ -268,9 +268,11 @@ public class ContingentServiceImpl implements ContingentService {
         String authGroupId = HelperUtils.getAuthorityGroupId();
         String toUnitId = "";
 
+
         for (Integer i = 0; i < contingentBillSaveRequestList.size(); i++) {
 
             ContingentBillSaveRequest contingentBillSaveRequest = contingentBillSaveRequestList.get(i);
+
 
             for (Integer j = 0; j < contingentBillSaveRequestList.get(i).getAuthList().size(); j++) {
 
@@ -330,6 +332,8 @@ public class ContingentServiceImpl implements ContingentService {
 
 
             for (Integer m = 0; m < contingentBillSaveRequest.getCdaParkingId().size(); m++) {
+
+
                 CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(contingentBillSaveRequest.getCdaParkingId().get(m).getCdaParkingId(), "0");
 
                 CdaParkingCrAndDr cdaParkingCrAndDr = new CdaParkingCrAndDr();
@@ -484,7 +488,6 @@ public class ContingentServiceImpl implements ContingentService {
             if (contingentBillSaveRequest.getBudgetFinancialYearId() == null || contingentBillSaveRequest.getBudgetFinancialYearId().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FINANCIAL ID CAN NOT BE BLANK");
             }
-
 
 
             if (contingentBillSaveRequest.getCbAmount() == null || contingentBillSaveRequest.getCbAmount().isEmpty()) {
@@ -692,6 +695,18 @@ public class ContingentServiceImpl implements ContingentService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO CB VERIFIER ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
         }
 
+        for (Integer i = 0; i < contingentBillSaveRequestList.size(); i++) {
+
+            ContingentBillSaveRequest contingentBillSaveRequest = contingentBillSaveRequestList.get(i);
+            ContigentBill contigentBill = contigentBillRepository.findByCbId(contingentBillSaveRequest.getContingentBilId());
+
+            List<CdaParkingCrAndDr>  cRdRdata = parkingCrAndDrRepository.findByAuthGroupId(contigentBill.getAuthGroupId());
+            for (Integer c = 0; c < cRdRdata.size(); c++) {
+                parkingCrAndDrRepository.delete(cRdRdata.get(i));
+            }
+        }
+
+
         String authGroupIdD = "";
 
         for (Integer i = 0; i < contingentBillSaveRequestList.size(); i++) {
@@ -712,6 +727,7 @@ public class ContingentServiceImpl implements ContingentService {
             }
 
             ContigentBill contigentBill = contigentBillRepository.findByCbId(contingentBillSaveRequest.getContingentBilId());
+
 
             authGroupIdD = contigentBill.getAuthGroupId();
             contigentBill.setCbId(contigentBill.getCbId());
@@ -769,8 +785,6 @@ public class ContingentServiceImpl implements ContingentService {
         }
 
 
-
-
         for (Integer i = 0; i < contingentBillSaveRequestList.size(); i++) {
 
             for (Integer m = 0; m < contingentBillSaveRequestList.get(i).getCdaParkingId().size(); m++) {
@@ -782,7 +796,7 @@ public class ContingentServiceImpl implements ContingentService {
                 double parkingAmount = Double.parseDouble(contingentBillSaveRequestList.get(i).getCdaParkingId().get(m).getCdaAmount());
 
                 double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
-                cdaParkingTrans.setRemainingCdaAmount(bakiPesa +"");
+                cdaParkingTrans.setRemainingCdaAmount(bakiPesa + "");
                 cdaParkingTransRepository.save(cdaParkingTrans);
             }
 
