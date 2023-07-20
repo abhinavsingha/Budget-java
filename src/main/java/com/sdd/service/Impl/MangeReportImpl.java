@@ -1272,6 +1272,21 @@ public class MangeReportImpl implements MangeReportService {
                 ReportSubModel subModel = new ReportSubModel();
                 subModel.setType(budgetAllocationReport.get(j).getAllocTypeId());
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransactionId());
+                subModel.setUnit(cgUnit.getDescr());
+                subModel.setBudgetHead(budgetHead);
+                double totalAmount = (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
+
+                subModel.setAmount(totalAmount + "");
+
+                subModel.setAmountType(amountUnitServer.getAmountType());
+                subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
+
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                    reportMaindata.add(subModel);
+                    hashMap.put(budgetHead.getMajorHead(), reportMaindata);
+                }
+            }
+        }
 
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
 
