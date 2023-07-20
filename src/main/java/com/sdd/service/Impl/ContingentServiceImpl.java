@@ -240,27 +240,6 @@ public class ContingentServiceImpl implements ContingentService {
         }
 
 
-//        for (Integer i = 0; i < contingentBillSaveRequestList.size(); i++) {
-//
-//            double amount = 0;
-//            List<BudgetAllocation> budgetAloocation = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), contingentBillSaveRequestList.get(i).getBudgetFinancialYearId(), contingentBillSaveRequestList.get(i).getBudgetHeadId(), contingentBillSaveRequestList.get(i).getAllocationTypeId(), "Approved", "0", "0");
-//
-//            for (Integer m = 0; m < budgetAloocation.size(); m++) {
-//
-//                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAloocation.get(m).getAmountType());
-//                amount = amount + (Double.parseDouble(budgetAloocation.get(m).getAllocationAmount()) * amountUnit.getAmount());
-//
-//            }
-//
-//            double allocationAmount = Double.parseDouble(contingentBillSaveRequestList.get(i).getCbAmount());
-//            BudgetHead budgetHeadId = subHeadRepository.findByBudgetCodeId(contingentBillSaveRequestList.get(i).getBudgetHeadId());
-//
-//            if (allocationAmount > amount) {
-//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB AMOUNT CAN NOT LARGER THAN REMAINING AMOUNT FOR " + budgetHeadId.getSubHeadDescr());
-//            }
-//
-//
-//        }
 
 
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
@@ -390,7 +369,7 @@ public class ContingentServiceImpl implements ContingentService {
                 AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
 
                 double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
-                double parkingAmount = Double.parseDouble(contingentBillSaveRequestList.get(i).getCdaParkingId().get(m).getCdaAmount());
+                double parkingAmount = Double.parseDouble(contingentBillSaveRequestList.get(i).getCbAmount());
 
                 double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
                 cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
@@ -805,7 +784,8 @@ public class ContingentServiceImpl implements ContingentService {
                 AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
 
                 double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
-                double parkingAmount = Double.parseDouble(contingentBillSaveRequestList.get(i).getCdaParkingId().get(m).getCdaAmount());
+//                double parkingAmount = Double.parseDouble(contingentBillSaveRequestList.get(i).getCdaParkingId().get(m).getCdaAmount());
+                double parkingAmount = Double.parseDouble(contingentBillSaveRequestList.get(i).getCbAmount());
 
                 double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
                 cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
@@ -813,6 +793,8 @@ public class ContingentServiceImpl implements ContingentService {
             }
 
         }
+
+
 
         List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(authGroupIdD, hrData.getUnitId());
 
