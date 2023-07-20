@@ -10252,55 +10252,50 @@ public class MangeReportImpl implements MangeReportService {
         String formattedDateTime = now.format(formatter);
 
         try {
-            Document document = new Document(PageSize.A4);
+            XWPFDocument document = new XWPFDocument();
+            XWPFParagraph headingParagraph = document.createParagraph();
+            headingParagraph.setAlignment(ParagraphAlignment.CENTER);
+            headingParagraph.setStyle("Heading1");
+            XWPFRun headingRun = headingParagraph.createRun();
+            headingRun.setText("REVISED" + " " + allocType.toUpperCase() + " " + "ALLOCATION REPORT");
+            headingRun.setBold(true);
+            headingRun.setFontSize(16);
+
+            XWPFParagraph spacingParagraphss = document.createParagraph();
+            spacingParagraphss.setSpacingAfter(20);
 
             File folder = new File(HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
             String timemilisec = String.valueOf(System.currentTimeMillis());
-            String path = folder.getAbsolutePath() + "/" + allocType.toUpperCase() + "_Revised_allocation-report" + timemilisec + ".pdf";
-            PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
+            String path = folder.getAbsolutePath() + "/" + allocType.toUpperCase() + "_Revised_Allocation_Report" + timemilisec + ".docx";
+            FileOutputStream out = new FileOutputStream(new File(path));
 
-            document.open();
-            Paragraph paragraph = new Paragraph();
-            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            paragraph.add(new Chunk("REVISED" + " " + allocType.toUpperCase() + " " + " ALLOCATION  REPORT", boldFont));
-            paragraph.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(paragraph);
-            document.add(new Paragraph("\n"));
+            XWPFTable tab = document.createTable(1, 2);
+            tab.setWidth("100%");
+            XWPFTableRow tab1 = tab.getRow(0);
+            XWPFParagraph paragraph11 = tab1.getCell(0).addParagraph();
+            boldText(paragraph11.createRun(), 10, allocType.toUpperCase() + " :" + findyr.getFinYear() + " :" + "ALLOCATION", true);
+            XWPFParagraph paragraph22 = tab1.getCell(1).addParagraph();
+            boldText(paragraph22.createRun(), 10, "AMOUNT : (₹ IN " + amountIn.toUpperCase() + ")", true);
+            XWPFParagraph zz = document.createParagraph();
+            zz.setSpacingAfter(1);
 
-            PdfPTable tables = new PdfPTable(2);
-            tables.setWidthPercentage(100);
-            Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
-            PdfPCell cells = new PdfPCell(new Phrase(allocType.toUpperCase() + ": " + findyr.getFinYear() + " " + "ALLOCATION", cellFont));
-            PdfPCell cells0 = new PdfPCell(new Phrase("AMOUNT : (₹ IN " + amountIn + ")", cellFont));
-            cells.setPadding(15);
-            cells0.setPadding(15);
+            XWPFTable table = document.createTable(1, 5);
+            table.setWidth("100%");
+            XWPFTableRow tableRowOne = table.getRow(0);
+            XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
+            boldText(paragraphtableRowOne.createRun(), 12, bHeadType, true);
+            XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
+            boldText(paragraphtableRowOne1.createRun(), 12, "UNIT ", true);
+            XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
+            boldText(paragraphtableRowOne2.createRun(), 12, "ALLOCATION AMOUNT", true);
+            XWPFParagraph paragraphtableRowOne3 = tableRowOne.getCell(3).addParagraph();
+            boldText(paragraphtableRowOne3.createRun(), 12, "ADDITIONAL AMOUNT", true);
+            XWPFParagraph paragraphtableRowOne4 = tableRowOne.getCell(4).addParagraph();
+            boldText(paragraphtableRowOne4.createRun(), 12, "REVISED AMOUNT", true);
 
-            tables.addCell(cells);
-            tables.addCell(cells0);
-            document.add(tables);
-
-            PdfPTable table = new PdfPTable(5);
-            table.setWidthPercentage(100);
-
-            PdfPCell cell1 = new PdfPCell(new Phrase(bHeadType, cellFont));
-            PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
-            PdfPCell cell3 = new PdfPCell(new Phrase("ALLOCATION AMOUNT", cellFont));
-            PdfPCell cell4 = new PdfPCell(new Phrase("ADDITIONAL AMOUNT", cellFont));
-            PdfPCell cell5 = new PdfPCell(new Phrase("REVISED AMOUNT", cellFont));
-            cell1.setPadding(10);
-            cell2.setPadding(10);
-            cell3.setPadding(10);
-            cell4.setPadding(10);
-            cell5.setPadding(10);
-
-            table.addCell(cell1);
-            table.addCell(cell2);
-            table.addCell(cell3);
-            table.addCell(cell4);
-            table.addCell(cell5);
 
             int i = 1;
             String finyear = "";
@@ -10325,23 +10320,25 @@ public class MangeReportImpl implements MangeReportService {
                 else
                     reportDetails = reportDetails2.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
 
-                if (reportDetails.size() <= 0) {
+                BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
+                int sz = reportDetails.size();
+                if (sz <= 0) {
                     continue;
                 }
-                BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
-
+                XWPFTable table11 = document.createTable(sz, 5);
+                table11.setWidth("100%");
                 int count = 0;
                 float sumExisting = 0;
                 float sumRE = 0;
                 float total = 0;
-                for (BudgetAllocationDetails row : reportDetails) {
-                    amount = Float.valueOf(row.getAllocationAmount());
-                    if (row.getRevisedAmount() != null || Float.valueOf(row.getRevisedAmount()) != 0) {
-                        revisedAmount = Float.valueOf(row.getRevisedAmount());
+                for (Integer r = 0; r < reportDetails.size(); r++) {
+                    amount = Float.valueOf(reportDetails.get(r).getAllocationAmount());
+                    if (reportDetails.get(r).getRevisedAmount() != null || Float.valueOf(reportDetails.get(r).getRevisedAmount()) != 0) {
+                        revisedAmount = Float.valueOf(reportDetails.get(r).getRevisedAmount());
                     } else
                         revisedAmount = 0.0f;
 
-                    AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
+                    AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(reportDetails.get(r).getAmountType());
                     if (amountTypeObj == null) {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
@@ -10355,154 +10352,138 @@ public class MangeReportImpl implements MangeReportService {
                         String s1 = s.replace("-", "");
                         s2 = Float.parseFloat(s1);
                     }
-                    CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
+                    CgUnit unitN = cgUnitRepository.findByUnit(reportDetails.get(r).getToUnit());
 
-                    PdfPCell cella1 = new PdfPCell(new Phrase(bHead.getSubHeadDescr()));
-                    PdfPCell cella2 = new PdfPCell(new Phrase(unitN.getDescr()));
-                    PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
-                    PdfPCell cella4 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", new BigDecimal(s2))));
-                    PdfPCell cella5 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", new BigDecimal(reAmount))));
-                    PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(reAmount))));
-                    PdfPCell cella7 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Float.toString(newAllocAmount))))))));
-                    cella1.setPadding(8);
-                    cella2.setPadding(8);
-                    cella3.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                    cella4.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                    cella5.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                    cella6.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                    cella7.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    XWPFTableRow tableRowOne111 = table11.getRow(r);
+                    XWPFParagraph paragraphtableRowOne11 = tableRowOne111.getCell(0).addParagraph();
+                    boldText(paragraphtableRowOne11.createRun(), 10, bHead.getSubHeadDescr(), false);
 
-                    if (count == 0)
-                        table.addCell(cella1);
-                    else
-                        table.addCell("");
-                    table.addCell(cella2);
-                    table.addCell(cella3);
+                    XWPFParagraph paragraphtableRow11 = tableRowOne111.getCell(1).addParagraph();
+                    boldText(paragraphtableRow11.createRun(), 10, unitN.getDescr(), false);
+
+                    XWPFParagraph paragraphtableRow21 = tableRowOne111.getCell(2).addParagraph();
+                    paragraphtableRow21.setAlignment(ParagraphAlignment.RIGHT);
+                    boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
+
+                    XWPFParagraph paragraphtableRow31 = tableRowOne111.getCell(3).addParagraph();
+                    paragraphtableRow31.setAlignment(ParagraphAlignment.RIGHT);
                     if (reAmount < 0)
-                        table.addCell(cella4);
+                        boldText(paragraphtableRow31.createRun(), 10, "(-)" + String.format("%1$0,1.4f", new BigDecimal(s2)), false);
                     else if (reAmount > 0)
-                        table.addCell(cella5);
+                        boldText(paragraphtableRow31.createRun(), 10, "(+)" + String.format("%1$0,1.4f", new BigDecimal(reAmount)), false);
                     else
-                        table.addCell(cella6);
-                    table.addCell(cella7);
+                        boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(reAmount)), false);
+
+                    XWPFParagraph paragraphtableRow41 = tableRowOne111.getCell(4).addParagraph();
+                    paragraphtableRow41.setAlignment(ParagraphAlignment.RIGHT);
+                    boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(newAllocAmount)), false);
+
 
                     count++;
                     sumExisting += Float.parseFloat(new BigDecimal(Float.toString(finAmount)).toPlainString());
                     sumRE += Float.parseFloat(new BigDecimal(Float.toString(reAmount)).toPlainString());
 
                 }
+                BigDecimal decimal = new BigDecimal(sumExisting);
+                BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+                BigDecimal decimal1 = new BigDecimal(sumRE);
+                BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+                double totSum1 = Double.parseDouble(String.valueOf(roundedAmount));
+                double totSum2 = Double.parseDouble(String.valueOf(roundedAmount1));
+                double totSum = totSum1 + totSum2;
+
+                BigDecimal decimal2 = new BigDecimal(sumExisting + sumRE);
+                BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+
+                total = sumExisting + sumRE;
+                Float ss2 = 0.0f;
+
+
+                String ss = Float.toString(sumRE);
+                if (ss.contains("-")) {
+                    String ss1 = ss.replace("-", "");
+                    ss2 = Float.parseFloat(ss1);
+                }
                 if (count != 0) {
-                    total = sumExisting + sumRE;
-                    Float ss2 = 0.0f;
-                    String ss = Float.toString(sumRE);
-                    if (ss.contains("-")) {
-                        String ss1 = ss.replace("-", "");
-                        ss2 = Float.parseFloat(ss1);
-                    }
-                    BigDecimal decimal = new BigDecimal(sumExisting);
-                    BigDecimal sumExistingRound = decimal.setScale(4, RoundingMode.HALF_UP);
 
-                    BigDecimal decimal1 = new BigDecimal(sumRE);
-                    BigDecimal sumRERound = decimal1.setScale(4, RoundingMode.HALF_UP);
+                    BigDecimal decimal11 = new BigDecimal(ss2);
+                    BigDecimal roundedAmount11 = decimal11.setScale(4, RoundingMode.HALF_UP);
 
-                    BigDecimal decimal2 = new BigDecimal(total);
-                    BigDecimal totalRound = decimal2.setScale(4, RoundingMode.HALF_UP);
-
-                    BigDecimal decimal3 = new BigDecimal(ss2);
-                    BigDecimal ss2Round = decimal3.setScale(4, RoundingMode.HALF_UP);
-
-                    PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
-                    PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", sumExistingRound), cellFont));
-                    PdfPCell cell301 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", ss2Round), cellFont));
-                    PdfPCell cell302 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", sumRERound), cellFont));
-                    PdfPCell cell303 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", sumRERound), cellFont));
-                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", totalRound), cellFont));
-                    cell10.setPadding(10);
-                    cell20.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                    cell301.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                    cell302.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                    cell303.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                    cell40.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-
-                    table.addCell(" ");
-                    table.addCell(cell10);
-                    table.addCell(cell20);
+                    XWPFTable table222 = document.createTable(1, 5);
+                    table222.setWidth("100%");
+                    XWPFTableRow tableRowOne222 = table222.getRow(0);
+                    XWPFParagraph paragraphtableRowOne222 = tableRowOne222.getCell(0).addParagraph();
+                    boldText(paragraphtableRowOne222.createRun(), 12, "", true);
+                    XWPFParagraph paragraphtableRowOne1222 = tableRowOne222.getCell(1).addParagraph();
+                    boldText(paragraphtableRowOne1222.createRun(), 12, "TOTAL ", true);
+                    XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
+                    paragraphtableRowOne2222.setAlignment(ParagraphAlignment.RIGHT);
+                    boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
+                    XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
+                    paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
                     if (sumRE < 0)
-                        table.addCell(cell301);
+                        boldText(paragraphtableRowOne2233.createRun(), 12, "(-)" + String.format("%1$0,1.4f", roundedAmount11), true);
                     else if (sumRE > 0)
-                        table.addCell(cell302);
+                        boldText(paragraphtableRowOne2233.createRun(), 12, "(+)" + String.format("%1$0,1.4f", roundedAmount1), true);
                     else
-                        table.addCell(cell303);
-                    table.addCell(cell40);
+                        boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", roundedAmount1), true);
+                    XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
+                    paragraphtableRowOne2244.setAlignment(ParagraphAlignment.RIGHT);
+                    boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", totSum), true);
+
+
                     count = 0;
                 }
-                grTotalAlloc += sumExisting;
-                grTotalAddition += sumRE;
+                grTotalAlloc += totSum1;
+                grTotalAddition += totSum2;
                 grTotalSum += (sumExisting + sumRE);
 //
             }
-            BigDecimal decimal = new BigDecimal(grTotalAlloc);
-            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+            XWPFTable table223 = document.createTable(1, 5);
+            table223.setWidth("100%");
+            XWPFTableRow tableRowOne223 = table223.getRow(0);
+            XWPFParagraph paragraphtableRowOne223 = tableRowOne223.getCell(0).addParagraph();
+            boldText(paragraphtableRowOne223.createRun(), 12, "", true);
+            XWPFParagraph paragraphtableRowOne1223 = tableRowOne223.getCell(1).addParagraph();
+            boldText(paragraphtableRowOne1223.createRun(), 12, "GRAND TOTAL ", true);
+            XWPFParagraph paragraphtableRowOne2223 = tableRowOne223.getCell(2).addParagraph();
+            paragraphtableRowOne2223.setAlignment(ParagraphAlignment.RIGHT);
+            boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f", grTotalAlloc), true);
+            XWPFParagraph paragraphtableRowOne2234 = tableRowOne223.getCell(3).addParagraph();
+            paragraphtableRowOne2234.setAlignment(ParagraphAlignment.RIGHT);
+            boldText(paragraphtableRowOne2234.createRun(), 12, String.format("%1$0,1.4f", grTotalAddition), true);
+            XWPFParagraph paragraphtableRowOne2245 = tableRowOne223.getCell(4).addParagraph();
+            paragraphtableRowOne2245.setAlignment(ParagraphAlignment.RIGHT);
+            boldText(paragraphtableRowOne2245.createRun(), 12, String.format("%1$0,1.4f", grTotalAlloc + grTotalAddition), true);
 
-            BigDecimal decimal1 = new BigDecimal(grTotalAddition);
-            BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
-
-            BigDecimal decimal2 = new BigDecimal(grTotalSum);
-            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
-
-            PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-            PdfPCell cell01 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
-            PdfPCell cell02 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
-            PdfPCell cell03 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount2), cellFont));
-            cell00.setPadding(12);
-            cell01.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-            cell02.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-            cell03.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-
-            table.addCell(" ");
-            table.addCell(cell00);
-            table.addCell(cell01);
-            table.addCell(cell02);
-            table.addCell(cell03);
-
-            document.add(table);
-
-            document.add(new Paragraph("\n"));
-            document.add(new Paragraph("\n"));
-            document.add(new Paragraph("\n"));
-
-            PdfPTable tables1 = new PdfPTable(4);
-            tables1.setWidthPercentage(100);
-
-            PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
-            PdfPCell cell200 = new PdfPCell(new Phrase(""));
-            PdfPCell cell300 = new PdfPCell(new Phrase(""));
-            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
-
-            cell100.setBorder(0);
-            cell200.setBorder(0);
-            cell300.setBorder(0);
-            cell400.setBorder(0);
-            cell400.setPadding(20);
-
-            tables1.addCell(cell100);
-            tables1.addCell(cell200);
-            tables1.addCell(cell300);
-            tables1.addCell(cell400);
-            document.add(tables1);
-/*            Paragraph heading1 = new Paragraph(formattedDateTime);
-            heading1.setAlignment(Paragraph.ALIGN_LEFT);
-            document.add(heading1);
-
-            document.add(new Paragraph("\n"));
-            Paragraph heading2 = new Paragraph(names + "\n" + unitName + "\n" + rank);
-            heading2.setAlignment(Paragraph.ALIGN_RIGHT);
-            document.add(heading2);*/
-
+            String names1 = approveName;
+            String unitName1 = hrData.getUnit();
+            String rank1 = approveRank;
+            LocalDateTime now1 = LocalDateTime.now();
+            DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String formattedDateTime1 = now1.format(formatter1);
+            XWPFParagraph mainParagraph = document.createParagraph();
+            mainParagraph = document.createParagraph();
+            mainParagraph.createRun().addBreak();
+            mainParagraph = document.createParagraph();
+            boldText(mainParagraph.createRun(), 10, formattedDateTime1 + "", true);
+            mainParagraph = document.createParagraph();
+            normalText(mainParagraph.createRun(), 10, names1 + "", true);
+            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
+            mainParagraph = document.createParagraph();
+            normalText(mainParagraph.createRun(), 10, rank1 + "", true);
+            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
+            mainParagraph = document.createParagraph();
+            normalText(mainParagraph.createRun(), 10, unitName1 + "", true);
+            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
+            document.write(out);
+            out.close();
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + allocType.toUpperCase() + "_Revised_allocation-report" + timemilisec + ".pdf");
-            dto.setFileName(allocType.toUpperCase() + "_Revised_allocation-report" + timemilisec + ".pdf");
+            dto.setPath(HelperUtils.FILEPATH + allocType.toUpperCase() + "_Revised_Allocation_Report" + timemilisec + ".docx");
+            dto.setFileName(allocType.toUpperCase() + "_Revised_Allocation_Report" + timemilisec + ".docx");
             dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -10588,55 +10569,50 @@ public class MangeReportImpl implements MangeReportService {
         String formattedDateTime = now.format(formatter);
 
         try {
-            Document document = new Document(PageSize.A4);
+            XWPFDocument document = new XWPFDocument();
+            XWPFParagraph headingParagraph = document.createParagraph();
+            headingParagraph.setAlignment(ParagraphAlignment.CENTER);
+            headingParagraph.setStyle("Heading1");
+            XWPFRun headingRun = headingParagraph.createRun();
+            headingRun.setText("REVISED" + " " + allocType.toUpperCase() + " " + "ALLOCATION REPORT");
+            headingRun.setBold(true);
+            headingRun.setFontSize(16);
+
+            XWPFParagraph spacingParagraphss = document.createParagraph();
+            spacingParagraphss.setSpacingAfter(20);
 
             File folder = new File(HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
             String timemilisec = String.valueOf(System.currentTimeMillis());
-            String path = folder.getAbsolutePath() + "/" + allocType.toUpperCase() + "_Revised_allocation-report" + timemilisec + ".pdf";
-            PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
+            String path = folder.getAbsolutePath() + "/" + allocType.toUpperCase() + "_Revised_Allocation_Report" + timemilisec + ".docx";
+            FileOutputStream out = new FileOutputStream(new File(path));
 
-            document.open();
-            Paragraph paragraph = new Paragraph();
-            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            paragraph.add(new Chunk("REVISED" + " " + allocType.toUpperCase() + " " + " ALLOCATION  REPORT", boldFont));
-            paragraph.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(paragraph);
-            document.add(new Paragraph("\n"));
+            XWPFTable tab = document.createTable(1, 2);
+            tab.setWidth("100%");
+            XWPFTableRow tab1 = tab.getRow(0);
+            XWPFParagraph paragraph11 = tab1.getCell(0).addParagraph();
+            boldText(paragraph11.createRun(), 10, allocType.toUpperCase() + " :" + findyr.getFinYear() + " :" + "ALLOCATION", true);
+            XWPFParagraph paragraph22 = tab1.getCell(1).addParagraph();
+            boldText(paragraph22.createRun(), 10, "AMOUNT : (₹ IN " + amountIn.toUpperCase() + ")", true);
+            XWPFParagraph zz = document.createParagraph();
+            zz.setSpacingAfter(1);
 
-            PdfPTable tables = new PdfPTable(2);
-            tables.setWidthPercentage(100);
-            Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
-            PdfPCell cells = new PdfPCell(new Phrase(allocType.toUpperCase() + ": " + findyr.getFinYear() + " " + "ALLOCATION", cellFont));
-            PdfPCell cells0 = new PdfPCell(new Phrase("AMOUNT : (₹ IN " + amountIn + ")", cellFont));
-            cells.setPadding(15);
-            cells0.setPadding(15);
+            XWPFTable table = document.createTable(1, 5);
+            table.setWidth("100%");
+            XWPFTableRow tableRowOne = table.getRow(0);
+            XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
+            boldText(paragraphtableRowOne.createRun(), 12, bHeadType, true);
+            XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
+            boldText(paragraphtableRowOne1.createRun(), 12, "UNIT ", true);
+            XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
+            boldText(paragraphtableRowOne2.createRun(), 12, "ALLOCATION AMOUNT", true);
+            XWPFParagraph paragraphtableRowOne3 = tableRowOne.getCell(3).addParagraph();
+            boldText(paragraphtableRowOne3.createRun(), 12, "ADDITIONAL AMOUNT", true);
+            XWPFParagraph paragraphtableRowOne4 = tableRowOne.getCell(4).addParagraph();
+            boldText(paragraphtableRowOne4.createRun(), 12, "REVISED AMOUNT", true);
 
-            tables.addCell(cells);
-            tables.addCell(cells0);
-            document.add(tables);
-
-            PdfPTable table = new PdfPTable(5);
-            table.setWidthPercentage(100);
-
-            PdfPCell cell1 = new PdfPCell(new Phrase(bHeadType, cellFont));
-            PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
-            PdfPCell cell3 = new PdfPCell(new Phrase("ALLOCATION AMOUNT", cellFont));
-            PdfPCell cell4 = new PdfPCell(new Phrase("ADDITIONAL AMOUNT", cellFont));
-            PdfPCell cell5 = new PdfPCell(new Phrase("REVISED AMOUNT", cellFont));
-            cell1.setPadding(10);
-            cell2.setPadding(10);
-            cell3.setPadding(10);
-            cell4.setPadding(10);
-            cell5.setPadding(10);
-
-            table.addCell(cell1);
-            table.addCell(cell2);
-            table.addCell(cell3);
-            table.addCell(cell4);
-            table.addCell(cell5);
 
             int i = 1;
             String finyear = "";
@@ -10660,23 +10636,25 @@ public class MangeReportImpl implements MangeReportService {
                 else
                     reportDetails = reportDetails2.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
 
-                if (reportDetails.size() <= 0) {
+                BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
+                int sz = reportDetails.size();
+                if (sz <= 0) {
                     continue;
                 }
-                BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
-
+                XWPFTable table11 = document.createTable(sz, 5);
+                table11.setWidth("100%");
                 int count = 0;
                 float sumExisting = 0;
                 float sumRE = 0;
                 float total = 0;
-                for (BudgetAllocation row : reportDetails) {
-                    amount = Float.valueOf(row.getAllocationAmount());
-                    if (row.getRevisedAmount() != null || Float.valueOf(row.getRevisedAmount()) != 0) {
-                        revisedAmount = Float.valueOf(row.getRevisedAmount());
+                for (Integer r = 0; r < reportDetails.size(); r++) {
+                    amount = Float.valueOf(reportDetails.get(r).getAllocationAmount());
+                    if (reportDetails.get(r).getRevisedAmount() != null || Float.valueOf(reportDetails.get(r).getRevisedAmount()) != 0) {
+                        revisedAmount = Float.valueOf(reportDetails.get(r).getRevisedAmount());
                     } else
                         revisedAmount = 0.0f;
 
-                    AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
+                    AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(reportDetails.get(r).getAmountType());
                     if (amountTypeObj == null) {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
@@ -10690,154 +10668,138 @@ public class MangeReportImpl implements MangeReportService {
                         String s1 = s.replace("-", "");
                         s2 = Float.parseFloat(s1);
                     }
-                    CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
+                    CgUnit unitN = cgUnitRepository.findByUnit(reportDetails.get(r).getToUnit());
 
-                    PdfPCell cella1 = new PdfPCell(new Phrase(bHead.getSubHeadDescr()));
-                    PdfPCell cella2 = new PdfPCell(new Phrase(unitN.getDescr()));
-                    PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(newAllocAmount))));
-                    PdfPCell cella4 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", new BigDecimal(s2))));
-                    PdfPCell cella5 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", new BigDecimal(reAmount))));
-                    PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(reAmount))));
-                    PdfPCell cella7 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", (new BigDecimal((Float.parseFloat(Float.toString(finAmount))))))));
-                    cella1.setPadding(8);
-                    cella2.setPadding(8);
-                    cella3.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                    cella4.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                    cella5.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                    cella6.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                    cella7.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    XWPFTableRow tableRowOne111 = table11.getRow(r);
+                    XWPFParagraph paragraphtableRowOne11 = tableRowOne111.getCell(0).addParagraph();
+                    boldText(paragraphtableRowOne11.createRun(), 10, bHead.getSubHeadDescr(), false);
 
-                    if (count == 0)
-                        table.addCell(cella1);
-                    else
-                        table.addCell("");
-                    table.addCell(cella2);
-                    table.addCell(cella3);
+                    XWPFParagraph paragraphtableRow11 = tableRowOne111.getCell(1).addParagraph();
+                    boldText(paragraphtableRow11.createRun(), 10, unitN.getDescr(), false);
+
+                    XWPFParagraph paragraphtableRow21 = tableRowOne111.getCell(2).addParagraph();
+                    paragraphtableRow21.setAlignment(ParagraphAlignment.RIGHT);
+                    boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(newAllocAmount)), false);
+
+                    XWPFParagraph paragraphtableRow31 = tableRowOne111.getCell(3).addParagraph();
+                    paragraphtableRow31.setAlignment(ParagraphAlignment.RIGHT);
                     if (reAmount < 0)
-                        table.addCell(cella4);
+                        boldText(paragraphtableRow31.createRun(), 10, "(-)" + String.format("%1$0,1.4f", new BigDecimal(s2)), false);
                     else if (reAmount > 0)
-                        table.addCell(cella5);
+                        boldText(paragraphtableRow31.createRun(), 10, "(+)" + String.format("%1$0,1.4f", new BigDecimal(reAmount)), false);
                     else
-                        table.addCell(cella6);
-                    table.addCell(cella7);
+                        boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(reAmount)), false);
+
+                    XWPFParagraph paragraphtableRow41 = tableRowOne111.getCell(4).addParagraph();
+                    paragraphtableRow41.setAlignment(ParagraphAlignment.RIGHT);
+                    boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
+
 
                     count++;
                     sumExisting += Float.parseFloat(new BigDecimal(Float.toString(newAllocAmount)).toPlainString());
                     sumRE += Float.parseFloat(new BigDecimal(Float.toString(reAmount)).toPlainString());
 
                 }
+                BigDecimal decimal = new BigDecimal(sumExisting);
+                BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+
+                BigDecimal decimal1 = new BigDecimal(sumRE);
+                BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
+
+                double totSum1 = Double.parseDouble(String.valueOf(roundedAmount));
+                double totSum2 = Double.parseDouble(String.valueOf(roundedAmount1));
+                double totSum = totSum1 + totSum2;
+
+                BigDecimal decimal2 = new BigDecimal(sumExisting + sumRE);
+                BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+
+                total = sumExisting + sumRE;
+                Float ss2 = 0.0f;
+
+
+                String ss = Float.toString(sumRE);
+                if (ss.contains("-")) {
+                    String ss1 = ss.replace("-", "");
+                    ss2 = Float.parseFloat(ss1);
+                }
                 if (count != 0) {
-                    total = sumExisting + sumRE;
-                    Float ss2 = 0.0f;
-                    String ss = Float.toString(sumRE);
-                    if (ss.contains("-")) {
-                        String ss1 = ss.replace("-", "");
-                        ss2 = Float.parseFloat(ss1);
-                    }
-                    BigDecimal decimal = new BigDecimal(sumExisting);
-                    BigDecimal sumExistingRound = decimal.setScale(4, RoundingMode.HALF_UP);
 
-                    BigDecimal decimal1 = new BigDecimal(sumRE);
-                    BigDecimal sumRERound = decimal1.setScale(4, RoundingMode.HALF_UP);
+                    BigDecimal decimal11 = new BigDecimal(ss2);
+                    BigDecimal roundedAmount11 = decimal11.setScale(4, RoundingMode.HALF_UP);
 
-                    BigDecimal decimal2 = new BigDecimal(total);
-                    BigDecimal totalRound = decimal2.setScale(4, RoundingMode.HALF_UP);
-
-                    BigDecimal decimal3 = new BigDecimal(ss2);
-                    BigDecimal ss2Round = decimal3.setScale(4, RoundingMode.HALF_UP);
-
-                    PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
-                    PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", sumExistingRound), cellFont));
-                    PdfPCell cell301 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", ss2Round), cellFont));
-                    PdfPCell cell302 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", sumRERound), cellFont));
-                    PdfPCell cell303 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", sumRERound), cellFont));
-                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", totalRound), cellFont));
-                    cell10.setPadding(10);
-                    cell20.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                    cell301.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                    cell302.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                    cell303.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                    cell40.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-
-                    table.addCell(" ");
-                    table.addCell(cell10);
-                    table.addCell(cell20);
+                    XWPFTable table222 = document.createTable(1, 5);
+                    table222.setWidth("100%");
+                    XWPFTableRow tableRowOne222 = table222.getRow(0);
+                    XWPFParagraph paragraphtableRowOne222 = tableRowOne222.getCell(0).addParagraph();
+                    boldText(paragraphtableRowOne222.createRun(), 12, "", true);
+                    XWPFParagraph paragraphtableRowOne1222 = tableRowOne222.getCell(1).addParagraph();
+                    boldText(paragraphtableRowOne1222.createRun(), 12, "TOTAL ", true);
+                    XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
+                    paragraphtableRowOne2222.setAlignment(ParagraphAlignment.RIGHT);
+                    boldText(paragraphtableRowOne2222.createRun(), 12, String.format("%1$0,1.4f", roundedAmount), true);
+                    XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
+                    paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
                     if (sumRE < 0)
-                        table.addCell(cell301);
+                        boldText(paragraphtableRowOne2233.createRun(), 12, "(-)" + String.format("%1$0,1.4f", roundedAmount11), true);
                     else if (sumRE > 0)
-                        table.addCell(cell302);
+                        boldText(paragraphtableRowOne2233.createRun(), 12, "(+)" + String.format("%1$0,1.4f", roundedAmount1), true);
                     else
-                        table.addCell(cell303);
-                    table.addCell(cell40);
+                        boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", roundedAmount1), true);
+                    XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
+                    paragraphtableRowOne2244.setAlignment(ParagraphAlignment.RIGHT);
+                    boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", totSum), true);
+
+
                     count = 0;
                 }
-                grTotalAlloc += sumExisting;
-                grTotalAddition += sumRE;
+                grTotalAlloc += totSum1;
+                grTotalAddition += totSum2;
                 grTotalSum += (sumExisting + sumRE);
 //
             }
-            BigDecimal decimal = new BigDecimal(grTotalAlloc);
-            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
+            XWPFTable table223 = document.createTable(1, 5);
+            table223.setWidth("100%");
+            XWPFTableRow tableRowOne223 = table223.getRow(0);
+            XWPFParagraph paragraphtableRowOne223 = tableRowOne223.getCell(0).addParagraph();
+            boldText(paragraphtableRowOne223.createRun(), 12, "", true);
+            XWPFParagraph paragraphtableRowOne1223 = tableRowOne223.getCell(1).addParagraph();
+            boldText(paragraphtableRowOne1223.createRun(), 12, "GRAND TOTAL ", true);
+            XWPFParagraph paragraphtableRowOne2223 = tableRowOne223.getCell(2).addParagraph();
+            paragraphtableRowOne2223.setAlignment(ParagraphAlignment.RIGHT);
+            boldText(paragraphtableRowOne2223.createRun(), 12, String.format("%1$0,1.4f", grTotalAlloc), true);
+            XWPFParagraph paragraphtableRowOne2234 = tableRowOne223.getCell(3).addParagraph();
+            paragraphtableRowOne2234.setAlignment(ParagraphAlignment.RIGHT);
+            boldText(paragraphtableRowOne2234.createRun(), 12, String.format("%1$0,1.4f", grTotalAddition), true);
+            XWPFParagraph paragraphtableRowOne2245 = tableRowOne223.getCell(4).addParagraph();
+            paragraphtableRowOne2245.setAlignment(ParagraphAlignment.RIGHT);
+            boldText(paragraphtableRowOne2245.createRun(), 12, String.format("%1$0,1.4f", grTotalAlloc + grTotalAddition), true);
 
-            BigDecimal decimal1 = new BigDecimal(grTotalAddition);
-            BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
-
-            BigDecimal decimal2 = new BigDecimal(grTotalSum);
-            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
-
-            PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-            PdfPCell cell01 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
-            PdfPCell cell02 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
-            PdfPCell cell03 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount2), cellFont));
-            cell00.setPadding(12);
-            cell01.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-            cell02.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-            cell03.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-
-            table.addCell(" ");
-            table.addCell(cell00);
-            table.addCell(cell01);
-            table.addCell(cell02);
-            table.addCell(cell03);
-
-            document.add(table);
-
-            document.add(new Paragraph("\n"));
-            document.add(new Paragraph("\n"));
-            document.add(new Paragraph("\n"));
-
-            PdfPTable tables1 = new PdfPTable(4);
-            tables1.setWidthPercentage(100);
-
-            PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
-            PdfPCell cell200 = new PdfPCell(new Phrase(""));
-            PdfPCell cell300 = new PdfPCell(new Phrase(""));
-            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
-
-            cell100.setBorder(0);
-            cell200.setBorder(0);
-            cell300.setBorder(0);
-            cell400.setBorder(0);
-            cell400.setPadding(20);
-
-            tables1.addCell(cell100);
-            tables1.addCell(cell200);
-            tables1.addCell(cell300);
-            tables1.addCell(cell400);
-            document.add(tables1);
-/*            Paragraph heading1 = new Paragraph(formattedDateTime);
-            heading1.setAlignment(Paragraph.ALIGN_LEFT);
-            document.add(heading1);
-
-            document.add(new Paragraph("\n"));
-            Paragraph heading2 = new Paragraph(names + "\n" + unitName + "\n" + rank);
-            heading2.setAlignment(Paragraph.ALIGN_RIGHT);
-            document.add(heading2);*/
-
+            String names1 = approveName;
+            String unitName1 = hrData.getUnit();
+            String rank1 = approveRank;
+            LocalDateTime now1 = LocalDateTime.now();
+            DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String formattedDateTime1 = now1.format(formatter1);
+            XWPFParagraph mainParagraph = document.createParagraph();
+            mainParagraph = document.createParagraph();
+            mainParagraph.createRun().addBreak();
+            mainParagraph = document.createParagraph();
+            boldText(mainParagraph.createRun(), 10, formattedDateTime1 + "", true);
+            mainParagraph = document.createParagraph();
+            normalText(mainParagraph.createRun(), 10, names1 + "", true);
+            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
+            mainParagraph = document.createParagraph();
+            normalText(mainParagraph.createRun(), 10, rank1 + "", true);
+            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
+            mainParagraph = document.createParagraph();
+            normalText(mainParagraph.createRun(), 10, unitName1 + "", true);
+            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
+            document.write(out);
+            out.close();
             document.close();
             FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + allocType.toUpperCase() + "_Revised_allocation-report" + timemilisec + ".pdf");
-            dto.setFileName(allocType.toUpperCase() + "_Revised_allocation-report" + timemilisec + ".pdf");
+            dto.setPath(HelperUtils.FILEPATH + allocType.toUpperCase() + "_Revised_Allocation_Report" + timemilisec + ".docx");
+            dto.setFileName(allocType.toUpperCase() + "_Revised_Allocation_Report" + timemilisec + ".docx");
             dtoList.add(dto);
         } catch (IOException e) {
             throw new RuntimeException(e);
