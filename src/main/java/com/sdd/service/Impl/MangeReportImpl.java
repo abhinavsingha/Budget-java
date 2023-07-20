@@ -1236,9 +1236,11 @@ public class MangeReportImpl implements MangeReportService {
         String key = "";
         for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
 
+
             if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) == 0) {
                 continue;
             }
+
 
             BudgetHead budgetHead = subHeadRepository.findByBudgetCodeId(budgetAllocationReport.get(j).getSubHead());
             CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationReport.get(j).getToUnit());
@@ -1249,15 +1251,17 @@ public class MangeReportImpl implements MangeReportService {
                 List<ReportSubModel> reportMaindata = hashMap.get(budgetHead.getMajorHead());
                 ReportSubModel subModel = new ReportSubModel();
                 subModel.setType(budgetAllocationReport.get(j).getAllocTypeId());
-                subModel.setRemark(budgetAllocationReport.get(j).getTransactionId());
+                subModel.setRemark(budgetAllocationReport.get(j).getRefTransactionId());
                 subModel.setUnit(cgUnit.getDescr());
-                subModel.setBudgetHead(budgetHead);
                 subModel.setAmountType(amountUnitServer.getAmountType());
+                subModel.setBudgetHead(budgetHead);
+                subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
+
+
                 double totalAmount = (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
 
                 subModel.setAmount(totalAmount + "");
 
-                subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
                 if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
                     reportMaindata.add(subModel);
@@ -1267,22 +1271,7 @@ public class MangeReportImpl implements MangeReportService {
                 List<ReportSubModel> reportMaindata = new ArrayList<ReportSubModel>();
                 ReportSubModel subModel = new ReportSubModel();
                 subModel.setType(budgetAllocationReport.get(j).getAllocTypeId());
-                subModel.setRemark(budgetAllocationReport.get(j).getTransactionId());
-                subModel.setUnit(cgUnit.getDescr());
-                subModel.setBudgetHead(budgetHead);
-                double totalAmount = (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
-
-                subModel.setAmount(totalAmount + "");
-
-                subModel.setAmountType(amountUnitServer.getAmountType());
-                subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
-
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
-                    reportMaindata.add(subModel);
-                    hashMap.put(budgetHead.getMajorHead(), reportMaindata);
-                }
-            }
-        }
+                subModel.setRemark(budgetAllocationReport.get(j).getRefTransactionId());
 
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
 
