@@ -369,7 +369,7 @@ public class PdfGenaratorUtilMain {
                 }
             }
         }
-        table.addCell(boldText("Grand Total"+tabData1.size(), 7, 20f));
+        table.addCell(boldText("Grand Total", 7, 20f));
 
         for (Map.Entry<String, String> entry : coloumWiseAmount.entrySet()) {
             String tabData = entry.getValue();
