@@ -719,36 +719,12 @@ public class ContingentServiceImpl implements ContingentService {
         if (veriferCbPId.isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO CB VERIFIER ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
         }
-//        String toUnitId = "";
-        String authGroupId = HelperUtils.getAuthorityGroupId();
-        ;
+
+        String authGroupIdD = "";
+
         for (Integer i = 0; i < contingentBillSaveRequestList.size(); i++) {
 
-//            ContigentBill contigentBill1 = contigentBillRepository.findByCbId(contingentBillSaveRequestList.get(i).getContingentBilId());
-//            contigentBill1.setIsUpdate("0");
-//            authGroupId = contigentBill1.getAuthGroupId();
-
-//            if (contigentBill1 != null) {
-//
-//                CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByCdaCrdrIdAndIsFlagAndIsRevision(contigentBill1.getCbId(), "0", 0);
-//                CdaParkingTrans cdaParkingTrans11 = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(cdaParkingCrAndDr.getCdaParkingTrans(), "0");
-//                AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans11.getAmountType());
-//
-//                double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans11.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
-//                double parkingAmount = Double.parseDouble(cdaParkingCrAndDr.getAmount());
-//
-//                double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
-//                cdaParkingTrans11.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
-//                cdaParkingTransRepository.save(cdaParkingTrans11);
-//
-//                cdaParkingCrAndDr.setIsFlag("1");
-//                parkingCrAndDrRepository.save(cdaParkingCrAndDr);
-//                contigentBillRepository.save(contigentBill1);
-//            }
-
-
             ContingentBillSaveRequest contingentBillSaveRequest = contingentBillSaveRequestList.get(i);
-
 
             for (Integer j = 0; j < contingentBillSaveRequestList.get(i).getAuthList().size(); j++) {
                 Authority authoritySaveData = authorityRepository.findByAuthorityId(contingentBillSaveRequestList.get(i).getAuthList().get(j).getAuthorityId());
@@ -763,34 +739,25 @@ public class ContingentServiceImpl implements ContingentService {
                 authorityRepository.save(authoritySaveData);
             }
 
-            ContigentBill contigentBill = new ContigentBill();
+            ContigentBill contigentBill = contigentBillRepository.findByCbId(contingentBillSaveRequest.getContingentBilId());
 
-            contigentBill.setCbId(HelperUtils.getContigentId());
-            contigentBill.setCbNo(contingentBillSaveRequest.getCbNumber());
+            authGroupIdD = contigentBill.getAuthGroupId();
+            contigentBill.setCbId(contigentBill.getCbId());
             contigentBill.setCbAmount(ConverterUtils.addDecimalPoint(contingentBillSaveRequest.getCbAmount()));
             contigentBill.setCbDate(ConverterUtils.convertDateTotimeStamp(contingentBillSaveRequest.getCbDate()));
-            contigentBill.setCbUnitId(contingentBillSaveRequest.getUnit());
-//            toUnitId = contingentBillSaveRequest.getUnit();
-            contigentBill.setFinYear(contingentBillSaveRequest.getBudgetFinancialYearId());
             contigentBill.setStatus("Pending");
-            contigentBill.setStatus(authGroupId);
             contigentBill.setRemarks(contingentBillSaveRequest.getRemark());
             contigentBill.setStatusDate(HelperUtils.getCurrentTimeStamp());
-            contigentBill.setAuthGroupId(authGroupId);
             contigentBill.setIsFlag("0");
             contigentBill.setIsUpdate("0");
-            contigentBill.setSectionNumber(contingentBillSaveRequest.getSectionNumber());
             contigentBill.setGst(contingentBillSaveRequest.getGst());
             contigentBill.setVendorName(contingentBillSaveRequest.getVendorName());
 
             List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
             contigentBill.setAllocationTypeId(allocationType.get(0).getAllocTypeId());
 
-
-            contigentBill.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             contigentBill.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             contigentBill.setInvoiceNO(contingentBillSaveRequest.getInvoiceNo());
-            contigentBill.setBudgetHeadID(contingentBillSaveRequest.getBudgetHeadId());
             contigentBill.setInvoiceDate(contingentBillSaveRequest.getInvoiceDate());
             contigentBill.setFileDate(contingentBillSaveRequest.getFileDate());
             contigentBill.setFileID(contingentBillSaveRequest.getFileNumber());
@@ -847,27 +814,28 @@ public class ContingentServiceImpl implements ContingentService {
 
         }
 
-        List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(authGroupId, hrData.getUnitId());
+        List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(authGroupIdD, hrData.getUnitId());
 
         if (mangeInboxOutboxList.size() > 0) {
 
-            MangeInboxOutbox mangeInboxOutbox = mangeInboxOutboxList.get(0);
+            for (Integer j = 0; j < mangeInboxOutboxList.size(); j++) {
+                MangeInboxOutbox mangeInboxOutbox = mangeInboxOutboxList.get(j);
 
-            mangeInboxOutbox.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
-            mangeInboxOutbox.setRemarks("Contingent Bill");
-            mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-            mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-            mangeInboxOutbox.setToUnit(hrData.getUnitId());
-            mangeInboxOutbox.setStatus("Pending");
-            mangeInboxOutbox.setGroupId(authGroupId);
-            mangeInboxOutbox.setFromUnit(hrData.getUnitId());
-            mangeInboxOutbox.setRoleId(hrData.getRoleId());
-            mangeInboxOutbox.setCreaterpId(hrData.getPid());
-            mangeInboxOutbox.setIsFlag("1");
-            mangeInboxOutbox.setState("VE");
-            mangeInboxOutbox.setIsBgcg("CB");
+                mangeInboxOutbox.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+                mangeInboxOutbox.setRemarks("Contingent Bill");
+                mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                mangeInboxOutbox.setStatus("Pending");
+                mangeInboxOutbox.setRoleId(hrData.getRoleId());
+                mangeInboxOutbox.setCreaterpId(hrData.getPid());
+                mangeInboxOutbox.setIsFlag("1");
+                mangeInboxOutbox.setState("VE");
+                mangeInboxOutbox.setIsBgcg("CB");
+                mangeInboxOutbox.setIsArchive("0");
+                mangeInboxOutbox.setIsApproved("0");
+                mangeInboxOutbox.setIsRevision(0);
 
-            mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+                mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+            }
 
         }
 
@@ -1104,7 +1072,7 @@ public class ContingentServiceImpl implements ContingentService {
                     maxNumber = number;
                 }
             }
-            contingentBillListData.setSectionNumber((maxNumber+1) + "");
+            contingentBillListData.setSectionNumber((maxNumber + 1) + "");
         }
 
         return ResponseUtils.createSuccessResponse(contingentBillListData, new TypeReference<ContigentSectionResp>() {
