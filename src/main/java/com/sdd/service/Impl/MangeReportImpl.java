@@ -764,7 +764,9 @@ public class MangeReportImpl implements MangeReportService {
 
 //        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
         budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsBudgetRevisionAndIsFlag(authGroupId, hrData.getUnitId(), "0", "0");
-
+        if (budgetAllocationReport.size() == 0) {
+            budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsFlag(authGroupId, hrData.getUnitId(), "1");
+        }
 
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
@@ -915,7 +917,9 @@ public class MangeReportImpl implements MangeReportService {
 
 //        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
         budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsBudgetRevisionAndIsFlag(authGroupId, hrData.getUnitId(), "0", "0");
-
+        if (budgetAllocationReport.size() == 0) {
+            budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsFlag(authGroupId, hrData.getUnitId(), "1");
+        }
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
