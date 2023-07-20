@@ -9536,6 +9536,13 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
+        boolean HEADUNITID;
+        List<CgUnit> hdunit=cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
+        if(hdunit.size()>0){
+            HEADUNITID=true;
+        }else{
+            HEADUNITID=false;
+        }
         List<BudgetAllocationDetails> check = budgetAllocationDetailsRepository.findByAuthGroupId(authGroupId);
         List<BudgetAllocationDetails> checks = check.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
         if (checks.size() <= 0) {
@@ -9649,7 +9656,7 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocationDetails> reportDetails2 = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
 
                 List<BudgetAllocationDetails> reportDetails;
-                if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID))
+                if (HEADUNITID==true)
                     reportDetails = reportDetails2.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 else
                     reportDetails = reportDetails2.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
@@ -9872,6 +9879,13 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
+        boolean HEADUNITID;
+        List<CgUnit> hdunit=cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
+        if(hdunit.size()>0){
+            HEADUNITID=true;
+        }else{
+            HEADUNITID=false;
+        }
         List<BudgetAllocation> check = budgetAllocationRepository.findByAuthGroupId(authGroupId);
         List<BudgetAllocation> checks = check.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
         if (checks.size() <= 0) {
@@ -9984,7 +9998,7 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocation> reportDetails1 = budgetAllocationRepository.findByAuthGroupIdAndSubHead(authGroupId, subHeadId);
                 List<BudgetAllocation> reportDetails2 = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
                 List<BudgetAllocation> reportDetails;
-                if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID))
+                if (HEADUNITID==true)
                     reportDetails = reportDetails2.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 else
                     reportDetails = reportDetails2.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
@@ -10207,6 +10221,13 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
+        boolean HEADUNITID;
+        List<CgUnit> hdunit=cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
+        if(hdunit.size()>0){
+            HEADUNITID=true;
+        }else{
+            HEADUNITID=false;
+        }
         List<BudgetAllocationDetails> check = budgetAllocationDetailsRepository.findByAuthGroupId(authGroupId);
         List<BudgetAllocationDetails> checks = check.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
         if (checks.size() <= 0) {
@@ -10315,7 +10336,7 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocationDetails> reportDetails2 = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
 
                 List<BudgetAllocationDetails> reportDetails;
-                if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID))
+                if (HEADUNITID==true)
                     reportDetails = reportDetails2.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 else
                     reportDetails = reportDetails2.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
@@ -10524,6 +10545,13 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
+        boolean HEADUNITID;
+        List<CgUnit> hdunit=cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
+        if(hdunit.size()>0){
+            HEADUNITID=true;
+        }else{
+            HEADUNITID=false;
+        }
         List<BudgetAllocation> check = budgetAllocationRepository.findByAuthGroupId(authGroupId);
         List<BudgetAllocation> checks = check.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
         if (checks.size() <= 0) {
@@ -10631,7 +10659,7 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocation> reportDetails1 = budgetAllocationRepository.findByAuthGroupIdAndSubHead(authGroupId, subHeadId);
                 List<BudgetAllocation> reportDetails2 = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
                 List<BudgetAllocation> reportDetails;
-                if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID))
+                if (HEADUNITID==true)
                     reportDetails = reportDetails2.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 else
                     reportDetails = reportDetails2.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
