@@ -47,6 +47,22 @@ public class ReportController {
     }
 
 
+
+
+    @GetMapping("/getReceiptReportRevision/{authgroupId}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getReceiptReportRevision(@PathVariable("authgroupId") String authgroupId) {
+        return new ResponseEntity<>(mangeReportService.getReceiptReportRevision(authgroupId), HttpStatus.OK);
+    }
+
+    @GetMapping("/getReceiptReportRevisionDoc/{authgroupId}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getReceiptReportRevisionDoc(@PathVariable("authgroupId") String authgroupId) {
+        return new ResponseEntity<>(mangeReportService.getReceiptReportRevisionDoc(authgroupId), HttpStatus.OK);
+    }
+
+
+
+
+
     @GetMapping("/getConsolidateReceiptReport/{finYearId}/{allocationType}/{amountType}")
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getConsolidateReceiptReport(@PathVariable("finYearId") String finYearId, @PathVariable("allocationType") String allocationType, @PathVariable("amountType") String amountType) {
         return new ResponseEntity<>(mangeReportService.getConsolidateReceiptReport(finYearId, allocationType, amountType), HttpStatus.OK);
@@ -93,8 +109,6 @@ public class ReportController {
     }
 
 
-
-
     @PostMapping("/getReservedFund")
     public ResponseEntity<ApiResponse<FilePathResponse>> getReservedFund(@RequestBody CDAReportRequest reportRequest) {
         return new ResponseEntity<>(mangeReportService.getReservedFund(reportRequest), HttpStatus.OK);
@@ -117,6 +131,11 @@ public class ReportController {
     public ResponseEntity<ApiResponse<FilePathResponse>> getCdaParkingReport(@RequestBody CDAReportRequest reportRequest) {
         return new ResponseEntity<>(mangeReportService.getCdaParkingReport(reportRequest), HttpStatus.OK);
     }
+
+
+
+
+
 
     //  UNIT WISE ALLOCATION REPORT
     @PostMapping("/getUnitWiseAllocationReport")
