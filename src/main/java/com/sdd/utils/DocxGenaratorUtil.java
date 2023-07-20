@@ -354,7 +354,7 @@ public class DocxGenaratorUtil {
 
             XWPFTableRow latRow = table.createRow();
             XWPFParagraph total1 = latRow.getCell(1).addParagraph();
-            boldText(total1.createRun(), 10, "Grand Total" + "(" + filePathResponse.getRevenueOrCapital() + ")", true);
+            boldText(total1.createRun(), 10, "Grand Total", true);
             XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
             boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(grandTotal + ""), true);
             total1111.setAlignment(ParagraphAlignment.RIGHT);
