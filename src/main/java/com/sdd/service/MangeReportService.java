@@ -112,6 +112,9 @@ public interface MangeReportService {
     ApiResponse<List<FilePathResponse>> getRevisedAllocationReport(String authGroupId);
     ApiResponse<List<FilePathResponse>> getRevisedAllocationAprReport(String authGroupId);
 
+    ApiResponse<List<FilePathResponse>> getRevisedAllocationReportDoc(String authGroupId);
+    ApiResponse<List<FilePathResponse>> getRevisedAllocationAprReportDoc(String authGroupId);
+
 }
 
 
