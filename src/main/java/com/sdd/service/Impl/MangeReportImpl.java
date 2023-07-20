@@ -469,7 +469,7 @@ public class MangeReportImpl implements MangeReportService {
         for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
 
 
-            if (Double.parseDouble(budgetAllocationReport.get(j).getRevisedAmount()) > 0) {
+            if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) == 0) {
                 continue;
             }
 
@@ -1236,7 +1236,7 @@ public class MangeReportImpl implements MangeReportService {
         String key = "";
         for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
 
-            if (Double.parseDouble(budgetAllocationReport.get(j).getRevisedAmount()) > 0) {
+            if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) == 0) {
                 continue;
             }
 
