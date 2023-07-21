@@ -78,6 +78,9 @@ public class DashboardServiceImpl implements DashBoardService {
     private HeaderUtils headerUtils;
 
     @Autowired
+    private CdaParkingTransRepository cdaParkingTransRepository;
+
+    @Autowired
     private HrDataRepository hrDataRepository;
 
     @Override
@@ -849,6 +852,21 @@ public class DashboardServiceImpl implements DashBoardService {
                         String cbAmount = decimalFormat.format(totalbill);
                         eAmount = Double.parseDouble(cbAmount);
                     }*/
+                    double totalCda=0.0;
+                    double remCdaBal=0.0;
+                    double rqUnit=0.0;
+                    List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, uid, allocationTypeId, "0");
+                    if (cdaDetail.size() > 0) {
+                        for (int j = 0; j < cdaDetail.size(); j++) {
+
+                            totalCda += Double.parseDouble(cdaDetail.get(j).getTotalParkingAmount());
+                            remCdaBal += Double.parseDouble(cdaDetail.get(j).getRemainingCdaAmount());
+                            AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(j).getAmountType());
+                            rqUnit=hdamtUnit.getAmount();
+                        }
+                    }
+                    double cdaTotal=totalCda*rqUnit/reqAmount;
+                    double cdaRming=remCdaBal*rqUnit/reqAmount;
                     List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(uid, finYearId, subHeadId,allocationTypeId, "0");
                     double totalAmount = 0.0;
                     if (expenditure.size() > 0) {
@@ -864,6 +882,7 @@ public class DashboardServiceImpl implements DashBoardService {
                                 cbD="";
                         }
                     }
+
                     DecimalFormat decimalFormat = new DecimalFormat("#");
                     String cbAmount = decimalFormat.format(totalAmount);
                     eAmount = Double.parseDouble(cbAmount);
@@ -874,14 +893,14 @@ public class DashboardServiceImpl implements DashBoardService {
                     dashBoardExprnditureResponse.setCgUnit(cgUnit);
                     dashBoardExprnditureResponse.setBudgetFinancialYear(budgetFinancialYear);
                     dashBoardExprnditureResponse.setBudgetHead(bHead);
-                    dashBoardExprnditureResponse.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
+                    dashBoardExprnditureResponse.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(cdaTotal)));
                     dashBoardExprnditureResponse.setExpenditureAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount)));
                     if(finAmount!=0)
-                    dashBoardExprnditureResponse.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount*100/finAmount)));
+                    dashBoardExprnditureResponse.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount*100/cdaTotal)));
                     else
                         dashBoardExprnditureResponse.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(0.0)));
                     dashBoardExprnditureResponse.setLastCBDate(cbD);
-                    dashBoardExprnditureResponse.setBalAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount-expAmount)));
+                    dashBoardExprnditureResponse.setBalAmount(String.format("%1$0,1.4f", new BigDecimal(cdaRming)));
                     dashBoardExprnditureResponse.setAmountIn(amountIn);
                     dashBoardExprnditureResponseList.add(dashBoardExprnditureResponse);
 
