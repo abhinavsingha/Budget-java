@@ -4464,6 +4464,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             String key = entry.getKey();
             BudgetAllocation tabData = entry.getValue();
 
+            if(Double.parseDouble(tabData.getAllocationAmount()) == 0 || Double.parseDouble(tabData.getAllocationAmount()) <= 0){
+               continue;
+            }
+
+
             MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
 
             mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
