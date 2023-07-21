@@ -33,6 +33,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MangeRebaseImpl implements MangeRebaseService {
@@ -330,7 +331,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
             }, "Record Not Found", HttpStatus.OK.value());
         }
 
-        Double amountUnit;
         for (int i = 0; i < allocationData.size(); i++) {
             RebaseBudgetHistory rebase = new RebaseBudgetHistory();
             AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(allocationData.get(i).getAmountType());
@@ -338,7 +338,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
                 }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
             }
-            amountUnit = amountTypeObj.getAmount();
+            double amountUnit = amountTypeObj.getAmount();
             String allocId = allocationData.get(i).getAllocationTypeId();
             Double aAmount = Double.parseDouble(allocationData.get(i).getAllocationAmount());
             //CgUnit frmUnit = cgUnitRepository.findByUnit(allocationData.get(i).getFromUnit());
@@ -378,19 +378,22 @@ public class MangeRebaseImpl implements MangeRebaseService {
             }
             rebase.setRemCdaBal(String.valueOf(remCdaBal));
             rebase.setCdaData(addRes);
-            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(unit, finYear, bHead, allocId,  "0");
+            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(unit, finYear, bHead, allocId,  "0");
+            List<ContigentBill> expenditure=expenditure1.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved")).collect(Collectors.toList());
             if (expenditure.size() > 0) {
                 double totalAmount = 0.0;
-                for (ContigentBill amount : expenditure) {
-                    totalAmount += Double.parseDouble(amount.getCbAmount());
+                Date lastCbDate = null;
+                for (ContigentBill data : expenditure) {
+                    totalAmount += Double.parseDouble(data.getCbAmount());
+                    lastCbDate=data.getCbDate();
                 }
-                DecimalFormat decimalFormat = new DecimalFormat("#");
-                String eAmount = decimalFormat.format(totalAmount/amountUnit);
-                rebase.setExpenditureAmount(eAmount);
-                Double bal = aAmount - totalAmount/amountUnit;
-                //Double remBal = bal / amountUnit;
+                //DecimalFormat decimalFormat = new DecimalFormat("#");
+                //String eAmount = decimalFormat.format(totalAmount/amountUnit);
+                double expAmnt=totalAmount/amountUnit;
+                double bal = aAmount - expAmnt;
+                rebase.setExpenditureAmount(String.valueOf(expAmnt));
                 rebase.setRemBal(Double.toString(bal));
-                rebase.setLastCbDate(expenditure.get(0).getCbDate());
+                rebase.setLastCbDate(lastCbDate);
             } else {
                 rebase.setExpenditureAmount("0.0000");
                 rebase.setLastCbDate(null);
