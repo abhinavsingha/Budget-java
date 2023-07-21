@@ -9656,10 +9656,32 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocationDetails> reportDetails2 = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
 
                 List<BudgetAllocationDetails> reportDetails;
-                if (HEADUNITID==true)
+                if (HEADUNITID==true  )
                     reportDetails = reportDetails2.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 else
                     reportDetails = reportDetails2.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+
+
+
+      /*          for (BudgetAllocationDetails mainData : reportDetails1) {
+
+                 if(hrData.getUnitId().equalsIgnoreCase(mainData.getToUnit())){
+
+                 }   else{
+
+                 }
+
+                }*/
+
+
+
+
+
+
+
+
+
+
 
                 if (reportDetails.size() <= 0) {
                     continue;
@@ -9854,6 +9876,13 @@ public class MangeReportImpl implements MangeReportService {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        String hrunitId="";
+        if(hrData.getUnitId().equalsIgnoreCase("001321"))
+        {
+            hrunitId="000225";
+        }else{
+            hrunitId=hrData.getUnitId();
+        }
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
@@ -9880,7 +9909,7 @@ public class MangeReportImpl implements MangeReportService {
             }
         }
         boolean HEADUNITID;
-        List<CgUnit> hdunit=cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
+        List<CgUnit> hdunit=cgUnitRepository.findByBudGroupUnitLike("%" + hrunitId + "%");
         if(hdunit.size()>0){
             HEADUNITID=true;
         }else{
@@ -9997,8 +10026,9 @@ public class MangeReportImpl implements MangeReportService {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetails1 = budgetAllocationRepository.findByAuthGroupIdAndSubHead(authGroupId, subHeadId);
                 List<BudgetAllocation> reportDetails2 = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
+                String frmu=reportDetails2.get(0).getFromUnit();
                 List<BudgetAllocation> reportDetails;
-                if (HEADUNITID==true)
+                if (HEADUNITID==true && hrData.getUnitId().equalsIgnoreCase(frmu))
                     reportDetails = reportDetails2.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 else
                     reportDetails = reportDetails2.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
@@ -10520,6 +10550,14 @@ public class MangeReportImpl implements MangeReportService {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        String hrunitId="";
+        if(hrData.getUnitId().equalsIgnoreCase("001321"))
+        {
+            hrunitId="000225";
+        }else{
+            hrunitId=hrData.getUnitId();
+        }
+
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
@@ -10546,7 +10584,7 @@ public class MangeReportImpl implements MangeReportService {
             }
         }
         boolean HEADUNITID;
-        List<CgUnit> hdunit=cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
+        List<CgUnit> hdunit=cgUnitRepository.findByBudGroupUnitLike("%" + hrunitId + "%");
         if(hdunit.size()>0){
             HEADUNITID=true;
         }else{
@@ -10659,7 +10697,8 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocation> reportDetails1 = budgetAllocationRepository.findByAuthGroupIdAndSubHead(authGroupId, subHeadId);
                 List<BudgetAllocation> reportDetails2 = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
                 List<BudgetAllocation> reportDetails;
-                if (HEADUNITID==true)
+                String frmu=reportDetails2.get(0).getFromUnit();
+                if (HEADUNITID==true && hrData.getUnitId().equalsIgnoreCase(frmu))
                     reportDetails = reportDetails2.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 else
                     reportDetails = reportDetails2.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());

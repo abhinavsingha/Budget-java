@@ -319,7 +319,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
         }
         BudgetFinancialYear Finyr = budgetFinancialYearRepository.findBySerialNo(finYear);
         CgUnit unitdata = cgUnitRepository.findByUnit(unit);
-        List<AllocationType> allocType = allocationRepository.findByIsFlag("1");
+        List<AllocationType> allocType = allocationRepository.findByIsFlag("0");
         String allocTypes = allocType.get(0).getAllocTypeId();
         if (unitdata == null) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
@@ -387,8 +387,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     totalAmount += Double.parseDouble(data.getCbAmount());
                     lastCbDate=data.getCbDate();
                 }
-                //DecimalFormat decimalFormat = new DecimalFormat("#");
-                //String eAmount = decimalFormat.format(totalAmount/amountUnit);
                 double expAmnt=totalAmount/amountUnit;
                 double bal = aAmount - expAmnt;
                 rebase.setExpenditureAmount(String.valueOf(expAmnt));
