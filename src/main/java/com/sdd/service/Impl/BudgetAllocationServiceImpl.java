@@ -1368,9 +1368,14 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             }
 
 
-            List<BudgetAllocationDetails> budgetAllocationsDetalis11 = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "Pending", "0", "1");
-            if (budgetAllocationsDetalis11.size() > 0) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY REVISED FOR THIS UNIT CURRENTLY NOT APPROVED. PLEASE APPROVED PREVIOUS REVISION");
+            List<BudgetAllocationDetails> checkBudgetRevisionExist = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "Pending", "0", "1");
+            List<BudgetAllocationDetails> checkBudgetAllocationPending = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "Pending", "0", "0");
+            if (checkBudgetRevisionExist.size() > 0) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET REVISION FOR THIS UNIT CURRENTLY NOT APPROVED. PLEASE APPROVED PREVIOUS REVISION");
+            }
+
+            if (checkBudgetAllocationPending.size() > 0) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALLOCATION FOR THIS UNIT CURRENTLY NOT APPROVED. PLEASE APPROVED PREVIOUS ALLOCATION");
             }
 
 
@@ -4462,7 +4467,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
-
         HashMap<String, BudgetAllocation> totalUnit = new HashMap<String, BudgetAllocation>();
         for (Integer i = 0; i < budgetAllocationsList.size(); i++) {
             totalUnit.put(budgetAllocationsList.get(i).getToUnit(), budgetAllocationsList.get(i));
@@ -4506,7 +4510,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             }
         }
-
 
 
         defaultResponse.setMsg("DATA SAVE SUCCESSFULLY");
