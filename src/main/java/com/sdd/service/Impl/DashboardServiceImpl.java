@@ -855,13 +855,15 @@ public class DashboardServiceImpl implements DashBoardService {
                     double totalCda=0.0;
                     double remCdaBal=0.0;
                     List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, uid, allocationTypeId, "0");
-                    AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(0).getAmountType());
-                    double rqUnit=hdamtUnit.getAmount();
+
+                    double rqUnit=0.0;
                     if (cdaDetail.size() > 0) {
                         for (int j = 0; j < cdaDetail.size(); j++) {
 
                             totalCda += Double.parseDouble(cdaDetail.get(j).getTotalParkingAmount());
                             remCdaBal += Double.parseDouble(cdaDetail.get(j).getRemainingCdaAmount());
+                            AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(0).getAmountType());
+                            rqUnit=hdamtUnit.getAmount();
                         }
                     }
                     double cdaTotal=totalCda*rqUnit/reqAmount;
@@ -1032,13 +1034,13 @@ public class DashboardServiceImpl implements DashBoardService {
                 double totalCda=0.0;
                 double remCdaBal=0.0;
                 List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, uId, allocationTypeId, "0");
-                AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(0).getAmountType());
-                double rqUnit=hdamtUnit.getAmount();
+                double rqUnit=0.0;
                 if (cdaDetail.size() > 0) {
                     for (int j = 0; j < cdaDetail.size(); j++) {
-
                         totalCda += Double.parseDouble(cdaDetail.get(j).getTotalParkingAmount());
                         remCdaBal += Double.parseDouble(cdaDetail.get(j).getRemainingCdaAmount());
+                        AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(0).getAmountType());
+                        rqUnit=hdamtUnit.getAmount();
                     }
                 }
                 double cdaTotal=totalCda*rqUnit/reqAmount;
