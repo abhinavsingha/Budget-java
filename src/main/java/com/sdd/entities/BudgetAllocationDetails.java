@@ -95,4 +95,7 @@ public class BudgetAllocationDetails {
     @Column(name = "IS_TYPE")
     private String isTYpe;
 
+    @Column(name = "UNALLOCATED_AMOUNT")
+    private String unallocatedAmount;
+
 }

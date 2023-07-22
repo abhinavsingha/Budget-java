@@ -930,6 +930,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setUserId(budgetAllocationSubReport.getUserId());
             budgetAllocationReport.setIsTYpe(budgetAllocationSubReport.getIsTYpe());
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
+            budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
 
             if (budgetAllocationSubReport.getRevisedAmount() == null) {
@@ -1076,7 +1077,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setFromUnit(cgUnitRepository.findByUnit(budgetAllocationSubReport.getFromUnit()));
             budgetAllocationReport.setAllocTypeId(allocationRepository.findByAllocTypeId(budgetAllocationSubReport.getAllocTypeId()));
             budgetAllocationReport.setSubHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(budgetAllocationSubReport.getSubHead()));
-
+            budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
 
 //            double allocationAmount = 0;
 //            AmountUnit remeningBalanceUnit = null;
@@ -1146,6 +1147,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     budgetAllocationReport.setStatus(budgetAllocationSubReport.getStatus());
                     budgetAllocationReport.setPurposeCode(budgetAllocationSubReport.getPurposeCode());
                     budgetAllocationReport.setRemarks(budgetAllocationSubReport.getRemarks());
+                    budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
                     budgetAllocationReport.setRefTransactionId(budgetAllocationSubReport.getRefTransactionId());
                     budgetAllocationReport.setUserId(budgetAllocationSubReport.getUserId());
                     budgetAllocationReport.setRevisedAmount(budgetAllocationSubReport.getRevisedAmount());
@@ -1254,6 +1256,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setStatus(budgetAllocationSubReport.getStatus());
             budgetAllocationReport.setPurposeCode(budgetAllocationSubReport.getPurposeCode());
             budgetAllocationReport.setRemarks(budgetAllocationSubReport.getRemarks());
+            budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
             budgetAllocationReport.setRefTransactionId(budgetAllocationSubReport.getRefTransactionId());
             budgetAllocationReport.setUserId(budgetAllocationSubReport.getUserId());
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
@@ -1588,6 +1591,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getCreatedOn());
             budgetAllocationReport.setAllocationId(budgetAllocationSubReport.getAllocationId());
             budgetAllocationReport.setTransactionId(budgetAllocationSubReport.getAllocationId());
+            budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
             budgetAllocationReport.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSubReport.getAllocationAmount()));
             budgetAllocationReport.setStatus(budgetAllocationSubReport.getStatus());
             budgetAllocationReport.setRemarks(budgetAllocationSubReport.getStatus());
@@ -1726,7 +1730,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setIsTYpe(budgetAllocationSubReport.getIsTYpe());
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getCreatedOn());
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
-
+            budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
             if (budgetAllocationSubReport.getRevisedAmount() == null) {
                 budgetAllocationReport.setRevisedAmount("0");
             } else {
@@ -2094,6 +2098,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationDetails.get(i).getAllocationAmount()));
                 budgetAllocation.setUnallocatedAmount("0");
                 budgetAllocation.setRevisedAmount("0");
+                budgetAllocation.setUnallocatedAmount("0");
                 budgetAllocation.setUserId(allocationDetails.get(i).getUserId());
                 budgetAllocation.setStatus("Pending");
                 budgetAllocation.setAmountType(allocationDetails.get(i).getAmountType());
@@ -2910,6 +2915,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationDetails.setRemarks(budgetAllocationSaveRequest.getBudgetRequest().get(i).getRemark());
             budgetAllocationDetails.setIsDelete("0");
             budgetAllocationDetails.setIsTYpe("S");
+            budgetAllocationDetails.setUnallocatedAmount("0");
             budgetAllocationDetails.setIsBudgetRevision("0");
             budgetAllocationDetails.setRevisedAmount("0.0000");
 //            budgetAllocationDetails.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmount()));
@@ -3029,7 +3035,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
             List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatusIn(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0", "0", dataIscgBg);
             if (budgetAllocationDetailsList.size() > 0) {
-                CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationDetailsList.get(i).getToUnit());
+                CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY ALLOCATED " + cgUnit.getDescr() + " . CAN NOT ASSIGN AGAIN");
             }
         }
@@ -3187,6 +3193,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationDetails.setToUnit(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
             budgetAllocationDetails.setSubHead(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId());
             budgetAllocationDetails.setStatus("Pending");
+            budgetAllocationDetails.setUnallocatedAmount("0");
             budgetAllocationDetails.setRemarks(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRemark());
             budgetAllocationDetails.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
@@ -3499,6 +3506,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 //            budgetAllocationDetails.setAuthGroupId(authGrouPid);
 //            budgetAllocationDetails.setRemarks(budgetAllocationSaveRequest.getBudgetRequest().get(i).getRemark());
             budgetAllocationDetails.setIsDelete("0");
+            budgetAllocationDetails.setUnallocatedAmount("0");
             budgetAllocationDetails.setIsTYpe("S");
 //            budgetAllocationDetails.setIsBudgetRevision("0");
             budgetAllocationDetails.setRevisedAmount("0.0000");
@@ -3644,7 +3652,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
             List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatusIn(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0", "0", dataIscgBg);
             if (budgetAllocationDetailsList.size() > 0) {
-                CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationDetailsList.get(i).getToUnit());
+                CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY ALLOCATED " + cgUnit.getDescr() + " . CAN NOT ASSIGN AGAIN");
             }
         }
@@ -3821,6 +3829,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 //            budgetAllocationDetails.setRefTransactionId(refTransID);
 //            budgetAllocationDetails.setUserId(hrData.getPid());
             budgetAllocationDetails.setIsDelete("0");
+            budgetAllocationDetails.setUnallocatedAmount("0");
             budgetAllocationDetails.setIsTYpe("U");
 //            budgetAllocationDetails.setIsBudgetRevision("0");
 //            budgetAllocationDetails.setAmountType(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
@@ -4655,6 +4664,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocation.setIsTYpe(allocationDetails.get(i).getIsTYpe());
                 budgetAllocation.setAllocationTypeId(allocationDetails.get(i).getAllocTypeId());
                 budgetAllocation.setIsBudgetRevision("0");
+                budgetAllocation.setUnallocatedAmount("0");
                 budgetAllocation.setUnallocatedAmount("0.0000");
                 budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint((revisedAmount + totalAmount) + ""));
                 budgetAllocation.setRevisedAmount(ConverterUtils.addDecimalPoint(revisedAmount + ""));

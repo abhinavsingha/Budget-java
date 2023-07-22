@@ -35,6 +35,7 @@ public class BudgetAllocationSubResponse {
     private String purposeCode;
     private Timestamp allocationDate;
     private String isFlag;
+    private String unallocatedAmount;
     private String isBudgetRevision;
     private String remarks;
     private String refTransactionId;

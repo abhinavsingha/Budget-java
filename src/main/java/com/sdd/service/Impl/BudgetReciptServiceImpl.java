@@ -259,6 +259,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             budgetAllocationDetails.setSubHead(subHeadData.getBudgetCodeId());
             budgetAllocationDetails.setStatus("Approved");
             budgetAllocationDetails.setIsTYpe("M");
+            budgetAllocationDetails.setUnallocatedAmount("0");
             budgetAllocationDetails.setIsBudgetRevision("0");
             budgetAllocationDetails.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
@@ -314,6 +315,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 //            budgetAllocation.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getReceiptSubRequests().get(j).getAllocationAmount()));
             budgetAllocation.setUnallocatedAmount("0");
             budgetAllocation.setIsFlag("0");
+            budgetAllocation.setUnallocatedAmount("0");
             budgetAllocation.setIsTYpe("R");
             budgetAllocation.setIsBudgetRevision("0");
             budgetAllocation.setRevisedAmount("0");
@@ -517,6 +519,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
         budgetAllocationDetails.setAuthGroupId(authGroupId);
         budgetAllocationDetails.setRemarks("");
+        budgetAllocationDetails.setUnallocatedAmount("0");
         budgetAllocationDetails.setAmountType(amountUnit.getAmountTypeId());
         budgetAllocationDetails.setPurposeCode("");
         budgetAllocationDetails.setIsDelete("0");
@@ -544,6 +547,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         budgetAllocation.setUnallocatedAmount("0");
         budgetAllocation.setRevisedAmount("0");
         budgetAllocation.setIsFlag("0");
+        budgetAllocation.setUnallocatedAmount("0");
 //        budgetAllocation.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getAllocationAmount()));
         budgetAllocation.setUserId(hrData.getPid());
         budgetAllocation.setStatus("Approved");
@@ -663,7 +667,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
             budgetAllocationReport.setCreatedOn(budgetAllocationSubReport.getCreatedOn());
             budgetAllocationReport.setUpdatedOn(budgetAllocationSubReport.getUpdatedOn());
-
+            budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
             budgetAllocationReport.setAmountUnit(amountUnitRepository.findByAmountTypeId(budgetAllocationSubReport.getAmountType()));
             budgetAllocationReport.setFinYear(budgetFinancialYearRepository.findBySerialNo(budgetAllocationSubReport.getFinYear()));
             budgetAllocationReport.setToUnit(cgUnitRepository.findByUnit(budgetAllocationSubReport.getToUnit()));

@@ -179,7 +179,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setBudgetHead(budgetHead);
-                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
+                subModel.setAmount(Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) + "");
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
 
@@ -194,7 +194,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setRemark(budgetAllocationReport.get(j).getTransactionId());
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
-                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
+                subModel.setAmount(Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) + "");
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
@@ -321,7 +321,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
                 subModel.setAmountType(amountUnit.getAmountType());
-                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
+                subModel.setAmount(Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) + "");
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
                 if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
@@ -335,7 +335,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setRemark(budgetAllocationReport.get(j).getTransactionId());
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
-                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
+                subModel.setAmount(Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) + "");
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
@@ -482,12 +482,10 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setType(budgetAllocationReport.get(j).getAllocationTypeId());
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
                 subModel.setUnit(cgUnit.getDescr());
-                subModel.setAmountType(amountUnitServer.getAmountType());
                 subModel.setBudgetHead(budgetHead);
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-
-                double totalAmount = (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
+                double totalAmount = ((Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
 
                 subModel.setAmount(totalAmount + "");
 
@@ -503,7 +501,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
-                double totalAmount = (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
+                double totalAmount = ((Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
 
                 subModel.setAmount(totalAmount + "");
 
@@ -517,7 +515,7 @@ public class MangeReportImpl implements MangeReportService {
             }
         }
 
-        if(hashMap.size() == 0){
+        if (hashMap.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Record Not Found.");
         }
 
@@ -647,12 +645,11 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setType(budgetAllocationReport.get(j).getAllocationTypeId());
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
                 subModel.setUnit(cgUnit.getDescr());
-                subModel.setAmountType(amountUnitServer.getAmountType());
                 subModel.setBudgetHead(budgetHead);
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
 
-                double totalAmount = (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
+                double totalAmount = ((Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
 
                 subModel.setAmount(totalAmount + "");
 
@@ -668,7 +665,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
-                double totalAmount = (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
+                double totalAmount = ((Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
 
                 subModel.setAmount(totalAmount + "");
 
@@ -732,7 +729,7 @@ public class MangeReportImpl implements MangeReportService {
             filePathResponse.setRevenueOrCapital("CAPITAL");
         }
 
-        if(hashMap.size() == 0){
+        if (hashMap.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Record Not Found.");
         }
 
@@ -760,12 +757,6 @@ public class MangeReportImpl implements MangeReportService {
 
 
     }
-
-
-
-
-
-
 
 
     @Override
@@ -825,7 +816,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setBudgetHead(budgetHead);
 
-                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount());
+                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount());
                 subModel.setAmount(addData + "");
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
@@ -841,7 +832,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
-                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount());
+                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount());
 
                 subModel.setAmount(addData + "");
                 subModel.setAmountType(amountUnit.getAmountType());
@@ -973,7 +964,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setBudgetHead(budgetHead);
                 subModel.setAmountType(amountUnit.getAmountType());
 
-                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount());
+                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount());
 
                 subModel.setAmount(addData + "");
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
@@ -990,7 +981,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
 
-                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount());
+                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount());
                 subModel.setAmount(addData + "");
 
                 subModel.setAmountType(amountUnit.getAmountType());
@@ -1127,7 +1118,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setBudgetHead(budgetHead);
 
-                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount());
+                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount());
 
                 subModel.setAmount(addData + "");
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
@@ -1146,7 +1137,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
 
-                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount());
+                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount());
                 subModel.setAmount(addData + "");
 
 //                subModel.setAmount(Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + "");
@@ -1276,7 +1267,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setBudgetHead(budgetHead);
                 subModel.setAmountType(amountUnit.getAmountType());
 
-                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount());
+                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount());
                 subModel.setAmount(addData + "");
 
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
@@ -1293,7 +1284,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
 
-                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount());
+                double addData = Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount());
                 subModel.setAmount(addData + "");
 
                 subModel.setAmountType(amountUnit.getAmountType());
@@ -1377,8 +1368,6 @@ public class MangeReportImpl implements MangeReportService {
     }
 
 
-
-
     @Override
     public ApiResponse<List<FilePathResponse>> getAllocationReportRevised(ReportRequest reportRequest) {
 
@@ -1427,7 +1416,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setUnit(budgetAllocationReport.get(j).getToUnit());
                 subModel.setType(budgetAllocationReport.get(j).getAllocationTypeId());
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
-                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
+                subModel.setAmount((Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())) + "");
                 subModel.setRevisedAmount(budgetAllocationReport.get(j).getRevisedAmount());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
                 reportMaindata.add(subModel);
@@ -1438,7 +1427,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setUnit(budgetAllocationReport.get(j).getToUnit());
                 subModel.setType(budgetAllocationReport.get(j).getAllocationTypeId());
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
-                subModel.setAmount(budgetAllocationReport.get(j).getAllocationAmount());
+                subModel.setAmount((Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())) + "");
                 subModel.setRevisedAmount(budgetAllocationReport.get(j).getRevisedAmount());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
                 reportMaindata.add(subModel);
@@ -2168,7 +2157,7 @@ public class MangeReportImpl implements MangeReportService {
 
             }
 
-            if (allocationAmount == 0 ||  allocationAmount <=0) {
+            if (allocationAmount == 0 || allocationAmount <= 0) {
                 continue;
             }
 
@@ -2180,10 +2169,9 @@ public class MangeReportImpl implements MangeReportService {
             allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
         }
 
-        if(allCdaData.size() == 0){
+        if (allCdaData.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Record Not Found.");
         }
-
 
 
         try {
@@ -2300,20 +2288,20 @@ public class MangeReportImpl implements MangeReportService {
                 allocationAmount = allocationAmount + (Double.parseDouble(cdaData.get(m).getTotalParkingAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
             }
 
-            if (allocationAmount == 0 ||  allocationAmount <=0) {
+            if (allocationAmount == 0 || allocationAmount <= 0) {
                 continue;
             }
 
-                cdaReportResponse = new CDAReportResponse();
-                cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
-                cdaReportResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
-                cdaReportResponse.setReportType("RESERVE FUND");
-                cdaReportList.add(cdaReportResponse);
-                allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
+            cdaReportResponse = new CDAReportResponse();
+            cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
+            cdaReportResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
+            cdaReportResponse.setReportType("RESERVE FUND");
+            cdaReportList.add(cdaReportResponse);
+            allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
 
         }
 
-        if(allCdaData.size() == 0){
+        if (allCdaData.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Record Not Found.");
         }
 
@@ -3671,7 +3659,6 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<FilePathResponse>() {
         });
     }
-
 
 
     @Override
@@ -9697,11 +9684,11 @@ public class MangeReportImpl implements MangeReportService {
             }
         }
         boolean HEADUNITID;
-        List<CgUnit> hdunit=cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
-        if(hdunit.size()>0){
-            HEADUNITID=true;
-        }else{
-            HEADUNITID=false;
+        List<CgUnit> hdunit = cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
+        if (hdunit.size() > 0) {
+            HEADUNITID = true;
+        } else {
+            HEADUNITID = false;
         }
         List<BudgetAllocationDetails> check = budgetAllocationDetailsRepository.findByAuthGroupId(authGroupId);
         List<BudgetAllocationDetails> checks = check.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
@@ -9816,7 +9803,7 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocationDetails> reportDetails2 = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
 
                 List<BudgetAllocationDetails> reportDetails;
-                if (HEADUNITID==true  )
+                if (HEADUNITID == true)
                     reportDetails = reportDetails2.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 else
                     reportDetails = reportDetails2.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
@@ -9832,15 +9819,6 @@ public class MangeReportImpl implements MangeReportService {
                  }
 
                 }*/
-
-
-
-
-
-
-
-
-
 
 
                 if (reportDetails.size() <= 0) {
@@ -10030,18 +10008,18 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
     }
+
     @Override
     public ApiResponse<List<FilePathResponse>> getRevisedAllocationAprReport(String authGroupId) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
-        String hrunitId="";
-        if(hrData.getUnitId().equalsIgnoreCase("001321"))
-        {
-            hrunitId="000225";
-        }else{
-            hrunitId=hrData.getUnitId();
+        String hrunitId = "";
+        if (hrData.getUnitId().equalsIgnoreCase("001321")) {
+            hrunitId = "000225";
+        } else {
+            hrunitId = hrData.getUnitId();
         }
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
         if (hrData == null) {
@@ -10069,11 +10047,11 @@ public class MangeReportImpl implements MangeReportService {
             }
         }
         boolean HEADUNITID;
-        List<CgUnit> hdunit=cgUnitRepository.findByBudGroupUnitLike("%" + hrunitId + "%");
-        if(hdunit.size()>0){
-            HEADUNITID=true;
-        }else{
-            HEADUNITID=false;
+        List<CgUnit> hdunit = cgUnitRepository.findByBudGroupUnitLike("%" + hrunitId + "%");
+        if (hdunit.size() > 0) {
+            HEADUNITID = true;
+        } else {
+            HEADUNITID = false;
         }
         List<BudgetAllocation> check = budgetAllocationRepository.findByAuthGroupId(authGroupId);
         List<BudgetAllocation> checks = check.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
@@ -10186,9 +10164,9 @@ public class MangeReportImpl implements MangeReportService {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetails1 = budgetAllocationRepository.findByAuthGroupIdAndSubHead(authGroupId, subHeadId);
                 List<BudgetAllocation> reportDetails2 = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
-                String frmu=reportDetails2.get(0).getFromUnit();
+                String frmu = reportDetails2.get(0).getFromUnit();
                 List<BudgetAllocation> reportDetails;
-                if (HEADUNITID==true && hrData.getUnitId().equalsIgnoreCase(frmu))
+                if (HEADUNITID == true && hrData.getUnitId().equalsIgnoreCase(frmu))
                     reportDetails = reportDetails2.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 else
                     reportDetails = reportDetails2.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
@@ -10380,6 +10358,7 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
     }
+
     @Override
     public ApiResponse<List<FilePathResponse>> getRevisedAllocationReportDoc(String authGroupId) {
 
@@ -10412,11 +10391,11 @@ public class MangeReportImpl implements MangeReportService {
             }
         }
         boolean HEADUNITID;
-        List<CgUnit> hdunit=cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
-        if(hdunit.size()>0){
-            HEADUNITID=true;
-        }else{
-            HEADUNITID=false;
+        List<CgUnit> hdunit = cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
+        if (hdunit.size() > 0) {
+            HEADUNITID = true;
+        } else {
+            HEADUNITID = false;
         }
         List<BudgetAllocationDetails> check = budgetAllocationDetailsRepository.findByAuthGroupId(authGroupId);
         List<BudgetAllocationDetails> checks = check.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
@@ -10526,7 +10505,7 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocationDetails> reportDetails2 = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
 
                 List<BudgetAllocationDetails> reportDetails;
-                if (HEADUNITID==true)
+                if (HEADUNITID == true)
                     reportDetails = reportDetails2.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 else
                     reportDetails = reportDetails2.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
@@ -10704,18 +10683,18 @@ public class MangeReportImpl implements MangeReportService {
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
     }
+
     @Override
     public ApiResponse<List<FilePathResponse>> getRevisedAllocationAprReportDoc(String authGroupId) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
-        String hrunitId="";
-        if(hrData.getUnitId().equalsIgnoreCase("001321"))
-        {
-            hrunitId="000225";
-        }else{
-            hrunitId=hrData.getUnitId();
+        String hrunitId = "";
+        if (hrData.getUnitId().equalsIgnoreCase("001321")) {
+            hrunitId = "000225";
+        } else {
+            hrunitId = hrData.getUnitId();
         }
 
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
@@ -10744,11 +10723,11 @@ public class MangeReportImpl implements MangeReportService {
             }
         }
         boolean HEADUNITID;
-        List<CgUnit> hdunit=cgUnitRepository.findByBudGroupUnitLike("%" + hrunitId + "%");
-        if(hdunit.size()>0){
-            HEADUNITID=true;
-        }else{
-            HEADUNITID=false;
+        List<CgUnit> hdunit = cgUnitRepository.findByBudGroupUnitLike("%" + hrunitId + "%");
+        if (hdunit.size() > 0) {
+            HEADUNITID = true;
+        } else {
+            HEADUNITID = false;
         }
         List<BudgetAllocation> check = budgetAllocationRepository.findByAuthGroupId(authGroupId);
         List<BudgetAllocation> checks = check.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
@@ -10857,8 +10836,8 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocation> reportDetails1 = budgetAllocationRepository.findByAuthGroupIdAndSubHead(authGroupId, subHeadId);
                 List<BudgetAllocation> reportDetails2 = reportDetails1.stream().filter(e -> Float.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
                 List<BudgetAllocation> reportDetails;
-                String frmu=reportDetails2.get(0).getFromUnit();
-                if (HEADUNITID==true && hrData.getUnitId().equalsIgnoreCase(frmu))
+                String frmu = reportDetails2.get(0).getFromUnit();
+                if (HEADUNITID == true && hrData.getUnitId().equalsIgnoreCase(frmu))
                     reportDetails = reportDetails2.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 else
                     reportDetails = reportDetails2.stream().filter(e -> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());

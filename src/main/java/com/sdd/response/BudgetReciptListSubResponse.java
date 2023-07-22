@@ -33,7 +33,7 @@ public class BudgetReciptListSubResponse {
     private String userId;
     private Timestamp createdOn;
     private Timestamp updatedOn;
-
+    private String unallocatedAmount;
     private String isCdaParked;
 
 
