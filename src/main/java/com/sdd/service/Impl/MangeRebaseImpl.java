@@ -508,6 +508,31 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
         CgUnit chekUnit = cgUnitRepository.findByUnit(req.getRebaseUnitId());
         String subUnits=chekUnit.getSubUnit();
+        CgStation frmS=cgStationRepository.findByStationId(req.getFrmStationId());
+        if (frmS==null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FROM STATION REGION GETTING NULL");
+        }
+        CgStation toS=cgStationRepository.findByStationId(req.getToStationId());
+        if (toS ==null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO STATION REGION GETTING NULL");
+        }
+        String toRegion=toS.getRhqId();
+        String tohdUnit=toS.getDhqName();
+        String frmRegion=frmS.getRhqId();
+        String frmhdUnit=frmS.getDhqName();
+
+        CgUnit obj = cgUnitRepository.findByCgUnitShort(tohdUnit);
+        if (obj==null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO HEAD UNIT NOT FOUND");
+        }
+        String toHdUnitId=obj.getUnit();
+
+        List<BudgetAllocation> allocationData = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getUnitRebaseRequests().get(0).getBudgetHeadId(), req.getRebaseUnitId(),req.getFinYear(), req.getUnitRebaseRequests().get(0).getAllocationTypeId(), "0");
+        if (allocationData.size()==0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION NOT FOUND FOR THIS UNIT");
+        }
+        String frmUnit=allocationData.get(0).getFromUnit();
+
 
 
         if (chekUnit == null || chekUnit.getUnit().isEmpty()) {
@@ -551,32 +576,9 @@ public class MangeRebaseImpl implements MangeRebaseService {
         authority.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
         Authority saveAuthority = authorityRepository.save(authority);
 
-        CgStation frmS=cgStationRepository.findByStationId(req.getFrmStationId());
-        if (frmS==null) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FROM STATION REGION GETTING NULL");
-        }
-        CgStation toS=cgStationRepository.findByStationId(req.getToStationId());
-        if (toS ==null) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO STATION REGION GETTING NULL");
-        }
 
 
-        String toRegion=toS.getRhqId();
-        String tohdUnit=toS.getDhqName();
-        String frmRegion=frmS.getRhqId();
-        String frmhdUnit=frmS.getDhqName();
 
-        CgUnit obj = cgUnitRepository.findByCgUnitShort(tohdUnit);
-        if (obj==null) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO HEAD UNIT NOT FOUND");
-        }
-        String toHdUnitId=obj.getUnit();
-
-        List<BudgetAllocation> allocationData = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getUnitRebaseRequests().get(0).getBudgetHeadId(), req.getRebaseUnitId(),req.getFinYear(), req.getUnitRebaseRequests().get(0).getAllocationTypeId(), "0");
-        if (allocationData.size()==0) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION NOT FOUND FOR THIS UNIT");
-        }
-        String frmUnit=allocationData.get(0).getFromUnit();
 
         if (req.getUnitRebaseRequests().size() > 0) {
             for (Integer k = 0; k < req.getUnitRebaseRequests().size(); k++) {
