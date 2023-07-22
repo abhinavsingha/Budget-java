@@ -610,7 +610,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 budgetRebase.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                 budgetRebaseRepository.save(budgetRebase);
-
                 List<CdaParkingTrans> selfCdaSieze = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), req.getRebaseUnitId(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
                 if(selfCdaSieze.size()>0) {
                     for (Integer i = 0; i < selfCdaSieze.size(); i++) {
@@ -664,7 +663,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 ToHdUnitCda.get(0).setRemarks("DUE TO REBASE AMOUNT CHANGE"+hndOverAmnt);
                 ToHdUnitCda.get(0).setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 cdaParkingTransRepository.save(ToHdUnitCda.get(0));
-
             }
         }else{
             BudgetRebase budgetRebase = new BudgetRebase();
@@ -691,7 +689,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
             budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             budgetRebaseRepository.save(budgetRebase);
         }
-
         defaultResponse.setMsg("UNIT REBASE SUCCESSFULLY");
         return ResponseUtils.createSuccessResponse(defaultResponse, new TypeReference<DefaultResponse>() {
         });
