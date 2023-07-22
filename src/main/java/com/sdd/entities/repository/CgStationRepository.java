@@ -10,4 +10,5 @@ public interface CgStationRepository extends JpaRepository<CgStation, String> {
 
 
     CgStation findByStationId(String stationId);
+    CgStation findByStationName(String stationId);
 }
