@@ -518,7 +518,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
         if(hashMap.size() == 0){
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ALLOCATION FOUND.");
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Record Not Found.");
         }
 
 
@@ -733,7 +733,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
         if(hashMap.size() == 0){
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ALLOCATION FOUND.");
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Record Not Found.");
         }
 
         try {

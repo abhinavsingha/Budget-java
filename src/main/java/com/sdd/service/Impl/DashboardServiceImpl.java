@@ -271,7 +271,7 @@ public class DashboardServiceImpl implements DashBoardService {
 
 
             arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
-            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
 
 
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
@@ -293,7 +293,7 @@ public class DashboardServiceImpl implements DashBoardService {
         else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
 
             arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
-            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
 
             inboxOutboxesList =
                     mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
@@ -317,7 +317,7 @@ public class DashboardServiceImpl implements DashBoardService {
         else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
 
             arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
-            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
 
             inboxOutboxesList =
                     mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
