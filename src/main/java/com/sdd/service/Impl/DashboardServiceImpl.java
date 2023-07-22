@@ -854,15 +854,14 @@ public class DashboardServiceImpl implements DashBoardService {
                     }*/
                     double totalCda=0.0;
                     double remCdaBal=0.0;
-                    double rqUnit=0.0;
                     List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, uid, allocationTypeId, "0");
+                    AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(0).getAmountType());
+                    double rqUnit=hdamtUnit.getAmount();
                     if (cdaDetail.size() > 0) {
                         for (int j = 0; j < cdaDetail.size(); j++) {
 
                             totalCda += Double.parseDouble(cdaDetail.get(j).getTotalParkingAmount());
                             remCdaBal += Double.parseDouble(cdaDetail.get(j).getRemainingCdaAmount());
-                            AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(j).getAmountType());
-                            rqUnit=hdamtUnit.getAmount();
                         }
                     }
                     double cdaTotal=totalCda*rqUnit/reqAmount;
@@ -895,7 +894,7 @@ public class DashboardServiceImpl implements DashBoardService {
                     dashBoardExprnditureResponse.setBudgetHead(bHead);
                     dashBoardExprnditureResponse.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(cdaTotal)));
                     dashBoardExprnditureResponse.setExpenditureAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount)));
-                    if(finAmount!=0)
+                    if(cdaTotal!=0)
                     dashBoardExprnditureResponse.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount*100/cdaTotal)));
                     else
                         dashBoardExprnditureResponse.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(0.0)));
@@ -1029,6 +1028,23 @@ public class DashboardServiceImpl implements DashBoardService {
                     String cbAmount = decimalFormat.format(totalbill);
                     eAmount = Double.parseDouble(cbAmount);
                 }*/
+
+                double totalCda=0.0;
+                double remCdaBal=0.0;
+                List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, uId, allocationTypeId, "0");
+                AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(0).getAmountType());
+                double rqUnit=hdamtUnit.getAmount();
+                if (cdaDetail.size() > 0) {
+                    for (int j = 0; j < cdaDetail.size(); j++) {
+
+                        totalCda += Double.parseDouble(cdaDetail.get(j).getTotalParkingAmount());
+                        remCdaBal += Double.parseDouble(cdaDetail.get(j).getRemainingCdaAmount());
+                    }
+                }
+                double cdaTotal=totalCda*rqUnit/reqAmount;
+                double cdaRming=remCdaBal*rqUnit/reqAmount;
+
+
                 List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(uId, finYearId, subHeadId,allocationTypeId, "0");
                 double totalAmount = 0.0;
                 if (expenditure.size() > 0) {
@@ -1056,11 +1072,11 @@ public class DashboardServiceImpl implements DashBoardService {
                 subResp.setFinYear(budgetFinancialYear.getFinYear());
                 subResp.setAllocType(type.getAllocDesc());
                 subResp.setAmountIn(amountIn);
-                subResp.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
+                subResp.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(cdaTotal)));
                 subResp.setExpenditureAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount)));
-                subResp.setBalAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount-expAmount)));
-                if(finAmount!=0)
-                subResp.setPerAmount(String.format("%1$0,1.4f", new BigDecimal((expAmount*100)/finAmount)));
+                subResp.setBalAmount(String.format("%1$0,1.4f", new BigDecimal(cdaRming)));
+                if(cdaTotal!=0)
+                subResp.setPerAmount(String.format("%1$0,1.4f", new BigDecimal((expAmount*100)/cdaTotal)));
                 else
                     subResp.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(0.0)));
                 subResp.setLastCBDate(cbD);
