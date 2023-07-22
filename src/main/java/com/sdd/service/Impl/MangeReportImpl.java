@@ -432,9 +432,6 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
 
-//        unitId
-//                AllocationType
-//        finYear
 
         if (finYearId == null || finYearId.isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FIN YEAR ID CAN NOT BE BLANK");
@@ -518,6 +515,10 @@ public class MangeReportImpl implements MangeReportService {
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
             }
+        }
+
+        if(hashMap.size() == 0){
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ALLOCATION FOUND.");
         }
 
 
@@ -731,6 +732,9 @@ public class MangeReportImpl implements MangeReportService {
             filePathResponse.setRevenueOrCapital("CAPITAL");
         }
 
+        if(hashMap.size() == 0){
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ALLOCATION FOUND.");
+        }
 
         try {
 

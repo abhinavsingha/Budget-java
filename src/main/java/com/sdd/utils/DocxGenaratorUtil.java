@@ -550,6 +550,9 @@ public class DocxGenaratorUtil {
             XWPFDocument document = new XWPFDocument();
             FileOutputStream out = new FileOutputStream(new File(path));
             String reOrCapital = "";
+
+
+            
             if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
                 reOrCapital = "REVENUE";
             } else {
