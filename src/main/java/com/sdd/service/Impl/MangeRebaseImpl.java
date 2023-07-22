@@ -49,6 +49,9 @@ public class MangeRebaseImpl implements MangeRebaseService {
     @Autowired
     private AmountUnitRepository amountUnitRepository;
 
+    @Autowired
+    MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
+
 
     @Autowired
     private BudgetFinancialYearRepository budgetFinancialYearRepository;
@@ -520,6 +523,15 @@ public class MangeRebaseImpl implements MangeRebaseService {
         String tohdUnit=toS.getDhqName();
         String frmRegion=frmS.getRhqId();
         String frmhdUnit=frmS.getDhqName();
+        CgUnit cgData = cgUnitRepository.findByUnit(hrDataCheck.getUnitId());
+        String rebaseAuthority=cgData.getIsRebaseAuthority();
+        if(!rebaseAuthority.equalsIgnoreCase("1")){
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED FOR UNIT REBASE");
+        }
+        if(!frmRegion.equalsIgnoreCase(toRegion)){
+            if(!hrDataCheck.getUnitId().equalsIgnoreCase("001321"))
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED FOR UNIT REBASE IN ANOTHER REGION");
+        }
 
         CgUnit obj = cgUnitRepository.findByCgUnitShort(tohdUnit);
         if (obj==null) {
@@ -628,6 +640,36 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         parkingCrAndDrRepository.save(cdaParking);
                     }
                 }
+
+                List<BudgetAllocation> ToHdUnitAllocation1 = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId,req.getFinYear(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+                List<BudgetAllocation> ToHdUnitAllocation=ToHdUnitAllocation1.stream().filter(e->e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
+                if (ToHdUnitAllocation.size()==0) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO HEAD UNIT ALLOCATION NOT FOUND IN THIS BUDGET HEAD"+req.getUnitRebaseRequests().get(k).getBudgetHeadId());
+                }
+                AmountUnit hdallocUnitObj = amountUnitRepository.findByAmountTypeId(ToHdUnitAllocation.get(0).getAmountType());
+                double hdallocUnit=hdallocUnitObj.getAmount();
+                double rebaseamount= Double.parseDouble(ToHdUnitAllocation.get(0).getUnallocatedAmount());
+                double finRebaseAmnt=trnsfrAmount/hdallocUnit;
+                double remUnlcdAmnt=rebaseamount+finRebaseAmnt;
+                ToHdUnitAllocation.get(0).setUnallocatedAmount(String.valueOf(remUnlcdAmnt));
+                ToHdUnitAllocation.get(0).setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                budgetAllocationRepository.save(ToHdUnitAllocation.get(0));
+
+
+                List<BudgetAllocationDetails> ToHdUnitAllocation11 = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(toHdUnitId,req.getFinYear(),req.getUnitRebaseRequests().get(k).getBudgetHeadId(),req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0","0");
+                List<BudgetAllocationDetails> ToHdUnitAllocationDetails=ToHdUnitAllocation11.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved")).collect(Collectors.toList());
+                if (ToHdUnitAllocationDetails.size()==0) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO HEAD UNIT ALLOCATION DETAILS NOT FOUND IN THIS BUDGET HEAD"+req.getUnitRebaseRequests().get(k).getBudgetHeadId());
+                }
+                AmountUnit hdallocDetailUnitObj = amountUnitRepository.findByAmountTypeId(ToHdUnitAllocationDetails.get(0).getAmountType());
+                double hdallocUnit1=hdallocDetailUnitObj.getAmount();
+                double rebaseamount1= Double.parseDouble(ToHdUnitAllocationDetails.get(0).getUnallocatedAmount());
+                double finRebaseAmnt1=trnsfrAmount/hdallocUnit1;
+                double remUnlcdAmnt1=rebaseamount1+finRebaseAmnt1;
+                ToHdUnitAllocationDetails.get(0).setUnallocatedAmount(String.valueOf(remUnlcdAmnt1));
+                ToHdUnitAllocationDetails.get(0).setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                budgetAllocationDetailsRepository.save(ToHdUnitAllocationDetails.get(0));
+
                 List<CdaParkingTrans> ToHdUnitCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
                 if(ToHdUnitCda.size()<=0){
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO HEAD UNIT CDA NOT FOUND IN THIS BUDGET HEAD "+req.getUnitRebaseRequests().get(k).getBudgetHeadId());
@@ -689,6 +731,27 @@ public class MangeRebaseImpl implements MangeRebaseService {
             budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             budgetRebaseRepository.save(budgetRebase);
         }
+        MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
+        mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
+        mangeInboxOutbox.setRemarks("UNIT REBASE");
+        mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+        mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+        mangeInboxOutbox.setToUnit(hrDataCheck.getUnitId());
+        mangeInboxOutbox.setFromUnit(hrDataCheck.getUnitId());
+        mangeInboxOutbox.setApproverpId("");
+        mangeInboxOutbox.setType(req.getUnitRebaseRequests().get(0).getBudgetHeadId());
+        mangeInboxOutbox.setRoleId(hrDataCheck.getRoleId());
+        mangeInboxOutbox.setCreaterpId(hrDataCheck.getPid());
+        mangeInboxOutbox.setStatus("Approved");
+        mangeInboxOutbox.setState("AP");
+        mangeInboxOutbox.setIsArchive("0");
+        mangeInboxOutbox.setIsApproved("1");
+        mangeInboxOutbox.setIsFlag("0");
+        mangeInboxOutbox.setIsRevision(0);
+        mangeInboxOutbox.setIsBgcg("RR");
+        mangeInboxOutbox.setGroupId(authGrId);
+        mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+
         defaultResponse.setMsg("UNIT REBASE SUCCESSFULLY");
         return ResponseUtils.createSuccessResponse(defaultResponse, new TypeReference<DefaultResponse>() {
         });

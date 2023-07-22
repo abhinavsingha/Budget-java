@@ -53,6 +53,9 @@ public class CgUnit {
     @Column(name = "BUD_GROUP_UNIT")
     private String budGroupUnit;
 
+    @Column(name = "BUDGET_UNIT_CODE")
+    private String budgetUnitCode;
+
     @Column(name = "IS_REBASE_AUTHORITY")
     private String isRebaseAuthority;
 }
