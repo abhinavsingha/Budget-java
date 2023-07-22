@@ -1584,7 +1584,6 @@ public class MangeReportImpl implements MangeReportService {
             }
         }
 
-
         cbReportResponse.setOnAccountData(cbData.getOnAccountOf());
         cbReportResponse.setGetGst(cbData.getGst());
         cbReportResponse.setOnAurthyData(cbData.getAuthorityDetails());
@@ -2154,27 +2153,22 @@ public class MangeReportImpl implements MangeReportService {
 
             BudgetHead subHead = subHeadsData.get(i);
             cdaReportResponse.setName(subHead.getSubHeadDescr());
-
             List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId());
 
             double amount = 0;
             double allocationAmount = 0;
 
             for (int m = 0; m < cdaData.size(); m++) {
-
                 AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-
                 grandTotal = grandTotal + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
-
                 amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
-
 
                 allocationGrandTotal = allocationGrandTotal + (Double.parseDouble(cdaData.get(m).getTotalParkingAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                 allocationAmount = allocationAmount + (Double.parseDouble(cdaData.get(m).getTotalParkingAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
 
             }
 
-            if (allocationGrandTotal == 0 ||  allocationGrandTotal <=0) {
+            if (allocationAmount == 0 ||  allocationAmount <=0) {
                 continue;
             }
 
@@ -2184,9 +2178,14 @@ public class MangeReportImpl implements MangeReportService {
             cdaReportResponse.setReportType("RESERVE FUND");
             cdaReportList.add(cdaReportResponse);
             allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
-
-
         }
+
+        if(allCdaData.size() == 0){
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Record Not Found.");
+        }
+
+
+
         try {
 
 
@@ -2286,7 +2285,6 @@ public class MangeReportImpl implements MangeReportService {
             BudgetHead subHead = subHeadsData.get(i);
             cdaReportResponse.setName(subHead.getSubHeadDescr());
 
-
             List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId());
 
             double amount = 0;
@@ -2295,29 +2293,32 @@ public class MangeReportImpl implements MangeReportService {
             for (int m = 0; m < cdaData.size(); m++) {
 
                 AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-
                 grandTotal = grandTotal + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
-
                 amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
-
 
                 allocationGrandTotal = allocationGrandTotal + (Double.parseDouble(cdaData.get(m).getTotalParkingAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                 allocationAmount = allocationAmount + (Double.parseDouble(cdaData.get(m).getTotalParkingAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
-
             }
-            if (Double.parseDouble(allocationGrandTotal + "") > 0) {
+
+            if (allocationAmount == 0 ||  allocationAmount <=0) {
+                continue;
+            }
+
                 cdaReportResponse = new CDAReportResponse();
                 cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
                 cdaReportResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
                 cdaReportResponse.setReportType("RESERVE FUND");
                 cdaReportList.add(cdaReportResponse);
                 allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
-            }
-
 
         }
-        try {
 
+        if(allCdaData.size() == 0){
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Record Not Found.");
+        }
+
+
+        try {
 
             File folder = new File(HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {

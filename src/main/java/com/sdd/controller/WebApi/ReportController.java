@@ -47,8 +47,6 @@ public class ReportController {
     }
 
 
-
-
     @GetMapping("/getReceiptReportRevision/{authgroupId}")
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getReceiptReportRevision(@PathVariable("authgroupId") String authgroupId) {
         return new ResponseEntity<>(mangeReportService.getReceiptReportRevision(authgroupId), HttpStatus.OK);
