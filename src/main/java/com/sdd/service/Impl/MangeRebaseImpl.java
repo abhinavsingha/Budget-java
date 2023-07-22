@@ -641,6 +641,21 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     }
                 }
 
+                List<BudgetAllocationDetails> ToHdUnitAllocation11 = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(toHdUnitId,req.getFinYear(),req.getUnitRebaseRequests().get(k).getBudgetHeadId(),req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0","0");
+                List<BudgetAllocationDetails> ToHdUnitAllocationDetails=ToHdUnitAllocation11.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved")).collect(Collectors.toList());
+                if (ToHdUnitAllocationDetails.size()==0) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO HEAD UNIT ALLOCATION DETAILS NOT FOUND IN THIS BUDGET HEAD"+req.getUnitRebaseRequests().get(k).getBudgetHeadId());
+                }
+                AmountUnit hdallocDetailUnitObj = amountUnitRepository.findByAmountTypeId(ToHdUnitAllocationDetails.get(0).getAmountType());
+                double hdallocUnit1=hdallocDetailUnitObj.getAmount();
+                double rebaseamount1= Double.parseDouble(ToHdUnitAllocationDetails.get(0).getUnallocatedAmount());
+                double finRebaseAmnt1=trnsfrAmount/hdallocUnit1;
+                double remUnlcdAmnt1=rebaseamount1+finRebaseAmnt1;
+                ToHdUnitAllocationDetails.get(0).setUnallocatedAmount(String.valueOf(remUnlcdAmnt1));
+                ToHdUnitAllocationDetails.get(0).setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                budgetAllocationDetailsRepository.save(ToHdUnitAllocationDetails.get(0));
+
+
                 List<BudgetAllocation> ToHdUnitAllocation1 = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId,req.getFinYear(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
                 List<BudgetAllocation> ToHdUnitAllocation=ToHdUnitAllocation1.stream().filter(e->e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
                 if (ToHdUnitAllocation.size()==0) {
@@ -656,19 +671,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 budgetAllocationRepository.save(ToHdUnitAllocation.get(0));
 
 
-                List<BudgetAllocationDetails> ToHdUnitAllocation11 = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(toHdUnitId,req.getFinYear(),req.getUnitRebaseRequests().get(k).getBudgetHeadId(),req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0","0");
-                List<BudgetAllocationDetails> ToHdUnitAllocationDetails=ToHdUnitAllocation11.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved")).collect(Collectors.toList());
-                if (ToHdUnitAllocationDetails.size()==0) {
-                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO HEAD UNIT ALLOCATION DETAILS NOT FOUND IN THIS BUDGET HEAD"+req.getUnitRebaseRequests().get(k).getBudgetHeadId());
-                }
-                AmountUnit hdallocDetailUnitObj = amountUnitRepository.findByAmountTypeId(ToHdUnitAllocationDetails.get(0).getAmountType());
-                double hdallocUnit1=hdallocDetailUnitObj.getAmount();
-                double rebaseamount1= Double.parseDouble(ToHdUnitAllocationDetails.get(0).getUnallocatedAmount());
-                double finRebaseAmnt1=trnsfrAmount/hdallocUnit1;
-                double remUnlcdAmnt1=rebaseamount1+finRebaseAmnt1;
-                ToHdUnitAllocationDetails.get(0).setUnallocatedAmount(String.valueOf(remUnlcdAmnt1));
-                ToHdUnitAllocationDetails.get(0).setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                budgetAllocationDetailsRepository.save(ToHdUnitAllocationDetails.get(0));
 
                 List<CdaParkingTrans> ToHdUnitCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
                 if(ToHdUnitCda.size()<=0){
