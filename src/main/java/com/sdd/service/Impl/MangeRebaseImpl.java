@@ -564,11 +564,13 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
             } else {
                 chekUnit.setStationId(req.getToStationId());
+                chekUnit.setSubUnit(toHdUnitId);
                 chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 cgUnitRepository.save(chekUnit);
             }
         } else {
             chekUnit.setStationId(req.getToStationId());
+            chekUnit.setSubUnit(toHdUnitId);
             chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             cgUnitRepository.save(chekUnit);
         }
