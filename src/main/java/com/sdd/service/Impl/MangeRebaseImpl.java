@@ -454,7 +454,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "DOCUMENT ID CAN NOT BE BLANK", HttpStatus.OK.value());
         }
-        if (req.getOccurrenceDate() == null) {
+        if (req.getOccurrenceDate() == null || req.getOccurrenceDate().isEmpty()) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "OCCURRENCE DATE CAN NOT BE BLANK", HttpStatus.OK.value());
         }
@@ -508,7 +508,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
         CgUnit chekUnit = cgUnitRepository.findByUnit(req.getRebaseUnitId());
         String subUnits=chekUnit.getSubUnit();
-        CgStation frmS=cgStationRepository.findByStationId(req.getFrmStationId());
+        CgStation frmS=cgStationRepository.findByStationName(req.getFrmStationId());
         if (frmS==null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FROM STATION REGION GETTING NULL");
         }
@@ -538,7 +538,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
         if (chekUnit == null || chekUnit.getUnit().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID UNIT");
         }
-        if (chekUnit.getStationId().equalsIgnoreCase(req.getToStationId())) {
+        if (frmS.getStationId().equalsIgnoreCase(req.getToStationId())) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CAN NOT REBASE ON SAME STATION");
         }
         String maxRebaseId = budgetRebaseRepository.findMaxRebaseIDByRebaseUnitId(req.getRebaseUnitId());
@@ -629,9 +629,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         parkingCrAndDrRepository.save(cdaParking);
                     }
                 }
-
-
-
                 List<CdaParkingTrans> ToHdUnitCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
                 if(ToHdUnitCda.size()<=0){
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO HEAD UNIT CDA NOT FOUND IN THIS BUDGET HEAD "+req.getUnitRebaseRequests().get(k).getBudgetHeadId());
