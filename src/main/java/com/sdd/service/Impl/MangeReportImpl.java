@@ -1639,6 +1639,163 @@ public class MangeReportImpl implements MangeReportService {
 
 
     @Override
+    public ApiResponse<List<FilePathResponse>> getContingentBillAll(ReportRequest reportRequest) {
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+        CbReportResponse cbReportResponse = new CbReportResponse();
+
+
+        if (reportRequest.getCbId() == null || reportRequest.getCbId().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB ID CAN NOT BE BLANK");
+        }
+
+
+        ContigentBill cbData = contigentBillRepository.findByCbId(reportRequest.getCbId());
+
+        if (cbData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND.");
+        }
+
+        String fileName = "ContingentBill" + hrData.getUnitId() + cbData.getCbId() + System.currentTimeMillis();
+
+
+        double allocationAmount = 0;
+        double balanceAmount = 0;
+
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverCbPId = "";
+        String veriferCbPId = "";
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.CBVERIFER)) {
+                veriferCbPId = findHrData.getPid();
+            }
+            if (findHrData.getRoleId().contains(HelperUtils.CBAPPROVER)) {
+                approverCbPId = findHrData.getPid();
+            }
+        }
+
+        if (approverCbPId.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO CB APPROVE ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
+        }
+        if (veriferCbPId.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO CB VERIFIER ROLE FOUND THIS UNIT.PLEASE ADD  ROLE FIRST");
+        }
+
+
+//        double expenditure = 0;
+//        List<ContigentBill> cbExpendure = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdate(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0");
+//        if (cbExpendure.size() == 0) {
+//
+//        } else {
+//            expenditure = 0;
+//            for (Integer i = 0; i < cbExpendure.size(); i++) {
+//                expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
+//            }
+//        }
+
+        List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
+        if (allocationType.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
+        }
+
+
+        List<Authority> authorityDetails = authorityRepository.findByAuthGroupId(cbData.getAuthGroupId());
+        CgUnit unit = cgUnitRepository.findByUnit(cbData.getCbUnitId());
+        BudgetHead budgetHead = subHeadRepository.findByBudgetCodeId(cbData.getBudgetHeadID());
+        HrData approverId = hrDataRepository.findByPidAndIsActive(approverCbPId, "1");
+        HrData verifer = hrDataRepository.findByPidAndIsActive(veriferCbPId, "1");
+
+        cbReportResponse.setAuthorityDetails(authorityDetails.get(0));
+        cbReportResponse.setApprover(approverId);
+        cbReportResponse.setVerifer(verifer);
+
+
+        double progressiveAmount = 0;
+        String sectionNumber = cbData.getSectionNumber();
+        List<ContigentBill> totalContigentBill = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdateAndAllocationTypeIdAndFinYear(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0", allocationType.get(0).getAllocTypeId(), cbData.getFinYear());
+//        List<CdaParkingTrans> cdaAmountList123123 = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cbData.getFinYear(), cbData.getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
+
+        if (totalContigentBill.size() == 0) {
+            progressiveAmount = 0;
+            ;
+        } else {
+            for (Integer i = 0; i < totalContigentBill.size(); i++) {
+                if (Integer.parseInt(sectionNumber) >= Integer.parseInt(totalContigentBill.get(i).getSectionNumber())) {
+                    progressiveAmount = progressiveAmount + Double.parseDouble(totalContigentBill.get(i).getCbAmount());
+                }
+            }
+        }
+
+
+        cbReportResponse.setOnAccountData(cbData.getOnAccountOf());
+        cbReportResponse.setGetGst(cbData.getGst());
+        cbReportResponse.setOnAurthyData(cbData.getAuthorityDetails());
+        cbReportResponse.setExpenditureAmount(String.format("%.2f", progressiveAmount));
+        cbReportResponse.setCurrentBillAmount(String.format("%.2f", Double.parseDouble(cbData.getCbAmount())));
+
+
+        List<CdaParkingTrans> cdaAmountList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cbData.getFinYear(), cbData.getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
+        for (Integer k = 0; k < cdaAmountList.size(); k++) {
+
+            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaAmountList.get(k).getAmountType());
+            balanceAmount = balanceAmount + (Double.parseDouble(cdaAmountList.get(k).getRemainingCdaAmount()) * amountUnit.getAmount());
+            allocationAmount = allocationAmount + (Double.parseDouble(cdaAmountList.get(k).getTotalParkingAmount()) * amountUnit.getAmount());
+        }
+
+
+        cbReportResponse.setAllocatedAmount(String.format("%.2f", allocationAmount));
+
+
+        cbReportResponse.setCbData(cbData);
+        cbReportResponse.setUnitData(unit);
+        cbReportResponse.setBudgetHead(budgetHead);
+        cbReportResponse.setBalanceAmount(String.format("%.2f", (allocationAmount - progressiveAmount)));
+        cbReportResponse.setRemeningAmount(String.format("%.2f", ((allocationAmount - progressiveAmount))));
+
+        String hindiAmount = ConverterUtils.convert((new Float(cbData.getCbAmount())).longValue());
+        cbReportResponse.setHindiAmount(hindiAmount);
+
+        HashMap<String, List<ReportSubModel>> hashMap = new HashMap<>();
+        List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
+
+        try {
+            FilePathResponse dto = new FilePathResponse();
+            File folder = new File(HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
+//            pdfGenaratorUtil.createCbReportPdfSample(templateName, cbReportResponse, file);
+            pdfGenaratorUtilMain.createContigentBillReport(cbReportResponse, filePath, hrData);
+            dto.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
+            dto.setFileName(fileName);
+            dtoList.add(dto);
+
+        } catch (Exception e) {
+            throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
+        }
+
+
+//        }
+
+        return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+        });
+
+    }
+
+
+    @Override
     public ApiResponse<List<FilePathResponse>> getContingentBillReportDoc(ReportRequest reportRequest) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -1994,7 +2151,6 @@ public class MangeReportImpl implements MangeReportService {
             BudgetHead subHead = subHeadsData.get(i);
             cdaReportResponse.setName(subHead.getSubHeadDescr());
 
-
             List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId());
 
             double amount = 0;
@@ -2012,12 +2168,11 @@ public class MangeReportImpl implements MangeReportService {
                 allocationGrandTotal = allocationGrandTotal + (Double.parseDouble(cdaData.get(m).getTotalParkingAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                 allocationAmount = allocationAmount + (Double.parseDouble(cdaData.get(m).getTotalParkingAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
 
-
             }
 
-//            if (allocationGrandTotal <= 0) {
-//                continue;
-//            }
+            if (allocationGrandTotal == 0 ||  allocationGrandTotal <=0) {
+                continue;
+            }
 
             cdaReportResponse = new CDAReportResponse();
             cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));

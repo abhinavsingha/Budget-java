@@ -85,6 +85,11 @@ public class ReportController {
         return new ResponseEntity<>(mangeReportService.getContingentBillReport(reportRequest), HttpStatus.OK);
     }
 
+    @PostMapping("/getContingentBillAll")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getContingentBillAll(@RequestBody ReportRequest reportRequest) {
+        return new ResponseEntity<>(mangeReportService.getContingentBillReport(reportRequest), HttpStatus.OK);
+    }
+
     @PostMapping("/getContingentBillReportDoc")
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getContingentBillReportDoc(@RequestBody ReportRequest reportRequest) {
         return new ResponseEntity<>(mangeReportService.getContingentBillReportDoc(reportRequest), HttpStatus.OK);

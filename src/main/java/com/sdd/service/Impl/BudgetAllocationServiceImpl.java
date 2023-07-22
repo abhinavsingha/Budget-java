@@ -1473,7 +1473,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
 //                    double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
-                    cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                    cdaParkingTrans.setRemainingCdaAmount(bakiPesa + "");
                     cdaParkingTransRepository.save(cdaParkingTrans);
                 }
 
@@ -2958,7 +2958,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 double parkingAmount = Double.parseDouble(budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount()) * amountUnit.getAmount();
 
                 double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
-                cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                cdaParkingTrans.setRemainingCdaAmount(bakiPesa+"");
                 cdaParkingTransRepository.save(cdaParkingTrans);
             }
 
@@ -3241,7 +3241,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 double parkingAmount = Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount()) * amountUnit.getAmount();
 
                 double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
-                cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                cdaParkingTrans.setRemainingCdaAmount(bakiPesa +"");
                 cdaParkingTransRepository.save(cdaParkingTrans);
             }
 
@@ -3561,7 +3561,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 double parkingAmount = Double.parseDouble(budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount()) * amountUnit.getAmount();
 
                 double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
-                cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                cdaParkingTrans.setRemainingCdaAmount(bakiPesa + "");
                 cdaParkingTransRepository.save(cdaParkingTrans);
             }
 
@@ -3879,7 +3879,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 double parkingAmount = Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount()) * amountUnit.getAmount();
 
                 double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
-                cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                cdaParkingTrans.setRemainingCdaAmount(bakiPesa + "");
                 cdaParkingTransRepository.save(cdaParkingTrans);
             }
 

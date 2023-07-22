@@ -45,6 +45,8 @@ public interface MangeReportService {
 
     ApiResponse<List<FilePathResponse>> getContingentBillReport(ReportRequest reportRequest);
 
+    ApiResponse<List<FilePathResponse>> getContingentBillAll(ReportRequest reportRequest);
+
     ApiResponse<List<FilePathResponse>> getContingentBillReportDoc(ReportRequest reportRequest);
 
     ApiResponse<List<FilePathResponse>> getAllocationReportUnitWise(ReportRequest reportRequest);
