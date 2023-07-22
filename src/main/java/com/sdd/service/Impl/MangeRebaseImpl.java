@@ -537,37 +537,24 @@ public class MangeRebaseImpl implements MangeRebaseService {
             chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             cgUnitRepository.save(chekUnit);
         }
-/*        String headUnits = chekUnit.getSubUnit();
-        String headUnit = "";
-        if (headUnits.equalsIgnoreCase("000225")) {
-            headUnit = "001321";
-        } else {
-            headUnit = headUnits;
-        }*/
+        String authorityId = HelperUtils.getAuthorityId();
+        String refRensId = HelperUtils.getTransId();
+        String authGrId = HelperUtils.getAuthorityGroupId();
 
         Authority authority = new Authority();
         authority.setAuthority(req.getAuthority());
-        authority.setAuthorityId(HelperUtils.getAuthorityId());
+        authority.setAuthorityId(authorityId);
         authority.setAuthDate(ConverterUtils.convertDateTotimeStamp(req.getAuthDate()));
         authority.setDocId(req.getAuthDocId());
         authority.setAuthUnit(req.getAuthUnitId());
         authority.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-        authority.setAuthGroupId(HelperUtils.getAuthorityGroupId());
+        authority.setAuthGroupId(authGrId);
         authority.setRemarks(req.getRemark());
         authority.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
         Authority saveAuthority = authorityRepository.save(authority);
 
-        String authorityId = HelperUtils.getAuthorityId();
-        String occurrenceDate = req.getOccurrenceDate();
-        String finYear = req.getFinYear();
-        String rebaseUnitId = req.getRebaseUnitId();
-        String headUnitId = req.getHeadUnitId();
-        String frmStationId = req.getFrmStationId();
-        String toStationId = req.getToStationId();
-        String toHeadUnitId = req.getToHeadUnitId();
-
-        CgStation frmS=cgStationRepository.findByStationId(frmStationId);
-        CgStation toS=cgStationRepository.findByStationId(toStationId);
+        CgStation frmS=cgStationRepository.findByStationId(req.getFrmStationId());
+        CgStation toS=cgStationRepository.findByStationId(req.getToStationId());
         if (frmS==null || toS ==null) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "REGION GETTING NULL FROM DB", HttpStatus.OK.value());
@@ -578,275 +565,132 @@ public class MangeRebaseImpl implements MangeRebaseService {
         String frmRegion=frmS.getRhqId();
         String frmhdUnit=frmS.getDhqName();
 
-        CgUnit toUnitIds = cgUnitRepository.findByCgUnitShort(tohdUnit);
-        String toHdUnitId=toUnitIds.getUnit();
+        CgUnit obj = cgUnitRepository.findByCgUnitShort(tohdUnit);
+        if (obj==null) {
+            return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+            }, "TO HEAD UNIT NOT FOUND", HttpStatus.OK.value());
+        }
+        String toHdUnitId=obj.getUnit();
 
-        String refRensId = HelperUtils.getTransId();
-        String authGrId = HelperUtils.getAuthorityGroupId();
+        List<BudgetAllocation> allocationData = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getUnitRebaseRequests().get(0).getBudgetHeadId(), req.getRebaseUnitId(),req.getFinYear(), req.getUnitRebaseRequests().get(0).getAllocationTypeId(), "0");
+        String frmUnit=allocationData.get(0).getFromUnit();
+
         if (req.getUnitRebaseRequests().size() > 0) {
-            for (Integer l = 0; l < req.getUnitRebaseRequests().size(); l++) {
-
-                String budHd = req.getUnitRebaseRequests().get(l).getBudgetHeadId();
-                String allocTypeId = req.getUnitRebaseRequests().get(l).getAllocationTypeId();
-                double remCdaBal=0.0;
-                String hdUnits="";
-                if(frmRegion.equalsIgnoreCase(toRegion)) {
-                    List<BudgetAllocation> allocationData = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(budHd, rebaseUnitId,finYear, allocTypeId, "0");
-                    hdUnits=allocationData.get(0).getFromUnit();
-                    List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear, budHd, rebaseUnitId, allocTypeId, "0");
-
-                    if (cdaDetail.size() > 0) {
-                        for (int j = 0; j < cdaDetail.size(); j++) {
-
-                            String cdaId= cdaDetail.get(j).getGinNo();
-                            String amountTotal=cdaDetail.get(j).getTotalParkingAmount();
-                            double amountRemaining= Double.parseDouble(cdaDetail.get(j).getRemainingCdaAmount());
-                            remCdaBal += Double.parseDouble(cdaDetail.get(j).getRemainingCdaAmount());
-                            AmountUnit cdaAmtObj = amountUnitRepository.findByAmountTypeId(cdaDetail.get(j).getAmountType());
-                            double cdaAmtUnit=cdaAmtObj.getAmount();
-
-                            if(tohdUnit.equalsIgnoreCase(frmhdUnit)){
-                                List<CdaParkingTrans> headCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear, budHd, hdUnits, allocTypeId, "0");
-                                String ginNo=headCda.get(0).getGinNo();
-                                String rmCdabal=headCda.get(0).getRemainingCdaAmount();
-                                AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(headCda.get(0).getAmountType());
-                                double rqUnit=hdamtUnit.getAmount();
-                                double fnAmount=amountRemaining*cdaAmtUnit/rqUnit;
-
-                                CdaParkingCrAndDr cdaParkingCrAndDr = new CdaParkingCrAndDr();
-                                cdaParkingCrAndDr.setCdaParkingTrans(HelperUtils.getCdaId());
-                                cdaParkingCrAndDr.setCdaCrdrId(HelperUtils.getCdaCrDrId());
-                                cdaParkingCrAndDr.setFinYearId(finYear);
-                                cdaParkingCrAndDr.setBudgetHeadId(budHd);
-                                cdaParkingCrAndDr.setGinNo(ginNo);
-                                cdaParkingCrAndDr.setUnitId(hdUnits);
-                                cdaParkingCrAndDr.setAuthGroupId(authGrId);
-                                cdaParkingCrAndDr.setAmount(String.valueOf(fnAmount));
-                                cdaParkingCrAndDr.setIscrdr("CR");
-                                cdaParkingCrAndDr.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-                                cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                                cdaParkingCrAndDr.setAllocTypeId(allocTypeId);
-                                cdaParkingCrAndDr.setIsFlag("0");
-                                cdaParkingCrAndDr.setTransactionId(HelperUtils.getTransId());
-                                cdaParkingCrAndDr.setAmountType(headCda.get(0).getAmountType());
-                                cdaParkingCrAndDr.setIsRevision(0);
-                                parkingCrAndDrRepository.save(cdaParkingCrAndDr);
-                            }else{
-                                List<CdaParkingTrans> headCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear, budHd, hdUnits, allocTypeId, "0");
-                                String ginNo=headCda.get(0).getGinNo();
-                                String rmCdabal=headCda.get(0).getRemainingCdaAmount();
-                                AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(headCda.get(0).getAmountType());
-                                double rqUnit=hdamtUnit.getAmount();
-                                double fnAmount=amountRemaining*cdaAmtUnit/rqUnit;
-
-                                CdaParkingCrAndDr cdaParkingCrAndDr = new CdaParkingCrAndDr();
-                                cdaParkingCrAndDr.setCdaParkingTrans(HelperUtils.getCdaId());
-                                cdaParkingCrAndDr.setCdaCrdrId(HelperUtils.getCdaCrDrId());
-                                cdaParkingCrAndDr.setFinYearId(finYear);
-                                cdaParkingCrAndDr.setBudgetHeadId(budHd);
-                                cdaParkingCrAndDr.setGinNo(ginNo);
-                                cdaParkingCrAndDr.setUnitId(hdUnits);
-                                cdaParkingCrAndDr.setAuthGroupId(authGrId);
-                                cdaParkingCrAndDr.setAmount(String.valueOf(fnAmount));
-                                cdaParkingCrAndDr.setIscrdr("CR");
-                                cdaParkingCrAndDr.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-                                cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                                cdaParkingCrAndDr.setAllocTypeId(allocTypeId);
-                                cdaParkingCrAndDr.setIsFlag("0");
-                                cdaParkingCrAndDr.setTransactionId(HelperUtils.getTransId());
-                                cdaParkingCrAndDr.setAmountType(headCda.get(0).getAmountType());
-                                cdaParkingCrAndDr.setIsRevision(0);
-                                parkingCrAndDrRepository.save(cdaParkingCrAndDr);
-
-                                CdaParkingCrAndDr cdaParkingCrAndDr1 = new CdaParkingCrAndDr();
-                                cdaParkingCrAndDr1.setCdaParkingTrans(HelperUtils.getCdaId());
-                                cdaParkingCrAndDr1.setCdaCrdrId(HelperUtils.getCdaCrDrId());
-                                cdaParkingCrAndDr1.setFinYearId(finYear);
-                                cdaParkingCrAndDr1.setBudgetHeadId(budHd);
-                                cdaParkingCrAndDr1.setGinNo(ginNo);
-                                cdaParkingCrAndDr1.setUnitId(hdUnits);
-                                cdaParkingCrAndDr1.setAuthGroupId(authGrId);
-                                cdaParkingCrAndDr1.setAmount(String.valueOf(fnAmount));
-                                cdaParkingCrAndDr1.setIscrdr("DR");
-                                cdaParkingCrAndDr1.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-                                cdaParkingCrAndDr1.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                                cdaParkingCrAndDr1.setAllocTypeId(allocTypeId);
-                                cdaParkingCrAndDr1.setIsFlag("0");
-                                cdaParkingCrAndDr1.setTransactionId(HelperUtils.getTransId());
-                                cdaParkingCrAndDr1.setAmountType(headCda.get(0).getAmountType());
-                                cdaParkingCrAndDr1.setIsRevision(0);
-                                parkingCrAndDrRepository.save(cdaParkingCrAndDr1);
-
-                                List<BudgetAllocation> allocationData1 = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(budHd, hdUnits,finYear, allocTypeId, "0");
-                                String rhqUnitId=allocationData1.get(0).getFromUnit();
-                                List<CdaParkingTrans> headCda1 = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear, budHd, rhqUnitId, allocTypeId, "0");
-                                String ginNo1=headCda1.get(0).getGinNo();
-                                String rmCdabal1=headCda1.get(0).getRemainingCdaAmount();
-                                AmountUnit hdamtUnit1 = amountUnitRepository.findByAmountTypeId(headCda1.get(0).getAmountType());
-                                double rqUnit1=hdamtUnit1.getAmount();
-                                double fnAmount1=amountRemaining*cdaAmtUnit/rqUnit1;
-
-                                CdaParkingCrAndDr cdaParkingCrAndDr2 = new CdaParkingCrAndDr();
-                                cdaParkingCrAndDr2.setCdaParkingTrans(HelperUtils.getCdaId());
-                                cdaParkingCrAndDr2.setCdaCrdrId(HelperUtils.getCdaCrDrId());
-                                cdaParkingCrAndDr2.setFinYearId(finYear);
-                                cdaParkingCrAndDr2.setBudgetHeadId(budHd);
-                                cdaParkingCrAndDr2.setGinNo(ginNo1);
-                                cdaParkingCrAndDr2.setUnitId(rhqUnitId);
-                                cdaParkingCrAndDr2.setAuthGroupId(authGrId);
-                                cdaParkingCrAndDr2.setAmount(String.valueOf(fnAmount1));
-                                cdaParkingCrAndDr2.setIscrdr("CR");
-                                cdaParkingCrAndDr2.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-                                cdaParkingCrAndDr2.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                                cdaParkingCrAndDr2.setAllocTypeId(allocTypeId);
-                                cdaParkingCrAndDr2.setIsFlag("0");
-                                cdaParkingCrAndDr2.setTransactionId(HelperUtils.getTransId());
-                                cdaParkingCrAndDr2.setAmountType(headCda.get(0).getAmountType());
-                                cdaParkingCrAndDr2.setIsRevision(0);
-                                parkingCrAndDrRepository.save(cdaParkingCrAndDr2);
-
-                                CdaParkingCrAndDr cdaParkingCrAndDr3 = new CdaParkingCrAndDr();
-                                cdaParkingCrAndDr3.setCdaParkingTrans(HelperUtils.getCdaId());
-                                cdaParkingCrAndDr3.setCdaCrdrId(HelperUtils.getCdaCrDrId());
-                                cdaParkingCrAndDr3.setFinYearId(finYear);
-                                cdaParkingCrAndDr3.setBudgetHeadId(budHd);
-                                cdaParkingCrAndDr3.setGinNo(ginNo1);
-                                cdaParkingCrAndDr3.setUnitId(rhqUnitId);
-                                cdaParkingCrAndDr3.setAuthGroupId(authGrId);
-                                cdaParkingCrAndDr3.setAmount(String.valueOf(fnAmount1));
-                                cdaParkingCrAndDr3.setIscrdr("DR");
-                                cdaParkingCrAndDr3.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-                                cdaParkingCrAndDr3.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                                cdaParkingCrAndDr3.setAllocTypeId(allocTypeId);
-                                cdaParkingCrAndDr3.setIsFlag("0");
-                                cdaParkingCrAndDr3.setTransactionId(HelperUtils.getTransId());
-                                cdaParkingCrAndDr3.setAmountType(headCda.get(0).getAmountType());
-                                cdaParkingCrAndDr3.setIsRevision(0);
-                                parkingCrAndDrRepository.save(cdaParkingCrAndDr3);
-
-                                List<CdaParkingTrans> headCda2 = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear, budHd, toHdUnitId, allocTypeId, "0");
-                                String ginNo2=headCda2.get(0).getGinNo();
-                                String rmCdabal2=headCda2.get(0).getRemainingCdaAmount();
-                                AmountUnit hdamtUnit2 = amountUnitRepository.findByAmountTypeId(headCda2.get(0).getAmountType());
-                                double rqUnit2=hdamtUnit2.getAmount();
-                                double fnAmount2=amountRemaining*cdaAmtUnit/rqUnit2;
-
-                                CdaParkingCrAndDr cdaParkingCrAndDr4 = new CdaParkingCrAndDr();
-                                cdaParkingCrAndDr4.setCdaParkingTrans(HelperUtils.getCdaId());
-                                cdaParkingCrAndDr4.setCdaCrdrId(HelperUtils.getCdaCrDrId());
-                                cdaParkingCrAndDr4.setFinYearId(finYear);
-                                cdaParkingCrAndDr4.setBudgetHeadId(budHd);
-                                cdaParkingCrAndDr4.setGinNo(ginNo2);
-                                cdaParkingCrAndDr4.setUnitId(toHdUnitId);
-                                cdaParkingCrAndDr4.setAuthGroupId(authGrId);
-                                cdaParkingCrAndDr4.setAmount(String.valueOf(fnAmount2));
-                                cdaParkingCrAndDr4.setIscrdr("CR");
-                                cdaParkingCrAndDr4.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-                                cdaParkingCrAndDr4.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                                cdaParkingCrAndDr4.setAllocTypeId(allocTypeId);
-                                cdaParkingCrAndDr4.setIsFlag("0");
-                                cdaParkingCrAndDr4.setTransactionId(HelperUtils.getTransId());
-                                cdaParkingCrAndDr4.setAmountType(headCda.get(0).getAmountType());
-                                cdaParkingCrAndDr4.setIsRevision(0);
-                                parkingCrAndDrRepository.save(cdaParkingCrAndDr4);
-
-                            }
-                            cdaDetail.get(j).setIsFlag("1");
-                            cdaParkingTransRepository.save(cdaDetail.get(j));
-
-                        }
-                    }
-                }else{
-                    List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear, budHd, rebaseUnitId, allocTypeId, "0");
-                    if (cdaDetail.size() > 0) {
-                        for (int j = 0; j < cdaDetail.size(); j++) {
-
-                            String cdaId = cdaDetail.get(j).getGinNo();
-                            String amountTotal = cdaDetail.get(j).getTotalParkingAmount();
-                            double amountRemaining = Double.parseDouble(cdaDetail.get(j).getRemainingCdaAmount());
-                            AmountUnit cdaAmtObj = amountUnitRepository.findByAmountTypeId(cdaDetail.get(j).getAmountType());
-                            double cdaAmtUnit = cdaAmtObj.getAmount();
-
-                                List<CdaParkingTrans> headCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear, budHd, "001321", allocTypeId, "0");
-                                String ginNo = headCda.get(0).getGinNo();
-                                String rmCdabal = headCda.get(0).getRemainingCdaAmount();
-                                AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(headCda.get(0).getAmountType());
-                                double rqUnit = hdamtUnit.getAmount();
-                                double fnAmount = amountRemaining * cdaAmtUnit / rqUnit;
-
-                                CdaParkingCrAndDr cdaParkingCrAndDr = new CdaParkingCrAndDr();
-                                cdaParkingCrAndDr.setCdaParkingTrans(HelperUtils.getCdaId());
-                                cdaParkingCrAndDr.setCdaCrdrId(HelperUtils.getCdaCrDrId());
-                                cdaParkingCrAndDr.setFinYearId(finYear);
-                                cdaParkingCrAndDr.setBudgetHeadId(budHd);
-                                cdaParkingCrAndDr.setGinNo(ginNo);
-                                cdaParkingCrAndDr.setUnitId("001321");
-                                cdaParkingCrAndDr.setAuthGroupId(authGrId);
-                                cdaParkingCrAndDr.setAmount(String.valueOf(fnAmount));
-                                cdaParkingCrAndDr.setIscrdr("CR");
-                                cdaParkingCrAndDr.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-                                cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                                cdaParkingCrAndDr.setAllocTypeId(allocTypeId);
-                                cdaParkingCrAndDr.setIsFlag("0");
-                                cdaParkingCrAndDr.setTransactionId(HelperUtils.getTransId());
-                                cdaParkingCrAndDr.setAmountType(headCda.get(0).getAmountType());
-                                cdaParkingCrAndDr.setIsRevision(0);
-                                parkingCrAndDrRepository.save(cdaParkingCrAndDr);
-                        }
-                    }
-
-                }
+            for (Integer k = 0; k < req.getUnitRebaseRequests().size(); k++) {
+                AmountUnit amtObj = amountUnitRepository.findByAmountTypeId(req.getUnitRebaseRequests().get(k).getAmountType());
+                double allAmountUnit=amtObj.getAmount();
+                double balAmount= Double.parseDouble(req.getUnitRebaseRequests().get(k).getBalAmount());
+                double trnsfrAmount=balAmount*allAmountUnit;
                 BudgetRebase budgetRebase = new BudgetRebase();
                 budgetRebase.setBudgetRebaseId(HelperUtils.getUnitRebased());
                 budgetRebase.setRefTransId(refRensId);
-                budgetRebase.setFinYear(finYear);
-                budgetRebase.setRebaseUnitId(rebaseUnitId);
-                budgetRebase.setFrmStationId(frmStationId);
-                budgetRebase.setToStationId(toStationId);
-                budgetRebase.setToHeadUnitId(toHeadUnitId);
-                budgetRebase.setAllocTypeId(allocTypeId);
-                budgetRebase.setOccuranceDate(ConverterUtils.convertDateTotimeStamp(occurrenceDate));
-                budgetRebase.setBudgetHeadId(req.getUnitRebaseRequests().get(l).getBudgetHeadId());
-                budgetRebase.setAllocAmount(req.getUnitRebaseRequests().get(l).getAllocAmount());
-                budgetRebase.setExpAmount(req.getUnitRebaseRequests().get(l).getExpAmount());
-                budgetRebase.setBalAmount(req.getUnitRebaseRequests().get(l).getBalAmount());
-                budgetRebase.setAmountType(req.getUnitRebaseRequests().get(l).getAmountType());
-                if (req.getUnitRebaseRequests().get(l).getLastCbDate() != null)
-                    budgetRebase.setLastCbDate(ConverterUtils.convertDateTotimeStamp(req.getUnitRebaseRequests().get(l).getLastCbDate()));
+                budgetRebase.setFinYear(req.getFinYear());
+                budgetRebase.setRebaseUnitId(req.getRebaseUnitId());
+                budgetRebase.setHeadUnitId(frmUnit);
+                budgetRebase.setFrmStationId(req.getFrmStationId());
+                budgetRebase.setToStationId(req.getToStationId());
+                budgetRebase.setToHeadUnitId(toHdUnitId);
+                budgetRebase.setOccuranceDate(ConverterUtils.convertDateTotimeStamp(req.getOccurrenceDate()));
+                budgetRebase.setAllocTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
+                budgetRebase.setBudgetHeadId(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
+                budgetRebase.setAllocAmount(req.getUnitRebaseRequests().get(k).getAllocAmount());
+                budgetRebase.setExpAmount(req.getUnitRebaseRequests().get(k).getExpAmount());
+                budgetRebase.setBalAmount(req.getUnitRebaseRequests().get(k).getBalAmount());
+                budgetRebase.setAmountType(req.getUnitRebaseRequests().get(k).getAmountType());
+                if (req.getUnitRebaseRequests().get(k).getLastCbDate() != null)
+                    budgetRebase.setLastCbDate(ConverterUtils.convertDateTotimeStamp(req.getUnitRebaseRequests().get(k).getLastCbDate()));
+                budgetRebase.setAuthorityId(authorityId);
                 budgetRebase.setAuthorityId(authorityId);
                 budgetRebase.setUserId(hrDataCheck.getPid());
                 budgetRebase.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-                budgetRebase.setAllocFromUnit(hdUnits);
-                budgetRebase.setRemCdaBal(String.valueOf(remCdaBal));
-                budgetRebase.setHeadUnitId(hdUnits);
                 budgetRebaseRepository.save(budgetRebase);
 
+                List<CdaParkingTrans> selfCdaSieze = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), req.getRebaseUnitId(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+                if(selfCdaSieze.size()>0) {
+                    for (Integer i = 0; i < selfCdaSieze.size(); i++) {
+                        CdaParkingTrans cdaParking = selfCdaSieze.get(i);
+                        cdaParking.setIsFlag("1");
+                        cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                        cdaParkingTransRepository.save(cdaParking);
+                    }
+                }
+                List<CdaParkingCrAndDr> selfDrCrCdaSieze = parkingCrAndDrRepository.findByFinYearIdAndBudgetHeadIdAndAllocTypeIdAndUnitId(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), req.getRebaseUnitId());
+                if(selfDrCrCdaSieze.size()>0) {
+                    for (Integer i = 0; i < selfDrCrCdaSieze.size(); i++) {
+                        CdaParkingCrAndDr cdaParking = selfDrCrCdaSieze.get(i);
+                        cdaParking.setIsFlag("1");
+                        cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                        parkingCrAndDrRepository.save(cdaParking);
+                    }
+                }
+
+
+
+                List<CdaParkingTrans> ToHdUnitCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+                if(ToHdUnitCda.size()<=0){
+                    return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+                    }, "TO HEAD UNIT CDA NOT FOUND IN THIS BUDGET HEAD "+req.getUnitRebaseRequests().get(k).getBudgetHeadId(), HttpStatus.OK.value());
+                }
+                String ginNo=ToHdUnitCda.get(0).getGinNo();
+                double rmCdaBal= Double.parseDouble(ToHdUnitCda.get(0).getRemainingCdaAmount());
+                double totalCdabal= Double.parseDouble(ToHdUnitCda.get(0).getTotalParkingAmount());
+                AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(ToHdUnitCda.get(0).getAmountType());
+                double rqUnit=hdamtUnit.getAmount();
+                double hndOverAmnt=trnsfrAmount/rqUnit;
+
+                CdaParkingCrAndDr cdaParkingCrAndDr = new CdaParkingCrAndDr();
+                cdaParkingCrAndDr.setCdaParkingTrans(HelperUtils.getCdaId());
+                cdaParkingCrAndDr.setCdaCrdrId(HelperUtils.getCdaCrDrId());
+                cdaParkingCrAndDr.setFinYearId(req.getFinYear());
+                cdaParkingCrAndDr.setBudgetHeadId(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
+                cdaParkingCrAndDr.setGinNo(ginNo);
+                cdaParkingCrAndDr.setUnitId(toHdUnitId);
+                cdaParkingCrAndDr.setAuthGroupId(authGrId);
+                cdaParkingCrAndDr.setAmount(String.valueOf(hndOverAmnt));
+                cdaParkingCrAndDr.setIscrdr("CR");
+                cdaParkingCrAndDr.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+                cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                cdaParkingCrAndDr.setAllocTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
+                cdaParkingCrAndDr.setIsFlag("0");
+                cdaParkingCrAndDr.setTransactionId(HelperUtils.getTransId());
+                cdaParkingCrAndDr.setAmountType(ToHdUnitCda.get(0).getAmountType());
+                cdaParkingCrAndDr.setIsRevision(0);
+                parkingCrAndDrRepository.save(cdaParkingCrAndDr);
+
+                ToHdUnitCda.get(0).setRemainingCdaAmount(String.valueOf(rmCdaBal+hndOverAmnt));
+                ToHdUnitCda.get(0).setTotalParkingAmount(String.valueOf(totalCdabal+hndOverAmnt));
+                ToHdUnitCda.get(0).setRemarks("DUE TO REBASE AMOUNT CHANGE"+hndOverAmnt);
+                ToHdUnitCda.get(0).setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                cdaParkingTransRepository.save(ToHdUnitCda.get(0));
+
             }
-        } else {
+        }else{
             BudgetRebase budgetRebase = new BudgetRebase();
             budgetRebase.setBudgetRebaseId(HelperUtils.getUnitRebased());
             budgetRebase.setRefTransId(refRensId);
-            budgetRebase.setFinYear(finYear);
-            budgetRebase.setRebaseUnitId(rebaseUnitId);
-            budgetRebase.setHeadUnitId("headUnit");
-            budgetRebase.setFrmStationId(frmStationId);
-            budgetRebase.setToStationId(toStationId);
-            budgetRebase.setToHeadUnitId(toHeadUnitId);
-            budgetRebase.setOccuranceDate(ConverterUtils.convertDateTotimeStamp(occurrenceDate));
-            budgetRebase.setAllocTypeId(null);
-            budgetRebase.setBudgetHeadId(null);
-            budgetRebase.setAllocAmount(null);
-            budgetRebase.setExpAmount(null);
-            budgetRebase.setBalAmount(null);
-            budgetRebase.setAmountType(null);
+            budgetRebase.setFinYear(req.getFinYear());
+            budgetRebase.setRebaseUnitId(req.getRebaseUnitId());
+            budgetRebase.setHeadUnitId(frmUnit);
+            budgetRebase.setFrmStationId(req.getFrmStationId());
+            budgetRebase.setToStationId(req.getToStationId());
+            budgetRebase.setToHeadUnitId(toHdUnitId);
+            budgetRebase.setOccuranceDate(ConverterUtils.convertDateTotimeStamp(req.getOccurrenceDate()));
+            budgetRebase.setAllocTypeId("");
+            budgetRebase.setBudgetHeadId("");
+            budgetRebase.setAllocAmount("");
+            budgetRebase.setExpAmount("");
+            budgetRebase.setBalAmount("");
+            budgetRebase.setAmountType("");
             budgetRebase.setLastCbDate(null);
+            budgetRebase.setAuthorityId(authorityId);
             budgetRebase.setAuthorityId(authorityId);
             budgetRebase.setUserId(hrDataCheck.getPid());
             budgetRebase.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             budgetRebaseRepository.save(budgetRebase);
         }
+
         defaultResponse.setMsg("UNIT REBASE SUCCESSFULLY");
         return ResponseUtils.createSuccessResponse(defaultResponse, new TypeReference<DefaultResponse>() {
         });
