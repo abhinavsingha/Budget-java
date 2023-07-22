@@ -147,17 +147,6 @@ public class MangeReportImpl implements MangeReportService {
 //            budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndToUnitOrderByTransactionIdAsc(authGroupId, hrData.getUnitId());
         }
 
-//        List<MangeInboxOutbox> mangeInboxOutbox = mangeInboxOutBoxRepository.findByGroupId(authGroupId);
-//
-//        if (mangeInboxOutbox.size() > 0) {
-//
-//            if (mangeInboxOutbox.get(0).getIsBgcg().equalsIgnoreCase("BR")) {
-//                fileName = "BudgetReceipt" + hrData.getUnitId() + System.currentTimeMillis();
-//            } else {
-//                fileName = "AllocationReport" + hrData.getUnitId() + System.currentTimeMillis();
-//            }
-//        }
-
 
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
@@ -183,7 +172,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -198,7 +187,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -324,7 +313,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) + "");
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -339,7 +328,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -490,7 +479,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(totalAmount + "");
 
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -508,7 +497,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnitServer.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -654,7 +643,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(totalAmount + "");
 
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -672,7 +661,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnitServer.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -820,7 +809,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(addData + "");
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -838,7 +827,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -969,7 +958,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(addData + "");
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount())+ Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -987,7 +976,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -1124,7 +1113,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -1144,7 +1133,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -1272,7 +1261,7 @@ public class MangeReportImpl implements MangeReportService {
 
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount())  + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -1290,7 +1279,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -1768,7 +1757,6 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-//            pdfGenaratorUtil.createCbReportPdfSample(templateName, cbReportResponse, file);
             pdfGenaratorUtilMain.createContigentBillReport(cbReportResponse, filePath, hrData);
             dto.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             dto.setFileName(fileName);
@@ -1777,9 +1765,6 @@ public class MangeReportImpl implements MangeReportService {
         } catch (Exception e) {
             throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
         }
-
-
-//        }
 
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
@@ -1824,7 +1809,6 @@ public class MangeReportImpl implements MangeReportService {
             for (Integer i = 0; i < modBudgetAllocations.size(); i++) {
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(modBudgetAllocations.get(i).getAmountType());
                 allocationAmount = allocationAmount + (Double.parseDouble(modBudgetAllocations.get(i).getAllocationAmount()) * amountUnit.getAmount());
-//                balanceAmount = balanceAmount + (Double.parseDouble(modBudgetAllocations.get(i).getBalanceAmount()) * amountUnit.getAmount());
             }
         }
 
@@ -1901,112 +1885,9 @@ public class MangeReportImpl implements MangeReportService {
             String path = folder.getAbsolutePath() + "/" + fileName + ".docx";
             FileOutputStream out = new FileOutputStream(new File(path));
 
-            XWPFTable table = document.createTable();
-            table.setWidth("100%");
-//                XWPFParagraph para = document.createParagraph();
-//                XWPFRun run = para.createRun();
-
-
-//            XWPFTableRow tableRowOne = table.getRow(0);
-//            XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
-//            boldText(paragraphtableRowOne.createRun(), 10, "SUB HEAD", true);
-//
-//            XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
-//            boldText(paragraphtableRowOne1.createRun(), 10, "UNIT NAME", true);
-//
-//            XWPFParagraph paragraphtableRowOne11 = tableRowOne.addNewTableCell().addParagraph();
-//            boldText(paragraphtableRowOne11.createRun(), 10, filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", true);
-
-
-//            for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
-//                String key11 = entry11.getKey();
-//                List<ReportSubModel> tabData11 = entry11.getValue();
-//
-//                XWPFTableRow tableRow = table.createRow();
-//                tableRow.getCell(0).setText(key11);
-//                double allAmountData = 0;
-//                for (Integer i = 0; i < tabData11.size(); i++) {
-//
-//                    if (i == 0) {
-////                            tableRow.getCell(1).setText(tabData11.get(i).getUnit());
-//                        XWPFParagraph paragraph = tableRow.getCell(1).addParagraph();
-//                        normalText(paragraph.createRun(), 10, tabData11.get(i).getUnit(), false);
-//
-////                            tableRow.getCell(2).setText(tabData11.get(i).getAmount());
-//                        XWPFParagraph paragraph11 = tableRow.getCell(2).addParagraph();
-//                        normalText(paragraph11.createRun(), 10, tabData11.get(i).getAmount(), false);
-//
-//                    } else {
-//                        XWPFTableRow tableRow11 = table.createRow();
-//                        tableRow11.getCell(0).setText("");
-//                        XWPFParagraph paragraph = tableRow11.getCell(1).addParagraph();
-//                        normalText(paragraph.createRun(), 10, tabData11.get(i).getUnit(), false);
-//
-//                        XWPFParagraph paragraph11 = tableRow11.getCell(2).addParagraph();
-//                        normalText(paragraph11.createRun(), 10, tabData11.get(i).getAmount(), false);
-//                    }
-//
-//
-//                    allAmountData = allAmountData + Double.parseDouble(tabData11.get(i).getAmount());
-//
-//                    XWPFTableRow latRow = table.createRow();
-//
-//                    XWPFParagraph total1 = latRow.getCell(1).addParagraph();
-//                    boldText(total1.createRun(), 10, "Total Amount", true);
-//
-//                    XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
-//                    boldText(total1111.createRun(), 10, allAmountData + "", true);
-//
-//                }
-//            }
-
-
-//            //create first row
-//            XWPFParagraph mainParagraph = document.createParagraph();
-//            mainParagraph = document.createParagraph();
-//            mainParagraph.createRun().addBreak();
-//            mainParagraph = document.createParagraph();
-//            boldText(mainParagraph.createRun(), 10, filePathResponse.getApproveName() + "", true);
-//            mainParagraph = document.createParagraph();
-//            normalText(mainParagraph.createRun(), 10, filePathResponse.getApproveRank() + "", true);
-
-
-            // Line 2
-            // Creating object for line 2
-//                XWPFRun line2 = paragraph.createRun();
-
-            // Formatting line1 by setting italic
-//                line2.setText("Formatted with Italics");
-//                line2.setItalic(true);
-//                line2.addBreak();
-
-            // Line 3
-            // Creating object for line 3
-//                XWPFRun line3 = paragraph.createRun();
-
-            // Formatting line3 by setting
-            // color & font size
-//                line3.setColor("73fc03");
-//                line3.setFontSize(20);
-//                line3.setText(" Formatted with Color");
-
-            // Step 6: Saving changes to document
-            document.write(out);
-
-            // Step 7: Closing the connections
-            out.close();
-            document.close();
-
-
-            FilePathResponse dto = new FilePathResponse();
-            dto.setPath(HelperUtils.FILEPATH + fileName + ".docx");
-            dto.setFileName(fileName);
-            dtoList.add(dto);
         } catch (Exception e) {
             throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
         }
-
-//        }
 
         return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
         });
