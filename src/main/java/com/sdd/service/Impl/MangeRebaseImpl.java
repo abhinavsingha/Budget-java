@@ -346,7 +346,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
             rebase.setFromUnit(cgUnitRepository.findByUnit(allocationData.get(i).getFromUnit()));
             rebase.setUnit(unitdata.getDescr());
             rebase.setFinYear(Finyr.getFinYear());
-            rebase.setAllocatedAmount(allocationData.get(i).getAllocationAmount());
             rebase.setStatus(allocationData.get(i).getStatus());
             rebase.setAmountType(amountTypeObj);
             rebase.setAllocationType(allocationRepository.findByAllocTypeId(allocId));
@@ -354,8 +353,15 @@ public class MangeRebaseImpl implements MangeRebaseService {
             rebase.setSubHead(subHeadRepository.findByBudgetCodeId(allocationData.get(i).getSubHead()));
             String bHead = allocationData.get(i).getSubHead();
             List<CdaParkingTrans> cdaDetails = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear, bHead, unit, allocId, "0");
+            if (cdaDetails.size()<=0) {
+                return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
+                }, "CDA NOT FOUND IN THIS SUBHEAD "+bHead, HttpStatus.OK.value());
+            }
+            AmountUnit cdaAmtObj = amountUnitRepository.findByAmountTypeId(cdaDetails.get(0).getAmountType());
+            double cdaAmtUnit=cdaAmtObj.getAmount();
             List<CdaDetailsForRebaseResponse> addRes = new ArrayList<CdaDetailsForRebaseResponse>();
             double remCdaBal=0.0;
+            double TotalCdaBal=0.0;
             if (cdaDetails.size() > 0) {
                 for (int j = 0; j < cdaDetails.size(); j++) {
                     CdaDetailsForRebaseResponse cda = new CdaDetailsForRebaseResponse();
@@ -365,18 +371,12 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     cda.setRemainingCdaAmount(cdaDetails.get(j).getRemainingCdaAmount());
                     cda.setRemarks(cdaDetails.get(j).getRemarks());
                     cda.setSubHeadId(cdaDetails.get(j).getBudgetHeadId());
-                    AmountUnit cdaAmtObj = amountUnitRepository.findByAmountTypeId(cdaDetails.get(j).getAmountType());
-                    if (cdaAmtObj == null) {
-                        return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
-                        }, "CDA AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
-                    }
-                    double cdaAmtUnit=cdaAmtObj.getAmount();
-                    double cdabal=Double.parseDouble(cdaDetails.get(j).getRemainingCdaAmount());
-                    double finCdaBal=cdabal*cdaAmtUnit/amountUnit;
-                    remCdaBal += finCdaBal;
+                    remCdaBal += Double.parseDouble(cdaDetails.get(j).getRemainingCdaAmount());
+                    TotalCdaBal += Double.parseDouble(cdaDetails.get(j).getTotalParkingAmount());
                     addRes.add(cda);
                 }
             }
+            rebase.setAllocatedAmount(String.valueOf(TotalCdaBal));
             rebase.setRemCdaBal(String.valueOf(remCdaBal));
             rebase.setCdaData(addRes);
             List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(unit, finYear, bHead, allocId,  "0");
@@ -391,12 +391,12 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 double expAmnt=totalAmount/amountUnit;
                 double bal = aAmount - expAmnt;
                 rebase.setExpenditureAmount(String.valueOf(expAmnt));
-                rebase.setRemBal(Double.toString(bal));
+                rebase.setRemBal(String.valueOf(remCdaBal));
                 rebase.setLastCbDate(lastCbDate);
             } else {
                 rebase.setExpenditureAmount("0.0000");
                 rebase.setLastCbDate(null);
-                rebase.setRemBal(allocationData.get(i).getAllocationAmount());
+                rebase.setRemBal(String.valueOf(remCdaBal));
             }
 
             responce.add(rebase);
