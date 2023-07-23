@@ -508,7 +508,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 }
             }
         }
-
         CgUnit chekUnit = cgUnitRepository.findByUnit(req.getRebaseUnitId());
         String subUnits=chekUnit.getSubUnit();
         CgStation frmS=cgStationRepository.findByStationName(req.getFrmStationId());
