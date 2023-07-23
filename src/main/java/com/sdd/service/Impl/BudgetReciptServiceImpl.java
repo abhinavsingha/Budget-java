@@ -81,7 +81,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<BudgetReciptListResponse> budgetRecipetSave(BudgetReciptSaveRequest budgetReciptSaveRequest) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -421,7 +421,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<ContingentSaveResponse> updateRecipetSave(BudgetReciptUpdateRequest budgetReciptSaveRequest) {
         ContingentSaveResponse budgetReciptResponse = new ContingentSaveResponse();
         String token = headerUtils.getTokeFromHeader();
