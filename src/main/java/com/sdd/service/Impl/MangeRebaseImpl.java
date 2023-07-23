@@ -520,9 +520,19 @@ public class MangeRebaseImpl implements MangeRebaseService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO STATION REGION GETTING NULL");
         }
         String toRegion=toS.getRhqId();
-        String tohdUnit=toS.getDhqName();
+        String tohdUnit="";
+        if (toS.getDhqName()==null || toS.getDhqName().isEmpty()){
+            tohdUnit=toS.getRhqId();
+        }else{
+            tohdUnit=toS.getDhqName();
+        }
         String frmRegion=frmS.getRhqId();
-        String frmhdUnit=frmS.getDhqName();
+        String frmhdUnit="";
+        if (frmS.getDhqName()==null || frmS.getDhqName().isEmpty()){
+            frmhdUnit=frmS.getRhqId();
+        }else{
+            frmhdUnit=frmS.getDhqName();
+        }
         CgUnit cgData = cgUnitRepository.findByUnit(hrDataCheck.getUnitId());
         String rebaseAuthority=cgData.getIsRebaseAuthority();
         if(!rebaseAuthority.equalsIgnoreCase("1")){
