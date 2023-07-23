@@ -228,7 +228,9 @@ public class DashboardServiceImpl implements DashBoardService {
                     outBoxList.add(data);
                 }
             }
-        } else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
+        }
+
+        else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
 
             List<String> dataIscgBg = new ArrayList<>();
             dataIscgBg.add("BG");
@@ -254,7 +256,9 @@ public class DashboardServiceImpl implements DashBoardService {
                     }
                 }
             }
-        } else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
+        }
+
+        else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
             inboxOutboxesList =
                     mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
                             hrDataCheck.getUnitId(), "CB", "0", "0");
@@ -275,7 +279,9 @@ public class DashboardServiceImpl implements DashBoardService {
                     outBoxList.add(data);
                 }
             }
-        } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
+        }
+
+        else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
 
             arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
             archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
@@ -294,7 +300,9 @@ public class DashboardServiceImpl implements DashBoardService {
                     outBoxList.add(data);
                 }
             }
-        } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
+        }
+
+        else if (getCurrentRole.contains(HelperUtils.CBAPPROVER)) {
 
             arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
             archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
