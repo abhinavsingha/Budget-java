@@ -25,6 +25,8 @@ public interface BudgetRebaseRepository extends JpaRepository<BudgetRebase, Stri
 
     List<BudgetRebase> findByRebaseUnitId(String rebaseUnitId);
 
+    List<BudgetRebase> findByAuthGrpId(String authGrId);
+
 
 
 

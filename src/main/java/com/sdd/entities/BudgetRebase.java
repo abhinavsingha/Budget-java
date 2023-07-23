@@ -24,6 +24,9 @@ public class BudgetRebase {
     @Column(name = "REF_TRANS_ID")
     private String refTransId;
 
+    @Column(name = "AUTH_GRP_ID")
+    private String authGrpId;
+
     @Column(name = "FIN_YEAR")
     private String finYear;
 
@@ -74,6 +77,9 @@ public class BudgetRebase {
 
     @Column(name = "USER_ID")
     private String userId;
+
+    @Column(name = "LOGIN UNIT")
+    private String loginUnit;
 
     @Column(name = "CREATED_ON")
     private Timestamp createdOn;

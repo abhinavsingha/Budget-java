@@ -7900,7 +7900,7 @@ public class MangeReportImpl implements MangeReportService {
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
 
-        String amountTypeId = "101";
+        //String amountTypeId = "101";
 
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
@@ -7935,9 +7935,6 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
-        AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
-        Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
-        String amountIn = amountObj.getAmountType().toUpperCase();
 
         String names = approveName;
         String unitName = hrData.getUnit();
@@ -8023,6 +8020,11 @@ public class MangeReportImpl implements MangeReportService {
                     if (rebaseData.size() <= 0) {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
                     }
+
+                    AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(rebaseData.get(0).getAmountType());
+                    Float reqAmount = Float.parseFloat(amountObj.getAmount() + "");
+                    String amountIn = amountObj.getAmountType().toUpperCase();
+
                     CgUnit unitN = cgUnitRepository.findByUnit(RunitId);
                     String frmS = rebaseData.get(0).getFrmStationId();
                     CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
