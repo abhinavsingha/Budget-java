@@ -942,7 +942,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 rebase.setUnitRebaseName(unitN.getDescr());
                 rebase.setLoginUnitName(loginN.getDescr());
                 rebase.setFromUnitName(frmU.getDescr());
-                rebase.setToStation(toU.getDescr());
+                rebase.setToUnitName(toU.getDescr());
                 rebase.setDateOfRebase(rebaseData.get(k).getOccuranceDate());
                 rebase.setFromStation(rebaseData.get(k).getFrmStationId());
                 rebase.setToStation(toS.getStationName());
