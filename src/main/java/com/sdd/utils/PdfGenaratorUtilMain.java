@@ -1,14 +1,14 @@
 package com.sdd.utils;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.*;
 import com.sdd.entities.HrData;
+import com.sdd.exception.SDDException;
 import com.sdd.response.CDAReportResponse;
 import com.sdd.response.CDAReportSubResponse;
 import com.sdd.response.CbReportResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.sdd.response.FilePathResponse;
 
 import java.io.*;
@@ -293,6 +293,45 @@ public class PdfGenaratorUtilMain {
     }
 
 
+    public void createCdaMainReport11(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, HashMap<String, String> coloumWiseAmount, FilePathResponse filePathResponse) throws Exception {
+
+        Document document = new Document(PageSize.A4.rotate());
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
+        document.open();
+        document.newPage();
+        Header event = new Header();
+        writer.setPageEvent(event);
+
+        event.setHeader(map, cadSubReport, path, grandTotal, coloumWiseAmount, filePathResponse);
+        event.onStartPage(writer,document);
+        Font font = new Font(Font.FontFamily.COURIER, 15, Font.BOLD);
+        Paragraph preface = new Paragraph();
+        preface.setAlignment(Element.ALIGN_CENTER);
+
+        if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
+            Chunk header = new Chunk("\n" + "CDA WISE/OBJECT HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() + "\n" + "\n", font);
+            preface.add(header);
+        } else {
+            Chunk header = new Chunk("\n" + "CDA WISE/DETAILED HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() + "\n" + "\n", font);
+            preface.add(header);
+        }
+
+
+        String reOrCapital = "";
+        if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
+            reOrCapital = "REVENUE";
+        } else {
+            reOrCapital = "CAPITAL";
+        }
+
+        Chunk revenue = new Chunk(reOrCapital + "\n" + "\n", font);
+        preface.add(revenue);
+
+        Chunk thiredHead = new Chunk("Major Head " + cadSubReport.getMajorHead() + ". Sub Major Head 00. Minor Head " + cadSubReport.getMinorHead() + ") (In " + cadSubReport.getAmountType() + ")" + "\n" + "\n" + "\n" + "\n", font);
+        preface.add(thiredHead);
+        document.add(preface);
+    }
+
     public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, HashMap<String, String> coloumWiseAmount, FilePathResponse filePathResponse) throws Exception {
 
 
@@ -332,9 +371,7 @@ public class PdfGenaratorUtilMain {
         List<CDAReportResponse> tabData1 = map.get("Sub Head");
         PdfPTable table = new PdfPTable(tabData1.size() + 1);
 
-//        float[] pointColumnWidths = {50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F};
         table.setWidthPercentage(100);
-//        table.setWidths(pointColumnWidths);
         table.setSpacingAfter(1);
 
 
@@ -342,8 +379,8 @@ public class PdfGenaratorUtilMain {
         for (Integer i = 0; i < tabData1.size(); i++) {
             table.addCell(boldText(tabData1.get(i).getName(), 6, 20f));
         }
-
-
+        table.setHeaderRows(1);
+        table.setSkipFirstHeader(true);
 
 
         for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
@@ -354,16 +391,12 @@ public class PdfGenaratorUtilMain {
                 table.addCell(boldText(key, 7, 35f));
                 for (Integer i = 0; i < tabData.size(); i++) {
 
+
+
                     Boolean isNumber = ConverterUtils.isNumber(tabData.get(i).getName() + "");
                     if (isNumber) {
-//                        float[] columnWidths = new float[]{20f};
-//                        table.setWidths(columnWidths);
                         table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(i).getName()), 7, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
                     } else {
-
-//                        PdfPCell cell = new PdfPCell(new Phrase(" Date" ));
-//                        float[] columnWidths = new float[]{50f};
-//                        table.setWidths(columnWidths);
                         table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(i).getName()), 7, 20f));
                     }
                 }
@@ -402,7 +435,6 @@ public class PdfGenaratorUtilMain {
         document.close();
 
     }
-
 
     public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, double allocationGrandTotal, FilePathResponse filePathResponse) throws Exception {
 
@@ -831,4 +863,130 @@ public class PdfGenaratorUtilMain {
         System.out.println(words);
         return words.trim();
     }
+
+
+    public class Header extends PdfPageEventHelper {
+
+
+        HashMap<String, List<CDAReportResponse>> map;
+        CDAReportSubResponse cadSubReport;
+        String path;
+        double grandTotal;
+        HashMap<String, String> coloumWiseAmount;
+        FilePathResponse filePathResponse;
+
+
+        @Override
+        public void onStartPage(PdfWriter writer, Document document) {
+            try {
+
+
+//                Document document = new Document(PageSize.A4.rotate());
+//                PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
+                Font font = new Font(Font.FontFamily.COURIER, 15, Font.BOLD);
+
+
+                int pageNumber = document.getPageNumber();
+                if (pageNumber > 1) {
+
+
+//                    PdfPTable table = new PdfPTable(tabData1.size() + 1);
+////                    table.setWidthPercentage(100);
+//                    float[] pointColumnWidths = {50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F, 50F};
+//                    table.setWidths(pointColumnWidths);
+//                    table.setSpacingAfter(1);
+//
+//                    PdfContentByte canvas = writer.getDirectContent();
+//                    table.addCell(boldText("object", 6, 35f));
+//                    for (Integer i = 0; i < tabData1.size(); i++) {
+//                        table.addCell(boldText(tabData1.get(i).getName(), 6, 20f));
+//                    }
+//                    table.writeSelectedRows(0, -1, 20, document.top(), canvas);
+                    //ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_TOP, phrase.add(), 0, 0, 0);
+                } else {
+
+
+
+                    List<CDAReportResponse> tabData1 = map.get("Sub Head");
+                    PdfPTable table = new PdfPTable(tabData1.size() + 1);
+
+                    table.setWidthPercentage(100);
+                    table.setSpacingAfter(1);
+
+
+                    table.addCell(boldText("object", 6, 35f));
+                    for (Integer i = 0; i < tabData1.size(); i++) {
+                        table.addCell(boldText(tabData1.get(i).getName(), 6, 20f));
+                    }
+
+                    int currentPageNumber = 1;
+
+                    for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
+                        String key = entry.getKey();
+
+                        if (!key.equalsIgnoreCase("Sub Head")) {
+                            List<CDAReportResponse> tabData = entry.getValue();
+                            table.addCell(boldText(key, 7, 35f));
+                            for (Integer i = 0; i < tabData.size(); i++) {
+                                int pageNumber111 = document.getPageNumber();
+
+                                Boolean isNumber = ConverterUtils.isNumber(tabData.get(i).getName() + "");
+                                if (isNumber) {
+                                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(i).getName()), 7, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                } else {
+                                    table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(i).getName()), 7, 20f));
+                                }
+                            }
+                        }
+                    }
+                    table.addCell(boldText("Grand Total", 7, 20f));
+
+                    for (Map.Entry<String, String> entry : coloumWiseAmount.entrySet()) {
+                        String tabData = entry.getValue();
+
+                        Boolean isNumber = ConverterUtils.isNumber(tabData + "");
+                        if (isNumber) {
+                            table.addCell(boldText(ConverterUtils.addDecimalPoint(tabData), 7, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        } else {
+                            table.addCell(boldText(ConverterUtils.addDecimalPoint(tabData), 7, 20f));
+                        }
+
+
+                    }
+
+                    table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 7, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+
+
+                    int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
+
+                    Phrase phrase = new Phrase();
+                    Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(), maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(), maxlength)), font);
+                    phrase.add(approverName);
+                    Paragraph paragraph = new Paragraph();
+                    paragraph.add(phrase);
+                    paragraph.setAlignment(Element.ALIGN_RIGHT);
+
+
+                    document.add(table);
+//                    document.close();
+
+
+                }
+            } catch (Exception e) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), e + "");
+            }
+        }
+
+
+        public void setHeader(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, HashMap<String, String> coloumWiseAmount, FilePathResponse filePathResponse) {
+            this.map = map;
+            this.cadSubReport = cadSubReport;
+            this.path = path;
+            this.grandTotal = grandTotal;
+            this.coloumWiseAmount = coloumWiseAmount;
+            this.filePathResponse = filePathResponse;
+        }
+    }
+
+
 }
