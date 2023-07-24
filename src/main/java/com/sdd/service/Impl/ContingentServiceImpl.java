@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -237,6 +238,23 @@ public class ContingentServiceImpl implements ContingentService {
             }
 
 
+        }
+
+
+        for (Integer i = 0; i < contingentBillSaveRequestList.size(); i++) {
+
+            int sectionNumber = Integer.parseInt(contingentBillSaveRequestList.get(i).getSectionNumber()) - 1;
+            ContigentBill lastContigentBill = contigentBillRepository.findByCbUnitIdAndSectionNumber(hrData.getUnitId(), sectionNumber + "");
+
+            if (lastContigentBill != null) {
+                Timestamp lastCbDate = lastContigentBill.getCbDate();
+                Timestamp currentDate = ConverterUtils.convertDateTotimeStamp(contingentBillSaveRequestList.get(i).getCbDate());
+
+                long dayFiffer = ConverterUtils.timeDifferTimeStamp(lastCbDate, currentDate);
+                if (dayFiffer > 1) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+                }
+            }
         }
 
 
@@ -700,7 +718,7 @@ public class ContingentServiceImpl implements ContingentService {
             ContingentBillSaveRequest contingentBillSaveRequest = contingentBillSaveRequestList.get(i);
             ContigentBill contigentBill = contigentBillRepository.findByCbId(contingentBillSaveRequest.getContingentBilId());
 
-            List<CdaParkingCrAndDr>  cRdRdata = parkingCrAndDrRepository.findByAuthGroupId(contigentBill.getAuthGroupId());
+            List<CdaParkingCrAndDr> cRdRdata = parkingCrAndDrRepository.findByAuthGroupId(contigentBill.getAuthGroupId());
             for (Integer c = 0; c < cRdRdata.size(); c++) {
                 parkingCrAndDrRepository.delete(cRdRdata.get(i));
             }
@@ -1052,7 +1070,7 @@ public class ContingentServiceImpl implements ContingentService {
         int maxNumber = 1;
         List<ContigentBill> masNumberList = contigentBillRepository.findByAllocationTypeIdAndCbUnitIdAndFinYear(allocationType.get(0).getAllocTypeId(), hrData.getUnitId(), budgetFinancialYear.getSerialNo());
         if (masNumberList.size() == 0) {
-            contingentBillListData.setSectionNumber("01");
+            contingentBillListData.setSectionNumber("1");
         } else {
             for (Integer i = 0; i < masNumberList.size(); i++) {
 

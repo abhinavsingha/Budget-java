@@ -344,6 +344,8 @@ public class PdfGenaratorUtilMain {
         }
 
 
+
+
         for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
             String key = entry.getKey();
 
@@ -513,7 +515,7 @@ public class PdfGenaratorUtilMain {
 
         Chunk billNumber1 = new Chunk("Contingent Bill No. ", normalFont);
         Chunk billNumber2 = new Chunk(cbReportResponse.getCbData().getCbNo() + "                           ", font);
-        Chunk billNumber3 = new Chunk("                                        " + " Dated: ", normalFont);
+        Chunk billNumber3 = new Chunk("                        " + " Dated: ", normalFont);
         Chunk billNumber4 = new Chunk(date(dateString) + " \n", font);
         phrase.add(billNumber1);
         phrase.add(billNumber2);

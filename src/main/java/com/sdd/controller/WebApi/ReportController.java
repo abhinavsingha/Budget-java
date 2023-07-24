@@ -58,9 +58,6 @@ public class ReportController {
     }
 
 
-
-
-
     @GetMapping("/getConsolidateReceiptReport/{finYearId}/{allocationType}/{amountType}")
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getConsolidateReceiptReport(@PathVariable("finYearId") String finYearId, @PathVariable("allocationType") String allocationType, @PathVariable("amountType") String amountType) {
         return new ResponseEntity<>(mangeReportService.getConsolidateReceiptReport(finYearId, allocationType, amountType), HttpStatus.OK);
@@ -70,8 +67,6 @@ public class ReportController {
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getConsolidateReceiptReportDoc(@PathVariable("finYearId") String finYearId, @PathVariable("allocationType") String allocationType, @PathVariable("amountType") String amountType) {
         return new ResponseEntity<>(mangeReportService.getConsolidateReceiptReportDoc(finYearId, allocationType, amountType), HttpStatus.OK);
     }
-
-
 
 
     @PostMapping("/getAllocationReportRevised")
@@ -136,9 +131,6 @@ public class ReportController {
     public ResponseEntity<ApiResponse<FilePathResponse>> getCdaParkingReport(@RequestBody CDAReportRequest reportRequest) {
         return new ResponseEntity<>(mangeReportService.getCdaParkingReport(reportRequest), HttpStatus.OK);
     }
-
-
-
 
 
 

@@ -16,23 +16,19 @@ public interface ContigentBillRepository extends JpaRepository<ContigentBill, Lo
           nativeQuery = true)
   List<ContigentBill> findExpAndCbDate(String unitId, String finYear, String subHead,String status,String update);
 
-  List<ContigentBill> findByCbUnitIdAndFinYearAndBudgetHeadIDAndStatusAndIsUpdateAndIsFlag(String unitId, String finYear, String subHead,String status,String update, String isFlag);
 
 
 
   ContigentBill findByCbIdAndIsFlagAndIsUpdate(String contingentBilId, String isFlag, String isUpdate);
-  ContigentBill findByCbIdAndIsFlag(String contingentBilId, String isFlag);
   ContigentBill findByCbId(String contingentBilId);
+  ContigentBill findByCbUnitIdAndSectionNumber(String contingentBilId,String billNo);
 
   List<ContigentBill> findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdate(String unitId, String finYear, String subHead, String isUpdate);
 
   List<ContigentBill> findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(String unitId, String finYear, String subHead,String allocTypeId, String isUpdate);
 
-  List<ContigentBill> findByCbUnitIdAndIsFlagAndIsUpdate(String cbUnitId, String isFlag, String isUpdate);
   List<ContigentBill> findByCbUnitId(String cbUnitId);
-  List<ContigentBill> findByCbUnitIdAndFinYearAndAndIsFlagAndIsUpdate(String cbUnitId,String finYear, String isFlag, String isUpdate);
 
-  List<ContigentBill> findByBudgetHeadIDAndIsFlagAndIsUpdate(String cbUnitId, String isFlag, String isUpdate);
 
   List<ContigentBill> findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdate(String cbUnitId, String budgetHeadId, String isFlag, String isUpdate);
   List<ContigentBill> findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdateAndAllocationTypeIdAndFinYear(String cbUnitId, String budgetHeadId, String isFlag, String isUpdate, String allocationTypeId, String finYear);

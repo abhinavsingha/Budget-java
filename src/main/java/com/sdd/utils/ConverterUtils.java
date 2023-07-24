@@ -230,8 +230,8 @@ public class ConverterUtils {
             return new Timestamp(((java.util.Date) df.parse(inDate)).getTime());
         } catch (Exception ie) {
             System.out.println("Problem creating directory " + ie);
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Date Format not correct. Use this yyyy-MM-dd.");
         }
-        return null;
     }
 
 
@@ -414,6 +414,32 @@ public class ConverterUtils {
          **      four hundred eighty three thousand six hundred forty seven
          *** three billion ten
          **/
+    }
+
+
+
+    public static long timeDifferTimeStamp(Timestamp dateStart,Timestamp dateEnd) {
+
+
+        Date d1 = null;
+        Date d2 = null;
+        try {
+            d1 = new Date(dateStart.getTime());
+            d2 = new Date(dateEnd.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        long diff = d1.getTime() - d2.getTime();
+        long diffSeconds = diff / 1000;
+        long diffMinutes = diff / (60 * 1000);
+        long diffHours = diff / (60 * 60 * 1000);
+        System.out.println("Time in seconds: " + diffSeconds + " seconds.");
+        System.out.println("Time in minutes: " + diffMinutes + " minutes.");
+        System.out.println("Time in hours: " + diffHours + " hours.");
+        long diffday = diff / (60 * 60 * 1000 * 24);
+        return diffday;
+
     }
 
 
