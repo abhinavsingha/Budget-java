@@ -274,7 +274,7 @@ public class DocxGenaratorUtil {
                 boldText(paragraphtableRowOne.createRun(), 10, "MAJOR/MINOR/SUB HEAD", true);
 
                 XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
-                boldText(paragraphtableRowOne1.createRun(), 10, "OBJECT HEAD", true);
+                boldText(paragraphtableRowOne1.createRun(), 10, "HEAD", true);
 
                 XWPFParagraph paragraphtableRowOne11 = tableRowOne.addNewTableCell().addParagraph();
                 boldText(paragraphtableRowOne11.createRun(), 10, filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", true);
@@ -552,7 +552,7 @@ public class DocxGenaratorUtil {
             String reOrCapital = "";
 
 
-            
+
             if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
                 reOrCapital = "REVENUE";
             } else {

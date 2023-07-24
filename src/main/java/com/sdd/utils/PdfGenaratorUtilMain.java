@@ -214,7 +214,7 @@ public class PdfGenaratorUtilMain {
 
 //        if (key.equalsIgnoreCase("2037")) {
             table.addCell(boldText("MAJOR/MINOR/SUB HEAD", 10, 25f));
-            table.addCell(boldText("OBJECT HEAD", 10, 25f));
+            table.addCell(boldText("HEAD", 10, 25f));
             table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 10, 25f));
 
 //        } else {
