@@ -5,6 +5,7 @@ import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
+import com.sdd.entities.HrData;
 import com.sdd.exception.SDDException;
 import com.sdd.response.CDAReportResponse;
 import com.sdd.response.CDAReportSubResponse;
@@ -247,7 +248,7 @@ public class DocxGenaratorUtil {
 
 
     @SuppressWarnings("rawtypes")
-    public void createDocConsolidateRecipt(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse) throws Exception {
+    public void createDocConsolidateRecipt(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse, HrData hrData) throws Exception {
 
         try {
 
@@ -352,12 +353,18 @@ public class DocxGenaratorUtil {
             }
 
 
-            XWPFTableRow latRow = table.createRow();
-            XWPFParagraph total1 = latRow.getCell(1).addParagraph();
-            boldText(total1.createRun(), 10, "Grand Total", true);
-            XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
-            boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(grandTotal + ""), true);
-            total1111.setAlignment(ParagraphAlignment.RIGHT);
+
+            if(hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)){
+
+                XWPFTableRow latRow = table.createRow();
+                XWPFParagraph total1 = latRow.getCell(1).addParagraph();
+                boldText(total1.createRun(), 10, "Grand Total", true);
+                XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
+                boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(grandTotal + ""), true);
+                total1111.setAlignment(ParagraphAlignment.RIGHT);
+
+            }
+
 
 
             int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());

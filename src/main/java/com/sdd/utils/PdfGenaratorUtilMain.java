@@ -192,7 +192,7 @@ public class PdfGenaratorUtilMain {
 
 
     @SuppressWarnings("rawtypes")
-    public void createPdfConsolidateRecipt(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse) throws Exception {
+    public void createPdfConsolidateRecipt(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse, HrData hrData) throws Exception {
 
         Document document = new Document();
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
@@ -208,22 +208,20 @@ public class PdfGenaratorUtilMain {
 
         String key = "";
         for (Map.Entry<String, List<ReportSubModel>> entry11 : hashMap.entrySet()) {
-             key = entry11.getKey();
+            key = entry11.getKey();
         }
 
 
 //        if (key.equalsIgnoreCase("2037")) {
-            table.addCell(boldText("MAJOR/MINOR/SUB HEAD", 10, 25f));
-            table.addCell(boldText("HEAD", 10, 25f));
-            table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 10, 25f));
+        table.addCell(boldText("MAJOR/MINOR/SUB HEAD", 10, 25f));
+        table.addCell(boldText("HEAD", 10, 25f));
+        table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 10, 25f));
 
 //        } else {
 //            table.addCell(boldText("MAJOR/MINOR/SUB HEAD", 10, 25f));
 //            table.addCell(boldText("OBJECT HEAD", 10, 25f));
 //            table.addCell(boldText(filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", 10, 25f));
 //        }
-
-
 
 
         double grandTotal = 0f;
@@ -270,9 +268,11 @@ public class PdfGenaratorUtilMain {
 
         }
 
-        table.addCell(boldText("", 10, 25f));
-        table.addCell(boldText(ConverterUtils.addDecimalPoint("Grand Total"), 10, 25f));
-        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 10, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+            table.addCell(boldText("", 10, 25f));
+            table.addCell(boldText(ConverterUtils.addDecimalPoint("Grand Total"), 10, 25f));
+            table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 10, 25f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+        }
 
 
         int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
@@ -313,8 +313,6 @@ public class PdfGenaratorUtilMain {
             Chunk header = new Chunk("\n" + "CDA WISE/DETAILED HEAD WISE CONTROL FIGURES FOR " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() + "\n" + "\n", font);
             preface.add(header);
         }
-
-
 
 
         String reOrCapital = "";
@@ -563,7 +561,7 @@ public class PdfGenaratorUtilMain {
 
         table.addCell(normalText("01", 9, 50f));
 //        table.addCell(normalText("Expenditure incurred towards quaterly payment for the 3rd otr from 01 Sep 22 to 30 Nov 22 in respect of Hirring of Designer/Developer IT Manpower (Project-SDOT) through " + cbReportResponse.getCbData().getVendorName() + " vibe Invoiice/bill " + cbReportResponse.getCbData().getInvoiceNO() + " Dated " + cbReportResponse.getCbData().getInvoiceDate(), 10, 50f));
-        table.addCell(normalText(cbReportResponse.getOnAccountData()+" through " + cbReportResponse.getCbData().getVendorName() + " vide Invoice/bill " + cbReportResponse.getCbData().getInvoiceNO() + " Dated " + cbReportResponse.getCbData().getInvoiceDate(), 10, 50f));
+        table.addCell(normalText(cbReportResponse.getOnAccountData() + " through " + cbReportResponse.getCbData().getVendorName() + " vide Invoice/bill " + cbReportResponse.getCbData().getInvoiceNO() + " Dated " + cbReportResponse.getCbData().getInvoiceDate(), 10, 50f));
 //        table.addCell(normalText(cbReportResponse.getOnAccountData() + " vide Invoice/bill " + cbReportResponse.getCbData().getInvoiceNO() + " Dated " + cbReportResponse.getCbData().getInvoiceDate(), 10, 50f));
         table.addCell(normalText(ConverterUtils.addDecimalPoint(bill.toString()), 9, 50f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
 

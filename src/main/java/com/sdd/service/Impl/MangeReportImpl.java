@@ -564,7 +564,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-            pdfGenaratorUtilMain.createPdfConsolidateRecipt(hashMap, filePath, filePathResponse);
+            pdfGenaratorUtilMain.createPdfConsolidateRecipt(hashMap, filePath, filePathResponse,hrData);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             filePathResponse.setFileName(fileName);
             filePathResponse.setReciptRespone(hashMap);
@@ -731,7 +731,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-            docxGenaratorUtil.createDocConsolidateRecipt(hashMap, filePath, filePathResponse);
+            docxGenaratorUtil.createDocConsolidateRecipt(hashMap, filePath, filePathResponse,hrData);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".docx");
             filePathResponse.setFileName(fileName);
             filePathResponse.setReciptRespone(hashMap);
