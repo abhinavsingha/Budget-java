@@ -243,16 +243,21 @@ public class ContingentServiceImpl implements ContingentService {
 
         for (Integer i = 0; i < contingentBillSaveRequestList.size(); i++) {
 
-            int sectionNumber = Integer.parseInt(contingentBillSaveRequestList.get(i).getSectionNumber()) - 1;
-            ContigentBill lastContigentBill = contigentBillRepository.findByCbUnitIdAndSectionNumber(hrData.getUnitId(), sectionNumber + "");
+            int sectionNumber = Integer.parseInt(contingentBillSaveRequestList.get(i).getSectionNumber());
+            ContigentBill lastContigentBill = contigentBillRepository.findByCbUnitIdAndSectionNumberAndBudgetHeadID(hrData.getUnitId(), sectionNumber - 1 + "", contingentBillSaveRequestList.get(i).getBudgetHeadId());
+
+            ContigentBill checkExistingData = contigentBillRepository.findByCbUnitIdAndSectionNumberAndBudgetHeadID(hrData.getUnitId(), sectionNumber + "", contingentBillSaveRequestList.get(i).getBudgetHeadId());
+            if (checkExistingData != null) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA ALREADY FOUND THIS SECTION NUMBER");
+            }
 
             if (lastContigentBill != null) {
                 Timestamp lastCbDate = lastContigentBill.getCbDate();
                 Timestamp currentDate = ConverterUtils.convertDateTotimeStamp(contingentBillSaveRequestList.get(i).getCbDate());
 
                 long dayFiffer = ConverterUtils.timeDifferTimeStamp(lastCbDate, currentDate);
-                if (dayFiffer > 1) {
-                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+                if (dayFiffer >= 1) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB DATE IS OLDER THAN LAST CB BILL.");
                 }
             }
         }
@@ -1073,7 +1078,7 @@ public class ContingentServiceImpl implements ContingentService {
 
         int maxNumber = 1;
 //        List<ContigentBill> masNumberList = contigentBillRepository.findByAllocationTypeIdAndCbUnitIdAndFinYear(allocationType.get(0).getAllocTypeId(), hrData.getUnitId(), budgetFinancialYear.getSerialNo());
-        List<ContigentBill> masNumberList = contigentBillRepository.findByAllocationTypeIdAndCbUnitIdAndFinYearAndBudgetHeadID(allocationType.get(0).getAllocTypeId(), hrData.getUnitId(), budgetFinancialYear.getSerialNo(),budgetHeadId);
+        List<ContigentBill> masNumberList = contigentBillRepository.findByAllocationTypeIdAndCbUnitIdAndFinYearAndBudgetHeadID(allocationType.get(0).getAllocTypeId(), hrData.getUnitId(), budgetFinancialYear.getSerialNo(), budgetHeadId);
         if (masNumberList.size() == 0) {
             contingentBillListData.setSectionNumber("1");
         } else {
