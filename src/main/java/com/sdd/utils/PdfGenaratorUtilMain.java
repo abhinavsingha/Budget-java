@@ -407,7 +407,7 @@ public class PdfGenaratorUtilMain {
     public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, double allocationGrandTotal, FilePathResponse filePathResponse) throws Exception {
 
 
-        Document document = new Document(PageSize.A4.rotate());
+        Document document = new Document(PageSize.A4);
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
         document.open();
         document.newPage();
