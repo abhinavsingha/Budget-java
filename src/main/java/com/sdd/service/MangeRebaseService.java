@@ -28,7 +28,7 @@ public interface MangeRebaseService {
 
 	ApiResponse<List<CgUnitResponse>> getAllIsShipCgUnitData();
 
-	ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseNotificationData(String authGrpId);
+	ApiResponse<List<RebaseNotificationResp>> getUnitRebaseNotificationData(String authGrpId);
 
 
 }

@@ -69,7 +69,7 @@ public class UnitRebaseController {
 	}
 
 	@GetMapping("/getUnitRebaseNotificationData/{authGrpId}")
-	public ResponseEntity<ApiResponse<List<UnitRebaseReportResponce>>> getUnitRebaseNotificationData(@PathVariable(value = "authGrpId") String authGrpId) {
+	public ResponseEntity<ApiResponse<List<RebaseNotificationResp>>> getUnitRebaseNotificationData(@PathVariable(value = "authGrpId") String authGrpId) {
 		return new ResponseEntity<>(mangeRebaseService.getUnitRebaseNotificationData(authGrpId), HttpStatus.OK);
 	}
 

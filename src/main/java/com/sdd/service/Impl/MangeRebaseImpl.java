@@ -902,24 +902,24 @@ public class MangeRebaseImpl implements MangeRebaseService {
     }
 
     @Override
-    public ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseNotificationData(String authGrpId) {
-        List<UnitRebaseReportResponce> responce = new ArrayList<UnitRebaseReportResponce>();
+    public ApiResponse<List<RebaseNotificationResp>> getUnitRebaseNotificationData(String authGrpId) {
+        List<RebaseNotificationResp> responce = new ArrayList<RebaseNotificationResp>();
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
         if (hrDataCheck == null) {
-            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseNotificationResp>>() {
             }, "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS", HttpStatus.OK.value());
         } else {
             if (hrDataCheck.getRoleId().contains(HelperUtils.BUDGETMANGER)) {
             } else {
-                return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+                return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseNotificationResp>>() {
                 }, "YOU ARE NOT AUTHORIZED TO REBASE THE STATION", HttpStatus.OK.value());
             }
         }
         if (authGrpId == null || authGrpId.isEmpty()) {
-            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseNotificationResp>>() {
             }, "AUTHGROUP ID CAN NOT BE NULL", HttpStatus.OK.value());
         }
 
@@ -928,42 +928,38 @@ public class MangeRebaseImpl implements MangeRebaseService {
         if (rebaseData.size() > 0) {
             for (Integer k = 0; k < rebaseData.size(); k++) {
 
-                UnitRebaseReportResponce rebase = new UnitRebaseReportResponce();
+                RebaseNotificationResp rebase = new RebaseNotificationResp();
                 CgUnit unitN = cgUnitRepository.findByUnit(rebaseData.get(0).getRebaseUnitId());
+                CgUnit loginN = cgUnitRepository.findByUnit(rebaseData.get(0).getLoginUnit());
+                CgUnit frmU = cgUnitRepository.findByUnit(rebaseData.get(0).getAllocFromUnit());
+                CgUnit toU = cgUnitRepository.findByUnit(rebaseData.get(0).getToHeadUnitId());
+                //CgStation frmS = cgStationRepository.findByStationId(rebaseData.get(0).getFrmStationId());
                 CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
-                AmountUnit amountTypeObjs = amountUnitRepository.findByAmountTypeId(rebaseData.get(0).getAmountType());
-
-                rebase.setUnitName(unitN.getDescr());
-                rebase.setDateOfRebase(rebaseData.get(0).getOccuranceDate());
-                rebase.setFromStation(rebaseData.get(0).getFrmStationId());
+                BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(rebaseData.get(0).getFinYear());
+                AllocationType type = allocationRepository.findByAllocTypeId(rebaseData.get(0).getAllocTypeId());
+                BudgetHead bHead = subHeadRepository.findByBudgetCodeId(rebaseData.get(k).getBudgetHeadId());
+                AmountUnit amountTypeObjs = amountUnitRepository.findByAmountTypeId(rebaseData.get(k).getAmountType());
+                rebase.setUnitRebaseName(unitN.getDescr());
+                rebase.setLoginUnitName(loginN.getDescr());
+                rebase.setFromUnitName(frmU.getDescr());
+                rebase.setToStation(toU.getDescr());
+                rebase.setDateOfRebase(rebaseData.get(k).getOccuranceDate());
+                rebase.setFromStation(rebaseData.get(k).getFrmStationId());
                 rebase.setToStation(toS.getStationName());
-
-                List<UnitRebaseSubReportResponce> addRes = new ArrayList<UnitRebaseSubReportResponce>();
-                for (Integer l = 0; l < rebaseData.size(); l++) {
-                    BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(rebaseData.get(l).getFinYear());
-                    BudgetHead bHead = subHeadRepository.findByBudgetCodeId(rebaseData.get(l).getBudgetHeadId());
-                    AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(rebaseData.get(l).getAmountType());
-                    AllocationType allocType = allocationRepository.findByAllocTypeId(rebaseData.get(l).getAllocTypeId());
-                    UnitRebaseSubReportResponce subResp = new UnitRebaseSubReportResponce();
-                    subResp.setFinYear(findyr.getFinYear());
-                    subResp.setAllocationType(allocType.getAllocDesc());
-                    subResp.setSubHead(bHead.getSubHeadDescr());
-                    subResp.setAllocationAmount(rebaseData.get(l).getAllocAmount());
-                    subResp.setExpenditureAmount(rebaseData.get(l).getExpAmount());
-                    subResp.setBalAmount(rebaseData.get(l).getBalAmount());
-                    subResp.setAmountType(amountTypeObj.getAmountType());
-                    if (rebaseData.get(l).getLastCbDate() != null) {
-                        subResp.setLastCbDate(rebaseData.get(l).getLastCbDate());
-                    }
-                    addRes.add(subResp);
-                }
-                rebase.setList(addRes);
+                rebase.setFinYear(findyr.getFinYear());
+                rebase.setAllocationType(type.getAllocDesc());
+                rebase.setSubHead(bHead.getSubHeadDescr());
+                rebase.setAllocationAmount(rebaseData.get(k).getAllocAmount());
+                rebase.setExpenditureAmount(rebaseData.get(k).getExpAmount());
+                rebase.setBalAmount(rebaseData.get(k).getBalAmount());
+                rebase.setAmountType(amountTypeObjs.getAmountType());
+                rebase.setAuthGrpId(rebaseData.get(k).getAuthGrpId());
+                rebase.setLastCbDate(rebaseData.get(k).getLastCbDate());
                 responce.add(rebase);
-
                }
             }
 
-        return ResponseUtils.createSuccessResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+        return ResponseUtils.createSuccessResponse(responce, new TypeReference<List<RebaseNotificationResp>>() {
         });
     }
 

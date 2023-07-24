@@ -78,7 +78,7 @@ public class BudgetRebase {
     @Column(name = "USER_ID")
     private String userId;
 
-    @Column(name = "LOGIN UNIT")
+    @Column(name = "LOGIN_UNIT")
     private String loginUnit;
 
     @Column(name = "CREATED_ON")
