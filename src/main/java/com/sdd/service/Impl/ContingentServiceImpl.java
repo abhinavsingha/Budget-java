@@ -1041,7 +1041,7 @@ public class ContingentServiceImpl implements ContingentService {
     }
 
     @Override
-    public ApiResponse<ContigentSectionResp> getMaxSectionNumber() {
+    public ApiResponse<ContigentSectionResp> getMaxSectionNumber(String budgetHeadId) {
         ContigentSectionResp contingentBillListData = new ContigentSectionResp();
 
         String token = headerUtils.getTokeFromHeader();
@@ -1049,6 +1049,10 @@ public class ContingentServiceImpl implements ContingentService {
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.");
+        }
+
+        if (budgetHeadId == null || budgetHeadId.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET HEAD ID CAN NOT BE BLANK");
         }
 
         List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
@@ -1068,7 +1072,8 @@ public class ContingentServiceImpl implements ContingentService {
         }
 
         int maxNumber = 1;
-        List<ContigentBill> masNumberList = contigentBillRepository.findByAllocationTypeIdAndCbUnitIdAndFinYear(allocationType.get(0).getAllocTypeId(), hrData.getUnitId(), budgetFinancialYear.getSerialNo());
+//        List<ContigentBill> masNumberList = contigentBillRepository.findByAllocationTypeIdAndCbUnitIdAndFinYear(allocationType.get(0).getAllocTypeId(), hrData.getUnitId(), budgetFinancialYear.getSerialNo());
+        List<ContigentBill> masNumberList = contigentBillRepository.findByAllocationTypeIdAndCbUnitIdAndFinYearAndBudgetHeadID(allocationType.get(0).getAllocTypeId(), hrData.getUnitId(), budgetFinancialYear.getSerialNo(),budgetHeadId);
         if (masNumberList.size() == 0) {
             contingentBillListData.setSectionNumber("1");
         } else {

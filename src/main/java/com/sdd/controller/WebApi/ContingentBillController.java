@@ -47,9 +47,9 @@ public class ContingentBillController {
 		return new ResponseEntity<>(contingentService.getContingentBillGroupId(groupId), HttpStatus.OK);
 	}
 
-	@GetMapping("/getMaxSectionNumber")
-	public ResponseEntity<ApiResponse<ContigentSectionResp>> getMaxSectionNumber() {
-		return new ResponseEntity<>(contingentService.getMaxSectionNumber(), HttpStatus.OK);
+	@GetMapping("/getMaxSectionNumber//{budgetHeadId}")
+	public ResponseEntity<ApiResponse<ContigentSectionResp>> getMaxSectionNumber(@PathVariable("budgetHeadId") String budgetHeadId) {
+		return new ResponseEntity<>(contingentService.getMaxSectionNumber(budgetHeadId), HttpStatus.OK);
 	}
 
 	@PostMapping("/approveContingentBill")
