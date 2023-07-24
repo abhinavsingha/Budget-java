@@ -423,6 +423,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
                     inboxList.add(data);
 
+                } else if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("VE") || inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
+
                 } else {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                     MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
