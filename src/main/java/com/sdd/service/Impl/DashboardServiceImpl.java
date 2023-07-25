@@ -922,13 +922,17 @@ public class DashboardServiceImpl implements DashBoardService {
             }else{
                 per=0.0;
             }
-            BigDecimal decimal3 = new BigDecimal(per);
-            BigDecimal roundedAmount3 = decimal3.setScale(2, RoundingMode.HALF_UP);
+            try{
+                BigDecimal decimal3 = new BigDecimal(per);
+                BigDecimal roundedAmount3 = decimal3.setScale(2, RoundingMode.HALF_UP);
+                respn.setPerBal(String.valueOf(roundedAmount3));
+            }catch (Exception e){
+                respn.setPerBal(String.valueOf(0.00));
+            }
 
             respn.setSumAlloc(String.valueOf(roundedAmount));
             respn.setSumExp(String.valueOf(roundedAmount1));
             respn.setSumBal(String.valueOf(roundedAmount2));
-            respn.setPerBal(String.valueOf(roundedAmount3));
             respn.setGrTotalObjResp(grResp);
             dashBoardExprnditureResponseList.add(respn);
             return ResponseUtils.createSuccessResponse(
