@@ -887,24 +887,22 @@ public class DashboardServiceImpl implements DashBoardService {
                     dashBoardExprnditureResponse.setCgUnit(cgUnit);
                     dashBoardExprnditureResponse.setBudgetFinancialYear(budgetFinancialYear);
                     dashBoardExprnditureResponse.setBudgetHead(bHead);
-                    dashBoardExprnditureResponse.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(cdaTotal)));
+                    dashBoardExprnditureResponse.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
                     dashBoardExprnditureResponse.setExpenditureAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount)));
-                    if(cdaTotal!=0){
-                        perAmnt=expAmount*100/cdaTotal;
-                        dashBoardExprnditureResponse.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount*100/cdaTotal)));
-
+                    if(finAmount!=0){
+                        perAmnt=(expAmount*100)/finAmount;
+                        dashBoardExprnditureResponse.setPerAmount(String.format("%1$0,1.2f", new BigDecimal(perAmnt)));
                     }
                     else{
                         perAmnt=0.0;
-                        dashBoardExprnditureResponse.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(0.0)));
-
+                        dashBoardExprnditureResponse.setPerAmount(String.format("%1$0,1.2f", new BigDecimal(0.0)));
                     }
                     dashBoardExprnditureResponse.setLastCBDate(cbD);
                     dashBoardExprnditureResponse.setBalAmount(String.format("%1$0,1.4f", new BigDecimal(cdaRming)));
                     dashBoardExprnditureResponse.setAmountIn(amountIn);
                     grResp.add(dashBoardExprnditureResponse);
 
-                    sumAlloc += Float.parseFloat(new BigDecimal(cdaTotal).toPlainString());
+                    sumAlloc += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                     sumExp += Float.parseFloat(new BigDecimal(expAmount).toPlainString());
                     sumBal += Float.parseFloat(new BigDecimal(cdaRming).toPlainString());
                     perBal += Float.parseFloat(new BigDecimal(perAmnt).toPlainString());
@@ -918,9 +916,14 @@ public class DashboardServiceImpl implements DashBoardService {
 
             BigDecimal decimal2 = new BigDecimal(sumBal);
             BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
-
-            BigDecimal decimal3 = new BigDecimal(sumBal*100/sumAlloc);
-            BigDecimal roundedAmount3 = decimal3.setScale(4, RoundingMode.HALF_UP);
+            double per=0.0;
+            if(sumAlloc!=0){
+                per=(sumAlloc-sumBal)*100/sumAlloc;
+            }else{
+                per=0.0;
+            }
+            BigDecimal decimal3 = new BigDecimal(per);
+            BigDecimal roundedAmount3 = decimal3.setScale(2, RoundingMode.HALF_UP);
 
             respn.setSumAlloc(String.valueOf(roundedAmount));
             respn.setSumExp(String.valueOf(roundedAmount1));
@@ -987,12 +990,30 @@ public class DashboardServiceImpl implements DashBoardService {
             double sumAlloc = 0.0;
             double sumExp = 0.0;
             double sumBal = 0.0;
+            double subHrAmount = 0.0;
+            double hrAmntUnit = 0.0;
             double perBal = 0.0;
             List<GrTotalObj> grResp = new ArrayList<GrTotalObj>();
             for (int j = 0; j < ulist.size(); j++) {
                 String uid=ulist.get(j).getUnit();
                 CgUnit cgUnit = cgUnitRepository.findByUnit(uid);
+                double allocAmount=0.0;
+                double allocAmntUnit=0.0;
                 List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, uid, finYearId, allocationTypeId, "0");
+                if(budgetAllocationsDetalis1.size()>0){
+                    if(uid.equalsIgnoreCase(hrData.getUnitId())){
+                        subHrAmount=Double.parseDouble(budgetAllocationsDetalis1.get(0).getAllocationAmount());
+                        AmountUnit allocUnit1 = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis1.get(0).getAmountType());
+                        hrAmntUnit=allocUnit1.getAmount();
+                    }
+                    allocAmount= Double.parseDouble(budgetAllocationsDetalis1.get(0).getAllocationAmount());
+                    AmountUnit allocUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis1.get(0).getAmountType());
+                    allocAmntUnit=allocUnit.getAmount();
+                } else{
+                    allocAmount=0.0;
+                    allocAmntUnit=0.0;
+                }
+                double finAmount = allocAmount*allocAmntUnit/reqAmount;
                 double totalCda=0.0;
                 double remCdaBal=0.0;
                 List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, uid, allocationTypeId, "0");
@@ -1032,24 +1053,30 @@ public class DashboardServiceImpl implements DashBoardService {
                 subResp.setFinYear(budgetFinancialYear.getFinYear());
                 subResp.setAllocType(allockData.getAllocDesc());
                 subResp.setAmountIn(hdamtUnits.getAmountType());
-                subResp.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(cdaTotal)));
+                subResp.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
                 subResp.setExpenditureAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount)));
                 subResp.setBalAmount(String.format("%1$0,1.4f", new BigDecimal(cdaRming)));
-                if(cdaTotal!=0){
-                    perAmnt=((cdaTotal-cdaRming)*100)/cdaTotal;
-                    subResp.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(((cdaTotal-cdaRming)*100)/cdaTotal)));
+                if(finAmount!=0){
+                    perAmnt=(expAmount*100)/finAmount;
                 }else{
                     perAmnt=0.0;
-                    subResp.setPerAmount(String.format("%1$0,1.4f", new BigDecimal(0.0)));
                 }
+                subResp.setPerAmount(String.format("%1$0,1.2f", new BigDecimal(perAmnt)));
                 subResp.setLastCBDate(cbD);
                 grResp.add(subResp);
-                sumAlloc += Float.parseFloat(new BigDecimal(cdaTotal).toPlainString());
+                if(uid.equalsIgnoreCase(hrData.getUnitId())){
+                    sumAlloc +=0.0;
+                }else{
+                    sumAlloc += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
+                }
                 sumExp += Float.parseFloat(new BigDecimal(expAmount).toPlainString());
                 sumBal += Float.parseFloat(new BigDecimal(cdaRming).toPlainString());
                 perBal += Float.parseFloat(new BigDecimal(perAmnt).toPlainString());
             }
-            BigDecimal decimal = new BigDecimal(sumAlloc);
+
+            double hrSubAmnt=subHrAmount*hrAmntUnit/reqAmount;
+            double sumFin=sumAlloc+(hrSubAmnt-sumAlloc);
+            BigDecimal decimal = new BigDecimal(sumFin);
             BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
 
             BigDecimal decimal1 = new BigDecimal(sumExp);
@@ -1057,9 +1084,15 @@ public class DashboardServiceImpl implements DashBoardService {
 
             BigDecimal decimal2 = new BigDecimal(sumBal);
             BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+            double per=0.0;
+            if(sumAlloc!=0){
+                per=(sumExp*100)/sumFin;
+            }else{
+                per=0.0;
+            }
 
-            BigDecimal decimal3 = new BigDecimal(sumBal*100/sumAlloc);
-            BigDecimal roundedAmount3 = decimal3.setScale(4, RoundingMode.HALF_UP);
+            BigDecimal decimal3 = new BigDecimal(per);
+            BigDecimal roundedAmount3 = decimal3.setScale(2, RoundingMode.HALF_UP);
 
             obj.setGrTotalObj(grResp);
             obj.setSumAlloc(String.valueOf(roundedAmount));
