@@ -342,7 +342,10 @@ public class PdfGenaratorUtilMain {
         table.setHeaderRows(1);
         table.setSkipFirstHeader(true);
 
-
+        table.addCell(boldText("object", 6, 35f));
+        for (Integer i = 0; i < tabData1.size(); i++) {
+            table.addCell(boldText(tabData1.get(i).getName(), 6, 20f));
+        }
         for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
             String key = entry.getKey();
 
