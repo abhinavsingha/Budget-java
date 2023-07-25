@@ -7,25 +7,17 @@ import com.sdd.entities.CgUnit;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class DashBoardExprnditureResponse {
+  private List<GrTotalObjResp> grTotalObjResp;
 
-  CgUnit cgUnit;
+  String sumAlloc;
+  String sumExp;
+  String sumBal;
+  String perBal;
 
-  BudgetFinancialYear budgetFinancialYear;
 
-  BudgetHead budgetHead;
-
-  String allocatedAmount;
-
-  String expenditureAmount;
-
-  String balAmount;
-
-  String perAmount;
-
-  String amountIn;
-
-  String lastCBDate;
 }

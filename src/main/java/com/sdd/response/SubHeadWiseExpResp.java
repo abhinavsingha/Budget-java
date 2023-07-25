@@ -6,24 +6,16 @@ import com.sdd.entities.CgUnit;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class SubHeadWiseExpResp {
-    String unitName;
+    private List<GrTotalObj> grTotalObj;
 
-    String finYear;
 
-    String allocType;
-
-    String amountIn;
-
-    String allocatedAmount;
-
-    String expenditureAmount;
-
-    String balAmount;
-
-    String perAmount;
-
-    String lastCBDate;
+    String sumAlloc;
+    String sumExp;
+    String sumBal;
+    String perBal;
 }

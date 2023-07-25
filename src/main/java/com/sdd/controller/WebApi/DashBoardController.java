@@ -49,9 +49,9 @@ public class DashBoardController {
     return new ResponseEntity<>(dashBoardService.getAllAmountUnit(), HttpStatus.OK);
   }
 
-  @GetMapping("/getSubHeadWiseExpenditureByUnitIdFinYearIdAllocationTypeIdSubHeadTypeId/{unitId}/{finYearId}/{subHeadTypeId}/{allocationTypeId}/{amountTypeId}")
-  public ResponseEntity<ApiResponse<List<DashBoardExprnditureResponse>>> getSubHeadWiseExpenditureByUnitIdFinYearIdAllocationTypeIdSubHeadTypeId(@PathVariable(value = "unitId") String unitId, @PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "subHeadTypeId") String subHeadTypeId, @PathVariable(value = "allocationTypeId") String allocationTypeId, @PathVariable(value = "amountTypeId") String amountTypeId) {
-    return new ResponseEntity<>(dashBoardService.getSubHeadWiseExpenditureByUnitIdFinYearIdAllocationTypeIdSubHeadTypeId(unitId, finYearId, subHeadTypeId, allocationTypeId,amountTypeId), HttpStatus.OK);
+  @GetMapping("/getSubHeadWiseExpenditureByUnitIdFinYearIdAllocationTypeIdSubHeadTypeId/{unitId}/{finYearId}/{subHeadTypeId}/{allocationTypeId}/{amountTypeId}/{majorHead}")
+  public ResponseEntity<ApiResponse<List<DashBoardExprnditureResponse>>> getSubHeadWiseExpenditureByUnitIdFinYearIdAllocationTypeIdSubHeadTypeId(@PathVariable(value = "unitId") String unitId, @PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "subHeadTypeId") String subHeadTypeId, @PathVariable(value = "allocationTypeId") String allocationTypeId, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "majorHead") String majorHead) {
+    return new ResponseEntity<>(dashBoardService.getSubHeadWiseExpenditureByUnitIdFinYearIdAllocationTypeIdSubHeadTypeId(unitId, finYearId, subHeadTypeId, allocationTypeId,amountTypeId,majorHead), HttpStatus.OK);
   }
 
   @PostMapping("/getDashBordSubHeadwiseExpenditure")
