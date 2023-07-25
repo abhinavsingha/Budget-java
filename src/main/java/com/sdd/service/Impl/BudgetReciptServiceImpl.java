@@ -870,6 +870,10 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         cdaParking.setGinNo("112233");
         cdaParking.setCdaName("All CDA");
 
+        CdaParking cdaParking1122 = new CdaParking();
+        cdaParking1122.setGinNo("123456");
+        cdaParking1122.setCdaName("All Unit CDA");
+
 
         CdaParking cdaParking11 = new CdaParking();
         cdaParking11.setGinNo("112244");

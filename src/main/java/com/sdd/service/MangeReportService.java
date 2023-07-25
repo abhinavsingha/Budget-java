@@ -59,11 +59,12 @@ public interface MangeReportService {
 
     ApiResponse<FilePathResponse> getCdaParkingReport(CDAReportRequest reportRequest);
 
+    ApiResponse<FilePathResponse> getCdaParkingReportDoc(CDAReportRequest reportRequest);
+
+
     ApiResponse<FilePathResponse> getReservedFund(CDAReportRequest reportRequest);
 
     ApiResponse<FilePathResponse> getReservedFundDoc(CDAReportRequest reportRequest);
-
-    ApiResponse<FilePathResponse> getCdaParkingReportDoc(CDAReportRequest reportRequest);
 
 
 

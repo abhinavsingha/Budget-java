@@ -187,7 +187,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -313,7 +313,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) + "");
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -328,7 +328,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -479,7 +479,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(totalAmount + "");
 
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -497,7 +497,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnitServer.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -564,7 +564,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-            pdfGenaratorUtilMain.createPdfConsolidateRecipt(hashMap, filePath, filePathResponse,hrData);
+            pdfGenaratorUtilMain.createPdfConsolidateRecipt(hashMap, filePath, filePathResponse, hrData);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             filePathResponse.setFileName(fileName);
             filePathResponse.setReciptRespone(hashMap);
@@ -643,7 +643,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(totalAmount + "");
 
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -661,7 +661,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnitServer.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -731,7 +731,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-            docxGenaratorUtil.createDocConsolidateRecipt(hashMap, filePath, filePathResponse,hrData);
+            docxGenaratorUtil.createDocConsolidateRecipt(hashMap, filePath, filePathResponse, hrData);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".docx");
             filePathResponse.setFileName(fileName);
             filePathResponse.setReciptRespone(hashMap);
@@ -809,7 +809,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(addData + "");
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -827,7 +827,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -958,7 +958,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(addData + "");
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount())+ Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -976,7 +976,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -1133,7 +1133,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -1261,7 +1261,7 @@ public class MangeReportImpl implements MangeReportService {
 
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount())  + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -1279,7 +1279,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmountType(amountUnit.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())  != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getSubHeadDescr(), reportMaindata);
                 }
@@ -2303,9 +2303,120 @@ public class MangeReportImpl implements MangeReportService {
 
 //        All Cda 112233
 //        MumBai Cda 112233
+//        All Unit CDA 123456
 
 
         double grandTotal = 0;
+
+        if (cdaReportRequest.getCdaType().contains("123456")) {
+
+            List<CDAReportResponse> cdaReportList = new ArrayList<>();
+            CDAReportResponse cdaReportResponse = new CDAReportResponse();
+
+            List<BudgetHead> subHeadsData = subHeadRepository.findByMajorHeadAndSubHeadTypeIdOrderBySerialNumberAsc(cdaReportRequest.getMajorHead(), cdaReportRequest.getSubHeadType());
+            List<CdaParking> cdaParkingTotalList = cdaParkingRepository.findAllByOrderByCdaNameAsc();
+            for (int i = 0; i < cdaParkingTotalList.size(); i++) {
+                cdaReportResponse = new CDAReportResponse();
+                cdaReportResponse.setName(cdaParkingTotalList.get(i).getCdaName());
+                cdaReportList.add(cdaReportResponse);
+            }
+            cdaReportResponse = new CDAReportResponse();
+            cdaReportResponse.setName("Total Amount");
+            cdaReportList.add(cdaReportResponse);
+            allCdaData.put("Sub Head", cdaReportList);
+
+
+            for (int i = 0; i < subHeadsData.size(); i++) {
+                cdaReportList = new ArrayList<>();
+                cdaReportResponse = new CDAReportResponse();
+
+                BudgetHead subHead = subHeadsData.get(i);
+                cdaReportResponse.setName(subHead.getSubHeadDescr());
+
+                double totalAmount = 0;
+                if (cdaParkingTotalList.size() > 0) {
+                    for (int k = 0; k < cdaParkingTotalList.size(); k++) {
+                        List<CdaParkingTrans> cdaData = new ArrayList<CdaParkingTrans>();
+
+
+                        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+                            cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId()));
+                        } else {
+                            List<CgUnit> unitDataList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+                            for (int p = 0; p < unitDataList.size(); p++) {
+                                List<CdaParkingTrans>  cdaTransData  = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(),unitDataList.get(p).getUnit());
+
+                                cdaData.addAll(cdaTransData);
+                            }
+                            List<CdaParkingTrans>  cdaTransData  = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(),hrData.getUnitId());
+                        }
+
+
+                        double amount = 0;
+
+                        for (int m = 0; m < cdaData.size(); m++) {
+//                            if(cdaData.get(m).getUnitId().equalsIgnoreCase(hrData.getUnitId())){
+//                                continue;
+//                            }
+                            if (cdaData.get(m).getRemainingCdaAmount() == null) {
+                                amount = amount;
+                            } else {
+                                AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
+                                amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
+                                grandTotal = grandTotal + amount;
+                            }
+                        }
+
+
+                        CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
+
+                        if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
+                            double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                            coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
+
+                        } else {
+                            coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
+                        }
+
+
+                        totalAmount = totalAmount + amount;
+                        cdaReportResponse = new CDAReportResponse();
+                        cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
+                        cdaReportList.add(cdaReportResponse);
+                    }
+                } else {
+                    cdaReportResponse = new CDAReportResponse();
+                    cdaReportResponse.setName("0");
+                    cdaReportList.add(cdaReportResponse);
+                }
+
+                cdaReportResponse = new CDAReportResponse();
+                cdaReportResponse.setName(ConverterUtils.addDecimalPoint(totalAmount + ""));
+                cdaReportResponse.setReportType("CDA Wise Report(All Unit CDA)");
+                cdaReportList.add(cdaReportResponse);
+                allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
+            }
+            try {
+
+
+                File folder = new File(HelperUtils.LASTFOLDERPATH);
+                if (!folder.exists()) {
+                    folder.mkdirs();
+                }
+                String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
+                pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse);
+                dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
+                dtoList.setFileName(fileName);
+                dtoList.setAllCdaData(allCdaData);
+
+
+            } catch (Exception e) {
+                throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
+            }
+
+        }
+
+
         if (cdaReportRequest.getBudgetHeadId() == null && cdaReportRequest.getUnitId() == null) {
             if (cdaReportRequest.getCdaType().contains("112233")) {
 
@@ -2412,7 +2523,9 @@ public class MangeReportImpl implements MangeReportService {
                     throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
                 }
 
-            } else if (cdaReportRequest.getCdaType().contains("112244")) {
+            }
+
+            else if (cdaReportRequest.getCdaType().contains("112244")) {
 
 
                 List<CDAReportResponse> cdaReportList = new ArrayList<>();
@@ -2470,6 +2583,8 @@ public class MangeReportImpl implements MangeReportService {
                             double amount = 0;
 
                             for (int m = 0; m < cdaData.size(); m++) {
+
+
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                     amount = amount;
                                 } else {
@@ -2525,7 +2640,9 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
 
-            } else {
+            }
+
+            else {
 
                 List<CDAReportResponse> cdaReportList = new ArrayList<>();
                 CDAReportResponse cdaReportResponse = new CDAReportResponse();
@@ -2650,6 +2767,7 @@ public class MangeReportImpl implements MangeReportService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REPORT TYPE CAN NOT BE BLANK");
             }
 
+
             if (cdaReportRequest.getReportType().equalsIgnoreCase("01")) {
 
 
@@ -2703,31 +2821,7 @@ public class MangeReportImpl implements MangeReportService {
                         List<CdaParkingTrans> cdaData = new ArrayList<>();
                         cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), cdaReportRequest.getUnitId()));
 
-//
-//                        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-//
-//                            cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
-//
-//                        } else {
-//                            List<CgUnit> unitDataList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
-//                            for (int q = 0; q < unitDataList.size(); q++) {
-//                                cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(q).getUnit()));
-//
-//                            }
-//
-////                            List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
-////                            List<String> unitIds = new ArrayList<>();
-////                            for (CgUnit cgUnit1 : unitList) {
-////                                unitIds.add(cgUnit1.getUnit());
-////                            }
-////                            cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitIdIn(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitIds);
-//                        }
-
-//                        List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
-
-
                         double amount = 0;
-
                         for (int m = 0; m < cdaData.size(); m++) {
                             if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                 amount = amount;
@@ -2783,7 +2877,9 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
 
-            } else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
+            }
+
+            else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
 
                 if (cdaReportRequest.getUnitId() == null || cdaReportRequest.getUnitId().isEmpty()) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT ID CAN NOT BE BLANK");
@@ -2840,30 +2936,7 @@ public class MangeReportImpl implements MangeReportService {
                             List<CdaParkingTrans> cdaData = new ArrayList<>();
                             cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), cdaReportRequest.getUnitId()));
 
-//                            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-//
-//                                cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
-//
-//                            } else {
-//
-//                                List<CgUnit> unitDataList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
-//                                for (int q = 0; q < unitDataList.size(); q++) {
-//                                    cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(q).getUnit()));
-//
-//                                }
-//
-////                                List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
-////                                List<String> unitIds = new ArrayList<>();
-////                                for (CgUnit cgUnit1 : unitList) {
-////                                    unitIds.add(cgUnit1.getUnit());
-////                                }
-////                                cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitIdIn(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitIds);
-//                            }
-
-
-//                            List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), cgUnit.getUnit());
                             double amount = 0;
-
                             for (int m = 0; m < cdaData.size(); m++) {
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                     amount = amount;
@@ -3022,6 +3095,110 @@ public class MangeReportImpl implements MangeReportService {
 
 
         double grandTotal = 0;
+        if (cdaReportRequest.getCdaType().contains("123456")) {
+
+            List<CDAReportResponse> cdaReportList = new ArrayList<>();
+            CDAReportResponse cdaReportResponse = new CDAReportResponse();
+
+            List<BudgetHead> subHeadsData = subHeadRepository.findByMajorHeadAndSubHeadTypeIdOrderBySerialNumberAsc(cdaReportRequest.getMajorHead(), cdaReportRequest.getSubHeadType());
+            List<CdaParking> cdaParkingTotalList = cdaParkingRepository.findAllByOrderByCdaNameAsc();
+            for (int i = 0; i < cdaParkingTotalList.size(); i++) {
+                cdaReportResponse = new CDAReportResponse();
+                cdaReportResponse.setName(cdaParkingTotalList.get(i).getCdaName());
+                cdaReportList.add(cdaReportResponse);
+            }
+            cdaReportResponse = new CDAReportResponse();
+            cdaReportResponse.setName("Total Amount");
+            cdaReportList.add(cdaReportResponse);
+            allCdaData.put("Sub Head", cdaReportList);
+
+
+            for (int i = 0; i < subHeadsData.size(); i++) {
+                cdaReportList = new ArrayList<>();
+                cdaReportResponse = new CDAReportResponse();
+
+                BudgetHead subHead = subHeadsData.get(i);
+                cdaReportResponse.setName(subHead.getSubHeadDescr());
+
+                double totalAmount = 0;
+                if (cdaParkingTotalList.size() > 0) {
+                    for (int k = 0; k < cdaParkingTotalList.size(); k++) {
+                        List<CdaParkingTrans> cdaData = new ArrayList<CdaParkingTrans>();
+
+                        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+                            cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId()));
+                        } else {
+                            List<CgUnit> unitDataList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+                            for (int p = 0; p < unitDataList.size(); p++) {
+                                List<CdaParkingTrans>  cdaTransData  = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(),unitDataList.get(p).getUnit());
+
+                                cdaData.addAll(cdaTransData);
+                            }
+                            List<CdaParkingTrans>  cdaTransData  = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(),hrData.getUnitId());
+                        }
+                        double amount = 0;
+                        for (int m = 0; m < cdaData.size(); m++) {
+
+                            if (cdaData.get(m).getRemainingCdaAmount() == null) {
+                                amount = amount;
+                            } else {
+                                AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
+                                amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
+                                grandTotal = grandTotal + amount;
+                            }
+                        }
+
+
+                        CdaParking ginWiseData = cdaParkingRepository.findByGinNo(cdaParkingTotalList.get(k).getGinNo());
+
+                        if (coloumWiseAmount.containsKey(ginWiseData.getCdaName())) {
+                            double colmount = Double.parseDouble(coloumWiseAmount.get(ginWiseData.getCdaName()));
+                            coloumWiseAmount.put(ginWiseData.getCdaName(), ConverterUtils.addDecimalPoint((colmount + amount) + ""));
+
+                        } else {
+                            coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
+                        }
+
+
+                        totalAmount = totalAmount + amount;
+                        cdaReportResponse = new CDAReportResponse();
+                        cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
+                        cdaReportList.add(cdaReportResponse);
+                    }
+                } else {
+                    cdaReportResponse = new CDAReportResponse();
+                    cdaReportResponse.setName("0");
+                    cdaReportList.add(cdaReportResponse);
+                }
+
+                cdaReportResponse = new CDAReportResponse();
+                cdaReportResponse.setName(ConverterUtils.addDecimalPoint(totalAmount + ""));
+                cdaReportResponse.setReportType("CDA Wise Report(All Unit CDA)");
+                cdaReportList.add(cdaReportResponse);
+                allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
+            }
+            try {
+
+
+                File folder = new File(HelperUtils.LASTFOLDERPATH);
+                if (!folder.exists()) {
+                    folder.mkdirs();
+                }
+                String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
+                docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount);
+
+                dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
+                dtoList.setFileName(fileName);
+                dtoList.setAllCdaData(allCdaData);
+
+
+            } catch (Exception e) {
+                throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
+            }
+
+        }
+
+
         if (cdaReportRequest.getBudgetHeadId() == null && cdaReportRequest.getUnitId() == null) {
             if (cdaReportRequest.getCdaType().contains("112233")) {
 
