@@ -23,7 +23,7 @@ public interface ContingentService {
 
     ApiResponse<List<ContingentBillResponse>> getContingentBillGroupId(String groupId);
 
-    ApiResponse<ContigentSectionResp> getMaxSectionNumber(String budgetHeadId);
+    ApiResponse<ContigentSectionResp> getMaxSectionNumber(MaxNumberRequest budgetHeadId);
 
     ApiResponse<ContingentSaveResponse>  approveContingentBill(ApproveContigentBillRequest approveContigentBillRequest);
 
