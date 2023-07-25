@@ -353,8 +353,6 @@ public class PdfGenaratorUtilMain {
                 List<CDAReportResponse> tabData = entry.getValue();
                 table.addCell(boldText(key, 7, 35f));
                 for (Integer i = 0; i < tabData.size(); i++) {
-
-
                     Boolean isNumber = ConverterUtils.isNumber(tabData.get(i).getName() + "");
                     if (isNumber) {
                         table.addCell(normalText(ConverterUtils.addDecimalPoint(tabData.get(i).getName()), 7, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
