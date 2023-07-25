@@ -880,6 +880,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         cdaParking11.setCdaName("Mumbai CDA");
 
         totalCdaParkingAmount.add(cdaParking);
+        totalCdaParkingAmount.add(cdaParking1122);
         totalCdaParkingAmount.add(cdaParking11);
 //        }
 
