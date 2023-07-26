@@ -918,7 +918,7 @@ public class DashboardServiceImpl implements DashBoardService {
             BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
             double per=0.0;
             if(sumAlloc!=0){
-                per=(sumAlloc-sumBal)*100/sumAlloc;
+                per=sumExp*100/sumAlloc;
             }else{
                 per=0.0;
             }
