@@ -985,8 +985,10 @@ public class DashboardServiceImpl implements DashBoardService {
         double reqAmount=hdamtUnits.getAmount();
         try{
             List<CgUnit> ulist1 = cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
-            List<CgUnit> ulist=ulist1.stream().filter(e->e.getIsActive().equalsIgnoreCase("1")).collect(Collectors.toList());
-            if (ulist.size()<=0) {
+            CgUnit cgUnits = cgUnitRepository.findByUnit(hrData.getUnitId());
+//            List<CgUnit> ulist=ulist1.stream().filter(e->e.getIsActive().equalsIgnoreCase("1")).collect(Collectors.toList());
+            ulist1.add(cgUnits);
+            if (ulist1.size()<=0) {
                 return ResponseUtils.createFailureResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {
                 }, "UNIT NOT FOUND", HttpStatus.OK.value());
             }
@@ -998,8 +1000,8 @@ public class DashboardServiceImpl implements DashBoardService {
             double hrAmntUnit = 0.0;
             double perBal = 0.0;
             List<GrTotalObj> grResp = new ArrayList<GrTotalObj>();
-            for (int j = 0; j < ulist.size(); j++) {
-                String uid=ulist.get(j).getUnit();
+            for (int j = 0; j < ulist1.size(); j++) {
+                String uid=ulist1.get(j).getUnit();
                 CgUnit cgUnit = cgUnitRepository.findByUnit(uid);
                 double allocAmount=0.0;
                 double allocAmntUnit=0.0;

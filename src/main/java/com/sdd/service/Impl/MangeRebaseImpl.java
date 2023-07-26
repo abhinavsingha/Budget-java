@@ -841,11 +841,30 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 cdaParkingCrAndDr.setIsRevision(0);
                 parkingCrAndDrRepository.save(cdaParkingCrAndDr);
 
-                ToHdUnitCda.get(0).setRemainingCdaAmount(String.valueOf(rmCdaBal+hndOverAmnt));
-                ToHdUnitCda.get(0).setTotalParkingAmount(String.valueOf(totalCdabal+hndOverAmnt));
-                ToHdUnitCda.get(0).setRemarks("DUE TO REBASE AMOUNT CHANGE"+hndOverAmnt);
-                ToHdUnitCda.get(0).setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                cdaParkingTransRepository.save(ToHdUnitCda.get(0));
+                CdaParkingCrAndDr cdaParkingCrAndDr1 = new CdaParkingCrAndDr();
+                cdaParkingCrAndDr1.setCdaParkingTrans(HelperUtils.getCdaId());
+                cdaParkingCrAndDr1.setCdaCrdrId(HelperUtils.getCdaCrDrId());
+                cdaParkingCrAndDr1.setFinYearId(req.getFinYear());
+                cdaParkingCrAndDr1.setBudgetHeadId(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
+                cdaParkingCrAndDr1.setGinNo(ginNo);
+                cdaParkingCrAndDr1.setUnitId(toHdUnitId);
+                cdaParkingCrAndDr1.setAuthGroupId(authGrId);
+                cdaParkingCrAndDr1.setAmount(String.valueOf(hndOverAmnt));
+                cdaParkingCrAndDr1.setIscrdr("DR");
+                cdaParkingCrAndDr1.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+                cdaParkingCrAndDr1.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                cdaParkingCrAndDr1.setAllocTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
+                cdaParkingCrAndDr1.setIsFlag("0");
+                cdaParkingCrAndDr1.setTransactionId(HelperUtils.getTransId());
+                cdaParkingCrAndDr1.setAmountType(ToHdUnitCda.get(0).getAmountType());
+                cdaParkingCrAndDr1.setIsRevision(0);
+                parkingCrAndDrRepository.save(cdaParkingCrAndDr1);
+
+                //ToHdUnitCda.get(0).setRemainingCdaAmount(String.valueOf(rmCdaBal+hndOverAmnt));
+                //ToHdUnitCda.get(0).setTotalParkingAmount(String.valueOf(totalCdabal+hndOverAmnt));
+                //ToHdUnitCda.get(0).setRemarks("DUE TO REBASE AMOUNT CHANGE"+hndOverAmnt);
+                //ToHdUnitCda.get(0).setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+               // cdaParkingTransRepository.save(ToHdUnitCda.get(0));
 
                 BudgetAllocationDetails budgetAllocationDetails1 = new BudgetAllocationDetails();
                 budgetAllocationDetails1.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
