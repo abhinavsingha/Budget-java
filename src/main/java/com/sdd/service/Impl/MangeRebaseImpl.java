@@ -329,7 +329,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             }, "INVALID UNIT ID PLEASE CHECK", HttpStatus.OK.value());
         }
         List<BudgetAllocation> allocationData1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(unit, finYear, allocTypes, "0");
-        List<BudgetAllocation> allocationData=allocationData1.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved")).collect(Collectors.toList());
+        List<BudgetAllocation> allocationData=allocationData1.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved") && e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
         if (allocationData.size() <= 0) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
             }, "Record Not Found", HttpStatus.OK.value());
@@ -791,15 +791,139 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                 budgetRebaseRepository.save(budgetRebase);
 
+/*
+                if(!frmRegion.equalsIgnoreCase(toRegion)){
+                    String rhqUnit="";
+                    ///............................DHQ REBASE BAL DEDUCT FROM ALLOCATION
+                    List<BudgetAllocationDetails> frmHdUnitDtl = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(frmUnit,req.getFinYear(),req.getUnitRebaseRequests().get(k).getBudgetHeadId(),req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0","0");
+                    List<BudgetAllocationDetails> frmHdUnitDtls=frmHdUnitDtl.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved")).collect(Collectors.toList());
+                    if (frmHdUnitDtls.size()>0) {
+                        for (Integer i = 0; i < frmHdUnitDtls.size(); i++) {
+                            BudgetAllocationDetails allocDatatails = frmHdUnitDtls.get(i);
+                            AmountUnit amountType = amountUnitRepository.findByAmountTypeId(allocDatatails.getAmountType());
+                            double AmtUnit=amountType.getAmount();
+                            double unloAmnt=trnsfrAmount/AmtUnit;
+                            allocDatatails.setAllocationAmount("-"+unloAmnt);
+                            allocDatatails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                            budgetAllocationDetailsRepository.save(allocDatatails);
+                        }
+                    }
+                    List<BudgetAllocation> frmHdUnitAlloc = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getUnitRebaseRequests().get(k).getBudgetHeadId(), frmUnit,req.getFinYear(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+                    List<BudgetAllocation> frmHdUnitAllocs=frmHdUnitAlloc.stream().filter(e->e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
+                    if (frmHdUnitAllocs.size()>0) {
+                        for (Integer i = 0; i < frmHdUnitAllocs.size(); i++) {
+                            BudgetAllocation alloc = frmHdUnitAllocs.get(i);
+                            rhqUnit=alloc.getFromUnit();
+                            AmountUnit amountType = amountUnitRepository.findByAmountTypeId(alloc.getAmountType());
+                            double AmtUnit=amountType.getAmount();
+                            double unloAmnt=trnsfrAmount/AmtUnit;
+                            alloc.setAllocationAmount("-"+unloAmnt);
+                            alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                            budgetAllocationRepository.save(alloc);
+                        }
+                    }
+
+                    ///............................RHQ REBASE BAL DEDUCT FROM ALLOCATION
+
+                    String dBudgetUnit="";
+                    List<BudgetAllocationDetails> frmRhqDtl = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(rhqUnit,req.getFinYear(),req.getUnitRebaseRequests().get(k).getBudgetHeadId(),req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0","0");
+                    List<BudgetAllocationDetails> frmRhqDtls=frmRhqDtl.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved")).collect(Collectors.toList());
+                    if (frmRhqDtls.size()>0) {
+                        for (Integer i = 0; i < frmRhqDtls.size(); i++) {
+                            BudgetAllocationDetails allocDatatails = frmRhqDtls.get(i);
+                            AmountUnit amountType = amountUnitRepository.findByAmountTypeId(allocDatatails.getAmountType());
+                            double AmtUnit=amountType.getAmount();
+                            double unloAmnt=trnsfrAmount/AmtUnit;
+                            allocDatatails.setAllocationAmount("-"+unloAmnt);
+                            allocDatatails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                            budgetAllocationDetailsRepository.save(allocDatatails);
+                        }
+                    }
+                    List<BudgetAllocation> frmRhqAlloc = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getUnitRebaseRequests().get(k).getBudgetHeadId(), rhqUnit,req.getFinYear(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+                    List<BudgetAllocation> frmRhqAllocs=frmRhqAlloc.stream().filter(e->e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
+                    if (frmRhqAllocs.size()>0) {
+                        for (Integer i = 0; i < frmRhqAllocs.size(); i++) {
+                            BudgetAllocation alloc = frmRhqAllocs.get(i);
+                            dBudgetUnit=alloc.getFromUnit();
+                            AmountUnit amountType = amountUnitRepository.findByAmountTypeId(alloc.getAmountType());
+                            double AmtUnit=amountType.getAmount();
+                            double unloAmnt=trnsfrAmount/AmtUnit;
+                            alloc.setAllocationAmount("-"+unloAmnt);
+                            alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                            budgetAllocationRepository.save(alloc);
+                        }
+                    }
+
+                }else{
+                    String rhqUnit="";
+                    ///............................DHQ REBASE BAL DEDUCT FROM ALLOCATION
+                    List<BudgetAllocationDetails> frmHdUnitDtl = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(frmUnit,req.getFinYear(),req.getUnitRebaseRequests().get(k).getBudgetHeadId(),req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0","0");
+                    List<BudgetAllocationDetails> frmHdUnitDtls=frmHdUnitDtl.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved")).collect(Collectors.toList());
+                    if (frmHdUnitDtls.size()>0) {
+                        for (Integer i = 0; i < frmHdUnitDtls.size(); i++) {
+                            BudgetAllocationDetails allocDatatails = frmHdUnitDtls.get(i);
+                            AmountUnit amountType = amountUnitRepository.findByAmountTypeId(allocDatatails.getAmountType());
+                            double AmtUnit=amountType.getAmount();
+                            double unloAmnt=trnsfrAmount/AmtUnit;
+                            allocDatatails.setAllocationAmount("-"+unloAmnt);
+                            allocDatatails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                            budgetAllocationDetailsRepository.save(allocDatatails);
+                        }
+                    }
+                    List<BudgetAllocation> frmHdUnitAlloc = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getUnitRebaseRequests().get(k).getBudgetHeadId(), frmUnit,req.getFinYear(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+                    List<BudgetAllocation> frmHdUnitAllocs=frmHdUnitAlloc.stream().filter(e->e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
+                    if (frmHdUnitAllocs.size()>0) {
+                        for (Integer i = 0; i < frmHdUnitAllocs.size(); i++) {
+                            BudgetAllocation alloc = frmHdUnitAllocs.get(i);
+                            rhqUnit=alloc.getFromUnit();
+                            AmountUnit amountType = amountUnitRepository.findByAmountTypeId(alloc.getAmountType());
+                            double AmtUnit=amountType.getAmount();
+                            double unloAmnt=trnsfrAmount/AmtUnit;
+                            alloc.setAllocationAmount("-"+unloAmnt);
+                            alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                            budgetAllocationRepository.save(alloc);
+                        }
+                    }
+
+                    ///............................RHQ REBASE BAL DEDUCT FROM ALLOCATION
+
+                    String dBudgetUnit="";
+                    List<BudgetAllocationDetails> frmRhqDtl = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(rhqUnit,req.getFinYear(),req.getUnitRebaseRequests().get(k).getBudgetHeadId(),req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0","0");
+                    List<BudgetAllocationDetails> frmRhqDtls=frmRhqDtl.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved")).collect(Collectors.toList());
+                    if (frmRhqDtls.size()>0) {
+                        for (Integer i = 0; i < frmRhqDtls.size(); i++) {
+                            BudgetAllocationDetails allocDatatails = frmRhqDtls.get(i);
+                            AmountUnit amountType = amountUnitRepository.findByAmountTypeId(allocDatatails.getAmountType());
+                            double AmtUnit=amountType.getAmount();
+                            double unloAmnt=trnsfrAmount/AmtUnit;
+                            allocDatatails.setAllocationAmount("-"+unloAmnt);
+                            allocDatatails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                            budgetAllocationDetailsRepository.save(allocDatatails);
+                        }
+                    }
+                    List<BudgetAllocation> frmRhqAlloc = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getUnitRebaseRequests().get(k).getBudgetHeadId(), rhqUnit,req.getFinYear(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+                    List<BudgetAllocation> frmRhqAllocs=frmRhqAlloc.stream().filter(e->e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
+                    if (frmRhqAllocs.size()>0) {
+                        for (Integer i = 0; i < frmRhqAllocs.size(); i++) {
+                            BudgetAllocation alloc = frmRhqAllocs.get(i);
+                            dBudgetUnit=alloc.getFromUnit();
+                            AmountUnit amountType = amountUnitRepository.findByAmountTypeId(alloc.getAmountType());
+                            double AmtUnit=amountType.getAmount();
+                            double unloAmnt=trnsfrAmount/AmtUnit;
+                            alloc.setAllocationAmount("-"+unloAmnt);
+                            alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                            budgetAllocationRepository.save(alloc);
+                        }
+                    }
+                }
+*/
 
                 CgUnit hdunitdata = cgUnitRepository.findByUnit(toHdUnitId);
                 BudgetHead bHeads = subHeadRepository.findByBudgetCodeId(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                 List<BudgetAllocationDetails> ToHdUnitAllocation11 = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(toHdUnitId,req.getFinYear(),req.getUnitRebaseRequests().get(k).getBudgetHeadId(),req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0","0");
                 List<BudgetAllocationDetails> ToHdUnitAllocationDetails=ToHdUnitAllocation11.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved")).collect(Collectors.toList());
                 if (ToHdUnitAllocationDetails.size()==0) {
-
                     authGrId = HelperUtils.getAuthorityGroupId();
-
                     BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
                     budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                     budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
@@ -832,9 +956,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     ToHdUnitAllocationDetails.get(0).setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                     budgetAllocationDetailsRepository.save(ToHdUnitAllocationDetails.get(0));
                 }
-
-
-
                 List<BudgetAllocation> ToHdUnitAllocation1 = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId,req.getFinYear(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
                 List<BudgetAllocation> ToHdUnitAllocation=ToHdUnitAllocation1.stream().filter(e->e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
                 if (ToHdUnitAllocation.size()==0) {
@@ -871,10 +992,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     ToHdUnitAllocation.get(0).setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                     budgetAllocationRepository.save(ToHdUnitAllocation.get(0));
                 }
-
-
-
-
                 List<CdaParkingTrans> ToHdUnitCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
                 if(ToHdUnitCda.size()==0){
                     CdaParkingTrans cdaParkingTrans = new CdaParkingTrans();
@@ -934,7 +1051,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     cdaParkingCrAndDr1.setAmountType(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                     cdaParkingCrAndDr1.setIsRevision(0);
                     parkingCrAndDrRepository.save(cdaParkingCrAndDr1);
-
                     //throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Please Add CDA Parking for the "+hdunitdata.getDescr() +"in This "+bHeads.getSubHeadDescr());
                 }else{
 
@@ -989,10 +1105,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     ToHdUnitCda.get(0).setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                     cdaParkingTransRepository.save(ToHdUnitCda.get(0));
                 }
-
-
                 String authGrId11 = HelperUtils.getAuthorityGroupId();
-
 
                 BudgetAllocationDetails budgetAllocationDetails1 = new BudgetAllocationDetails();
                 budgetAllocationDetails1.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
@@ -1063,8 +1176,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 mangeInboxOutbox11.setIsBgcg("BR");
                 mangeInboxOutbox11.setIsRevision(0);
                 mangeInboxOutBoxRepository.save(mangeInboxOutbox11);
-
-
             }
         }else{
             BudgetRebase budgetRebase = new BudgetRebase();
@@ -1095,9 +1206,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
             budgetRebase.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             budgetRebaseRepository.save(budgetRebase);
         }
-
-
-
         defaultResponse.setMsg("UNIT REBASE SUCCESSFULLY");
         return ResponseUtils.createSuccessResponse(defaultResponse, new TypeReference<DefaultResponse>() {
         });
