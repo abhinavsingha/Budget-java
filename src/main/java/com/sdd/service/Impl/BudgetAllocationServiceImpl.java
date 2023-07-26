@@ -1776,7 +1776,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     cdaRevisionData.setBudgetHeadId(revisonData.getSubHeadId());
                     cdaRevisionData.setToUnitId(hrData.getUnitId());
                     cdaRevisionData.setFromUnitId(hrData.getUnitId());
-                    cdaRevisionData.setAmount(revisonData.getCdaParkingId().get(m).getCdaParkingId());
+                    cdaRevisionData.setAmount(revisonData.getCdaParkingId().get(m).getCdaAmount());
                     cdaRevisionData.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                     cdaRevisionData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                     cdaRevisionData.setAllocTypeId(revisonData.getAllocationTypeId());
@@ -1797,9 +1797,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     cdaRevisionData.setCdaRrId(HelperUtils.getRevisionId());
                     cdaRevisionData.setFinYearId(revisonData.getBudgetFinanciaYearId());
                     cdaRevisionData.setBudgetHeadId(revisonData.getSubHeadId());
-                    cdaRevisionData.setToUnitId(hrData.getUnitId());
+                    cdaRevisionData.setToUnitId(revisonData.getToUnitId());
                     cdaRevisionData.setFromUnitId(hrData.getUnitId());
-                    cdaRevisionData.setAmount(revisonData.getCdaParkingId().get(m).getCdaParkingId());
+                    cdaRevisionData.setAmount(revisonData.getCdaParkingId().get(m).getCdaAmount());
                     cdaRevisionData.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                     cdaRevisionData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                     cdaRevisionData.setAllocTypeId(revisonData.getAllocationTypeId());
@@ -1811,8 +1811,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                     budgetRevisionRepository.save(cdaRevisionData);
                 }
-
-
             }
         }
 
