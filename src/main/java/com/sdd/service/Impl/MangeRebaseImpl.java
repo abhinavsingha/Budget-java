@@ -654,12 +654,14 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         parkingCrAndDrRepository.save(cdaParking);
                     }
                 }
+                String isType="";
                 List<BudgetAllocation> selftAllocSieze = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getUnitRebaseRequests().get(0).getBudgetHeadId(), req.getRebaseUnitId(),req.getFinYear(), req.getUnitRebaseRequests().get(0).getAllocationTypeId(), "0");
                 if (selftAllocSieze.size()>0) {
                     for (Integer i = 0; i < selftAllocSieze.size(); i++) {
                         BudgetAllocation allocData = selftAllocSieze.get(i);
                         allocData.setIsFlag("1");
                         allocData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                        isType=allocData.getIsTYpe();
                         budgetAllocationRepository.save(allocData);
                     }
                 }
@@ -881,7 +883,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 budgetAllocationDetails1.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                 budgetAllocationDetails1.setStatus("Approved");
                 budgetAllocationDetails1.setRemarks("Rebase Amount");
-                budgetAllocationDetails1.setIsTYpe("U");
+                budgetAllocationDetails1.setIsTYpe(isType);
                 budgetAllocationDetails1.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                 budgetAllocationDetails1.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 budgetAllocationDetails1.setAuthGroupId(authGrId);
@@ -902,7 +904,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 budgetAllocation1.setToUnit(req.getRebaseUnitId());
                 budgetAllocation1.setFromUnit(toHdUnitId);
                 budgetAllocation1.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
-                budgetAllocation1.setIsTYpe("R");
+                budgetAllocation1.setIsTYpe(isType);
                 budgetAllocation1.setAllocationTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                 budgetAllocation1.setIsBudgetRevision("0");
                 budgetAllocation1.setUnallocatedAmount("0");
@@ -914,8 +916,9 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 budgetAllocation1.setAuthGroupId(authGrId);
                 budgetAllocationRepository.save(budgetAllocation1);
 
-                MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
 
+                BudgetHead bHead = subHeadRepository.findByBudgetCodeId(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
+                MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
                 mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
                 mangeInboxOutbox.setRemarks("Budget Receipt");
                 mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
@@ -932,7 +935,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 mangeInboxOutbox.setIsApproved("0");
                 mangeInboxOutbox.setAllocationType(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                 mangeInboxOutbox.setIsFlag("0");
-                mangeInboxOutbox.setType("Mod Receipt");
+                mangeInboxOutbox.setType(bHead.getSubHeadDescr());
                 mangeInboxOutbox.setAmount(ConverterUtils.addDecimalPoint((req.getUnitRebaseRequests().get(k).getBalAmount()) + ""));
                 mangeInboxOutbox.setIsBgcg("BR");
                 mangeInboxOutbox.setIsRevision(0);
