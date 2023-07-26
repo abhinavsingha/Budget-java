@@ -2409,6 +2409,8 @@ public class MangeReportImpl implements MangeReportService {
                 dtoList.setFileName(fileName);
                 dtoList.setAllCdaData(allCdaData);
 
+                return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<FilePathResponse>() {
+                });
 
             } catch (Exception e) {
                 throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
@@ -3191,6 +3193,8 @@ public class MangeReportImpl implements MangeReportService {
                 dtoList.setFileName(fileName);
                 dtoList.setAllCdaData(allCdaData);
 
+                return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<FilePathResponse>() {
+                });
 
             } catch (Exception e) {
                 throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
@@ -3401,6 +3405,8 @@ public class MangeReportImpl implements MangeReportService {
 
                 if (cdaParkingTotalList == null) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CDA ID YEAR ID");
+                }else{
+
                 }
 
 
