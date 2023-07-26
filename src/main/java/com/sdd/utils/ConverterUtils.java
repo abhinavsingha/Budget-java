@@ -146,6 +146,26 @@ public class ConverterUtils {
         }
     }
 
+    public static String addDecimal2Point(String number) {
+        try {
+            if (number == null) {
+                return "0.00";
+            }
+
+            String amoumt = String.format("%.2f", Double.parseDouble(number));
+            DecimalFormat df = new DecimalFormat("#.##");
+            String dat23 = df.format(Double.parseDouble(amoumt));
+
+            if (!(dat23.contains("."))) {
+                dat23 = dat23 + ".00";
+            }
+            String amoumt11 = String.format("%.2f", Double.parseDouble(dat23));
+            return amoumt11;
+        } catch (Exception e) {
+            return number;
+        }
+    }
+
     public static Boolean isNumber(String number) {
         try {
             Float.parseFloat(number);

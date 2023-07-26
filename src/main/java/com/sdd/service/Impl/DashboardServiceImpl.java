@@ -792,12 +792,12 @@ public class DashboardServiceImpl implements DashBoardService {
                 if (reportDetails.size() <= 0) {
                     continue;
                 }
-                Double amount = 0.0;
-                Double amountUnit=0.0;
-                Double finAmount=0.0;
-                Double eAmount = 0.0;
-                Double expnAmount=0.0;
-                Double allAmount = 0.0;
+                double amount = 0.0;
+                double amountUnit=0.0;
+                double finAmount=0.0;
+                double eAmount = 0.0;
+                double expnAmount=0.0;
+                double allAmount = 0.0;
 
                 for (Integer r = 0; r < reportDetails.size(); r++) {
 
@@ -1085,21 +1085,9 @@ public class DashboardServiceImpl implements DashBoardService {
             }
 
             double hrSubAmnt=subHrAmount*hrAmntUnit/reqAmount;
-            double sumFin=sumAlloc+(hrSubAmnt-sumAlloc);
-//            BigDecimal decimal = new BigDecimal(sumAlloc);
-//            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
-            String roundedAmount = ConverterUtils.addDecimalPoint(sumAlloc+"");
-
-
-
-           String sumExp11 = ConverterUtils.addDecimalPoint(sumExp+"");
-           String sumBal11 = ConverterUtils.addDecimalPoint(sumBal+"");
-
-//            BigDecimal decimal1 = new BigDecimal(sumExp);
-//            BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
-
-//            BigDecimal decimal2 = new BigDecimal(sumBal);
-//            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+            String sumAlloc11 = ConverterUtils.addDecimalPoint(sumAlloc+"");
+            String sumExp11 = ConverterUtils.addDecimalPoint(sumExp+"");
+            String sumBal11 = ConverterUtils.addDecimalPoint(sumBal+"");
             double per=0.0;
             if(sumAlloc!=0){
                 per=(sumExp*100)/sumAlloc;
@@ -1107,26 +1095,16 @@ public class DashboardServiceImpl implements DashBoardService {
                 per=0.0;
             }
             try{
-//                BigDecimal decimal3 = new BigDecimal(per);
-//                BigDecimal roundedAmount3 = decimal3.setScale(2, RoundingMode.HALF_UP);
-                String per11 = ConverterUtils.addDecimalPoint(per+"");
-
+                String per11 = ConverterUtils.addDecimal2Point(per+"");
                 obj.setPerBal(String.valueOf(per11));
-
-
             }catch (Exception e){
                 obj.setPerBal(String.valueOf(0.00));
             }
-
-
-
             obj.setGrTotalObj(grResp);
-            obj.setSumAlloc(String.valueOf(roundedAmount));
+            obj.setSumAlloc(String.valueOf(sumAlloc11));
             obj.setSumExp(String.valueOf(sumExp11));
             obj.setSumBal(String.valueOf(sumBal11));
-
             resp.add(obj);
-
 
             return ResponseUtils.createSuccessResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {});
         } catch (Exception e) {
