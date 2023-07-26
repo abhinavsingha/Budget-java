@@ -7183,7 +7183,7 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cella3 = new PdfPCell(new Phrase(unitN.getDescr()));
                     PdfPCell cella4 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
                     PdfPCell cella5 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(eAmount / reqAmount))));
-                    PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(expnAmount))));
+                    PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.2f", new BigDecimal(expnAmount))));
 
                     cella1.setPadding(8);
                     cella2.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -7261,7 +7261,7 @@ public class MangeReportImpl implements MangeReportService {
                 BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
 
                 BigDecimal decimal2 = new BigDecimal(perc);
-                BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
+                BigDecimal roundedAmount2 = decimal2.setScale(2, RoundingMode.HALF_UP);
 
                 double totSum1 = Double.parseDouble(String.valueOf(roundedAmount));
                 double totSum2 = Double.parseDouble(String.valueOf(roundedAmount1));
@@ -7271,7 +7271,7 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
                     PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount), cellFont));
                     PdfPCell cell30 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount1), cellFont));
-                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", roundedAmount2), cellFont));
+                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.2f", roundedAmount2), cellFont));
                     cell10.setPadding(10);
                     cell20.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                     cell30.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -7309,7 +7309,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell51 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalIcg), cellFont));
             PdfPCell cell60 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAlloc), cellFont));
             PdfPCell cell70 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAddition), cellFont));
-            PdfPCell cell80 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalSum), cellFont));
+            PdfPCell cell80 = new PdfPCell(new Phrase(String.format("%1$0,1.2f", grTotalSum), cellFont));
             cell50.setPadding(12);
             cell51.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell60.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
