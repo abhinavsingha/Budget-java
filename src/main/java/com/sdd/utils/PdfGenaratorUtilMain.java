@@ -599,7 +599,7 @@ public class PdfGenaratorUtilMain {
         Chunk certifyc1 = new Chunk("(c) The Expenditure incurred is creditable to Major Head ", normalFont);
         Chunk certifyc2 = new Chunk(cbReportResponse.getBudgetHead().getMajorHead() + ",", font);
         Chunk certifyc3 = new Chunk(" Sub Major Head 00, Minor Head ", normalFont);
-        Chunk certifyc4 = new Chunk(cbReportResponse.getBudgetHead().getMinorHead(), font);
+//        Chunk certifyc4 = new Chunk(cbReportResponse.getBudgetHead().getMinorHead(), font);
         Chunk certifyc5 = new Chunk(", " + cbReportResponse.getBudgetHead().getDetailHeadType() + ":", normalFont);
         Chunk certifyc6 = new Chunk(cbReportResponse.getBudgetHead().getSubHeadDescr() + " \n", font);
 //        Chunk certifyc7 = new Chunk(".Category Code ", normalFont);
@@ -607,7 +607,7 @@ public class PdfGenaratorUtilMain {
         phraseFooter.add(certifyc1);
         phraseFooter.add(certifyc2);
         phraseFooter.add(certifyc3);
-        phraseFooter.add(certifyc4);
+//        phraseFooter.add(certifyc4);
         phraseFooter.add(certifyc5);
         phraseFooter.add(certifyc6);
 //        phraseFooter.add(certifyc7);
