@@ -966,6 +966,9 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 budgetAllocationDetailsRepository.save(allocDatatails);
                             }
                         }else{
+
+
+                            // .....................CREATE BUDGET RECIPT..................................
                             BudgetAllocationDetails budgetRecipt = new BudgetAllocationDetails();
                             budgetRecipt.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                             budgetRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
@@ -994,6 +997,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             budgetAllocationDetailsRepository.save(budgetRecipt);
 
 
+                            // .....................CREATE BUDGET ALLOCATION..................................
                             BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
                             budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                             budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
@@ -1046,6 +1050,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 alloc.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                             }
                         }else{
+
+                            // .....................CREATE BUDGET RECIPT..................................
                             BudgetAllocation budgetAllocationRecipt = new BudgetAllocation();
                             budgetAllocationRecipt.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                             budgetAllocationRecipt.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
@@ -1070,6 +1076,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             budgetAllocationRecipt.setAmountType(req.getUnitRebaseRequests().get(k).getAmountType());
                             budgetAllocationRepository.save(budgetAllocationRecipt);
 
+                            // .....................CREATE BUDGET RECIPT NOTIFICATION..................................
                             MangeInboxOutbox mangeInboxOutboxRHqSendRecipt = new MangeInboxOutbox();
                             mangeInboxOutboxRHqSendRecipt.setMangeInboxId(HelperUtils.getMangeInboxId());
                             mangeInboxOutboxRHqSendRecipt.setRemarks("Budget Receipt");
@@ -1094,7 +1101,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             mangeInboxOutBoxRepository.save(mangeInboxOutbox);
 
 
-
+                            // .....................CREATE BUDGET ALLOCATION..................................
                             BudgetAllocation budgetAllocation = new BudgetAllocation();
                             budgetAllocation.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                             budgetAllocation.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
@@ -1119,6 +1126,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             budgetAllocationRepository.save(budgetAllocation);
 
 
+                            // .....................CREATE BUDGET ALLOCATION NOTIFICATION..................................
                             BudgetHead budgetHeadId = subHeadRepository.findByBudgetCodeId(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
 
                             MangeInboxOutbox mangeInboxOutboxAllocation = new MangeInboxOutbox();
@@ -1254,6 +1262,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                         }
                     }else{
+                        // .....................CREATE BUDGET RECIPT..................................
                         BudgetAllocationDetails budgetAllocationDetailsRecipt = new BudgetAllocationDetails();
                         budgetAllocationDetailsRecipt.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                         budgetAllocationDetailsRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
@@ -1283,7 +1292,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
 
 
-
+                        // .....................CREATE BUDGET ALLOCATION..................................
                         BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
                         budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                         budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
@@ -1343,6 +1352,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                         }
                     }else{
+                        // .....................CREATE BUDGET RECIPT..................................
                         BudgetAllocation budgetAllocationRecipt = new BudgetAllocation();
                         budgetAllocationRecipt.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                         budgetAllocationRecipt.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
@@ -1367,6 +1377,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationRecipt.setAmountType(req.getUnitRebaseRequests().get(k).getAmountType());
                         budgetAllocationRepository.save(budgetAllocationRecipt);
 
+
+                        // .....................CREATE BUDGET RECIPT NOTIFICATION..................................
                         MangeInboxOutbox mangeInboxOutboxRHqSend = new MangeInboxOutbox();
                         mangeInboxOutboxRHqSend.setMangeInboxId(HelperUtils.getMangeInboxId());
                         mangeInboxOutboxRHqSend.setRemarks("Budget Receipt");
@@ -1391,7 +1403,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         mangeInboxOutBoxRepository.save(mangeInboxOutbox);
 
 
-
+                        // .....................CREATE BUDGET ALLOCATION..................................
                         BudgetAllocation budgetAllocation = new BudgetAllocation();
                         budgetAllocation.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                         budgetAllocation.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
@@ -1416,6 +1428,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationRepository.save(budgetAllocation);
 
 
+
+                        // .....................CREATE BUDGET ALLOCATION NOTIFICATION..................................
                         BudgetHead budgetHeadId = subHeadRepository.findByBudgetCodeId(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
 
                         MangeInboxOutbox mangeInboxOutboxAllocation = new MangeInboxOutbox();
