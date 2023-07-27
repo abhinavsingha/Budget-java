@@ -248,7 +248,6 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
             budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
             budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getReceiptSubRequests().get(j).getAllocationAmount()));
-//            budgetAllocationDetails.setBalanceAmount(ConverterUtils.addDecimalPoint(budgetReciptSaveRequest.getReceiptSubRequests().get(j).getAllocationAmount()));
             budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetails.setAllocTypeId(saveAllocationType.getAllocTypeId());
@@ -265,12 +264,9 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetails.setAuthGroupId(authGroupId);
             budgetAllocationDetails.setRemarks("");
-
             budgetAllocationDetails.setPurposeCode("");
             budgetAllocationDetails.setRevisedAmount("0.0000");
             budgetAllocationDetails.setIsDelete("0");
-
-
             budgetAllocationDetails.setRefTransactionId(HelperUtils.getBudgetAllocationTypeId());
             budgetAllocationDetails.setUserId(hrData.getPid());
             budgetAllocationDetails.setAmountType(amountUnit.getAmountTypeId());

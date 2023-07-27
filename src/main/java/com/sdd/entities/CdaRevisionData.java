@@ -60,6 +60,9 @@ public class CdaRevisionData {
     @Column(name = "IS_SELF")
     private String isSelf;
 
+    @Column(name = "ALLOCATION_AMOUNT")
+    private String allocationAmount;
+
 
 
 }
