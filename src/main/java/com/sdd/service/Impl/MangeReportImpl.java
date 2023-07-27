@@ -6752,7 +6752,7 @@ public class MangeReportImpl implements MangeReportService {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
-        String frmUnit = hrData.getUnitId();
+
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
 
         if (hrData == null) {
@@ -6789,6 +6789,7 @@ public class MangeReportImpl implements MangeReportService {
         if (hrDataList.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
         }
+        String frmUnit = hrData.getUnitId();
 
         String approverPId = "";
         String approveName = "";
@@ -6817,9 +6818,15 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, bHeadType + " " + "RECORD NOT FOUND", HttpStatus.OK.value());
         }
-        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
-        List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
-        List<BudgetAllocation> checks = mrge.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        List<BudgetAllocation> checks;
+        List<CgUnit> listOfSubUnit1=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+        if(listOfSubUnit1.size()==0){
+            checks = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(frmUnit, finYearId, allocationType, "0","0","Approved");
+        }else{
+            List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
+            List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+            checks = mrge.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        }
         if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -6930,17 +6937,16 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocation> reportDetail;
                 List<CgUnit> listOfSubUnit=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
                 if(listOfSubUnit.size()==0){
-                    List<BudgetAllocation> reportDetail1 = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
-                    reportDetail = reportDetail1.stream().filter(e ->e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
+                    reportDetail = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
                 }else{
-                    List<BudgetAllocation>reportDetail1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
+                    List<BudgetAllocation>reportDetail1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
                     List<BudgetAllocation> reportDetailss = reportDetail1.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                     reportDetail = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
                 }
                 if (reportDetail.size() <= 0) {
                     continue;
                 }
-                List<BudgetAllocation> hrDetails = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(hrUnit, finYearId, subHeadId, allocationType, "0");
+                List<BudgetAllocation> hrDetails = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId,hrUnit, finYearId, allocationType, "0","0","Approved");
                 if (hrDetails.size() > 0) {
                     double hrAllocAmount = Double.parseDouble(hrDetails.get(0).getAllocationAmount());
                     AmountUnit hrAmount = amountUnitRepository.findByAmountTypeId(hrDetails.get(0).getAmountType());
@@ -6976,7 +6982,7 @@ public class MangeReportImpl implements MangeReportService {
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
                             String subUnit = unitss.getUnit();
-                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnit, finYearId, subHeadId, allocationType, "0");
+                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(subUnit, finYearId, subHeadId, allocationType, "0","0");
                             List<ContigentBill> expenditure = expenditure1.stream()
                                     .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                             if (expenditure.size() > 0) {
@@ -6991,7 +6997,7 @@ public class MangeReportImpl implements MangeReportService {
                         String cbAmount = decimalFormat.format(totalbill);
                         eAmount = Double.parseDouble(cbAmount);
                     }
-                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(uid, finYearId, subHeadId, allocationType, "0");
+                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(uid, finYearId, subHeadId, allocationType, "0","0");
                     List<ContigentBill> expenditure = expenditure1.stream()
                             .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                     double totalAmount = 0.0;
@@ -7052,42 +7058,44 @@ public class MangeReportImpl implements MangeReportService {
                 double hrbalanceAmount = 0;
                 double hrallocationAmount = 0;
                 double hrAmountUnit = 0.0;
-                List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, hrData.getUnitId(), allocationType, "0");
-                if (cdaParkingTrans.size() == 0) {
-                } else {
-                    for (Integer k = 0; k < cdaParkingTrans.size(); k++) {
-                        AmountUnit dbudgetFin = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(k).getAmountType());
-                        hrAmountUnit = dbudgetFin.getAmount();
-                        hrbalanceAmount = hrbalanceAmount + Double.parseDouble(cdaParkingTrans.get(k).getRemainingCdaAmount());
-                        hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
+                double hrfinAmount=0.0;
+                if(listOfSubUnit1.size()==0){
+                }else{
+                    List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, hrData.getUnitId(), allocationType, "0");
+                    if (cdaParkingTrans.size() == 0) {
+                    } else {
+                        for (Integer k = 0; k < cdaParkingTrans.size(); k++) {
+                            AmountUnit dbudgetFin = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(k).getAmountType());
+                            hrAmountUnit = dbudgetFin.getAmount();
+                            hrbalanceAmount = hrbalanceAmount + Double.parseDouble(cdaParkingTrans.get(k).getRemainingCdaAmount());
+                            hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
+                        }
                     }
+                    hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
+                    PdfPCell cell100 = new PdfPCell(new Phrase(hrunitN.getDescr()));
+                    PdfPCell cell200 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(hrfinAmount))));
+                    PdfPCell cell300 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(0))));
+                    PdfPCell cell400 = new PdfPCell(new Phrase(String.format("%1$0,1.2f", new BigDecimal(0))));
+                    cell100.setPadding(10);
+                    cell200.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    cell300.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    cell400.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(cell100);
+                    table.addCell(cell200);
+                    table.addCell(cell300);
+                    table.addCell(cell400);
+                    table.addCell(" ");
+                    table.addCell(" ");
                 }
-                double hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
-                PdfPCell cell100 = new PdfPCell(new Phrase(hrunitN.getDescr()));
-
-                PdfPCell cell200 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(hrfinAmount))));
-                PdfPCell cell300 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(0))));
-                PdfPCell cell400 = new PdfPCell(new Phrase(String.format("%1$0,1.2f", new BigDecimal(0))));
-
-
-                cell100.setPadding(10);
-                cell200.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                cell300.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                cell400.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-
-
-                table.addCell(" ");
-                table.addCell(" ");
-                table.addCell(cell100);
-                table.addCell(cell200);
-                table.addCell(cell300);
-                table.addCell(cell400);
-                table.addCell(" ");
-                table.addCell(" ");
-
                 double tot = sum + hrfinAmount;
                 double ex = expsum / reqAmount;
-                double perc = (ex * 100) / tot;
+                double perc=0.0;
+                if(tot==0)
+                    perc=0.0;
+                    else
+                  perc = (ex * 100) / tot;
                 String tot1=ConverterUtils.addDecimalPoint(tot+"");
                 String ex1=ConverterUtils.addDecimalPoint(ex+"");
                 String perc1=ConverterUtils.addDecimal2Point(perc+"");
@@ -7095,7 +7103,7 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
                     PdfPCell cell20 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(tot+""), cellFont));
                     PdfPCell cell30 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(ex+""), cellFont));
-                    PdfPCell cell40 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(perc+""), cellFont));
+                    PdfPCell cell40 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(perc1+""), cellFont));
                     cell10.setPadding(10);
                     cell20.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                     cell30.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
