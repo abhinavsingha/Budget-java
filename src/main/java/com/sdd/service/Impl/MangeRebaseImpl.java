@@ -1004,7 +1004,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
                             budgetAllocationDetails.setAllocTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                             budgetAllocationDetails.setFinYear(req.getFinYear());
-                            budgetAllocationDetails.setFromUnit();
+                            budgetAllocationDetails.setFromUnit(tohdUnit);
                             budgetAllocationDetails.setToUnit();
                             budgetAllocationDetails.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                             budgetAllocationDetails.setStatus("Approved");
@@ -1111,8 +1111,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             budgetAllocation.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                             budgetAllocation.setRefTransId(HelperUtils.getBudgetAllocationTypeId());
                             budgetAllocation.setFinYear(req.getFinYear());
-                            budgetAllocation.setToUnit();
-                            budgetAllocation.setFromUnit();
+                            budgetAllocation.setToUnit(tohdUnit);
+                            budgetAllocation.setFromUnit(tohdUnit);
                             budgetAllocation.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                             budgetAllocation.setAllocationTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                             budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
@@ -1134,8 +1134,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             mangeInboxOutboxAllocation.setRemarks("Budget Allocation SubHead Wise");
                             mangeInboxOutboxAllocation.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                             mangeInboxOutboxAllocation.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                            mangeInboxOutboxAllocation.setToUnit();
-                            mangeInboxOutboxAllocation.setFromUnit();
+                            mangeInboxOutboxAllocation.setToUnit(tohdUnit);
+                            mangeInboxOutboxAllocation.setFromUnit(tohdUnit);
                             mangeInboxOutboxAllocation.setGroupId(budgetAllocationAuthGroupId);
                             mangeInboxOutboxAllocation.setType(budgetHeadId.getSubHeadDescr());
                             mangeInboxOutboxAllocation.setRoleId(hrDataCheck.getRoleId());
@@ -1299,8 +1299,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
                         budgetAllocationDetails.setAllocTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                         budgetAllocationDetails.setFinYear(req.getFinYear());
-                        budgetAllocationDetails.setFromUnit();
-                        budgetAllocationDetails.setToUnit();
+                        budgetAllocationDetails.setFromUnit(tohdUnit);
+                        budgetAllocationDetails.setToUnit(toHdUnitId);
                         budgetAllocationDetails.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                         budgetAllocationDetails.setStatus("Approved");
                         budgetAllocationDetails.setCreatedOn(HelperUtils.getCurrentTimeStamp());
@@ -1413,8 +1413,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocation.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                         budgetAllocation.setRefTransId(HelperUtils.getBudgetAllocationTypeId());
                         budgetAllocation.setFinYear(req.getFinYear());
-                        budgetAllocation.setToUnit();
-                        budgetAllocation.setFromUnit();
+                        budgetAllocation.setToUnit(toHdUnitId);
+                        budgetAllocation.setFromUnit(tohdUnit);
                         budgetAllocation.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                         budgetAllocation.setAllocationTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                         budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
@@ -1437,8 +1437,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         mangeInboxOutboxAllocation.setRemarks("Budget Allocation SubHead Wise");
                         mangeInboxOutboxAllocation.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                         mangeInboxOutboxAllocation.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                        mangeInboxOutboxAllocation.setToUnit();
-                        mangeInboxOutboxAllocation.setFromUnit();
+                        mangeInboxOutboxAllocation.setToUnit(toHdUnitId);
+                        mangeInboxOutboxAllocation.setFromUnit(tohdUnit);
                         mangeInboxOutboxAllocation.setGroupId(allocationAuthGroupId);
                         mangeInboxOutboxAllocation.setType(budgetHeadId.getSubHeadDescr());
                         mangeInboxOutboxAllocation.setRoleId(hrDataCheck.getRoleId());
