@@ -596,7 +596,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
         authority.setAuthGroupId(authGrId);
         authority.setRemarks(req.getRemark());
         authority.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-        Authority saveAuthority = authorityRepository.save(authority);
+        authorityRepository.save(authority);
 
         MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
         mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
@@ -621,7 +621,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
 
 
-        if(!hrDataCheck.getUnitId().equalsIgnoreCase("001321")){
+        if(!hrDataCheck.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)){
             MangeInboxOutbox mangeInboxOutbox2 = new MangeInboxOutbox();
             mangeInboxOutbox2.setMangeInboxId(HelperUtils.getMangeInboxId());
             mangeInboxOutbox2.setRemarks("UNIT REBASE");
@@ -709,6 +709,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
         String isType="";
         if (req.getUnitRebaseRequests().size() > 0) {
+
             for (Integer m = 0; m < req.getUnitRebaseRequests().size(); m++) {
                 AmountUnit amtObj = amountUnitRepository.findByAmountTypeId(req.getUnitRebaseRequests().get(m).getAmountType());
                 double allAmountUnit=amtObj.getAmount();
@@ -935,7 +936,9 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         cdaParkingTransRepository.save(cdaParking);
                     }
 
-                    // .....................DHQ BAL ALLOCATION HERE AS RECEPIET..................................
+
+
+                    // 2 Side.....................DHQ BAL ALLOCATION HERE AS RECEPIET..................................
 
                     CgUnit toHead= cgUnitRepository.findByUnit(tohdUnit);
                     if (toHead.getIsRebaseAuthority().equalsIgnoreCase("1")){
@@ -964,6 +967,11 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 allocDatatails.setIsDelete("0");
                                 allocDatatails.setIsBudgetRevision("0");
                                 budgetAllocationDetailsRepository.save(allocDatatails);
+
+                                if(Double.parseDouble(allocDatatails.getAllocationAmount())  == 0 ){
+
+                                }
+
                             }
                         }else{
 
