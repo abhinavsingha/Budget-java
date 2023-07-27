@@ -26,29 +26,29 @@ public class BudgetAllocationDetails {
     private String transactionId;
 
 
-    @Column(name = "ALLOCATION_ID", nullable = false)
+    @Column(name = "ALLOCATION_ID")
     private String allocationId;
 
     @Column(name = "FIN_YEAR")
     private String finYear;
 
-    @Column(name = "FROM_UNIT", nullable = false)
+    @Column(name = "FROM_UNIT")
     private String fromUnit;
 
-    @Column(name = "TO_UNIT", nullable = false)
+    @Column(name = "TO_UNIT")
     private String toUnit;
 
-    @Column(name = "BUDGET_HEAD", nullable = false)
+    @Column(name = "BUDGET_HEAD")
     private String subHead;
 
-    @Column(name = "ALLOC_TYPE_ID", nullable = false)
+    @Column(name = "ALLOC_TYPE_ID")
     private String allocTypeId;
 
-    @Column(name = "ALLOCATION_AMOUNT", nullable = false)
+    @Column(name = "ALLOCATION_AMOUNT")
     private String allocationAmount;
 
 
-    @Column(name = "AUTH_GROUP_ID", nullable = false)
+    @Column(name = "AUTH_GROUP_ID")
     private String authGroupId;
 
     @Column(name = "STATUS")
@@ -57,13 +57,13 @@ public class BudgetAllocationDetails {
     @Column(name = "PURPOSE_CODE")
     private String purposeCode;
 
-    @Column(name = "ALLOCATION_DATE", nullable = false)
+    @Column(name = "ALLOCATION_DATE")
     private Timestamp allocationDate;
 
     @Column(name = "REMARKS")
     private String remarks;
 
-    @Column(name = "REF_TRANSACTION_ID", nullable = false)
+    @Column(name = "REF_TRANSACTION_ID")
     private String refTransactionId;
 
     @Column(name = "USER_ID")
@@ -72,7 +72,7 @@ public class BudgetAllocationDetails {
     @Column(name = "CREATED_ON")
     private Timestamp createdOn;
 
-    @Column(name = "UPDATED_ON", nullable = false)
+    @Column(name = "UPDATED_ON")
     private Timestamp updatedOn;
 
     @Column(name = "IS_DELETE")
