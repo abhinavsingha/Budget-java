@@ -1048,10 +1048,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "0");
 
-//        if (budgetAllocations.size() == 0) {
-//            budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "1");
-//
-//        }
 
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
@@ -1110,8 +1106,14 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 AmountUnit amountUnitMain = amountUnitRepository.findByAmountTypeId(budgetAllocationSubReport.getAmountType());
                 remeningCdaAmount = remeningCdaAmount / amountUnitMain.getAmount();
 
-                double revisedAmount = Double.parseDouble(budgetAllocationSubReport.getRevisedAmount());
-                budgetAllocationReport.setAllocationAmount((remeningCdaAmount - (revisedAmount)) + "");
+                if (budgetAllocationSubReport.getStatus().equalsIgnoreCase("Approved")) {
+                    double revisedAmount = Double.parseDouble(budgetAllocationSubReport.getRevisedAmount());
+                    budgetAllocationReport.setAllocationAmount((remeningCdaAmount - (revisedAmount)) + "");
+                } else {
+                    double revisedAmount = Double.parseDouble(budgetAllocationSubReport.getRevisedAmount());
+                    budgetAllocationReport.setAllocationAmount((remeningCdaAmount + (revisedAmount)) + "");
+                }
+
 
             } else {
 
@@ -1782,7 +1784,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     cdaRevisionData.setAllocTypeId(revisonData.getAllocationTypeId());
                     cdaRevisionData.setAuthGroupId(authGrouPid);
                     cdaRevisionData.setIsFlag("0");
-                    cdaRevisionData.setAmount(revisonData.getAmount());
+                    cdaRevisionData.setAllocationAmount(revisonData.getAmount());
                     cdaRevisionData.setAmountType(revisonData.getAmountTypeId());
                     cdaRevisionData.setCdaTransId(cdaParkingTrans.getCdaParkingId());
                     cdaRevisionData.setIsSelf("1");
@@ -1799,14 +1801,15 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 cdaRevisionData.setBudgetHeadId(revisonData.getSubHeadId());
                 cdaRevisionData.setToUnitId(revisonData.getToUnitId());
                 cdaRevisionData.setFromUnitId(hrData.getUnitId());
-                cdaRevisionData.setAmount(revisonData.getAmount());
                 cdaRevisionData.setAmount(revisonData.getRevisedAmount());
+                cdaRevisionData.setAllocationAmount(revisonData.getAmount());
                 cdaRevisionData.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                 cdaRevisionData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 cdaRevisionData.setAllocTypeId(revisonData.getAllocationTypeId());
                 cdaRevisionData.setAuthGroupId(authGrouPid);
                 cdaRevisionData.setIsFlag("0");
                 cdaRevisionData.setAmountType(revisonData.getAmountTypeId());
+                cdaRevisionData.setAllocationAmount(revisonData.getAmount());
                 cdaRevisionData.setCdaTransId(null);
                 cdaRevisionData.setIsSelf("0");
 
@@ -3895,7 +3898,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         for (Integer i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
 
-            BudgetAllocationDetails budgetAllocationDetails = budgetAllocationDetailsRepository.findByTransactionId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getTransactionId());;
+            BudgetAllocationDetails budgetAllocationDetails = budgetAllocationDetailsRepository.findByTransactionId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getTransactionId());
+            ;
             authGrouPid = budgetAllocationDetails.getAuthGroupId();
 
             budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmount()));
@@ -5208,9 +5212,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                 double bakiPesa = 0;
                 if (parkingAmount < 0) {
-                    bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
+                    bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
                 } else {
-                    bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
+                    bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
                 }
 
                 cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
