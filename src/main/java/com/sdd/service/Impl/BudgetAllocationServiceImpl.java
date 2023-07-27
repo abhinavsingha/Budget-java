@@ -1782,6 +1782,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     cdaRevisionData.setAllocTypeId(revisonData.getAllocationTypeId());
                     cdaRevisionData.setAuthGroupId(authGrouPid);
                     cdaRevisionData.setIsFlag("0");
+                    cdaRevisionData.setAmount(revisonData.getAmount());
                     cdaRevisionData.setAmountType(revisonData.getAmountTypeId());
                     cdaRevisionData.setCdaTransId(cdaParkingTrans.getCdaParkingId());
                     cdaRevisionData.setIsSelf("1");
@@ -1791,26 +1792,25 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 }
 
             } else {
-                for (Integer m = 0; m < revisonData.getCdaParkingId().size(); m++) {
 
-                    CdaRevisionData cdaRevisionData = new CdaRevisionData();
-                    cdaRevisionData.setCdaRrId(HelperUtils.getRevisionId());
-                    cdaRevisionData.setFinYearId(revisonData.getBudgetFinanciaYearId());
-                    cdaRevisionData.setBudgetHeadId(revisonData.getSubHeadId());
-                    cdaRevisionData.setToUnitId(revisonData.getToUnitId());
-                    cdaRevisionData.setFromUnitId(hrData.getUnitId());
-                    cdaRevisionData.setAmount(revisonData.getCdaParkingId().get(m).getCdaAmount());
-                    cdaRevisionData.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-                    cdaRevisionData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                    cdaRevisionData.setAllocTypeId(revisonData.getAllocationTypeId());
-                    cdaRevisionData.setAuthGroupId(authGrouPid);
-                    cdaRevisionData.setIsFlag("0");
-                    cdaRevisionData.setAmountType(revisonData.getAmountTypeId());
-                    cdaRevisionData.setCdaTransId(null);
-                    cdaRevisionData.setIsSelf("0");
+                CdaRevisionData cdaRevisionData = new CdaRevisionData();
+                cdaRevisionData.setCdaRrId(HelperUtils.getRevisionId());
+                cdaRevisionData.setFinYearId(revisonData.getBudgetFinanciaYearId());
+                cdaRevisionData.setBudgetHeadId(revisonData.getSubHeadId());
+                cdaRevisionData.setToUnitId(revisonData.getToUnitId());
+                cdaRevisionData.setFromUnitId(hrData.getUnitId());
+                cdaRevisionData.setAmount(revisonData.getAmount());
+                cdaRevisionData.setAmount(revisonData.getRevisedAmount());
+                cdaRevisionData.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+                cdaRevisionData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                cdaRevisionData.setAllocTypeId(revisonData.getAllocationTypeId());
+                cdaRevisionData.setAuthGroupId(authGrouPid);
+                cdaRevisionData.setIsFlag("0");
+                cdaRevisionData.setAmountType(revisonData.getAmountTypeId());
+                cdaRevisionData.setCdaTransId(null);
+                cdaRevisionData.setIsSelf("0");
 
-                    budgetRevisionRepository.save(cdaRevisionData);
-                }
+                budgetRevisionRepository.save(cdaRevisionData);
             }
         }
 
@@ -3895,8 +3895,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         for (Integer i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
 
-            BudgetAllocationDetails budgetAllocationDetails = budgetAllocationDetailsRepository.findByTransactionId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getTransactionId());
-            ;
+            BudgetAllocationDetails budgetAllocationDetails = budgetAllocationDetailsRepository.findByTransactionId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getTransactionId());;
             authGrouPid = budgetAllocationDetails.getAuthGroupId();
 
             budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmount()));
