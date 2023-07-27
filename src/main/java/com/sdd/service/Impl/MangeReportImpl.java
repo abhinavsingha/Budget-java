@@ -3726,7 +3726,7 @@ public class MangeReportImpl implements MangeReportService {
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(reportRequest.getAmountTypeId());
         double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType().toUpperCase();
-        List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0");
+        List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0","0","Approved");
         List<BudgetAllocation> budgetAllocationsDetalis2 = budgetAllocationsDetalis1.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
         List<BudgetAllocation> budgetAllocationsDetalis3 = budgetAllocationsDetalis2.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
         List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis3.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
@@ -3948,7 +3948,7 @@ public class MangeReportImpl implements MangeReportService {
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(reportRequest.getAmountTypeId());
         double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType();
-        List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0");
+        List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0","0","Approved");
         List<BudgetAllocation> budgetAllocationsDetalis2 = budgetAllocationsDetalis1.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
         List<BudgetAllocation> budgetAllocationsDetalis3 = budgetAllocationsDetalis2.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
         List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis3.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
@@ -4149,7 +4149,7 @@ public class MangeReportImpl implements MangeReportService {
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(reportRequest.getAmountTypeId());
         double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
         String amountIn = amountObj.getAmountType();
-        List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0");
+        List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0","0","Approved");
         List<BudgetAllocation> budgetAllocationsDetalis2 = budgetAllocationsDetalis1.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
         List<BudgetAllocation> budgetAllocationsDetalis3 = budgetAllocationsDetalis2.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
         List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis3.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
@@ -4249,7 +4249,7 @@ public class MangeReportImpl implements MangeReportService {
             bHeadType = bHead.getRemark() + " " + "DETAILED" + " " + "HEAD";
 
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(req.getFinYearId());
-        List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getSubHeadId(), hrData.getUnitId(), req.getFinYearId(), req.getAllocationTypeId(), "0");
+        List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(req.getSubHeadId(), hrData.getUnitId(), req.getFinYearId(), req.getAllocationTypeId(), "0","0","Approved");
         List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis1.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
 
         if (budgetAllocationsDetalis.size() <= 0) {
@@ -4459,7 +4459,7 @@ public class MangeReportImpl implements MangeReportService {
             bHeadType = bHead.getRemark() + " " + "DETAILED" + " " + "HEAD";
 
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(req.getFinYearId());
-        List<BudgetAllocation> budgetAllocationsDetaliss = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getSubHeadId(), hrData.getUnitId(), req.getFinYearId(), req.getAllocationTypeId(), "0");
+        List<BudgetAllocation> budgetAllocationsDetaliss = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(req.getSubHeadId(), hrData.getUnitId(), req.getFinYearId(), req.getAllocationTypeId(), "0","0","Approved");
         List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationsDetaliss.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
         List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis1.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
 
@@ -4648,7 +4648,7 @@ public class MangeReportImpl implements MangeReportService {
 
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(req.getFinYearId());
         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(req.getSubHeadId());
-        List<BudgetAllocation> budgetAllocationsDetaliss = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(req.getSubHeadId(), hrData.getUnitId(), req.getFinYearId(), req.getAllocationTypeId(), "0");
+        List<BudgetAllocation> budgetAllocationsDetaliss = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(req.getSubHeadId(), hrData.getUnitId(), req.getFinYearId(), req.getAllocationTypeId(), "0","0","Approved");
         List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationsDetaliss.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
         List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationsDetalis1.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
 
@@ -4767,7 +4767,7 @@ public class MangeReportImpl implements MangeReportService {
         List<BudgetAllocationDetails> check = budgetAllocationDetailsRepository.findByFromUnitAndFinYearAndAllocTypeIdAndIsBudgetRevision(hrData.getUnitId(), finYearId, allocationType, "0");
         List<BudgetAllocationDetails> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
         List<BudgetAllocationDetails> checks1 = mrge.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-        List<BudgetAllocationDetails> checks = checks1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+        List<BudgetAllocationDetails> checks = checks1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status) && e.getIsDelete().equalsIgnoreCase("0")).collect(Collectors.toList());
         if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -4826,7 +4826,7 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocationDetails> reportDetail = budgetAllocationDetailsRepository.findBySubHeadAndFromUnitAndFinYearAndAllocTypeIdAndIsBudgetRevision(subHeadId, hrData.getUnitId(), finYearId, allocationType, "0");
                 List<BudgetAllocationDetails> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 List<BudgetAllocationDetails> reportDetails1 = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-                List<BudgetAllocationDetails> reportDetails = reportDetails1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+                List<BudgetAllocationDetails> reportDetails = reportDetails1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status)  && e.getIsDelete().equalsIgnoreCase("0")).collect(Collectors.toList());
                 int sz = reportDetails.size();
                 if (sz <= 0)
                     continue;
@@ -4994,7 +4994,7 @@ public class MangeReportImpl implements MangeReportService {
         List<BudgetAllocationDetails> check = budgetAllocationDetailsRepository.findByFromUnitAndFinYearAndAllocTypeIdAndIsBudgetRevision(hrData.getUnitId(), finYearId, allocationType, "0");
         List<BudgetAllocationDetails> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
         List<BudgetAllocationDetails> checks1 = mrge.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-        List<BudgetAllocationDetails> checks = checks1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+        List<BudgetAllocationDetails> checks = checks1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status)&& e.getIsDelete().equalsIgnoreCase("0")).collect(Collectors.toList());
         if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -5042,7 +5042,7 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocationDetails> reportDetail = budgetAllocationDetailsRepository.findBySubHeadAndFromUnitAndFinYearAndAllocTypeIdAndIsBudgetRevision(subHeadId, hrData.getUnitId(), finYearId, allocationType, "0");
                 List<BudgetAllocationDetails> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 List<BudgetAllocationDetails> reportDetails1 = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-                List<BudgetAllocationDetails> reportDetails = reportDetails1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+                List<BudgetAllocationDetails> reportDetails = reportDetails1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status)  && e.getIsDelete().equalsIgnoreCase("0")).collect(Collectors.toList());
 
                 int sz = reportDetails.size();
                 if (sz <= 0)
@@ -5215,7 +5215,7 @@ public class MangeReportImpl implements MangeReportService {
         List<BudgetAllocationDetails> check = budgetAllocationDetailsRepository.findByFromUnitAndFinYearAndAllocTypeIdAndIsBudgetRevision(hrData.getUnitId(), finYearId, allocationType, "0");
         List<BudgetAllocationDetails> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
         List<BudgetAllocationDetails> checks1 = mrge.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-        List<BudgetAllocationDetails> checks = checks1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+        List<BudgetAllocationDetails> checks = checks1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status)&& e.getIsDelete().equalsIgnoreCase("0")).collect(Collectors.toList());
         if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -5232,7 +5232,7 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocationDetails> reportDetail = budgetAllocationDetailsRepository.findBySubHeadAndFromUnitAndFinYearAndAllocTypeIdAndIsBudgetRevision(subHeadId, hrData.getUnitId(), finYearId, allocationType, "0");
                 List<BudgetAllocationDetails> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 List<BudgetAllocationDetails> reportDetails1 = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-                List<BudgetAllocationDetails> reportDetails = reportDetails1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+                List<BudgetAllocationDetails> reportDetails = reportDetails1.stream().filter(e -> e.getStatus().equalsIgnoreCase(status) && e.getIsDelete().equalsIgnoreCase("0")).collect(Collectors.toList());
 
                 int count = 0;
                 double sum = 0.0;
@@ -5422,7 +5422,7 @@ public class MangeReportImpl implements MangeReportService {
             double s2 = 0.0;
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetailss = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
+                List<BudgetAllocation> reportDetailss = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
                 List<BudgetAllocation> reportDetails1 = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
                 List<BudgetAllocation> reportDetails = reportDetails1.stream().filter(e -> Double.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
                 if (reportDetails.size() <= 0) {
@@ -5714,7 +5714,7 @@ public class MangeReportImpl implements MangeReportService {
             double s2 = 0.0;
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
+                List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
                 List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 List<BudgetAllocation> reportDetails1 = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
                 List<BudgetAllocation> reportDetails = reportDetails1.stream().filter(e -> Double.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
@@ -5962,7 +5962,7 @@ public class MangeReportImpl implements MangeReportService {
             double s2 = 0.0;
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
+                List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
                 List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 List<BudgetAllocation> reportDetails1 = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
                 List<BudgetAllocation> reportDetails = reportDetails1.stream().filter(e -> Double.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
@@ -6171,7 +6171,8 @@ public class MangeReportImpl implements MangeReportService {
             String unit = "";
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationTypeBE, "0");
+                List<BudgetAllocation>reportDetails = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationTypeBE, "0","0","Approved");
+                //List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationTypeBE, "0");
                 //List<BudgetAllocation> reportDetails = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
                 if (reportDetails.size() <= 0) {
                     continue;
@@ -6190,7 +6191,8 @@ public class MangeReportImpl implements MangeReportService {
 
                     String unitIds = row.getToUnit();
                     amount = Double.parseDouble(row.getAllocationAmount());
-                    List<BudgetAllocation> reData = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0");
+                    List<BudgetAllocation> reData1 = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0");
+                    List<BudgetAllocation> reData=reData1.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved") && e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
                     if (reData.size() <= 0) {
                         reFinalAmount = 0.0000f;
                     } else {
@@ -6432,8 +6434,8 @@ public class MangeReportImpl implements MangeReportService {
             double grTotalAddition = 0;
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationTypeBE, "0");
-                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation>reportDetails1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationTypeBE, "0","0","Approved");
+                List<BudgetAllocation> reportDetails = reportDetails1.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 //List<BudgetAllocation> reportDetails = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
 
                 int sz = reportDetails.size();
@@ -6462,7 +6464,8 @@ public class MangeReportImpl implements MangeReportService {
                     String unitIds = reportDetails.get(r).getToUnit();
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
-                    List<BudgetAllocation> reDatas = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0");
+
+                    List<BudgetAllocation> reDatas = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0","0","Approved");
                     List<BudgetAllocation> reData = reDatas.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
 
                     if (reData.size() <= 0) {
@@ -6668,8 +6671,8 @@ public class MangeReportImpl implements MangeReportService {
             int i = 1;
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationTypeBE, "0");
-                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation>reportDetails1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationTypeBE, "0","0","Approved");
+                List<BudgetAllocation> reportDetails = reportDetails1.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 //List<BudgetAllocation> reportDetails = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
                 if (reportDetails.size() <= 0) {
                     continue;
@@ -6696,8 +6699,8 @@ public class MangeReportImpl implements MangeReportService {
                     String unitIds = reportDetails.get(r).getToUnit();
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
-                    List<BudgetAllocation> reDatas = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0");
-                    List<BudgetAllocation> reData = reDatas.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                    List<BudgetAllocation> reDatas = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0","0","Approved");
+                    List<BudgetAllocation> reData = reDatas.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId()) ).collect(Collectors.toList());
 
                     if (reData.size() <= 0) {
                         reFinalAmount = 0.0000f;
@@ -7255,9 +7258,15 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, bHeadType + " " + "RECORD NOT FOUND", HttpStatus.OK.value());
         }
-        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
-        List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
-        List<BudgetAllocation> checks = mrge.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        List<BudgetAllocation> checks;
+        List<CgUnit> listOfSubUnit1=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+        if(listOfSubUnit1.size()==0){
+            checks = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(frmUnit, finYearId, allocationType, "0","0","Approved");
+        }else{
+            List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
+            List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+            checks = mrge.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        }
         if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -7356,13 +7365,12 @@ public class MangeReportImpl implements MangeReportService {
             double grTotalSum = 0.0;
             for (String val : rowData) {
                 String subHeadId = val;
-                List<CgUnit> listOfSubUnit=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
                 List<BudgetAllocation> reportDetail;
+                List<CgUnit> listOfSubUnit=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
                 if(listOfSubUnit.size()==0){
-                    List<BudgetAllocation> reportDetail1 = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
-                    reportDetail = reportDetail1.stream().filter(e ->e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
+                    reportDetail = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
                 }else{
-                    List<BudgetAllocation>reportDetail1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
+                    List<BudgetAllocation>reportDetail1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
                     List<BudgetAllocation> reportDetailss = reportDetail1.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                     reportDetail = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
                 }
@@ -7494,44 +7502,54 @@ public class MangeReportImpl implements MangeReportService {
                 double hrbalanceAmount = 0f;
                 double hrallocationAmount = 0f;
                 double hrAmountUnit = 0.0;
-                List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, hrData.getUnitId(), allocationType, "0");
-                if (cdaParkingTrans.size() == 0) {
-                } else {
-                    for (Integer k = 0; k < cdaParkingTrans.size(); k++) {
-                        AmountUnit dbudgetFin = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(k).getAmountType());
-                        hrAmountUnit = Double.parseDouble(dbudgetFin.getAmount() + "");
-                        hrbalanceAmount = hrbalanceAmount + Double.parseDouble(cdaParkingTrans.get(k).getRemainingCdaAmount());
-                        hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
-                    }
-                }
-                double hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
+                double hrfinAmount=0.0;
+                if(listOfSubUnit1.size()==0){
 
-                XWPFTable hrrow = document.createTable(1, 8);
-                hrrow.setWidth("100%");
-                XWPFTableRow hrrow0 = hrrow.getRow(0);
-                XWPFParagraph hrcell0 = hrrow0.getCell(0).addParagraph();
-                boldText(hrcell0.createRun(), 12, "", false);
-                XWPFParagraph hrcell01 = hrrow0.getCell(1).addParagraph();
-                boldText(hrcell01.createRun(), 12, "", false);
-                XWPFParagraph hrcell02 = hrrow0.getCell(2).addParagraph();
-                boldText(hrcell02.createRun(), 12, hrunitN.getDescr(), false);
-                XWPFParagraph hrcell03 = hrrow0.getCell(3).addParagraph();
-                hrcell03.setAlignment(ParagraphAlignment.RIGHT);
-                boldText(hrcell03.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(hrfinAmount)), false);
-                XWPFParagraph hrcell04 = hrrow0.getCell(4).addParagraph();
-                hrcell04.setAlignment(ParagraphAlignment.RIGHT);
-                boldText(hrcell04.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(0)), false);
-                XWPFParagraph hrcell05 = hrrow0.getCell(5).addParagraph();
-                hrcell05.setAlignment(ParagraphAlignment.RIGHT);
-                boldText(hrcell05.createRun(), 12, String.format("%1$0,1.2f", new BigDecimal(0)), false);
-                XWPFParagraph hrcell06 = hrrow0.getCell(6).addParagraph();
-                boldText(hrcell06.createRun(), 12, "", false);
-                XWPFParagraph hrcell07 = hrrow0.getCell(7).addParagraph();
-                boldText(hrcell07.createRun(), 12, "", false);
+                }else{
+                    List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, hrData.getUnitId(), allocationType, "0");
+                    if (cdaParkingTrans.size() == 0) {
+                    } else {
+                        for (Integer k = 0; k < cdaParkingTrans.size(); k++) {
+                            AmountUnit dbudgetFin = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(k).getAmountType());
+                            hrAmountUnit = Double.parseDouble(dbudgetFin.getAmount() + "");
+                            hrbalanceAmount = hrbalanceAmount + Double.parseDouble(cdaParkingTrans.get(k).getRemainingCdaAmount());
+                            hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
+                        }
+                    }
+                    hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
+
+                    XWPFTable hrrow = document.createTable(1, 8);
+                    hrrow.setWidth("100%");
+                    XWPFTableRow hrrow0 = hrrow.getRow(0);
+                    XWPFParagraph hrcell0 = hrrow0.getCell(0).addParagraph();
+                    boldText(hrcell0.createRun(), 12, "", false);
+                    XWPFParagraph hrcell01 = hrrow0.getCell(1).addParagraph();
+                    boldText(hrcell01.createRun(), 12, "", false);
+                    XWPFParagraph hrcell02 = hrrow0.getCell(2).addParagraph();
+                    boldText(hrcell02.createRun(), 12, hrunitN.getDescr(), false);
+                    XWPFParagraph hrcell03 = hrrow0.getCell(3).addParagraph();
+                    hrcell03.setAlignment(ParagraphAlignment.RIGHT);
+                    boldText(hrcell03.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(hrfinAmount)), false);
+                    XWPFParagraph hrcell04 = hrrow0.getCell(4).addParagraph();
+                    hrcell04.setAlignment(ParagraphAlignment.RIGHT);
+                    boldText(hrcell04.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(0)), false);
+                    XWPFParagraph hrcell05 = hrrow0.getCell(5).addParagraph();
+                    hrcell05.setAlignment(ParagraphAlignment.RIGHT);
+                    boldText(hrcell05.createRun(), 12, String.format("%1$0,1.2f", new BigDecimal(0)), false);
+                    XWPFParagraph hrcell06 = hrrow0.getCell(6).addParagraph();
+                    boldText(hrcell06.createRun(), 12, "", false);
+                    XWPFParagraph hrcell07 = hrrow0.getCell(7).addParagraph();
+                    boldText(hrcell07.createRun(), 12, "", false);
+                }
+
 
                 double tot = sum + hrfinAmount;
                 double ex = expsum / reqAmount;
-                double perc = (ex * 100) / tot;
+                double perc=0.0;
+                if(tot==0)
+                    perc=0.0;
+                else
+                    perc = (ex * 100) / tot;
 
                 String tot1=ConverterUtils.addDecimalPoint(tot+"");
                 String ex1=ConverterUtils.addDecimalPoint(ex+"");
@@ -7698,9 +7716,15 @@ public class MangeReportImpl implements MangeReportService {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
             }, bHeadType + " " + "RECORD NOT FOUND", HttpStatus.OK.value());
         }
-        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
-        List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
-        List<BudgetAllocation> checks = mrge.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        List<BudgetAllocation> checks;
+        List<CgUnit> listOfSubUnit1=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+        if(listOfSubUnit1.size()==0){
+            checks = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(frmUnit, finYearId, allocationType, "0","0","Approved");
+        }else{
+            List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
+            List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+            checks = mrge.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        }
         if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -7735,16 +7759,16 @@ public class MangeReportImpl implements MangeReportService {
             double IcgAmount = 0.0;
             for (String val : rowData) {
                 String subHeadId = val;
-                List<CgUnit> listOfSubUnit=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
                 List<BudgetAllocation> reportDetails;
+                List<CgUnit> listOfSubUnit=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
                 if(listOfSubUnit.size()==0){
-                    List<BudgetAllocation> reportDetail1 = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
-                    reportDetails = reportDetail1.stream().filter(e ->e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
+                    reportDetails = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
                 }else{
-                    List<BudgetAllocation>reportDetail1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationType, "0");
+                    List<BudgetAllocation>reportDetail1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
                     List<BudgetAllocation> reportDetailss = reportDetail1.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                     reportDetails = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
-                }if (reportDetails.size() <= 0) {
+                }
+                if (reportDetails.size() <= 0) {
                     continue;
                 }
                 String hrUnit = hrData.getUnitId();
@@ -7846,26 +7870,31 @@ public class MangeReportImpl implements MangeReportService {
                 double hrbalanceAmount = 0;
                 double hrallocationAmount = 0;
                 double hrAmountUnit = 0.0;
-                List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, hrData.getUnitId(), allocationType, "0");
-                if (cdaParkingTrans.size() == 0) {
-                } else {
-                    for (Integer k = 0; k < cdaParkingTrans.size(); k++) {
-                        AmountUnit dbudgetFin = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(k).getAmountType());
-                        hrAmountUnit = dbudgetFin.getAmount();
-                        hrbalanceAmount = hrbalanceAmount + Double.parseDouble(cdaParkingTrans.get(k).getRemainingCdaAmount());
-                        hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
+                double hrfinAmount=0.0;
+                if(listOfSubUnit1.size()==0){
+                }else{
+                    List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, hrData.getUnitId(), allocationType, "0");
+                    if (cdaParkingTrans.size() == 0) {
+                    } else {
+                        for (Integer k = 0; k < cdaParkingTrans.size(); k++) {
+                            AmountUnit dbudgetFin = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(k).getAmountType());
+                            hrAmountUnit = dbudgetFin.getAmount();
+                            hrbalanceAmount = hrbalanceAmount + Double.parseDouble(cdaParkingTrans.get(k).getRemainingCdaAmount());
+                            hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
+                        }
                     }
+                    hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
+                    subResponce.setSubHead("");
+                    subResponce.setUnitName(hrunitN.getDescr());
+                    subResponce.setIcgAllocAmount("");
+                    subResponce.setAllocAmount(String.format("%1$0,1.4f", new BigDecimal(hrfinAmount)));
+                    subResponce.setBillSubmission(String.format("%1$0,1.4f", new BigDecimal(0)));
+                    subResponce.setPercentageBill(String.format("%1$0,1.2f", new BigDecimal(0)));
+                    subResponce.setCgdaBooking("");
+                    subResponce.setPercentageBillClearnce("");
+                    addRes.add(subResponce);
                 }
-                double hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
-                subResponce.setSubHead("");
-                subResponce.setUnitName(hrunitN.getDescr());
-                subResponce.setIcgAllocAmount("");
-                subResponce.setAllocAmount(String.format("%1$0,1.4f", new BigDecimal(hrfinAmount)));
-                subResponce.setBillSubmission(String.format("%1$0,1.4f", new BigDecimal(0)));
-                subResponce.setPercentageBill(String.format("%1$0,1.2f", new BigDecimal(0)));
-                subResponce.setCgdaBooking("");
-                subResponce.setPercentageBillClearnce("");
-                addRes.add(subResponce);
+
 
             }
             res.setFerDetails(addRes);
@@ -8765,7 +8794,7 @@ public class MangeReportImpl implements MangeReportService {
             String unit = "";
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationTypeBE, "0");
+                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationTypeBE, "0","0","Approved");
                 //List<BudgetAllocation> reportDetails = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
                 if (reportDetails.size() <= 0) {
                     continue;
@@ -8798,7 +8827,9 @@ public class MangeReportImpl implements MangeReportService {
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
 
-                    List<BudgetAllocation> reData = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0");
+                    List<BudgetAllocation> reData1 = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0");
+                    List<BudgetAllocation> reData=reData1.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved") && e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
+
                     if (reData.size() <= 0) {
                         reFinalAmount = 0.0000f;
                     } else {
@@ -8812,7 +8843,9 @@ public class MangeReportImpl implements MangeReportService {
                         reFinalAmount = reTotalAmount * reAmountUnit / reqAmount;
                     }
 
-                    List<BudgetAllocation> maData = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeMA, "0");
+                    List<BudgetAllocation> maData1 = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeMA, "0");
+                    List<BudgetAllocation> maData=maData1.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved") && e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
+
                     if (maData.size() <= 0) {
                         maFinalAmount = 0.0000f;
                     } else {
@@ -9071,7 +9104,7 @@ public class MangeReportImpl implements MangeReportService {
             double grTotalMA = 0;
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationTypeBE, "0");
+                List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationTypeBE, "0","0","Approved");
                 List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                 //List<BudgetAllocation> reportDetails = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
 
@@ -9109,7 +9142,9 @@ public class MangeReportImpl implements MangeReportService {
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
 
-                    List<BudgetAllocation> reData = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0");
+                    List<BudgetAllocation> reData1 = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0");
+                    List<BudgetAllocation> reData=reData1.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved") && e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
+
                     if (reData.size() <= 0) {
                         reFinalAmount = 0.0000f;
                     } else {
@@ -9123,7 +9158,9 @@ public class MangeReportImpl implements MangeReportService {
                         reFinalAmount = reTotalAmount * reAmountUnit / reqAmount;
                     }
 
-                    List<BudgetAllocation> maData = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeMA, "0");
+                    List<BudgetAllocation> maData1 = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeMA, "0");
+                    List<BudgetAllocation> maData=maData1.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved") && e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
+
                     if (maData.size() <= 0) {
                         maFinalAmount = 0.0000f;
                     } else {
@@ -9346,8 +9383,9 @@ public class MangeReportImpl implements MangeReportService {
             int i = 1;
             for (String val : rowData) {
                 String subHeadId = val;
-                List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, frmUnit, finYearId, allocationTypeBE, "0");
-                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationTypeBE, "0","0","Approved");
+                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())
+                ).collect(Collectors.toList());
                 if (reportDetails.size() <= 0) {
                     continue;
                 }
@@ -9378,7 +9416,9 @@ public class MangeReportImpl implements MangeReportService {
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
 
-                    List<BudgetAllocation> reData = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0");
+                    List<BudgetAllocation> reData1 = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeRE, "0");
+                    List<BudgetAllocation> reData=reData1.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved") && e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
+
                     if (reData.size() <= 0) {
                         reFinalAmount = 0.0000f;
                     } else {
@@ -9391,7 +9431,9 @@ public class MangeReportImpl implements MangeReportService {
                         reAmountUnit = Double.parseDouble(amountTypeRe.getAmount() + "");
                         reFinalAmount = reTotalAmount * reAmountUnit / reqAmount;
                     }
-                    List<BudgetAllocation> maData = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeMA, "0");
+                    List<BudgetAllocation> maData1 = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitIds, frmUnit, finYearId, subHeadId, allocationTypeMA, "0");
+                    List<BudgetAllocation> maData=maData1.stream().filter(e->e.getStatus().equalsIgnoreCase("Approved") && e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
+
                     if (maData.size() <= 0) {
                         maFinalAmount = 0.0000f;
                     } else {
