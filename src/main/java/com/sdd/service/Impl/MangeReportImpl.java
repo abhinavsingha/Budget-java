@@ -6822,7 +6822,12 @@ public class MangeReportImpl implements MangeReportService {
             }, bHeadType + " " + "RECORD NOT FOUND", HttpStatus.OK.value());
         }
         List<BudgetAllocation> checks;
-        List<CgUnit> listOfSubUnit1=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+        String hrUnitId="";
+        if (hrData.getUnitId().equalsIgnoreCase("001321"))
+            hrUnitId="000225";
+        else
+            hrUnitId=hrData.getUnitId();
+        List<CgUnit> listOfSubUnit1=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrUnitId);
         if(listOfSubUnit1.size()==0){
             checks = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(frmUnit, finYearId, allocationType, "0","0","Approved");
         }else{
@@ -6938,8 +6943,7 @@ public class MangeReportImpl implements MangeReportService {
                 String hrUnit = hrData.getUnitId();
                 System.out.println("Sorting " + subHeadId);
                 List<BudgetAllocation> reportDetail;
-                List<CgUnit> listOfSubUnit=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
-                if(listOfSubUnit.size()==0){
+                if(listOfSubUnit1.size()==0){
                     reportDetail = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
                 }else{
                     List<BudgetAllocation>reportDetail1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
@@ -7106,7 +7110,7 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
                     PdfPCell cell20 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(tot+""), cellFont));
                     PdfPCell cell30 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(ex+""), cellFont));
-                    PdfPCell cell40 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(perc1+""), cellFont));
+                    PdfPCell cell40 = new PdfPCell(new Phrase(perc1, cellFont));
                     cell10.setPadding(10);
                     cell20.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                     cell30.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -7259,7 +7263,12 @@ public class MangeReportImpl implements MangeReportService {
             }, bHeadType + " " + "RECORD NOT FOUND", HttpStatus.OK.value());
         }
         List<BudgetAllocation> checks;
-        List<CgUnit> listOfSubUnit1=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+        String hrUnitId="";
+        if (hrData.getUnitId().equalsIgnoreCase("001321"))
+            hrUnitId="000225";
+        else
+            hrUnitId=hrData.getUnitId();
+        List<CgUnit> listOfSubUnit1=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrUnitId);
         if(listOfSubUnit1.size()==0){
             checks = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(frmUnit, finYearId, allocationType, "0","0","Approved");
         }else{
@@ -7366,8 +7375,7 @@ public class MangeReportImpl implements MangeReportService {
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail;
-                List<CgUnit> listOfSubUnit=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
-                if(listOfSubUnit.size()==0){
+                if(listOfSubUnit1.size()==0){
                     reportDetail = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
                 }else{
                     List<BudgetAllocation>reportDetail1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
@@ -7717,6 +7725,11 @@ public class MangeReportImpl implements MangeReportService {
             }, bHeadType + " " + "RECORD NOT FOUND", HttpStatus.OK.value());
         }
         List<BudgetAllocation> checks;
+        String hrUnitId="";
+        if (hrData.getUnitId().equalsIgnoreCase("001321"))
+            hrUnitId="000225";
+        else
+            hrUnitId=hrData.getUnitId();
         List<CgUnit> listOfSubUnit1=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
         if(listOfSubUnit1.size()==0){
             checks = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(frmUnit, finYearId, allocationType, "0","0","Approved");
@@ -7760,8 +7773,7 @@ public class MangeReportImpl implements MangeReportService {
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetails;
-                List<CgUnit> listOfSubUnit=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
-                if(listOfSubUnit.size()==0){
+                if(listOfSubUnit1.size()==0){
                     reportDetails = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
                 }else{
                     List<BudgetAllocation>reportDetail1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
