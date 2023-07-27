@@ -609,6 +609,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
         mangeInboxOutbox.setStatus("Fully Approved");
         mangeInboxOutbox.setState("AP");
         mangeInboxOutbox.setIsArchive("0");
+        mangeInboxOutbox.setAllocationType(req.getUnitRebaseRequests().get(0).getAllocationTypeId());
         mangeInboxOutbox.setIsApproved("1");
         mangeInboxOutbox.setIsFlag("0");
         mangeInboxOutbox.setIsRevision(0);
@@ -634,11 +635,13 @@ public class MangeRebaseImpl implements MangeRebaseService {
             mangeInboxOutbox2.setIsArchive("0");
             mangeInboxOutbox2.setIsApproved("1");
             mangeInboxOutbox2.setIsFlag("0");
+            mangeInboxOutbox2.setAllocationType(req.getUnitRebaseRequests().get(0).getAllocationTypeId());
             mangeInboxOutbox2.setIsRevision(0);
             mangeInboxOutbox2.setIsBgcg("RR");
             mangeInboxOutbox2.setGroupId(authGrId);
             mangeInboxOutBoxRepository.save(mangeInboxOutbox2);
         }
+
         MangeInboxOutbox mangeInboxOutbox1 = new MangeInboxOutbox();
         mangeInboxOutbox1.setMangeInboxId(HelperUtils.getMangeInboxId());
         mangeInboxOutbox1.setRemarks("UNIT REBASE");
@@ -655,6 +658,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
         mangeInboxOutbox1.setIsArchive("0");
         mangeInboxOutbox1.setIsApproved("1");
         mangeInboxOutbox1.setIsFlag("0");
+        mangeInboxOutbox1.setAllocationType(req.getUnitRebaseRequests().get(0).getAllocationTypeId());
         mangeInboxOutbox1.setIsRevision(0);
         mangeInboxOutbox1.setIsBgcg("RR");
         mangeInboxOutbox1.setGroupId(authGrId);
@@ -667,6 +671,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
         mangeInboxOutbox2.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
         mangeInboxOutbox2.setToUnit(toHdUnitId);
         mangeInboxOutbox2.setFromUnit(toHdUnitId);
+        mangeInboxOutbox2.setAllocationType(req.getUnitRebaseRequests().get(0).getAllocationTypeId());
         mangeInboxOutbox2.setApproverpId("");
         mangeInboxOutbox2.setType(chekUnit.getDescr());
         mangeInboxOutbox2.setRoleId(hrDataCheck.getRoleId());
@@ -893,7 +898,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     afterRebaseNotification.setIsApproved("0");
                     afterRebaseNotification.setAllocationType(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                     afterRebaseNotification.setIsFlag("0");
-                    afterRebaseNotification.setType("Rebase Receipt");
+                    afterRebaseNotification.setType("Receipt After Rebase");
                     afterRebaseNotification.setAmount("");
                     afterRebaseNotification.setIsBgcg("BR");
                     afterRebaseNotification.setIsRevision(0);
