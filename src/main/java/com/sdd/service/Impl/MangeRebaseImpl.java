@@ -1571,6 +1571,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 } else {
                     ///............................SAME REGION..............................
                     ///............................DHQ REBASE BAL DEDUCT FROM ALLOCATION..............................
+                    String frmRhqUnitId="";
 
                     List<BudgetAllocationDetails> frmHdUnitDtl = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(frmUnit, req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0", "0");
                     List<BudgetAllocationDetails> frmHdUnitDtls = frmHdUnitDtl.stream().filter(e -> e.getStatus().equalsIgnoreCase("Approved")).collect(Collectors.toList());
@@ -1580,6 +1581,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         for (Integer i = 0; i < frmHdUnitDtls.size(); i++) {
                             BudgetAllocationDetails allocDatatails = frmHdUnitDtls.get(i);
                             AmountUnit amountType = amountUnitRepository.findByAmountTypeId(allocDatatails.getAmountType());
+                            frmRhqUnitId=allocDatatails.getFromUnit();
                             double AmtUnit = amountType.getAmount();
                             double unloAmnt = trnsfrAmount / AmtUnit;
                             double allocAmt = Double.parseDouble(allocDatatails.getAllocationAmount());
@@ -1723,7 +1725,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationDetailsRecipt.setAllocationDate(HelperUtils.getCurrentTimeStamp());
                         budgetAllocationDetailsRecipt.setAllocTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                         budgetAllocationDetailsRecipt.setFinYear(req.getFinYear());
-                        budgetAllocationDetailsRecipt.setFromUnit(toHdUnitId);
+                        budgetAllocationDetailsRecipt.setFromUnit(frmRhqUnitId);
                         budgetAllocationDetailsRecipt.setToUnit(toHdUnitId);
                         budgetAllocationDetailsRecipt.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                         budgetAllocationDetailsRecipt.setStatus("Approved");
@@ -1834,7 +1836,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationRecipt.setRefTransId(HelperUtils.getBudgetAllocationTypeId());
                         budgetAllocationRecipt.setFinYear(req.getFinYear());
                         budgetAllocationRecipt.setToUnit(toHdUnitId);
-                        budgetAllocationRecipt.setFromUnit(toHdUnitId);
+                        budgetAllocationRecipt.setFromUnit(frmRhqUnitId);
                         budgetAllocationRecipt.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                         budgetAllocationRecipt.setAllocationTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                         budgetAllocationRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
@@ -1859,7 +1861,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         mangeInboxOutboxRHqSend.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                         mangeInboxOutboxRHqSend.setToUnit(toHdUnitId);
                         mangeInboxOutboxRHqSend.setGroupId(reciptAuthGroupId);
-                        mangeInboxOutboxRHqSend.setFromUnit(HelperUtils.HEADUNITID);
+                        mangeInboxOutboxRHqSend.setFromUnit(frmRhqUnitId);
                         mangeInboxOutboxRHqSend.setRoleId(hrDataCheck.getRoleId());
                         mangeInboxOutboxRHqSend.setCreaterpId(hrDataCheck.getPid());
                         mangeInboxOutboxRHqSend.setApproverpId(hrDataCheck.getPid());
@@ -1929,73 +1931,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                     }
                 }
-
-                // ...............................ALLOCATION FOR REBASE UNIT HERE........................
-//                String authGrId11=HelperUtils.getAuthorityGroupId();
-//                BudgetAllocationDetails budgetAllocationDetails1 = new BudgetAllocationDetails();
-//                budgetAllocationDetails1.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
-//                budgetAllocationDetails1.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
-//                budgetAllocationDetails1.setAmountType(req.getUnitRebaseRequests().get(k).getAmountType());
-//                budgetAllocationDetails1.setAllocationDate(HelperUtils.getCurrentTimeStamp());
-//                budgetAllocationDetails1.setAllocTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
-//                budgetAllocationDetails1.setFinYear(req.getFinYear());
-//                budgetAllocationDetails1.setFromUnit(toHdUnitId);
-//                budgetAllocationDetails1.setToUnit(req.getRebaseUnitId());
-//                budgetAllocationDetails1.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
-//                budgetAllocationDetails1.setStatus("Approved");
-//                budgetAllocationDetails1.setRemarks("Rebase Amount");
-//                budgetAllocationDetails1.setIsTYpe(isType);
-//                budgetAllocationDetails1.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-//                budgetAllocationDetails1.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-//                budgetAllocationDetails1.setAuthGroupId(authGrId11);
-//                budgetAllocationDetails1.setRevisedAmount("0");
-//                budgetAllocationDetails1.setRefTransactionId(HelperUtils.getTransId());
-//                budgetAllocationDetails1.setUserId(hrDataCheck.getPid());
-//                budgetAllocationDetails1.setIsDelete("0");
-//                budgetAllocationDetails1.setTransactionId(HelperUtils.getTransId());
-//                budgetAllocationDetailsRepository.save(budgetAllocationDetails1);
-//
-//                BudgetAllocation budgetAllocation1 = new BudgetAllocation();
-//                budgetAllocation1.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
-//                budgetAllocation1.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
-//                budgetAllocation1.setIsFlag("0");
-//                budgetAllocation1.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-//                budgetAllocation1.setRefTransId(HelperUtils.getTransId());
-//                budgetAllocation1.setFinYear(req.getFinYear());
-//                budgetAllocation1.setToUnit(req.getRebaseUnitId());
-//                budgetAllocation1.setFromUnit(toHdUnitId);
-//                budgetAllocation1.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
-//                budgetAllocation1.setIsTYpe(isType);
-//                budgetAllocation1.setAllocationTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
-//                budgetAllocation1.setIsBudgetRevision("0");
-//                budgetAllocation1.setUnallocatedAmount("0");
-//                budgetAllocation1.setAllocationAmount(ConverterUtils.addDecimalPoint((req.getUnitRebaseRequests().get(k).getBalAmount()) + ""));
-//                budgetAllocation1.setRevisedAmount(ConverterUtils.addDecimalPoint(0 + ""));
-//                budgetAllocation1.setUserId(hrDataCheck.getPid());
-//                budgetAllocation1.setStatus("Approved");
-//                budgetAllocation1.setAmountType(req.getUnitRebaseRequests().get(k).getAmountType());
-//                budgetAllocation1.setAuthGroupId(authGrId11);
-//                budgetAllocationRepository.save(budgetAllocation1);
-
-
-//                if (req.getUnitRebaseRequests().size() > 0) {
-//
-//                    for (Integer m = 0; m < req.getUnitRebaseRequests().size(); m++) {
-//
-//
-//                        List<CdaParkingCrAndDr> selfDrCrCdaSieze = parkingCrAndDrRepository.findByFinYearIdAndBudgetHeadIdAndAllocTypeIdAndUnitId(req.getFinYear(), req.getUnitRebaseRequests().get(m).getBudgetHeadId(), req.getUnitRebaseRequests().get(m).getAllocationTypeId(), req.getRebaseUnitId());
-//                        if (selfDrCrCdaSieze.size() > 0) {
-//                            for (Integer i = 0; i < 50; i++) {
-//                                CdaParkingCrAndDr cdaParking = selfDrCrCdaSieze.get(i);
-//                                cdaParking.setIsFlag("1");
-//                                cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-//                                parkingCrAndDrRepository.save(cdaParking);
-//                            }
-//                        }
-//
-//                    }
-//                }
-
 
             }
         } else {
