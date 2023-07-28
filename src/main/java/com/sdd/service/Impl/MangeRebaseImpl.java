@@ -1063,10 +1063,12 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     }
 
 
-                    // 2 Side.....................DHQ BAL ALLOCATION HERE AS RECEPIET..................................
+                    // 2 Side..................... BAL ALLOCATION HERE AS RECEPIET..................................
 
                     CgUnit toHead = cgUnitRepository.findByUnit(toHdUnitId);
                     if (toHead.getIsRebaseAuthority().equalsIgnoreCase("1")) {
+
+                        // 2 Side..................... RHQ BAL  ALLOCATION HERE AS RECEPIET..................................
 
                         List<BudgetAllocationDetails> toRhqDtl = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(toHdUnitId, req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0", "0");
                         List<BudgetAllocationDetails> toRhqDtls = toRhqDtl.stream().filter(e -> e.getStatus().equalsIgnoreCase("Approved")).collect(Collectors.toList());
@@ -1244,7 +1246,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             mangeInboxOutboxRHqSendRecipt.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             mangeInboxOutboxRHqSendRecipt.setToUnit(req.getRebaseUnitId());
                             mangeInboxOutboxRHqSendRecipt.setGroupId(budgetReciptAuthGroupId);
-                            mangeInboxOutboxRHqSendRecipt.setFromUnit(HelperUtils.HEADUNITID);
+                            mangeInboxOutboxRHqSendRecipt.setFromUnit(toHdUnitId);
                             mangeInboxOutboxRHqSendRecipt.setRoleId(hrDataCheck.getRoleId());
                             mangeInboxOutboxRHqSendRecipt.setCreaterpId(hrDataCheck.getPid());
                             mangeInboxOutboxRHqSendRecipt.setApproverpId(hrDataCheck.getPid());
