@@ -3408,7 +3408,10 @@ public class MangeReportImpl implements MangeReportService {
 
             }
 
-        } else {
+        }
+
+
+        else {
 
             if (cdaReportRequest.getReportType() == null || cdaReportRequest.getReportType().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REPORT TYPE CAN NOT BE BLANK");
@@ -3523,7 +3526,9 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
 
-            } else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
+            }
+
+            else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
 
                 if (cdaReportRequest.getUnitId() == null || cdaReportRequest.getUnitId().isEmpty()) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT ID CAN NOT BE BLANK");
