@@ -7132,12 +7132,18 @@ public class MangeReportImpl implements MangeReportService {
                 grTotalSum += Double.parseDouble(perc1);;
 
             }
+            double perc1=0.0;
+            if(grTotalIcg==0)
+                perc1=0.0;
+            else
+                perc1 = (grTotalAddition * 100) / grTotalIcg;
+
 
             PdfPCell cell50 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
             PdfPCell cell51 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalIcg), cellFont));
             PdfPCell cell60 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAlloc), cellFont));
             PdfPCell cell70 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAddition), cellFont));
-            PdfPCell cell80 = new PdfPCell(new Phrase(String.format("%1$0,1.2f", grTotalSum), cellFont));
+            PdfPCell cell80 = new PdfPCell(new Phrase(ConverterUtils.addDecimal2Point(perc1+""), cellFont));
             cell50.setPadding(12);
             cell51.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell60.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -7592,6 +7598,11 @@ public class MangeReportImpl implements MangeReportService {
                 grTotalSum += Double.parseDouble(perc1);;
 
             }
+            double perc1=0.0;
+            if(grTotalIcg==0)
+                perc1=0.0;
+            else
+                perc1 = (grTotalAddition * 100) / grTotalIcg;
 
             XWPFTable table220 = document.createTable(1, 8);
             table220.setWidth("100%");
@@ -7611,7 +7622,7 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne2200.createRun(), 12, String.format("%1$0,1.4f", grTotalAddition), true);
             XWPFParagraph paragraphtableRowOne2250 = tableRowOne220.getCell(5).addParagraph();
             paragraphtableRowOne2250.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2250.createRun(), 12, String.format("%1$0,1.2f", grTotalSum), true);
+            boldText(paragraphtableRowOne2250.createRun(), 12, String.format("%1$0,1.2f", perc1), true);
             XWPFParagraph paragraphtableRowOne2260 = tableRowOne220.getCell(6).addParagraph();
             boldText(paragraphtableRowOne2260.createRun(), 12, "", true);
             XWPFParagraph paragraphtableRowOne2270 = tableRowOne220.getCell(7).addParagraph();
