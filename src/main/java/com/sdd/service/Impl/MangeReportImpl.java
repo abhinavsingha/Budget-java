@@ -1578,8 +1578,11 @@ public class MangeReportImpl implements MangeReportService {
 
             AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaAmountList.get(k).getAmountType());
             balanceAmount = balanceAmount + (Double.parseDouble(cdaAmountList.get(k).getRemainingCdaAmount()) * amountUnit.getAmount());
-            allocationAmount = allocationAmount + (Double.parseDouble(cdaAmountList.get(k).getTotalParkingAmount()) * amountUnit.getAmount());
+            allocationAmount = allocationAmount + (Double.parseDouble(cdaAmountList.get(k).getRemainingCdaAmount()) * amountUnit.getAmount());
+
+
         }
+
 
 
         cbReportResponse.setAllocatedAmount(String.format("%.2f", allocationAmount));
@@ -2364,7 +2367,7 @@ public class MangeReportImpl implements MangeReportService {
                                     expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                 }
                             }
-                            amount = expCdaOrSubHeadWise;
+                            amount = expCdaOrSubHeadWise/ Double.parseDouble(amountUnit.getAmount().toString());
 
                             if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                 amount = amount;
@@ -2473,7 +2476,7 @@ public class MangeReportImpl implements MangeReportService {
                                         expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                     }
                                 }
-                                amount = expCdaOrSubHeadWise;
+                                amount = expCdaOrSubHeadWise/ Double.parseDouble(amountUnit.getAmount().toString());
 
 
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
@@ -2577,7 +2580,7 @@ public class MangeReportImpl implements MangeReportService {
                                         expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                     }
                                 }
-                                amount = expCdaOrSubHeadWise;
+                                amount = expCdaOrSubHeadWise/ Double.parseDouble(amountUnit.getAmount().toString());
 
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                     amount = amount;
@@ -2680,7 +2683,7 @@ public class MangeReportImpl implements MangeReportService {
                                     expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                 }
                             }
-                            amount = expCdaOrSubHeadWise;
+                            amount = expCdaOrSubHeadWise/ Double.parseDouble(amountUnit.getAmount().toString());
 
 
                             if (cdaData.get(m).getRemainingCdaAmount() == null) {
@@ -2813,7 +2816,7 @@ public class MangeReportImpl implements MangeReportService {
                                     expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                 }
                             }
-                            amount = expCdaOrSubHeadWise;
+                            amount = expCdaOrSubHeadWise/ Double.parseDouble(amountUnit.getAmount().toString());
 
                             if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                 amount = amount;
@@ -2942,7 +2945,7 @@ public class MangeReportImpl implements MangeReportService {
                                         expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                     }
                                 }
-                                amount = expCdaOrSubHeadWise;
+                                amount = expCdaOrSubHeadWise/ Double.parseDouble(amountUnit.getAmount().toString());
 
 
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
