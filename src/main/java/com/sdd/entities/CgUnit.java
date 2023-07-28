@@ -22,10 +22,10 @@ public class CgUnit {
     @Column(name = "UNIT", nullable = false)
     private String unit;
 
-    @Column(name = "DESCR", nullable = false)
+    @Column(name = "DESCR")
     private String descr;
 
-    @Column(name = "SHORT", nullable = false)
+    @Column(name = "SHORT")
     private String cgUnitShort;
 
     @Column(name = "PURPOSE_CODE")
@@ -44,10 +44,10 @@ public class CgUnit {
     @Column(name = "CREATED_ON")
     private Timestamp createdOn;
 
-    @Column(name = "UPDATED_ON", nullable = false)
+    @Column(name = "UPDATED_ON")
     private Timestamp updatedOn;
 
-    @Column(name = "STATION_ID", nullable = false)
+    @Column(name = "STATION_ID")
     private String stationId;
 
     @Column(name = "BUD_GROUP_UNIT")
