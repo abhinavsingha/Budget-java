@@ -7277,9 +7277,9 @@ public class MangeReportImpl implements MangeReportService {
 
 
             PdfPCell cell50 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-            PdfPCell cell51 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalIcg+sumalcg), cellFont));
-            PdfPCell cell60 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAlloc+sumalcg), cellFont));
-            PdfPCell cell70 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAddition), cellFont));
+            PdfPCell cell51 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalIcg+sumalcg+""), cellFont));
+            PdfPCell cell60 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAlloc+sumalcg+""), cellFont));
+            PdfPCell cell70 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAddition+""), cellFont));
             PdfPCell cell80 = new PdfPCell(new Phrase(ConverterUtils.addDecimal2Point(perc1+""), cellFont));
             cell50.setPadding(12);
             cell51.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -7823,18 +7823,18 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne220.createRun(), 12, "GRAND TOTAL", true);
             XWPFParagraph paragraphtableRowOne1220 = tableRowOne220.getCell(1).addParagraph();
             paragraphtableRowOne1220.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne1220.createRun(), 12, String.format("%1$0,1.4f", grTotalIcg+sumalcg), true);
+            boldText(paragraphtableRowOne1220.createRun(), 12,ConverterUtils.addDecimalPoint(grTotalIcg+sumalcg+""), true);
             XWPFParagraph paragraphtableRowOne2220 = tableRowOne220.getCell(2).addParagraph();
             boldText(paragraphtableRowOne2220.createRun(), 12, " ", true);
             XWPFParagraph paragraphtableRowOne2230 = tableRowOne220.getCell(3).addParagraph();
             paragraphtableRowOne2230.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", grTotalAlloc+sumalcg), true);
+            boldText(paragraphtableRowOne2230.createRun(), 12,ConverterUtils.addDecimalPoint(grTotalAlloc+sumalcg+""), true);
             XWPFParagraph paragraphtableRowOne2200 = tableRowOne220.getCell(4).addParagraph();
             paragraphtableRowOne2200.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2200.createRun(), 12, String.format("%1$0,1.4f", grTotalAddition), true);
+            boldText(paragraphtableRowOne2200.createRun(), 12, ConverterUtils.addDecimalPoint(grTotalAddition+""), true);
             XWPFParagraph paragraphtableRowOne2250 = tableRowOne220.getCell(5).addParagraph();
             paragraphtableRowOne2250.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2250.createRun(), 12, String.format("%1$0,1.2f", perc1), true);
+            boldText(paragraphtableRowOne2250.createRun(), 12,ConverterUtils.addDecimal2Point(perc1+""), true);
             XWPFParagraph paragraphtableRowOne2260 = tableRowOne220.getCell(6).addParagraph();
             boldText(paragraphtableRowOne2260.createRun(), 12, "", true);
             XWPFParagraph paragraphtableRowOne2270 = tableRowOne220.getCell(7).addParagraph();
