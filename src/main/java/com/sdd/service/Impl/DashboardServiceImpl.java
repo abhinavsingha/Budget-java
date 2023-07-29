@@ -861,7 +861,7 @@ public class DashboardServiceImpl implements DashBoardService {
                     }
                     double cdaTotal=totalCda*rqUnit/reqAmount;
                     double cdaRming=remCdaBal*rqUnit/reqAmount;
-                    List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(uid, finYearId, subHeadId,allocationTypeId, "0");
+                    List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(uid, finYearId, subHeadId,allocationTypeId, "0","0");
                     double totalAmount = 0.0;
                     if (expenditure.size() > 0) {
                         for (ContigentBill bill : expenditure) {
@@ -908,14 +908,6 @@ public class DashboardServiceImpl implements DashBoardService {
                     perBal += Float.parseFloat(new BigDecimal(perAmnt).toPlainString());
                 }
             }
-            BigDecimal decimal = new BigDecimal(sumAlloc);
-            BigDecimal roundedAmount = decimal.setScale(4, RoundingMode.HALF_UP);
-
-            BigDecimal decimal1 = new BigDecimal(sumExp);
-            BigDecimal roundedAmount1 = decimal1.setScale(4, RoundingMode.HALF_UP);
-
-            BigDecimal decimal2 = new BigDecimal(sumBal);
-            BigDecimal roundedAmount2 = decimal2.setScale(4, RoundingMode.HALF_UP);
             double per=0.0;
             if(sumAlloc!=0){
                 per=sumExp*100/sumAlloc;
@@ -923,16 +915,14 @@ public class DashboardServiceImpl implements DashBoardService {
                 per=0.0;
             }
             try{
-                BigDecimal decimal3 = new BigDecimal(per);
-                BigDecimal roundedAmount3 = decimal3.setScale(2, RoundingMode.HALF_UP);
-                respn.setPerBal(String.valueOf(roundedAmount3));
+                respn.setPerBal(ConverterUtils.addDecimal2Point(per+""));
             }catch (Exception e){
                 respn.setPerBal(String.valueOf(0.00));
             }
 
-            respn.setSumAlloc(String.valueOf(roundedAmount));
-            respn.setSumExp(String.valueOf(roundedAmount1));
-            respn.setSumBal(String.valueOf(roundedAmount2));
+            respn.setSumAlloc(ConverterUtils.addDecimalPoint(sumAlloc+""));
+            respn.setSumExp(ConverterUtils.addDecimalPoint(sumExp+""));
+            respn.setSumBal(ConverterUtils.addDecimalPoint(sumBal+""));
             respn.setGrTotalObjResp(grResp);
             dashBoardExprnditureResponseList.add(respn);
             return ResponseUtils.createSuccessResponse(
