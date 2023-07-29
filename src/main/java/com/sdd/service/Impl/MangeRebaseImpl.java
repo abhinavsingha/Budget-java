@@ -701,8 +701,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
             for (Integer k = 0; k < req.getUnitRebaseRequests().size(); k++) {
                 AmountUnit amtObj = amountUnitRepository.findByAmountTypeId(req.getUnitRebaseRequests().get(k).getAmountType());
                 double allAmountUnit = amtObj.getAmount();
-                double balAmount = Double.parseDouble(req.getUnitRebaseRequests().get(k).getBalAmount());
-                double trnsfrAmount = balAmount * allAmountUnit;
+                double allocAmount = Double.parseDouble(req.getUnitRebaseRequests().get(k).getAllocAmount());
+                double shipAllocAmount = allocAmount * allAmountUnit;
                 BudgetRebase budgetRebase = new BudgetRebase();
                 budgetRebase.setBudgetRebaseId(HelperUtils.getUnitRebased());
                 budgetRebase.setRefTransId(refRensId);
@@ -745,7 +745,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 BudgetAllocationDetails allocDatatails = frmRhqDtls.get(i);
                                 AmountUnit amountType = amountUnitRepository.findByAmountTypeId(allocDatatails.getAmountType());
                                 double AmtUnit = amountType.getAmount();
-                                double unloAmnt = trnsfrAmount / AmtUnit;
+                                double unloAmnt = shipAllocAmount / AmtUnit;
                                 double allocAmt = Double.parseDouble(allocDatatails.getAllocationAmount());
                                 allocDatatails.setAllocationAmount("" + unloAmnt);
                                 allocDatatails.setIsDelete("1");
@@ -775,7 +775,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 BudgetAllocation alloc = frmRhqAllocs.get(i);
                                 AmountUnit amountType = amountUnitRepository.findByAmountTypeId(alloc.getAmountType());
                                 double AmtUnit = amountType.getAmount();
-                                double unloAmnt = trnsfrAmount / AmtUnit;
+                                double unloAmnt = shipAllocAmount / AmtUnit;
                                 double allocAmt = Double.parseDouble(alloc.getAllocationAmount());
                                 auth=alloc.getAuthGroupId();
                                 alloc.setIsFlag("1");
@@ -804,14 +804,14 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             cdaParking.setTotalParkingAmount((remaning) + "");
                             cdaParkingTransRepository.save(cdaParking);
                         }
-                        if (frmRhqCda.size() > 0) {
+/*                        if (frmRhqCda.size() > 0) {
                             CdaParkingTrans cdaParking = frmRhqCda.get(0);
                             cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             double remaning = Double.parseDouble(cdaParking.getRemainingCdaAmount());
                             double exp = Double.parseDouble(req.getUnitRebaseRequests().get(k).getExpAmount());
                             cdaParking.setTotalParkingAmount((remaning + exp) + "");
                             cdaParkingTransRepository.save(cdaParking);
-                        }
+                        }*/
                         MangeInboxOutbox afterRebaseNotification = new MangeInboxOutbox();
                         afterRebaseNotification.setMangeInboxId(HelperUtils.getMangeInboxId());
                         afterRebaseNotification.setRemarks("Budget Rebase");
@@ -847,7 +847,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 BudgetAllocationDetails allocDatatails = frmHdUnitDtls.get(i);
                                 AmountUnit amountType = amountUnitRepository.findByAmountTypeId(allocDatatails.getAmountType());
                                 double AmtUnit = amountType.getAmount();
-                                double unloAmnt = trnsfrAmount / AmtUnit;
+                                double unloAmnt = shipAllocAmount / AmtUnit;
                                 double allocAmt = Double.parseDouble(allocDatatails.getAllocationAmount());
                                 allocDatatails.setIsDelete("1");
                                 allocDatatails.setIsBudgetRevision("1");
@@ -880,7 +880,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 rhqUnit = alloc.getFromUnit();
                                 AmountUnit amountType = amountUnitRepository.findByAmountTypeId(alloc.getAmountType());
                                 double AmtUnit = amountType.getAmount();
-                                double unloAmnt = trnsfrAmount / AmtUnit;
+                                double unloAmnt = shipAllocAmount / AmtUnit;
                                 authG=alloc.getAuthGroupId();
                                 unloAmntData = unloAmnt;
                                 double allocAmt = Double.parseDouble(alloc.getAllocationAmount());
@@ -911,14 +911,14 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             cdaParking.setTotalParkingAmount((remaning) + "");
                             cdaParkingTransRepository.save(cdaParking);
                         }
-                        if (frmHdUnitCda.size() > 0) {
+/*                        if (frmHdUnitCda.size() > 0) {
                             CdaParkingTrans cdaParking = frmHdUnitCda.get(0);
                             cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             double remaning = Double.parseDouble(cdaParking.getRemainingCdaAmount());
                             double exp = Double.parseDouble(req.getUnitRebaseRequests().get(k).getExpAmount());
                             cdaParking.setTotalParkingAmount((remaning + exp) + "");
                             cdaParkingTransRepository.save(cdaParking);
-                        }
+                        }*/
 
                         MangeInboxOutbox afterRebaseNotification = new MangeInboxOutbox();
                         afterRebaseNotification.setMangeInboxId(HelperUtils.getMangeInboxId());
@@ -954,7 +954,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 BudgetAllocationDetails allocDatatails = frmRhqDtls.get(i);
                                 AmountUnit amountType = amountUnitRepository.findByAmountTypeId(allocDatatails.getAmountType());
                                 double AmtUnit = amountType.getAmount();
-                                double unloAmnt = trnsfrAmount / AmtUnit;
+                                double unloAmnt = shipAllocAmount / AmtUnit;
                                 double allocAmt = Double.parseDouble(allocDatatails.getAllocationAmount());
                                 allocDatatails.setAllocationAmount("" + unloAmnt);
                                 allocDatatails.setIsDelete("1");
@@ -984,7 +984,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 BudgetAllocation alloc = frmRhqAllocs.get(i);
                                 AmountUnit amountType = amountUnitRepository.findByAmountTypeId(alloc.getAmountType());
                                 double AmtUnit = amountType.getAmount();
-                                double unloAmnt = trnsfrAmount / AmtUnit;
+                                double unloAmnt = shipAllocAmount / AmtUnit;
                                 double allocAmt = Double.parseDouble(alloc.getAllocationAmount());
                                 Auths=alloc.getAuthGroupId();
                                 alloc.setIsFlag("1");
@@ -1013,14 +1013,14 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             cdaParking.setTotalParkingAmount((remaning) + "");
                             cdaParkingTransRepository.save(cdaParking);
                         }
-                        if (frmRhqCda.size() > 0) {
+      /*                  if (frmRhqCda.size() > 0) {
                             CdaParkingTrans cdaParking = frmRhqCda.get(0);
                             cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             double remaning = Double.parseDouble(cdaParking.getRemainingCdaAmount());
                             double exp = Double.parseDouble(req.getUnitRebaseRequests().get(k).getExpAmount());
                             cdaParking.setTotalParkingAmount((remaning + exp) + "");
                             cdaParkingTransRepository.save(cdaParking);
-                        }
+                        }*/
 
                         MangeInboxOutbox afterRebaseNotification123 = new MangeInboxOutbox();
                         afterRebaseNotification123.setMangeInboxId(HelperUtils.getMangeInboxId());
@@ -1064,7 +1064,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 BudgetAllocationDetails allocDatatails = toRhqDtls.get(i);
                                 AmountUnit amountType = amountUnitRepository.findByAmountTypeId(allocDatatails.getAmountType());
                                 double AmtUnit = amountType.getAmount();
-                                double unloAmnt = trnsfrAmount / AmtUnit;
+                                double unloAmnt = shipAllocAmount / AmtUnit;
                                 double allocAmt = Double.parseDouble(allocDatatails.getAllocationAmount());
                                 allocDatatails.setIsDelete("1");
                                 allocDatatails.setIsBudgetRevision("1");
@@ -1088,7 +1088,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             // .....................CREATE BUDGET RECIPT..................................
                             BudgetAllocationDetails budgetRecipt = new BudgetAllocationDetails();
                             budgetRecipt.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
-                            budgetRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                            budgetRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                             budgetRecipt.setAllocationDate(HelperUtils.getCurrentTimeStamp());
                             budgetRecipt.setAllocationDate(HelperUtils.getCurrentTimeStamp());
                             budgetRecipt.setAllocTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
@@ -1117,7 +1117,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             // .....................CREATE BUDGET ALLOCATION..................................
                             BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
                             budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
-                            budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                            budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                             budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
                             budgetAllocationDetails.setAllocTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                             budgetAllocationDetails.setFinYear(req.getFinYear());
@@ -1151,7 +1151,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 BudgetAllocation alloc = toRhqAllocs.get(i);
                                 AmountUnit amountType = amountUnitRepository.findByAmountTypeId(alloc.getAmountType());
                                 double amountu = amountType.getAmount();
-                                double unloAmnt = trnsfrAmount / amountu;
+                                double unloAmnt = shipAllocAmount / amountu;
                                 double allocAmt = Double.parseDouble(alloc.getAllocationAmount());
                                 Authgr=alloc.getAllocationId();
                                 alloc.setIsFlag("1");
@@ -1187,7 +1187,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 mangeInboxOutboxRHqSendRecipt.setAllocationType(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                                 mangeInboxOutboxRHqSendRecipt.setIsFlag("0");
                                 mangeInboxOutboxRHqSendRecipt.setType("Rebase Receipt");
-                                mangeInboxOutboxRHqSendRecipt.setAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                                mangeInboxOutboxRHqSendRecipt.setAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                                 mangeInboxOutboxRHqSendRecipt.setIsBgcg("BR");
                                 mangeInboxOutboxRHqSendRecipt.setIsRevision(0);
                                 mangeInboxOutBoxRepository.save(mangeInboxOutboxRHqSendRecipt);
@@ -1208,7 +1208,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             budgetAllocationRecipt.setFromUnit(HelperUtils.HEADUNITID);
                             budgetAllocationRecipt.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                             budgetAllocationRecipt.setAllocationTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
-                            budgetAllocationRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                            budgetAllocationRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                             budgetAllocationRecipt.setUnallocatedAmount("0");
                             budgetAllocationRecipt.setIsFlag("0");
                             budgetAllocationRecipt.setUnallocatedAmount("0");
@@ -1240,7 +1240,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             mangeInboxOutboxRHqSendRecipt.setAllocationType(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                             mangeInboxOutboxRHqSendRecipt.setIsFlag("0");
                             mangeInboxOutboxRHqSendRecipt.setType("Rebase Receipt");
-                            mangeInboxOutboxRHqSendRecipt.setAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                            mangeInboxOutboxRHqSendRecipt.setAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                             mangeInboxOutboxRHqSendRecipt.setIsBgcg("BR");
                             mangeInboxOutboxRHqSendRecipt.setIsRevision(0);
                             mangeInboxOutBoxRepository.save(mangeInboxOutbox);
@@ -1260,7 +1260,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             budgetAllocation.setFromUnit(toHdUnitId);
                             budgetAllocation.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                             budgetAllocation.setAllocationTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
-                            budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                            budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                             budgetAllocation.setUnallocatedAmount("0");
                             budgetAllocation.setRevisedAmount("0");
                             budgetAllocation.setUserId(hrDataCheck.getPid());
@@ -1315,7 +1315,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 BudgetAllocationDetails allocDatatails = toRhqDtls.get(i);
                                 AmountUnit amountType = amountUnitRepository.findByAmountTypeId(allocDatatails.getAmountType());
                                 double AmtUnit = amountType.getAmount();
-                                double unloAmnt = trnsfrAmount / AmtUnit;
+                                double unloAmnt = shipAllocAmount / AmtUnit;
                                 double allocAmt = Double.parseDouble(allocDatatails.getAllocationAmount());
                                 allocDatatails.setIsDelete("1");
                                 allocDatatails.setIsBudgetRevision("1");
@@ -1339,7 +1339,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             // .....................CREATE BUDGET RECIPT..................................
                             BudgetAllocationDetails budgetRecipt = new BudgetAllocationDetails();
                             budgetRecipt.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
-                            budgetRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                            budgetRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                             budgetRecipt.setAllocationDate(HelperUtils.getCurrentTimeStamp());
                             budgetRecipt.setAllocationDate(HelperUtils.getCurrentTimeStamp());
                             budgetRecipt.setAllocTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
@@ -1368,7 +1368,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             // .....................CREATE BUDGET ALLOCATION..................................
                             BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
                             budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
-                            budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                            budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                             budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
                             budgetAllocationDetails.setAllocTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                             budgetAllocationDetails.setFinYear(req.getFinYear());
@@ -1401,7 +1401,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 BudgetAllocation alloc = toRhqAllocs.get(i);
                                 AmountUnit amountType = amountUnitRepository.findByAmountTypeId(alloc.getAmountType());
                                 double amountu = amountType.getAmount();
-                                double unloAmnt = trnsfrAmount / amountu;
+                                double unloAmnt = shipAllocAmount / amountu;
                                 double allocAmt = Double.parseDouble(alloc.getAllocationAmount());
                                 alloc.setIsFlag("1");
                                 alloc.setIsBudgetRevision("1");
@@ -1440,7 +1440,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 mangeInboxOutboxRHqSendRecipt.setAllocationType(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                                 mangeInboxOutboxRHqSendRecipt.setIsFlag("0");
                                 mangeInboxOutboxRHqSendRecipt.setType("Rebase Receipt");
-                                mangeInboxOutboxRHqSendRecipt.setAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                                mangeInboxOutboxRHqSendRecipt.setAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                                 mangeInboxOutboxRHqSendRecipt.setIsBgcg("BR");
                                 mangeInboxOutboxRHqSendRecipt.setIsRevision(0);
                                 mangeInboxOutBoxRepository.save(mangeInboxOutboxRHqSendRecipt);
@@ -1461,7 +1461,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             budgetAllocationRecipt.setFromUnit(rHqUnitId);
                             budgetAllocationRecipt.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                             budgetAllocationRecipt.setAllocationTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
-                            budgetAllocationRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                            budgetAllocationRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                             budgetAllocationRecipt.setUnallocatedAmount("0");
                             budgetAllocationRecipt.setIsFlag("0");
                             budgetAllocationRecipt.setUnallocatedAmount("0");
@@ -1493,7 +1493,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             mangeInboxOutboxRHqSendRecipt.setAllocationType(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                             mangeInboxOutboxRHqSendRecipt.setIsFlag("0");
                             mangeInboxOutboxRHqSendRecipt.setType("Rebase Receipt");
-                            mangeInboxOutboxRHqSendRecipt.setAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                            mangeInboxOutboxRHqSendRecipt.setAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                             mangeInboxOutboxRHqSendRecipt.setIsBgcg("BR");
                             mangeInboxOutboxRHqSendRecipt.setIsRevision(0);
                             mangeInboxOutBoxRepository.save(mangeInboxOutboxRHqSendRecipt);
@@ -1513,7 +1513,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             budgetAllocation.setFromUnit(rHqUnitId);
                             budgetAllocation.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                             budgetAllocation.setAllocationTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
-                            budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                            budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                             budgetAllocation.setUnallocatedAmount("0");
                             budgetAllocation.setRevisedAmount("0");
                             budgetAllocation.setUserId(hrDataCheck.getPid());
@@ -1541,7 +1541,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             AmountUnit amountType = amountUnitRepository.findByAmountTypeId(allocDatatails.getAmountType());
                             frmRhqUnitId=allocDatatails.getFromUnit();
                             double AmtUnit = amountType.getAmount();
-                            double unloAmnt = trnsfrAmount / AmtUnit;
+                            double unloAmnt = shipAllocAmount / AmtUnit;
                             double allocAmt = Double.parseDouble(allocDatatails.getAllocationAmount());
                             allocDatatails.setIsDelete("1");
                             allocDatatails.setIsBudgetRevision("1");
@@ -1577,7 +1577,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             authgrId=alloc.getAuthGroupId();
                             AmountUnit amountType = amountUnitRepository.findByAmountTypeId(alloc.getAmountType());
                             double AmtUnit = amountType.getAmount();
-                            unloAmnt = trnsfrAmount / AmtUnit;
+                            unloAmnt = shipAllocAmount / AmtUnit;
 
                             unloAmntData = unloAmnt;
                             allocAmt = Double.parseDouble(alloc.getAllocationAmount());
@@ -1636,14 +1636,14 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         cdaParking.setTotalParkingAmount((remaning) + "");
                         cdaParkingTransRepository.save(cdaParking);
                     }
-                    if (frmHdUnitCda.size() > 0) {
+/*                    if (frmHdUnitCda.size() > 0) {
                         CdaParkingTrans cdaParking = frmHdUnitCda.get(0);
                         cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                         double remaning = Double.parseDouble(cdaParking.getRemainingCdaAmount());
                         double exp = Double.parseDouble(req.getUnitRebaseRequests().get(k).getExpAmount());
                         cdaParking.setTotalParkingAmount((remaning + exp) + "");
                         cdaParkingTransRepository.save(cdaParking);
-                    }
+                    }*/
                     MangeInboxOutbox mangeInboxOutboxRHqSendRecipt1230 = new MangeInboxOutbox();
                     mangeInboxOutboxRHqSendRecipt1230.setMangeInboxId(HelperUtils.getMangeInboxId());
                     mangeInboxOutboxRHqSendRecipt1230.setRemarks("Budget Receipt");
@@ -1678,7 +1678,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             BudgetAllocationDetails allocDatatails = toRhqDtls.get(i);
                             AmountUnit amountType = amountUnitRepository.findByAmountTypeId(allocDatatails.getAmountType());
                             double AmtUnit = amountType.getAmount();
-                            double unloAmnt1 = trnsfrAmount / AmtUnit;
+                            double unloAmnt1 = shipAllocAmount / AmtUnit;
                             double allocAmt1 = Double.parseDouble(allocDatatails.getAllocationAmount());
                             allocDatatails.setIsDelete("1");
                             allocDatatails.setIsBudgetRevision("1");
@@ -1703,7 +1703,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         // .....................CREATE BUDGET RECIPT..................................
                         BudgetAllocationDetails budgetAllocationDetailsRecipt = new BudgetAllocationDetails();
                         budgetAllocationDetailsRecipt.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
-                        budgetAllocationDetailsRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                        budgetAllocationDetailsRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                         budgetAllocationDetailsRecipt.setAllocationDate(HelperUtils.getCurrentTimeStamp());
                         budgetAllocationDetailsRecipt.setAllocationDate(HelperUtils.getCurrentTimeStamp());
                         budgetAllocationDetailsRecipt.setAllocTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
@@ -1732,7 +1732,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         // .....................CREATE BUDGET ALLOCATION..................................
                         BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
                         budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
-                        budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                        budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                         budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
                         budgetAllocationDetails.setAllocTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                         budgetAllocationDetails.setFinYear(req.getFinYear());
@@ -1764,7 +1764,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             BudgetAllocation alloc = toRhqAllocs.get(i);
                             AmountUnit amountType = amountUnitRepository.findByAmountTypeId(alloc.getAmountType());
                             double amountu = amountType.getAmount();
-                            double unloAmnt0 = trnsfrAmount / amountu;
+                            double unloAmnt0 = shipAllocAmount / amountu;
                             double allocAmt0 = Double.parseDouble(alloc.getAllocationAmount());
                             AuthGrp =alloc.getAuthGroupId();
                             alloc.setIsFlag("1");
@@ -1822,7 +1822,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationRecipt.setFromUnit(frmRhqUnitId);
                         budgetAllocationRecipt.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                         budgetAllocationRecipt.setAllocationTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
-                        budgetAllocationRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                        budgetAllocationRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                         budgetAllocationRecipt.setUnallocatedAmount("0");
                         budgetAllocationRecipt.setIsFlag("0");
                         budgetAllocationRecipt.setUnallocatedAmount("0");
@@ -1854,7 +1854,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         mangeInboxOutboxRHqSend.setAllocationType(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                         mangeInboxOutboxRHqSend.setIsFlag("0");
                         mangeInboxOutboxRHqSend.setType("Rebase Receipt");
-                        mangeInboxOutboxRHqSend.setAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                        mangeInboxOutboxRHqSend.setAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                         mangeInboxOutboxRHqSend.setIsBgcg("BR");
                         mangeInboxOutboxRHqSend.setIsRevision(0);
                         mangeInboxOutBoxRepository.save(mangeInboxOutboxRHqSend);
@@ -1873,7 +1873,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocation.setFromUnit(toHdUnitId);
                         budgetAllocation.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                         budgetAllocation.setAllocationTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
-                        budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getBalAmount()));
+                        budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                         budgetAllocation.setUnallocatedAmount("0");
                         budgetAllocation.setRevisedAmount("0");
                         budgetAllocation.setUserId(hrDataCheck.getPid());
