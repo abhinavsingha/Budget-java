@@ -7004,6 +7004,7 @@ public class MangeReportImpl implements MangeReportService {
 
             int i = 1;
             double sumalcg=0.0;
+            double IcgAmount1 = 0.0;
             double grTotalAlloc = 0;
             double grTotalIcg = 0;
             double grTotalAddition = 0;
@@ -7012,7 +7013,7 @@ public class MangeReportImpl implements MangeReportService {
             String unit = "";
 
             double IcgAmount = 0.0;
-            double IcgAmount1 = 0.0;
+
             for (String val : rowData) {
                 String subHeadId = val;
                 String hrUnit = hrData.getUnitId();
@@ -7063,6 +7064,24 @@ public class MangeReportImpl implements MangeReportService {
                             table.addCell(cella4);
                             table.addCell(cella5);
                             table.addCell(cella6);
+                            table.addCell(" ");
+                            table.addCell(" ");
+
+                            PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
+                            PdfPCell cell20 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(IcgAmount1+""), cellFont));
+                            PdfPCell cell30 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(0.0000+""), cellFont));
+                            PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.2f", new BigDecimal(0.00))));
+                            cell10.setPadding(10);
+                            cell20.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                            cell30.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                            cell40.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+
+                            table.addCell(" ");
+                            table.addCell(" ");
+                            table.addCell(cell10);
+                            table.addCell(cell20);
+                            table.addCell(cell30);
+                            table.addCell(cell40);
                             table.addCell(" ");
                             table.addCell(" ");
                         }
@@ -7492,6 +7511,8 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne7 = tableRowOne.getCell(7).addParagraph();
             boldText(paragraphtableRowOne7.createRun(), 12, "% BILL CLEARANCE w.r.t : " + type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear(), true);
             double IcgAmount = 0.0;
+            double sumalcg=0.0;
+            double IcgAmount1 = 0.0;
             double grTotalAlloc = 0.0;
             double grTotalIcg = 0.0;
             double grTotalAddition = 0.0;
@@ -7500,12 +7521,90 @@ public class MangeReportImpl implements MangeReportService {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail;
                 if(listOfSubUnit1.size()==0){
-                    reportDetail = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
+                    List<BudgetAllocation>reportDetail1 = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
+                    reportDetail = reportDetail1.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+
                 }else{
                     List<BudgetAllocation>reportDetail1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
                     List<BudgetAllocation> reportDetailss = reportDetail1.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                     reportDetail = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
                 }
+
+                int sz = reportDetail.size();
+                if (reportDetail.size() <= 0) {
+
+                    String UnitName = "";
+                    List<BudgetAllocation> hrDetails = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, hrData.getUnitId(), finYearId, allocationType, "0", "0", "Approved");
+                    if (hrDetails.size() > 0) {
+                        double hrAllocAmount = Double.parseDouble(hrDetails.get(0).getAllocationAmount());
+                        AmountUnit hrAmount = amountUnitRepository.findByAmountTypeId(hrDetails.get(0).getAmountType());
+                        double hrAmountUnit = Double.parseDouble(hrAmount.getAmount() + "");
+                        IcgAmount1 = hrAllocAmount * hrAmountUnit / reqAmount;
+                        sumalcg+=IcgAmount1;
+
+                        CgUnit unitN = cgUnitRepository.findByUnit(hrDetails.get(0).getToUnit());
+                        UnitName = unitN.getDescr();
+                        BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
+                        if (IcgAmount1 != 0) {
+                            XWPFTable tableRowOne11100 = document.createTable(1, 8);
+                            tableRowOne11100.setWidth("100%");
+                            XWPFTableRow tableRowOne111 = tableRowOne11100.getRow(0);
+
+                            XWPFParagraph paragraphtableRowOne11 = tableRowOne111.getCell(0).addParagraph();
+                            boldText(paragraphtableRowOne11.createRun(), 10, bHead.getSubHeadDescr(), false);
+
+                            XWPFParagraph paragraphtableRow11 = tableRowOne111.getCell(1).addParagraph();
+                            paragraphtableRow11.setAlignment(ParagraphAlignment.RIGHT);
+                            boldText(paragraphtableRow11.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(IcgAmount1)), true);
+
+                            XWPFParagraph paragraphtableRow21 = tableRowOne111.getCell(2).addParagraph();
+                            boldText(paragraphtableRow21.createRun(), 10, UnitName, false);
+
+                            XWPFParagraph paragraphtableRow31 = tableRowOne111.getCell(3).addParagraph();
+                            paragraphtableRow31.setAlignment(ParagraphAlignment.RIGHT);
+                            boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(IcgAmount1)), false);
+
+                            XWPFParagraph paragraphtableRow41 = tableRowOne111.getCell(4).addParagraph();
+                            paragraphtableRow41.setAlignment(ParagraphAlignment.RIGHT);
+                            boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(0.0000)), false);
+
+                            XWPFParagraph paragraphtableRow51 = tableRowOne111.getCell(5).addParagraph();
+                            paragraphtableRow51.setAlignment(ParagraphAlignment.RIGHT);
+                            boldText(paragraphtableRow51.createRun(), 10, String.format("%1$0,1.2f", new BigDecimal(0.00)), false);
+
+                            XWPFParagraph paragraphtableRow61 = tableRowOne111.getCell(6).addParagraph();
+                            boldText(paragraphtableRow61.createRun(), 10, "", false);
+
+                            XWPFParagraph paragraphtableRow71 = tableRowOne111.getCell(7).addParagraph();
+                            boldText(paragraphtableRow71.createRun(), 10, "", false);
+
+                            XWPFTable table222 = document.createTable(1, 8);
+                            table222.setWidth("100%");
+                            XWPFTableRow tableRowOne222 = table222.getRow(0);
+                            XWPFParagraph paragraphtableRowOne222 = tableRowOne222.getCell(0).addParagraph();
+                            boldText(paragraphtableRowOne222.createRun(), 12, "", true);
+                            XWPFParagraph paragraphtableRowOne1222 = tableRowOne222.getCell(1).addParagraph();
+                            boldText(paragraphtableRowOne1222.createRun(), 12, "", true);
+                            XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
+                            boldText(paragraphtableRowOne2222.createRun(), 12, "TOTAL", true);
+                            XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
+                            paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
+                            boldText(paragraphtableRowOne2233.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(IcgAmount1)), true);
+                            XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
+                            paragraphtableRowOne2244.setAlignment(ParagraphAlignment.RIGHT);
+                            boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(0.0000)), true);
+                            XWPFParagraph paragraphtableRowOne2255 = tableRowOne222.getCell(5).addParagraph();
+                            paragraphtableRowOne2255.setAlignment(ParagraphAlignment.RIGHT);
+                            boldText(paragraphtableRowOne2255.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(0.00)), true);
+                            XWPFParagraph paragraphtableRowOne2266 = tableRowOne222.getCell(6).addParagraph();
+                            boldText(paragraphtableRowOne2266.createRun(), 12, "", true);
+                            XWPFParagraph paragraphtableRowOne2277 = tableRowOne222.getCell(7).addParagraph();
+                            boldText(paragraphtableRowOne2277.createRun(), 12, "", true);
+                        }
+                    }
+                    continue;
+                }
+
                 String hrUnit = hrData.getUnitId();
                 List<BudgetAllocation> hrDetails = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(hrUnit, finYearId, subHeadId, allocationType, "0");
                 if (hrDetails.size() > 0) {
@@ -7513,11 +7612,6 @@ public class MangeReportImpl implements MangeReportService {
                     AmountUnit hrAmount = amountUnitRepository.findByAmountTypeId(hrDetails.get(0).getAmountType());
                     double hrAmountUnit = Double.parseDouble(hrAmount.getAmount() + "");
                     IcgAmount = hrAllocAmount * hrAmountUnit / reqAmount;
-                }
-
-                int sz = reportDetail.size();
-                if (sz <= 0) {
-                    continue;
                 }
 
                 XWPFTable table11 = document.createTable(sz, 8);
@@ -7729,12 +7823,12 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne220.createRun(), 12, "GRAND TOTAL", true);
             XWPFParagraph paragraphtableRowOne1220 = tableRowOne220.getCell(1).addParagraph();
             paragraphtableRowOne1220.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne1220.createRun(), 12, String.format("%1$0,1.4f", grTotalIcg), true);
+            boldText(paragraphtableRowOne1220.createRun(), 12, String.format("%1$0,1.4f", grTotalIcg+sumalcg), true);
             XWPFParagraph paragraphtableRowOne2220 = tableRowOne220.getCell(2).addParagraph();
             boldText(paragraphtableRowOne2220.createRun(), 12, " ", true);
             XWPFParagraph paragraphtableRowOne2230 = tableRowOne220.getCell(3).addParagraph();
             paragraphtableRowOne2230.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", grTotalAlloc), true);
+            boldText(paragraphtableRowOne2230.createRun(), 12, String.format("%1$0,1.4f", grTotalAlloc+sumalcg), true);
             XWPFParagraph paragraphtableRowOne2200 = tableRowOne220.getCell(4).addParagraph();
             paragraphtableRowOne2200.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2200.createRun(), 12, String.format("%1$0,1.4f", grTotalAddition), true);
@@ -7903,7 +7997,9 @@ public class MangeReportImpl implements MangeReportService {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetails;
                 if(listOfSubUnit1.size()==0){
-                    reportDetails = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
+                    List<BudgetAllocation>reportDetails1 = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
+                    reportDetails = reportDetails1.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+
                 }else{
                     List<BudgetAllocation>reportDetail1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0","0","Approved");
                     List<BudgetAllocation> reportDetailss = reportDetail1.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
