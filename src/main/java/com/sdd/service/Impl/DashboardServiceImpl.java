@@ -1048,6 +1048,7 @@ public class DashboardServiceImpl implements DashBoardService {
                             cbD="";
                     }
                 }
+
                 double perAmnt=0.0;
                 double expAmount=totalAmount/reqAmount;
                 GrTotalObj subResp = new GrTotalObj();
