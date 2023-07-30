@@ -5402,6 +5402,26 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocationRepository.save(budgetAllocation);
                 budgetAllocationsListData.add(budgetAllocation);
 
+
+                List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(revisionData.get(z).getFinYearId(), revisionData.get(z).getBudgetHeadId(), revisionData.get(z).getToUnitId(), revisionData.get(z).getAllocTypeId(), "1");
+
+                for (Integer k = 0; k < cdaParkingTransList.size(); k++) {
+
+                    CdaParkingTrans cdaParkingTrans = cdaParkingTransList.get(k);
+                    cdaParkingTrans.setIsFlag("0");
+                    cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                    cdaParkingTransRepository.save(cdaParkingTrans);
+
+                    List<CdaParkingCrAndDr> cdaParkingCrAndDr = parkingCrAndDrRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitIdAndIsRevision(cdaParkingTrans.getFinYearId(), cdaParkingTrans.getBudgetHeadId(), cdaParkingTrans.getGinNo(), "0", cdaParkingTrans.getAllocTypeId(), revisionData.get(z).getToUnitId(), 0);
+                    for (Integer q = 0; q < cdaParkingCrAndDr.size(); q++) {
+                        CdaParkingCrAndDr cddata = cdaParkingCrAndDr.get(q);
+                        cddata.setIsFlag("1");
+                        parkingCrAndDrRepository.save(cddata);
+                    }
+
+                }
+
+
             }
 
 
