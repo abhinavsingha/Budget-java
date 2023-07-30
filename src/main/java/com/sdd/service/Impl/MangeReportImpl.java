@@ -10220,7 +10220,7 @@ public class MangeReportImpl implements MangeReportService {
         String allocType = allockData.getAllocType();
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
-        List<String> rowData = budgetAllocationDetailsRepository.findSubHeadByAuthGroupIds(authGroupId);
+        List<String> rowData = budgetAllocationRepository.findSubHeadByAuthGroupIds(authGroupId);
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUNDS", HttpStatus.OK.value());
@@ -10855,7 +10855,7 @@ public class MangeReportImpl implements MangeReportService {
         String allocType = allockData.getAllocType();
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
-        List<String> rowData = budgetAllocationDetailsRepository.findSubHeadByAuthGroupIds(authGroupId);
+        List<String> rowData = budgetAllocationRepository.findSubHeadByAuthGroupIds(authGroupId);
         if (rowData.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUNDS", HttpStatus.OK.value());

@@ -788,7 +788,7 @@ public class DashboardServiceImpl implements DashBoardService {
             for (BudgetHead val : budgetHeadList) {
                 String subHeadId = val.getBudgetCodeId();
                 BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
-                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(unitId, finYearId,subHeadId,  allocationTypeId, "0");
+                List<BudgetAllocation> reportDetails = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(unitId, finYearId,subHeadId,  allocationTypeId,"Approved","0", "0");
                 if (reportDetails.size() <= 0) {
                     continue;
                 }
