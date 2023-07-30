@@ -1092,7 +1092,6 @@ public class DashboardServiceImpl implements DashBoardService {
                 sumBal += cdaRming;
                 perBal += perAmnt;
             }
-
             double hrSubAmnt=subHrAmount*hrAmntUnit/reqAmount;
             String sumAlloc11 = ConverterUtils.addDecimalPoint((sumAlloc-hralloc)+"");
             String sumExp11 = ConverterUtils.addDecimalPoint(sumExp+"");
