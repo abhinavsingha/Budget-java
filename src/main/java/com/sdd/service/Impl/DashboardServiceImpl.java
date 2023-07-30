@@ -902,10 +902,10 @@ public class DashboardServiceImpl implements DashBoardService {
                     dashBoardExprnditureResponse.setAmountIn(amountIn);
                     grResp.add(dashBoardExprnditureResponse);
 
-                    sumAlloc += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
-                    sumExp += Float.parseFloat(new BigDecimal(expAmount).toPlainString());
-                    sumBal += Float.parseFloat(new BigDecimal(cdaRming).toPlainString());
-                    perBal += Float.parseFloat(new BigDecimal(perAmnt).toPlainString());
+                    sumAlloc += finAmount;
+                    sumExp += expAmount;
+                    sumBal += cdaRming;
+                    perBal += perAmnt;
                 }
             }
             double per=0.0;
