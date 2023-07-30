@@ -2945,10 +2945,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         String status = "";
 
         for (Integer i = 0; i < allocationDetails.size(); i++) {
-
-
             if (!(budgetApproveRequest.getStatus().equalsIgnoreCase("Approved"))) {
 
+                status = budgetApproveRequest.getStatus();
                 BudgetAllocationDetails allocationData = allocationDetails.get(i);
                 allocationData.setStatus(budgetApproveRequest.getStatus());
                 allocationData.setIsDelete("1");
@@ -2959,7 +2958,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocationDetailsRepository.save(allocationData);
 
             }
-
         }
 
 
@@ -2972,11 +2970,15 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                     mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                     mangeInboxOutbox.setStatus(budgetApproveRequest.getStatus());
-
-                    mangeInboxOutbox.setState("CR");
-                    mangeInboxOutbox.setIsArchive("0");
-                    mangeInboxOutbox.setIsApproved("0");
-
+                    if(status.equalsIgnoreCase("Rejected")){
+                        mangeInboxOutbox.setState("CR");
+                        mangeInboxOutbox.setIsArchive("1");
+                        mangeInboxOutbox.setIsApproved("0");
+                    }else{
+                        mangeInboxOutbox.setState("CR");
+                        mangeInboxOutbox.setIsArchive("0");
+                        mangeInboxOutbox.setIsApproved("0");
+                    }
                     mangeInboxOutBoxRepository.save(mangeInboxOutbox);
                 } catch (Exception e) {
 
