@@ -1409,8 +1409,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 alloc.setIsBudgetRevision("1");
                                 alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                                 BudgetAllocation saveData11 = budgetAllocationRepository.save(alloc);
-
-
                                 BudgetAllocation saveData = new BudgetAllocation();
                                 BeanUtils.copyProperties(saveData11, saveData);
 
