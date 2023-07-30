@@ -974,7 +974,8 @@ public class DashboardServiceImpl implements DashBoardService {
         AmountUnit hdamtUnits = amountUnitRepository.findByAmountTypeId(amounttypeId);
         double reqAmount=hdamtUnits.getAmount();
         try{
-            List<CgUnit> ulist1 = cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
+            List<CgUnit> ulist1 = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+            //List<CgUnit> ulist1 = cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
 
             if(!(hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID))){
                 CgUnit cgUnits = cgUnitRepository.findByUnit(hrData.getUnitId());
@@ -992,13 +993,14 @@ public class DashboardServiceImpl implements DashBoardService {
             double subHrAmount = 0.0;
             double hrAmntUnit = 0.0;
             double perBal = 0.0;
+            double hralloc=0.0;
             List<GrTotalObj> grResp = new ArrayList<GrTotalObj>();
             for (int j = 0; j < ulist1.size(); j++) {
                 String uid=ulist1.get(j).getUnit();
                 CgUnit cgUnit = cgUnitRepository.findByUnit(uid);
                 double allocAmount=0.0;
                 double allocAmntUnit=0.0;
-                List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(subHeadId, uid, finYearId, allocationTypeId, "0");
+                List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, uid, finYearId, allocationTypeId, "0","0","Approved");
                 if(budgetAllocationsDetalis1.size()>0){
                     if(uid.equalsIgnoreCase(hrData.getUnitId())){
                         subHrAmount=Double.parseDouble(budgetAllocationsDetalis1.get(0).getAllocationAmount());
@@ -1028,7 +1030,8 @@ public class DashboardServiceImpl implements DashBoardService {
                 double cdaTotal=totalCda*rqUnit/reqAmount;
                 double cdaRming=remCdaBal*rqUnit/reqAmount;
 
-                List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(uid, finYearId, subHeadId,allocationTypeId, "0");
+                List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(uid, finYearId, subHeadId,allocationTypeId, "0");
+                List<ContigentBill> expenditure=expenditure1.stream().filter(e->e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
                 double totalAmount = 0.0;
                 Timestamp lastCvDate;
                 String cbD = "";
@@ -1052,7 +1055,13 @@ public class DashboardServiceImpl implements DashBoardService {
                 subResp.setFinYear(budgetFinancialYear.getFinYear());
                 subResp.setAllocType(allockData.getAllocDesc());
                 subResp.setAmountIn(hdamtUnits.getAmountType());
-                subResp.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(cdaRming+expAmount)));
+                //subResp.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(cdaRming+expAmount)));
+                if(hrData.getUnitId().equalsIgnoreCase(uid)){
+                    subResp.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(cdaRming+expAmount)));
+                    hralloc=cdaRming+expAmount;
+                }else{
+                    subResp.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
+                }
                 subResp.setExpenditureAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount)));
                 subResp.setBalAmount(String.format("%1$0,1.4f", new BigDecimal(cdaRming)));
                 if(finAmount!=0){
@@ -1060,7 +1069,12 @@ public class DashboardServiceImpl implements DashBoardService {
                 }else{
                     perAmnt=0.0;
                 }
-                subResp.setPerAmount(String.format("%1$0,1.2f", new BigDecimal(perAmnt)));
+                if(hrData.getUnitId().equalsIgnoreCase(uid)){
+                    subResp.setPerAmount(String.format("%1$0,1.2f", ((expAmount*100)/cdaRming+expAmount)));
+                }else{
+                    subResp.setPerAmount(String.format("%1$0,1.2f", (perAmnt)));
+                }
+
                 subResp.setLastCBDate(cbD);
                 grResp.add(subResp);
 /*                if(uid.equalsIgnoreCase(hrData.getUnitId())){
@@ -1068,14 +1082,15 @@ public class DashboardServiceImpl implements DashBoardService {
                 }else{
                     sumAlloc += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
                 }*/
-                sumAlloc += cdaRming+expAmount;
+                //sumAlloc += cdaRming+expAmount;
+                sumAlloc += finAmount;
                 sumExp += expAmount;
                 sumBal += cdaRming;
                 perBal += perAmnt;
             }
 
             double hrSubAmnt=subHrAmount*hrAmntUnit/reqAmount;
-            String sumAlloc11 = ConverterUtils.addDecimalPoint(sumAlloc+"");
+            String sumAlloc11 = ConverterUtils.addDecimalPoint((sumAlloc-hralloc)+"");
             String sumExp11 = ConverterUtils.addDecimalPoint(sumExp+"");
             String sumBal11 = ConverterUtils.addDecimalPoint(sumBal+"");
             double per=0.0;
