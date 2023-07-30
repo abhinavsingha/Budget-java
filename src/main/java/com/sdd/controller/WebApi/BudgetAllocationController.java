@@ -235,10 +235,6 @@ public class BudgetAllocationController {
         return new ResponseEntity<>(budgetAllocationService.saveBudgetRevision(budgetAllocationSaveRequestList), HttpStatus.OK);
     }
 
-    @PostMapping("/saveBudgetRevision2")
-    public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> saveBudgetRevision2(@RequestBody BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList) {
-        return new ResponseEntity<>(budgetAllocationService.saveBudgetRevision2(budgetAllocationSaveRequestList), HttpStatus.OK);
-    }
 
 
     @PostMapping("/approveRevisionBudgetOrReject")
@@ -250,6 +246,13 @@ public class BudgetAllocationController {
     @PostMapping("/saveAuthDataRevision")
     public ResponseEntity<ApiResponse<DefaultResponse>> saveAuthDataRevision(@RequestBody AuthRequest authRequest) {
         return new ResponseEntity<>(budgetAllocationService.saveAuthDataRevision(authRequest), HttpStatus.OK);
+    }
+
+
+
+    @PostMapping("/saveBudgetRevision2")
+    public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> saveBudgetRevision2(@RequestBody BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList) {
+        return new ResponseEntity<>(budgetAllocationService.saveBudgetRevision2(budgetAllocationSaveRequestList), HttpStatus.OK);
     }
 
 
