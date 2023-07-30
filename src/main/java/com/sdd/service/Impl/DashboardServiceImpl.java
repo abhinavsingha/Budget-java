@@ -1098,8 +1098,8 @@ public class DashboardServiceImpl implements DashBoardService {
             String sumExp11 = ConverterUtils.addDecimalPoint(sumExp+"");
             String sumBal11 = ConverterUtils.addDecimalPoint(sumBal+"");
             double per=0.0;
-            if(sumAlloc!=0){
-                per=(sumExp*100)/sumAlloc;
+            if((sumAlloc-hralloc)!=0){
+                per=(sumExp*100)/(sumAlloc-hralloc);
             }else{
                 per=0.0;
             }
