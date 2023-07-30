@@ -327,7 +327,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
             }, "INVALID UNIT ID PLEASE CHECK", HttpStatus.OK.value());
         }
         List<BudgetAllocation> allocationData1 = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(unit, finYear, allocTypes, "0");
-        List<BudgetAllocation> allocationData = allocationData1.stream().filter(e -> e.getStatus().equalsIgnoreCase("Approved") && e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
+        List<BudgetAllocation> allocationData2 = allocationData1.stream().filter(e -> e.getStatus().equalsIgnoreCase("Approved") && e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
+        List<BudgetAllocation>allocationData=allocationData2.stream().filter(e->!e.getAllocationAmount().equalsIgnoreCase("0")).collect(Collectors.toList());;
         if (allocationData.size() <= 0) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
             }, "Record Not Found", HttpStatus.OK.value());
