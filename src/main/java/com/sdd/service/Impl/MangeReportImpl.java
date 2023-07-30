@@ -1590,7 +1590,7 @@ public class MangeReportImpl implements MangeReportService {
         allocationAmount = allocationAmount  +  totalBill;
 
 
-        cbReportResponse.setAllocatedAmount(String.format("%.2f", allocationAmount - totalBill));
+        cbReportResponse.setAllocatedAmount(String.format("%.2f", allocationAmount));
 
 
         cbReportResponse.setCbData(cbData);
@@ -1721,7 +1721,6 @@ public class MangeReportImpl implements MangeReportService {
 
         if (totalContigentBill.size() == 0) {
             progressiveAmount = 0;
-            ;
         } else {
             for (Integer i = 0; i < totalContigentBill.size(); i++) {
                 if (Integer.parseInt(sectionNumber) >= Integer.parseInt(totalContigentBill.get(i).getSectionNumber())) {
