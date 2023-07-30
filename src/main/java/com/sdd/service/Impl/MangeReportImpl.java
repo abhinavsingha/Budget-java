@@ -1587,7 +1587,7 @@ public class MangeReportImpl implements MangeReportService {
         for (Integer k = 0; k < subHeadContigentBill.size(); k++) {
             totalBill = totalBill + Double.parseDouble(subHeadContigentBill.get(k).getCbAmount());
         }
-        allocationAmount = allocationAmount - totalBill;
+        allocationAmount = allocationAmount  +  totalBill;
 
 
         cbReportResponse.setAllocatedAmount(String.format("%.2f", allocationAmount - totalBill));
@@ -1752,7 +1752,7 @@ public class MangeReportImpl implements MangeReportService {
         for (Integer k = 0; k < subHeadContigentBill.size(); k++) {
             totalBill = totalBill + Double.parseDouble(subHeadContigentBill.get(k).getCbAmount());
         }
-        allocationAmount = allocationAmount - totalBill;
+        allocationAmount = allocationAmount + totalBill;
 
 
         cbReportResponse.setAllocatedAmount(String.format("%.2f", allocationAmount));
@@ -2360,7 +2360,8 @@ public class MangeReportImpl implements MangeReportService {
                             List<CgUnit> unitDataList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
                             for (int p = 0; p < unitDataList.size(); p++) {
                                 List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(p).getUnit());
-
+                                CgUnit selfUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
+                                unitDataList.add(selfUnit);
                                 cdaData.addAll(cdaTransData);
                             }
                             List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId());

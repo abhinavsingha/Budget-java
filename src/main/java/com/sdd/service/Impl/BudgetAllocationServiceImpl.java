@@ -1225,29 +1225,29 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 }
 
 
-                List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
-
-                if (cdaParkingList.size() > 0) {
-                    if (cdaParkingList.size() > 0) {
-                        budgetAllocationReport.setIsCDAparking("1");
-                        budgetAllocationReport.setCdaList(cdaParkingList);
-                    } else {
-                        budgetAllocationReport.setIsCDAparking("0");
-                        budgetAllocationReport.setCdaList(cdaParkingList);
-                    }
-
-                    budgetAllocationList.add(budgetAllocationReport);
-                } else {
-                    List<CdaParkingTrans> cdaParkingList11 = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(), "0", budgetAllocationSubReport.getAllocTypeId(), budgetAllocationSubReport.getToUnit());
-                    if (cdaParkingList11.size() > 0) {
-                        budgetAllocationReport.setIsCDAparking("1");
-                        budgetAllocationReport.setCdaList(cdaParkingList11);
-                    } else {
-                        budgetAllocationReport.setIsCDAparking("0");
-                        budgetAllocationReport.setCdaList(cdaParkingList11);
-                    }
-                    budgetAllocationList.add(budgetAllocationReport);
-                }
+//                List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
+//
+//                if (cdaParkingList.size() > 0) {
+//                    if (cdaParkingList.size() > 0) {
+//                        budgetAllocationReport.setIsCDAparking("1");
+//                        budgetAllocationReport.setCdaList(cdaParkingList);
+//                    } else {
+//                        budgetAllocationReport.setIsCDAparking("0");
+//                        budgetAllocationReport.setCdaList(cdaParkingList);
+//                    }
+//
+//                    budgetAllocationList.add(budgetAllocationReport);
+//                } else {
+//                    List<CdaParkingTrans> cdaParkingList11 = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(), "0", budgetAllocationSubReport.getAllocTypeId(), budgetAllocationSubReport.getToUnit());
+//                    if (cdaParkingList11.size() > 0) {
+//                        budgetAllocationReport.setIsCDAparking("1");
+//                        budgetAllocationReport.setCdaList(cdaParkingList11);
+//                    } else {
+//                        budgetAllocationReport.setIsCDAparking("0");
+//                        budgetAllocationReport.setCdaList(cdaParkingList11);
+//                    }
+//                    budgetAllocationList.add(budgetAllocationReport);
+//                }
 
 
             }
