@@ -702,7 +702,9 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 AmountUnit amtObj = amountUnitRepository.findByAmountTypeId(req.getUnitRebaseRequests().get(k).getAmountType());
                 double allAmountUnit = amtObj.getAmount();
                 double allocAmount = Double.parseDouble(req.getUnitRebaseRequests().get(k).getAllocAmount());
+                double expAmount=Double.parseDouble(req.getUnitRebaseRequests().get(k).getExpAmount());
                 double shipAllocAmount = allocAmount * allAmountUnit;
+                double shipExpAmount= Double.parseDouble("-"+expAmount);
                 BudgetRebase budgetRebase = new BudgetRebase();
                 budgetRebase.setBudgetRebaseId(HelperUtils.getUnitRebased());
                 budgetRebase.setRefTransId(refRensId);
@@ -1130,7 +1132,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             budgetAllocationDetails.setAuthGroupId(budgetAllocationAuthGroupId);
                             budgetAllocationDetails.setIsDelete("0");
                             budgetAllocationDetails.setIsTYpe("S");
-                            budgetAllocationDetails.setUnallocatedAmount("0");
+                            budgetAllocationDetails.setUnallocatedAmount(shipExpAmount+"");
                             budgetAllocationDetails.setIsBudgetRevision("0");
                             budgetAllocationDetails.setRevisedAmount("0.0000");
                             budgetAllocationDetails.setRefTransactionId(HelperUtils.getBudgetAllocationTypeId());
@@ -1261,7 +1263,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             budgetAllocation.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                             budgetAllocation.setAllocationTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                             budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
-                            budgetAllocation.setUnallocatedAmount("0");
+                            budgetAllocation.setUnallocatedAmount(shipExpAmount+"");
                             budgetAllocation.setRevisedAmount("0");
                             budgetAllocation.setUserId(hrDataCheck.getPid());
                             budgetAllocation.setStatus("Approved");
@@ -1514,7 +1516,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             budgetAllocation.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                             budgetAllocation.setAllocationTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                             budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
-                            budgetAllocation.setUnallocatedAmount("0");
+                            budgetAllocation.setUnallocatedAmount(shipExpAmount+"");
                             budgetAllocation.setRevisedAmount("0");
                             budgetAllocation.setUserId(hrDataCheck.getPid());
                             budgetAllocation.setStatus("Approved");
@@ -1745,7 +1747,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationDetails.setAuthGroupId(allocationAuthGroupId);
                         budgetAllocationDetails.setIsDelete("0");
                         budgetAllocationDetails.setIsTYpe("S");
-                        budgetAllocationDetails.setUnallocatedAmount("0");
+                        budgetAllocationDetails.setUnallocatedAmount(shipExpAmount+"");
                         budgetAllocationDetails.setIsBudgetRevision("0");
                         budgetAllocationDetails.setRevisedAmount("0.0000");
                         budgetAllocationDetails.setRefTransactionId(HelperUtils.getBudgetAllocationTypeId());
@@ -1874,7 +1876,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocation.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                         budgetAllocation.setAllocationTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                         budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
-                        budgetAllocation.setUnallocatedAmount("0");
+                        budgetAllocation.setUnallocatedAmount(shipExpAmount+"");
                         budgetAllocation.setRevisedAmount("0");
                         budgetAllocation.setUserId(hrDataCheck.getPid());
                         budgetAllocation.setStatus("Approved");
