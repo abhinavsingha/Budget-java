@@ -7300,8 +7300,22 @@ public class MangeReportImpl implements MangeReportService {
                 double hrallocationAmount = 0;
                 double hrAmountUnit = 0.0;
                 double hrfinAmount=0.0;
+                double exAmount=0.0;
                 if(listOfSubUnit1.size()==0){
                 }else{
+                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, allocationType, "0","0");
+                    List<ContigentBill> expenditure = expenditure1.stream()
+                            .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
+                    double selfExp = 0.0;
+                    if (expenditure.size() > 0) {
+                        for (ContigentBill bill : expenditure) {
+                            selfExp += Double.parseDouble(bill.getCbAmount());
+                        }
+                        DecimalFormat decimalFormat = new DecimalFormat("#");
+                        String cbAmount = decimalFormat.format(selfExp);
+                        exAmount = Double.parseDouble(cbAmount);
+                    }
+
                     List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, hrData.getUnitId(), allocationType, "0");
                     if (cdaParkingTrans.size() == 0) {
                     } else {
@@ -7311,11 +7325,11 @@ public class MangeReportImpl implements MangeReportService {
                             hrbalanceAmount = hrbalanceAmount + Double.parseDouble(cdaParkingTrans.get(k).getRemainingCdaAmount());
                             hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
                         }
-                        hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
+                        hrfinAmount = (hrbalanceAmount * hrAmountUnit+exAmount) / reqAmount;
                         PdfPCell cell100 = new PdfPCell(new Phrase(hrunitN.getDescr()));
                         PdfPCell cell200 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(hrfinAmount))));
-                        PdfPCell cell300 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(0))));
-                        PdfPCell cell400 = new PdfPCell(new Phrase(String.format("%1$0,1.2f", new BigDecimal(0))));
+                        PdfPCell cell300 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(exAmount/reqAmount))));
+                        PdfPCell cell400 = new PdfPCell(new Phrase(String.format("%1$0,1.2f", new BigDecimal((exAmount/reqAmount)*100/hrfinAmount))));
                         cell100.setPadding(10);
                         cell200.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                         cell300.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -7332,7 +7346,7 @@ public class MangeReportImpl implements MangeReportService {
 
                 }
                 double tot = sum + hrfinAmount;
-                double ex = expsum / reqAmount;
+                double ex = (expsum+exAmount) / reqAmount;
                 double perc=0.0;
                 if(tot==0)
                     perc=0.0;
@@ -7827,9 +7841,23 @@ public class MangeReportImpl implements MangeReportService {
                 double hrallocationAmount = 0f;
                 double hrAmountUnit = 0.0;
                 double hrfinAmount=0.0;
+                double exAmount=0.0;
                 if(listOfSubUnit1.size()==0){
 
                 }else{
+                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, allocationType, "0","0");
+                    List<ContigentBill> expenditure = expenditure1.stream()
+                            .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
+                    double selfExp = 0.0;
+                    if (expenditure.size() > 0) {
+                        for (ContigentBill bill : expenditure) {
+                            selfExp += Double.parseDouble(bill.getCbAmount());
+                        }
+                        DecimalFormat decimalFormat = new DecimalFormat("#");
+                        String cbAmount = decimalFormat.format(selfExp);
+                        exAmount = Double.parseDouble(cbAmount);
+                    }
+
                     List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, hrData.getUnitId(), allocationType, "0");
                     if (cdaParkingTrans.size() == 0) {
                     } else {
@@ -7840,7 +7868,13 @@ public class MangeReportImpl implements MangeReportService {
                             hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
                         }
                     }
-                    hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
+                    hrfinAmount = (hrbalanceAmount * hrAmountUnit+exAmount) / reqAmount;
+
+/*                    hrfinAmount = (hrbalanceAmount * hrAmountUnit+exAmount) / reqAmount;
+                    PdfPCell cell100 = new PdfPCell(new Phrase(hrunitN.getDescr()));
+                    PdfPCell cell200 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(hrfinAmount))));
+                    PdfPCell cell300 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(exAmount/reqAmount))));
+                    PdfPCell cell400 = new PdfPCell(new Phrase(String.format("%1$0,1.2f", new BigDecimal((exAmount/reqAmount)*100/hrfinAmount))));*/
 
                     XWPFTable hrrow = document.createTable(1, 8);
                     hrrow.setWidth("100%");
@@ -7856,10 +7890,10 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(hrcell03.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(hrfinAmount)), false);
                     XWPFParagraph hrcell04 = hrrow0.getCell(4).addParagraph();
                     hrcell04.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(hrcell04.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(0)), false);
+                    boldText(hrcell04.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(exAmount/reqAmount)), false);
                     XWPFParagraph hrcell05 = hrrow0.getCell(5).addParagraph();
                     hrcell05.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(hrcell05.createRun(), 12, String.format("%1$0,1.2f", new BigDecimal(0)), false);
+                    boldText(hrcell05.createRun(), 12, String.format("%1$0,1.2f", new BigDecimal((exAmount/reqAmount)*100/hrfinAmount)), false);
                     XWPFParagraph hrcell06 = hrrow0.getCell(6).addParagraph();
                     boldText(hrcell06.createRun(), 12, "", false);
                     XWPFParagraph hrcell07 = hrrow0.getCell(7).addParagraph();
@@ -7868,7 +7902,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
                 double tot = sum + hrfinAmount;
-                double ex = expsum / reqAmount;
+                double ex = (expsum+exAmount) / reqAmount;
                 double perc=0.0;
                 if(tot==0)
                     perc=0.0;
