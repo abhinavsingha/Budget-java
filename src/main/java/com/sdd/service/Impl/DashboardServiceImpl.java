@@ -1071,7 +1071,10 @@ public class DashboardServiceImpl implements DashBoardService {
                     perAmnt=0.0;
                 }
                 if(hrData.getUnitId().equalsIgnoreCase(uid)){
-                    subResp.setPerAmount(String.format("%1$0,1.2f", ((expAmount*100)/cdaRming+expAmount)));
+                    if(hralloc!=0)
+                    subResp.setPerAmount(String.format("%1$0,1.2f", ((expAmount*100)/hralloc)));
+                    else
+                        subResp.setPerAmount(String.format("%1$0,1.2f", (0.00)));
                 }else{
                     subResp.setPerAmount(String.format("%1$0,1.2f", (perAmnt)));
                 }
