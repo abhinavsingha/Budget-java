@@ -33,6 +33,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -8095,7 +8096,7 @@ public class MangeReportImpl implements MangeReportService {
             hrUnitId="000225";
         else
             hrUnitId=hrData.getUnitId();
-        List<CgUnit> listOfSubUnit1=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+        List<CgUnit> listOfSubUnit1=cgUnitRepository.findBySubUnitOrderByDescrAsc(hrUnitId);
         if(listOfSubUnit1.size()==0){
             checks = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(frmUnit, finYearId, allocationType, "0","0","Approved");
         }else{
@@ -8386,6 +8387,8 @@ public class MangeReportImpl implements MangeReportService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String formattedDateTime = now.format(formatter);
 
+
+
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
         LocalDate date = LocalDate.parse(toDate, inputFormatter);
@@ -8455,6 +8458,7 @@ public class MangeReportImpl implements MangeReportService {
 
                     RunitId = ids;
                     List<BudgetRebase> rebaseDatas = budgetRebaseRepository.findByRebaseUnitId(RunitId);
+
                     List<BudgetRebase> rebaseData1 = rebaseDatas.stream()
                             .filter(e -> e.getOccuranceDate().after(fromDateFormate) && e.getOccuranceDate().before(toDateFormate)).collect(Collectors.toList());
                     List<BudgetRebase> rebaseDatass = rebaseData1.stream().sorted(Comparator.comparing(data -> data.getBudgetHeadId().substring(data.getBudgetHeadId().length() - 2))).collect(Collectors.toList());
@@ -8473,12 +8477,23 @@ public class MangeReportImpl implements MangeReportService {
                     CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
 
                     uName = unitN.getDescr();
-                    Date rebaseDate = rebaseData.get(0).getOccuranceDate();
-                    Date dt = new Date();
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
-                    String formattedDatess = sdf.format(dt);
+                    Date rebaseDate = rebaseData.get(0).getCreatedOn();
+                    System.out.println("RBDATE" + rebaseDate);
                     frmStation = frmS;
                     toStation = toS.getStationName();
+
+                    //String inputDateStr = "31-07-23 7:38:53.485000000 PM";
+                    String inputDateStr= String.valueOf(rebaseData.get(0).getCreatedOn());
+                    SimpleDateFormat inputDateFormat = new SimpleDateFormat("dd-MM-yy h:mm:ss.SSSSSSSSS ");
+                    //String formattedDat="";
+                    //try {
+                        Date inputDate = inputDateFormat.parse(inputDateStr);
+                        SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd MMMM yyyy");
+                        String formattedDat= outputDateFormat.format(inputDate);
+                        System.out.println("Hello DATE"+formattedDat);
+/*                    } catch (ParseException e) {
+                        System.err.println("Error parsing the input date: " + e.getMessage());
+                    }*/
 
                     Paragraph paragraph11 = new Paragraph();
                     Font boldFontss = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
@@ -8496,7 +8511,7 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell3 = new PdfPCell(new Phrase("From Station", cellFont));
                     PdfPCell cell4 = new PdfPCell(new Phrase(frmStation, cellFont));
                     PdfPCell cell5 = new PdfPCell(new Phrase("Date of Rebase", cellFont));
-                    PdfPCell cell6 = new PdfPCell(new Phrase(formattedDatess, cellFont));
+                    PdfPCell cell6 = new PdfPCell(new Phrase(formattedDat, cellFont));
                     PdfPCell cell7 = new PdfPCell(new Phrase("To Station", cellFont));
                     PdfPCell cell8 = new PdfPCell(new Phrase(toStation, cellFont));
 
@@ -8725,10 +8740,6 @@ public class MangeReportImpl implements MangeReportService {
         LocalDateTime localDateTime = LocalDateTime.of(resultDt, LocalTime.MIDNIGHT);
         Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
 
-        Date dt = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
-        String formattedDatess = sdf.format(dt);
-
         try {
             XWPFDocument document = new XWPFDocument();
             XWPFParagraph headingParagraph = document.createParagraph();
@@ -8809,7 +8820,7 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowTwo.createRun(), 12, "REBASE DATE", true);
 
                     XWPFParagraph paragraphtableRowTwo1 = tableRowTwo.getCell(1).addParagraph();
-                    boldText(paragraphtableRowTwo1.createRun(), 10, formattedDatess, false);
+                    boldText(paragraphtableRowTwo1.createRun(), 10, rebaseData.get(0).getOccuranceDate().toString(), false);
 
                     XWPFParagraph paragraphtableRowTwo2 = tableRowTwo.getCell(2).addParagraph();
                     boldText(paragraphtableRowTwo2.createRun(), 12, "TO STATION", true);
@@ -9049,9 +9060,8 @@ public class MangeReportImpl implements MangeReportService {
                     CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
                     AmountUnit amountTypeObjs = amountUnitRepository.findByAmountTypeId(rebaseData.get(0).getAmountType());
 
-
                     rebase.setUnitName(unitN.getDescr());
-                    rebase.setDateOfRebase(HelperUtils.getCurrentTimeStamp());
+                    rebase.setDateOfRebase(rebaseData.get(0).getOccuranceDate());
                     rebase.setFromStation(rebaseData.get(0).getFrmStationId());
                     rebase.setToStation(toS.getStationName());
 

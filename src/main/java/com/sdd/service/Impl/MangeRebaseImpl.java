@@ -226,7 +226,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS");
         }
 
-        List<CgStation> getAllData = cgStationRepository.findAll();
+        List<CgStation> getAllData = cgStationRepository.findByIsBasePort("1");
 
         return ResponseUtils.createSuccessResponse(getAllData, new TypeReference<List<CgStation>>() {
         });

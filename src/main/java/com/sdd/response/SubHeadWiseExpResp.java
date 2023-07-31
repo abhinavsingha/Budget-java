@@ -12,8 +12,6 @@ import java.util.List;
 @Setter
 public class SubHeadWiseExpResp {
     private List<GrTotalObj> grTotalObj;
-
-
     String sumAlloc;
     String sumExp;
     String sumBal;
