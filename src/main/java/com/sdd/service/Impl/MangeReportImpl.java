@@ -7326,14 +7326,23 @@ public class MangeReportImpl implements MangeReportService {
                             hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
                         }
                         hrfinAmount = (hrbalanceAmount * hrAmountUnit+exAmount) / reqAmount;
+                        double expn=0.0;
+                        if(hrfinAmount==0){
+                            expn=0.00;
+                        }else{
+                            expn=(exAmount/reqAmount)*100/hrfinAmount;
+                        }
                         PdfPCell cell100 = new PdfPCell(new Phrase(hrunitN.getDescr()));
                         PdfPCell cell200 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(hrfinAmount))));
                         PdfPCell cell300 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(exAmount/reqAmount))));
-                        PdfPCell cell400 = new PdfPCell(new Phrase(String.format("%1$0,1.2f", new BigDecimal((exAmount/reqAmount)*100/hrfinAmount))));
+                        PdfPCell cell400 = new PdfPCell(new Phrase(String.format("%1$0,1.2f", new BigDecimal(expn))));
+
+
                         cell100.setPadding(10);
                         cell200.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                         cell300.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                         cell400.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+
                         table.addCell(" ");
                         table.addCell(" ");
                         table.addCell(cell100);
@@ -7565,8 +7574,8 @@ public class MangeReportImpl implements MangeReportService {
             CTSectPr ctSectPr = (ctBody.isSetSectPr()) ? ctBody.getSectPr() : ctBody.addNewSectPr();
             CTPageSz ctPageSz = (ctSectPr.isSetPgSz()) ? ctSectPr.getPgSz() : ctSectPr.addNewPgSz();
             ctPageSz.setOrient(STPageOrientation.LANDSCAPE);
-            ctPageSz.setW(java.math.BigInteger.valueOf(Math.round(120 * 1440))); //11 inches
-            ctPageSz.setH(java.math.BigInteger.valueOf(Math.round(8.5 * 1440))); //8.5 inches
+            ctPageSz.setW(java.math.BigInteger.valueOf(Math.round(80 * 1000))); //11 inches 11.7 x 16.5
+            ctPageSz.setH(java.math.BigInteger.valueOf(Math.round(6.5 * 1000))); //8.5 inches
 
 
             XWPFParagraph headingParagraph = document.createParagraph();
@@ -7870,11 +7879,12 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     hrfinAmount = (hrbalanceAmount * hrAmountUnit+exAmount) / reqAmount;
 
-/*                    hrfinAmount = (hrbalanceAmount * hrAmountUnit+exAmount) / reqAmount;
-                    PdfPCell cell100 = new PdfPCell(new Phrase(hrunitN.getDescr()));
-                    PdfPCell cell200 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(hrfinAmount))));
-                    PdfPCell cell300 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(exAmount/reqAmount))));
-                    PdfPCell cell400 = new PdfPCell(new Phrase(String.format("%1$0,1.2f", new BigDecimal((exAmount/reqAmount)*100/hrfinAmount))));*/
+                    double expn=0.0;
+                    if(hrfinAmount==0){
+                        expn=0.00;
+                    }else{
+                        expn=(exAmount/reqAmount)*100/hrfinAmount;
+                    }
 
                     XWPFTable hrrow = document.createTable(1, 8);
                     hrrow.setWidth("100%");
@@ -7893,7 +7903,7 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(hrcell04.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(exAmount/reqAmount)), false);
                     XWPFParagraph hrcell05 = hrrow0.getCell(5).addParagraph();
                     hrcell05.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(hrcell05.createRun(), 12, String.format("%1$0,1.2f", new BigDecimal((exAmount/reqAmount)*100/hrfinAmount)), false);
+                    boldText(hrcell05.createRun(), 12, String.format("%1$0,1.2f", new BigDecimal(expn)), false);
                     XWPFParagraph hrcell06 = hrrow0.getCell(6).addParagraph();
                     boldText(hrcell06.createRun(), 12, "", false);
                     XWPFParagraph hrcell07 = hrrow0.getCell(7).addParagraph();
@@ -8240,8 +8250,22 @@ public class MangeReportImpl implements MangeReportService {
                 double hrallocationAmount = 0;
                 double hrAmountUnit = 0.0;
                 double hrfinAmount=0.0;
+                double exAmount=0.0;
                 if(listOfSubUnit1.size()==0){
                 }else{
+                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, allocationType, "0","0");
+                    List<ContigentBill> expenditure = expenditure1.stream()
+                            .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
+                    double selfExp = 0.0;
+                    if (expenditure.size() > 0) {
+                        for (ContigentBill bill : expenditure) {
+                            selfExp += Double.parseDouble(bill.getCbAmount());
+                        }
+                        DecimalFormat decimalFormat = new DecimalFormat("#");
+                        String cbAmount = decimalFormat.format(selfExp);
+                        exAmount = Double.parseDouble(cbAmount);
+                    }
+
                     List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, hrData.getUnitId(), allocationType, "0");
                     if (cdaParkingTrans.size() == 0) {
                     } else {
@@ -8252,7 +8276,16 @@ public class MangeReportImpl implements MangeReportService {
                             hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
                         }
                     }
+
                     hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
+
+                    double expn=0.0;
+                    if(hrfinAmount==0){
+                        expn=0.00;
+                    }else{
+                        expn=(exAmount/reqAmount)*100/hrfinAmount;
+                    }
+
                     subResponce.setSubHead("");
                     subResponce.setUnitName(hrunitN.getDescr());
                     subResponce.setIcgAllocAmount("");
