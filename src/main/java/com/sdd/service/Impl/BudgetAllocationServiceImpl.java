@@ -920,7 +920,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
             BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
-            if(Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0){
+            if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
                 continue;
             }
             BudgetAllocationSubResponse budgetAllocationReport = new BudgetAllocationSubResponse();
@@ -1175,7 +1175,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                 if (budgetAllocationSubReport.getStatus().equalsIgnoreCase("Approved")) {
                     double revisedAmount = Double.parseDouble(budgetAllocationSubReport.getRevisedAmount());
-                    budgetAllocationReport.setAllocationAmount((remeningCdaAmount + (revisedAmount)) + "");
+                    budgetAllocationReport.setAllocationAmount((remeningCdaAmount) + "");
                 } else {
                     double revisedAmount = Double.parseDouble(budgetAllocationSubReport.getRevisedAmount());
                     budgetAllocationReport.setAllocationAmount((remeningCdaAmount) + "");
@@ -1958,7 +1958,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(i);
 
-            if(Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0){
+            if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
                 continue;
             }
 
@@ -2128,7 +2128,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
             BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(i);
-            if(Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0){
+            if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
                 continue;
             }
 
