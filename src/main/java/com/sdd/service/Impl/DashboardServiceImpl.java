@@ -990,12 +990,12 @@ public class DashboardServiceImpl implements DashBoardService {
             }
             List<BudgetAllocation> budgetAllocToUnit;
             if(headunit==true){
-                budgetAllocToUnit=budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, loginUnitId, finYearId, allocationTypeId, "0","0","Approved");
+                budgetAllocToUnit=budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, hrData.getUnitId(), finYearId, allocationTypeId, "0","0","Approved");
             }else{
-               budgetAllocToUnit=budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, loginUnitId, finYearId, allocationTypeId, "0","0","Approved");
+               budgetAllocToUnit=budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, hrData.getUnitId(), finYearId, allocationTypeId, "0","0","Approved");
             }
             if(headunit==true){
-                List<BudgetAllocation> budgetAllocToUnits=budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, loginUnitId, finYearId, allocationTypeId, "0","0","Approved");
+                List<BudgetAllocation> budgetAllocToUnits=budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, hrData.getUnitId(), finYearId, allocationTypeId, "0","0","Approved");
                 budgetAllocToUnit.addAll(budgetAllocToUnits);
             }
 
