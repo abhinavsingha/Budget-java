@@ -1072,8 +1072,6 @@ public class DashboardServiceImpl implements DashBoardService {
                     sumAlloc += alocAmnt;
                     sumExp += expAmount;
                     sumBal += cdaRmingAmunt;
-
-
                 }
             }
             double grPer=0.0;
