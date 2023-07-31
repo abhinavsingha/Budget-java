@@ -8482,18 +8482,12 @@ public class MangeReportImpl implements MangeReportService {
                     frmStation = frmS;
                     toStation = toS.getStationName();
 
-                    //String inputDateStr = "31-07-23 7:38:53.485000000 PM";
                     String inputDateStr= String.valueOf(rebaseData.get(0).getCreatedOn());
-                    SimpleDateFormat inputDateFormat = new SimpleDateFormat("dd-MM-yy h:mm:ss.SSSSSSSSS ");
-                    //String formattedDat="";
-                    //try {
-                        Date inputDate = inputDateFormat.parse(inputDateStr);
-                        SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd MMMM yyyy");
-                        String formattedDat= outputDateFormat.format(inputDate);
-                        System.out.println("Hello DATE"+formattedDat);
-/*                    } catch (ParseException e) {
-                        System.err.println("Error parsing the input date: " + e.getMessage());
-                    }*/
+                    String dt=ConverterUtils.conVertDateTimeFormat(inputDateStr);
+                    DateTimeFormatter inputDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    DateTimeFormatter outputDateFormat = DateTimeFormatter.ofPattern("dd MMMM yy");
+                        LocalDate inputDate = LocalDate.parse(dt, inputDateFormat);
+                        String dtOfRebase = outputDateFormat.format(inputDate);
 
                     Paragraph paragraph11 = new Paragraph();
                     Font boldFontss = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
@@ -8511,7 +8505,7 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell3 = new PdfPCell(new Phrase("From Station", cellFont));
                     PdfPCell cell4 = new PdfPCell(new Phrase(frmStation, cellFont));
                     PdfPCell cell5 = new PdfPCell(new Phrase("Date of Rebase", cellFont));
-                    PdfPCell cell6 = new PdfPCell(new Phrase(formattedDat, cellFont));
+                    PdfPCell cell6 = new PdfPCell(new Phrase(dtOfRebase, cellFont));
                     PdfPCell cell7 = new PdfPCell(new Phrase("To Station", cellFont));
                     PdfPCell cell8 = new PdfPCell(new Phrase(toStation, cellFont));
 
@@ -8777,6 +8771,14 @@ public class MangeReportImpl implements MangeReportService {
                     if (rebaseData.size() <= 0) {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
                     }
+
+                    String inputDateStr= String.valueOf(rebaseData.get(0).getCreatedOn());
+                    String dt=ConverterUtils.conVertDateTimeFormat(inputDateStr);
+                    DateTimeFormatter inputDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    DateTimeFormatter outputDateFormat = DateTimeFormatter.ofPattern("dd MMMM yy");
+                    LocalDate inputDate = LocalDate.parse(dt, inputDateFormat);
+                    String dtOfRebase = outputDateFormat.format(inputDate);
+
                     UnitRebaseReportResponce rebase = new UnitRebaseReportResponce();
                     CgUnit unitN = cgUnitRepository.findByUnit(RunitId);
                     CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
@@ -8820,7 +8822,7 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowTwo.createRun(), 12, "REBASE DATE", true);
 
                     XWPFParagraph paragraphtableRowTwo1 = tableRowTwo.getCell(1).addParagraph();
-                    boldText(paragraphtableRowTwo1.createRun(), 10, rebaseData.get(0).getOccuranceDate().toString(), false);
+                    boldText(paragraphtableRowTwo1.createRun(), 10, dtOfRebase, false);
 
                     XWPFParagraph paragraphtableRowTwo2 = tableRowTwo.getCell(2).addParagraph();
                     boldText(paragraphtableRowTwo2.createRun(), 12, "TO STATION", true);
@@ -10286,7 +10288,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 grTotalAlloc += Double.parseDouble(sumExistingRound);
                 grTotalAddition += Double.parseDouble(sumRERound);
-                grTotalSum += Double.parseDouble(sumExistingRound + sumRERound);
+                grTotalSum += (Double.parseDouble(sumExistingRound) + Double.parseDouble(sumRERound));
             }
             PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
             PdfPCell cell01 = new PdfPCell(new Phrase(String.valueOf(grTotalAlloc), cellFont));
