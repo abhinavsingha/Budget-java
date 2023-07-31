@@ -8441,6 +8441,10 @@ public class MangeReportImpl implements MangeReportService {
 
                     uName = unitN.getDescr();
                     Date rebaseDate = rebaseData.get(0).getOccuranceDate();
+/*                    DateTimeFormatter inputFormatter11 = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss tt");
+                    DateTimeFormatter outputFormatter11 = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+                    LocalDate date1 = LocalDate.parse(rebaseDate, inputFormatter11);
+                    String formattedDate11 = date1.format(outputFormatter11);*/
                     System.out.println("RBDATE" + rebaseDate);
                     frmStation = frmS;
                     toStation = toS.getStationName();
@@ -9039,6 +9043,88 @@ public class MangeReportImpl implements MangeReportService {
                     responce.add(rebase);
                 }
             }
+        } catch (Exception e) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
+        }
+        return ResponseUtils.createSuccessResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+        });
+    }
+
+    @Override
+    public ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseDataAuthGrId(String authGrpId) {
+        List<UnitRebaseReportResponce> responce = new ArrayList<UnitRebaseReportResponce>();
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+
+        if (authGrpId == null) {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+            }, "FROM DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrDataCheck.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+/*        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+        LocalDate date = LocalDate.parse(toDate, inputFormatter);
+        String formattedDate = date.format(outputFormatter);*/
+
+        try {
+
+                    List<BudgetRebase> rebaseData = budgetRebaseRepository.findByAuthGrpId(authGrpId);
+                    if (rebaseData.size() <= 0) {
+                        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "RECORD NOT FOUND IN THIS AUTHGROUPID");
+                    }
+                    CgUnit unitN = cgUnitRepository.findByUnit(rebaseData.get(0).getRebaseUnitId());
+                    CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
+                    AmountUnit amountTypeObjs = amountUnitRepository.findByAmountTypeId(rebaseData.get(0).getAmountType());
+                    UnitRebaseReportResponce rebase = new UnitRebaseReportResponce();
+
+                    rebase.setUnitName(unitN.getDescr());
+                    rebase.setDateOfRebase(rebaseData.get(0).getOccuranceDate());
+                    rebase.setFromStation(rebaseData.get(0).getFrmStationId());
+                    rebase.setToStation(toS.getStationName());
+
+                    List<UnitRebaseSubReportResponce> addRes = new ArrayList<UnitRebaseSubReportResponce>();
+                    for (Integer k = 0; k < rebaseData.size(); k++) {
+                        BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(rebaseData.get(k).getFinYear());
+                        BudgetHead bHead = subHeadRepository.findByBudgetCodeId(rebaseData.get(k).getBudgetHeadId());
+                        AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(rebaseData.get(k).getAmountType());
+                        AllocationType allocType = allocationRepository.findByAllocTypeId(rebaseData.get(k).getAllocTypeId());
+                        UnitRebaseSubReportResponce subResp = new UnitRebaseSubReportResponce();
+                        subResp.setFinYear(findyr.getFinYear());
+                        subResp.setAllocationType(allocType.getAllocDesc());
+                        subResp.setSubHead(bHead.getSubHeadDescr());
+                        subResp.setAllocationAmount(rebaseData.get(k).getAllocAmount());
+                        subResp.setExpenditureAmount(rebaseData.get(k).getExpAmount());
+                        subResp.setBalAmount(rebaseData.get(k).getBalAmount());
+                        subResp.setAmountType(amountTypeObj.getAmountType());
+                        if (rebaseData.get(k).getLastCbDate() != null) {
+                            subResp.setLastCbDate(rebaseData.get(k).getLastCbDate());
+                        }
+                        addRes.add(subResp);
+                    }
+                    rebase.setList(addRes);
+                    responce.add(rebase);
         } catch (Exception e) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
         }

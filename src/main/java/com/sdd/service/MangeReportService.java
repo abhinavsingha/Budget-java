@@ -105,7 +105,10 @@ public interface MangeReportService {
     ApiResponse<List<FilePathResponse>> getUnitRebaseReportDoc(String fromDate, String toDate);
     ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseReportExcel(String fromDate, String toDate);
 
- //   MA ALLOCATION REPORT
+    ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseDataAuthGrId(String authGrpId);
+
+
+    //   MA ALLOCATION REPORT
     ApiResponse<List<FilePathResponse>> getMAAllocationReport(String finYearId, String allocationTypeBE, String allocationTypeRE,String allocationTypeMA, String amountTypeId,String majorHd);
     ApiResponse<List<FilePathResponse>> getMAAllocationReportDoc(String finYearId, String allocationTypeBE, String allocationTypeRE,String allocationTypeMA, String amountTypeId,String majorHd);
     ApiResponse<List<MAResponceReport>> getMAAllocationReportExcel(String finYearId, String allocationTypeBE, String allocationTypeRE,String allocationTypeMA, String amountTypeId,String majorHd);

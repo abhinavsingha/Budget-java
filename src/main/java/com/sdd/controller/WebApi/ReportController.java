@@ -246,6 +246,11 @@ public class ReportController {
         return new ResponseEntity<>(mangeReportService.getUnitRebaseReportExcel(fromDate, toDate), HttpStatus.OK);
     }
 
+    @GetMapping("/getUnitRebaseDataAuthGrId/{authGrpId}")
+    public ResponseEntity<ApiResponse<List<UnitRebaseReportResponce>>> getUnitRebaseDataAuthGrId(@PathVariable(value = "authGrpId") String authGrpId) {
+        return new ResponseEntity<>(mangeReportService.getUnitRebaseDataAuthGrId(authGrpId), HttpStatus.OK);
+    }
+
     //  MA ALLOCATION REPORT
     @GetMapping("/getMAAllocationReport/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{allocationTypeMA}/{amountTypeId}/{majorHd}")
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getMAAllocationReport(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationTypeBE") String allocationTypeBE, @PathVariable(value = "allocationTypeRE") String allocationTypeRE,@PathVariable(value = "allocationTypeMA") String allocationTypeMA, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "majorHd") String majorHd) {
