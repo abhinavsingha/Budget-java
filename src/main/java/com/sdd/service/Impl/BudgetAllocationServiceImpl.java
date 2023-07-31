@@ -1176,7 +1176,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     budgetAllocationReport.setAllocationAmount((remeningCdaAmount + (revisedAmount)) + "");
                 } else {
                     double revisedAmount = Double.parseDouble(budgetAllocationSubReport.getRevisedAmount());
-                    budgetAllocationReport.setAllocationAmount((remeningCdaAmount ) + "");
+                    budgetAllocationReport.setAllocationAmount((remeningCdaAmount) + "");
                 }
 
 
@@ -2906,7 +2906,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "STATUS CAN NOT BE BLANK");
         }
 
-
         if (budgetApproveRequest.getAuthGroupId() == null || budgetApproveRequest.getAuthGroupId().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO AUTH GROUP ID");
         }
@@ -2970,11 +2969,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                     mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                     mangeInboxOutbox.setStatus(budgetApproveRequest.getStatus());
-                    if(status.equalsIgnoreCase("Rejected")){
+                    if (status.equalsIgnoreCase("Rejected")) {
                         mangeInboxOutbox.setState("CR");
                         mangeInboxOutbox.setIsArchive("1");
                         mangeInboxOutbox.setIsApproved("0");
-                    }else{
+                    } else {
                         mangeInboxOutbox.setState("CR");
                         mangeInboxOutbox.setIsArchive("0");
                         mangeInboxOutbox.setIsApproved("0");
@@ -2985,7 +2984,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 }
             }
         }
-
 
         BudgetAllocationSaveResponse response = new BudgetAllocationSaveResponse();
         response.setMsg("Data " + budgetApproveRequest.getStatus() + " Successfully");
@@ -5322,8 +5320,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             allocationData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetailsRepository.save(allocationData);
         }
-
-
 
 
         List<CdaRevisionData> revisionData = budgetRevisionRepository.findByAuthGroupId(authRequest.getAuthGroupId());
