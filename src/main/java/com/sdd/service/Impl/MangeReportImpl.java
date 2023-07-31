@@ -8276,9 +8276,7 @@ public class MangeReportImpl implements MangeReportService {
                             hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
                         }
                     }
-
                     hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
-
                     double expn=0.0;
                     if(hrfinAmount==0){
                         expn=0.00;
