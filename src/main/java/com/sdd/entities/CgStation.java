@@ -34,6 +34,9 @@ public class CgStation {
     @Column(name = "IS_FLAG")
     private String isFlag;
 
+    @Column(name = "IS_BASEPORT")
+    private String isBasePort;
+
     @Column(name = "CREATED_ON")
     private Timestamp createdOn;
 
