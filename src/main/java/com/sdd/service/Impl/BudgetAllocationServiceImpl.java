@@ -1675,6 +1675,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         mangeInboxOutbox.setCreaterpId(hrData.getPid());
         mangeInboxOutbox.setStatus("Pending");
         mangeInboxOutbox.setState("AP");
+        mangeInboxOutbox.setIsRebase("0");
         mangeInboxOutbox.setIsArchive("0");
         mangeInboxOutbox.setIsApproved("0");
         mangeInboxOutbox.setIsFlag("0");
@@ -1893,6 +1894,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         mangeInboxOutbox.setCreaterpId(hrData.getPid());
         mangeInboxOutbox.setStatus("Pending");
         mangeInboxOutbox.setState("AP");
+        mangeInboxOutbox.setIsRebase("0");
         mangeInboxOutbox.setIsArchive("0");
         mangeInboxOutbox.setIsApproved("0");
         mangeInboxOutbox.setIsFlag("0");
@@ -3649,6 +3651,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         mangeInboxOutbox.setApproverpId("");
         mangeInboxOutbox.setIsFlag("1");
         mangeInboxOutbox.setIsArchive("0");
+        mangeInboxOutbox.setIsRebase("0");
         mangeInboxOutbox.setIsApproved("0");
         mangeInboxOutbox.setIsRevision(0);
         mangeInboxOutbox.setStatus("Pending");
@@ -3941,6 +3944,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         mangeInboxOutbox.setIsArchive("0");
         mangeInboxOutbox.setIsRevision(0);
         mangeInboxOutbox.setIsApproved("0");
+        mangeInboxOutbox.setIsRebase("0");
         mangeInboxOutbox.setIsBgcg("BG");
 
         mangeInboxOutBoxRepository.save(mangeInboxOutbox);
@@ -4820,6 +4824,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
         mangeInboxOutbox.setToUnit(hrData.getUnitId());
         mangeInboxOutbox.setGroupId(authGrouPid);
+        mangeInboxOutbox.setIsRebase("0");
         mangeInboxOutbox.setFromUnit(hrData.getUnitId());
         mangeInboxOutbox.setRoleId(hrData.getRoleId());
         mangeInboxOutbox.setCreaterpId(hrData.getPid());
@@ -5108,6 +5113,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             mangeInboxOutbox.setRoleId(hrDataCheck.getRoleId());
             mangeInboxOutbox.setCreaterpId(hrDataCheck.getPid());
             mangeInboxOutbox.setApproverpId("");
+            mangeInboxOutbox.setIsRebase("0");
             mangeInboxOutbox.setStatus("Approved");
             mangeInboxOutbox.setAllocationType(tabData.getAllocationTypeId());
             mangeInboxOutbox.setIsFlag("1");
@@ -5334,6 +5340,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
             mangeInboxOutbox.setGroupId(authgroupid);
+            mangeInboxOutbox.setIsRebase("0");
             mangeInboxOutbox.setFromUnit(hrData.getUnitId());
             mangeInboxOutbox.setRoleId(hrData.getRoleId());
             mangeInboxOutbox.setCreaterpId(hrData.getPid());
@@ -5647,6 +5654,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
             mangeInboxOutbox.setRemarks("Budget Receipt");
+            mangeInboxOutbox.setIsRebase("0");
             mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             mangeInboxOutbox.setToUnit(key);
@@ -5657,6 +5665,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
             mangeInboxOutbox.setGroupId(authgroupid);
+            mangeInboxOutbox.setIsRebase("0");
             mangeInboxOutbox.setFromUnit(hrData.getUnitId());
             mangeInboxOutbox.setRoleId(hrData.getRoleId());
             mangeInboxOutbox.setCreaterpId(hrData.getPid());

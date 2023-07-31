@@ -604,6 +604,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
         MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
         mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
         mangeInboxOutbox.setRemarks("UNIT REBASE");
+
         mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
         mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
         mangeInboxOutbox.setToUnit(hrDataCheck.getUnitId());

@@ -27,6 +27,7 @@ public class ManageStatus {
     @Column(name = "is_flag")
     private String isFlag;
 
+
     @Column(name = "CREATED_ON")
     private Timestamp createdOn;
 

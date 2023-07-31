@@ -78,6 +78,9 @@ public class MangeInboxOutbox {
     private String isApproved;
 
 
+    @Column(name = "IS_REBASE")
+    private String isRebase;
+
     @Column(name = "IS_ARCHIVE")
     private String isArchive;
 

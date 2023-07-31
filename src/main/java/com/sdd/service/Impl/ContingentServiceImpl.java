@@ -406,6 +406,7 @@ public class ContingentServiceImpl implements ContingentService {
 
         CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
         MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
+        mangeInboxOutbox.setIsRebase("0");
         mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
         mangeInboxOutbox.setRemarks("Contingent Bill");
         mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());

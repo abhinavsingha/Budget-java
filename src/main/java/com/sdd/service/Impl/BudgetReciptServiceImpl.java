@@ -325,7 +325,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
 
         MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
-
+        mangeInboxOutbox.setIsRebase("0");
         mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
         mangeInboxOutbox.setRemarks("Budget Receipt");
         mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
