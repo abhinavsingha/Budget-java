@@ -465,6 +465,11 @@ public class ContingentServiceImpl implements ContingentService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CONTINGENT BILL ID");
             }
 
+            if(!(contigentBill.getStatus().equalsIgnoreCase("Rejected") || contigentBill.getStatus().equalsIgnoreCase("Reject"))){
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB BILL NOT IN REJECTED STATE");
+            }
+
+
             if (contigentBill.getStatus().equalsIgnoreCase("Pending") || contigentBill.getStatus().equalsIgnoreCase("Rejected")) {
 
             } else {

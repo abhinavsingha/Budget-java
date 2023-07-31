@@ -920,7 +920,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
             BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
-
+            if(Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0){
+                continue;
+            }
             BudgetAllocationSubResponse budgetAllocationReport = new BudgetAllocationSubResponse();
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
             budgetAllocationReport.setAllocationId(budgetAllocationSubReport.getAllocationId());
@@ -1954,6 +1956,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(i);
 
+            if(Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0){
+                continue;
+            }
+
+
             BudgetAllocationSubResponse budgetAllocationReport = new BudgetAllocationSubResponse();
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getCreatedOn());
             budgetAllocationReport.setAllocationId(budgetAllocationSubReport.getAllocationId());
@@ -2119,6 +2126,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
             BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(i);
+            if(Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0){
+                continue;
+            }
 
             BudgetAllocationSubResponse budgetAllocationReport = new BudgetAllocationSubResponse();
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getCreatedOn());
