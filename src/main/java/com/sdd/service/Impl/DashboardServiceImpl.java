@@ -987,7 +987,6 @@ public class DashboardServiceImpl implements DashBoardService {
                 CgUnit cgUnits = cgUnitRepository.findByUnit(hrData.getUnitId());
                 ulist1.add(cgUnits);
             }
-
             if (ulist1.size()<=0) {
                 return ResponseUtils.createFailureResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {
                 }, "UNIT NOT FOUND", HttpStatus.OK.value());
