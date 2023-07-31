@@ -7574,8 +7574,8 @@ public class MangeReportImpl implements MangeReportService {
             CTSectPr ctSectPr = (ctBody.isSetSectPr()) ? ctBody.getSectPr() : ctBody.addNewSectPr();
             CTPageSz ctPageSz = (ctSectPr.isSetPgSz()) ? ctSectPr.getPgSz() : ctSectPr.addNewPgSz();
             ctPageSz.setOrient(STPageOrientation.LANDSCAPE);
-            ctPageSz.setW(java.math.BigInteger.valueOf(Math.round(80 * 1000))); //11 inches 11.7 x 16.5
-            ctPageSz.setH(java.math.BigInteger.valueOf(Math.round(6.5 * 1000))); //8.5 inches
+            ctPageSz.setW(java.math.BigInteger.valueOf(Math.round(120 * 1440))); //11 inches 11.7 x 16.5
+            ctPageSz.setH(java.math.BigInteger.valueOf(Math.round(8.5 * 1440))); //8.5 inches
 
 
             XWPFParagraph headingParagraph = document.createParagraph();
@@ -8135,6 +8135,8 @@ public class MangeReportImpl implements MangeReportService {
 
 
             double IcgAmount = 0.0;
+            double IcgAmount1 = 0.0;
+            double sumalcg=0.0;
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetails;
@@ -8147,7 +8149,37 @@ public class MangeReportImpl implements MangeReportService {
                     List<BudgetAllocation> reportDetailss = reportDetail1.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                     reportDetails = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
                 }
+/*                if (reportDetails.size() <= 0) {
+                    continue;
+                }*/
                 if (reportDetails.size() <= 0) {
+
+                    String UnitName = "";
+                    List<BudgetAllocation> hrDetails = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, hrData.getUnitId(), finYearId, allocationType, "0", "0", "Approved");
+                    if (hrDetails.size() > 0) {
+                        double hrAllocAmount = Double.parseDouble(hrDetails.get(0).getAllocationAmount());
+                        AmountUnit hrAmount = amountUnitRepository.findByAmountTypeId(hrDetails.get(0).getAmountType());
+                        double hrAmountUnit = Double.parseDouble(hrAmount.getAmount() + "");
+                        IcgAmount1 = hrAllocAmount * hrAmountUnit / reqAmount;
+                        sumalcg+=IcgAmount1;
+
+                        CgUnit unitN = cgUnitRepository.findByUnit(hrDetails.get(0).getToUnit());
+                        UnitName = unitN.getDescr();
+                        BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
+                        if (IcgAmount1 != 0) {
+                            FerSubResponse subResp1 = new FerSubResponse();
+                            subResp1.setSubHead(bHead.getSubHeadDescr());
+                            subResp1.setIcgAllocAmount(String.format("%1$0,1.4f", new BigDecimal(IcgAmount1)));
+                            subResp1.setUnitName(unitN.getDescr());
+                            subResp1.setAllocAmount(String.format("%1$0,1.4f", new BigDecimal(IcgAmount1)));
+                            subResp1.setBillSubmission(String.format("%1$0,1.4f", new BigDecimal(0.0000)));
+                            subResp1.setPercentageBill(String.format("%1$0,1.2f", new BigDecimal(0.00)));
+                            subResp1.setCgdaBooking("");
+                            subResp1.setPercentageBillClearnce("");
+                            addRes.add(subResp1);
+                        }
+
+                    }
                     continue;
                 }
                 String hrUnit = hrData.getUnitId();
@@ -8275,8 +8307,8 @@ public class MangeReportImpl implements MangeReportService {
                             hrbalanceAmount = hrbalanceAmount + Double.parseDouble(cdaParkingTrans.get(k).getRemainingCdaAmount());
                             hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
                         }
-                    }
-                    hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
+                        hrfinAmount = (hrbalanceAmount * hrAmountUnit+exAmount) / reqAmount;
+                    //hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
                     double expn=0.0;
                     if(hrfinAmount==0){
                         expn=0.00;
@@ -8288,11 +8320,12 @@ public class MangeReportImpl implements MangeReportService {
                     subResponce.setUnitName(hrunitN.getDescr());
                     subResponce.setIcgAllocAmount("");
                     subResponce.setAllocAmount(String.format("%1$0,1.4f", new BigDecimal(hrfinAmount)));
-                    subResponce.setBillSubmission(String.format("%1$0,1.4f", new BigDecimal(0)));
-                    subResponce.setPercentageBill(String.format("%1$0,1.2f", new BigDecimal(0)));
+                    subResponce.setBillSubmission(String.format("%1$0,1.4f", new BigDecimal(exAmount/reqAmount)));
+                    subResponce.setPercentageBill(String.format("%1$0,1.2f", new BigDecimal(expn)));
                     subResponce.setCgdaBooking("");
                     subResponce.setPercentageBillClearnce("");
                     addRes.add(subResponce);
+                    }
                 }
 
 
