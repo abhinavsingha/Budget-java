@@ -864,11 +864,11 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 //        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
         CdaParking cdaParking = new CdaParking();
         cdaParking.setGinNo("112233");
-        cdaParking.setCdaName("All CDA");
+        cdaParking.setCdaName("Unit Parking");
 
         CdaParking cdaParking1122 = new CdaParking();
         cdaParking1122.setGinNo("123456");
-        cdaParking1122.setCdaName("All Unit CDA");
+        cdaParking1122.setCdaName("ALL CDA");
 
 
         CdaParking cdaParking11 = new CdaParking();

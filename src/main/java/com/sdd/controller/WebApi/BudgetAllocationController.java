@@ -101,6 +101,11 @@ public class BudgetAllocationController {
         return new ResponseEntity<>(budgetAllocationService.findAvailableAmount(budgetHeadId), HttpStatus.OK);
     }
 
+    @PostMapping("/getAvailableFundCB")
+    public ResponseEntity<ApiResponse<AvilableFundResponse>> getAvailableFundCb(@RequestBody GetAmountRequest  budgetHeadId) {
+        return new ResponseEntity<>(budgetAllocationService.getAvailableFundCB(budgetHeadId), HttpStatus.OK);
+    }
+
 
     @PostMapping("/getAvailableFundFindByUnitIdAndFinYearId")
     public ResponseEntity<ApiResponse<AvilableFundResponse>> getAvailableFundFindByUnitIdAndFinYearId(@RequestBody GetAvilableFundRequest getAvilableFundRequest) {

@@ -3086,6 +3086,110 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         });
     }
 
+
+    @Override
+    @Transactional
+    public ApiResponse<AvilableFundResponse> getAvailableFundCB(GetAmountRequest budgetHeadId) {
+        AvilableFundResponse response = new AvilableFundResponse();
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE BUDGET ALLOCATION");
+        }
+
+
+        if (budgetHeadId.getBudgetHeadId() == null || budgetHeadId.getBudgetHeadId().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "SUB HEAD ID CAN NOT BE BLANK");
+        }
+
+
+        if (budgetHeadId.getUnitId() == null || budgetHeadId.getUnitId().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT ID CAN NOT BE BLANK");
+        }
+        CgUnit cgUnitData = cgUnitRepository.findByUnit(budgetHeadId.getUnitId());
+        if (cgUnitData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID UNIT ID.");
+        }
+
+
+        if (budgetHeadId.getBudgetFinancialYearId() == null || budgetHeadId.getBudgetFinancialYearId().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FIN YEAR ID CAN NOT BE BLANK key:-budgetFinancialYearId");
+        }
+
+        BudgetHead subHeadData = subHeadRepository.findByBudgetCodeId(budgetHeadId.getBudgetHeadId());
+        if (subHeadData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), " INVALID SUB HEAD ID .");
+        }
+
+        AllocationType allocationTypeData = null;
+        List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
+        if (allocationType.size() > 0) {
+            allocationTypeData = allocationType.get(0);
+        }
+
+        List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(budgetHeadId.getBudgetFinancialYearId(), budgetHeadId.getBudgetHeadId(), budgetHeadId.getUnitId(), allocationTypeData.getAllocTypeId(), "0");
+
+
+        AmountUnit amountUnit = null;
+        if (cdaParkingTrans.size() == 0) {
+            response.setFundAvailable("0");
+        } else {
+            double balanceAmount = 0;
+            double allocationAmount = 0;
+            for (Integer i = 0; i < cdaParkingTrans.size(); i++) {
+
+                amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(i).getAmountType());
+                balanceAmount = balanceAmount + Double.parseDouble(cdaParkingTrans.get(i).getRemainingCdaAmount());
+                allocationAmount = allocationAmount + Double.parseDouble(cdaParkingTrans.get(i).getTotalParkingAmount());
+            }
+            response.setFundAvailable(ConverterUtils.addDecimalPoint(balanceAmount + ""));
+            response.setFundallocated(ConverterUtils.addDecimalPoint(allocationAmount + ""));
+            response.setAmountUnit(amountUnit);
+        }
+
+//        List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(budgetHeadId.getUnitId(), budgetHeadId.getBudgetFinancialYearId(), budgetHeadId.getBudgetHeadId(), allocationTypeData.getAllocTypeId(), "0", "0");
+//
+//        double totalBill = 0;
+//        for (Integer k = 0; k < subHeadContigentBill.size(); k++) {
+//            totalBill = totalBill + Double.parseDouble(subHeadContigentBill.get(k).getCbAmount());
+//        }
+//        totalBill = Double.parseDouble(response.getFundAvailable()) + totalBill;
+//
+//
+//        response.setFundAvailable(ConverterUtils.addDecimalPoint(totalBill + ""));
+        response.setUnitName(cgUnitData.getCgUnitShort());
+
+
+        List<ContigentBill> cbExpendure = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdate(budgetHeadId.getUnitId(), budgetHeadId.getBudgetHeadId(), "0", "0");
+        if (cbExpendure.size() == 0) {
+            response.setExpenditure("0.0000");
+        } else {
+            double expenditure = 0;
+            for (Integer i = 0; i < cbExpendure.size(); i++) {
+                expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
+            }
+            response.setExpenditure(ConverterUtils.addDecimalPoint(expenditure + ""));
+        }
+
+        List<CdaFilterData> data = new ArrayList<>();
+        for (Integer m = 0; m < cdaParkingTrans.size(); m++) {
+            CdaParkingTrans cdaParkingCrAndDr = cdaParkingTrans.get(m);
+
+            CdaFilterData cgUnitResponse = new CdaFilterData();
+            BeanUtils.copyProperties(cdaParkingCrAndDr, cgUnitResponse);
+            cgUnitResponse.setGinNo(cdaParkingRepository.findByGinNo(cdaParkingCrAndDr.getGinNo()));
+            cgUnitResponse.setAmountType(amountUnitRepository.findByAmountTypeId(cdaParkingCrAndDr.getAmountType()));
+            data.add(cgUnitResponse);
+        }
+        response.setCdaParkingTrans(data);
+
+        return ResponseUtils.createSuccessResponse(response, new TypeReference<AvilableFundResponse>() {
+        });
+    }
+
     @Override
     @Transactional
     public ApiResponse<AvilableFundResponse> getAvailableFundData() {
