@@ -980,143 +980,113 @@ public class DashboardServiceImpl implements DashBoardService {
             }else{
                 loginUnitId=hrData.getUnitId();
             }
-            List<CgUnit> ulist1 = cgUnitRepository.findBySubUnitOrderByDescrAsc(loginUnitId);
-            //List<CgUnit> ulist1 = cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
 
-            if(!(hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID))){
-                CgUnit cgUnits = cgUnitRepository.findByUnit(hrData.getUnitId());
-                ulist1.add(cgUnits);
+            boolean headunit;
+            List<CgUnit> subUnit=cgUnitRepository.findBySubUnitOrderByDescrAsc(loginUnitId);
+            if(subUnit.size() ==0){
+                headunit=false;
+            }else{
+                headunit=true;
             }
-            if (ulist1.size()<=0) {
-                return ResponseUtils.createFailureResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {
-                }, "UNIT NOT FOUND", HttpStatus.OK.value());
+            List<BudgetAllocation> budgetAllocToUnit;
+            if(headunit==true){
+                budgetAllocToUnit=budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, loginUnitId, finYearId, allocationTypeId, "0","0","Approved");
+            }else{
+               budgetAllocToUnit=budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, loginUnitId, finYearId, allocationTypeId, "0","0","Approved");
             }
-            SubHeadWiseExpResp obj =new SubHeadWiseExpResp();
+            if(headunit==true){
+                List<BudgetAllocation> budgetAllocToUnits=budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, loginUnitId, finYearId, allocationTypeId, "0","0","Approved");
+                budgetAllocToUnit.addAll(budgetAllocToUnits);
+            }
+
             double sumAlloc = 0.0;
             double sumExp = 0.0;
             double sumBal = 0.0;
-            double subHrAmount = 0.0;
-            double hrAmntUnit = 0.0;
-            double perBal = 0.0;
-            double hralloc=0.0;
+            SubHeadWiseExpResp obj =new SubHeadWiseExpResp();
             List<GrTotalObj> grResp = new ArrayList<GrTotalObj>();
-            for (int j = 0; j < ulist1.size(); j++) {
-                String uid=ulist1.get(j).getUnit();
-                CgUnit cgUnit = cgUnitRepository.findByUnit(uid);
-                double allocAmount=0.0;
-                double allocAmntUnit=0.0;
-                List<BudgetAllocation> budgetAllocationsDetalis1 = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, uid, finYearId, allocationTypeId, "0","0","Approved");
-                if(budgetAllocationsDetalis1.size()>0){
-                    if(uid.equalsIgnoreCase(hrData.getUnitId())){
-                        subHrAmount=Double.parseDouble(budgetAllocationsDetalis1.get(0).getAllocationAmount());
-                        AmountUnit allocUnit1 = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis1.get(0).getAmountType());
-                        hrAmntUnit=allocUnit1.getAmount();
-                    }
-                    allocAmount= Double.parseDouble(budgetAllocationsDetalis1.get(0).getAllocationAmount());
-                    AmountUnit allocUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis1.get(0).getAmountType());
-                    allocAmntUnit=allocUnit.getAmount();
-                } else{
-                    allocAmount=0.0;
-                    allocAmntUnit=0.0;
-                }
-                double finAmount = allocAmount*allocAmntUnit/reqAmount;
-                double totalCda=0.0;
-                double remCdaBal=0.0;
-                List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, uid, allocationTypeId, "0");
-                double rqUnit=0.0;
-                if (cdaDetail.size() > 0) {
-                    for (int k = 0; k < cdaDetail.size(); k++) {
-                        totalCda += Double.parseDouble(cdaDetail.get(k).getTotalParkingAmount());
-                        remCdaBal += Double.parseDouble(cdaDetail.get(k).getRemainingCdaAmount());
-                        AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(0).getAmountType());
-                        rqUnit=hdamtUnit.getAmount();
-                    }
-                }
-                double cdaTotal=totalCda*rqUnit/reqAmount;
-                double cdaRming=remCdaBal*rqUnit/reqAmount;
+            if(budgetAllocToUnit.size()>0){
+                for (int j = 0; j < budgetAllocToUnit.size(); j++) {
 
-                List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(uid, finYearId, subHeadId,allocationTypeId, "0");
-                List<ContigentBill> expenditure=expenditure1.stream().filter(e->e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
-                double totalAmount = 0.0;
-                Timestamp lastCvDate;
-                String cbD = "";
-                if (expenditure.size() > 0) {
-                    for (ContigentBill bill : expenditure) {
-                        totalAmount += Double.parseDouble(bill.getCbAmount());
-                        if(bill.getCbDate()!=null){
-                            lastCvDate=bill.getCbDate();
-                            SimpleDateFormat id = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-                            SimpleDateFormat od = new SimpleDateFormat("dd-MMMM-yyyy");
-                            Date dateC = id.parse(lastCvDate.toString());
-                            cbD = od.format(dateC);
-                        }else
-                            cbD="";
+                    String uid=budgetAllocToUnit.get(j).getToUnit();
+                    double remCdaBal=0.0;
+                    double cdaUnit=0.0;
+                    List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, uid, allocationTypeId, "0");
+                    if (cdaDetail.size() > 0) {
+                        for (int k = 0; k < cdaDetail.size(); k++) {
+                            remCdaBal += Double.parseDouble(cdaDetail.get(k).getRemainingCdaAmount());
+                            AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(0).getAmountType());
+                            cdaUnit=hdamtUnit.getAmount();
+                        }
                     }
-                }
+                    double cdaRmingAmunt=remCdaBal*cdaUnit/reqAmount;
 
-                double perAmnt=0.0;
-                double expAmount=totalAmount/reqAmount;
-                GrTotalObj subResp = new GrTotalObj();
-                subResp.setUnitName(cgUnit.getDescr());
-                subResp.setFinYear(budgetFinancialYear.getFinYear());
-                subResp.setAllocType(allockData.getAllocDesc());
-                subResp.setAmountIn(hdamtUnits.getAmountType());
-                //subResp.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(cdaRming+expAmount)));
-                if(hrData.getUnitId().equalsIgnoreCase(uid)){
-                    subResp.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(cdaRming+expAmount)));
-                    hralloc=cdaRming+expAmount;
-                }else{
-                    subResp.setAllocatedAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
-                }
-                subResp.setExpenditureAmount(String.format("%1$0,1.4f", new BigDecimal(expAmount)));
-                subResp.setBalAmount(String.format("%1$0,1.4f", new BigDecimal(cdaRming)));
-                if(finAmount!=0){
-                    perAmnt=(expAmount*100)/finAmount;
-                }else{
-                    perAmnt=0.0;
-                }
-                if(hrData.getUnitId().equalsIgnoreCase(uid)){
-                    if(hralloc!=0)
-                    subResp.setPerAmount(String.format("%1$0,1.2f", ((expAmount*100)/hralloc)));
-                    else
-                        subResp.setPerAmount(String.format("%1$0,1.2f", (0.00)));
-                }else{
-                    subResp.setPerAmount(String.format("%1$0,1.2f", (perAmnt)));
-                }
+                    List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(uid, finYearId, subHeadId,allocationTypeId, "0","0");
+                    double totalExpAmount = 0.0;
+                    Timestamp lastCvDate;
+                    String cbD = "";
+                    if (expenditure.size() > 0) {
+                        for (ContigentBill bill : expenditure) {
+                            totalExpAmount += Double.parseDouble(bill.getCbAmount());
+                            if(bill.getCbDate()!=null){
+                                lastCvDate=bill.getCbDate();
+                                SimpleDateFormat id = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                                SimpleDateFormat od = new SimpleDateFormat("dd-MMMM-yyyy");
+                                Date dateC = id.parse(lastCvDate.toString());
+                                cbD = od.format(dateC);
+                            }else
+                                cbD="";
+                        }
+                    }
+                    double expAmount=totalExpAmount/reqAmount;
 
-                subResp.setLastCBDate(cbD);
-                grResp.add(subResp);
-/*                if(uid.equalsIgnoreCase(hrData.getUnitId())){
-                    sumAlloc +=0.0;
-                }else{
-                    sumAlloc += Float.parseFloat(new BigDecimal(finAmount).toPlainString());
-                }*/
-                //sumAlloc += cdaRming+expAmount;
-                sumAlloc += finAmount;
-                sumExp += expAmount;
-                sumBal += cdaRming;
-                perBal += perAmnt;
+                    AmountUnit alloc = amountUnitRepository.findByAmountTypeId(budgetAllocToUnit.get(j).getAmountType());
+                    double allocAmntUnit=alloc.getAmount();
+                    double alocAmnt=0.0;
+                    if(headunit==true && hrData.getUnitId().equalsIgnoreCase(uid)){
+                        alocAmnt= cdaRmingAmunt+expAmount;
+                    }else{
+                        double alocAmnts= Double.parseDouble(budgetAllocToUnit.get(j).getAllocationAmount());
+                        alocAmnt=alocAmnts*allocAmntUnit/reqAmount;
+                    }
+
+                    double perAmnt=0.0;
+                    if(alocAmnt!=0){
+                        perAmnt=(expAmount*100)/alocAmnt;
+                    }else{
+                        perAmnt=0.0;
+                    }
+
+                    CgUnit cgUnit = cgUnitRepository.findByUnit(uid);
+                    GrTotalObj subResp = new GrTotalObj();
+                    subResp.setUnitName(cgUnit.getDescr());
+                    subResp.setFinYear(budgetFinancialYear.getFinYear());
+                    subResp.setAllocType(allockData.getAllocDesc());
+                    subResp.setAmountIn(hdamtUnits.getAmountType());
+                    subResp.setAllocatedAmount(String.format("%1$0,1.4f", alocAmnt));
+                    subResp.setExpenditureAmount(String.format("%1$0,1.4f", expAmount));
+                    subResp.setBalAmount(String.format("%1$0,1.4f", cdaRmingAmunt));
+                    subResp.setPerAmount(String.format("%1$0,1.2f", perAmnt));
+                    subResp.setLastCBDate(cbD);
+                    grResp.add(subResp);
+
+                    sumAlloc += alocAmnt;
+                    sumExp += expAmount;
+                    sumBal += cdaRmingAmunt;
+
+
+                }
             }
-            double hrSubAmnt=subHrAmount*hrAmntUnit/reqAmount;
-            String sumAlloc11 = ConverterUtils.addDecimalPoint((sumAlloc-hralloc)+"");
-            String sumExp11 = ConverterUtils.addDecimalPoint(sumExp+"");
-            String sumBal11 = ConverterUtils.addDecimalPoint(sumBal+"");
-            double per=0.0;
-            if((sumAlloc-hralloc)!=0){
-                per=(sumExp*100)/(sumAlloc-hralloc);
+            double grPer=0.0;
+            if(sumAlloc!=0){
+                grPer=(sumExp*100)/sumAlloc;
             }else{
-                per=0.0;
-            }
-            try{
-                String per11 = ConverterUtils.addDecimal2Point(per+"");
-                obj.setPerBal(String.valueOf(per11));
-            }catch (Exception e){
-                obj.setPerBal(String.valueOf(0.00));
+                grPer=0.0;
             }
             obj.setGrTotalObj(grResp);
-            obj.setSumAlloc(String.valueOf(sumAlloc11));
-            obj.setSumExp(String.valueOf(sumExp11));
-            obj.setSumBal(String.valueOf(sumBal11));
+            obj.setSumAlloc(ConverterUtils.addDecimalPoint(sumAlloc+""));
+            obj.setSumExp(ConverterUtils.addDecimalPoint(sumExp+""));
+            obj.setSumBal(ConverterUtils.addDecimalPoint(sumBal+""));
+            obj.setPerBal(ConverterUtils.addDecimal2Point(grPer+""));
             resp.add(obj);
 
             return ResponseUtils.createSuccessResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {});
