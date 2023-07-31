@@ -811,7 +811,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             for (Integer i = 0; i < frmRhqCda.size(); i++) {
                                 CdaParkingTrans cdaParking = frmRhqCda.get(i);
 
-                                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getTotalParkingAmount());
+                                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
 
                                 cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                                 double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
@@ -1060,7 +1060,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             for (Integer i = 0; i < frmRhqCda.size(); i++) {
                                 CdaParkingTrans cdaParking = frmRhqCda.get(i);
 
-                                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getTotalParkingAmount());
+                                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
 
                                 cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                                 double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
