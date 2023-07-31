@@ -8441,11 +8441,9 @@ public class MangeReportImpl implements MangeReportService {
 
                     uName = unitN.getDescr();
                     Date rebaseDate = rebaseData.get(0).getOccuranceDate();
-/*                    DateTimeFormatter inputFormatter11 = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss tt");
-                    DateTimeFormatter outputFormatter11 = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
-                    LocalDate date1 = LocalDate.parse(rebaseDate, inputFormatter11);
-                    String formattedDate11 = date1.format(outputFormatter11);*/
-                    System.out.println("RBDATE" + rebaseDate);
+                    Date dt = new Date();
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
+                    String formattedDatess = sdf.format(dt);
                     frmStation = frmS;
                     toStation = toS.getStationName();
 
@@ -8465,7 +8463,7 @@ public class MangeReportImpl implements MangeReportService {
                     PdfPCell cell3 = new PdfPCell(new Phrase("From Station", cellFont));
                     PdfPCell cell4 = new PdfPCell(new Phrase(frmStation, cellFont));
                     PdfPCell cell5 = new PdfPCell(new Phrase("Date of Rebase", cellFont));
-                    PdfPCell cell6 = new PdfPCell(new Phrase(String.valueOf(rebaseDate), cellFont));
+                    PdfPCell cell6 = new PdfPCell(new Phrase(formattedDatess, cellFont));
                     PdfPCell cell7 = new PdfPCell(new Phrase("To Station", cellFont));
                     PdfPCell cell8 = new PdfPCell(new Phrase(toStation, cellFont));
 
@@ -8694,6 +8692,10 @@ public class MangeReportImpl implements MangeReportService {
         LocalDateTime localDateTime = LocalDateTime.of(resultDt, LocalTime.MIDNIGHT);
         Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
 
+        Date dt = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
+        String formattedDatess = sdf.format(dt);
+
         try {
             XWPFDocument document = new XWPFDocument();
             XWPFParagraph headingParagraph = document.createParagraph();
@@ -8774,7 +8776,7 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowTwo.createRun(), 12, "REBASE DATE", true);
 
                     XWPFParagraph paragraphtableRowTwo1 = tableRowTwo.getCell(1).addParagraph();
-                    boldText(paragraphtableRowTwo1.createRun(), 10, rebaseData.get(0).getOccuranceDate().toString(), false);
+                    boldText(paragraphtableRowTwo1.createRun(), 10, formattedDatess, false);
 
                     XWPFParagraph paragraphtableRowTwo2 = tableRowTwo.getCell(2).addParagraph();
                     boldText(paragraphtableRowTwo2.createRun(), 12, "TO STATION", true);
@@ -9014,8 +9016,9 @@ public class MangeReportImpl implements MangeReportService {
                     CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
                     AmountUnit amountTypeObjs = amountUnitRepository.findByAmountTypeId(rebaseData.get(0).getAmountType());
 
+
                     rebase.setUnitName(unitN.getDescr());
-                    rebase.setDateOfRebase(rebaseData.get(0).getOccuranceDate());
+                    rebase.setDateOfRebase(HelperUtils.getCurrentTimeStamp());
                     rebase.setFromStation(rebaseData.get(0).getFrmStationId());
                     rebase.setToStation(toS.getStationName());
 
@@ -9103,6 +9106,7 @@ public class MangeReportImpl implements MangeReportService {
                     rebase.setDateOfRebase(rebaseData.get(0).getOccuranceDate());
                     rebase.setFromStation(rebaseData.get(0).getFrmStationId());
                     rebase.setToStation(toS.getStationName());
+
 
                     List<UnitRebaseSubReportResponce> addRes = new ArrayList<UnitRebaseSubReportResponce>();
                     for (Integer k = 0; k < rebaseData.size(); k++) {
