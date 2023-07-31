@@ -97,6 +97,8 @@ public class ContigentBill {
     @Column(name = "GST")
     private String gst;
 
+    @Column(name = "ALLOCATED_AMOUNT")
+    private String allocatedAmount;
 
     @Column(name = "IS_FLAG")
     private String isFlag;

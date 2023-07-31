@@ -14,6 +14,7 @@ public class BudgetAllocationSubRequest {
     private String toUnitId;
     private String subHeadId;
     private String amount = "0";
+    private String remainingAmount = "0";
     private String remark;
     private String revisedAmount;
     private String allocationTypeId;
