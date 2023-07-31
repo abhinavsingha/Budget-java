@@ -974,7 +974,13 @@ public class DashboardServiceImpl implements DashBoardService {
         AmountUnit hdamtUnits = amountUnitRepository.findByAmountTypeId(amounttypeId);
         double reqAmount=hdamtUnits.getAmount();
         try{
-            List<CgUnit> ulist1 = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+            String loginUnitId="";
+            if(hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)){
+                loginUnitId="000225";
+            }else{
+                loginUnitId=hrData.getUnitId();
+            }
+            List<CgUnit> ulist1 = cgUnitRepository.findBySubUnitOrderByDescrAsc(loginUnitId);
             //List<CgUnit> ulist1 = cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
 
             if(!(hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID))){
