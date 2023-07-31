@@ -10,7 +10,10 @@ import com.sdd.exception.SDDException;
 import com.sdd.response.CDAReportResponse;
 import com.sdd.response.CDAReportSubResponse;
 import com.sdd.response.FilePathResponse;
+import org.apache.poi.wp.usermodel.HeaderFooterType;
+import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
 import org.apache.poi.xwpf.usermodel.*;
+import org.apache.xmlbeans.XmlCursor;
 import org.openxmlformats.schemas.officeDocument.x2006.sharedTypes.STOnOff;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -218,7 +221,7 @@ public class DocxGenaratorUtil {
 
             XWPFTableRow latRow = table.createRow();
             XWPFParagraph total1 = latRow.getCell(1).addParagraph();
-            boldText(total1.createRun(), 10, "Grand Total" , true);
+            boldText(total1.createRun(), 10, "Grand Total", true);
             XWPFParagraph total1111 = latRow.getCell(2).addParagraph();
             boldText(total1111.createRun(), 10, ConverterUtils.addDecimalPoint(grandTotal + ""), true);
             total1111.setAlignment(ParagraphAlignment.RIGHT);
@@ -270,15 +273,15 @@ public class DocxGenaratorUtil {
 
 //            if (key.equalsIgnoreCase("2037")) {
 
-                XWPFTableRow tableRowOne = table.getRow(0);
-                XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
-                boldText(paragraphtableRowOne.createRun(), 10, "MAJOR/MINOR/SUB HEAD", true);
+            XWPFTableRow tableRowOne = table.getRow(0);
+            XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
+            boldText(paragraphtableRowOne.createRun(), 10, "MAJOR/MINOR/SUB HEAD", true);
 
-                XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
-                boldText(paragraphtableRowOne1.createRun(), 10, "HEAD", true);
+            XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
+            boldText(paragraphtableRowOne1.createRun(), 10, "HEAD", true);
 
-                XWPFParagraph paragraphtableRowOne11 = tableRowOne.addNewTableCell().addParagraph();
-                boldText(paragraphtableRowOne11.createRun(), 10, filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", true);
+            XWPFParagraph paragraphtableRowOne11 = tableRowOne.addNewTableCell().addParagraph();
+            boldText(paragraphtableRowOne11.createRun(), 10, filePathResponse.getType() + " (" + filePathResponse.getFinYear() + ") \n" + " ALLOCATION (In " + filePathResponse.getAmountType() + ")", true);
 
 //            } else {
 //
@@ -353,8 +356,7 @@ public class DocxGenaratorUtil {
             }
 
 
-
-            if(hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)){
+            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
 
                 XWPFTableRow latRow = table.createRow();
                 XWPFParagraph total1 = latRow.getCell(1).addParagraph();
@@ -364,7 +366,6 @@ public class DocxGenaratorUtil {
                 total1111.setAlignment(ParagraphAlignment.RIGHT);
 
             }
-
 
 
             int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
@@ -407,12 +408,34 @@ public class DocxGenaratorUtil {
             CTPageSz ctPageSz = (ctSectPr.isSetPgSz()) ? ctSectPr.getPgSz() : ctSectPr.addNewPgSz();
             ctPageSz.setOrient(STPageOrientation.LANDSCAPE);
 
-            List<CDAReportResponse> tabData1 = map.get("Sub Head");
+            XWPFParagraph mainParagraph = document.createParagraph();
+            mainParagraph.createRun().addBreak();
 
+            List<CDAReportResponse> tabData1 = map.get("Sub Head");
             if (tabData1.size() > 12) {
                 ctPageSz.setW(java.math.BigInteger.valueOf(Math.round(120 * 1440))); //11 inches
                 ctPageSz.setH(java.math.BigInteger.valueOf(Math.round(8.5 * 1440))); //8.5 inches
             }
+
+
+//            XWPFHeader header = document.createHeader(HeaderFooterType.DEFAULT);
+//            XWPFTable table11 = header.createTable(1,0);
+//            XWPFTableRow tableRowOne11 = table11.getRow(0);
+//            XWPFParagraph paragraphtableRowOne99 = tableRowOne11.addNewTableCell().addParagraph();
+//            boldText(paragraphtableRowOne99.createRun(), 10, "object", true);
+//
+//            for (Integer i = 0; i < tabData1.size(); i++) {
+//                Boolean isNumber = ConverterUtils.isNumber(tabData1.get(i).getName() + "");
+//                if (isNumber) {
+//                    XWPFParagraph paragraphtableRowOne1 = tableRowOne11.addNewTableCell().addParagraph();
+//                    boldText(paragraphtableRowOne1.createRun(), 10, ConverterUtils.addDecimalPoint(tabData1.get(i).getName()), true);
+//                    paragraphtableRowOne1.setAlignment(ParagraphAlignment.RIGHT);
+//                } else {
+//                    XWPFParagraph paragraphtableRowOne1 = tableRowOne11.addNewTableCell().addParagraph();
+//                    boldText(paragraphtableRowOne1.createRun(), 10, ConverterUtils.addDecimalPoint(tabData1.get(i).getName()), true);
+//                }
+//            }
+
 
 
             String reOrCapital = "";
@@ -422,8 +445,6 @@ public class DocxGenaratorUtil {
                 reOrCapital = "CAPITAL";
             }
 
-            XWPFParagraph mainParagraph = document.createParagraph();
-            mainParagraph.createRun().addBreak();
 
             mainParagraph = document.createParagraph();
             mainParagraph.setAlignment(ParagraphAlignment.CENTER);
@@ -462,11 +483,8 @@ public class DocxGenaratorUtil {
 
 
             for (Integer i = 0; i < tabData1.size(); i++) {
-
-
                 Boolean isNumber = ConverterUtils.isNumber(tabData1.get(i).getName() + "");
                 if (isNumber) {
-
                     XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
                     boldText(paragraphtableRowOne1.createRun(), 10, ConverterUtils.addDecimalPoint(tabData1.get(i).getName()), true);
                     paragraphtableRowOne1.setAlignment(ParagraphAlignment.RIGHT);
@@ -474,8 +492,6 @@ public class DocxGenaratorUtil {
                     XWPFParagraph paragraphtableRowOne1 = tableRowOne.addNewTableCell().addParagraph();
                     boldText(paragraphtableRowOne1.createRun(), 10, ConverterUtils.addDecimalPoint(tabData1.get(i).getName()), true);
                 }
-
-
             }
 
             for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
@@ -559,7 +575,6 @@ public class DocxGenaratorUtil {
             String reOrCapital = "";
 
 
-
             if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
                 reOrCapital = "REVENUE";
             } else {
@@ -573,8 +588,6 @@ public class DocxGenaratorUtil {
             mainParagraph.setAlignment(ParagraphAlignment.CENTER);
             boldText(mainParagraph.createRun(), 17, "\n" + "RESERVE FUND " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear(), true);
             mainParagraph.createRun().addBreak();
-
-
 
 
             mainParagraph = document.createParagraph();
@@ -593,7 +606,6 @@ public class DocxGenaratorUtil {
 
             XWPFTable table = document.createTable();
             table.setWidth("100%");
-
 
 
             if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
@@ -619,7 +631,6 @@ public class DocxGenaratorUtil {
                 boldText(paragraphtableRowThree.createRun(), 13, "Reserve Fund", true);
 
             }
-
 
 
             for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
