@@ -365,7 +365,7 @@ public class ContingentServiceImpl implements ContingentService {
                 totalBill = totalBill + Double.parseDouble(subHeadContigentBill.get(k).getCbAmount());
             }
             allocationAmount = allocationAmount + totalBill;
-            contigentBill.setAllocatedAmount(allocationAmount + "");
+            contigentBill.setAllocatedAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
 
 
             ContigentBill saveData = contigentBillRepository.save(contigentBill);
@@ -778,7 +778,7 @@ public class ContingentServiceImpl implements ContingentService {
                 totalBill = totalBill + Double.parseDouble(subHeadContigentBill.get(k).getCbAmount());
             }
             allocationAmount = allocationAmount + totalBill;
-            contigentBill.setAllocatedAmount(allocationAmount + "");
+            contigentBill.setAllocatedAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
 
 
             ContigentBill saveData = contigentBillRepository.save(contigentBill);
