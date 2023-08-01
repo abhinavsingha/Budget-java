@@ -351,6 +351,23 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBill.setInvoiceUploadId(contingentBillSaveRequest.getInvoiceUploadId());
 
 
+            double allocationAmount = 0;
+            List<CdaParkingTrans> cdaAmountList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(contingentBillSaveRequest.getBudgetFinancialYearId(), contingentBillSaveRequest.getBudgetHeadId(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
+            for (Integer k = 0; k < cdaAmountList.size(); k++) {
+                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaAmountList.get(k).getAmountType());
+                allocationAmount = allocationAmount + (Double.parseDouble(cdaAmountList.get(k).getRemainingCdaAmount()) * amountUnit.getAmount());
+            }
+
+            List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(contingentBillSaveRequest.getUnit(), contingentBillSaveRequest.getBudgetFinancialYearId(), contingentBillSaveRequest.getBudgetHeadId(), allocationType.get(0).getAllocTypeId(), "0", "0");
+
+            double totalBill = 0;
+            for (Integer k = 0; k < subHeadContigentBill.size(); k++) {
+                totalBill = totalBill + Double.parseDouble(subHeadContigentBill.get(k).getCbAmount());
+            }
+            allocationAmount = allocationAmount + totalBill;
+            contigentBill.setAllocatedAmount(allocationAmount + "");
+
+
             ContigentBill saveData = contigentBillRepository.save(contigentBill);
 
 
@@ -466,7 +483,7 @@ public class ContingentServiceImpl implements ContingentService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CONTINGENT BILL ID");
             }
 
-            if(!(contigentBill.getStatus().equalsIgnoreCase("Rejected") || contigentBill.getStatus().equalsIgnoreCase("Reject"))){
+            if (!(contigentBill.getStatus().equalsIgnoreCase("Rejected") || contigentBill.getStatus().equalsIgnoreCase("Reject"))) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB BILL NOT IN REJECTED STATE");
             }
 
@@ -747,6 +764,22 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBill.setAuthorityDetails(contingentBillSaveRequest.getAuthorityDetails());
             contigentBill.setInvoiceUploadId(contingentBillSaveRequest.getInvoiceUploadId());
 
+            double allocationAmount = 0;
+            List<CdaParkingTrans> cdaAmountList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(contingentBillSaveRequest.getBudgetFinancialYearId(), contingentBillSaveRequest.getBudgetHeadId(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
+            for (Integer k = 0; k < cdaAmountList.size(); k++) {
+                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaAmountList.get(k).getAmountType());
+                allocationAmount = allocationAmount + (Double.parseDouble(cdaAmountList.get(k).getRemainingCdaAmount()) * amountUnit.getAmount());
+            }
+
+            List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(contingentBillSaveRequest.getUnit(), contingentBillSaveRequest.getBudgetFinancialYearId(), contingentBillSaveRequest.getBudgetHeadId(), allocationType.get(0).getAllocTypeId(), "0", "0");
+
+            double totalBill = 0;
+            for (Integer k = 0; k < subHeadContigentBill.size(); k++) {
+                totalBill = totalBill + Double.parseDouble(subHeadContigentBill.get(k).getCbAmount());
+            }
+            allocationAmount = allocationAmount + totalBill;
+            contigentBill.setAllocatedAmount(allocationAmount + "");
+
 
             ContigentBill saveData = contigentBillRepository.save(contigentBill);
 
@@ -839,7 +872,6 @@ public class ContingentServiceImpl implements ContingentService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.");
         }
 
-//        List<ContigentBill> cbData = contigentBillRepository.findByCbUnitIdAndIsFlagAndIsUpdate(hrData.getUnitId(), "0", "0");
         List<ContigentBill> cbData = contigentBillRepository.findByCbUnitId(hrData.getUnitId());
         if (cbData.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND.");
@@ -872,6 +904,7 @@ public class ContingentServiceImpl implements ContingentService {
 
             contingentBill.setFileDate(contigentBill.getFileDate());
             contingentBill.setProgressiveAmount(contigentBill.getProgressiveAmount());
+            contingentBill.setAllocatedAmount(contigentBill.getAllocatedAmount());
 
             CgUnit cgUnit = cgUnitRepository.findByUnit(contigentBill.getCbUnitId());
             contingentBill.setCbUnitId(cgUnit);
@@ -970,10 +1003,10 @@ public class ContingentServiceImpl implements ContingentService {
             contingentBill.setGst(contigentBill.getGst());
             contingentBill.setAuthorityDetails(contigentBill.getAuthorityDetails());
             contingentBill.setOnAccountOf(contigentBill.getOnAccountOf());
-
+            contingentBill.setAllocatedAmount(contigentBill.getAllocatedAmount());
             contingentBill.setFileDate(contigentBill.getFileDate());
             contingentBill.setProgressiveAmount(contigentBill.getProgressiveAmount());
-
+            contingentBill.setAllocatedAmount(contigentBill.getAllocatedAmount());
             contingentBill.setCbFilePath(fileUploadRepository.findByUploadID(contigentBill.getCbFilePath()));
 
             CgUnit cgUnit = cgUnitRepository.findByUnit(contigentBill.getCbUnitId());

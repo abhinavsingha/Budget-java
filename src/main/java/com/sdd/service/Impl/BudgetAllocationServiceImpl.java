@@ -1730,6 +1730,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId() == null || budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AMOUNT TYPE ID NOT BE BLANK");
             }
+            if (budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRemainingAmount() == null || budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRemainingAmount().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REMAINING AMOUNT NOT BE BLANK");
+            }
 
 
             BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId());
@@ -1852,7 +1855,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     cdaRevisionData.setAmountType(revisonData.getAmountTypeId());
                     cdaRevisionData.setCdaTransId(cdaParkingTrans.getCdaParkingId());
                     cdaRevisionData.setIsSelf("1");
-
+                    cdaRevisionData.setRemainingAmount(revisonData.getRemainingAmount());
                     budgetRevisionRepository.save(cdaRevisionData);
 
                 }
@@ -1874,6 +1877,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 cdaRevisionData.setIsFlag("0");
                 cdaRevisionData.setAmountType(revisonData.getAmountTypeId());
                 cdaRevisionData.setAllocationAmount(revisonData.getAmount());
+                cdaRevisionData.setRemainingAmount(revisonData.getRemainingAmount());
                 cdaRevisionData.setCdaTransId(null);
                 cdaRevisionData.setIsSelf("0");
 

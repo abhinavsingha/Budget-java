@@ -40,6 +40,7 @@ public class ContingentBillResponse {
     private String gst;
     private String fileDate;
     private String progressiveAmount;
+    private String allocatedAmount;
 
     private FileUpload cbFilePath;
     private String onAccountOf;

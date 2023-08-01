@@ -64,5 +64,9 @@ public class CdaRevisionData {
     private String allocationAmount;
 
 
+    @Column(name = "REMAINING_AMOUNT")
+    private String remainingAmount;
+
+
 
 }
