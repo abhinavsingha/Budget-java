@@ -1121,6 +1121,12 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     }
 
 
+
+
+
+
+
+
                     // 2 Side..................... BAL ALLOCATION HERE AS RECEPIET..................................
 
                     CgUnit toHead = cgUnitRepository.findByUnit(toHdUnitId);
@@ -1206,7 +1212,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                                 BudgetAllocation saveData11 = budgetAllocationRepository.save(alloc);
 
-
 //                                BudgetAllocation saveData = new BudgetAllocation();
 //                                BeanUtils.copyProperties(saveData11, saveData);
 //                                saveData.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
@@ -1218,6 +1223,20 @@ public class MangeRebaseImpl implements MangeRebaseService {
 //                                budgetAllocationRepository.save(saveData);
 
                             }
+
+
+
+
+
+//                                Add  CDA
+
+
+
+
+
+
+
+
                         } else {
                             // .....................CREATE BUDGET RECIPT.....FOR RHQ.............................
                             BudgetAllocation budgetAllocationRecipt = new BudgetAllocation();
@@ -1464,6 +1483,20 @@ public class MangeRebaseImpl implements MangeRebaseService {
 //                                saveData.setCreatedOn(HelperUtils.getCurrentTimeStamp());
 //                                budgetAllocationRepository.save(saveData);
                             }
+
+
+
+
+
+
+//                                Add  CDA
+
+
+
+
+
+
+
                         } else {
 
                             // .....................CREATE BUDGET RECIPT..FOR RHQ................................
