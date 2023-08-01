@@ -820,6 +820,10 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             cdaParking.setTotalParkingAmount((remaning + exp) + "");
                             cdaParkingTransRepository.save(cdaParking);
                         }*/
+
+
+
+                        
                         if(count==0){
                             MangeInboxOutbox afterRebaseNotification = new MangeInboxOutbox();
                             afterRebaseNotification.setMangeInboxId(HelperUtils.getMangeInboxId());
