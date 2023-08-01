@@ -21,56 +21,61 @@ import java.util.List;
 @Slf4j
 public class UnitRebaseController {
 
-	@Autowired    
-	private MangeRebaseService mangeRebaseService;
+    @Autowired
+    private MangeRebaseService mangeRebaseService;
 
 
-	@PostMapping("/saveRebase")
-	public ResponseEntity<ApiResponse<DefaultResponse>> budgetAllocationReport(@RequestBody MangeRebaseRequest mangeRebaseRequest) {
-		return new ResponseEntity<>(mangeRebaseService.saveRebaes(mangeRebaseRequest), HttpStatus.OK);
-	}
+    @PostMapping("/saveRebase")
+    public ResponseEntity<ApiResponse<DefaultResponse>> budgetAllocationReport(@RequestBody MangeRebaseRequest mangeRebaseRequest) {
+        return new ResponseEntity<>(mangeRebaseService.saveRebaes(mangeRebaseRequest), HttpStatus.OK);
+    }
 
 
-	@GetMapping("/getAllStation")
-	public ResponseEntity<ApiResponse<List<CgStation>>> getAllStation() {
-		return new ResponseEntity<>(mangeRebaseService.getAllStation(), HttpStatus.OK);
-	}
+    @GetMapping("/getAllStation")
+    public ResponseEntity<ApiResponse<List<CgStation>>> getAllStation() {
+        return new ResponseEntity<>(mangeRebaseService.getAllStation(), HttpStatus.OK);
+    }
 
-	@GetMapping("/getAllUnit")
-	public ResponseEntity<ApiResponse<List<CgUnitResponse>>> getAllUnit() {
-		return new ResponseEntity<>(mangeRebaseService.getAllUnit(), HttpStatus.OK);
-	}
+    @GetMapping("/getAllUnit")
+    public ResponseEntity<ApiResponse<List<CgUnitResponse>>> getAllUnit() {
+        return new ResponseEntity<>(mangeRebaseService.getAllUnit(), HttpStatus.OK);
+    }
 
-	@GetMapping("/getAllBudgetFinYr")
-	public ResponseEntity<ApiResponse<List<BudgetFinancialYear>>> getAllBudgetFinYr() {
-		return new ResponseEntity<>(mangeRebaseService.getAllBudgetFinYr(), HttpStatus.OK);
-	}
-
-
-	@GetMapping("/getAllStationById/{stationId}")
-	public ResponseEntity<ApiResponse<CgStation>> getAllStation(@PathVariable(value = "stationId") String stationId) {
-		return new ResponseEntity<>(mangeRebaseService.getAllStationById(stationId), HttpStatus.OK);
-	}
+    @GetMapping("/getAllBudgetFinYr")
+    public ResponseEntity<ApiResponse<List<BudgetFinancialYear>>> getAllBudgetFinYr() {
+        return new ResponseEntity<>(mangeRebaseService.getAllBudgetFinYr(), HttpStatus.OK);
+    }
 
 
-	@GetMapping("/getAllUnitRebaseData/{finYear}/{unit}")
-	public ResponseEntity<ApiResponse<List<RebaseBudgetHistory>>> getAllUnitRebaseData(@PathVariable(value = "finYear") String finYear , @PathVariable(value = "unit") String unit) {
-		return new ResponseEntity<>(mangeRebaseService.getAllUnitRebaseData(finYear,unit), HttpStatus.OK);
-	}
+    @GetMapping("/getAllStationById/{stationId}")
+    public ResponseEntity<ApiResponse<CgStation>> getAllStation(@PathVariable(value = "stationId") String stationId) {
+        return new ResponseEntity<>(mangeRebaseService.getAllStationById(stationId), HttpStatus.OK);
+    }
 
-	@PostMapping("/saveUnitRebase")
-	public ResponseEntity<ApiResponse<DefaultResponse>> saveUnitRebase(@RequestBody UnitRebaseSaveReq req) {
-		return new ResponseEntity<>(mangeRebaseService.saveUnitRebase(req), HttpStatus.OK);
-	}
 
-	@GetMapping("/getAllIsShipCgUnitData")
-	public ResponseEntity<ApiResponse<List<CgUnitResponse>>> getAllIsShipCgUnitData() {
-		return new ResponseEntity<>(mangeRebaseService.getAllIsShipCgUnitData(), HttpStatus.OK);
-	}
+    @GetMapping("/getAllUnitRebaseData/{finYear}/{unit}")
+    public ResponseEntity<ApiResponse<List<RebaseBudgetHistory>>> getAllUnitRebaseData(@PathVariable(value = "finYear") String finYear, @PathVariable(value = "unit") String unit) {
+        return new ResponseEntity<>(mangeRebaseService.getAllUnitRebaseData(finYear, unit), HttpStatus.OK);
+    }
 
-	@GetMapping("/getUnitRebaseNotificationData/{authGrpId}")
-	public ResponseEntity<ApiResponse<List<RebaseNotificationResp>>> getUnitRebaseNotificationData(@PathVariable(value = "authGrpId") String authGrpId) {
-		return new ResponseEntity<>(mangeRebaseService.getUnitRebaseNotificationData(authGrpId), HttpStatus.OK);
-	}
+    @PostMapping("/saveUnitRebase")
+    public ResponseEntity<ApiResponse<DefaultResponse>> saveUnitRebase(@RequestBody UnitRebaseSaveReq req) {
+        return new ResponseEntity<>(mangeRebaseService.saveUnitRebase(req), HttpStatus.OK);
+    }
+
+    @PostMapping("/saveUnitRebaseArvind")
+    public ResponseEntity<ApiResponse<DefaultResponse>> saveUnitRebaseArvind(@RequestBody UnitRebaseSaveReq req) {
+        return new ResponseEntity<>(mangeRebaseService.saveUnitRebaseArvind(req), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllIsShipCgUnitData")
+    public ResponseEntity<ApiResponse<List<CgUnitResponse>>> getAllIsShipCgUnitData() {
+        return new ResponseEntity<>(mangeRebaseService.getAllIsShipCgUnitData(), HttpStatus.OK);
+    }
+
+    @GetMapping("/getUnitRebaseNotificationData/{authGrpId}")
+    public ResponseEntity<ApiResponse<List<RebaseNotificationResp>>> getUnitRebaseNotificationData(@PathVariable(value = "authGrpId") String authGrpId) {
+        return new ResponseEntity<>(mangeRebaseService.getUnitRebaseNotificationData(authGrpId), HttpStatus.OK);
+    }
 
 }

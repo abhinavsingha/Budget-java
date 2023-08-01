@@ -24,6 +24,8 @@ public interface MangeRebaseService {
 
 	ApiResponse<DefaultResponse> saveUnitRebase(UnitRebaseSaveReq req);
 
+	ApiResponse<DefaultResponse> saveUnitRebaseArvind(UnitRebaseSaveReq req);
+
 	ApiResponse<CgStation> getAllStationById(String stationId);
 
 	ApiResponse<List<CgUnitResponse>> getAllIsShipCgUnitData();
