@@ -2863,7 +2863,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                                 BudgetAllocation saveData11 = budgetAllocationRepository.save(alloc);
 
-
 //                                BudgetAllocation saveData = new BudgetAllocation();
 //                                BeanUtils.copyProperties(saveData11, saveData);
 //                                saveData.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
@@ -2875,6 +2874,23 @@ public class MangeRebaseImpl implements MangeRebaseService {
 //                                budgetAllocationRepository.save(saveData);
 
                             }
+
+
+//                                Add  CDA Add karke Phir Minus karna hai
+                            List<CdaParkingTrans> frmRhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+
+                            if (frmRhqCda.size() > 0) {
+                                CdaParkingTrans cdaParking = frmRhqCda.get(0);
+                                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
+
+                                cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                                double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
+
+                                cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
+                                cdaParkingTransRepository.save(cdaParking);
+                            }
+
+
                         } else {
                             // .....................CREATE BUDGET RECIPT.....FOR RHQ.............................
                             BudgetAllocation budgetAllocationRecipt = new BudgetAllocation();
@@ -3121,6 +3137,23 @@ public class MangeRebaseImpl implements MangeRebaseService {
 //                                saveData.setCreatedOn(HelperUtils.getCurrentTimeStamp());
 //                                budgetAllocationRepository.save(saveData);
                             }
+
+
+//                                Add  CDA Add karke Phir Minus karna hai
+                            List<CdaParkingTrans> frmRhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), rHqUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+
+                            if (frmRhqCda.size() > 0) {
+                                CdaParkingTrans cdaParking = frmRhqCda.get(0);
+                                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
+
+                                cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                                double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
+
+                                cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
+                                cdaParkingTransRepository.save(cdaParking);
+                            }
+
+
                         } else {
 
                             // .....................CREATE BUDGET RECIPT..FOR RHQ................................
@@ -3712,6 +3745,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
         return ResponseUtils.createSuccessResponse(defaultResponse, new TypeReference<DefaultResponse>() {
         });
     }
+
 
     @Override
     @Transactional
