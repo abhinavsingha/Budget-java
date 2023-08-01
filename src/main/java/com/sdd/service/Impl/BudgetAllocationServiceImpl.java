@@ -1115,6 +1115,10 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "0");
 
+        if (budgetAllocations.size() == 0) {
+            budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "1");
+        }
+
 
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
@@ -1173,11 +1177,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 AmountUnit amountUnitMain = amountUnitRepository.findByAmountTypeId(budgetAllocationSubReport.getAmountType());
                 remeningCdaAmount = remeningCdaAmount / amountUnitMain.getAmount();
 
-                if (budgetAllocationSubReport.getStatus().equalsIgnoreCase("Approved")) {
-                    double revisedAmount = Double.parseDouble(budgetAllocationSubReport.getRevisedAmount());
-                    budgetAllocationReport.setAllocationAmount((remeningCdaAmount) + "");
+                double revisedAmount = Double.parseDouble(budgetAllocationSubReport.getRevisedAmount());
+
+                if (revisedAmount < 0) {
+                    budgetAllocationReport.setAllocationAmount((remeningCdaAmount - revisedAmount) + "");
                 } else {
-                    double revisedAmount = Double.parseDouble(budgetAllocationSubReport.getRevisedAmount());
                     budgetAllocationReport.setAllocationAmount((remeningCdaAmount) + "");
                 }
 
