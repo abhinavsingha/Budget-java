@@ -2333,11 +2333,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 BudgetReviResp res = new BudgetReviResp();
                 res.setUnit(cgUnitRepository.findByUnit(budgetAllocationsDetalis.get(m).getToUnit()));
 
-//                double totalAmount = Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount()) + Double.parseDouble(budgetAllocationsDetalis.get(m).getRevisedAmount());
                 double totalAmount = Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount());
-
                 res.setAllocationAmount(totalAmount + "");
-
                 List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsFlagAndIsUpdateOrderByCbDateDesc(unit.get(i).getUnit(), budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), "0", "0");
 
                 double expendure = 0;

@@ -107,7 +107,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
         }
 
-        if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER)) {
+             if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER)) {
             approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
             archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
 
@@ -203,7 +203,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                 }
 
             }
-        } else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
+        }
+        else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
 //            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG", "0", "0");
 
             List<String> dataIscgBg = new ArrayList<>();
@@ -305,7 +306,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                 }
 
             }
-        } else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
+        }
+        else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
             approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
             archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
 
@@ -351,7 +353,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                 }
 
             }
-        } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
+        }
+        else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
             approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
             archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
 
@@ -397,7 +400,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                 }
 
             }
-        } else if (getCurrentRole.contains(HelperUtils.CBAPPROVER)) {
+        }
+        else if (getCurrentRole.contains(HelperUtils.CBAPPROVER)) {
             approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
             archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
 
@@ -423,8 +427,23 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
                     inboxList.add(data);
 
-                } else if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("VE") || inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
+                } else if (inboxOutboxesList.get(i).getStatus().equalsIgnoreCase("Approved") && inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
+                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+                    data.setGroupId(mangeInboxOutbox.getGroupId());
+                    data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+                    data.setRemarks(mangeInboxOutbox.getRemarks());
+                    data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                    data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                    data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                    data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+                    data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setType(mangeInboxOutbox.getType());
+                    data.setIsRevision(mangeInboxOutbox.getIsRevision());
+                    data.setStatus(mangeInboxOutbox.getStatus());
+                    data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
+                    outBoxList.add(data);
                 } else {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                     MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
