@@ -11,4 +11,5 @@ public interface BudgetRevisionRepository extends JpaRepository<CdaRevisionData,
 
 
     List<CdaRevisionData> findByAuthGroupId(String authGroupId);
+    List<CdaRevisionData> findByAuthGroupIdAndToUnitId(String authGroupId,String unitId);
 }
