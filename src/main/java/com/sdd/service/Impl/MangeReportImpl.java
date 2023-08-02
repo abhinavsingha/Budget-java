@@ -448,7 +448,7 @@ public class MangeReportImpl implements MangeReportService {
         List<BudgetAllocation> budgetAllocationReport = new ArrayList<BudgetAllocation>();
 
 //        budgetAllocationReport = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteOrderByTransactionIdAsc(authGroupId, "0");
-        budgetAllocationReport = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(hrData.getUnitId(), finYearId, allocationTypeIdR, "0", "0", "Approved");
+        budgetAllocationReport = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatusOrderByCreatedOnAsc(hrData.getUnitId(), finYearId, allocationTypeIdR, "0", "0", "Approved");
 //        budgetAllocationReport = budgetAllocationRepository.findBy(hrData.getUnitId(), finYearId, allocationTypeIdR, "0", "0", "Approved");
 
 
@@ -613,7 +613,7 @@ public class MangeReportImpl implements MangeReportService {
 
         List<BudgetAllocation> budgetAllocationReport = new ArrayList<BudgetAllocation>();
 //        budgetAllocationReport = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatus(hrData.getUnitId(), finYearId, allocationTypeIdR, "0", "0", "Approved");
-        budgetAllocationReport = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(hrData.getUnitId(), finYearId, allocationTypeIdR, "0", "0", "Approved");
+        budgetAllocationReport = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatusOrderByCreatedOnAsc(hrData.getUnitId(), finYearId, allocationTypeIdR, "0", "0", "Approved");
 
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
