@@ -7539,6 +7539,9 @@ public class MangeReportImpl implements MangeReportService {
             checks = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(frmUnit, finYearId, allocationType, "0", "0", "Approved");
         } else {
             List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
+            if (check.size() == 0) {
+                check = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
+            }
             List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
             checks = mrge.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
         }
@@ -8103,6 +8106,9 @@ public class MangeReportImpl implements MangeReportService {
             checks = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(frmUnit, finYearId, allocationType, "0", "0", "Approved");
         } else {
             List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
+            if (check.size() == 0) {
+                check = budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
+            }
             List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
             checks = mrge.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
         }
