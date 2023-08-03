@@ -658,46 +658,46 @@ public class MangeRebaseImpl implements MangeRebaseService {
         }
 
 
+        List<CdaParkingTrans> selfCdaSieze = cdaParkingTransRepository.findByFinYearIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getRebaseUnitId(), req.getUnitRebaseRequests().get(0).getAllocationTypeId(), "0");
+        for (Integer i = 0; i < selfCdaSieze.size(); i++) {
+            CdaParkingTrans cdaParking = selfCdaSieze.get(i);
+            cdaParking.setIsFlag("1");
+            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            cdaParkingTransRepository.save(cdaParking);
+        }
+
+        List<CdaParkingCrAndDr> selfDrCrCdaSieze = parkingCrAndDrRepository.findByFinYearIdAndIsFlagAndAndAllocTypeIdAndUnitIdAndIsRevision(req.getFinYear(), "0", req.getUnitRebaseRequests().get(0).getAllocationTypeId(), req.getRebaseUnitId(), 0);
+        for (Integer i = 0; i < selfDrCrCdaSieze.size(); i++) {
+            CdaParkingCrAndDr cdaParking = selfDrCrCdaSieze.get(i);
+            cdaParking.setIsFlag("1");
+            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            parkingCrAndDrRepository.save(cdaParking);
+        }
+
+
         String rebaseUnitAllocFromU = "";
-        for (Integer m = 0; m < req.getUnitRebaseRequests().size(); m++) {
-
-            List<CdaParkingTrans> selfCdaSieze = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(m).getBudgetHeadId(), req.getRebaseUnitId(), req.getUnitRebaseRequests().get(m).getAllocationTypeId(), "0");
-            for (Integer i = 0; i < selfCdaSieze.size(); i++) {
-                CdaParkingTrans cdaParking = selfCdaSieze.get(i);
-                cdaParking.setIsFlag("1");
-                cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                cdaParkingTransRepository.save(cdaParking);
-            }
-
-            List<CdaParkingCrAndDr> selfDrCrCdaSieze = parkingCrAndDrRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitIdAndIsRevision(req.getFinYear(), req.getUnitRebaseRequests().get(m).getBudgetHeadId(), "0", req.getUnitRebaseRequests().get(m).getAllocationTypeId(), req.getRebaseUnitId(), 0);
-            for (Integer i = 0; i < selfDrCrCdaSieze.size(); i++) {
-                CdaParkingCrAndDr cdaParking = selfDrCrCdaSieze.get(i);
-                cdaParking.setIsFlag("1");
-                cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                parkingCrAndDrRepository.save(cdaParking);
-            }
-
-            List<BudgetAllocation> selftAllocSieze = (budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(req.getUnitRebaseRequests().get(m).getBudgetHeadId(), req.getRebaseUnitId(), req.getFinYear(), req.getUnitRebaseRequests().get(m).getAllocationTypeId(), "0", "0", "Approved"));
-            for (Integer i = 0; i < selftAllocSieze.size(); i++) {
-                BudgetAllocation allocData = selftAllocSieze.get(i);
-                rebaseUnitAllocFromU = allocData.getFromUnit();
-                allocData.setIsFlag("1");
-                allocData.setIsTYpe("REBASE");
-                allocData.setIsBudgetRevision("1");
-                allocData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                budgetAllocationRepository.save(allocData);
-            }
 
 
-            List<BudgetAllocationDetails> selfAllocDetailSieze = (budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(req.getRebaseUnitId(), req.getFinYear(), req.getUnitRebaseRequests().get(m).getBudgetHeadId(), req.getUnitRebaseRequests().get(m).getAllocationTypeId(), "0", "0"));
-            for (Integer i = 0; i < selfAllocDetailSieze.size(); i++) {
-                BudgetAllocationDetails allocDatatails = selfAllocDetailSieze.get(i);
-                allocDatatails.setIsDelete("1");
-                allocDatatails.setIsTYpe("REBASE");
-                allocDatatails.setIsBudgetRevision("1");
-                allocDatatails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                budgetAllocationDetailsRepository.save(allocDatatails);
-            }
+        List<BudgetAllocation> selftAllocSieze = (budgetAllocationRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(req.getRebaseUnitId(), req.getFinYear(), req.getUnitRebaseRequests().get(0).getAllocationTypeId(), "0", "0", "Approved"));
+        for (Integer i = 0; i < selftAllocSieze.size(); i++) {
+            BudgetAllocation allocData = selftAllocSieze.get(i);
+            rebaseUnitAllocFromU = allocData.getFromUnit();
+            allocData.setIsFlag("1");
+            allocData.setIsTYpe("REBASE");
+            allocData.setIsBudgetRevision("1");
+            allocData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            budgetAllocationRepository.save(allocData);
+        }
+
+
+        List<BudgetAllocationDetails> selfAllocDetailSieze = (budgetAllocationDetailsRepository.findByToUnitAndFinYearAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(req.getRebaseUnitId(), req.getFinYear(), req.getUnitRebaseRequests().get(0).getAllocationTypeId(), "0", "0"));
+        for (Integer i = 0; i < selfAllocDetailSieze.size(); i++) {
+            BudgetAllocationDetails allocDatatails = selfAllocDetailSieze.get(i);
+            allocDatatails.setIsDelete("1");
+            allocDatatails.setIsTYpe("REBASE");
+            allocDatatails.setIsBudgetRevision("1");
+            allocDatatails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            budgetAllocationDetailsRepository.save(allocDatatails);
         }
 
 
@@ -793,13 +793,17 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         if (ghataSkateHai == 0) {
                             continue;
                         }
+
                         double remeningCdaAMount = 0;
                         if (totalAllocationAmount >= ghataSkateHai) {
-                            remeningCdaAMount = totalAllocationAmount - ghataSkateHai;
+                            remeningCdaAMount = allocatedAmount - ghataSkateHai;
+                            totalAllocationAmount = totalAllocationAmount - ghataSkateHai;
                         } else {
                             remeningCdaAMount = ghataSkateHai - totalAllocationAmount;
+                            totalAllocationAmount = 0;
                         }
 
+                        cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                         cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint(remeningCdaAMount / amountUnit.getAmount() + ""));
                         cdaParkingTransRepository.save(cdaParking);
                     }
@@ -890,11 +894,14 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                         double remeningCdaAMount = 0;
                         if (totalAllocationAmount >= ghataSkateHai) {
-                            remeningCdaAMount = totalAllocationAmount - ghataSkateHai;
+                            remeningCdaAMount = allocatedAmount - ghataSkateHai;
+                            totalAllocationAmount = totalAllocationAmount - ghataSkateHai;
                         } else {
                             remeningCdaAMount = ghataSkateHai - totalAllocationAmount;
+                            totalAllocationAmount = 0;
                         }
 
+                        cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                         cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint(remeningCdaAMount / amountUnit.getAmount() + ""));
                         cdaParkingTransRepository.save(cdaParking);
                     }
@@ -973,16 +980,20 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         double remaningAmount = Double.parseDouble(cdaParking.getRemainingCdaAmount()) * amountUnit.getAmount();
 
                         double ghataSkateHai = allocatedAmount - remaningAmount;
-                        double remeningCdaAMount = 0;
                         if (ghataSkateHai == 0) {
                             continue;
                         }
+
+                        double remeningCdaAMount = 0;
                         if (totalAllocationAmount11 >= ghataSkateHai) {
-                            remeningCdaAMount = totalAllocationAmount11 - ghataSkateHai;
+                            remeningCdaAMount = allocatedAmount - ghataSkateHai;
+                            totalAllocationAmount11 = totalAllocationAmount11 - ghataSkateHai;
                         } else {
                             remeningCdaAMount = ghataSkateHai - totalAllocationAmount11;
+                            totalAllocationAmount11 = 0;
                         }
 
+                        cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                         cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint(remeningCdaAMount / amountUnit.getAmount() + ""));
                         cdaParkingTransRepository.save(cdaParking);
                     }
@@ -1104,7 +1115,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                             cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
-
+                            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
                             cdaParkingTransRepository.save(cdaParking);
                         }
@@ -1379,7 +1390,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                             cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
-
+                            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
                             cdaParkingTransRepository.save(cdaParking);
                         }
@@ -1475,7 +1486,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                             cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
-
+                            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
                             cdaParkingTransRepository.save(cdaParking);
                         }
@@ -1716,7 +1727,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
                             cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
-
+                            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
                             cdaParkingTransRepository.save(cdaParking);
                         }
@@ -1879,16 +1890,20 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             double remaningAmount = Double.parseDouble(cdaParking.getRemainingCdaAmount()) * amountUnit.getAmount();
 
                             double ghataSkateHai = allocatedAmount - remaningAmount;
-                            double remeningCdaAMount = 0;
                             if (ghataSkateHai == 0) {
                                 continue;
                             }
+
+                            double remeningCdaAMount = 0;
                             if (totalAllocationAmount11 >= ghataSkateHai) {
-                                remeningCdaAMount = totalAllocationAmount11 - ghataSkateHai;
+                                remeningCdaAMount = allocatedAmount - ghataSkateHai;
+                                totalAllocationAmount11 = totalAllocationAmount11 - ghataSkateHai;
                             } else {
                                 remeningCdaAMount = ghataSkateHai - totalAllocationAmount11;
+                                totalAllocationAmount11 = 0;
                             }
 
+                            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint(remeningCdaAMount / amountUnit.getAmount() + ""));
                             cdaParkingTransRepository.save(cdaParking);
                         }
@@ -1984,6 +1999,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
                             cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
+                            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             cdaParkingTransRepository.save(cdaParking);
                         }
 
@@ -2518,13 +2534,17 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         if (ghataSkateHai == 0) {
                             continue;
                         }
+
                         double remeningCdaAMount = 0;
                         if (totalAllocationAmount >= ghataSkateHai) {
-                            remeningCdaAMount = totalAllocationAmount - ghataSkateHai;
+                            remeningCdaAMount = allocatedAmount - ghataSkateHai;
+                            totalAllocationAmount = totalAllocationAmount - ghataSkateHai;
                         } else {
                             remeningCdaAMount = ghataSkateHai - totalAllocationAmount;
+                            totalAllocationAmount = 0;
                         }
 
+                        cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                         cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint(remeningCdaAMount / amountUnit.getAmount() + ""));
                         cdaParkingTransRepository.save(cdaParking);
                     }
@@ -2559,9 +2579,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     }
 
 
-                }
-
-                else {
+                } else {
                     String rhqUnit = "";
 
                     ///............................DHQ REBASE BAL DEDUCT FROM ALLOCATION..............................
@@ -2614,13 +2632,17 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         if (ghataSkateHai == 0) {
                             continue;
                         }
+
                         double remeningCdaAMount = 0;
                         if (totalAllocationAmount >= ghataSkateHai) {
-                            remeningCdaAMount = totalAllocationAmount - ghataSkateHai;
+                            remeningCdaAMount = allocatedAmount - ghataSkateHai;
+                            totalAllocationAmount = totalAllocationAmount - ghataSkateHai;
                         } else {
                             remeningCdaAMount = ghataSkateHai - totalAllocationAmount;
+                            totalAllocationAmount = 0;
                         }
 
+                        cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                         cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint(remeningCdaAMount / amountUnit.getAmount() + ""));
                         cdaParkingTransRepository.save(cdaParking);
                     }
@@ -2699,16 +2721,20 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         double remaningAmount = Double.parseDouble(cdaParking.getRemainingCdaAmount()) * amountUnit.getAmount();
 
                         double ghataSkateHai = allocatedAmount - remaningAmount;
-                        double remeningCdaAMount = 0;
                         if (ghataSkateHai == 0) {
                             continue;
                         }
+
+                        double remeningCdaAMount = 0;
                         if (totalAllocationAmount11 >= ghataSkateHai) {
-                            remeningCdaAMount = totalAllocationAmount11 - ghataSkateHai;
+                            remeningCdaAMount = allocatedAmount - ghataSkateHai;
+                            totalAllocationAmount11 = totalAllocationAmount11 - ghataSkateHai;
                         } else {
                             remeningCdaAMount = ghataSkateHai - totalAllocationAmount11;
+                            totalAllocationAmount11 = 0;
                         }
 
+                        cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                         cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint(remeningCdaAMount / amountUnit.getAmount() + ""));
                         cdaParkingTransRepository.save(cdaParking);
                     }
@@ -2823,7 +2849,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                             cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
-
+                            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
                             cdaParkingTransRepository.save(cdaParking);
                         }
@@ -3083,14 +3109,13 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
 //                      Add  CDA Add karke Phir Minus karna hai
                         List<CdaParkingTrans> frmRhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), rHqUnitIdMain, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
-
                         if (frmRhqCda.size() > 0) {
                             CdaParkingTrans cdaParking = frmRhqCda.get(0);
                             AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
 
                             cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
-
+                            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
                             cdaParkingTransRepository.save(cdaParking);
                         }
@@ -3179,7 +3204,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                             cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
-
+                            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
                             cdaParkingTransRepository.save(cdaParking);
                         }
@@ -3438,7 +3463,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
                         cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                         double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
-
+                        cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                         cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
                         cdaParkingTransRepository.save(cdaParking);
                     }
@@ -3596,16 +3621,20 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             double remaningAmount = Double.parseDouble(cdaParking.getRemainingCdaAmount()) * amountUnit.getAmount();
 
                             double ghataSkateHai = allocatedAmount - remaningAmount;
-                            double remeningCdaAMount = 0;
                             if (ghataSkateHai == 0) {
                                 continue;
                             }
+
+                            double remeningCdaAMount = 0;
                             if (totalAllocationAmount11 >= ghataSkateHai) {
-                                remeningCdaAMount = totalAllocationAmount11 - ghataSkateHai;
+                                remeningCdaAMount = allocatedAmount - ghataSkateHai;
+                                totalAllocationAmount11 = totalAllocationAmount11 - ghataSkateHai;
                             } else {
                                 remeningCdaAMount = ghataSkateHai - totalAllocationAmount11;
+                                totalAllocationAmount11 = 0;
                             }
 
+                            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint(remeningCdaAMount / amountUnit.getAmount() + ""));
                             cdaParkingTransRepository.save(cdaParking);
                         }
@@ -3693,6 +3722,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
                             cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
+                            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
                             cdaParkingTransRepository.save(cdaParking);
                         }
