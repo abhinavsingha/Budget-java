@@ -1822,31 +1822,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         mangeInboxOutboxAllocation11111.setIsRebase("1");
                         mangeInboxOutBoxRepository.save(mangeInboxOutboxAllocation11111);
 
-
-                        MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
-                        mangeInboxOutboxReciptMsg.setIsRebase("0");
-                        mangeInboxOutboxReciptMsg.setMangeInboxId(HelperUtils.getMangeInboxId());
-                        mangeInboxOutboxReciptMsg.setRemarks("Budget Receipt");
-                        mangeInboxOutboxReciptMsg.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-                        mangeInboxOutboxReciptMsg.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                        mangeInboxOutboxReciptMsg.setToUnit(toHdUnitId);
-                        mangeInboxOutboxReciptMsg.setGroupId(universalAuthGroup);
-                        mangeInboxOutboxReciptMsg.setFromUnit(rebaseUnitAllocFromU);
-                        mangeInboxOutboxReciptMsg.setRoleId(hrDataCheck.getRoleId());
-                        mangeInboxOutboxReciptMsg.setCreaterpId(hrDataCheck.getPid());
-                        mangeInboxOutboxReciptMsg.setApproverpId(hrDataCheck.getPid());
-                        mangeInboxOutboxReciptMsg.setStatus("Fully Approved");
-                        mangeInboxOutboxReciptMsg.setState("CR");
-                        mangeInboxOutboxReciptMsg.setIsArchive("0");
-                        mangeInboxOutboxReciptMsg.setIsApproved("0");
-                        mangeInboxOutboxReciptMsg.setAllocationType(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
-                        mangeInboxOutboxReciptMsg.setIsFlag("0");
-                        mangeInboxOutboxReciptMsg.setType("Budget Receipt");
-                        mangeInboxOutboxReciptMsg.setAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
-                        mangeInboxOutboxReciptMsg.setIsBgcg("BR");
-                        mangeInboxOutboxReciptMsg.setIsRevision(0);
-                        mangeInboxOutBoxRepository.save(mangeInboxOutboxReciptMsg);
-
                     }
 
 
