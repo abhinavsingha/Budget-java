@@ -812,7 +812,7 @@ public class DashboardServiceImpl implements DashBoardService {
 
                     String uid = reportDetails.get(r).getToUnit();
                     finAmount = amount * amountUnits / reqAmount;
-                    List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
+                    List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
 
                     double totalbill = 0.0;
                     Timestamp lastCvDate;
