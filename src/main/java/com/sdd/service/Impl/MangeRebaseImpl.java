@@ -336,9 +336,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
         for (int i = 0; i < allocationData.size(); i++) {
 
-            if (Double.parseDouble(allocationData.get(i).getAllocationAmount()) == 0) {
-                continue;
-            }
 
             RebaseBudgetHistory rebase = new RebaseBudgetHistory();
             AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(allocationData.get(i).getAmountType());
@@ -360,10 +357,17 @@ public class MangeRebaseImpl implements MangeRebaseService {
             rebase.setSubHead(subHeadRepository.findByBudgetCodeId(allocationData.get(i).getSubHead()));
             String bHead = allocationData.get(i).getSubHead();
             List<CdaParkingTrans> cdaDetails = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYear, bHead, unit, allocId, "0");
-            if (cdaDetails.size() <= 0) {
-                return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
-                }, "CDA NOT FOUND IN THIS SUBHEAD " + bHead, HttpStatus.OK.value());
+
+
+            if (Double.parseDouble(allocationData.get(i).getAllocationAmount()) == 0) {
+            } else {
+                if (cdaDetails.size() <= 0) {
+                    return ResponseUtils.createFailureResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
+                    }, "CDA NOT FOUND IN THIS SUBHEAD " + bHead, HttpStatus.OK.value());
+                }
             }
+
+
             AmountUnit cdaAmtObj = amountUnitRepository.findByAmountTypeId(cdaDetails.get(0).getAmountType());
             double cdaAmtUnit = cdaAmtObj.getAmount();
             List<CdaDetailsForRebaseResponse> addRes = new ArrayList<CdaDetailsForRebaseResponse>();
