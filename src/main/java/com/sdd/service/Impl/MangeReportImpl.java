@@ -8410,7 +8410,7 @@ public class MangeReportImpl implements MangeReportService {
         LocalDateTime localDateTime = LocalDateTime.of(resultDt, LocalTime.MIDNIGHT);
         Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
 
-        List<String> groupUnitId = budgetRebaseRepository.findGroupRebaseUnit();
+        List<String> groupUnitId = budgetRebaseRepository.findAuthGroupRebaseUnit();
         if (groupUnitId.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "DATA NOT FOUND FROM DB", HttpStatus.OK.value());
@@ -8463,7 +8463,7 @@ public class MangeReportImpl implements MangeReportService {
                 for (String ids : groupUnitId) {
 
                     RunitId = ids;
-                    List<BudgetRebase> rebaseDatas = budgetRebaseRepository.findByRebaseUnitId(RunitId);
+                    List<BudgetRebase> rebaseDatas = budgetRebaseRepository.findByAuthGrpId(RunitId);
 
                     List<BudgetRebase> rebaseData1 = rebaseDatas.stream()
                             .filter(e -> e.getOccuranceDate().after(fromDateFormate) && e.getOccuranceDate().before(toDateFormate)).collect(Collectors.toList());
@@ -8478,7 +8478,7 @@ public class MangeReportImpl implements MangeReportService {
                     double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
                     String amountIn = amountObj.getAmountType().toUpperCase();
 
-                    CgUnit unitN = cgUnitRepository.findByUnit(RunitId);
+                    CgUnit unitN = cgUnitRepository.findByUnit(rebaseData.get(0).getRebaseUnitId());
                     String frmS = rebaseData.get(0).getFrmStationId();
                     CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
 

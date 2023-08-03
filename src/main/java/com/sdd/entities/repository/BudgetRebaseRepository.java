@@ -23,6 +23,12 @@ public interface BudgetRebaseRepository extends JpaRepository<BudgetRebase, Stri
     @Query(value ="select REBASE_UNIT_ID from budgetrebase group by REBASE_UNIT_ID",nativeQuery = true)
     List<String> findGroupRebaseUnit();
 
+    @Query(value ="select AUTH_GRP_ID from budgetrebase group by AUTH_GRP_ID",nativeQuery = true)
+    List<String> findAuthGroupRebaseUnit();
+
+    @Query(value ="select AUTH_GRP_ID from budgetrebase where REBASE_UNIT_ID=:unitId group by AUTH_GRP_ID",nativeQuery = true)
+    List<String> findAuthGroupRebaseUnit(String unitId);
+
     List<BudgetRebase> findByRebaseUnitId(String rebaseUnitId);
 
     List<BudgetRebase> findByAuthGrpId(String authGrId);

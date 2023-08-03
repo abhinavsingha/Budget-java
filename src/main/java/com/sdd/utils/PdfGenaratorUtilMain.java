@@ -35,6 +35,13 @@ public class PdfGenaratorUtilMain {
         table.setSpacingAfter(20);
         table.setWidthPercentage(100);
 
+        Paragraph paragraphs = new Paragraph();
+        Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+        paragraphs.add(new Chunk("ALLOCATION REPORT "+"( "+hrData.getUnit().toUpperCase()+" )", boldFont));
+        paragraphs.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(paragraphs);
+        document.add(new Paragraph("\n"));
+
 
         if (filePathResponse.getSubHeadKey().contains("2037")) {
             table.addCell(boldText("OBJECT HEAD", 10, 25f));
@@ -116,6 +123,13 @@ public class PdfGenaratorUtilMain {
         table.setWidths(pointColumnWidths);
         table.setWidthPercentage(100);
         table.setSpacingAfter(20);
+
+        Paragraph paragraphs = new Paragraph();
+        Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+        paragraphs.add(new Chunk("RECIPT REPORT "+"( "+hrData.getUnit().toUpperCase()+" )", boldFont));
+        paragraphs.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(paragraphs);
+        document.add(new Paragraph("\n"));
 
 
         table.addCell(boldText("MAJOR/MINOR/SUB HEAD", 10, 25f));
@@ -204,6 +218,13 @@ public class PdfGenaratorUtilMain {
         table.setWidths(pointColumnWidths);
         table.setWidthPercentage(100);
         table.setSpacingAfter(20);
+
+        Paragraph paragraphs = new Paragraph();
+        Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+        paragraphs.add(new Chunk("CONSOLIDATED REPORT "+"( "+hrData.getUnit().toUpperCase()+" )", boldFont));
+        paragraphs.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(paragraphs);
+        document.add(new Paragraph("\n"));
 
 
         String key = "";
@@ -406,7 +427,7 @@ public class PdfGenaratorUtilMain {
 
 
         Font font = new Font(Font.FontFamily.COURIER, 15, Font.BOLD);
-        Chunk header = new Chunk("\n" + "RESERVE FUND " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() + "\n" + "\n", font);
+        Chunk header = new Chunk("\n" + "RESERVE FUND " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() + " "+"( "+hrData.getUnit().toUpperCase()+" )"+"\n" + "\n", font);
         Paragraph preface = new Paragraph();
         preface.setAlignment(Element.ALIGN_CENTER);
         preface.add(header);

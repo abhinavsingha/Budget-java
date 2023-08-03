@@ -39,6 +39,19 @@ public class DocxGenaratorUtil {
             XWPFDocument document = new XWPFDocument();
             FileOutputStream out = new FileOutputStream(new File(path));
 
+
+            XWPFParagraph headingParagraph = document.createParagraph();
+            headingParagraph.setAlignment(ParagraphAlignment.CENTER);
+            headingParagraph.setStyle("Heading1");
+            XWPFRun headingRun = headingParagraph.createRun();
+            headingRun.setText("ALLOCATION REPORT " +"( "+hrData.getUnit().toUpperCase()+" )");
+            headingRun.setBold(true);
+            headingRun.setFontSize(16);
+
+            XWPFParagraph spacingParagraphss = document.createParagraph();
+            spacingParagraphss.setSpacingAfter(20);
+
+
             XWPFTable table = document.createTable();
             table.setWidth("100%");
 //                XWPFParagraph para = document.createParagraph();
@@ -149,6 +162,18 @@ public class DocxGenaratorUtil {
             table.setWidth("100%");
 //                XWPFParagraph para = document.createParagraph();
 //                XWPFRun run = para.createRun();
+
+            XWPFParagraph headingParagraph = document.createParagraph();
+            headingParagraph.setAlignment(ParagraphAlignment.CENTER);
+            headingParagraph.setStyle("Heading1");
+            XWPFRun headingRun = headingParagraph.createRun();
+            headingRun.setText("RECIEPT REPORT " +"( "+hrData.getUnit().toUpperCase()+" )");
+            headingRun.setBold(true);
+            headingRun.setFontSize(16);
+
+            XWPFParagraph spacingParagraphss = document.createParagraph();
+            spacingParagraphss.setSpacingAfter(20);
+
 
 
             XWPFTableRow tableRowOne = table.getRow(0);
@@ -263,6 +288,19 @@ public class DocxGenaratorUtil {
             table.setWidth("100%");
 //                XWPFParagraph para = document.createParagraph();
 //                XWPFRun run = para.createRun();
+
+            XWPFParagraph headingParagraph = document.createParagraph();
+            headingParagraph.setAlignment(ParagraphAlignment.CENTER);
+            headingParagraph.setStyle("Heading1");
+            XWPFRun headingRun = headingParagraph.createRun();
+            headingRun.setText("CONSOLIDATE REPORT " +"( "+hrData.getUnit().toUpperCase()+" )");
+            headingRun.setBold(true);
+            headingRun.setFontSize(16);
+
+            XWPFParagraph spacingParagraphss = document.createParagraph();
+            spacingParagraphss.setSpacingAfter(20);
+
+
 
 
             String key = "";
@@ -575,6 +613,8 @@ public class DocxGenaratorUtil {
             String reOrCapital = "";
 
 
+
+
             if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
                 reOrCapital = "REVENUE";
             } else {
@@ -586,7 +626,7 @@ public class DocxGenaratorUtil {
 
             mainParagraph = document.createParagraph();
             mainParagraph.setAlignment(ParagraphAlignment.CENTER);
-            boldText(mainParagraph.createRun(), 17, "\n" + "RESERVE FUND " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear(), true);
+            boldText(mainParagraph.createRun(), 17, "\n" + "RESERVE FUND " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() +" "+"( "+hrData.getUnit().toUpperCase()+" )", true);
             mainParagraph.createRun().addBreak();
 
 
