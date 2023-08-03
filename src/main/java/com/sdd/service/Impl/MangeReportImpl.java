@@ -256,7 +256,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-            pdfGenaratorUtilMain.createPdfAllocation(hashMap, filePath, filePathResponse);
+            pdfGenaratorUtilMain.createPdfAllocation(hashMap, filePath, filePathResponse,hrData);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             filePathResponse.setFileName(fileName);
             dtoList.add(filePathResponse);
@@ -399,7 +399,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-            docxGenaratorUtil.createDocAllocation(hashMap, filePath, filePathResponse);
+            docxGenaratorUtil.createDocAllocation(hashMap, filePath, filePathResponse,hrData);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".docx");
             filePathResponse.setFileName(fileName);
             dtoList.add(filePathResponse);
@@ -893,7 +893,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-            pdfGenaratorUtilMain.createPdfRecipt(hashMap, filePath, filePathResponse);
+            pdfGenaratorUtilMain.createPdfRecipt(hashMap, filePath, filePathResponse,hrData);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             filePathResponse.setFileName(fileName);
             filePathResponse.setReciptRespone(hashMap);
@@ -1043,7 +1043,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-            docxGenaratorUtil.createDocRecipt(hashMap, filePath, filePathResponse);
+            docxGenaratorUtil.createDocRecipt(hashMap, filePath, filePathResponse,hrData);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".docx");
             filePathResponse.setFileName(fileName);
             filePathResponse.setReciptRespone(hashMap);
@@ -1198,7 +1198,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-            pdfGenaratorUtilMain.createPdfRecipt(hashMap, filePath, filePathResponse);
+            pdfGenaratorUtilMain.createPdfRecipt(hashMap, filePath, filePathResponse,hrData);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             filePathResponse.setFileName(fileName);
             filePathResponse.setReciptRespone(hashMap);
@@ -1345,7 +1345,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-            docxGenaratorUtil.createDocRecipt(hashMap, filePath, filePathResponse);
+            docxGenaratorUtil.createDocRecipt(hashMap, filePath, filePathResponse,hrData);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".docx");
             filePathResponse.setFileName(fileName);
             filePathResponse.setReciptRespone(hashMap);
@@ -2084,7 +2084,7 @@ public class MangeReportImpl implements MangeReportService {
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
             File file = new File(filePath);
-            pdfGenaratorUtilMain.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal, allocationGrandTotal, filePathResponse);
+            pdfGenaratorUtilMain.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal, allocationGrandTotal, filePathResponse,hrData);
             dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             dtoList.setFileName(fileName);
             dtoList.setAllCdaData(allCdaData);
@@ -2215,7 +2215,7 @@ public class MangeReportImpl implements MangeReportService {
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
             File file = new File(filePath);
-            docxGenaratorUtil.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal, allocationGrandTotal);
+            docxGenaratorUtil.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal, allocationGrandTotal,hrData);
             dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
             dtoList.setFileName(fileName);
             dtoList.setAllCdaData(allCdaData);
@@ -2428,7 +2428,7 @@ public class MangeReportImpl implements MangeReportService {
                     folder.mkdirs();
                 }
                 String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse);
+                pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse,hrData);
                 dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                 dtoList.setFileName(fileName);
                 dtoList.setAllCdaData(allCdaData);
@@ -2537,7 +2537,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse,hrData);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -2641,7 +2641,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse,hrData);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -2747,7 +2747,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse,hrData);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -2879,7 +2879,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse,hrData);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -3010,7 +3010,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse,hrData);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -3230,7 +3230,7 @@ public class MangeReportImpl implements MangeReportService {
                     folder.mkdirs();
                 }
                 String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount);
+                docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount,hrData);
 
                 dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                 dtoList.setFileName(fileName);
@@ -3338,7 +3338,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount,hrData);
 
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
@@ -3440,7 +3440,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount,hrData);
 
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
@@ -3545,7 +3545,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount,hrData);
 
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
@@ -3675,7 +3675,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount,hrData);
 
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
@@ -3806,7 +3806,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount,hrData);
 
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);

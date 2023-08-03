@@ -31,7 +31,7 @@ public class DocxGenaratorUtil {
 
 
     @SuppressWarnings("rawtypes")
-    public void createDocAllocation(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse) throws Exception {
+    public void createDocAllocation(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse,HrData hrData) throws Exception {
 
         try {
 
@@ -137,7 +137,7 @@ public class DocxGenaratorUtil {
 
 
     @SuppressWarnings("rawtypes")
-    public void createDocRecipt(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse) throws Exception {
+    public void createDocRecipt(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse,HrData hrData) throws Exception {
 
         try {
 
@@ -395,7 +395,7 @@ public class DocxGenaratorUtil {
     }
 
 
-    public void createCdaMainReportDoc(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, HashMap<String, String> coloumWiseAmount) throws Exception {
+    public void createCdaMainReportDoc(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, HashMap<String, String> coloumWiseAmount,HrData hrData) throws Exception {
 
         try {
 
@@ -566,7 +566,7 @@ public class DocxGenaratorUtil {
     }
 
 
-    public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, double allocationGrandTotal) throws Exception {
+    public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, double allocationGrandTotal,HrData hrData) throws Exception {
 
         try {
 

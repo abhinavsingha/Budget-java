@@ -22,7 +22,7 @@ public class PdfGenaratorUtilMain {
     private static final String UTF_8 = "UTF-8";
 
     @SuppressWarnings("rawtypes")
-    public void createPdfAllocation(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse) throws Exception {
+    public void createPdfAllocation(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse,HrData hrData) throws Exception {
 
         Document document = new Document();
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
@@ -104,7 +104,7 @@ public class PdfGenaratorUtilMain {
 
 
     @SuppressWarnings("rawtypes")
-    public void createPdfRecipt(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse) throws Exception {
+    public void createPdfRecipt(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse,HrData hrData) throws Exception {
 
         Document document = new Document();
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
@@ -292,7 +292,7 @@ public class PdfGenaratorUtilMain {
 
     }
 
-    public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, HashMap<String, String> coloumWiseAmount, FilePathResponse filePathResponse) throws Exception {
+    public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, HashMap<String, String> coloumWiseAmount, FilePathResponse filePathResponse,HrData hrData) throws Exception {
 
 
         Document document = new Document(PageSize.A4.rotate());
@@ -396,7 +396,7 @@ public class PdfGenaratorUtilMain {
 
     }
 
-    public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, double allocationGrandTotal, FilePathResponse filePathResponse) throws Exception {
+    public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, double allocationGrandTotal, FilePathResponse filePathResponse,HrData hrData) throws Exception {
 
 
         Document document = new Document(PageSize.A4);
