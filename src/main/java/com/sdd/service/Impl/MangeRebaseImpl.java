@@ -740,6 +740,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             budgetRebaseRepository.save(budgetRebase);
 
             if (!frmRegion.equalsIgnoreCase(toRegion)) {
+
                 CgUnit frmHead = cgUnitRepository.findByUnit(frmUnit);
                 if (frmHead.getIsRebaseAuthority().equalsIgnoreCase("1")) {
                     String dBudgetUnit = "";
@@ -799,7 +800,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             remeningCdaAMount = allocatedAmount - ghataSkateHai;
                             totalAllocationAmount = totalAllocationAmount - ghataSkateHai;
                         } else {
-                            remeningCdaAMount = ghataSkateHai - totalAllocationAmount;
+                            remeningCdaAMount = allocatedAmount - totalAllocationAmount;
                             totalAllocationAmount = 0;
                         }
 
@@ -897,7 +898,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             remeningCdaAMount = allocatedAmount - ghataSkateHai;
                             totalAllocationAmount = totalAllocationAmount - ghataSkateHai;
                         } else {
-                            remeningCdaAMount = ghataSkateHai - totalAllocationAmount;
+                            remeningCdaAMount = allocatedAmount - totalAllocationAmount;
                             totalAllocationAmount = 0;
                         }
 
@@ -989,7 +990,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             remeningCdaAMount = allocatedAmount - ghataSkateHai;
                             totalAllocationAmount11 = totalAllocationAmount11 - ghataSkateHai;
                         } else {
-                            remeningCdaAMount = ghataSkateHai - totalAllocationAmount11;
+                            remeningCdaAMount = allocatedAmount - totalAllocationAmount11;
                             totalAllocationAmount11 = 0;
                         }
 
@@ -1413,8 +1414,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationReciptMain.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                         budgetAllocationReciptMain.setUnallocatedAmount("0");
                         budgetAllocationReciptMain.setIsFlag("0");
-                        budgetAllocationReciptMain.setIsTYpe("U");
-//                        budgetAllocationReciptMain.setUnallocatedAmount("0");
                         budgetAllocationReciptMain.setIsTYpe("REBASE");
                         budgetAllocationReciptMain.setIsBudgetRevision("0");
                         budgetAllocationReciptMain.setRevisedAmount("0");
@@ -1510,7 +1509,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationMain.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                         budgetAllocationMain.setUnallocatedAmount("");
                         budgetAllocationMain.setRevisedAmount("0");
-                        budgetAllocationMain.setIsTYpe("U");
                         budgetAllocationMain.setUserId(hrDataCheck.getPid());
                         budgetAllocationMain.setStatus("Approved");
                         budgetAllocationMain.setAmountType(req.getUnitRebaseRequests().get(k).getAmountType());
@@ -1560,7 +1558,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                     budgetAllocationDetails.setAuthGroupId(universalAuthGroup);
                     budgetAllocationDetails.setIsDelete("0");
-                    budgetAllocationDetails.setIsTYpe("U");
+                    budgetAllocationDetails.setIsTYpe("REBASE");
                     budgetAllocationDetails.setUnallocatedAmount(shipExpAmount + "");
                     budgetAllocationDetails.setIsBudgetRevision("0");
                     budgetAllocationDetails.setRevisedAmount("0.0000");
@@ -1575,7 +1573,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     budgetAllocation123.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                     budgetAllocation123.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
                     budgetAllocation123.setIsFlag("0");
-                    budgetAllocation123.setIsTYpe("U");
+                    budgetAllocation123.setIsTYpe("REBASE");
                     budgetAllocation123.setIsBudgetRevision("0");
                     budgetAllocation123.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                     budgetAllocation123.setRefTransId(HelperUtils.getBudgetAllocationTypeId());
@@ -1776,7 +1774,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                     budgetAllocationDetails.setAuthGroupId(universalAuthGroup);
                     budgetAllocationDetails.setIsDelete("0");
-                    budgetAllocationDetails.setIsTYpe("U");
+                    budgetAllocationDetails.setIsTYpe("REBASE");
                     budgetAllocationDetails.setUnallocatedAmount(shipExpAmount + "");
                     budgetAllocationDetails.setIsBudgetRevision("0");
                     budgetAllocationDetails.setRevisedAmount("0.0000");
@@ -1791,7 +1789,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     budgetAllocation.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                     budgetAllocation.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
                     budgetAllocation.setIsFlag("0");
-                    budgetAllocation.setIsTYpe("U");
+                    budgetAllocation.setIsTYpe("REBASE");
                     budgetAllocation.setIsBudgetRevision("0");
                     budgetAllocation.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                     budgetAllocation.setRefTransId(HelperUtils.getBudgetAllocationTypeId());
@@ -1899,7 +1897,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 remeningCdaAMount = allocatedAmount - ghataSkateHai;
                                 totalAllocationAmount11 = totalAllocationAmount11 - ghataSkateHai;
                             } else {
-                                remeningCdaAMount = ghataSkateHai - totalAllocationAmount11;
+                                remeningCdaAMount = allocatedAmount - totalAllocationAmount11;
                                 totalAllocationAmount11 = 0;
                             }
 
@@ -2047,7 +2045,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                     budgetAllocationDetails.setAuthGroupId(universalAuthGroup);
                     budgetAllocationDetails.setIsDelete("0");
-                    budgetAllocationDetails.setIsTYpe("U");
+                    budgetAllocationDetails.setIsTYpe("REBASE");
                     budgetAllocationDetails.setUnallocatedAmount(shipExpAmount + "");
                     budgetAllocationDetails.setIsBudgetRevision("0");
                     budgetAllocationDetails.setRevisedAmount("0.0000");
@@ -2062,7 +2060,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     budgetAllocation.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                     budgetAllocation.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
                     budgetAllocation.setIsFlag("0");
-                    budgetAllocation.setIsTYpe("U");
+                    budgetAllocation.setIsTYpe("REBASE");
                     budgetAllocation.setIsBudgetRevision("0");
                     budgetAllocation.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                     budgetAllocation.setRefTransId(HelperUtils.getBudgetAllocationTypeId());
@@ -2540,7 +2538,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             remeningCdaAMount = allocatedAmount - ghataSkateHai;
                             totalAllocationAmount = totalAllocationAmount - ghataSkateHai;
                         } else {
-                            remeningCdaAMount = ghataSkateHai - totalAllocationAmount;
+                            remeningCdaAMount = allocatedAmount - totalAllocationAmount;
                             totalAllocationAmount = 0;
                         }
 
@@ -2638,7 +2636,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             remeningCdaAMount = allocatedAmount - ghataSkateHai;
                             totalAllocationAmount = totalAllocationAmount - ghataSkateHai;
                         } else {
-                            remeningCdaAMount = ghataSkateHai - totalAllocationAmount;
+                            remeningCdaAMount = allocatedAmount - totalAllocationAmount;
                             totalAllocationAmount = 0;
                         }
 
@@ -2730,7 +2728,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             remeningCdaAMount = allocatedAmount - ghataSkateHai;
                             totalAllocationAmount11 = totalAllocationAmount11 - ghataSkateHai;
                         } else {
-                            remeningCdaAMount = ghataSkateHai - totalAllocationAmount11;
+                            remeningCdaAMount = allocatedAmount - totalAllocationAmount11;
                             totalAllocationAmount11 = 0;
                         }
 
@@ -3138,8 +3136,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationReciptMain.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                         budgetAllocationReciptMain.setUnallocatedAmount("0");
                         budgetAllocationReciptMain.setIsFlag("0");
-                        budgetAllocationReciptMain.setIsTYpe("U");
-//                        budgetAllocationReciptMain.setUnallocatedAmount("0");
                         budgetAllocationReciptMain.setIsTYpe("REBASE");
                         budgetAllocationReciptMain.setIsBudgetRevision("0");
                         budgetAllocationReciptMain.setRevisedAmount("0");
@@ -3228,7 +3224,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationMain.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                         budgetAllocationMain.setUnallocatedAmount("");
                         budgetAllocationMain.setRevisedAmount("0");
-                        budgetAllocationMain.setIsTYpe("U");
                         budgetAllocationMain.setUserId(hrDataCheck.getPid());
                         budgetAllocationMain.setStatus("Approved");
                         budgetAllocationMain.setAmountType(req.getUnitRebaseRequests().get(k).getAmountType());
@@ -3278,7 +3273,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                     budgetAllocationDetails.setAuthGroupId(universalAuthGroup);
                     budgetAllocationDetails.setIsDelete("0");
-                    budgetAllocationDetails.setIsTYpe("U");
+                    budgetAllocationDetails.setIsTYpe("REBASE");
                     budgetAllocationDetails.setUnallocatedAmount(shipExpAmount + "");
                     budgetAllocationDetails.setIsBudgetRevision("0");
                     budgetAllocationDetails.setRevisedAmount("0.0000");
@@ -3293,7 +3288,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     budgetAllocation123.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                     budgetAllocation123.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
                     budgetAllocation123.setIsFlag("0");
-                    budgetAllocation123.setIsTYpe("U");
+                    budgetAllocation123.setIsTYpe("REBASE");
                     budgetAllocation123.setIsBudgetRevision("0");
                     budgetAllocation123.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                     budgetAllocation123.setRefTransId(HelperUtils.getBudgetAllocationTypeId());
@@ -3484,7 +3479,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                     budgetAllocationDetails.setAuthGroupId(universalAuthGroup);
                     budgetAllocationDetails.setIsDelete("0");
-                    budgetAllocationDetails.setIsTYpe("U");
+                    budgetAllocationDetails.setIsTYpe("REBASE");
                     budgetAllocationDetails.setUnallocatedAmount(shipExpAmount + "");
                     budgetAllocationDetails.setIsBudgetRevision("0");
                     budgetAllocationDetails.setRevisedAmount("0.0000");
@@ -3499,7 +3494,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     budgetAllocation.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                     budgetAllocation.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
                     budgetAllocation.setIsFlag("0");
-                    budgetAllocation.setIsTYpe("U");
+                    budgetAllocation.setIsTYpe("REBASE");
                     budgetAllocation.setIsBudgetRevision("0");
                     budgetAllocation.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                     budgetAllocation.setRefTransId(HelperUtils.getBudgetAllocationTypeId());
@@ -3630,7 +3625,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 remeningCdaAMount = allocatedAmount - ghataSkateHai;
                                 totalAllocationAmount11 = totalAllocationAmount11 - ghataSkateHai;
                             } else {
-                                remeningCdaAMount = ghataSkateHai - totalAllocationAmount11;
+                                remeningCdaAMount = allocatedAmount - totalAllocationAmount11;
                                 totalAllocationAmount11 = 0;
                             }
 
@@ -3771,7 +3766,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                     budgetAllocationDetails.setAuthGroupId(universalAuthGroup);
                     budgetAllocationDetails.setIsDelete("0");
-                    budgetAllocationDetails.setIsTYpe("U");
+                    budgetAllocationDetails.setIsTYpe("REBASE");
                     budgetAllocationDetails.setUnallocatedAmount(shipExpAmount + "");
                     budgetAllocationDetails.setIsBudgetRevision("0");
                     budgetAllocationDetails.setRevisedAmount("0.0000");
@@ -3786,7 +3781,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     budgetAllocation.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                     budgetAllocation.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
                     budgetAllocation.setIsFlag("0");
-                    budgetAllocation.setIsTYpe("U");
+                    budgetAllocation.setIsTYpe("REBASE");
                     budgetAllocation.setIsBudgetRevision("0");
                     budgetAllocation.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                     budgetAllocation.setRefTransId(HelperUtils.getBudgetAllocationTypeId());

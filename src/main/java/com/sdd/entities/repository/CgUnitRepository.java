@@ -9,11 +9,10 @@ import java.util.List;
 public interface CgUnitRepository extends JpaRepository<CgUnit, Long> {
 
   CgUnit findByUnit(String cbUnit);
+  CgUnit findByUnitAndIsActive(String cbUnit,String isActive);
 
   CgUnit findByCgUnitShort(String unitShort);
 
-  @Query(value = "SELECT DESCR FROM cgunit where UNIT=:unitId", nativeQuery = true)
-  String findUnitName(String unitId);
 
   List<CgUnit> findAllByOrderByDescrAsc();
   List<CgUnit> findByUnitOrderByDescrAsc(String cbUnit);
