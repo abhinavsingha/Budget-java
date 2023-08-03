@@ -368,8 +368,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
             }
 
 
-            AmountUnit cdaAmtObj = amountUnitRepository.findByAmountTypeId(cdaDetails.get(0).getAmountType());
-            double cdaAmtUnit = cdaAmtObj.getAmount();
             List<CdaDetailsForRebaseResponse> addRes = new ArrayList<CdaDetailsForRebaseResponse>();
             double remCdaBal = 0.0;
             double TotalCdaBal = 0.0;
@@ -889,6 +887,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         if (ghataSkateHai == 0) {
                             continue;
                         }
+
                         double remeningCdaAMount = 0;
                         if (totalAllocationAmount >= ghataSkateHai) {
                             remeningCdaAMount = totalAllocationAmount - ghataSkateHai;
@@ -2560,7 +2559,9 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     }
 
 
-                } else {
+                }
+
+                else {
                     String rhqUnit = "";
 
                     ///............................DHQ REBASE BAL DEDUCT FROM ALLOCATION..............................
