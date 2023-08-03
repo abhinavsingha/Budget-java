@@ -575,7 +575,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             Date expireDate = new Date(crDate.getTime() + expirationTime * 1000);
             Date todayDate = new Date();
             if (expireDate.getTime() >= todayDate.getTime()) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CAN NOT REBASE SAME UNIT ! TRY AFTER 24 HOURS");
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CAN NOT REBASE SAME UNIT ! TRY AFTER 1 HOURS");
 
             } else {
                 chekUnit.setStationId(req.getToStationId());
@@ -2288,7 +2288,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED FOR UNIT REBASE");
         }
         if (!frmRegion.equalsIgnoreCase(toRegion)) {
-            if (!hrDataCheck.getUnitId().equalsIgnoreCase("001321"))
+            if (!hrDataCheck.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID))
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED FOR UNIT REBASE IN ANOTHER REGION");
         }
 
