@@ -8221,7 +8221,6 @@ public class MangeReportImpl implements MangeReportService {
                     finAmount = amount * amountUnit / reqAmount;
                     List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
                     //List<CgUnit> listOfSubUnit=cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
-
                     double totalbill = 0.0;
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
