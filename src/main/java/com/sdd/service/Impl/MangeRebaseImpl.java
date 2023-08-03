@@ -619,7 +619,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
         mangeInboxOutbox.setType(chekUnit.getDescr());
         mangeInboxOutbox.setRoleId(hrDataCheck.getRoleId());
         mangeInboxOutbox.setCreaterpId(hrDataCheck.getPid());
-        mangeInboxOutbox.setStatus("Fully Approved");
+        mangeInboxOutbox.setStatus("Approved");
         mangeInboxOutbox.setState("AP");
         mangeInboxOutbox.setIsArchive("0");
         mangeInboxOutbox.setAllocationType(req.getUnitRebaseRequests().get(0).getAllocationTypeId());
@@ -644,7 +644,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             mangeInboxOutbox2.setType(chekUnit.getDescr());
             mangeInboxOutbox2.setRoleId(hrDataCheck.getRoleId());
             mangeInboxOutbox2.setCreaterpId(hrDataCheck.getPid());
-            mangeInboxOutbox2.setStatus("Fully Approved");
+            mangeInboxOutbox2.setStatus("Approved");
             mangeInboxOutbox2.setState("AP");
             mangeInboxOutbox2.setIsArchive("0");
             mangeInboxOutbox2.setIsApproved("0");
@@ -823,7 +823,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         afterRebaseNotification.setRoleId(hrDataCheck.getRoleId());
                         afterRebaseNotification.setCreaterpId(hrDataCheck.getPid());
                         afterRebaseNotification.setApproverpId(hrDataCheck.getPid());
-                        afterRebaseNotification.setStatus("Fully Approved");
+                        afterRebaseNotification.setStatus("Approved");
                         afterRebaseNotification.setState("AP");
                         afterRebaseNotification.setIsArchive("0");
                         afterRebaseNotification.setIsApproved("0");
@@ -1169,7 +1169,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         mangeInboxOutboxAllocation.setIsArchive("0");
                         mangeInboxOutboxAllocation.setIsApproved("0");
                         mangeInboxOutboxAllocation.setIsRevision(0);
-                        mangeInboxOutboxAllocation.setStatus("Fully Approved");
+                        mangeInboxOutboxAllocation.setStatus("Approved");
                         mangeInboxOutboxAllocation.setIsBgcg("RR");
                         mangeInboxOutboxAllocation.setIsRebase("1");
                         mangeInboxOutBoxRepository.save(mangeInboxOutboxAllocation);
@@ -1269,7 +1269,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         mangeInboxOutboxAllocation.setIsArchive("0");
                         mangeInboxOutboxAllocation.setIsApproved("0");
                         mangeInboxOutboxAllocation.setIsRevision(0);
-                        mangeInboxOutboxAllocation.setStatus("Fully Approved");
+                        mangeInboxOutboxAllocation.setStatus("Approved");
                         mangeInboxOutboxAllocation.setIsBgcg("RR");
                         mangeInboxOutboxAllocation.setIsRebase("1");
                         mangeInboxOutBoxRepository.save(mangeInboxOutboxAllocation);
@@ -1437,7 +1437,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         afterRebaseNotification.setRoleId(hrDataCheck.getRoleId());
                         afterRebaseNotification.setCreaterpId(hrDataCheck.getPid());
                         afterRebaseNotification.setApproverpId(hrDataCheck.getPid());
-                        afterRebaseNotification.setStatus("Fully Approved");
+                        afterRebaseNotification.setStatus("Approved");
                         afterRebaseNotification.setState("AP");
                         afterRebaseNotification.setIsArchive("0");
                         afterRebaseNotification.setIsApproved("0");
@@ -1526,7 +1526,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             afterRebaseNotification.setRoleId(hrDataCheck.getRoleId());
                             afterRebaseNotification.setCreaterpId(hrDataCheck.getPid());
                             afterRebaseNotification.setApproverpId(hrDataCheck.getPid());
-                            afterRebaseNotification.setStatus("Fully Approved");
+                            afterRebaseNotification.setStatus("Approved");
                             afterRebaseNotification.setState("AP");
                             afterRebaseNotification.setIsArchive("0");
                             afterRebaseNotification.setIsApproved("0");
@@ -1612,7 +1612,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         mangeInboxOutboxAllocation.setIsArchive("0");
                         mangeInboxOutboxAllocation.setIsApproved("0");
                         mangeInboxOutboxAllocation.setIsRevision(0);
-                        mangeInboxOutboxAllocation.setStatus("Fully Approved");
+                        mangeInboxOutboxAllocation.setStatus("Approved");
                         mangeInboxOutboxAllocation.setIsBgcg("RR");
                         mangeInboxOutboxAllocation.setIsRebase("1");
                         mangeInboxOutBoxRepository.save(mangeInboxOutboxAllocation);
@@ -1825,7 +1825,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         mangeInboxOutboxAllocation11111.setIsArchive("0");
                         mangeInboxOutboxAllocation11111.setIsApproved("0");
                         mangeInboxOutboxAllocation11111.setIsRevision(0);
-                        mangeInboxOutboxAllocation11111.setStatus("Fully Approved");
+                        mangeInboxOutboxAllocation11111.setStatus("Approved");
                         mangeInboxOutboxAllocation11111.setIsBgcg("RR");
                         mangeInboxOutboxAllocation11111.setIsRebase("1");
                         mangeInboxOutBoxRepository.save(mangeInboxOutboxAllocation11111);
@@ -2120,7 +2120,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     afterRebaseNotification.setRoleId(hrDataCheck.getRoleId());
                     afterRebaseNotification.setCreaterpId(hrDataCheck.getPid());
                     afterRebaseNotification.setApproverpId(hrDataCheck.getPid());
-                    afterRebaseNotification.setStatus("Fully Approved");
+                    afterRebaseNotification.setStatus("Approved");
                     afterRebaseNotification.setState("AP");
                     afterRebaseNotification.setIsArchive("0");
                     afterRebaseNotification.setIsApproved("0");
@@ -2145,7 +2145,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     afterRebaseNotification.setRoleId(hrDataCheck.getRoleId());
                     afterRebaseNotification.setCreaterpId(hrDataCheck.getPid());
                     afterRebaseNotification.setApproverpId(hrDataCheck.getPid());
-                    afterRebaseNotification.setStatus("Fully Approved");
+                    afterRebaseNotification.setStatus("Approved");
                     afterRebaseNotification.setState("AP");
                     afterRebaseNotification.setIsArchive("0");
                     afterRebaseNotification.setIsApproved("0");

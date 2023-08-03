@@ -2,6 +2,8 @@ package com.sdd.controller.WebApi;
 
 
 import com.sdd.entities.HrData;
+import com.sdd.request.BudgetApproveRequest;
+import com.sdd.request.InboxOutboxStatusRequest;
 import com.sdd.request.RebaseBudgetHistory;
 import com.sdd.response.*;
 import com.sdd.service.InboxOutBoxService;
@@ -52,5 +54,19 @@ public class InboxOutboxController {
     public ResponseEntity<ApiResponse<List<ArchivedResponse>>> getApprovedListData(@PathVariable(value = "groupId") String groupId) {
         return new ResponseEntity<>(inboxOutBoxService.getApprovedListData(groupId), HttpStatus.OK);
     }
+
+
+    @GetMapping("/updateMsgStatusMain/{msgId}")
+    public ResponseEntity<ApiResponse<ArchivedResponse>> updateMsgStatusMain(@PathVariable(value = "msgId") String msgId) {
+        return new ResponseEntity<>(inboxOutBoxService.updateMsgStatusMain(msgId), HttpStatus.OK);
+    }
+
+
+//    @PostMapping("/updateMsgStatus")
+//    public ResponseEntity<ApiResponse<ArchivedResponse>> updateMsgStatus(@RequestBody InboxOutboxStatusRequest inboxOutboxStatusRequest) {
+//        return new ResponseEntity<>(inboxOutBoxService.updateMsgStatus(inboxOutboxStatusRequest), HttpStatus.OK);
+//    }
+
+
 
 }

@@ -1,6 +1,7 @@
 package com.sdd.service;
 
 import com.sdd.entities.HrData;
+import com.sdd.request.InboxOutboxStatusRequest;
 import com.sdd.request.RebaseBudgetHistory;
 import com.sdd.response.*;
 
@@ -16,13 +17,9 @@ public interface InboxOutBoxService {
 
 	ApiResponse<InboxOutBoxResponse> readMessage(String msgId);
 
-//	ApiResponse<List<ApprovedResponse>>getApprovedList();
-//
-//	ApiResponse<List<ApprovedResponse>> getArchivedList();
-
 	ApiResponse<List<ArchivedResponse>> getApprovedListData(String groupId);
 
+//	ApiResponse<ArchivedResponse> updateMsgStatus(InboxOutboxStatusRequest inboxOutboxStatusRequest);
 
-
-
+	ApiResponse<ArchivedResponse> updateMsgStatusMain(String msgId);
 }
