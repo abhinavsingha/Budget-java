@@ -578,15 +578,15 @@ public class MangeRebaseImpl implements MangeRebaseService {
             Date crDate = rebaseData.getCreatedOn();
             Date expireDate = new Date(crDate.getTime() + expirationTime * 1000);
             Date todayDate = new Date();
-            if (expireDate.getTime() >= todayDate.getTime()) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CAN NOT REBASE SAME UNIT ! TRY AFTER 1 HOURS");
-
-            } else {
-                chekUnit.setStationId(req.getToStationId());
-                chekUnit.setSubUnit(toHdUnitId);
-                chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                cgUnitRepository.save(chekUnit);
-            }
+//            if (expireDate.getTime() >= todayDate.getTime()) {
+//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CAN NOT REBASE SAME UNIT ! TRY AFTER 1 HOURS");
+//
+//            } else {
+            chekUnit.setStationId(req.getToStationId());
+            chekUnit.setSubUnit(toHdUnitId);
+            chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            cgUnitRepository.save(chekUnit);
+//            }
         } else {
             chekUnit.setStationId(req.getToStationId());
             chekUnit.setSubUnit(toHdUnitId);
@@ -1127,7 +1127,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                         budgetAllocationRecipt.setUnallocatedAmount("0");
                         budgetAllocationRecipt.setIsFlag("0");
-                        budgetAllocationRecipt.setUnallocatedAmount("0");
+
                         budgetAllocationRecipt.setIsTYpe("REBASE");
                         budgetAllocationRecipt.setIsBudgetRevision("0");
                         budgetAllocationRecipt.setRevisedAmount("0");
@@ -1404,7 +1404,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationReciptMain.setUnallocatedAmount("0");
                         budgetAllocationReciptMain.setIsFlag("0");
                         budgetAllocationReciptMain.setIsTYpe("U");
-                        budgetAllocationReciptMain.setUnallocatedAmount("0");
+//                        budgetAllocationReciptMain.setUnallocatedAmount("0");
                         budgetAllocationReciptMain.setIsTYpe("REBASE");
                         budgetAllocationReciptMain.setIsBudgetRevision("0");
                         budgetAllocationReciptMain.setRevisedAmount("0");
@@ -2030,7 +2030,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                         budgetAllocationRecipt.setUnallocatedAmount("0");
                         budgetAllocationRecipt.setIsFlag("0");
-                        budgetAllocationRecipt.setUnallocatedAmount("0");
+
                         budgetAllocationRecipt.setIsTYpe("REBASE");
                         budgetAllocationRecipt.setIsBudgetRevision("0");
                         budgetAllocationRecipt.setRevisedAmount("0");
@@ -2869,7 +2869,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                         budgetAllocationRecipt.setUnallocatedAmount("0");
                         budgetAllocationRecipt.setIsFlag("0");
-                        budgetAllocationRecipt.setUnallocatedAmount("0");
                         budgetAllocationRecipt.setIsTYpe("REBASE");
                         budgetAllocationRecipt.setIsBudgetRevision("0");
                         budgetAllocationRecipt.setRevisedAmount("0");
@@ -3139,7 +3138,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationReciptMain.setUnallocatedAmount("0");
                         budgetAllocationReciptMain.setIsFlag("0");
                         budgetAllocationReciptMain.setIsTYpe("U");
-                        budgetAllocationReciptMain.setUnallocatedAmount("0");
+//                        budgetAllocationReciptMain.setUnallocatedAmount("0");
                         budgetAllocationReciptMain.setIsTYpe("REBASE");
                         budgetAllocationReciptMain.setIsBudgetRevision("0");
                         budgetAllocationReciptMain.setRevisedAmount("0");
@@ -3446,7 +3445,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
                         budgetAllocationRecipt.setUnallocatedAmount("0");
                         budgetAllocationRecipt.setIsFlag("0");
-                        budgetAllocationRecipt.setUnallocatedAmount("0");
                         budgetAllocationRecipt.setIsTYpe("REBASE");
                         budgetAllocationRecipt.setIsBudgetRevision("0");
                         budgetAllocationRecipt.setRevisedAmount("0");
