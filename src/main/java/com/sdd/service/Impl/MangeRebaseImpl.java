@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @Service
 public class MangeRebaseImpl implements MangeRebaseService {
 
-    private static final long expirationTime = 24L * 60L * 60L;
+    private static final long expirationTime = 1L * 60L * 60L;
 
     @Autowired
     private CgUnitRepository cgUnitRepository;
