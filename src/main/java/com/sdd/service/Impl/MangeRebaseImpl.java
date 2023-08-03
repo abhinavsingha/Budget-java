@@ -672,7 +672,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 parkingCrAndDrRepository.save(cdaParking);
             }
 
-            List<BudgetAllocation> selftAllocSieze = (budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(req.getUnitRebaseRequests().get(m).getBudgetHeadId(), req.getRebaseUnitId(), req.getFinYear(), req.getUnitRebaseRequests().get(0).getAllocationTypeId(), "0", "0", "Approved"));
+            List<BudgetAllocation> selftAllocSieze = (budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(req.getUnitRebaseRequests().get(m).getBudgetHeadId(), req.getRebaseUnitId(), req.getFinYear(), req.getUnitRebaseRequests().get(m).getAllocationTypeId(), "0", "0", "Approved"));
             for (Integer i = 0; i < selftAllocSieze.size(); i++) {
                 BudgetAllocation allocData = selftAllocSieze.get(i);
                 rebaseUnitAllocFromU = allocData.getFromUnit();
