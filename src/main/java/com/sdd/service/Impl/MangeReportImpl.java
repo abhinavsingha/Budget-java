@@ -7217,7 +7217,7 @@ public class MangeReportImpl implements MangeReportService {
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
                     String uid = row.getToUnit();
-                    List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
+                    List<CgUnit> unitList = cgUnitRepository.findByUnitOrderByDescrAsc(uid);
                     //List<CgUnit> listOfSubUnit=cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
 
                     double totalbill = 0.0;
@@ -7393,10 +7393,10 @@ public class MangeReportImpl implements MangeReportService {
 
             }
             double perc1 = 0.0;
-            if (grTotalIcg == 0)
+            if ((grTotalAlloc + sumalcg) == 0)
                 perc1 = 0.0;
             else
-                perc1 = (grTotalAddition * 100) / grTotalIcg;
+                perc1 = (grTotalAddition * 100) / (grTotalAlloc + sumalcg);
 
 
             PdfPCell cell50 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
@@ -7764,7 +7764,7 @@ public class MangeReportImpl implements MangeReportService {
                     String uid = reportDetail.get(r).getToUnit();
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
-                    List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
+                    List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
                     //List<CgUnit> listOfSubUnit=cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
 
                     double totalbill = 0.0;
@@ -7959,10 +7959,10 @@ public class MangeReportImpl implements MangeReportService {
 
             }
             double perc1 = 0.0;
-            if (grTotalIcg == 0)
+            if ((grTotalAlloc + sumalcg) == 0)
                 perc1 = 0.0;
             else
-                perc1 = (grTotalAddition * 100) / grTotalIcg;
+                perc1 = (grTotalAddition * 100) / (grTotalAlloc + sumalcg);
 
             XWPFTable table220 = document.createTable(1, 8);
             table220.setWidth("100%");
@@ -8219,7 +8219,7 @@ public class MangeReportImpl implements MangeReportService {
                     String uid = reportDetails.get(r).getToUnit();
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
-                    List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
+                    List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
                     //List<CgUnit> listOfSubUnit=cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
 
                     double totalbill = 0.0;
