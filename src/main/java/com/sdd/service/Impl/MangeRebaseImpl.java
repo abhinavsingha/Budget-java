@@ -531,12 +531,12 @@ public class MangeRebaseImpl implements MangeRebaseService {
             tohdUnit = toS.getDhqName();
         }
         String frmRegion = frmS.getRhqId();
-        String frmhdUnit = "";
-        if (frmS.getDhqName() == null || frmS.getDhqName().isEmpty()) {
-            frmhdUnit = frmS.getRhqId();
-        } else {
-            frmhdUnit = frmS.getDhqName();
-        }
+//        String frmhdUnit = "";
+//        if (frmS.getDhqName() == null || frmS.getDhqName().isEmpty()) {
+//            frmhdUnit = frmS.getRhqId();
+//        } else {
+//            frmhdUnit = frmS.getDhqName();
+//        }
         CgUnit cgData = cgUnitRepository.findByUnit(hrDataCheck.getUnitId());
         String rebaseAuthority = cgData.getIsRebaseAuthority();
         if (!rebaseAuthority.equalsIgnoreCase("1")) {
@@ -653,10 +653,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
         }
 
 
-        String isType = "";
         String rebaseUnitAllocFromU = "";
-
-
         for (Integer m = 0; m < req.getUnitRebaseRequests().size(); m++) {
 
             List<CdaParkingTrans> selfCdaSieze = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(m).getBudgetHeadId(), req.getRebaseUnitId(), req.getUnitRebaseRequests().get(m).getAllocationTypeId(), "0");
@@ -675,7 +672,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 parkingCrAndDrRepository.save(cdaParking);
             }
 
-            List<BudgetAllocation> selftAllocSieze = (budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(req.getUnitRebaseRequests().get(0).getBudgetHeadId(), req.getRebaseUnitId(), req.getFinYear(), req.getUnitRebaseRequests().get(0).getAllocationTypeId(), "0", "0", "Approved"));
+            List<BudgetAllocation> selftAllocSieze = (budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(req.getUnitRebaseRequests().get(m).getBudgetHeadId(), req.getRebaseUnitId(), req.getFinYear(), req.getUnitRebaseRequests().get(0).getAllocationTypeId(), "0", "0", "Approved"));
             for (Integer i = 0; i < selftAllocSieze.size(); i++) {
                 BudgetAllocation allocData = selftAllocSieze.get(i);
                 rebaseUnitAllocFromU = allocData.getFromUnit();
@@ -683,7 +680,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 allocData.setIsTYpe("REBASE");
                 allocData.setIsBudgetRevision("1");
                 allocData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                isType = allocData.getIsTYpe();
                 budgetAllocationRepository.save(allocData);
             }
 
