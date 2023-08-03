@@ -13,6 +13,7 @@ public interface CdaParkingService {
 
 
 	ApiResponse<DefaultResponse> saveCdaParkingData(CDARequest cdaRequest);
+	ApiResponse<DefaultResponse> saveCdaParkingDataForRebase(CDARequest cdaRequest);
 
 	ApiResponse<CdaParkingTransResponse> getCdaData(String groupId);
 

@@ -16,6 +16,7 @@ public class CdaSubRequest {
     private String ginNo;
     private String budgetHeadId;
     private String availableParkingAmount;
+    private String totalExpenditure;
     private String remark;
     private String authGroupId;
     private String transactionId;
