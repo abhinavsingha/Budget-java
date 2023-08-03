@@ -139,7 +139,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
 
-        String fileName = "AllocationReport" + hrData.getUnitId() + System.currentTimeMillis();
+        String fileName = "AllocationReport" + hrData.getUnit() + System.currentTimeMillis();
 
         HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
         List<BudgetAllocationDetails> budgetAllocationReport = new ArrayList<BudgetAllocationDetails>();
@@ -392,7 +392,7 @@ public class MangeReportImpl implements MangeReportService {
 
         try {
 
-            String fileName = "AllocationReport" + hrData.getUnitId() + System.currentTimeMillis();
+            String fileName = "AllocationReport" + hrData.getUnit() + System.currentTimeMillis();
 
             File folder = new File(HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
@@ -442,7 +442,7 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AMOUNT TYPE ID");
         }
 
-        String fileName = "BudgetReceipt" + hrData.getUnitId() + System.currentTimeMillis();
+        String fileName = "BudgetReceipt" + hrData.getUnit() + System.currentTimeMillis();
 
         HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
         List<BudgetAllocation> budgetAllocationReport = new ArrayList<BudgetAllocation>();
@@ -729,7 +729,7 @@ public class MangeReportImpl implements MangeReportService {
 
         try {
 
-            String fileName = "BudgetReceipt" + hrData.getUnitId() + System.currentTimeMillis();
+            String fileName = "BudgetReceipt" + hrData.getUnit() + System.currentTimeMillis();
 
             File folder = new File(HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
@@ -765,7 +765,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
 
-        String fileName = "BudgetReceipt" + hrData.getUnitId() + System.currentTimeMillis();
+        String fileName = "BudgetReceipt" + hrData.getUnit() + System.currentTimeMillis();
 
         HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
 //        List<BudgetAllocation> budgetAllocationReport = new ArrayList<BudgetAllocation>();
@@ -1036,7 +1036,7 @@ public class MangeReportImpl implements MangeReportService {
 
         try {
 
-            String fileName = "BudgetReceipt" + hrData.getUnitId() + System.currentTimeMillis();
+            String fileName = "BudgetReceipt" + hrData.getUnit() + System.currentTimeMillis();
 
             File folder = new File(HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
@@ -1072,7 +1072,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
 
-        String fileName = "BudgetReceipt" + hrData.getUnitId() + System.currentTimeMillis();
+        String fileName = "BudgetReceipt" + hrData.getUnit() + System.currentTimeMillis();
 
         HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
         List<BudgetAllocation> budgetAllocationReport = new ArrayList<BudgetAllocation>();
@@ -1338,7 +1338,7 @@ public class MangeReportImpl implements MangeReportService {
 
         try {
 
-            String fileName = "BudgetReceipt" + hrData.getUnitId() + System.currentTimeMillis();
+            String fileName = "BudgetReceipt" + hrData.getUnit() + System.currentTimeMillis();
 
             File folder = new File(HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
@@ -1399,7 +1399,7 @@ public class MangeReportImpl implements MangeReportService {
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
         }
-        String fileName = hrData.getUnitId() + System.currentTimeMillis();
+        String fileName = hrData.getUnit() + System.currentTimeMillis();
 
 
         for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
@@ -1492,7 +1492,7 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND.");
         }
 
-        String fileName = "ContingentBill" + hrData.getUnitId() + cbData.getCbId() + System.currentTimeMillis();
+        String fileName = "ContingentBill" + hrData.getUnit() + cbData.getCbId() + System.currentTimeMillis();
 
 
         double allocationAmount = 0;
@@ -1656,7 +1656,7 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND.");
         }
 
-        String fileName = "ContingentBill" + hrData.getUnitId() + cbData.getCbId() + System.currentTimeMillis();
+        String fileName = "ContingentBill" + hrData.getUnit() + cbData.getCbId() + System.currentTimeMillis();
 
 
         double allocationAmount = 0;
@@ -1816,7 +1816,7 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND.");
         }
 
-        String fileName = "ContingentBill" + hrData.getUnitId() + cbData.getCbId() + System.currentTimeMillis();
+        String fileName = "ContingentBill" + hrData.getUnit() + cbData.getCbId() + System.currentTimeMillis();
 
 
         double allocationAmount = 0;
@@ -1962,7 +1962,7 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
 
-        String fileName = "ReserveFund" + hrData.getUnitId() + System.currentTimeMillis();
+        String fileName = "ReserveFund" + hrData.getUnit() + System.currentTimeMillis();
         CDAReportSubResponse cadSubReport = new CDAReportSubResponse();
 
 
@@ -2111,7 +2111,7 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
 
-        String fileName = "ReserveFund" + hrData.getUnitId() + System.currentTimeMillis();
+        String fileName = "ReserveFund" + hrData.getUnit() + System.currentTimeMillis();
         CDAReportSubResponse cadSubReport = new CDAReportSubResponse();
 
 
@@ -2242,7 +2242,7 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
 
-        String fileName = "CdaParkingReport" + hrData.getUnitId() + System.currentTimeMillis();
+        String fileName = "CdaParkingReport" + hrData.getUnit() + System.currentTimeMillis();
         CDAReportSubResponse cadSubReport = new CDAReportSubResponse();
 
 
@@ -3042,7 +3042,7 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
 
-        String fileName = "CdaParkingReport" + hrData.getUnitId() + System.currentTimeMillis();
+        String fileName = "CdaParkingReport" + hrData.getUnit() + System.currentTimeMillis();
         CDAReportSubResponse cadSubReport = new CDAReportSubResponse();
 
 
