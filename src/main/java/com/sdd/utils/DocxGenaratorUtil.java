@@ -293,7 +293,7 @@ public class DocxGenaratorUtil {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText("CONSOLIDATE REPORT " +"( "+hrData.getUnit().toUpperCase()+" )");
+            headingRun.setText("RECEIPT REPORT " +"( "+hrData.getUnit().toUpperCase()+" )");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
