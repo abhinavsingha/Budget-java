@@ -812,13 +812,14 @@ public class DashboardServiceImpl implements DashBoardService {
 
                     String uid = reportDetails.get(r).getToUnit();
                     finAmount = amount * amountUnits / reqAmount;
-                    List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
+                    //List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike(uid);
+                    List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
 
                     double totalbill = 0.0;
                     Timestamp lastCvDate;
                     String cbD = "";
 
-/*                    if (unitList.size() > 0) {
+                    if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
                             String subUnit = unitss.getUnit();
                             List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnit, finYearId, subHeadId,allocationTypeId, "0");
@@ -844,10 +845,7 @@ public class DashboardServiceImpl implements DashBoardService {
                                 totalbill += totalAmount;
                             }
                         }
-                        DecimalFormat decimalFormat = new DecimalFormat("#");
-                        String cbAmount = decimalFormat.format(totalbill);
-                        eAmount = Double.parseDouble(cbAmount);
-                    }*/
+                    }
                     double totalCda = 0.0;
                     double remCdaBal = 0.0;
                     List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, uid, allocationTypeId, "0");
@@ -879,12 +877,8 @@ public class DashboardServiceImpl implements DashBoardService {
                                 cbD = "";
                         }
                     }
-
-                    DecimalFormat decimalFormat = new DecimalFormat("#");
-                    String cbAmount = decimalFormat.format(totalAmount);
-                    eAmount = Double.parseDouble(cbAmount);
                     double perAmnt = 0.0;
-                    //eAmount = totalAmount + totalbill;
+                    eAmount = totalAmount + totalbill;
                     double expAmount = eAmount / reqAmount;
 
                     dashBoardExprnditureResponse.setCgUnit(cgUnit);
@@ -1023,6 +1017,24 @@ public class DashboardServiceImpl implements DashBoardService {
                     }
                     double cdaRmingAmunt = remCdaBal * cdaUnit / reqAmount;
 
+                    List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
+
+                    double totalbill = 0.0;
+                    if (unitList.size() > 0) {
+                        for (CgUnit unitss : unitList) {
+                            String subUnits = unitss.getUnit();
+                            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnits, finYearId, subHeadId,allocationTypeId, "0");
+
+                            if (expenditure.size() > 0) {
+                                double totalAmount = 0.0;
+                                for (ContigentBill bill : expenditure) {
+                                    totalAmount += Double.parseDouble(bill.getCbAmount());
+                                }
+                                totalbill += totalAmount;
+                            }
+                        }
+                    }
+
                     List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(uid, finYearId, subHeadId, allocationTypeId, "0", "0");
                     double totalExpAmount = 0.0;
                     Timestamp lastCvDate;
@@ -1040,21 +1052,24 @@ public class DashboardServiceImpl implements DashBoardService {
                                 cbD = "";
                         }
                     }
-                    double expAmount = totalExpAmount / reqAmount;
+                    double expAmount = (totalExpAmount+totalbill) / reqAmount;
+                    double expAmnt=0.0;
 
                     AmountUnit alloc = amountUnitRepository.findByAmountTypeId(budgetAllocToUnit.get(j).getAmountType());
                     double allocAmntUnit = alloc.getAmount();
                     double alocAmnt = 0.0;
                     if (headunit == true && hrData.getUnitId().equalsIgnoreCase(uid)) {
+                        expAmnt=totalExpAmount;
                         alocAmnt = cdaRmingAmunt + expAmount;
                     } else {
                         double alocAmnts = Double.parseDouble(budgetAllocToUnit.get(j).getAllocationAmount());
                         alocAmnt = alocAmnts * allocAmntUnit / reqAmount;
+                        expAmnt=expAmount;
                     }
 
                     double perAmnt = 0.0;
                     if (alocAmnt != 0) {
-                        perAmnt = (expAmount * 100) / alocAmnt;
+                        perAmnt = (expAmnt * 100) / alocAmnt;
                     } else {
                         perAmnt = 0.0;
                     }
@@ -1066,14 +1081,14 @@ public class DashboardServiceImpl implements DashBoardService {
                     subResp.setAllocType(allockData.getAllocDesc());
                     subResp.setAmountIn(hdamtUnits.getAmountType());
                     subResp.setAllocatedAmount(String.format("%1$0,1.4f", alocAmnt));
-                    subResp.setExpenditureAmount(String.format("%1$0,1.4f", expAmount));
+                    subResp.setExpenditureAmount(String.format("%1$0,1.4f", expAmnt));
                     subResp.setBalAmount(String.format("%1$0,1.4f", cdaRmingAmunt));
                     subResp.setPerAmount(String.format("%1$0,1.2f", perAmnt));
                     subResp.setLastCBDate(cbD);
                     grResp.add(subResp);
 
                     sumAlloc += alocAmnt;
-                    sumExp += expAmount;
+                    sumExp += expAmnt;
                     sumBal += cdaRmingAmunt;
                 }
             }
