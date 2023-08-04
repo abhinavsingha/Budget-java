@@ -13,6 +13,7 @@ public interface CdaParkingService {
 
 
 	ApiResponse<DefaultResponse> saveCdaParkingData(CDARequest cdaRequest);
+
 	ApiResponse<DefaultResponse> saveCdaParkingDataForRebase(CDARequest cdaRequest);
 
 	ApiResponse<CdaParkingTransResponse> getCdaData(String groupId);
@@ -22,4 +23,6 @@ public interface CdaParkingService {
 	ApiResponse<List<CdaParking>> getCdaUnitList();
 
 	ApiResponse<DefaultResponse> updateCdaParkingData(CDARequest cdaRequest);
+
+	ApiResponse<DefaultResponse> updateCdaParkingDataRebase(CDARequest cdaRequest);
 }

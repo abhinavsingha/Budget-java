@@ -49,15 +49,20 @@ public class CdaParkingController {
 	}
 
 
-	@PostMapping("/saveCdaParkingDataForRebase")
-	public ResponseEntity<ApiResponse<DefaultResponse>> saveCdaParkingDataForRebase(@RequestBody CDARequest cdaRequest) {
-		return new ResponseEntity<>(cdaParkingService.saveCdaParkingData(cdaRequest), HttpStatus.OK);
-	}
-
-
 	@PostMapping("/updateCdaParkingData")
 	public ResponseEntity<ApiResponse<DefaultResponse>> updateCdaParkingData(@RequestBody CDARequest cdaRequest) {
 		return new ResponseEntity<>(cdaParkingService.updateCdaParkingData(cdaRequest), HttpStatus.OK);
+	}
+
+	@PostMapping("/saveCdaParkingDataForRebase")
+	public ResponseEntity<ApiResponse<DefaultResponse>> saveCdaParkingDataForRebase(@RequestBody CDARequest cdaRequest) {
+		return new ResponseEntity<>(cdaParkingService.saveCdaParkingDataForRebase(cdaRequest), HttpStatus.OK);
+	}
+
+
+	@PostMapping("/updateCdaParkingDataRebase")
+	public ResponseEntity<ApiResponse<DefaultResponse>> updateCdaParkingDataRebase(@RequestBody CDARequest cdaRequest) {
+		return new ResponseEntity<>(cdaParkingService.updateCdaParkingDataRebase(cdaRequest), HttpStatus.OK);
 	}
 
 }
