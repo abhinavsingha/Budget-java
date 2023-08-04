@@ -527,6 +527,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
         if (toS == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO STATION REGION GETTING NULL");
         }
+
         String toRegion = toS.getRhqId();
         String tohdUnit = "";
         if (toS.getDhqName() == null || toS.getDhqName().isEmpty()) {
@@ -556,6 +557,9 @@ public class MangeRebaseImpl implements MangeRebaseService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO HEAD UNIT NOT FOUND");
         }
         String toHdUnitId = obj.getUnit();
+        CgUnit headBudgrpId = cgUnitRepository.findByCgUnitShort(toHdUnitId);
+        String setBudGroupHdUnit=headBudgrpId.getBudGroupUnit();
+        String setBudGroupUnit=setBudGroupHdUnit+","+toHdUnitId;
 
         List<BudgetAllocation> allocationData = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlag(req.getUnitRebaseRequests().get(0).getBudgetHeadId(), req.getRebaseUnitId(), req.getFinYear(), req.getUnitRebaseRequests().get(0).getAllocationTypeId(), "0", "0");
         if (allocationData.size() == 0) {
@@ -582,12 +586,14 @@ public class MangeRebaseImpl implements MangeRebaseService {
 //            } else {
             chekUnit.setStationId(req.getToStationId());
             chekUnit.setSubUnit(toHdUnitId);
+            chekUnit.setBudGroupUnit(setBudGroupUnit);
             chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             cgUnitRepository.save(chekUnit);
 //            }
         } else {
             chekUnit.setStationId(req.getToStationId());
             chekUnit.setSubUnit(toHdUnitId);
+            chekUnit.setBudGroupUnit(setBudGroupUnit);
             chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             cgUnitRepository.save(chekUnit);
         }
@@ -3907,14 +3913,14 @@ public class MangeRebaseImpl implements MangeRebaseService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "USER UNIT IS INVALID.PLEASE CHECK");
         }
         String unitIdHr = hrDataCheck.getUnitId();
-        //List<CgUnit> unitDataList1 = cgUnitRepository.findByBudGroupUnitLike("%" + unitIdHr + "%");
-        List<CgUnit> unitDataList1;
+        List<CgUnit> unitDataList1 = cgUnitRepository.findByBudGroupUnitLike("%" + unitIdHr + "%");
+/*        List<CgUnit> unitDataList1;
         if(hrDataCheck.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID))
         {
             unitDataList1 = cgUnitRepository.findAll();
         }else{
             unitDataList1 = cgUnitRepository.findBySubUnitOrderByDescrAsc(unitIdHr);
-        }
+        }*/
         List<CgUnit> unitDataList = unitDataList1.stream().filter(e -> e.getIsShip().equalsIgnoreCase("1") && e.getIsActive().equalsIgnoreCase("1")).collect(Collectors.toList());
         if (unitDataList.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT lIST NOT FOUND ");

@@ -10715,7 +10715,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 grTotalAlloc += Double.parseDouble(sumExistingRound);
                 grTotalAddition += Double.parseDouble(sumRERound);
-                grTotalSum += Double.parseDouble(sumExistingRound + sumRERound);
+                grTotalSum += Double.parseDouble(sumExistingRound) + Double.parseDouble(sumRERound);
             }
 
             PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
