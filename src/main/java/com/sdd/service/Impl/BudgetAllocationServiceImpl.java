@@ -5274,29 +5274,19 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 cdaParkingTransRepository.save(cdaParkingTrans);
 
             } else {
-                double totalAmount = 0;
-                double revisedAmount = 0;
+
                 List<BudgetAllocation> data = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(revisionData.get(z).getToUnitId(), revisionData.get(z).getFinYearId(), revisionData.get(z).getBudgetHeadId(), revisionData.get(z).getAllocTypeId(), "Approved", "0", "0");
-                for (Integer m = 0; m < data.size(); m++) {
-
-                    AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(data.get(m).getAmountType());
-                    totalAmount = totalAmount + (Double.parseDouble(data.get(m).getAllocationAmount()) * amountUnit.getAmount());
-                }
-
-
-                revisedAmount = Double.parseDouble(revisionData.get(z).getAmount());
-                AmountUnit convertedAmount = amountUnitRepository.findByAmountTypeId(revisionData.get(z).getAmountType());
-                totalAmount = totalAmount / convertedAmount.getAmount();
-
                 for (Integer y = 0; y < data.size(); y++) {
 
                     BudgetAllocation budgetAllocationRevision = data.get(y);
                     budgetAllocationRevision.setIsBudgetRevision("1");
                     budgetAllocationRevision.setIsFlag("1");
                     budgetAllocationRepository.save(budgetAllocationRevision);
-
                 }
 
+
+                double totalAmount = Double.parseDouble(revisionData.get(z).getRemainingAmount()) + Double.parseDouble(revisionData.get(z).getAmount());
+                double revisedAmount = Double.parseDouble(revisionData.get(z).getAmount());
 
                 BudgetAllocation budgetAllocation = new BudgetAllocation();
                 budgetAllocation.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
@@ -5313,7 +5303,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocation.setIsBudgetRevision("0");
                 budgetAllocation.setUnallocatedAmount("0");
                 budgetAllocation.setUnallocatedAmount("0.0000");
-                budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint((revisedAmount + totalAmount) + ""));
+                budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(totalAmount + ""));
                 budgetAllocation.setRevisedAmount(ConverterUtils.addDecimalPoint(revisedAmount + ""));
                 budgetAllocation.setUserId(hrData.getPid());
                 budgetAllocation.setStatus("Approved");
@@ -5333,7 +5323,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                     cdaParkingTransRepository.save(cdaParkingTrans);
                 }
-                List<CdaParkingCrAndDr> cdaParkingCrAndDr = parkingCrAndDrRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitIdAndIsRevision(revisionData.get(z).getFinYearId(), revisionData.get(z).getBudgetHeadId(),  "0", revisionData.get(z).getAllocTypeId(), revisionData.get(z).getToUnitId(), 0);
+                List<CdaParkingCrAndDr> cdaParkingCrAndDr = parkingCrAndDrRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitIdAndIsRevision(revisionData.get(z).getFinYearId(), revisionData.get(z).getBudgetHeadId(), "0", revisionData.get(z).getAllocTypeId(), revisionData.get(z).getToUnitId(), 0);
                 for (Integer q = 0; q < cdaParkingCrAndDr.size(); q++) {
                     CdaParkingCrAndDr cddata = cdaParkingCrAndDr.get(q);
                     cddata.setIsFlag("1");

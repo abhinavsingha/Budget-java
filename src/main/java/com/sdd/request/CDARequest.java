@@ -19,6 +19,8 @@ public class CDARequest {
 
     private String allocationTypeId;
     private String authGroupId;
+
+    private String totalExpenditure;
     private List<CdaSubRequest> cdaRequest;
 
 

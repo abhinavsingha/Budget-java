@@ -211,6 +211,31 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FILE NOT FOUND");
             } else
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "RECORD NOT FOUND");
+        } else if (type.equalsIgnoreCase("RR") || type.equalsIgnoreCase("RR")) {
+            List<Authority> authData = authorityRepository.findByAuthGroupId(authGoupId);
+            if (authData.size() > 0) {
+                String fId = authData.get(0).getDocId();
+                FileUpload fileUp = fileUploadRepository.findByUploadID(fId);
+                if (fileUp != null) {
+                    fileUpload.setPathURL(fileUp.getPathURL());
+                    fileUpload.setUploadID(fileUp.getUploadID());
+                } else
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FILE NOT FOUND");
+            } else
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "RECORD NOT FOUND");
+        } else {
+
+            List<Authority> authData = authorityRepository.findByAuthGroupId(authGoupId);
+            if (authData.size() > 0) {
+                String fId = authData.get(0).getDocId();
+                FileUpload fileUp = fileUploadRepository.findByUploadID(fId);
+                if (fileUp != null) {
+                    fileUpload.setPathURL(fileUp.getPathURL());
+                    fileUpload.setUploadID(fileUp.getUploadID());
+                } else
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FILE NOT FOUND");
+            }
+
         }
 
         return ResponseUtils.createSuccessResponse(fileUpload, new TypeReference<FileUpload>() {
