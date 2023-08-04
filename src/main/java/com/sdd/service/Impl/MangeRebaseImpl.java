@@ -3907,7 +3907,14 @@ public class MangeRebaseImpl implements MangeRebaseService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "USER UNIT IS INVALID.PLEASE CHECK");
         }
         String unitIdHr = hrDataCheck.getUnitId();
-        List<CgUnit> unitDataList1 = cgUnitRepository.findByBudGroupUnitLike("%" + unitIdHr + "%");
+        //List<CgUnit> unitDataList1 = cgUnitRepository.findByBudGroupUnitLike("%" + unitIdHr + "%");
+        List<CgUnit> unitDataList1;
+        if(hrDataCheck.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID))
+        {
+            unitDataList1 = cgUnitRepository.findAll();
+        }else{
+            unitDataList1 = cgUnitRepository.findBySubUnitOrderByDescrAsc(unitIdHr);
+        }
         List<CgUnit> unitDataList = unitDataList1.stream().filter(e -> e.getIsShip().equalsIgnoreCase("1") && e.getIsActive().equalsIgnoreCase("1")).collect(Collectors.toList());
         if (unitDataList.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT lIST NOT FOUND ");

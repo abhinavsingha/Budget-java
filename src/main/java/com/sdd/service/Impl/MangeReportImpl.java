@@ -8720,7 +8720,7 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
-        List<String> groupUnitId = budgetRebaseRepository.findGroupRebaseUnit();
+        List<String> groupUnitId = budgetRebaseRepository.findAuthGroupRebaseUnit();
         if (groupUnitId.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "DATA NOT FOUND FROM DB", HttpStatus.OK.value());
@@ -8769,7 +8769,7 @@ public class MangeReportImpl implements MangeReportService {
             if (groupUnitId.size() > 0) {
                 for (String ids : groupUnitId) {
                     RunitId = ids;
-                    List<BudgetRebase> rebaseDatas = budgetRebaseRepository.findByRebaseUnitId(RunitId);
+                    List<BudgetRebase> rebaseDatas = budgetRebaseRepository.findByAuthGrpId(RunitId);
                     List<BudgetRebase> rebaseData1 = rebaseDatas.stream()
                             .filter(e -> e.getOccuranceDate().after(fromDateFormate) && e.getOccuranceDate().before(toDateFormate)).collect(Collectors.toList());
                     List<BudgetRebase> rebaseDatass = rebaseData1.stream().sorted(Comparator.comparing(data -> data.getBudgetHeadId().substring(data.getBudgetHeadId().length() - 2))).collect(Collectors.toList());
@@ -8787,7 +8787,7 @@ public class MangeReportImpl implements MangeReportService {
                     String dtOfRebase = outputDateFormat.format(inputDate);
 
                     UnitRebaseReportResponce rebase = new UnitRebaseReportResponce();
-                    CgUnit unitN = cgUnitRepository.findByUnit(RunitId);
+                    CgUnit unitN = cgUnitRepository.findByUnit(rebaseData.get(0).getRebaseUnitId());
                     CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
                     AmountUnit amountTypeObjs = amountUnitRepository.findByAmountTypeId(rebaseData.get(0).getAmountType());
                     String amountIn = amountTypeObjs.getAmountType().toUpperCase();
@@ -9011,7 +9011,7 @@ public class MangeReportImpl implements MangeReportService {
             }, "TO DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
 
-        List<String> groupUnitId = budgetRebaseRepository.findGroupRebaseUnit();
+        List<String> groupUnitId = budgetRebaseRepository.findAuthGroupRebaseUnit();
         if (groupUnitId.size() <= 0) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
             }, "DATA NOT FOUND FROM DB", HttpStatus.OK.value());
@@ -9055,7 +9055,7 @@ public class MangeReportImpl implements MangeReportService {
             if (groupUnitId.size() > 0) {
                 for (String ids : groupUnitId) {
                     RunitId = ids;
-                    List<BudgetRebase> rebaseDatas = budgetRebaseRepository.findByRebaseUnitId(RunitId);
+                    List<BudgetRebase> rebaseDatas = budgetRebaseRepository.findByAuthGrpId(RunitId);
                     List<BudgetRebase> rebaseData1 = rebaseDatas.stream()
                             .filter(e -> e.getOccuranceDate().after(fromDateFormate) && e.getOccuranceDate().before(toDateFormate)).collect(Collectors.toList());
                     List<BudgetRebase> rebaseDatass = rebaseData1.stream().sorted(Comparator.comparing(data -> data.getBudgetHeadId().substring(data.getBudgetHeadId().length() - 2))).collect(Collectors.toList());
@@ -9065,7 +9065,7 @@ public class MangeReportImpl implements MangeReportService {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
                     }
                     UnitRebaseReportResponce rebase = new UnitRebaseReportResponce();
-                    CgUnit unitN = cgUnitRepository.findByUnit(RunitId);
+                    CgUnit unitN = cgUnitRepository.findByUnit(rebaseData.get(0).getRebaseUnitId());
                     CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
                     AmountUnit amountTypeObjs = amountUnitRepository.findByAmountTypeId(rebaseData.get(0).getAmountType());
 
