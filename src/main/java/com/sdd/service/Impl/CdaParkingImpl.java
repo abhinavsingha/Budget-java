@@ -9,6 +9,7 @@ import com.sdd.jwt.JwtUtils;
 import com.sdd.jwtParse.TokenParseData;
 import com.sdd.request.CDAReportRequest;
 import com.sdd.request.CDARequest;
+import com.sdd.request.CDARequestReBase;
 import com.sdd.request.CdaSubRequest;
 import com.sdd.response.ApiResponse;
 import com.sdd.response.CdaParkingTransResponse;
@@ -72,6 +73,9 @@ public class CdaParkingImpl implements CdaParkingService {
 
     @Autowired
     SubHeadRepository subHeadRepository;
+
+    @Autowired
+    ContigentBillRepository contigentBillRepository;
 
 
     @Override
@@ -191,6 +195,19 @@ public class CdaParkingImpl implements CdaParkingService {
 
 
         String groupId = "";
+
+        List<CgUnit> subUnitList =  cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+
+        double totalAllocationAmount = 0;
+        for (Integer i = 0; i < subUnitList.size(); i++) {
+            List<BudgetAllocation> budgetAllocationList = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlag(cdaRequest.getCdaRequest().get(0).getBudgetHeadId(),subUnitList.get(i).getUnit(),cdaRequest.getCdaRequest().get(0).getBudgetFinancialYearId(),cdaRequest.getCdaRequest().get(0).getAllocationTypeID(),"0","0");
+            for (Integer m = 0; m < subUnitList.size(); m++) {
+                BudgetAllocation budgetAllocation = budgetAllocationList.get(m);
+                 totalAllocationAmount = totalAllocationAmount + Double.parseDouble(budgetAllocation.getAllocationAmount()) * amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType()).getAmount();
+            }
+        }
+
+
 
         for (Integer i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
             CdaParkingTrans cdaParkingTrans = new CdaParkingTrans();
@@ -407,7 +424,6 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingTrans.setFinYearId(cdaRequest.getCdaRequest().get(i).getBudgetFinancialYearId());
 
 
-
 //            cdaParkingTrans.setTotalParkingAmount(ConverterUtils.addDecimalPoint(totalPrkingAmount + ""));
             cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()));
             cdaParkingTrans.setBudgetHeadId(cdaRequest.getCdaRequest().get(i).getBudgetHeadId());
@@ -530,6 +546,7 @@ public class CdaParkingImpl implements CdaParkingService {
 
     }
 
+
     @Override
     @Transactional
     public ApiResponse<CdaParkingTransResponse> getAllCdaData(CDARequest cdaRequest) {
@@ -570,7 +587,6 @@ public class CdaParkingImpl implements CdaParkingService {
 
         List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(), hrData.getUnitId(), cdaRequest.getAllocationTypeId(), "0");
 
-
         List<CdaParkingTransSubResponse> cdaParkingTransList = new ArrayList<CdaParkingTransSubResponse>();
 
         for (Integer i = 0; i < cdaParkingTrans.size(); i++) {
@@ -599,12 +615,97 @@ public class CdaParkingImpl implements CdaParkingService {
         });
     }
 
+
+    @Override
+    @Transactional
+    public ApiResponse<CdaParkingTransResponse> getOldCdaDataForRebase(CDARequestReBase cdaRequest) {
+        CdaParkingTransResponse mainResponse = new CdaParkingTransResponse();
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CDA PARKING");
+        }
+
+        if (cdaRequest.getBudgetHeadId() == null || cdaRequest.getBudgetHeadId().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "SUB HEAD ID CAN NOT BE BLANK");
+        }
+
+        if (cdaRequest.getFinancialYearId() == null || cdaRequest.getFinancialYearId().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FINANCIAL ID CAN NOT BE BLANK");
+        }
+
+        if (cdaRequest.getAllocationTypeId() == null || cdaRequest.getAllocationTypeId().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION TYPE ID CAN NOT BE BLANK");
+        }
+
+        if (cdaRequest.getAmountType() == null || cdaRequest.getAmountType().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AMOUNT TYPE ID CAN NOT BE BLANK");
+        }
+
+        AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaRequest.getAmountType());
+        if (amountUnit == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AMOUNT UNIT ID");
+        }
+
+        BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo(cdaRequest.getFinancialYearId());
+        if (budgetFinancialYear == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID FINANCIAL YEAR ID");
+        }
+
+        AllocationType allocationType = allocationRepository.findByAllocTypeId(cdaRequest.getAllocationTypeId());
+        if (allocationType == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
+        }
+
+        List<CdaParkingTransSubResponse> cdaParkingTransList = new ArrayList<CdaParkingTransSubResponse>();
+
+        List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(), cdaRequest.getAllocationTypeId(), "0", "0", hrData.getUnitId());
+        double totalBill = 0;
+        for (Integer i = 0; i < contigentBills.size(); i++) {
+            ContigentBill contigentBill = contigentBills.get(i);
+            List<CdaParkingCrAndDr> cdaParkingCrAndDrsList = parkingCrAndDrRepository.findByTransactionIdAndIsFlag(contigentBill.getCbId(), "0");
+
+
+            for (Integer v = 0; v < cdaParkingCrAndDrsList.size(); v++) {
+
+                CdaParkingCrAndDr cdaParkingCrAndDrs = cdaParkingCrAndDrsList.get(v);
+                totalBill = Double.parseDouble(contigentBill.getCbAmount()) / amountUnitRepository.findByAmountTypeId(cdaParkingCrAndDrs.getAmountType()).getAmount();
+
+                CdaParkingTransSubResponse cdaParkingTransResponse = new CdaParkingTransSubResponse();
+
+                cdaParkingTransResponse.setFinYearId(budgetFinancialYearRepository.findBySerialNo(cdaParkingCrAndDrs.getFinYearId()));
+                cdaParkingTransResponse.setBudgetHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(cdaParkingCrAndDrs.getBudgetHeadId()));
+                cdaParkingTransResponse.setGinNo(cdaParkingRepository.findByGinNo(cdaParkingCrAndDrs.getGinNo()));
+                cdaParkingTransResponse.setAllocationType(allocationRepository.findByAllocTypeId(cdaParkingCrAndDrs.getAllocTypeId()));
+
+                cdaParkingTransResponse.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(totalBill + ""));
+                cdaParkingTransResponse.setTotalParkingAmount(ConverterUtils.addDecimalPoint(totalBill + ""));
+
+                cdaParkingTransResponse.setUpdatedOn(cdaParkingCrAndDrs.getUpdatedOn());
+                cdaParkingTransResponse.setTransactionId(cdaParkingCrAndDrs.getTransactionId());
+                cdaParkingTransResponse.setCreatedOn(cdaParkingCrAndDrs.getCreatedOn());
+                cdaParkingTransResponse.setAmountUnit(amountUnitRepository.findByAmountTypeId(cdaParkingCrAndDrs.getAmountType()));
+                cdaParkingTransResponse.setAuthGroupId(cdaParkingCrAndDrs.getAuthGroupId());
+                cdaParkingTransResponse.setUnitId(cdaParkingCrAndDrs.getUnitId());
+                cdaParkingTransList.add(cdaParkingTransResponse);
+
+            }
+        }
+
+
+        mainResponse.setCdaParking(cdaParkingTransList);
+        return ResponseUtils.createSuccessResponse(mainResponse, new TypeReference<CdaParkingTransResponse>() {
+        });
+    }
+
     @Override
     @Transactional
     public ApiResponse<List<CdaParking>> getCdaUnitList() {
 
         List<CdaParking> cdaParkingTrans = cdaParkingRepository.findAll();
-
 
         return ResponseUtils.createSuccessResponse(cdaParkingTrans, new TypeReference<List<CdaParking>>() {
         });
@@ -712,7 +813,7 @@ public class CdaParkingImpl implements CdaParkingService {
             double cdaAvialabeBalance = Double.parseDouble(cdaParking.getRemainingCdaAmount());
 
             if (cdaBalance != cdaAvialabeBalance) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AVAILABLE BALANCE CAN NOT CHANGED BECAUSE CDA BALANCE AND AVAILABLE BALANCE CAN NOT BE SAME");
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA CAN NOT UPDATE BECAUSE CDA BALANCE AND AVAILABLE BALANCE CAN NOT BE SAME");
             }
         }
 

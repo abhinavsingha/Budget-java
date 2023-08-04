@@ -2369,7 +2369,6 @@ public class MangeReportImpl implements MangeReportService {
 
 
                         double amount = 0;
-
                         for (int m = 0; m < cdaData.size(); m++) {
                             List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
 

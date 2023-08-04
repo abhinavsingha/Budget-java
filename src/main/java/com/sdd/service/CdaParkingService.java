@@ -2,6 +2,7 @@ package com.sdd.service;
 
 import com.sdd.entities.CdaParking;
 import com.sdd.request.CDARequest;
+import com.sdd.request.CDARequestReBase;
 import com.sdd.response.ApiResponse;
 import com.sdd.response.CdaParkingTransResponse;
 import com.sdd.response.DefaultResponse;
@@ -19,6 +20,8 @@ public interface CdaParkingService {
 	ApiResponse<CdaParkingTransResponse> getCdaData(String groupId);
 
 	ApiResponse<CdaParkingTransResponse> getAllCdaData(CDARequest cdaRequest);
+
+	ApiResponse<CdaParkingTransResponse> getOldCdaDataForRebase(CDARequestReBase cdaRequest);
 
 	ApiResponse<List<CdaParking>> getCdaUnitList();
 

@@ -916,6 +916,10 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
         List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "0");
+        if (budgetAllocations.size() == 0) {
+            budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "1");
+        }
+
 
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
@@ -1159,6 +1163,24 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocationReport.setAllocationAmount(cdaRevisionData.get(0).getRemainingAmount());
             }
 
+//
+//            List<CgUnit> subUnitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+//
+//            double totalAllocationAmount = 0;
+//            for (Integer c = 0; c < subUnitList.size(); c++) {
+//                List<BudgetAllocation> budgetAllocationListASD = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlag(budgetAllocationReport.getSubHead().getBudgetCodeId(), subUnitList.get(i).getUnit(), budgetAllocationReport.getFinYear().getSerialNo(), budgetAllocationReport.getAllocTypeId().getAllocTypeId(), "0", "0");
+//                for (Integer m = 0; m < budgetAllocationListASD.size(); m++) {
+//                    BudgetAllocation budgetAllocation = budgetAllocationListASD.get(m);
+//                    totalAllocationAmount = totalAllocationAmount + Double.parseDouble(budgetAllocation.getAllocationAmount()) * budgetAllocationReport.getAmountUnit().getAmount();
+//                }
+//            }
+//
+//            if (totalAllocationAmount == 0) {
+            budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
+//            } else {
+//                budgetAllocationReport.setUnallocatedAmount((Double.parseDouble(budgetAllocationSubReport.getUnallocatedAmount()) - totalAllocationAmount) + "");
+//
+//            }
 
             budgetAllocationList.add(budgetAllocationReport);
 
@@ -1955,6 +1977,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getCreatedOn());
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
             budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
+
             if (budgetAllocationSubReport.getRevisedAmount() == null) {
                 budgetAllocationReport.setRevisedAmount("0");
             } else {
@@ -1968,6 +1991,27 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setAmountUnit(amountUnitRepository.findByAmountTypeId(budgetAllocationSubReport.getAmountType()));
             budgetAllocationReport.setToUnit(cgUnitRepository.findByUnit(budgetAllocationSubReport.getToUnit()));
 
+
+            List<CgUnit> subUnitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+
+            double totalAllocationAmount = 0;
+            for (Integer c = 0; c < subUnitList.size(); c++) {
+                List<BudgetAllocation> budgetAllocationListASD = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlag(budgetAllocations.get(i).getSubHead(), subUnitList.get(c).getUnit(), budgetAllocations.get(i).getFinYear(), budgetAllocations.get(i).getAllocationTypeId(), "0", "0");
+                for (Integer m = 0; m < budgetAllocationListASD.size(); m++) {
+                    BudgetAllocation budgetAllocation = budgetAllocationListASD.get(m);
+                    totalAllocationAmount = totalAllocationAmount + Double.parseDouble(budgetAllocation.getAllocationAmount()) * amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType()).getAmount();
+                }
+            }
+
+            totalAllocationAmount = totalAllocationAmount / amountUnitRepository.findByAmountTypeId(budgetAllocationSubReport.getAmountType()).getAmount();
+
+            if (totalAllocationAmount == 0) {
+                budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
+            } else {
+                budgetAllocationReport.setUnallocatedAmount((Double.parseDouble(budgetAllocationSubReport.getUnallocatedAmount()) - totalAllocationAmount) + "");
+
+            }
+
             try {
 
                 CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationSubReport.getFromUnit());
@@ -1978,7 +2022,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     budgetAllocationReport.setFromUnit(cgUnitRepository.findByUnit(budgetAllocationSubReport.getFromUnit()));
 
                 }
-
 
             } catch (Exception e) {
                 budgetAllocationReport.setFromUnit(cgUnitRepository.findByUnit(budgetAllocationSubReport.getToUnit()));
@@ -5313,11 +5356,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocationRepository.save(budgetAllocation);
                 budgetAllocationsListData.add(budgetAllocation);
 
-
                 List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(revisionData.get(z).getFinYearId(), revisionData.get(z).getBudgetHeadId(), revisionData.get(z).getToUnitId(), revisionData.get(z).getAllocTypeId(), "0");
 
                 for (Integer k = 0; k < cdaParkingTransList.size(); k++) {
-
                     CdaParkingTrans cdaParkingTrans = cdaParkingTransList.get(k);
                     cdaParkingTrans.setIsFlag("1");
                     cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());

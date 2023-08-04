@@ -4,6 +4,7 @@ package com.sdd.controller.WebApi;
 import com.sdd.entities.CdaParking;
 import com.sdd.request.CDAReportRequest;
 import com.sdd.request.CDARequest;
+import com.sdd.request.CDARequestReBase;
 import com.sdd.response.ApiResponse;
 import com.sdd.response.CdaParkingTransResponse;
 import com.sdd.response.DefaultResponse;
@@ -40,6 +41,12 @@ public class CdaParkingController {
 	@PostMapping("/getCdaDataList")
 	public ResponseEntity<ApiResponse<CdaParkingTransResponse>> getAllCdaData(@RequestBody CDARequest cdaRequest) {
 		return new ResponseEntity<>(cdaParkingService.getAllCdaData(cdaRequest), HttpStatus.OK);
+	}
+
+
+	@PostMapping("/getOldCdaDataForRebase")
+	public ResponseEntity<ApiResponse<CdaParkingTransResponse>> getOldCdaDataForRebase(@RequestBody CDARequestReBase cdaRequest) {
+		return new ResponseEntity<>(cdaParkingService.getOldCdaDataForRebase(cdaRequest), HttpStatus.OK);
 	}
 
 
