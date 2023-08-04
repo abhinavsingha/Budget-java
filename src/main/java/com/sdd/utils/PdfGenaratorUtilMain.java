@@ -442,7 +442,7 @@ public class PdfGenaratorUtilMain {
         Chunk revenue = new Chunk(reOrCapital + "\n" + "\n", font);
         preface.add(revenue);
 
-        Chunk thiredHead = new Chunk("Major Head " + cadSubReport.getMajorHead() + ". Sub Major Head 00. Minor Head " + cadSubReport.getMinorHead() + ") (In " + cadSubReport.getAmountType() + ")" + "\n" + "\n" + "\n" + "\n", font);
+        Chunk thiredHead = new Chunk("Major Head " + cadSubReport.getMajorHead() + ", Sub Major Head 00, Minor Head " + cadSubReport.getMinorHead() + ") (In " + cadSubReport.getAmountType() + ")" + "\n" + "\n" + "\n" + "\n", font);
         preface.add(thiredHead);
 
 

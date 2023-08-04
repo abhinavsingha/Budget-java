@@ -638,7 +638,7 @@ public class DocxGenaratorUtil {
 
             mainParagraph = document.createParagraph();
             mainParagraph.setAlignment(ParagraphAlignment.CENTER);
-            boldText(mainParagraph.createRun(), 17, "Major Head " + cadSubReport.getMajorHead() + ". Sub Major Head 00. Minor Head " + cadSubReport.getMinorHead() + ") (In " + cadSubReport.getAmountType() + ")", true);
+            boldText(mainParagraph.createRun(), 17, "Major Head " + cadSubReport.getMajorHead() + ", Sub Major Head 00, Minor Head " + cadSubReport.getMinorHead() + ") (In " + cadSubReport.getAmountType() + ")", true);
 
             mainParagraph.createRun().addBreak();
             mainParagraph.createRun().addBreak();
