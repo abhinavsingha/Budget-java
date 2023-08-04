@@ -925,9 +925,9 @@ public class MangeReportImpl implements MangeReportService {
         List<BudgetAllocation> budgetAllocationReport = new ArrayList<BudgetAllocation>();
 
 //        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
-        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsBudgetRevisionAndIsFlag(authGroupId, hrData.getUnitId(), "0", "0");
+        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnit(authGroupId, hrData.getUnitId());
         if (budgetAllocationReport.size() == 0) {
-            budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsFlag(authGroupId, hrData.getUnitId(), "1");
+            budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnit(authGroupId, hrData.getUnitId());
         }
 
         if (budgetAllocationReport.size() <= 0) {
@@ -1078,9 +1078,9 @@ public class MangeReportImpl implements MangeReportService {
         List<BudgetAllocation> budgetAllocationReport = new ArrayList<BudgetAllocation>();
 
 //        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
-        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsBudgetRevisionAndIsFlag(authGroupId, hrData.getUnitId(), "0", "0");
+        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnit(authGroupId, hrData.getUnitId());
         if (budgetAllocationReport.size() == 0) {
-            budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsFlag(authGroupId, hrData.getUnitId(), "1");
+            budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnit(authGroupId, hrData.getUnitId());
         }
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
