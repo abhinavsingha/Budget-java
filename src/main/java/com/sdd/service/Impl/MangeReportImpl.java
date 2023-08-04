@@ -5997,7 +5997,7 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne2233.createRun(), 12, ConverterUtils.addDecimalPoint(sumRE + ""), true);
                 XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
                 paragraphtableRowOne2244.setAlignment(ParagraphAlignment.RIGHT);
-                boldText(paragraphtableRowOne2244.createRun(), 12, ConverterUtils.addDecimalPoint(totSum + ""), true);
+                boldText(paragraphtableRowOne2244.createRun(), 12, ConverterUtils.addDecimalPoint((sumExisting+sumRE) + ""), true);
 
                 grTotalAlloc += Double.parseDouble(totSum1);
                 grTotalAddition += Double.parseDouble(totSum2);
