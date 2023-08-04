@@ -8,6 +8,7 @@ import com.sdd.request.CDARequestReBase;
 import com.sdd.response.ApiResponse;
 import com.sdd.response.CdaParkingTransResponse;
 import com.sdd.response.DefaultResponse;
+import com.sdd.response.ReabseCdaParkingResponse;
 import com.sdd.service.CdaParkingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +45,6 @@ public class CdaParkingController {
 	}
 
 
-	@PostMapping("/getOldCdaDataForRebase")
-	public ResponseEntity<ApiResponse<CdaParkingTransResponse>> getOldCdaDataForRebase(@RequestBody CDARequestReBase cdaRequest) {
-		return new ResponseEntity<>(cdaParkingService.getOldCdaDataForRebase(cdaRequest), HttpStatus.OK);
-	}
-
 
 	@PostMapping("/saveCdaParkingData")
 	public ResponseEntity<ApiResponse<DefaultResponse>> budgetAllocationReport(@RequestBody CDARequest cdaRequest) {
@@ -70,6 +66,12 @@ public class CdaParkingController {
 	@PostMapping("/updateCdaParkingDataRebase")
 	public ResponseEntity<ApiResponse<DefaultResponse>> updateCdaParkingDataRebase(@RequestBody CDARequest cdaRequest) {
 		return new ResponseEntity<>(cdaParkingService.updateCdaParkingDataRebase(cdaRequest), HttpStatus.OK);
+	}
+
+
+	@PostMapping("/getOldCdaDataForRebase")
+	public ResponseEntity<ApiResponse<ReabseCdaParkingResponse>> getOldCdaDataForRebase(@RequestBody CDARequestReBase cdaRequest) {
+		return new ResponseEntity<>(cdaParkingService.getOldCdaDataForRebase(cdaRequest), HttpStatus.OK);
 	}
 
 }

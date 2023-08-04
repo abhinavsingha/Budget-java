@@ -371,19 +371,17 @@ public class MangeRebaseImpl implements MangeRebaseService {
             List<CdaDetailsForRebaseResponse> addRes = new ArrayList<CdaDetailsForRebaseResponse>();
             double remCdaBal = 0.0;
             double TotalCdaBal = 0.0;
-            if (cdaDetails.size() > 0) {
-                for (int j = 0; j < cdaDetails.size(); j++) {
-                    CdaDetailsForRebaseResponse cda = new CdaDetailsForRebaseResponse();
-                    cda.setGinNo(cdaParkingRepository.findByGinNo(cdaDetails.get(j).getGinNo()));
-                    cda.setAmountUnit(amountUnitRepository.findByAmountTypeId(cdaDetails.get(j).getAmountType()));
-                    cda.setTotalParkingAmount(cdaDetails.get(j).getTotalParkingAmount());
-                    cda.setRemainingCdaAmount(cdaDetails.get(j).getRemainingCdaAmount());
-                    cda.setRemarks(cdaDetails.get(j).getRemarks());
-                    cda.setSubHeadId(cdaDetails.get(j).getBudgetHeadId());
-                    remCdaBal += Double.parseDouble(cdaDetails.get(j).getRemainingCdaAmount());
-                    TotalCdaBal += Double.parseDouble(cdaDetails.get(j).getTotalParkingAmount());
-                    addRes.add(cda);
-                }
+            for (int j = 0; j < cdaDetails.size(); j++) {
+                CdaDetailsForRebaseResponse cda = new CdaDetailsForRebaseResponse();
+                cda.setGinNo(cdaParkingRepository.findByGinNo(cdaDetails.get(j).getGinNo()));
+                cda.setAmountUnit(amountUnitRepository.findByAmountTypeId(cdaDetails.get(j).getAmountType()));
+                cda.setTotalParkingAmount(cdaDetails.get(j).getTotalParkingAmount());
+                cda.setRemainingCdaAmount(cdaDetails.get(j).getRemainingCdaAmount());
+                cda.setRemarks(cdaDetails.get(j).getRemarks());
+                cda.setSubHeadId(cdaDetails.get(j).getBudgetHeadId());
+                remCdaBal += Double.parseDouble(cdaDetails.get(j).getRemainingCdaAmount());
+                TotalCdaBal += Double.parseDouble(cdaDetails.get(j).getTotalParkingAmount());
+                addRes.add(cda);
             }
             rebase.setAllocatedAmount(String.valueOf(TotalCdaBal));
             rebase.setRemCdaBal(String.valueOf(remCdaBal));
@@ -557,9 +555,9 @@ public class MangeRebaseImpl implements MangeRebaseService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TO HEAD UNIT NOT FOUND");
         }
         String toHdUnitId = obj.getUnit();
-        CgUnit headBudgrpId = cgUnitRepository.findByCgUnitShort(toHdUnitId);
-        String setBudGroupHdUnit=headBudgrpId.getBudGroupUnit();
-        String setBudGroupUnit=setBudGroupHdUnit+","+toHdUnitId;
+        CgUnit headBudgrpId = cgUnitRepository.findByUnit(toHdUnitId);
+        String setBudGroupHdUnit = headBudgrpId.getBudGroupUnit();
+        String setBudGroupUnit = setBudGroupHdUnit + "," + toHdUnitId;
 
         List<BudgetAllocation> allocationData = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlag(req.getUnitRebaseRequests().get(0).getBudgetHeadId(), req.getRebaseUnitId(), req.getFinYear(), req.getUnitRebaseRequests().get(0).getAllocationTypeId(), "0", "0");
         if (allocationData.size() == 0) {
@@ -639,29 +637,28 @@ public class MangeRebaseImpl implements MangeRebaseService {
         mangeInboxOutBoxRepository.save(mangeInboxOutbox);
 */
 
-            MangeInboxOutbox mangeInboxOutbox2 = new MangeInboxOutbox();
-            mangeInboxOutbox2.setMangeInboxId(HelperUtils.getMangeInboxId());
-            mangeInboxOutbox2.setRemarks("UNIT REBASE");
-            mangeInboxOutbox2.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-            mangeInboxOutbox2.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-            mangeInboxOutbox2.setToUnit(HelperUtils.HEADUNITID);
-            mangeInboxOutbox2.setFromUnit(hrDataCheck.getUnitId());
-            mangeInboxOutbox2.setApproverpId("");
-            mangeInboxOutbox2.setType(chekUnit.getDescr());
-            mangeInboxOutbox2.setRoleId(hrDataCheck.getRoleId());
-            mangeInboxOutbox2.setCreaterpId(hrDataCheck.getPid());
-            mangeInboxOutbox2.setStatus("Approved");
-            mangeInboxOutbox2.setState("CR");
-            mangeInboxOutbox2.setIsArchive("0");
-            mangeInboxOutbox2.setIsApproved("0");
-            mangeInboxOutbox2.setIsFlag("1");
-            mangeInboxOutbox2.setAllocationType(req.getUnitRebaseRequests().get(0).getAllocationTypeId());
-            mangeInboxOutbox2.setIsRevision(0);
-            mangeInboxOutbox2.setIsBgcg("RR");
-            mangeInboxOutbox2.setIsRebase("1");
-            mangeInboxOutbox2.setGroupId(universalAuthGroupForRebase);
-            mangeInboxOutBoxRepository.save(mangeInboxOutbox2);
-
+        MangeInboxOutbox mangeInboxOutbox2 = new MangeInboxOutbox();
+        mangeInboxOutbox2.setMangeInboxId(HelperUtils.getMangeInboxId());
+        mangeInboxOutbox2.setRemarks("UNIT REBASE");
+        mangeInboxOutbox2.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+        mangeInboxOutbox2.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+        mangeInboxOutbox2.setToUnit(HelperUtils.HEADUNITID);
+        mangeInboxOutbox2.setFromUnit(hrDataCheck.getUnitId());
+        mangeInboxOutbox2.setApproverpId("");
+        mangeInboxOutbox2.setType(chekUnit.getDescr());
+        mangeInboxOutbox2.setRoleId(hrDataCheck.getRoleId());
+        mangeInboxOutbox2.setCreaterpId(hrDataCheck.getPid());
+        mangeInboxOutbox2.setStatus("Approved");
+        mangeInboxOutbox2.setState("CR");
+        mangeInboxOutbox2.setIsArchive("0");
+        mangeInboxOutbox2.setIsApproved("0");
+        mangeInboxOutbox2.setIsFlag("1");
+        mangeInboxOutbox2.setAllocationType(req.getUnitRebaseRequests().get(0).getAllocationTypeId());
+        mangeInboxOutbox2.setIsRevision(0);
+        mangeInboxOutbox2.setIsBgcg("RR");
+        mangeInboxOutbox2.setIsRebase("1");
+        mangeInboxOutbox2.setGroupId(universalAuthGroupForRebase);
+        mangeInboxOutBoxRepository.save(mangeInboxOutbox2);
 
 
         List<CdaParkingTrans> selfCdaSieze = cdaParkingTransRepository.findByFinYearIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getRebaseUnitId(), req.getUnitRebaseRequests().get(0).getAllocationTypeId(), "0");

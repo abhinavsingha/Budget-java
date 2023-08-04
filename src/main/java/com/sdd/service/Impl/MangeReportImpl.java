@@ -2400,8 +2400,6 @@ public class MangeReportImpl implements MangeReportService {
                         } else {
                             coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
                         }
-
-
                         totalAmount = totalAmount + amount;
                         cdaReportResponse = new CDAReportResponse();
                         cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
