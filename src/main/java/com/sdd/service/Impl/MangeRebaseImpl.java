@@ -608,6 +608,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
         authority.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
         authorityRepository.save(authority);
 
+/*
         MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
         mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
         mangeInboxOutbox.setRemarks("UNIT REBASE");
@@ -630,9 +631,10 @@ public class MangeRebaseImpl implements MangeRebaseService {
         mangeInboxOutbox.setIsRebase("1");
         mangeInboxOutbox.setGroupId(universalAuthGroupForRebase);
         mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+*/
 
 
-        if (!hrDataCheck.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+
             MangeInboxOutbox mangeInboxOutbox2 = new MangeInboxOutbox();
             mangeInboxOutbox2.setMangeInboxId(HelperUtils.getMangeInboxId());
             mangeInboxOutbox2.setRemarks("UNIT REBASE");
@@ -655,7 +657,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             mangeInboxOutbox2.setIsRebase("1");
             mangeInboxOutbox2.setGroupId(universalAuthGroupForRebase);
             mangeInboxOutBoxRepository.save(mangeInboxOutbox2);
-        }
+
 
 
         List<CdaParkingTrans> selfCdaSieze = cdaParkingTransRepository.findByFinYearIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getRebaseUnitId(), req.getUnitRebaseRequests().get(0).getAllocationTypeId(), "0");
