@@ -633,8 +633,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
         mangeInboxOutBoxRepository.save(mangeInboxOutbox);
 */
 
-
-
             MangeInboxOutbox mangeInboxOutbox2 = new MangeInboxOutbox();
             mangeInboxOutbox2.setMangeInboxId(HelperUtils.getMangeInboxId());
             mangeInboxOutbox2.setRemarks("UNIT REBASE");
