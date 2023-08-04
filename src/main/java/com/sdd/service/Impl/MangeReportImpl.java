@@ -256,7 +256,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-            pdfGenaratorUtilMain.createPdfAllocation(hashMap, filePath, filePathResponse,hrData);
+            pdfGenaratorUtilMain.createPdfAllocation(hashMap, filePath, filePathResponse, hrData);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             filePathResponse.setFileName(fileName);
             dtoList.add(filePathResponse);
@@ -399,7 +399,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-            docxGenaratorUtil.createDocAllocation(hashMap, filePath, filePathResponse,hrData);
+            docxGenaratorUtil.createDocAllocation(hashMap, filePath, filePathResponse, hrData);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".docx");
             filePathResponse.setFileName(fileName);
             dtoList.add(filePathResponse);
@@ -893,7 +893,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-            pdfGenaratorUtilMain.createPdfRecipt(hashMap, filePath, filePathResponse,hrData);
+            pdfGenaratorUtilMain.createPdfRecipt(hashMap, filePath, filePathResponse, hrData);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             filePathResponse.setFileName(fileName);
             filePathResponse.setReciptRespone(hashMap);
@@ -1043,7 +1043,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-            docxGenaratorUtil.createDocRecipt(hashMap, filePath, filePathResponse,hrData);
+            docxGenaratorUtil.createDocRecipt(hashMap, filePath, filePathResponse, hrData);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".docx");
             filePathResponse.setFileName(fileName);
             filePathResponse.setReciptRespone(hashMap);
@@ -1198,7 +1198,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-            pdfGenaratorUtilMain.createPdfRecipt(hashMap, filePath, filePathResponse,hrData);
+            pdfGenaratorUtilMain.createPdfRecipt(hashMap, filePath, filePathResponse, hrData);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             filePathResponse.setFileName(fileName);
             filePathResponse.setReciptRespone(hashMap);
@@ -1345,7 +1345,7 @@ public class MangeReportImpl implements MangeReportService {
                 folder.mkdirs();
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-            docxGenaratorUtil.createDocRecipt(hashMap, filePath, filePathResponse,hrData);
+            docxGenaratorUtil.createDocRecipt(hashMap, filePath, filePathResponse, hrData);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".docx");
             filePathResponse.setFileName(fileName);
             filePathResponse.setReciptRespone(hashMap);
@@ -2084,7 +2084,7 @@ public class MangeReportImpl implements MangeReportService {
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
             File file = new File(filePath);
-            pdfGenaratorUtilMain.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal, allocationGrandTotal, filePathResponse,hrData);
+            pdfGenaratorUtilMain.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal, allocationGrandTotal, filePathResponse, hrData);
             dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             dtoList.setFileName(fileName);
             dtoList.setAllCdaData(allCdaData);
@@ -2215,7 +2215,7 @@ public class MangeReportImpl implements MangeReportService {
             }
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
             File file = new File(filePath);
-            docxGenaratorUtil.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal, allocationGrandTotal,hrData);
+            docxGenaratorUtil.createReserveFundnReport(allCdaData, cadSubReport, filePath, grandTotal, allocationGrandTotal, hrData);
             dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
             dtoList.setFileName(fileName);
             dtoList.setAllCdaData(allCdaData);
@@ -2367,11 +2367,11 @@ public class MangeReportImpl implements MangeReportService {
                             }
                         }
 
-                        List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
 
                         double amount = 0;
 
                         for (int m = 0; m < cdaData.size(); m++) {
+                            List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
 
                             double expCdaOrSubHeadWise = 0;
                             for (int t = 0; t < contigentBills.size(); t++) {
@@ -2428,7 +2428,7 @@ public class MangeReportImpl implements MangeReportService {
                     folder.mkdirs();
                 }
                 String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse,hrData);
+                pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData);
                 dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                 dtoList.setFileName(fileName);
                 dtoList.setAllCdaData(allCdaData);
@@ -2475,11 +2475,12 @@ public class MangeReportImpl implements MangeReportService {
 
                             cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId()));
 
-                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
+//                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
 
 
                             double amount = 0;
                             for (int m = 0; m < cdaData.size(); m++) {
+                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
 
                                 double expCdaOrSubHeadWise = 0;
                                 for (int t = 0; t < contigentBills.size(); t++) {
@@ -2537,7 +2538,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse,hrData);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -2574,7 +2575,7 @@ public class MangeReportImpl implements MangeReportService {
                     cdaReportResponse.setName(subHead.getSubHeadDescr());
 
 
-                    List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
+//                    List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
 
                     double totalAmount = 0;
                     if (cdaParkingTotalList.size() > 0) {
@@ -2585,6 +2586,7 @@ public class MangeReportImpl implements MangeReportService {
 
                             double amount = 0;
                             for (int m = 0; m < cdaData.size(); m++) {
+                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
 
                                 double expCdaOrSubHeadWise = 0;
                                 for (int t = 0; t < contigentBills.size(); t++) {
@@ -2641,7 +2643,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse,hrData);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -2686,9 +2688,10 @@ public class MangeReportImpl implements MangeReportService {
                         List<CdaParkingTrans> cdaData = new ArrayList<>();
                         cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId()));
 
-                        List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
+//                        List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
                         double amount = 0;
                         for (int m = 0; m < cdaData.size(); m++) {
+                            List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
 
 
                             double expCdaOrSubHeadWise = 0;
@@ -2747,7 +2750,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse,hrData);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -2820,11 +2823,12 @@ public class MangeReportImpl implements MangeReportService {
                         List<CdaParkingTrans> cdaData = new ArrayList<>();
                         cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId()));
 
-                        List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
-
 
                         double amount = 0;
                         for (int m = 0; m < cdaData.size(); m++) {
+                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
+
+
                             double expCdaOrSubHeadWise = 0;
                             for (int t = 0; t < contigentBills.size(); t++) {
                                 CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByTransactionIdAndGinNoAndIsFlagAndIsRevision(contigentBills.get(t).getCbId(), cdaData.get(m).getGinNo(), "0", 0);
@@ -2879,7 +2883,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse,hrData);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -2949,12 +2953,13 @@ public class MangeReportImpl implements MangeReportService {
                             List<CdaParkingTrans> cdaData = new ArrayList<>();
                             cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), cdaReportRequest.getUnitId()));
 
-                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
+//                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
 
 
                             double amount = 0;
                             for (int m = 0; m < cdaData.size(); m++) {
 
+                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
 
                                 double expCdaOrSubHeadWise = 0;
                                 for (int t = 0; t < contigentBills.size(); t++) {
@@ -3010,7 +3015,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse,hrData);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -3170,12 +3175,14 @@ public class MangeReportImpl implements MangeReportService {
                             List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId());
                         }
 
-                        List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
+//                        List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
 
 
                         double amount = 0;
 
                         for (int m = 0; m < cdaData.size(); m++) {
+
+                            List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
 
                             double expCdaOrSubHeadWise = 0;
                             for (int t = 0; t < contigentBills.size(); t++) {
@@ -3230,7 +3237,7 @@ public class MangeReportImpl implements MangeReportService {
                     folder.mkdirs();
                 }
                 String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount,hrData);
+                docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData);
 
                 dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                 dtoList.setFileName(fileName);
@@ -3278,11 +3285,12 @@ public class MangeReportImpl implements MangeReportService {
 
                             cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId()));
 
-                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
+//                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
 
 
                             double amount = 0;
                             for (int m = 0; m < cdaData.size(); m++) {
+                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
 
                                 double expCdaOrSubHeadWise = 0;
                                 for (int t = 0; t < contigentBills.size(); t++) {
@@ -3338,7 +3346,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount,hrData);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData);
 
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
@@ -3376,7 +3384,7 @@ public class MangeReportImpl implements MangeReportService {
                     cdaReportResponse.setName(subHead.getSubHeadDescr());
 
 
-                    List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
+//                    List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
 
                     double totalAmount = 0;
                     if (cdaParkingTotalList.size() > 0) {
@@ -3387,6 +3395,7 @@ public class MangeReportImpl implements MangeReportService {
 
                             double amount = 0;
                             for (int m = 0; m < cdaData.size(); m++) {
+                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
 
                                 double expCdaOrSubHeadWise = 0;
                                 for (int t = 0; t < contigentBills.size(); t++) {
@@ -3440,7 +3449,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount,hrData);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData);
 
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
@@ -3487,9 +3496,10 @@ public class MangeReportImpl implements MangeReportService {
                         List<CdaParkingTrans> cdaData = new ArrayList<>();
                         cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId()));
 
-                        List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
+//                        List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
                         double amount = 0;
                         for (int m = 0; m < cdaData.size(); m++) {
+                            List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
 
 
                             double expCdaOrSubHeadWise = 0;
@@ -3545,7 +3555,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount,hrData);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData);
 
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
@@ -3619,11 +3629,11 @@ public class MangeReportImpl implements MangeReportService {
                         List<CdaParkingTrans> cdaData = new ArrayList<>();
                         cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId()));
 
-                        List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
-
 
                         double amount = 0;
                         for (int m = 0; m < cdaData.size(); m++) {
+                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
+
                             double expCdaOrSubHeadWise = 0;
                             for (int t = 0; t < contigentBills.size(); t++) {
                                 CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByTransactionIdAndGinNoAndIsFlagAndIsRevision(contigentBills.get(t).getCbId(), cdaData.get(m).getGinNo(), "0", 0);
@@ -3675,7 +3685,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount,hrData);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData);
 
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
@@ -3747,12 +3757,13 @@ public class MangeReportImpl implements MangeReportService {
                             List<CdaParkingTrans> cdaData = new ArrayList<>();
                             cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), cdaReportRequest.getUnitId()));
 
-                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
+//                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
 
 
                             double amount = 0;
                             for (int m = 0; m < cdaData.size(); m++) {
 
+                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
 
                                 double expCdaOrSubHeadWise = 0;
                                 for (int t = 0; t < contigentBills.size(); t++) {
@@ -3806,7 +3817,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount,hrData);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData);
 
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
@@ -4451,7 +4462,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            paragraph.add(new Chunk("SUBHEAD WISE ALLOCATION REPORT " +"( "+unitName.toUpperCase()+" )", boldFont));
+            paragraph.add(new Chunk("SUBHEAD WISE ALLOCATION REPORT " + "( " + unitName.toUpperCase() + " )", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
@@ -4648,7 +4659,7 @@ public class MangeReportImpl implements MangeReportService {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText("SUBHEAD WISE ALLOCATION REPORT " +"( "+hrData.getUnit().toUpperCase()+" )");
+            headingRun.setText("SUBHEAD WISE ALLOCATION REPORT " + "( " + hrData.getUnit().toUpperCase() + " )");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
@@ -4966,7 +4977,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            paragraph.add(new Chunk(type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear() + " " + "ALLOCATION REPORT "+"( "+hrData.getUnit().toUpperCase()+" )", boldFont));
+            paragraph.add(new Chunk(type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear() + " " + "ALLOCATION REPORT " + "( " + hrData.getUnit().toUpperCase() + " )", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
@@ -5179,7 +5190,7 @@ public class MangeReportImpl implements MangeReportService {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText(type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear() + " " + "ALLOCATION REPORT "+"( "+hrData.getUnit().toUpperCase()+" )");
+            headingRun.setText(type.getAllocDesc().toUpperCase() + " " + findyr.getFinYear() + " " + "ALLOCATION REPORT " + "( " + hrData.getUnit().toUpperCase() + " )");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
@@ -5540,7 +5551,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            paragraph.add(new Chunk("REVISED" + " " + allocType.toUpperCase() + " " + " ALLOCATION  REPORT "+"( "+hrData.getUnit().toUpperCase()+" )", boldFont));
+            paragraph.add(new Chunk("REVISED" + " " + allocType.toUpperCase() + " " + " ALLOCATION  REPORT " + "( " + hrData.getUnit().toUpperCase() + " )", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
@@ -5831,7 +5842,7 @@ public class MangeReportImpl implements MangeReportService {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText("REVISED" + " " + allocType.toUpperCase() + " " + "ALLOCATION REPORT "+"( "+hrData.getUnit().toUpperCase()+" )");
+            headingRun.setText("REVISED" + " " + allocType.toUpperCase() + " " + "ALLOCATION REPORT " + "( " + hrData.getUnit().toUpperCase() + " )");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
@@ -6308,7 +6319,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            paragraph.add(new Chunk(types.getAllocDesc().toUpperCase() + " " + "ALLOCATION  REPORT" + ": " + findyr.getFinYear()+" "+" "+"( "+hrData.getUnit().toUpperCase()+" )", boldFont));
+            paragraph.add(new Chunk(types.getAllocDesc().toUpperCase() + " " + "ALLOCATION  REPORT" + ": " + findyr.getFinYear() + " " + " " + "( " + hrData.getUnit().toUpperCase() + " )", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
@@ -6572,7 +6583,7 @@ public class MangeReportImpl implements MangeReportService {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText(types.getAllocDesc().toUpperCase() + " " + "ALLOCATION  REPORT" + ": " + findyr.getFinYear()+" "+" "+"( "+hrData.getUnit().toUpperCase()+" )");
+            headingRun.setText(types.getAllocDesc().toUpperCase() + " " + "ALLOCATION  REPORT" + ": " + findyr.getFinYear() + " " + " " + "( " + hrData.getUnit().toUpperCase() + " )");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
@@ -7054,7 +7065,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            paragraph.add(new Chunk(type.getAllocDesc().toUpperCase() + " " + "FER  ALLOCATION REPORT "+" "+" "+"( "+hrData.getUnit().toUpperCase()+" )", boldFont));
+            paragraph.add(new Chunk(type.getAllocDesc().toUpperCase() + " " + "FER  ALLOCATION REPORT " + " " + " " + "( " + hrData.getUnit().toUpperCase() + " )", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
@@ -7587,7 +7598,7 @@ public class MangeReportImpl implements MangeReportService {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText(type.getAllocDesc().toUpperCase() + " " + "FER" + " " + "ALLOCATION REPORT "+"( "+hrData.getUnit().toUpperCase()+" )");
+            headingRun.setText(type.getAllocDesc().toUpperCase() + " " + "FER" + " " + "ALLOCATION REPORT " + "( " + hrData.getUnit().toUpperCase() + " )");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
@@ -9300,7 +9311,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            paragraph.add(new Chunk(typesMA.getAllocDesc().toUpperCase() + " " + "ALLOCATION  REPORT" + ": " + findyr.getFinYear()+" "+"( "+hrData.getUnit().toUpperCase()+" )", boldFont));
+            paragraph.add(new Chunk(typesMA.getAllocDesc().toUpperCase() + " " + "ALLOCATION  REPORT" + ": " + findyr.getFinYear() + " " + "( " + hrData.getUnit().toUpperCase() + " )", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
@@ -9611,7 +9622,7 @@ public class MangeReportImpl implements MangeReportService {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText(typesMA.getAllocDesc().toUpperCase() + " " + "ALLOCATION  REPORT" + ": " + findyr.getFinYear()+" "+"( "+hrData.getUnit().toUpperCase()+" )");
+            headingRun.setText(typesMA.getAllocDesc().toUpperCase() + " " + "ALLOCATION  REPORT" + ": " + findyr.getFinYear() + " " + "( " + hrData.getUnit().toUpperCase() + " )");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
@@ -10136,7 +10147,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            paragraph.add(new Chunk("REVISED" + " " + allocType.toUpperCase() + " " + " ALLOCATION  REPORT "+" "+"( "+hrData.getUnit().toUpperCase()+" )", boldFont));
+            paragraph.add(new Chunk("REVISED" + " " + allocType.toUpperCase() + " " + " ALLOCATION  REPORT " + " " + "( " + hrData.getUnit().toUpperCase() + " )", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
@@ -10461,7 +10472,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            paragraph.add(new Chunk("REVISED" + " " + allocType.toUpperCase() + " " + " ALLOCATION  REPORT "+" "+"( "+hrData.getUnit().toUpperCase()+" )", boldFont));
+            paragraph.add(new Chunk("REVISED" + " " + allocType.toUpperCase() + " " + " ALLOCATION  REPORT " + " " + "( " + hrData.getUnit().toUpperCase() + " )", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
@@ -10778,7 +10789,7 @@ public class MangeReportImpl implements MangeReportService {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText("REVISED" + " " + allocType.toUpperCase() + " " + "ALLOCATION REPORT "+" ( "+hrData.getUnit().toUpperCase()+" )");
+            headingRun.setText("REVISED" + " " + allocType.toUpperCase() + " " + "ALLOCATION REPORT " + " ( " + hrData.getUnit().toUpperCase() + " )");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
@@ -11094,7 +11105,7 @@ public class MangeReportImpl implements MangeReportService {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText("REVISED" + " " + allocType.toUpperCase() + " " + "ALLOCATION REPORT "+" "+" ( "+hrData.getUnit().toUpperCase()+" )");
+            headingRun.setText("REVISED" + " " + allocType.toUpperCase() + " " + "ALLOCATION REPORT " + " " + " ( " + hrData.getUnit().toUpperCase() + " )");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
