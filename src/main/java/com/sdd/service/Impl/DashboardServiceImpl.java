@@ -823,7 +823,6 @@ public class DashboardServiceImpl implements DashBoardService {
                         for (CgUnit unitss : unitList) {
                             String subUnit = unitss.getUnit();
                             List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnit, finYearId, subHeadId,allocationTypeId, "0");
-
                             if (expenditure.size() > 0) {
                                 double totalAmount = 0.0;
                                 for (ContigentBill bill : expenditure) {
@@ -846,22 +845,6 @@ public class DashboardServiceImpl implements DashBoardService {
                             }
                         }
                     }
-                    double totalCda = 0.0;
-                    double remCdaBal = 0.0;
-                    List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, uid, allocationTypeId, "0");
-
-                    double rqUnit = 0.0;
-                    if (cdaDetail.size() > 0) {
-                        for (int j = 0; j < cdaDetail.size(); j++) {
-
-                            totalCda += Double.parseDouble(cdaDetail.get(j).getTotalParkingAmount());
-                            remCdaBal += Double.parseDouble(cdaDetail.get(j).getRemainingCdaAmount());
-                            AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(0).getAmountType());
-                            rqUnit = hdamtUnit.getAmount();
-                        }
-                    }
-                    double cdaTotal = totalCda * rqUnit / reqAmount;
-                    double cdaRming = remCdaBal * rqUnit / reqAmount;
                     List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(uid, finYearId, subHeadId, allocationTypeId, "0", "0");
                     double totalAmount = 0.0;
                     if (expenditure.size() > 0) {
@@ -881,6 +864,39 @@ public class DashboardServiceImpl implements DashBoardService {
                     eAmount = totalAmount + totalbill;
                     double expAmount = eAmount / reqAmount;
 
+                    double totalCda = 0.0;
+                    double remCdaBal = 0.0;
+                    List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, uid, allocationTypeId, "0");
+                    double rqUnit = 0.0;
+                    if (cdaDetail.size() > 0) {
+                        for (int j = 0; j < cdaDetail.size(); j++) {
+                            totalCda += Double.parseDouble(cdaDetail.get(j).getTotalParkingAmount());
+                            remCdaBal += Double.parseDouble(cdaDetail.get(j).getRemainingCdaAmount());
+                            AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(0).getAmountType());
+                            rqUnit = hdamtUnit.getAmount();
+                        }
+                    }
+                    double cdaTotal = totalCda * rqUnit / reqAmount;
+                    double cdaRming = remCdaBal * rqUnit / reqAmount;
+
+                    double totalCdaSub = 0.0;
+                    double remCdaBalSub = 0.0;
+                    double rqUnitSub = 0.0;
+                    for (CgUnit unitS : unitList) {
+                        String subUnits = unitS.getUnit();
+                        List<CdaParkingTrans> cdaDetailSub = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, subUnits, allocationTypeId, "0");
+                            for (int k = 0; k < cdaDetailSub.size(); k++) {
+                                totalCdaSub += Double.parseDouble(cdaDetailSub.get(k).getTotalParkingAmount());
+                                remCdaBalSub += Double.parseDouble(cdaDetailSub.get(k).getRemainingCdaAmount());
+                                AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetailSub.get(0).getAmountType());
+                                rqUnitSub = hdamtUnit.getAmount();
+                            }
+                    }
+                    double cdaTotalSub = totalCdaSub * rqUnitSub / reqAmount;
+                    double cdaRmingSub = remCdaBalSub * rqUnitSub / reqAmount;
+
+                    double sumCdaRmng=cdaRmingSub+cdaRming;
+
                     dashBoardExprnditureResponse.setCgUnit(cgUnit);
                     dashBoardExprnditureResponse.setBudgetFinancialYear(budgetFinancialYear);
                     dashBoardExprnditureResponse.setBudgetHead(bHead);
@@ -894,13 +910,13 @@ public class DashboardServiceImpl implements DashBoardService {
                         dashBoardExprnditureResponse.setPerAmount(String.format("%1$0,1.2f", new BigDecimal(0.0)));
                     }
                     dashBoardExprnditureResponse.setLastCBDate(cbD);
-                    dashBoardExprnditureResponse.setBalAmount(String.format("%1$0,1.4f", new BigDecimal(cdaRming)));
+                    dashBoardExprnditureResponse.setBalAmount(String.format("%1$0,1.4f", new BigDecimal(sumCdaRmng)));
                     dashBoardExprnditureResponse.setAmountIn(amountIn);
                     grResp.add(dashBoardExprnditureResponse);
 
                     sumAlloc += finAmount;
                     sumExp += expAmount;
-                    sumBal += cdaRming;
+                    sumBal += sumCdaRmng;
                     perBal += perAmnt;
                 }
             }
@@ -1003,8 +1019,25 @@ public class DashboardServiceImpl implements DashBoardService {
             List<GrTotalObj> grResp = new ArrayList<GrTotalObj>();
             if (budgetAllocToUnit.size() > 0) {
                 for (int j = 0; j < budgetAllocToUnit.size(); j++) {
-
                     String uid = budgetAllocToUnit.get(j).getToUnit();
+                    List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
+
+                    double totalCdaSub = 0.0;
+                    double remCdaBalSub = 0.0;
+                    double rqUnitSub = 0.0;
+                    for (CgUnit unitS : unitList) {
+                        String subUnits = unitS.getUnit();
+                        List<CdaParkingTrans> cdaDetailSub = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, subUnits, allocationTypeId, "0");
+                        for (int k = 0; k < cdaDetailSub.size(); k++) {
+                            totalCdaSub += Double.parseDouble(cdaDetailSub.get(k).getTotalParkingAmount());
+                            remCdaBalSub += Double.parseDouble(cdaDetailSub.get(k).getRemainingCdaAmount());
+                            AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetailSub.get(0).getAmountType());
+                            rqUnitSub = hdamtUnit.getAmount();
+                        }
+                    }
+                    double cdaTotalSub = totalCdaSub * rqUnitSub / reqAmount;
+                    double cdaRmingSub = remCdaBalSub * rqUnitSub / reqAmount;
+
                     double remCdaBal = 0.0;
                     double cdaUnit = 0.0;
                     List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, uid, allocationTypeId, "0");
@@ -1017,7 +1050,7 @@ public class DashboardServiceImpl implements DashBoardService {
                     }
                     double cdaRmingAmunt = remCdaBal * cdaUnit / reqAmount;
 
-                    List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
+                    double sumCdaRemaining=cdaRmingSub+cdaRmingAmunt;
 
                     double totalbill = 0.0;
                     if (unitList.size() > 0) {
@@ -1082,14 +1115,14 @@ public class DashboardServiceImpl implements DashBoardService {
                     subResp.setAmountIn(hdamtUnits.getAmountType());
                     subResp.setAllocatedAmount(String.format("%1$0,1.4f", alocAmnt));
                     subResp.setExpenditureAmount(String.format("%1$0,1.4f", expAmnt));
-                    subResp.setBalAmount(String.format("%1$0,1.4f", cdaRmingAmunt));
+                    subResp.setBalAmount(String.format("%1$0,1.4f", sumCdaRemaining));
                     subResp.setPerAmount(String.format("%1$0,1.2f", perAmnt));
                     subResp.setLastCBDate(cbD);
                     grResp.add(subResp);
 
                     sumAlloc += alocAmnt;
                     sumExp += expAmnt;
-                    sumBal += cdaRmingAmunt;
+                    sumBal += sumCdaRemaining;
                 }
             }
             double grPer = 0.0;
