@@ -25,6 +25,8 @@ public class CgUnitResponse {
     private String cbUnit;
     private String isActive;
     private String isFlag;
+    private String unitRhq;
+    private String unitDhq;
     private Timestamp createdOn;
     private Timestamp updatedOn;
     private CgStation cgStation;

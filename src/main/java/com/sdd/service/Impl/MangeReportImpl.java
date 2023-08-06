@@ -10393,9 +10393,9 @@ public class MangeReportImpl implements MangeReportService {
                 grTotalSum += (Double.parseDouble(sumExistingRound) + Double.parseDouble(sumRERound));
             }
             PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-            PdfPCell cell01 = new PdfPCell(new Phrase(String.valueOf(grTotalAlloc), cellFont));
-            PdfPCell cell02 = new PdfPCell(new Phrase(String.valueOf(grTotalAddition), cellFont));
-            PdfPCell cell03 = new PdfPCell(new Phrase(String.valueOf(grTotalSum), cellFont));
+            PdfPCell cell01 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAlloc+""), cellFont));
+            PdfPCell cell02 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAddition+""), cellFont));
+            PdfPCell cell03 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAlloc+grTotalAddition+""), cellFont));
             cell00.setPadding(12);
             cell01.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell02.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -11015,24 +11015,24 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne1222.createRun(), 12, "TOTAL ", true);
                     XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
                     paragraphtableRowOne2222.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(paragraphtableRowOne2222.createRun(), 12, roundedAmount, true);
+                    boldText(paragraphtableRowOne2222.createRun(), 12, ConverterUtils.addDecimalPoint(sumExisting + ""), true);
                     XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
                     paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
                     if (sumRE < 0)
                         boldText(paragraphtableRowOne2233.createRun(), 12, "(-)" + ConverterUtils.addDecimalPoint(ss2 + ""), true);
                     else if (sumRE > 0)
-                        boldText(paragraphtableRowOne2233.createRun(), 12, "(+)" + roundedAmount1, true);
+                        boldText(paragraphtableRowOne2233.createRun(), 12, "(+)" + ConverterUtils.addDecimalPoint(sumRE + ""), true);
                     else
-                        boldText(paragraphtableRowOne2233.createRun(), 12, roundedAmount1, true);
+                        boldText(paragraphtableRowOne2233.createRun(), 12, ConverterUtils.addDecimalPoint(sumRE + ""), true);
                     XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
                     paragraphtableRowOne2244.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", totSum), true);
+                    boldText(paragraphtableRowOne2244.createRun(), 12, ConverterUtils.addDecimalPoint(totSum + ""), true);
 
 
                     count = 0;
                 }
-                grTotalAlloc += totSum1;
-                grTotalAddition += totSum2;
+                grTotalAlloc += sumExisting;
+                grTotalAddition += sumRE;
                 grTotalSum += (sumExisting + sumRE);
 //
             }
@@ -11051,7 +11051,7 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne2234.createRun(), 12, String.format("%1$0,1.4f", grTotalAddition), true);
             XWPFParagraph paragraphtableRowOne2245 = tableRowOne223.getCell(4).addParagraph();
             paragraphtableRowOne2245.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2245.createRun(), 12, String.format("%1$0,1.4f", grTotalAlloc + grTotalAddition), true);
+            boldText(paragraphtableRowOne2245.createRun(), 12, String.format("%1$0,1.4f", (grTotalAlloc + grTotalAddition)), true);
 
             String names1 = approveName;
             String unitName1 = hrData.getUnit();
@@ -11313,7 +11313,7 @@ public class MangeReportImpl implements MangeReportService {
 
                 double totSum1 = Double.parseDouble(roundedAmount);
                 double totSum2 = Double.parseDouble(roundedAmount);
-                double totSum = totSum1 + totSum2;
+                double totSum = sumExisting + sumRE;
                 double ss2 = 0.0;
                 String ss = String.valueOf(sumRE);
                 if (ss.contains("-")) {
@@ -11330,22 +11330,22 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne1222.createRun(), 12, "TOTAL ", true);
                     XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
                     paragraphtableRowOne2222.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(paragraphtableRowOne2222.createRun(), 12, roundedAmount, true);
+                    boldText(paragraphtableRowOne2222.createRun(), 12, ConverterUtils.addDecimalPoint(sumExisting + ""), true);
                     XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
                     paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
                     if (sumRE < 0)
                         boldText(paragraphtableRowOne2233.createRun(), 12, "(-)" + ConverterUtils.addDecimalPoint(ss2 + ""), true);
                     else if (sumRE > 0)
-                        boldText(paragraphtableRowOne2233.createRun(), 12, "(+)" + roundedAmount1, true);
+                        boldText(paragraphtableRowOne2233.createRun(), 12, "(+)" + ConverterUtils.addDecimalPoint(sumRE + ""), true);
                     else
-                        boldText(paragraphtableRowOne2233.createRun(), 12, roundedAmount1, true);
+                        boldText(paragraphtableRowOne2233.createRun(), 12, ConverterUtils.addDecimalPoint(sumRE + ""), true);
                     XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
                     paragraphtableRowOne2244.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", totSum), true);
+                    boldText(paragraphtableRowOne2244.createRun(), 12, ConverterUtils.addDecimalPoint(totSum + ""), true);
                     count = 0;
                 }
-                grTotalAlloc += totSum1;
-                grTotalAddition += totSum2;
+                grTotalAlloc += sumExisting;
+                grTotalAddition += sumRE;
                 grTotalSum += (sumExisting + sumRE);
 //
             }
@@ -11364,7 +11364,7 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne2234.createRun(), 12, String.format("%1$0,1.4f", grTotalAddition), true);
             XWPFParagraph paragraphtableRowOne2245 = tableRowOne223.getCell(4).addParagraph();
             paragraphtableRowOne2245.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2245.createRun(), 12, String.format("%1$0,1.4f", grTotalAlloc + grTotalAddition), true);
+            boldText(paragraphtableRowOne2245.createRun(), 12, ConverterUtils.addDecimalPoint((grTotalAlloc+grTotalAddition) + ""), true);
 
             String names1 = approveName;
             String unitName1 = hrData.getUnit();

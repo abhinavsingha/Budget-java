@@ -379,8 +379,17 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 cda.setRemainingCdaAmount(cdaDetails.get(j).getRemainingCdaAmount());
                 cda.setRemarks(cdaDetails.get(j).getRemarks());
                 cda.setSubHeadId(cdaDetails.get(j).getBudgetHeadId());
-                remCdaBal += Double.parseDouble(cdaDetails.get(j).getRemainingCdaAmount());
-                TotalCdaBal += Double.parseDouble(cdaDetails.get(j).getTotalParkingAmount());
+                if (cdaDetails.get(j).getRemainingCdaAmount() == null) {
+                    remCdaBal+=0.0;
+                }else{
+                    remCdaBal += Double.parseDouble(cdaDetails.get(j).getRemainingCdaAmount());
+                }
+                if (cdaDetails.get(j).getTotalParkingAmount() == null) {
+                    TotalCdaBal=0.0;
+                }else{
+                    TotalCdaBal += Double.parseDouble(cdaDetails.get(j).getTotalParkingAmount());
+                }
+
                 addRes.add(cda);
             }
             rebase.setAllocatedAmount(String.valueOf(TotalCdaBal));
@@ -585,6 +594,16 @@ public class MangeRebaseImpl implements MangeRebaseService {
             chekUnit.setStationId(req.getToStationId());
             chekUnit.setSubUnit(toHdUnitId);
             chekUnit.setBudGroupUnit(setBudGroupUnit);
+            if(toS.getRhqId()==null){
+                chekUnit.setUnitRhq("");
+            }else{
+                chekUnit.setUnitRhq(toS.getRhqId());
+            }
+            if(toS.getDhqName()==null){
+                chekUnit.setUnitDhq("");
+            }else{
+                chekUnit.setUnitDhq(toS.getDhqName());
+            }
             chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             cgUnitRepository.save(chekUnit);
 //            }
@@ -592,6 +611,16 @@ public class MangeRebaseImpl implements MangeRebaseService {
             chekUnit.setStationId(req.getToStationId());
             chekUnit.setSubUnit(toHdUnitId);
             chekUnit.setBudGroupUnit(setBudGroupUnit);
+            if(toS.getRhqId()==null){
+                chekUnit.setUnitRhq("");
+            }else{
+                chekUnit.setUnitRhq(toS.getRhqId());
+            }
+            if(toS.getDhqName()==null){
+                chekUnit.setUnitDhq("");
+            }else{
+                chekUnit.setUnitDhq(toS.getDhqName());
+            }
             chekUnit.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             cgUnitRepository.save(chekUnit);
         }
