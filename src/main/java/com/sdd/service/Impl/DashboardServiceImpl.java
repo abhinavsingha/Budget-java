@@ -1016,7 +1016,6 @@ public class DashboardServiceImpl implements DashBoardService {
                 List<BudgetAllocation> budgetAllocToUnits = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, hrData.getUnitId(), finYearId, allocationTypeId, "0", "0", "Approved");
                 budgetAllocToUnit.addAll(budgetAllocToUnits);
             }
-
             double sumAlloc = 0.0;
             double sumExp = 0.0;
             double sumBal = 0.0;
