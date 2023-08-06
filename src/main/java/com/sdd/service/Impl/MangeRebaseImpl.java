@@ -1125,12 +1125,12 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             double allocAmt = Double.parseDouble(alloc.getAllocationAmount());
                             alloc.setIsFlag("0");
 
-                            List<CdaParkingTrans> frmRhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
-                            if (frmRhqCda.size() == 0) {
-                                alloc.setUnallocatedAmount("-" + unloAmnt);
-                            } else {
+//                            List<CdaParkingTrans> frmRhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+//                            if (frmRhqCda.size() == 0) {
+//                                alloc.setUnallocatedAmount("-" + unloAmnt);
+//                            } else {
                                 alloc.setUnallocatedAmount("0");
-                            }
+//                            }
 
                             alloc.setAllocationAmount((allocAmt + unloAmnt) + "");
                             alloc.setIsBudgetRevision("0");
@@ -1404,11 +1404,11 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             alloc.setAllocationAmount((allocAmt + unloAmnt) + "");
                             alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             List<CdaParkingTrans> frmRhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), rHqUnitIdMain, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
-                            if (frmRhqCda.size() == 0) {
-                                alloc.setUnallocatedAmount("-" + unloAmnt);
-                            } else {
+//                            if (frmRhqCda.size() == 0) {
+//                                alloc.setUnallocatedAmount("-" + unloAmnt);
+//                            } else {
                                 alloc.setUnallocatedAmount("0");
-                            }
+//                            }
 
                             BudgetAllocation saveData11 = budgetAllocationRepository.save(alloc);
 
@@ -1497,12 +1497,12 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             alloc.setIsBudgetRevision("0");
                             alloc.setAllocationAmount((allocAmt + unloAmnt) + "");
                             alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                            List<CdaParkingTrans> frmRhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
-                            if (frmRhqCda.size() == 0) {
-                                alloc.setUnallocatedAmount("-" + unloAmnt);
-                            } else {
+//                            List<CdaParkingTrans> frmRhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+//                            if (frmRhqCda.size() == 0) {
+//                                alloc.setUnallocatedAmount("-" + unloAmnt);
+//                            } else {
                                 alloc.setUnallocatedAmount("0");
-                            }
+//                            }
 
                             BudgetAllocation saveData11 = budgetAllocationRepository.save(alloc);
 
@@ -1737,14 +1737,14 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             double allocAmt0 = Double.parseDouble(alloc.getAllocationAmount());
                             alloc.setIsFlag("0");
                             alloc.setIsBudgetRevision("0");
-                            alloc.setAllocationAmount((allocAmt0 + unloAmnt0) + "");
+//                            alloc.setAllocationAmount((allocAmt0 + unloAmnt0) + "");
                             alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                            List<CdaParkingTrans> frmHdUnitCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
-                            if (frmHdUnitCda.size() == 0) {
-                                alloc.setUnallocatedAmount("-" + unloAmnt0);
-                            } else {
+//                            List<CdaParkingTrans> frmHdUnitCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+//                            if (frmHdUnitCda.size() == 0) {
+//                                alloc.setUnallocatedAmount("-" + unloAmnt0);
+//                            } else {
                                 alloc.setUnallocatedAmount("0");
-                            }
+//                            }
                             BudgetAllocation saveData11 = budgetAllocationRepository.save(alloc);
 
                         }
@@ -2010,12 +2010,12 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             alloc.setIsBudgetRevision("0");
                             alloc.setAllocationAmount((allocAmt0 + unloAmnt0) + "");
                             alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                            List<CdaParkingTrans> frmHdUnitCdaMain = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
-                            if (frmHdUnitCdaMain.size() == 0) {
-                                alloc.setUnallocatedAmount("-" + unloAmnt0);
-                            } else {
+//                            List<CdaParkingTrans> frmHdUnitCdaMain = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+//                            if (frmHdUnitCdaMain.size() == 0) {
+//                                alloc.setUnallocatedAmount("-" + unloAmnt0);
+//                            } else {
                                 alloc.setUnallocatedAmount("0");
-                            }
+//                            }
 
                             BudgetAllocation saveData11 = budgetAllocationRepository.save(alloc);
 
