@@ -1081,7 +1081,8 @@ public class CdaParkingImpl implements CdaParkingService {
 
             for (Integer v = 0; v < cdaParkingCrAndDrsList.size(); v++) {
                 CdaParkingCrAndDr cdaParkingCrAndDrs = cdaParkingCrAndDrsList.get(v);
-                if (subHeadData.containsKey(cdaParkingCrAndDrs.getGinNo())) {
+                CdaParking cdaName =  cdaParkingRepository.findByGinNo(cdaParkingCrAndDrs.getGinNo());
+                if (subHeadData.containsKey(cdaName.getCdaName())) {
                     CdaParkingTransSubResponse cdaParkingTransSubResponses = subHeadData.get(cdaParkingCrAndDrs.getGinNo());
 
                     double totalBillAmount = totalBill + Double.parseDouble(contigentBill.getCbAmount()) / amountUnit.getAmount();
@@ -1089,11 +1090,11 @@ public class CdaParkingImpl implements CdaParkingService {
                     totalBill = totalBill + totalBillAmount / amountUnit.getAmount();
                     cdaParkingTransSubResponses.setTotalParkingAmount(ConverterUtils.addDecimalPoint(totalBill + ""));
                     cdaParkingTransSubResponses.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(totalBill + ""));
-                    subHeadData.put(cdaParkingCrAndDrs.getGinNo(), cdaParkingTransSubResponses);
+                    subHeadData.put(cdaName.getCdaName(), cdaParkingTransSubResponses);
 
 
                 } else {
-                    double totalBillAmount = Double.parseDouble(contigentBill.getCbAmount()) * amountUnitRepository.findByAmountTypeId(cdaParkingCrAndDrs.getAmountType()).getAmount();
+                    double totalBillAmount = Double.parseDouble(contigentBill.getCbAmount()) ;
 
                     totalBill = totalBillAmount / amountUnit.getAmount();
 
@@ -1101,7 +1102,7 @@ public class CdaParkingImpl implements CdaParkingService {
 
                     cdaParkingTransResponse.setFinYearId(budgetFinancialYearRepository.findBySerialNo(cdaParkingCrAndDrs.getFinYearId()));
                     cdaParkingTransResponse.setBudgetHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(cdaParkingCrAndDrs.getBudgetHeadId()));
-                    cdaParkingTransResponse.setGinNo(cdaParkingRepository.findByGinNo(cdaParkingCrAndDrs.getGinNo()));
+                    cdaParkingTransResponse.setGinNo(cdaName);
                     cdaParkingTransResponse.setAllocationType(allocationRepository.findByAllocTypeId(cdaParkingCrAndDrs.getAllocTypeId()));
 
                     cdaParkingTransResponse.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(totalBill + ""));
@@ -1114,7 +1115,7 @@ public class CdaParkingImpl implements CdaParkingService {
                     cdaParkingTransResponse.setAuthGroupId(cdaParkingCrAndDrs.getAuthGroupId());
                     cdaParkingTransResponse.setUnitId(cdaParkingCrAndDrs.getUnitId());
 
-                    subHeadData.put(cdaParkingCrAndDrs.getGinNo(), cdaParkingTransResponse);
+                    subHeadData.put(cdaName.getCdaName(), cdaParkingTransResponse);
                 }
 
             }
