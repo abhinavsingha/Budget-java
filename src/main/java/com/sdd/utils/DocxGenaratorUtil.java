@@ -158,11 +158,6 @@ public class DocxGenaratorUtil {
             XWPFDocument document = new XWPFDocument();
             FileOutputStream out = new FileOutputStream(new File(path));
 
-            XWPFTable table = document.createTable();
-            table.setWidth("100%");
-//                XWPFParagraph para = document.createParagraph();
-//                XWPFRun run = para.createRun();
-
             XWPFParagraph headingParagraph = document.createParagraph();
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
@@ -173,6 +168,13 @@ public class DocxGenaratorUtil {
 
             XWPFParagraph spacingParagraphss = document.createParagraph();
             spacingParagraphss.setSpacingAfter(20);
+
+            XWPFTable table = document.createTable();
+            table.setWidth("100%");
+//                XWPFParagraph para = document.createParagraph();
+//                XWPFRun run = para.createRun();
+
+
 
 
 

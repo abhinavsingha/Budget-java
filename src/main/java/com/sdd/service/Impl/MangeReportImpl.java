@@ -7016,10 +7016,10 @@ public class MangeReportImpl implements MangeReportService {
             List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
             checks = mrge.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
         }
-        if (checks.size() <= 0) {
+/*        if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
-        }
+        }*/
 
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
@@ -7582,10 +7582,10 @@ public class MangeReportImpl implements MangeReportService {
             List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
             checks = mrge.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
         }
-        if (checks.size() <= 0) {
+/*        if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
-        }
+        }*/
 
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
@@ -8175,10 +8175,10 @@ public class MangeReportImpl implements MangeReportService {
             List<BudgetAllocation> mrge = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
             checks = mrge.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
         }
-        if (checks.size() <= 0) {
+/*        if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<FerResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
-        }
+        }*/
 
 
         try {
