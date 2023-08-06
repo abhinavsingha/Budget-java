@@ -740,7 +740,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             double allocAmount = Double.parseDouble(req.getUnitRebaseRequests().get(k).getAllocAmount());
             double expAmount = Double.parseDouble(req.getUnitRebaseRequests().get(k).getExpAmount());
             double shipAllocAmount = allocAmount * allAmountUnit;
-            double shipExpAmount = Double.parseDouble("-" + expAmount);
+            double shipExpAmount = Double.parseDouble( 0+"");
             BudgetRebase budgetRebase = new BudgetRebase();
             budgetRebase.setBudgetRebaseId(HelperUtils.getUnitRebased());
             budgetRebase.setRefTransId(HelperUtils.getTransId());
