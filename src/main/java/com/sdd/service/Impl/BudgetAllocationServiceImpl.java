@@ -1976,6 +1976,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setIsTYpe(budgetAllocationSubReport.getIsTYpe());
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getCreatedOn());
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
+            budgetAllocationReport.setIsFlag(budgetAllocationSubReport.getIsFlag());
             budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
 
             if (budgetAllocationSubReport.getRevisedAmount() == null) {

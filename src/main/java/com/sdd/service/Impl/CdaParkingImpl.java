@@ -1127,6 +1127,9 @@ public class CdaParkingImpl implements CdaParkingService {
     }
 
 
+
+
+
     public boolean checkDuplicateData(List<CdaSubRequest> cdaRequest) {
         Set<String> s = new HashSet<String>();
 

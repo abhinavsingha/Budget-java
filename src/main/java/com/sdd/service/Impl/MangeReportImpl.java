@@ -2760,7 +2760,8 @@ public class MangeReportImpl implements MangeReportService {
 
             }
 
-        } else {
+        }
+        else {
 
             if (cdaReportRequest.getReportType() == null || cdaReportRequest.getReportType().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REPORT TYPE CAN NOT BE BLANK");
@@ -2969,7 +2970,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
-                                    amount = amount;
+                                    amount = 0;
                                 } else {
                                     AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
                                     amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
