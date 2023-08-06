@@ -58,4 +58,10 @@ public class CgUnit {
 
     @Column(name = "IS_REBASE_AUTHORITY")
     private String isRebaseAuthority;
+
+    @Column(name = "unit_rhq")
+    private String unitRhq;
+
+    @Column(name = "unit_dhq")
+    private String unitDhq;
 }
