@@ -867,33 +867,57 @@ public class DashboardServiceImpl implements DashBoardService {
                     double totalCda = 0.0;
                     double remCdaBal = 0.0;
                     List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, uid, allocationTypeId, "0");
-                    double rqUnit = 0.0;
+                    //double rqUnit = 0.0;
                     if (cdaDetail.size() > 0) {
                         for (int j = 0; j < cdaDetail.size(); j++) {
-                            totalCda += Double.parseDouble(cdaDetail.get(j).getTotalParkingAmount());
-                            remCdaBal += Double.parseDouble(cdaDetail.get(j).getRemainingCdaAmount());
                             AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(0).getAmountType());
-                            rqUnit = hdamtUnit.getAmount();
+                            double rqUnit = hdamtUnit.getAmount();
+                            if (cdaDetail.get(j).getTotalParkingAmount() == null) {
+                                totalCda+=0.0;
+                            }else{
+                                totalCda += Double.parseDouble(cdaDetail.get(j).getTotalParkingAmount());
+                            }
+                            if (cdaDetail.get(j).getRemainingCdaAmount() == null) {
+                                remCdaBal=0.0;
+                            }else{
+                                double cdaBal=Double.parseDouble(cdaDetail.get(j).getRemainingCdaAmount());
+                                remCdaBal += cdaBal * rqUnit;
+                            }
+
                         }
                     }
-                    double cdaTotal = totalCda * rqUnit / reqAmount;
-                    double cdaRming = remCdaBal * rqUnit / reqAmount;
+                    //double cdaTotal = totalCda * rqUnit / reqAmount;
+                    double cdaRming = remCdaBal / reqAmount;
 
                     double totalCdaSub = 0.0;
                     double remCdaBalSub = 0.0;
-                    double rqUnitSub = 0.0;
+                    //double rqUnitSub = 0.0;
                     for (CgUnit unitS : unitList) {
                         String subUnits = unitS.getUnit();
                         List<CdaParkingTrans> cdaDetailSub = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, subUnits, allocationTypeId, "0");
+                        if (cdaDetailSub.size() > 0) {
+                            double cdaRmBal=0.0;
                             for (int k = 0; k < cdaDetailSub.size(); k++) {
-                                totalCdaSub += Double.parseDouble(cdaDetailSub.get(k).getTotalParkingAmount());
-                                remCdaBalSub += Double.parseDouble(cdaDetailSub.get(k).getRemainingCdaAmount());
                                 AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetailSub.get(0).getAmountType());
-                                rqUnitSub = hdamtUnit.getAmount();
+                                double rqUnitSub = hdamtUnit.getAmount();
+                                if (cdaDetailSub.get(k).getTotalParkingAmount() == null) {
+                                    totalCdaSub+=0.0;
+                                }else{
+                                    totalCdaSub += Double.parseDouble(cdaDetailSub.get(k).getTotalParkingAmount());
+                                }
+                                if (cdaDetailSub.get(k).getRemainingCdaAmount() == null) {
+                                    cdaRmBal +=0.0;
+                                }else{
+                                    double cdaRm=Double.parseDouble(cdaDetailSub.get(k).getRemainingCdaAmount());
+                                    cdaRmBal += cdaRm * rqUnitSub;
+                                }
                             }
+                            remCdaBalSub += cdaRmBal;
+                        }
+
                     }
-                    double cdaTotalSub = totalCdaSub * rqUnitSub / reqAmount;
-                    double cdaRmingSub = remCdaBalSub * rqUnitSub / reqAmount;
+                    //double cdaTotalSub = totalCdaSub * rqUnitSub / reqAmount;
+                    double cdaRmingSub = remCdaBalSub/ reqAmount;
 
                     double sumCdaRmng=cdaRmingSub+cdaRming;
 
@@ -1024,31 +1048,47 @@ public class DashboardServiceImpl implements DashBoardService {
 
                     double totalCdaSub = 0.0;
                     double remCdaBalSub = 0.0;
-                    double rqUnitSub = 0.0;
+                    //double rqUnitSub = 0.0;
                     for (CgUnit unitS : unitList) {
                         String subUnits = unitS.getUnit();
                         List<CdaParkingTrans> cdaDetailSub = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, subUnits, allocationTypeId, "0");
                         for (int k = 0; k < cdaDetailSub.size(); k++) {
-                            totalCdaSub += Double.parseDouble(cdaDetailSub.get(k).getTotalParkingAmount());
-                            remCdaBalSub += Double.parseDouble(cdaDetailSub.get(k).getRemainingCdaAmount());
                             AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetailSub.get(0).getAmountType());
-                            rqUnitSub = hdamtUnit.getAmount();
+                            double rqUnitSub = hdamtUnit.getAmount();
+                            if (cdaDetailSub.get(k).getTotalParkingAmount() == null) {
+                                totalCdaSub+=0.0;
+                            }else{
+                                totalCdaSub += Double.parseDouble(cdaDetailSub.get(k).getTotalParkingAmount());
+                            }
+                            if (cdaDetailSub.get(k).getRemainingCdaAmount() == null) {
+                                remCdaBalSub=0.0;
+                            }else{
+                                double remcda=Double.parseDouble(cdaDetailSub.get(k).getRemainingCdaAmount());
+                                remCdaBalSub += remcda * rqUnitSub;
+                            }
+
                         }
                     }
-                    double cdaTotalSub = totalCdaSub * rqUnitSub / reqAmount;
-                    double cdaRmingSub = remCdaBalSub * rqUnitSub / reqAmount;
+                    //double cdaTotalSub = totalCdaSub * rqUnitSub / reqAmount;
+                    double cdaRmingSub = remCdaBalSub/ reqAmount;
 
                     double remCdaBal = 0.0;
-                    double cdaUnit = 0.0;
+                    //double cdaUnit = 0.0;
                     List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, uid, allocationTypeId, "0");
                     if (cdaDetail.size() > 0) {
                         for (int k = 0; k < cdaDetail.size(); k++) {
-                            remCdaBal += Double.parseDouble(cdaDetail.get(k).getRemainingCdaAmount());
                             AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(0).getAmountType());
-                            cdaUnit = hdamtUnit.getAmount();
+                            double cdaUnit = hdamtUnit.getAmount();
+
+                            if (cdaDetail.get(k).getRemainingCdaAmount() == null) {
+                                remCdaBal=0.0;
+                            }else{
+                                double remCd=Double.parseDouble(cdaDetail.get(k).getRemainingCdaAmount());
+                                remCdaBal += remCd * cdaUnit;
+                            }
                         }
                     }
-                    double cdaRmingAmunt = remCdaBal * cdaUnit / reqAmount;
+                    double cdaRmingAmunt = remCdaBal/ reqAmount;
 
                     double sumCdaRemaining=cdaRmingSub+cdaRmingAmunt;
                     String cbD = "";
@@ -1078,7 +1118,6 @@ public class DashboardServiceImpl implements DashBoardService {
                     }
                     List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(uid, finYearId, subHeadId, allocationTypeId, "0", "0");
                     double totalExpAmount = 0.0;
-
                     if (expenditure.size() > 0) {
                         for (ContigentBill bill : expenditure) {
                             totalExpAmount += Double.parseDouble(bill.getCbAmount());
@@ -1104,6 +1143,8 @@ public class DashboardServiceImpl implements DashBoardService {
                         expAmnt=totalExpAmount/ reqAmount;
                         alocAmnt = cdaRmingAmunt + (totalExpAmount/ reqAmount);
                         sumCdaRemainingBal=cdaRmingAmunt;
+                        if(expAmnt ==0)
+                            cbD="";
                     } else {
                         double alocAmnts = Double.parseDouble(budgetAllocToUnit.get(j).getAllocationAmount());
                         alocAmnt = alocAmnts * allocAmntUnit / reqAmount;
