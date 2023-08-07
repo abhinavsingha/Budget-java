@@ -65,10 +65,10 @@ public class UnitRebaseController {
 
 
 
-    @PostMapping("/saveUnitRebaseArvind")
-    public ResponseEntity<ApiResponse<DefaultResponse>> saveUnitRebaseArvind(@RequestBody UnitRebaseSaveReq req) {
-        return new ResponseEntity<>(mangeRebaseService.saveUnitRebaseArvind(req), HttpStatus.OK);
-    }
+//    @PostMapping("/saveUnitRebaseArvind")
+//    public ResponseEntity<ApiResponse<DefaultResponse>> saveUnitRebaseArvind(@RequestBody UnitRebaseSaveReq req) {
+//        return new ResponseEntity<>(mangeRebaseService.saveUnitRebaseArvind(req), HttpStatus.OK);
+//    }
 
     @GetMapping("/getAllIsShipCgUnitData")
     public ResponseEntity<ApiResponse<List<CgUnitResponse>>> getAllIsShipCgUnitData() {
