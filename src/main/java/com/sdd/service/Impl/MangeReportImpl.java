@@ -2948,11 +2948,15 @@ public class MangeReportImpl implements MangeReportService {
                     if (cdaParkingTotalList.size() > 0) {
                         for (int k = 0; k < cdaParkingTotalList.size(); k++) {
 
-
                             List<CdaParkingTrans> cdaData = new ArrayList<>();
-                            cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), cdaReportRequest.getUnitId()));
+                            List<CgUnit> unitDataList = cgUnitRepository.findByBudGroupUnitLike("%" + cdaReportRequest.getUnitId() + "%");
+                            List<CgUnit> unitList = unitDataList.stream().filter(e -> !e.getUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                            CgUnit selfUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
+                            unitList.add(selfUnit);
 
-//                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
+                            for (int p = 0; p < unitDataList.size(); p++) {
+                                cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(p).getUnit()));
+                            }
 
 
                             double amount = 0;
@@ -3164,11 +3168,13 @@ public class MangeReportImpl implements MangeReportService {
                         if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
                             cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId()));
                         } else {
-                            List<CgUnit> unitDataList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+                            List<CgUnit> unitDataList = cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
+                            List<CgUnit> unitList = unitDataList.stream().filter(e -> !e.getUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                            CgUnit selfUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
+                            unitList.add(selfUnit);
+
                             for (int p = 0; p < unitDataList.size(); p++) {
                                 List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(p).getUnit());
-                                CgUnit selfUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-                                unitDataList.add(selfUnit);
                                 cdaData.addAll(cdaTransData);
                             }
                             List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId());
@@ -3697,7 +3703,10 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
 
-            } else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
+            }
+
+
+            else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
 
                 if (cdaReportRequest.getUnitId() == null || cdaReportRequest.getUnitId().isEmpty()) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT ID CAN NOT BE BLANK");
@@ -3752,11 +3761,16 @@ public class MangeReportImpl implements MangeReportService {
                     if (cdaParkingTotalList.size() > 0) {
                         for (int k = 0; k < cdaParkingTotalList.size(); k++) {
 
+                                List<CdaParkingTrans> cdaData = new ArrayList<>();
+                                List<CgUnit> unitDataList = cgUnitRepository.findByBudGroupUnitLike("%" + cdaReportRequest.getUnitId() + "%");
+                                List<CgUnit> unitList = unitDataList.stream().filter(e -> !e.getUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                                CgUnit selfUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
+                                unitList.add(selfUnit);
 
-                            List<CdaParkingTrans> cdaData = new ArrayList<>();
-                            cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), cdaReportRequest.getUnitId()));
+                                for (int p = 0; p < unitDataList.size(); p++) {
+                                    cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(p).getUnit()));
+                                }
 
-//                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
 
 
                             double amount = 0;
