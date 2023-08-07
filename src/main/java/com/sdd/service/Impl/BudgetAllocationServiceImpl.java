@@ -1996,21 +1996,29 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             List<CgUnit> subUnitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
 
             double totalAllocationAmount = 0;
+            double expAmount = 0;
             for (Integer c = 0; c < subUnitList.size(); c++) {
                 List<BudgetAllocation> budgetAllocationListASD = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlag(budgetAllocations.get(i).getSubHead(), subUnitList.get(c).getUnit(), budgetAllocations.get(i).getFinYear(), budgetAllocations.get(i).getAllocationTypeId(), "0", "0");
+                List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), budgetAllocations.get(i).getFinYear(), budgetAllocations.get(i).getSubHead(), budgetAllocations.get(i).getAllocationTypeId(), "0", "0");
+
+                for (Integer m = 0; m < contigentBills.size(); m++) {
+                    ContigentBill contigentBill = contigentBills.get(m);
+                    expAmount = expAmount + Double.parseDouble(contigentBill.getCbAmount());
+                }
+
+
                 for (Integer m = 0; m < budgetAllocationListASD.size(); m++) {
                     BudgetAllocation budgetAllocation = budgetAllocationListASD.get(m);
                     totalAllocationAmount = totalAllocationAmount + Double.parseDouble(budgetAllocation.getAllocationAmount()) * amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType()).getAmount();
                 }
             }
 
-            totalAllocationAmount = totalAllocationAmount / amountUnitRepository.findByAmountTypeId(budgetAllocationSubReport.getAmountType()).getAmount();
+            totalAllocationAmount = (expAmount + totalAllocationAmount) / amountUnitRepository.findByAmountTypeId(budgetAllocationSubReport.getAmountType()).getAmount();
 
             if (totalAllocationAmount == 0) {
                 budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
             } else {
                 budgetAllocationReport.setUnallocatedAmount((Double.parseDouble(budgetAllocationSubReport.getUnallocatedAmount()) - totalAllocationAmount) + "");
-
             }
 
             try {
@@ -2018,15 +2026,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationSubReport.getFromUnit());
                 if (cgUnit == null) {
                     budgetAllocationReport.setFromUnit(cgUnitRepository.findByUnit(budgetAllocationSubReport.getToUnit()));
-
                 } else {
                     budgetAllocationReport.setFromUnit(cgUnitRepository.findByUnit(budgetAllocationSubReport.getFromUnit()));
-
                 }
 
             } catch (Exception e) {
                 budgetAllocationReport.setFromUnit(cgUnitRepository.findByUnit(budgetAllocationSubReport.getToUnit()));
-
             }
 
 
