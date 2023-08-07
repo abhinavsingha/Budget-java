@@ -74,4 +74,9 @@ public class CdaParkingController {
 		return new ResponseEntity<>(cdaParkingService.getOldCdaDataForRebase(cdaRequest), HttpStatus.OK);
 	}
 
+	@PostMapping("/getCheckExpForUnit")
+	public ResponseEntity<ApiResponse<ReabseCdaParkingResponse>> getCheckExpForUnit(@RequestBody CDARequestReBase cdaRequest) {
+		return new ResponseEntity<>(cdaParkingService.getOldCdaDataForRebase(cdaRequest), HttpStatus.OK);
+	}
+
 }

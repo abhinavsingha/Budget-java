@@ -24,6 +24,8 @@ public interface CdaParkingService {
 
 	ApiResponse<ReabseCdaParkingResponse> getOldCdaDataForRebase(CDARequestReBase cdaRequest);
 
+	ApiResponse<ReabseCdaParkingResponse> getCheckExpForUnit(CDARequestReBase cdaRequest);
+
 	ApiResponse<List<CdaParking>> getCdaUnitList();
 
 	ApiResponse<DefaultResponse> updateCdaParkingData(CDARequest cdaRequest);

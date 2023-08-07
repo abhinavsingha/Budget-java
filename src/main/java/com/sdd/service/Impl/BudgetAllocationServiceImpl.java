@@ -2022,7 +2022,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             }
 
             try {
-
                 CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationSubReport.getFromUnit());
                 if (cgUnit == null) {
                     budgetAllocationReport.setFromUnit(cgUnitRepository.findByUnit(budgetAllocationSubReport.getToUnit()));
@@ -5347,7 +5346,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocation.setToUnit(revisionData.get(z).getToUnitId());
                 budgetAllocation.setFromUnit(hrData.getUnitId());
                 budgetAllocation.setSubHead(revisionData.get(z).getBudgetHeadId());
-                budgetAllocation.setIsTYpe("R");
+                budgetAllocation.setIsTYpe("REVISION");
                 budgetAllocation.setAllocationTypeId(revisionData.get(z).getAllocTypeId());
                 budgetAllocation.setIsBudgetRevision("0");
                 budgetAllocation.setUnallocatedAmount("0");
