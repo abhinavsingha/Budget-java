@@ -2357,7 +2357,10 @@ public class MangeReportImpl implements MangeReportService {
                         if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
                             cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId()));
                         } else {
-                            List<CgUnit> unitDataList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+//                            List<CgUnit> unitDataList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+
+                            List<CgUnit> unitDataList = cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
+                            List<CgUnit> unitList = unitDataList.stream().filter(e -> !e.getUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
                             CgUnit selfUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
                             unitDataList.add(selfUnit);
 
@@ -2366,7 +2369,6 @@ public class MangeReportImpl implements MangeReportService {
                                 cdaData.addAll(cdaTransData);
                             }
                         }
-
 
                         double amount = 0;
                         for (int m = 0; m < cdaData.size(); m++) {
@@ -2760,8 +2762,7 @@ public class MangeReportImpl implements MangeReportService {
 
             }
 
-        }
-        else {
+        } else {
 
             if (cdaReportRequest.getReportType() == null || cdaReportRequest.getReportType().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REPORT TYPE CAN NOT BE BLANK");
@@ -5998,7 +5999,7 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne2233.createRun(), 12, ConverterUtils.addDecimalPoint(sumRE + ""), true);
                 XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
                 paragraphtableRowOne2244.setAlignment(ParagraphAlignment.RIGHT);
-                boldText(paragraphtableRowOne2244.createRun(), 12, ConverterUtils.addDecimalPoint((sumExisting+sumRE) + ""), true);
+                boldText(paragraphtableRowOne2244.createRun(), 12, ConverterUtils.addDecimalPoint((sumExisting + sumRE) + ""), true);
 
                 grTotalAlloc += Double.parseDouble(totSum1);
                 grTotalAddition += Double.parseDouble(totSum2);
@@ -7149,7 +7150,7 @@ public class MangeReportImpl implements MangeReportService {
                         IcgAmount1 = hrAllocAmount * hrAmountUnit / reqAmount;
                         sumalcg += IcgAmount1;
 
-                        double eAmount=0.0;
+                        double eAmount = 0.0;
 
                         CgUnit unitN = cgUnitRepository.findByUnit(hrDetails.get(0).getToUnit());
                         UnitName = unitN.getDescr();
@@ -7168,12 +7169,12 @@ public class MangeReportImpl implements MangeReportService {
                             eAmount = Double.parseDouble(cbAmount);
                         }
 
-                        emountself = eAmount/ reqAmount;
+                        emountself = eAmount / reqAmount;
                         sumEmountself += emountself;
                         double expnAmount;
-                        if(IcgAmount1 != 0){
+                        if (IcgAmount1 != 0) {
                             expnAmount = emountself * 100 / IcgAmount1;
-                        }else{
+                        } else {
                             expnAmount = 0.0;
                         }
 
@@ -7206,7 +7207,7 @@ public class MangeReportImpl implements MangeReportService {
                             PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
                             PdfPCell cell20 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(IcgAmount1 + ""), cellFont));
                             PdfPCell cell30 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(emountself + ""), cellFont));
-                            PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.2f", new BigDecimal(emountself*100/IcgAmount1))));
+                            PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.2f", new BigDecimal(emountself * 100 / IcgAmount1))));
                             cell10.setPadding(10);
                             cell20.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                             cell30.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -7433,13 +7434,13 @@ public class MangeReportImpl implements MangeReportService {
             if ((grTotalAlloc + sumalcg) == 0)
                 perc1 = 0.0;
             else
-                perc1 = ((grTotalAddition+sumEmountself) * 100) / (grTotalAlloc + sumalcg);
+                perc1 = ((grTotalAddition + sumEmountself) * 100) / (grTotalAlloc + sumalcg);
 
 
             PdfPCell cell50 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
             PdfPCell cell51 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalIcg + sumalcg + ""), cellFont));
             PdfPCell cell60 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAlloc + sumalcg + ""), cellFont));
-            PdfPCell cell70 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAddition+sumEmountself + ""), cellFont));
+            PdfPCell cell70 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAddition + sumEmountself + ""), cellFont));
             PdfPCell cell80 = new PdfPCell(new Phrase(ConverterUtils.addDecimal2Point(perc1 + ""), cellFont));
             cell50.setPadding(12);
             cell51.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -7707,7 +7708,7 @@ public class MangeReportImpl implements MangeReportService {
                         IcgAmount1 = hrAllocAmount * hrAmountUnit / reqAmount;
                         sumalcg += IcgAmount1;
 
-                        double eAmount=0.0;
+                        double eAmount = 0.0;
 
                         CgUnit unitN = cgUnitRepository.findByUnit(hrDetails.get(0).getToUnit());
                         UnitName = unitN.getDescr();
@@ -7725,12 +7726,12 @@ public class MangeReportImpl implements MangeReportService {
                             eAmount = Double.parseDouble(cbAmount);
                         }
 
-                        emountself = eAmount/ reqAmount;
+                        emountself = eAmount / reqAmount;
                         sumEmountself += emountself;
                         double expnAmount;
-                        if(IcgAmount1 != 0){
+                        if (IcgAmount1 != 0) {
                             expnAmount = emountself * 100 / IcgAmount1;
-                        }else{
+                        } else {
                             expnAmount = 0.0;
                         }
 
@@ -7784,7 +7785,7 @@ public class MangeReportImpl implements MangeReportService {
                             boldText(paragraphtableRowOne2244.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(emountself)), true);
                             XWPFParagraph paragraphtableRowOne2255 = tableRowOne222.getCell(5).addParagraph();
                             paragraphtableRowOne2255.setAlignment(ParagraphAlignment.RIGHT);
-                            boldText(paragraphtableRowOne2255.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(emountself*100/IcgAmount1)), true);
+                            boldText(paragraphtableRowOne2255.createRun(), 12, String.format("%1$0,1.4f", new BigDecimal(emountself * 100 / IcgAmount1)), true);
                             XWPFParagraph paragraphtableRowOne2266 = tableRowOne222.getCell(6).addParagraph();
                             boldText(paragraphtableRowOne2266.createRun(), 12, "", true);
                             XWPFParagraph paragraphtableRowOne2277 = tableRowOne222.getCell(7).addParagraph();
@@ -8025,7 +8026,7 @@ public class MangeReportImpl implements MangeReportService {
             if ((grTotalAlloc + sumalcg) == 0)
                 perc1 = 0.0;
             else
-                perc1 = ((grTotalAddition+sumEmountself) * 100) / (grTotalAlloc + sumalcg);
+                perc1 = ((grTotalAddition + sumEmountself) * 100) / (grTotalAlloc + sumalcg);
 
             XWPFTable table220 = document.createTable(1, 8);
             table220.setWidth("100%");
@@ -8042,7 +8043,7 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne2230.createRun(), 12, ConverterUtils.addDecimalPoint(grTotalAlloc + sumalcg + ""), true);
             XWPFParagraph paragraphtableRowOne2200 = tableRowOne220.getCell(4).addParagraph();
             paragraphtableRowOne2200.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2200.createRun(), 12, ConverterUtils.addDecimalPoint(grTotalAddition+sumEmountself + ""), true);
+            boldText(paragraphtableRowOne2200.createRun(), 12, ConverterUtils.addDecimalPoint(grTotalAddition + sumEmountself + ""), true);
             XWPFParagraph paragraphtableRowOne2250 = tableRowOne220.getCell(5).addParagraph();
             paragraphtableRowOne2250.setAlignment(ParagraphAlignment.RIGHT);
             boldText(paragraphtableRowOne2250.createRun(), 12, ConverterUtils.addDecimal2Point(perc1 + ""), true);
@@ -8237,7 +8238,7 @@ public class MangeReportImpl implements MangeReportService {
                         IcgAmount1 = hrAllocAmount * hrAmountUnit / reqAmount;
                         sumalcg += IcgAmount1;
 
-                        double eAmount=0.0;
+                        double eAmount = 0.0;
 
                         CgUnit unitN = cgUnitRepository.findByUnit(hrDetails.get(0).getToUnit());
                         UnitName = unitN.getDescr();
@@ -8255,12 +8256,12 @@ public class MangeReportImpl implements MangeReportService {
                             eAmount = Double.parseDouble(cbAmount);
                         }
 
-                        emountself = eAmount/ reqAmount;
+                        emountself = eAmount / reqAmount;
                         sumEmountself += emountself;
                         double expnAmount;
-                        if(IcgAmount1 != 0){
+                        if (IcgAmount1 != 0) {
                             expnAmount = emountself * 100 / IcgAmount1;
-                        }else{
+                        } else {
                             expnAmount = 0.0;
                         }
 
@@ -10393,9 +10394,9 @@ public class MangeReportImpl implements MangeReportService {
                 grTotalSum += (Double.parseDouble(sumExistingRound) + Double.parseDouble(sumRERound));
             }
             PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-            PdfPCell cell01 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAlloc+""), cellFont));
-            PdfPCell cell02 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAddition+""), cellFont));
-            PdfPCell cell03 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAlloc+grTotalAddition+""), cellFont));
+            PdfPCell cell01 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAlloc + ""), cellFont));
+            PdfPCell cell02 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAddition + ""), cellFont));
+            PdfPCell cell03 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAlloc + grTotalAddition + ""), cellFont));
             cell00.setPadding(12);
             cell01.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell02.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -11364,7 +11365,7 @@ public class MangeReportImpl implements MangeReportService {
             boldText(paragraphtableRowOne2234.createRun(), 12, String.format("%1$0,1.4f", grTotalAddition), true);
             XWPFParagraph paragraphtableRowOne2245 = tableRowOne223.getCell(4).addParagraph();
             paragraphtableRowOne2245.setAlignment(ParagraphAlignment.RIGHT);
-            boldText(paragraphtableRowOne2245.createRun(), 12, ConverterUtils.addDecimalPoint((grTotalAlloc+grTotalAddition) + ""), true);
+            boldText(paragraphtableRowOne2245.createRun(), 12, ConverterUtils.addDecimalPoint((grTotalAlloc + grTotalAddition) + ""), true);
 
             String names1 = approveName;
             String unitName1 = hrData.getUnit();
