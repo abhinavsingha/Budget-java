@@ -310,6 +310,10 @@ public class CdaParkingImpl implements CdaParkingService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AVAILABLE AMOUNT CAN NOT BE BLANK");
             }
 
+            if (cdaRequest.getCdaRequest().get(i).getTotalParkingAmount() == null || cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TOTAL AMOUNT CAN NOT BE BLANK");
+            }
+
 
             if (cdaRequest.getCdaRequest().get(i).getGinNo() == null || cdaRequest.getCdaRequest().get(i).getGinNo().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "GIN NUMBER CAN NOT BE BLANK");
@@ -342,9 +346,6 @@ public class CdaParkingImpl implements CdaParkingService {
 
             AmountUnit allocationAmountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType());
             totalAmount = (Double.parseDouble(ConverterUtils.addDecimalPoint(budgetAllocation.getAllocationAmount())) + Double.parseDouble(ConverterUtils.addDecimalPoint(budgetAllocation.getRevisedAmount()))) * allocationAmountUnit.getAmount();
-
-            String fourDigitsAmount = ConverterUtils.addDecimalPoint(totalAmount + "");
-            totalAmount = Double.parseDouble(fourDigitsAmount);
 
             cadTotalAmount = cadTotalAmount + Double.parseDouble(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()) * amountUnit.getAmount();
 
@@ -400,10 +401,8 @@ public class CdaParkingImpl implements CdaParkingService {
 
             cdaParkingTrans.setCdaParkingId(HelperUtils.getCdaId());
             cdaParkingTrans.setFinYearId(cdaRequest.getCdaRequest().get(i).getBudgetFinancialYearId());
-
-
-//            cdaParkingTrans.setTotalParkingAmount(ConverterUtils.addDecimalPoint(totalPrkingAmount + ""));
             cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()));
+            cdaParkingTrans.setTotalParkingAmount(ConverterUtils.addDecimalPoint(cdaRequest.getCdaRequest().get(i).getTotalParkingAmount()));
             cdaParkingTrans.setBudgetHeadId(cdaRequest.getCdaRequest().get(i).getBudgetHeadId());
             cdaParkingTrans.setRemarks(cdaRequest.getCdaRequest().get(i).getRemark());
             cdaParkingTrans.setGinNo(cdaRequest.getCdaRequest().get(i).getGinNo());
@@ -428,7 +427,6 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingCrAndDr.setGinNo(saveCdaData.getGinNo());
             cdaParkingCrAndDr.setUnitId(saveCdaData.getUnitId());
             cdaParkingCrAndDr.setAuthGroupId(saveCdaData.getAuthGroupId());
-//            cdaParkingCrAndDr.setAmount(totalPrkingAmount + "");
             cdaParkingCrAndDr.setIscrdr("CR");
             cdaParkingCrAndDr.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
