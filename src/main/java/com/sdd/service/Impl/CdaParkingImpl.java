@@ -310,7 +310,6 @@ public class CdaParkingImpl implements CdaParkingService {
             }
 
 
-
             if (cdaRequest.getCdaRequest().get(i).getGinNo() == null || cdaRequest.getCdaRequest().get(i).getGinNo().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "GIN NUMBER CAN NOT BE BLANK");
             }
@@ -617,7 +616,6 @@ public class CdaParkingImpl implements CdaParkingService {
         String budgetHedaid = "";
         double cadTotalAmount = 0;
 
-        double currentCDARemeninng = 0;
 
         double totalAmount = 0;
         for (Integer i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
@@ -670,10 +668,7 @@ public class CdaParkingImpl implements CdaParkingService {
 
             AmountUnit allocationAmountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType());
             totalAmount = (Double.parseDouble(budgetAllocation.getAllocationAmount()) + Double.parseDouble(budgetAllocation.getRevisedAmount())) * allocationAmountUnit.getAmount();
-
             cadTotalAmount = cadTotalAmount + Double.parseDouble(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()) * amountUnit.getAmount();
-
-            currentCDARemeninng = currentCDARemeninng + Double.parseDouble(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()) * amountUnit.getAmount();
 
 
             List<BudgetAllocationDetails> budgetAllocationDetailsLists = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(cdaRequest.getAuthGroupId(), "0", "0");
@@ -698,28 +693,31 @@ public class CdaParkingImpl implements CdaParkingService {
         List<CdaParkingCrAndDr> cdaParkingIsCrDr = parkingCrAndDrRepository.findByAuthGroupIdAndBudgetHeadIdAndIsFlagAndIsRevision(cdaRequest.getAuthGroupId(), budgetHedaid, "0", 0);
 
 
-        double previousCDATotalAmount = 0;
-        double previousRemeningAmount = 0;
+        List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+        for (Integer f = 0; f < unitList.size(); f++) {
+
+            for (Integer i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
+
+                CdaSubRequest cdaSubRequest = cdaRequest.getCdaRequest().get(i);
+                List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByFromUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(unitList.get(f).getUnit(), cdaSubRequest.getBudgetFinancialYearId(), cdaSubRequest.getBudgetHeadId(), cdaSubRequest.getAllocationTypeID(), "0", "0", "Pending");
+                if (budgetAllocationDetailsList.size() > 0) {
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALLOCATION OR BUDGET REVISION IS PENDING.AFTER COMPLETE U CAN CHANGE.");
+                }
+            }
+        }
+
+
         for (Integer i = 0; i < cdaParkingTransData.size(); i++) {
             CdaParkingTrans cdaParking = cdaParkingTransData.get(i);
-            AmountUnit amountUnitCDA = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
-            previousRemeningAmount = previousRemeningAmount + (Double.parseDouble(cdaParking.getRemainingCdaAmount()) * amountUnitCDA.getAmount());
-
             cdaParking.setIsFlag("1");
+            cdaParking.setRemarks("CDA UPDATE");
             cdaParkingTransRepository.save(cdaParking);
-
         }
 
         for (Integer i = 0; i < cdaParkingIsCrDr.size(); i++) {
             CdaParkingCrAndDr cdaParking = cdaParkingIsCrDr.get(i);
             cdaParking.setIsFlag("1");
             parkingCrAndDrRepository.save(cdaParking);
-        }
-
-
-
-        if (!(currentCDARemeninng == previousRemeningAmount)) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "OLD CDA REMAINING AMOUNT AND NEW CDA REMAINING AMOUNT MISMATCH");
         }
 
 

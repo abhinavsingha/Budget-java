@@ -270,11 +270,6 @@ public class BudgetAllocationController {
         return new ResponseEntity<>(budgetAllocationService.getAllCgUnitData(), HttpStatus.OK);
     }
 
-
-
-
-
-
     @GetMapping("/getAllSubHeadList")
     public ResponseEntity<ApiResponse<BudgetAllocationResponse>> getAllSubHeadList() {
         return new ResponseEntity<>(budgetAllocationService.getAllSubHeadList(), HttpStatus.OK);
