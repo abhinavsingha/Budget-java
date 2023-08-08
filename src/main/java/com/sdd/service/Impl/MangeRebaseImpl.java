@@ -448,7 +448,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
         DefaultResponse defaultResponse = new DefaultResponse();
-
         String universalAuthGroup = HelperUtils.getAuthorityGroupId();
         String budgetReciptAuthGroupIdForRHQ = HelperUtils.getAuthorityGroupId();
         String budgetAllocationAuthGroupIdDHQ = HelperUtils.getAuthorityGroupId();
