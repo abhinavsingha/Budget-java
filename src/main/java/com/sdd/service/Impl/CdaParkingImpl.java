@@ -685,21 +685,28 @@ public class CdaParkingImpl implements CdaParkingService {
         }
 
 
-        if (!(totalAmount == cadTotalAmount)) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA AMOUNT IS GREATER THAN ALLOCATION AMOUNT");
-        }
+//        if ((totalAmount < cadTotalAmount)) {
+//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA AMOUNT IS GREATER THAN ALLOCATION AMOUNT");
+//        }
 
         List<CdaParkingTrans> cdaParkingTransData = cdaParkingTransRepository.findByAuthGroupIdAndBudgetHeadIdAndIsFlag(cdaRequest.getAuthGroupId(), budgetHedaid, "0");
         List<CdaParkingCrAndDr> cdaParkingIsCrDr = parkingCrAndDrRepository.findByAuthGroupIdAndBudgetHeadIdAndIsFlagAndIsRevision(cdaRequest.getAuthGroupId(), budgetHedaid, "0", 0);
 
 
-        List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
-        for (Integer f = 0; f < unitList.size(); f++) {
+        List<CgUnit> unitDataList = new ArrayList<>();
+        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+            unitDataList = cgUnitRepository.findBySubUnitOrderByDescrAsc("000225");
+        } else {
+            unitDataList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnit());
+        }
+
+
+//        List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
+        for (Integer f = 0; f < unitDataList.size(); f++) {
 
             for (Integer i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
-
                 CdaSubRequest cdaSubRequest = cdaRequest.getCdaRequest().get(i);
-                List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByFromUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(unitList.get(f).getUnit(), cdaSubRequest.getBudgetFinancialYearId(), cdaSubRequest.getBudgetHeadId(), cdaSubRequest.getAllocationTypeID(), "0", "0", "Pending");
+                List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(unitDataList.get(f).getUnit(), cdaSubRequest.getBudgetFinancialYearId(), cdaSubRequest.getBudgetHeadId(), cdaSubRequest.getAllocationTypeID(), "0", "0", "Pending");
                 if (budgetAllocationDetailsList.size() > 0) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALLOCATION OR BUDGET REVISION IS PENDING.AFTER COMPLETE U CAN CHANGE.");
                 }
@@ -763,42 +770,6 @@ public class CdaParkingImpl implements CdaParkingService {
             parkingCrAndDrRepository.save(cdaParkingCrAndDr);
 
         }
-
-
-//        CgUnit cgToUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-//
-//        String[] groupUnit = cgToUnit.getBudGroupUnit().split(",");
-//        for (Integer i = 0; i < groupUnit.length; i++) {
-//
-//
-//            MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
-//
-//            if (cgToUnit != null) {
-//                mangeInboxOutbox.setType(cgToUnit.getDescr());
-//            }
-//
-//            mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
-//            mangeInboxOutbox.setRemarks("CDA Update");
-//            mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-//            mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-//            mangeInboxOutbox.setToUnit(groupUnit[i]);
-//            mangeInboxOutbox.setFromUnit(hrData.getUnitId());
-//            mangeInboxOutbox.setGroupId(authGroupId);
-//            mangeInboxOutbox.setRoleId(hrData.getRoleId());
-//            mangeInboxOutbox.setCreaterpId(hrData.getPid());
-//            mangeInboxOutbox.setApproverpId("");
-//            mangeInboxOutbox.setIsFlag("1");
-//            mangeInboxOutbox.setIsArchive("0");
-//            mangeInboxOutbox.setIsApproved("0");
-//            mangeInboxOutbox.setStatus("Approved");
-//            mangeInboxOutbox.setIsBgcg("CDA");
-//            mangeInboxOutbox.setState("CR");
-//            mangeInboxOutbox.setIsRevision(0);
-//            mangeInboxOutBoxRepository.save(mangeInboxOutbox);
-//
-//
-//        }
-
 
         defaultResponse.setMsg("CDA data update successfully");
         return ResponseUtils.createSuccessResponse(defaultResponse, new TypeReference<DefaultResponse>() {

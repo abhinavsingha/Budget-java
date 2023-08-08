@@ -15,17 +15,10 @@ public class CDARequest {
     private String ginNo;
     private String budgetHeadId;
     private String amountTypeId;
-
-
-
     private String allocationTypeId;
     private String authGroupId;
-
     private String totalExpenditure;
     private List<CdaSubRequest> cdaRequest;
-
-
-
 
 
 }

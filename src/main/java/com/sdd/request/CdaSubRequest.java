@@ -12,7 +12,6 @@ public class CdaSubRequest {
 
     private String budgetFinancialYearId;
     private String allocationTypeID;
-    private String toUnitId;
     private String ginNo;
     private String budgetHeadId;
     private String availableParkingAmount;

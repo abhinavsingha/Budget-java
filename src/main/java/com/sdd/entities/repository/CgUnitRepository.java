@@ -21,10 +21,6 @@ public interface CgUnitRepository extends JpaRepository<CgUnit, Long> {
 
   List<CgUnit> findBySubUnitOrderByDescrAsc(String subUnit);
 
-  List<CgUnit> findByIsActiveAndIsShipOrderByDescrAsc(String active,String isShip);
-
-
-  List<CgUnit> findByPurposeCodeOrderByDescrAsc(String purpose);
 
   List<CgUnit> findByBudGroupUnitLike(String unitId);
 

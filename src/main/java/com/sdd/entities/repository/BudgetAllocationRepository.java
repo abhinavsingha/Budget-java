@@ -36,6 +36,9 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
     List<BudgetAllocation> findByAuthGroupIdAndToUnit(
             String unitId, String toUnit);
 
+    List<BudgetAllocation> findByAuthGroupIdAndToUnitOrderByCreatedOnAsc(
+            String unitId, String toUnit);
+
     List<BudgetAllocation> findByAuthGroupIdAndToUnitAndIsFlag(
             String unitId, String toUnit, String isDelete);
 

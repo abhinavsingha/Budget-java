@@ -1,5 +1,6 @@
 package com.sdd.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sdd.entities.*;
 import com.sdd.request.CdaParkingCrAndDrResponse;
 import lombok.Getter;
@@ -11,7 +12,6 @@ import java.util.List;
 
 @Getter
 @Setter
-
 public class BudgetAllocationSubResponse {
 
 

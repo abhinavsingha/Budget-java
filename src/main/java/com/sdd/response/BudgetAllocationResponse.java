@@ -1,5 +1,6 @@
 package com.sdd.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sdd.entities.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,6 @@ import java.util.List;
 
 @Getter
 @Setter
-
 public class BudgetAllocationResponse {
 
     private List<BudgetAllocationSubResponse> budgetResponseist;

@@ -924,11 +924,8 @@ public class MangeReportImpl implements MangeReportService {
 
         List<BudgetAllocation> budgetAllocationReport = new ArrayList<BudgetAllocation>();
 
-//        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
-        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnit(authGroupId, hrData.getUnitId());
-        if (budgetAllocationReport.size() == 0) {
-            budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnit(authGroupId, hrData.getUnitId());
-        }
+        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitOrderByCreatedOnAsc(authGroupId, hrData.getUnitId());
+
 
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
@@ -943,6 +940,9 @@ public class MangeReportImpl implements MangeReportService {
         String key = "";
         for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
 
+//            if (!(budgetAllocationReport.get(j).getIsFlag().equalsIgnoreCase("0"))) {
+//                continue;
+//            }
 
             BudgetHead budgetHead = subHeadRepository.findByBudgetCodeId(budgetAllocationReport.get(j).getSubHead());
             CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationReport.get(j).getToUnit());
@@ -1077,11 +1077,8 @@ public class MangeReportImpl implements MangeReportService {
         HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
         List<BudgetAllocation> budgetAllocationReport = new ArrayList<BudgetAllocation>();
 
-//        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
-        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnit(authGroupId, hrData.getUnitId());
-        if (budgetAllocationReport.size() == 0) {
-            budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnit(authGroupId, hrData.getUnitId());
-        }
+        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitOrderByCreatedOnAsc(authGroupId, hrData.getUnitId());
+
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
@@ -1095,6 +1092,10 @@ public class MangeReportImpl implements MangeReportService {
 
         String key = "";
         for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
+
+//            if (!(budgetAllocationReport.get(j).getIsFlag().equalsIgnoreCase("0"))) {
+//                continue;
+//            }
 
 
             BudgetHead budgetHead = subHeadRepository.findByBudgetCodeId(budgetAllocationReport.get(j).getSubHead());
@@ -2044,17 +2045,13 @@ public class MangeReportImpl implements MangeReportService {
             double allocationAmount = 0;
 
 
-
-
-
-
             for (int m = 0; m < cdaData.size(); m++) {
                 AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
                 grandTotal = grandTotal + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                 amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
 
                 List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), cdaData.get(m).getBudgetHeadId(), cdaData.get(m).getAllocTypeId(), "Approved", "0", "0");
-                double allocationAmountMain  = 0;
+                double allocationAmountMain = 0;
                 for (Integer g = 0; g < budgetAllocationsDetalis.size(); g++) {
                     AmountUnit amountUnitMain = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(m).getAmountType());
                     allocationAmountMain = allocationAmountMain + (Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount()) * amountUnitMain.getAmount());
@@ -2192,7 +2189,7 @@ public class MangeReportImpl implements MangeReportService {
                 amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
 
                 List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), cdaData.get(m).getBudgetHeadId(), cdaData.get(m).getAllocTypeId(), "Approved", "0", "0");
-                double allocationAmountMain  = 0;
+                double allocationAmountMain = 0;
                 for (Integer g = 0; g < budgetAllocationsDetalis.size(); g++) {
                     AmountUnit amountUnitMain = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(m).getAmountType());
                     allocationAmountMain = allocationAmountMain + (Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount()) * amountUnitMain.getAmount());
@@ -3714,10 +3711,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
 
-            }
-
-
-            else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
+            } else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
 
                 if (cdaReportRequest.getUnitId() == null || cdaReportRequest.getUnitId().isEmpty()) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT ID CAN NOT BE BLANK");
@@ -3772,16 +3766,15 @@ public class MangeReportImpl implements MangeReportService {
                     if (cdaParkingTotalList.size() > 0) {
                         for (int k = 0; k < cdaParkingTotalList.size(); k++) {
 
-                                List<CdaParkingTrans> cdaData = new ArrayList<>();
-                                List<CgUnit> unitDataList = cgUnitRepository.findByBudGroupUnitLike("%" + cdaReportRequest.getUnitId() + "%");
-                                List<CgUnit> unitList = unitDataList.stream().filter(e -> !e.getUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
-                                CgUnit selfUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-                                unitList.add(selfUnit);
+                            List<CdaParkingTrans> cdaData = new ArrayList<>();
+                            List<CgUnit> unitDataList = cgUnitRepository.findByBudGroupUnitLike("%" + cdaReportRequest.getUnitId() + "%");
+                            List<CgUnit> unitList = unitDataList.stream().filter(e -> !e.getUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                            CgUnit selfUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
+                            unitList.add(selfUnit);
 
-                                for (int p = 0; p < unitDataList.size(); p++) {
-                                    cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(p).getUnit()));
-                                }
-
+                            for (int p = 0; p < unitDataList.size(); p++) {
+                                cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(p).getUnit()));
+                            }
 
 
                             double amount = 0;

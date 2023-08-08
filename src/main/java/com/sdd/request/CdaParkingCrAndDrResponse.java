@@ -1,5 +1,6 @@
 package com.sdd.request;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sdd.entities.AmountUnit;
 import com.sdd.entities.CdaParking;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CdaParkingCrAndDrResponse {
 
     private String cdaCrdrId;
