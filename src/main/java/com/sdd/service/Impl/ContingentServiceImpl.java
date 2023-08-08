@@ -946,7 +946,7 @@ public class ContingentServiceImpl implements ContingentService {
 
                 if (cdaTransData != null) {
                     cgUnitResponse.setRemainingAmount(ConverterUtils.addDecimalPoint(cdaTransData.getRemainingCdaAmount()));
-                    cgUnitResponse.setAllocationAmountMain(ConverterUtils.addDecimalPoint(allocationAmount+""));
+                    cgUnitResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationAmount+""));
                     cgUnitResponse.setAmountTypeMain(amountUnitRepository.findByAmountTypeId(cdaTransData.getAmountType()));
                     data.add(cgUnitResponse);
                 }
@@ -1057,7 +1057,7 @@ public class ContingentServiceImpl implements ContingentService {
 
                 CdaParkingTrans cdaTransData = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(cdaParkingCrAndDr.getCdaParkingTrans(), "0");
                 cgUnitResponse.setRemainingAmount(ConverterUtils.addDecimalPoint(cdaTransData.getRemainingCdaAmount()));
-                cgUnitResponse.setAllocationAmountMain(ConverterUtils.addDecimalPoint(""+allocationAmount));
+                cgUnitResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(""+allocationAmount));
                 cgUnitResponse.setAmountTypeMain(amountUnitRepository.findByAmountTypeId(cdaTransData.getAmountType()));
 
                 data.add(cgUnitResponse);

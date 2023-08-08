@@ -309,9 +309,6 @@ public class CdaParkingImpl implements CdaParkingService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AVAILABLE AMOUNT CAN NOT BE BLANK");
             }
 
-            if (cdaRequest.getCdaRequest().get(i).getTotalParkingAmount() == null || cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount().isEmpty()) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "TOTAL AMOUNT CAN NOT BE BLANK");
-            }
 
 
             if (cdaRequest.getCdaRequest().get(i).getGinNo() == null || cdaRequest.getCdaRequest().get(i).getGinNo().isEmpty()) {
@@ -620,7 +617,6 @@ public class CdaParkingImpl implements CdaParkingService {
         String budgetHedaid = "";
         double cadTotalAmount = 0;
 
-        double currentCDATotal = 0;
         double currentCDARemeninng = 0;
 
         double totalAmount = 0;
@@ -677,7 +673,6 @@ public class CdaParkingImpl implements CdaParkingService {
 
             cadTotalAmount = cadTotalAmount + Double.parseDouble(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()) * amountUnit.getAmount();
 
-            currentCDATotal = currentCDATotal + Double.parseDouble(cdaRequest.getCdaRequest().get(i).getTotalParkingAmount()) * amountUnit.getAmount();
             currentCDARemeninng = currentCDARemeninng + Double.parseDouble(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()) * amountUnit.getAmount();
 
 
@@ -722,9 +717,6 @@ public class CdaParkingImpl implements CdaParkingService {
         }
 
 
-        if (!(currentCDATotal == previousCDATotalAmount)) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "OLD CDA TOTAL AMOUNT AND NEW CDA TOTAL AMOUNT MISMATCH");
-        }
 
         if (!(currentCDARemeninng == previousRemeningAmount)) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "OLD CDA REMAINING AMOUNT AND NEW CDA REMAINING AMOUNT MISMATCH");

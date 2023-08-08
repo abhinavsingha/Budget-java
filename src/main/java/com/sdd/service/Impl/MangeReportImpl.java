@@ -7361,7 +7361,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 CgUnit hrunitN = cgUnitRepository.findByUnit(hrData.getUnitId());
                 double hrbalanceAmount = 0;
-                double hrallocationAmount = 0;
+//                double hrallocationAmount = 0;
                 double hrAmountUnit = 0.0;
                 double hrfinAmount = 0.0;
                 double exAmount = 0.0;
@@ -7387,7 +7387,7 @@ public class MangeReportImpl implements MangeReportService {
                             AmountUnit dbudgetFin = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(k).getAmountType());
                             hrAmountUnit = dbudgetFin.getAmount();
                             hrbalanceAmount = hrbalanceAmount + Double.parseDouble(cdaParkingTrans.get(k).getRemainingCdaAmount());
-                            hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
+//                            hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
                         }
                         hrfinAmount = (hrbalanceAmount * hrAmountUnit + exAmount) / reqAmount;
                         double expn = 0.0;
@@ -7941,7 +7941,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
                 CgUnit hrunitN = cgUnitRepository.findByUnit(hrData.getUnitId());
                 double hrbalanceAmount = 0f;
-                double hrallocationAmount = 0f;
+//                double hrallocationAmount = 0f;
                 double hrAmountUnit = 0.0;
                 double hrfinAmount = 0.0;
                 double exAmount = 0.0;
@@ -7968,7 +7968,7 @@ public class MangeReportImpl implements MangeReportService {
                             AmountUnit dbudgetFin = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(k).getAmountType());
                             hrAmountUnit = Double.parseDouble(dbudgetFin.getAmount() + "");
                             hrbalanceAmount = hrbalanceAmount + Double.parseDouble(cdaParkingTrans.get(k).getRemainingCdaAmount());
-                            hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
+//                            hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
                         }
                     }
                     hrfinAmount = (hrbalanceAmount * hrAmountUnit + exAmount) / reqAmount;
@@ -8402,7 +8402,7 @@ public class MangeReportImpl implements MangeReportService {
                 FerSubResponse subResponce = new FerSubResponse();
                 CgUnit hrunitN = cgUnitRepository.findByUnit(hrData.getUnitId());
                 double hrbalanceAmount = 0;
-                double hrallocationAmount = 0;
+//                double hrallocationAmount = 0;
                 double hrAmountUnit = 0.0;
                 double hrfinAmount = 0.0;
                 double exAmount = 0.0;
@@ -8428,7 +8428,7 @@ public class MangeReportImpl implements MangeReportService {
                             AmountUnit dbudgetFin = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(k).getAmountType());
                             hrAmountUnit = dbudgetFin.getAmount();
                             hrbalanceAmount = hrbalanceAmount + Double.parseDouble(cdaParkingTrans.get(k).getRemainingCdaAmount());
-                            hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
+//                            hrallocationAmount = hrallocationAmount + Double.parseDouble(cdaParkingTrans.get(k).getTotalParkingAmount());
                         }
                         hrfinAmount = (hrbalanceAmount * hrAmountUnit + exAmount) / reqAmount;
                         //hrfinAmount = hrbalanceAmount * hrAmountUnit / reqAmount;
