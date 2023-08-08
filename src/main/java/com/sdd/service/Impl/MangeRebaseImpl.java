@@ -392,7 +392,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                 addRes.add(cda);
             }
-            rebase.setAllocatedAmount(String.valueOf(TotalCdaBal));
+            rebase.setAllocatedAmount(String.valueOf(aAmount));
             rebase.setRemCdaBal(String.valueOf(remCdaBal));
             rebase.setCdaData(addRes);
             List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(unit, finYear, bHead, allocId, "0");
@@ -2654,6 +2654,60 @@ public class MangeRebaseImpl implements MangeRebaseService {
         parkingCrAndDrRepository.save(cdaParkingCrAndDr);
 
     }
+
+
+    public void notificationForRebase(String toUnit, String frmUnit, String allocationTypeId, String authGroupId, String type, String role,String pid,String amount) {
+
+        MangeInboxOutbox mangeInboxOutbox2 = new MangeInboxOutbox();
+        mangeInboxOutbox2.setMangeInboxId(HelperUtils.getMangeInboxId());
+        mangeInboxOutbox2.setRemarks("UNIT REBASE");
+        mangeInboxOutbox2.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+        mangeInboxOutbox2.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+        mangeInboxOutbox2.setToUnit(toUnit);
+        mangeInboxOutbox2.setFromUnit(frmUnit);
+        mangeInboxOutbox2.setType(type);
+        mangeInboxOutbox2.setRoleId(role);
+        mangeInboxOutbox2.setCreaterpId(pid);
+        mangeInboxOutbox2.setStatus("Approved");
+        mangeInboxOutbox2.setState("CR");
+        mangeInboxOutbox2.setIsArchive("0");
+        mangeInboxOutbox2.setIsApproved("0");
+        mangeInboxOutbox2.setIsFlag("1");
+        mangeInboxOutbox2.setAllocationType(allocationTypeId);
+        mangeInboxOutbox2.setIsRevision(0);
+        mangeInboxOutbox2.setIsBgcg("RR");
+        mangeInboxOutbox2.setIsRebase("1");
+        mangeInboxOutbox2.setAmount(ConverterUtils.addDecimalPoint(amount));
+        mangeInboxOutbox2.setGroupId(authGroupId);
+        mangeInboxOutBoxRepository.save(mangeInboxOutbox2);
+    }
+
+    public void notificationForReceipt(String toUnit, String frmUnit, String allocationTypeId, String authGroupId, String amount, String role,String pid) {
+
+        MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
+        mangeInboxOutboxReciptMsg.setIsRebase("0");
+        mangeInboxOutboxReciptMsg.setMangeInboxId(HelperUtils.getMangeInboxId());
+        mangeInboxOutboxReciptMsg.setRemarks("Budget Receipt");
+        mangeInboxOutboxReciptMsg.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+        mangeInboxOutboxReciptMsg.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+        mangeInboxOutboxReciptMsg.setToUnit(toUnit);
+        mangeInboxOutboxReciptMsg.setGroupId(authGroupId);
+        mangeInboxOutboxReciptMsg.setFromUnit(frmUnit);
+        mangeInboxOutboxReciptMsg.setRoleId(role);
+        mangeInboxOutboxReciptMsg.setCreaterpId(pid);
+        mangeInboxOutboxReciptMsg.setStatus("Fully Approved");
+        mangeInboxOutboxReciptMsg.setState("CR");
+        mangeInboxOutboxReciptMsg.setIsArchive("0");
+        mangeInboxOutboxReciptMsg.setIsApproved("0");
+        mangeInboxOutboxReciptMsg.setAllocationType(allocationTypeId);
+        mangeInboxOutboxReciptMsg.setIsFlag("0");
+        mangeInboxOutboxReciptMsg.setType("Budget Receipt");
+        mangeInboxOutboxReciptMsg.setAmount(ConverterUtils.addDecimalPoint(amount));
+        mangeInboxOutboxReciptMsg.setIsBgcg("BR");
+        mangeInboxOutboxReciptMsg.setIsRevision(0);
+        mangeInboxOutBoxRepository.save(mangeInboxOutboxReciptMsg);
+    }
+
 
  /*   @Override
     @Transactional(rollbackFor = {Exception.class})

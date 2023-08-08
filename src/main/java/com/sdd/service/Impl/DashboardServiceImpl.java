@@ -994,7 +994,8 @@ public class DashboardServiceImpl implements DashBoardService {
             if (budgetAllocToUnit.size() > 0) {
                 for (int j = 0; j < budgetAllocToUnit.size(); j++) {
                     String uid = budgetAllocToUnit.get(j).getToUnit();
-                    List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
+                    List<CgUnit> unitList1 = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
+                    List<CgUnit> unitList=unitList1.stream().filter(e->!e.getUnit().equalsIgnoreCase(uid)).collect(Collectors.toList());
 
 //                    double totalCdaSub = 0.0;
                     double remCdaBalSub = 0.0;
