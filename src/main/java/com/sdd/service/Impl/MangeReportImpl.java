@@ -479,12 +479,19 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setBudgetHead(budgetHead);
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                double totalAmount = ((Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
+                double unallocated = 0;
+                if (budgetAllocationReport.get(j).getUnallocatedAmount() == null) {
+                    unallocated = 0;
+                } else {
+                    unallocated = Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount());
+                }
+
+                double totalAmount = ((Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + unallocated) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
 
                 subModel.setAmount(totalAmount + "");
 
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount())  + unallocated != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -495,14 +502,22 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
-                double totalAmount = ((Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
+                double unallocated = 0;
+                if (budgetAllocationReport.get(j).getUnallocatedAmount() == null) {
+                    unallocated = 0;
+                } else {
+                    unallocated = Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount());
+                }
+
+
+                double totalAmount = ((Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + unallocated) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
 
                 subModel.setAmount(totalAmount + "");
 
                 subModel.setAmountType(amountUnitServer.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + unallocated != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -642,13 +657,18 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setBudgetHead(budgetHead);
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-
-                double totalAmount = ((Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
+                double unallocated = 0;
+                if (budgetAllocationReport.get(j).getUnallocatedAmount() == null) {
+                    unallocated = 0;
+                } else {
+                    unallocated = Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount());
+                }
+                double totalAmount = ((Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + unallocated) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
 
                 subModel.setAmount(totalAmount + "");
 
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + unallocated != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -659,14 +679,21 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setRemark(budgetAllocationReport.get(j).getRefTransId());
                 subModel.setUnit(cgUnit.getDescr());
                 subModel.setBudgetHead(budgetHead);
-                double totalAmount = ((Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount())) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
+
+                double unallocated = 0;
+                if (budgetAllocationReport.get(j).getUnallocatedAmount() == null) {
+                    unallocated = 0;
+                } else {
+                    unallocated = Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount());
+                }
+                double totalAmount = ((Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + unallocated) * amountUnitMain.getAmount()) / amountUnitServer.getAmount();
 
                 subModel.setAmount(totalAmount + "");
 
                 subModel.setAmountType(amountUnitServer.getAmountType());
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + unallocated != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -7275,7 +7302,7 @@ public class MangeReportImpl implements MangeReportService {
                     String uid = row.getToUnit();
                     //List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
                     List<CgUnit> unitList1 = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
-                    List<CgUnit> unitList=unitList1.stream().filter(e->!e.getUnit().equalsIgnoreCase(uid)).collect(Collectors.toList());
+                    List<CgUnit> unitList = unitList1.stream().filter(e -> !e.getUnit().equalsIgnoreCase(uid)).collect(Collectors.toList());
 
 
                     double totalbill = 0.0;
@@ -7850,7 +7877,7 @@ public class MangeReportImpl implements MangeReportService {
                     finAmount = amount * amountUnit / reqAmount;
                     //List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
                     List<CgUnit> unitList1 = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
-                    List<CgUnit> unitList=unitList1.stream().filter(e->!e.getUnit().equalsIgnoreCase(uid)).collect(Collectors.toList());
+                    List<CgUnit> unitList = unitList1.stream().filter(e -> !e.getUnit().equalsIgnoreCase(uid)).collect(Collectors.toList());
 
                     double totalbill = 0.0;
                     if (unitList.size() > 0) {
@@ -8332,7 +8359,7 @@ public class MangeReportImpl implements MangeReportService {
                     finAmount = amount * amountUnit / reqAmount;
                     //List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
                     List<CgUnit> unitList1 = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
-                    List<CgUnit> unitList=unitList1.stream().filter(e->!e.getUnit().equalsIgnoreCase(uid)).collect(Collectors.toList());
+                    List<CgUnit> unitList = unitList1.stream().filter(e -> !e.getUnit().equalsIgnoreCase(uid)).collect(Collectors.toList());
                     double totalbill = 0.0;
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
