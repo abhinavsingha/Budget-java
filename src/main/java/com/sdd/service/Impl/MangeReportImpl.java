@@ -7274,7 +7274,9 @@ public class MangeReportImpl implements MangeReportService {
                     finAmount = amount * amountUnit / reqAmount;
                     String uid = row.getToUnit();
                     //List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
-                    List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
+                    List<CgUnit> unitList1 = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
+                    List<CgUnit> unitList=unitList1.stream().filter(e->!e.getUnit().equalsIgnoreCase(uid)).collect(Collectors.toList());
+
 
                     double totalbill = 0.0;
                     if (unitList.size() > 0) {
@@ -7847,7 +7849,8 @@ public class MangeReportImpl implements MangeReportService {
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
                     //List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
-                    List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
+                    List<CgUnit> unitList1 = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
+                    List<CgUnit> unitList=unitList1.stream().filter(e->!e.getUnit().equalsIgnoreCase(uid)).collect(Collectors.toList());
 
                     double totalbill = 0.0;
                     if (unitList.size() > 0) {
@@ -8328,7 +8331,8 @@ public class MangeReportImpl implements MangeReportService {
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
                     finAmount = amount * amountUnit / reqAmount;
                     //List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
-                    List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
+                    List<CgUnit> unitList1 = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
+                    List<CgUnit> unitList=unitList1.stream().filter(e->!e.getUnit().equalsIgnoreCase(uid)).collect(Collectors.toList());
                     double totalbill = 0.0;
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
