@@ -996,7 +996,7 @@ public class DashboardServiceImpl implements DashBoardService {
                     String uid = budgetAllocToUnit.get(j).getToUnit();
                     List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
 
-                    double totalCdaSub = 0.0;
+//                    double totalCdaSub = 0.0;
                     double remCdaBalSub = 0.0;
                     //double rqUnitSub = 0.0;
                     for (CgUnit unitS : unitList) {
@@ -1005,11 +1005,11 @@ public class DashboardServiceImpl implements DashBoardService {
                         for (int k = 0; k < cdaDetailSub.size(); k++) {
                             AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetailSub.get(0).getAmountType());
                             double rqUnitSub = hdamtUnit.getAmount();
-                            if (cdaDetailSub.get(k).getTotalParkingAmount() == null) {
-                                totalCdaSub+=0.0;
-                            }else{
-                                totalCdaSub += Double.parseDouble(cdaDetailSub.get(k).getTotalParkingAmount());
-                            }
+//                            if (cdaDetailSub.get(k).getTotalParkingAmount() == null) {
+//                                totalCdaSub+=0.0;
+//                            }else{
+//                                totalCdaSub += Double.parseDouble(cdaDetailSub.get(k).getTotalParkingAmount());
+//                            }
                             if (cdaDetailSub.get(k).getRemainingCdaAmount() == null) {
                                 remCdaBalSub=0.0;
                             }else{

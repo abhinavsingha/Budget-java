@@ -15,7 +15,7 @@ public class AvilableFundResponse {
 
    String fundAvailable;
    List<CdaFilterData> cdaParkingTrans;
-   String fundallocated;
+//   String fundallocated;
    AmountUnit amountUnit;
    String previousAllocation;
    String unallocatedAmount;

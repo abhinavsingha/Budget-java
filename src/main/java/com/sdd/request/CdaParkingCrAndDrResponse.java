@@ -24,7 +24,7 @@ public class CdaParkingCrAndDrResponse {
     private String unitId;
     private String amount;
     private String remainingAmount;
-    private String allocationAmount;
+    private String allocationAmountMain;
     private String iscrdr;
     private Timestamp createdOn;
     private Timestamp updatedOn;

@@ -1687,17 +1687,6 @@ public class MangeReportImpl implements MangeReportService {
         }
 
 
-//        double expenditure = 0;
-//        List<ContigentBill> cbExpendure = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdate(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0");
-//        if (cbExpendure.size() == 0) {
-//
-//        } else {
-//            expenditure = 0;
-//            for (Integer i = 0; i < cbExpendure.size(); i++) {
-//                expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
-//            }
-//        }
-
         List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
         if (allocationType.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
@@ -1738,12 +1727,18 @@ public class MangeReportImpl implements MangeReportService {
         cbReportResponse.setCurrentBillAmount(String.format("%.2f", Double.parseDouble(cbData.getCbAmount())));
 
 
+        List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), cbData.getFinYear(), cbData.getBudgetHeadID(), cbData.getAllocationTypeId(), "Approved", "0", "0");
+        for (Integer m = 0; m < budgetAllocationsDetalis.size(); m++) {
+            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(m).getAmountType());
+            allocationAmount = allocationAmount + (Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount()) * amountUnit.getAmount());
+        }
+
+
         List<CdaParkingTrans> cdaAmountList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(cbData.getFinYear(), cbData.getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
         for (Integer k = 0; k < cdaAmountList.size(); k++) {
 
             AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaAmountList.get(k).getAmountType());
             balanceAmount = balanceAmount + (Double.parseDouble(cdaAmountList.get(k).getRemainingCdaAmount()) * amountUnit.getAmount());
-            allocationAmount = allocationAmount + (Double.parseDouble(cdaAmountList.get(k).getTotalParkingAmount()) * amountUnit.getAmount());
         }
 
         List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(cbData.getCbUnitId(), cbData.getFinYear(), cbData.getBudgetHeadID(), cbData.getAllocationTypeId(), "0", "0");
@@ -2048,13 +2043,25 @@ public class MangeReportImpl implements MangeReportService {
             double amount = 0;
             double allocationAmount = 0;
 
+
+
+
+
+
             for (int m = 0; m < cdaData.size(); m++) {
                 AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
                 grandTotal = grandTotal + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                 amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
 
-                allocationGrandTotal = allocationGrandTotal + (Double.parseDouble(cdaData.get(m).getTotalParkingAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
-                allocationAmount = allocationAmount + (Double.parseDouble(cdaData.get(m).getTotalParkingAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
+                List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), cdaData.get(m).getBudgetHeadId(), cdaData.get(m).getAllocTypeId(), "Approved", "0", "0");
+                double allocationAmountMain  = 0;
+                for (Integer g = 0; g < budgetAllocationsDetalis.size(); g++) {
+                    AmountUnit amountUnitMain = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(m).getAmountType());
+                    allocationAmountMain = allocationAmountMain + (Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount()) * amountUnitMain.getAmount());
+                }
+
+                allocationGrandTotal = allocationGrandTotal + (allocationAmountMain) / Double.parseDouble(amountUnit.getAmount().toString());
+                allocationAmount = allocationAmount + (allocationAmountMain) / Double.parseDouble(amountUnit.getAmount().toString());
 
             }
 
@@ -2180,13 +2187,20 @@ public class MangeReportImpl implements MangeReportService {
             double allocationAmount = 0;
 
             for (int m = 0; m < cdaData.size(); m++) {
-
                 AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
                 grandTotal = grandTotal + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                 amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
 
-                allocationGrandTotal = allocationGrandTotal + (Double.parseDouble(cdaData.get(m).getTotalParkingAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
-                allocationAmount = allocationAmount + (Double.parseDouble(cdaData.get(m).getTotalParkingAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
+                List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), cdaData.get(m).getBudgetHeadId(), cdaData.get(m).getAllocTypeId(), "Approved", "0", "0");
+                double allocationAmountMain  = 0;
+                for (Integer g = 0; g < budgetAllocationsDetalis.size(); g++) {
+                    AmountUnit amountUnitMain = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(m).getAmountType());
+                    allocationAmountMain = allocationAmountMain + (Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount()) * amountUnitMain.getAmount());
+                }
+
+                allocationGrandTotal = allocationGrandTotal + (allocationAmountMain) / Double.parseDouble(amountUnit.getAmount().toString());
+                allocationAmount = allocationAmount + (allocationAmountMain) / Double.parseDouble(amountUnit.getAmount().toString());
+
             }
 
             if (allocationAmount == 0 || allocationAmount <= 0) {

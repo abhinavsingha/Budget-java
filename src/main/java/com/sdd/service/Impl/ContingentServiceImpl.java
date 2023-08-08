@@ -921,6 +921,18 @@ public class ContingentServiceImpl implements ContingentService {
             contingentBill.setAuthoritiesList(authoritiesList);
 
             List<CdaParkingCrAndDr> cdaCrDrTransData = parkingCrAndDrRepository.findByTransactionIdAndIsFlagAndIsRevision(contigentBill.getCbId(), "0", 0);
+
+
+            List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), contigentBill.getBudgetHeadID(), contigentBill.getAllocationTypeId(), "Approved", "0", "0");
+           double allocationAmount  = 0;
+            for (Integer m = 0; m < budgetAllocationsDetalis.size(); m++) {
+
+                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(m).getAmountType());
+                allocationAmount = allocationAmount + (Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount()) * amountUnit.getAmount());
+
+            }
+
+
             List<CdaParkingCrAndDrResponse> data = new ArrayList<>();
             for (Integer m = 0; m < cdaCrDrTransData.size(); m++) {
                 CdaParkingCrAndDr cdaParkingCrAndDr = cdaCrDrTransData.get(m);
@@ -934,12 +946,14 @@ public class ContingentServiceImpl implements ContingentService {
 
                 if (cdaTransData != null) {
                     cgUnitResponse.setRemainingAmount(ConverterUtils.addDecimalPoint(cdaTransData.getRemainingCdaAmount()));
-                    cgUnitResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(cdaTransData.getTotalParkingAmount()));
+                    cgUnitResponse.setAllocationAmountMain(ConverterUtils.addDecimalPoint(allocationAmount+""));
                     cgUnitResponse.setAmountTypeMain(amountUnitRepository.findByAmountTypeId(cdaTransData.getAmountType()));
-
                     data.add(cgUnitResponse);
                 }
             }
+
+
+
 
             contingentBill.setCdaData(data);
 
@@ -1022,6 +1036,16 @@ public class ContingentServiceImpl implements ContingentService {
             contingentBill.setAuthoritiesList(authoritiesList);
 
             List<CdaParkingCrAndDr> cdaCrDrTransData = parkingCrAndDrRepository.findByTransactionIdAndIsFlagAndIsRevision(contigentBill.getCbId(), "0", 0);
+
+            List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), contigentBill.getBudgetHeadID(), contigentBill.getAllocationTypeId(), "Approved", "0", "0");
+            double allocationAmount  = 0;
+            for (Integer m = 0; m < budgetAllocationsDetalis.size(); m++) {
+
+                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(m).getAmountType());
+                allocationAmount = allocationAmount + (Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount()) * amountUnit.getAmount());
+
+            }
+
             List<CdaParkingCrAndDrResponse> data = new ArrayList<>();
             for (Integer m = 0; m < cdaCrDrTransData.size(); m++) {
                 CdaParkingCrAndDr cdaParkingCrAndDr = cdaCrDrTransData.get(m);
@@ -1033,7 +1057,7 @@ public class ContingentServiceImpl implements ContingentService {
 
                 CdaParkingTrans cdaTransData = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(cdaParkingCrAndDr.getCdaParkingTrans(), "0");
                 cgUnitResponse.setRemainingAmount(ConverterUtils.addDecimalPoint(cdaTransData.getRemainingCdaAmount()));
-                cgUnitResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(cdaTransData.getTotalParkingAmount()));
+                cgUnitResponse.setAllocationAmountMain(ConverterUtils.addDecimalPoint(""+allocationAmount));
                 cgUnitResponse.setAmountTypeMain(amountUnitRepository.findByAmountTypeId(cdaTransData.getAmountType()));
 
                 data.add(cgUnitResponse);

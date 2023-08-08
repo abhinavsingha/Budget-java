@@ -30,5 +30,4 @@ public interface CdaParkingService {
 
 	ApiResponse<DefaultResponse> updateCdaParkingData(CDARequest cdaRequest);
 
-	ApiResponse<DefaultResponse> updateCdaParkingDataRebase(CDARequest cdaRequest);
 }
