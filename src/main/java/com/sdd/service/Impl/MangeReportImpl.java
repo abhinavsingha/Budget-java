@@ -2958,7 +2958,6 @@ public class MangeReportImpl implements MangeReportService {
                                 cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(p).getUnit()));
                             }
 
-
                             double amount = 0;
                             for (int m = 0; m < cdaData.size(); m++) {
 
@@ -3011,8 +3010,6 @@ public class MangeReportImpl implements MangeReportService {
                     allCdaData.put(subHead.getSubHeadDescr(), cdaReportList);
                 }
                 try {
-
-
                     File folder = new File(HelperUtils.LASTFOLDERPATH);
                     if (!folder.exists()) {
                         folder.mkdirs();

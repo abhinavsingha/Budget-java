@@ -4981,6 +4981,19 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             mangeInboxOutBoxRepository.save(mangeInboxOutbox);
 
 
+            Authority authorityMain = new Authority();
+            authorityMain.setAuthorityId(HelperUtils.getAuthorityId());
+            authorityMain.setAuthority(authRequest.getAuthority());
+            authorityMain.setAuthDate(ConverterUtils.convertDateTotimeStamp(authRequest.getAuthDate()));
+            authorityMain.setDocId(tabData.getAuthGroupId());
+            authorityMain.setAuthUnit(authRequest.getAuthUnitId());
+            authorityMain.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            authorityMain.setAuthGroupId(authRequest.getAuthGroupId());
+            authorityMain.setRemarks(authRequest.getAuthUnitId());
+            authorityMain.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            authorityRepository.save(authorityMain);
+
+
         }
 
 
@@ -5438,6 +5451,19 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             authgroupid = tabData.getAuthGroupId();
 
             mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+
+
+            Authority authority11 = new Authority();
+            authority11.setAuthorityId(HelperUtils.getAuthorityId());
+            authority11.setAuthority(authRequest.getAuthority());
+            authority11.setAuthDate(ConverterUtils.convertDateTotimeStamp(authRequest.getAuthDate()));
+            authority11.setDocId(authRequest.getAuthDocId());
+            authority11.setAuthUnit(authRequest.getAuthUnitId());
+            authority11.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            authority11.setAuthGroupId(authgroupid);
+            authority11.setRemarks(authRequest.getAuthUnitId());
+            authority11.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            authorityRepository.save(authority11);
 
         }
 
