@@ -4968,7 +4968,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             mangeInboxOutbox.setCreaterpId(hrDataCheck.getPid());
             mangeInboxOutbox.setApproverpId("");
             mangeInboxOutbox.setIsRebase("0");
-            mangeInboxOutbox.setStatus("Approved");
+            mangeInboxOutbox.setStatus("Fully Approved");
             mangeInboxOutbox.setAllocationType(tabData.getAllocationTypeId());
             mangeInboxOutbox.setIsFlag("1");
             mangeInboxOutbox.setIsArchive("0");
@@ -5439,7 +5439,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             mangeInboxOutbox.setRoleId(hrData.getRoleId());
             mangeInboxOutbox.setCreaterpId(hrData.getPid());
             mangeInboxOutbox.setApproverpId("");
-            mangeInboxOutbox.setStatus("Approved");
+            mangeInboxOutbox.setStatus("Fully Approved");
             mangeInboxOutbox.setAllocationType(tabData.getAllocationTypeId());
             mangeInboxOutbox.setIsFlag("1");
             mangeInboxOutbox.setIsArchive("0");
