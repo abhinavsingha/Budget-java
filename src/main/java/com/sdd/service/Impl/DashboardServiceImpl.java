@@ -710,7 +710,6 @@ public class DashboardServiceImpl implements DashBoardService {
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
-
         if (finYearId == null || finYearId.isEmpty()) {
             return ResponseUtils.createFailureResponse(dashBoardExprnditureResponseList, new TypeReference<List<DashBoardExprnditureResponse>>() {
             }, "FINANCIAL YEAR CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
@@ -719,7 +718,6 @@ public class DashboardServiceImpl implements DashBoardService {
             return ResponseUtils.createFailureResponse(dashBoardExprnditureResponseList, new TypeReference<List<DashBoardExprnditureResponse>>() {
             }, "UNIT ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
-
         if (subHeadTypeId == null || subHeadTypeId.isEmpty()) {
             return ResponseUtils.createFailureResponse(dashBoardExprnditureResponseList, new TypeReference<List<DashBoardExprnditureResponse>>() {
             }, "SUBHEAD TYPE  CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
