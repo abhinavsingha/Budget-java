@@ -149,6 +149,7 @@ public class BudgetAllocationController {
     }
 
 
+
     @GetMapping("/getAllGroupIdAndUnitId/{groupId}")
     public ResponseEntity<ApiResponse<BudgetAllocationResponse>> getAllGroupIdAndUnitId(@PathVariable("groupId") String groupId) {
         return new ResponseEntity<>(budgetAllocationService.getAllGroupIdAndUnitId(groupId), HttpStatus.OK);
@@ -204,23 +205,10 @@ public class BudgetAllocationController {
     }
 
 
-//    @PostMapping("/getBudgetRevisionData")
-//    public ResponseEntity<ApiResponse<List<BudgetRevisionResponse>>> getBudgetRevisionData(@RequestBody BudgetAllocationReportRequest budgetAllocationReportRequest) {
-//        return new ResponseEntity<>(budgetAllocationService.getBudgetRevisionData(budgetAllocationReportRequest), HttpStatus.OK);
-//    }
-//
-//
-//    @PostMapping("/saveBudgetRevisionData")
-//    public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> saveBudgetRevisionData(@RequestBody BudgetAllocationSaveUnitRequest budgetAllocationSaveUnitRequest) {
-//        return new ResponseEntity<>(budgetAllocationService.saveBudgetRevisonData(budgetAllocationSaveUnitRequest), HttpStatus.OK);
-//    }
-
-
     @PostMapping("/saveAuthData")
     public ResponseEntity<ApiResponse<DefaultResponse>> saveAuthData(@RequestBody AuthRequest authRequest) {
         return new ResponseEntity<>(budgetAllocationService.saveAuthData(authRequest), HttpStatus.OK);
     }
-
 
 
     @GetMapping("/getApprovedBudgetData")
@@ -239,7 +227,6 @@ public class BudgetAllocationController {
     public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> saveBudgetRevision(@RequestBody BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList) {
         return new ResponseEntity<>(budgetAllocationService.saveBudgetRevision(budgetAllocationSaveRequestList), HttpStatus.OK);
     }
-
 
 
     @PostMapping("/approveRevisionBudgetOrReject")
@@ -282,5 +269,17 @@ public class BudgetAllocationController {
     public ResponseEntity<ApiResponse<List<CgUnitResponse>>> getAllCgUnitData() {
         return new ResponseEntity<>(budgetAllocationService.getAllCgUnitData(), HttpStatus.OK);
     }
+
+
+
+
+
+
+    @GetMapping("/getAllSubHeadList")
+    public ResponseEntity<ApiResponse<BudgetAllocationResponse>> getAllSubHeadList() {
+        return new ResponseEntity<>(budgetAllocationService.getAllSubHeadList(), HttpStatus.OK);
+    }
+
+
 
 }

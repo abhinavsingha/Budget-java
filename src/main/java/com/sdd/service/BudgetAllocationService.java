@@ -80,6 +80,8 @@ public interface BudgetAllocationService {
 
 	ApiResponse<BudgetAllocationResponse> getBudgetAllocationDataGroupId(String groupId);
 
+	ApiResponse<BudgetAllocationResponse> getAllSubHeadList();
+
 	ApiResponse<BudgetAllocationResponse> getAllRevisionGroupId(String groupId);
 
 	ApiResponse<BudgetAllocationSaveResponse> approveRivisonBudgetOrReject(BudgetApproveRequest budgetApproveRequest);

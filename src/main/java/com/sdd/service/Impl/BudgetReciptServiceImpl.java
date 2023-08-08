@@ -805,17 +805,6 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         }
 
 
-//        List<BudgetRecioptSubDemoResponse> budgetData = new ArrayList<BudgetRecioptSubDemoResponse>();
-//        for (Map.Entry<String, BudgetRecioptSubDemoResponse> entry : hashMap.entrySet()) {
-//            BudgetRecioptSubDemoResponse tabData = entry.getValue();
-//            budgetData.add(tabData);
-//        }
-
-//        Collections.sort(budgetData, new Comparator<BudgetRecioptSubDemoResponse>() {
-//            public int compare(BudgetRecioptSubDemoResponse v1, BudgetRecioptSubDemoResponse v2) {
-//                return v1.getBudgetHead().getSerialNumber().compareTo(v2.getBudgetHead().getSerialNumber());
-//            }
-//        });
 
         List<BudgetRecioptDemoResponse> budgetMainDataResponse = new ArrayList<BudgetRecioptDemoResponse>();
 

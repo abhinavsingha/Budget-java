@@ -103,36 +103,6 @@ public class DashboardServiceImpl implements DashBoardService {
             }
         }
 
-//        if (dashBoardRequest.getToUnitId() == null || dashBoardRequest.getToUnitId().isEmpty()) {
-//            budgetList = budgetAllocationDetailsRepository.findAll();
-//        } else {
-//            CgUnit cgFromUnit = cgUnitRepository.findByUnit(dashBoardRequest.getToUnitId());
-//            if (cgFromUnit == null) {
-//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO UNIT ID");
-//            } else {
-//                budgetList =
-//                        budgetAllocationDetailsRepository.findByToUnitAndIsDeleteAndIsBudgetRevision(
-//                                dashBoardRequest.getToUnitId(), "0", "0");
-//            }
-//        }
-
-//        if (dashBoardRequest.getBudgetFinancialYearId() == null
-//                || dashBoardRequest.getBudgetFinancialYearId().isEmpty()) {
-//
-//        } else {
-//            BudgetFinancialYear budgetFinancialYear =
-//                    budgetFinancialYearRepository.findBySerialNo(dashBoardRequest.getBudgetFinancialYearId());
-//            if (budgetFinancialYear == null) {
-//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID FINANCIAL YEAR ID");
-//            } else {
-//                budgetList =
-//                        budgetAllocationDetailsRepository.findByToUnitAndFinYearAndIsDeleteAndIsBudgetRevision(
-//                                dashBoardRequest.getToUnitId(),
-//                                dashBoardRequest.getBudgetFinancialYearId(),
-//                                "0",
-//                                "0");
-//            }
-//        }
 
         HradataResponse hradataResponse = new HradataResponse();
 
