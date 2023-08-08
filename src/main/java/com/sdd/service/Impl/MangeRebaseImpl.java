@@ -1128,18 +1128,33 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 }
                             }
                             alloc.setIsFlag("0");
-
-//                            List<CdaParkingTrans> frmRhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
-//                            if (frmRhqCda.size() == 0) {
-//                                alloc.setUnallocatedAmount("-" + unloAmnt);
-//                            } else {
                             alloc.setUnallocatedAmount("0");
-//                            }
 
                             alloc.setAllocationAmount((allocAmt + unloAmnt) + "");
                             alloc.setIsBudgetRevision("0");
                             alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             BudgetAllocation saveData11 = budgetAllocationRepository.save(alloc);
+
+
+                            //                           Add  CDA Add karke Phir Minus karna hai
+                            List<CdaParkingTrans> frmRhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+                            if (frmRhqCda.size() > 0) {
+                                CdaParkingTrans cdaParking = frmRhqCda.get(0);
+                                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
+
+                                cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                                double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
+                                cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                                cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
+                                cdaParkingTransRepository.save(cdaParking);
+                            } else {
+                                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(saveData11.getAmountType());
+                                double allocationAmount = shipAllocAmount / amountUnit.getAmount();
+                                svaeCdaDataForReabse(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), allocationAmount + "", saveData11.getAmountType(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), saveData11.getAuthGroupId()
+                                        , saveData11.getAllocationId(), toHdUnitId);
+                            }
+
+
                         }
 
                     } else {
@@ -1165,7 +1180,12 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationRecipt.setStatus("Approved");
                         budgetAllocationRecipt.setAuthGroupId(budgetReciptAuthGroupIdForRHQ);
                         budgetAllocationRecipt.setAmountType(req.getUnitRebaseRequests().get(k).getAmountType());
-                        budgetAllocationRepository.save(budgetAllocationRecipt);
+                        BudgetAllocation saveData11 = budgetAllocationRepository.save(budgetAllocationRecipt);
+
+                        AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(saveData11.getAmountType());
+                        double allocationAmount = shipAllocAmount / amountUnit.getAmount();
+                        svaeCdaDataForReabse(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), allocationAmount + "", saveData11.getAmountType(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), saveData11.getAuthGroupId()
+                                , saveData11.getAllocationId(), toHdUnitId);
 
 
                         if (count == 0) {
@@ -1194,20 +1214,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             mangeInboxOutBoxRepository.save(mangeInboxOutboxReciptMsg);
                         }
 
-                    }
-
-//                           Add  CDA Add karke Phir Minus karna hai
-                    List<CdaParkingTrans> frmRhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
-
-                    if (frmRhqCda.size() > 0) {
-                        CdaParkingTrans cdaParking = frmRhqCda.get(0);
-                        AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
-
-                        cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                        double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
-                        cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                        cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
-                        cdaParkingTransRepository.save(cdaParking);
                     }
 
 
@@ -1435,14 +1441,30 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             alloc.setIsBudgetRevision("0");
                             alloc.setAllocationAmount((allocAmt + unloAmnt) + "");
                             alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                            List<CdaParkingTrans> frmRhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), rHqUnitIdMain, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
-//                            if (frmRhqCda.size() == 0) {
-//                                alloc.setUnallocatedAmount("-" + unloAmnt);
-//                            } else {
                             alloc.setUnallocatedAmount("0");
-//                            }
 
                             BudgetAllocation saveData11 = budgetAllocationRepository.save(alloc);
+
+
+//                           Add  CDA Add karke Phir Minus karna hai
+                            List<CdaParkingTrans> frmRhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), rHqUnitIdMain, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+
+                            if (frmRhqCda.size() > 0) {
+                                CdaParkingTrans cdaParking = frmRhqCda.get(0);
+                                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
+
+                                cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                                double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
+                                cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                                cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
+                                cdaParkingTransRepository.save(cdaParking);
+
+                            } else {
+                                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(saveData11.getAmountType());
+                                double allocationAmount = shipAllocAmount / amountUnit.getAmount();
+                                svaeCdaDataForReabse(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), allocationAmount + "", saveData11.getAmountType(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), saveData11.getAuthGroupId()
+                                        , saveData11.getAllocationId(), rHqUnitIdMain);
+                            }
 
                         }
 
@@ -1471,7 +1493,14 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationReciptMain.setStatus("Approved");
                         budgetAllocationReciptMain.setAuthGroupId(budgetReciptAuthGroupIdForRHQ);
                         budgetAllocationReciptMain.setAmountType(req.getUnitRebaseRequests().get(k).getAmountType());
-                        budgetAllocationRepository.save(budgetAllocationReciptMain);
+                        BudgetAllocation saveData11 = budgetAllocationRepository.save(budgetAllocationReciptMain);
+
+
+                        AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(saveData11.getAmountType());
+                        double allocationAmount = shipAllocAmount / amountUnit.getAmount();
+                        svaeCdaDataForReabse(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), allocationAmount + "", saveData11.getAmountType(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), saveData11.getAuthGroupId()
+                                , saveData11.getAllocationId(), rHqUnitIdMain);
+
 
                         if (count == 0) {
                             MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
@@ -1498,21 +1527,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             mangeInboxOutboxReciptMsg.setIsRevision(0);
                             mangeInboxOutBoxRepository.save(mangeInboxOutboxReciptMsg);
                         }
-                    }
-
-
-//                      Add  CDA Add karke Phir Minus karna hai
-                    List<CdaParkingTrans> frmRhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), rHqUnitIdMain, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
-
-                    if (frmRhqCda.size() > 0) {
-                        CdaParkingTrans cdaParking = frmRhqCda.get(0);
-                        AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
-
-                        cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                        double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
-                        cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                        cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
-                        cdaParkingTransRepository.save(cdaParking);
                     }
 
 
@@ -1627,14 +1641,31 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             alloc.setIsBudgetRevision("0");
                             alloc.setAllocationAmount((allocAmt + unloAmnt) + "");
                             alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-//                            List<CdaParkingTrans> frmRhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
-//                            if (frmRhqCda.size() == 0) {
-//                                alloc.setUnallocatedAmount("-" + unloAmnt);
-//                            } else {
                             alloc.setUnallocatedAmount("0");
-//                            }
 
                             BudgetAllocation saveData11 = budgetAllocationRepository.save(alloc);
+
+
+//                      Add  CDA Add karke Phir Minus karna hai
+                            List<CdaParkingTrans> frmDhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+                            if (frmDhqCda.size() > 0) {
+                                CdaParkingTrans cdaParking = frmDhqCda.get(0);
+                                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
+
+                                cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                                double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
+                                cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                                cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
+                                cdaParkingTransRepository.save(cdaParking);
+                            } else {
+
+                                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(saveData11.getAmountType());
+                                double allocationAmount = shipAllocAmount / amountUnit.getAmount();
+                                svaeCdaDataForReabse(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), allocationAmount + "", saveData11.getAmountType(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), saveData11.getAuthGroupId()
+                                        , saveData11.getAllocationId(), toHdUnitId);
+
+                            }
+
 
                         }
 
@@ -1660,8 +1691,13 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationMain.setStatus("Approved");
                         budgetAllocationMain.setAmountType(req.getUnitRebaseRequests().get(k).getAmountType());
                         budgetAllocationMain.setAuthGroupId(budgetAllocationAuthGroupIdDHQ);
-                        budgetAllocationRepository.save(budgetAllocationMain);
+                        BudgetAllocation saveData11 = budgetAllocationRepository.save(budgetAllocationMain);
 
+
+                        AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(saveData11.getAmountType());
+                        double allocationAmount = shipAllocAmount / amountUnit.getAmount();
+                        svaeCdaDataForReabse(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), allocationAmount + "", saveData11.getAmountType(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), saveData11.getAuthGroupId()
+                                , saveData11.getAllocationId(), toHdUnitId);
 
                         if (count == 0) {
                             MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
@@ -1690,18 +1726,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         }
                     }
 
-//                      Add  CDA Add karke Phir Minus karna hai
-                    List<CdaParkingTrans> frmDhqCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
-                    if (frmDhqCda.size() > 0) {
-                        CdaParkingTrans cdaParking = frmDhqCda.get(0);
-                        AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
-
-                        cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                        double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
-                        cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                        cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
-                        cdaParkingTransRepository.save(cdaParking);
-                    }
 
                     // .....................CREATE BUDGET ALLOCATION....FOR SHIP UNIT..............................
                     BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
@@ -1934,16 +1958,28 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 }
                                 alloc.setIsFlag("0");
                                 alloc.setIsBudgetRevision("0");
-//                            alloc.setAllocationAmount((allocAmt0 + unloAmnt0) + "");
+                                alloc.setAllocationAmount((allocAmt0 + unloAmnt0) + "");
                                 alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-//                            List<CdaParkingTrans> frmHdUnitCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
-//                            if (frmHdUnitCda.size() == 0) {
-//                                alloc.setUnallocatedAmount("-" + unloAmnt0);
-//                            } else {
                                 alloc.setUnallocatedAmount("0");
-//                            }
                                 BudgetAllocation saveData11 = budgetAllocationRepository.save(alloc);
 
+                                List<CdaParkingTrans> frmHdUnitCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+
+                                if (frmHdUnitCda.size() > 0) {
+                                    CdaParkingTrans cdaParking = frmHdUnitCda.get(0);
+                                    AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
+                                    cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                                    double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
+                                    cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                                    cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
+                                    cdaParkingTransRepository.save(cdaParking);
+                                } else {
+
+                                    AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(saveData11.getAmountType());
+                                    double allocationAmount = shipAllocAmount / amountUnit.getAmount();
+                                    svaeCdaDataForReabse(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), allocationAmount + "", saveData11.getAmountType(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), saveData11.getAuthGroupId()
+                                            , saveData11.getAllocationId(), toHdUnitId);
+                                }
                             }
 
                         } else {
@@ -1970,7 +2006,13 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             budgetAllocationRecipt.setStatus("Approved");
                             budgetAllocationRecipt.setAuthGroupId(authGroupIdRHQtoDHQsameR);
                             budgetAllocationRecipt.setAmountType(req.getUnitRebaseRequests().get(k).getAmountType());
-                            budgetAllocationRepository.save(budgetAllocationRecipt);
+                            BudgetAllocation saveData11 = budgetAllocationRepository.save(budgetAllocationRecipt);
+
+                            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(saveData11.getAmountType());
+                            double allocationAmount = shipAllocAmount / amountUnit.getAmount();
+                            svaeCdaDataForReabse(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), allocationAmount + "", saveData11.getAmountType(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), saveData11.getAuthGroupId()
+                                    , saveData11.getAllocationId(), toHdUnitId);
+
 
                             if (count == 0) {
                                 MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
@@ -2020,19 +2062,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 notifi.setIsRebase("1");
                                 mangeInboxOutBoxRepository.save(notifi);
                             }
-                        }
-
-
-                        List<CdaParkingTrans> frmHdUnitCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
-
-                        if (frmHdUnitCda.size() > 0) {
-                            CdaParkingTrans cdaParking = frmHdUnitCda.get(0);
-                            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
-                            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                            double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
-                            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                            cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
-                            cdaParkingTransRepository.save(cdaParking);
                         }
 
 
@@ -2359,29 +2388,32 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             alloc.setIsBudgetRevision("0");
                             alloc.setAllocationAmount((allocAmt0 + unloAmnt0) + "");
                             alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-//                            List<CdaParkingTrans> frmHdUnitCdaMain = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
-//                            if (frmHdUnitCdaMain.size() == 0) {
-//                                alloc.setUnallocatedAmount("-" + unloAmnt0);
-//                            } else {
                             alloc.setUnallocatedAmount("0");
-//                            }
 
                             BudgetAllocation saveData11 = budgetAllocationRepository.save(alloc);
 
+
+                            List<CdaParkingTrans> frmHdUnitCdaMain = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
+
+                            if (frmHdUnitCdaMain.size() > 0) {
+                                CdaParkingTrans cdaParking = frmHdUnitCdaMain.get(0);
+                                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
+                                cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                                double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
+                                cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
+                                cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                                cdaParkingTransRepository.save(cdaParking);
+                            } else {
+
+
+                                AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(saveData11.getAmountType());
+                                double allocationAmount = shipAllocAmount / amountUnit.getAmount();
+                                svaeCdaDataForReabse(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), allocationAmount + "", saveData11.getAmountType(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), saveData11.getAuthGroupId()
+                                        , saveData11.getAllocationId(), toHdUnitId);
+
+
+                            }
                         }
-
-                        List<CdaParkingTrans> frmHdUnitCdaMain = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), toHdUnitId, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
-
-                        if (frmHdUnitCdaMain.size() > 0) {
-                            CdaParkingTrans cdaParking = frmHdUnitCdaMain.get(0);
-                            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParking.getAmountType());
-                            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                            double allocatedAmount = Double.parseDouble(cdaParking.getTotalParkingAmount()) * amountUnit.getAmount();
-                            cdaParking.setTotalParkingAmount(ConverterUtils.addDecimalPoint((allocatedAmount + shipAllocAmount) / amountUnit.getAmount() + ""));
-                            cdaParking.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                            cdaParkingTransRepository.save(cdaParking);
-                        }
-
 
                     } else {
                         // .....................CREATE BUDGET RECIPT....FOR TO DHQ..............................
@@ -2406,8 +2438,13 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationRecipt.setStatus("Approved");
                         budgetAllocationRecipt.setAuthGroupId(authGroupIdRHQtoDHQsameRegion);
                         budgetAllocationRecipt.setAmountType(req.getUnitRebaseRequests().get(k).getAmountType());
-                        budgetAllocationRepository.save(budgetAllocationRecipt);
+                        BudgetAllocation saveData11 = budgetAllocationRepository.save(budgetAllocationRecipt);
 
+
+                        AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(saveData11.getAmountType());
+                        double allocationAmount = shipAllocAmount / amountUnit.getAmount();
+                        svaeCdaDataForReabse(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), allocationAmount + "", saveData11.getAmountType(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), saveData11.getAuthGroupId()
+                                , saveData11.getAllocationId(), toHdUnitId);
 
                         if (count == 0) {
                             MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
@@ -2574,6 +2611,49 @@ public class MangeRebaseImpl implements MangeRebaseService {
         });
     }
 
+    public void svaeCdaDataForReabse(String finYearId, String subHeadId, String totalParkingAmount, String amountType, String allocationTypeId, String groupId, String transId, String unitId) {
+
+        CdaParkingTrans cdaParkingTrans = new CdaParkingTrans();
+
+        cdaParkingTrans.setCdaParkingId(HelperUtils.getCdaId());
+        cdaParkingTrans.setFinYearId(finYearId);
+        cdaParkingTrans.setTotalParkingAmount(ConverterUtils.addDecimalPoint(totalParkingAmount));
+        cdaParkingTrans.setRemainingCdaAmount("0.0000");
+        cdaParkingTrans.setBudgetHeadId(subHeadId);
+        cdaParkingTrans.setRemarks("");
+        cdaParkingTrans.setGinNo("200211");
+        cdaParkingTrans.setUnitId(unitId);
+        cdaParkingTrans.setIsFlag("0");
+        cdaParkingTrans.setAmountType(amountType);
+        cdaParkingTrans.setTransactionId(transId);
+        cdaParkingTrans.setAllocTypeId(allocationTypeId);
+        cdaParkingTrans.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+        cdaParkingTrans.setAuthGroupId(groupId);
+        cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+
+        CdaParkingTrans saveCdaData = cdaParkingTransRepository.save(cdaParkingTrans);
+
+
+        CdaParkingCrAndDr cdaParkingCrAndDr = new CdaParkingCrAndDr();
+        cdaParkingCrAndDr.setCdaParkingTrans(saveCdaData.getCdaParkingId());
+        cdaParkingCrAndDr.setCdaCrdrId(HelperUtils.getCdaCrDrId());
+        cdaParkingCrAndDr.setFinYearId(saveCdaData.getFinYearId());
+        cdaParkingCrAndDr.setBudgetHeadId(saveCdaData.getBudgetHeadId());
+        cdaParkingCrAndDr.setGinNo(saveCdaData.getGinNo());
+        cdaParkingCrAndDr.setUnitId(saveCdaData.getUnitId());
+        cdaParkingCrAndDr.setAuthGroupId(saveCdaData.getAuthGroupId());
+        cdaParkingCrAndDr.setAmount(saveCdaData.getTotalParkingAmount());
+        cdaParkingCrAndDr.setIscrdr("CR");
+        cdaParkingCrAndDr.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+        cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+        cdaParkingCrAndDr.setAllocTypeId(saveCdaData.getAllocTypeId());
+        cdaParkingCrAndDr.setIsFlag("0");
+        cdaParkingCrAndDr.setTransactionId(saveCdaData.getTransactionId());
+        cdaParkingCrAndDr.setAmountType(saveCdaData.getAmountType());
+        cdaParkingCrAndDr.setIsRevision(0);
+        parkingCrAndDrRepository.save(cdaParkingCrAndDr);
+
+    }
 
  /*   @Override
     @Transactional(rollbackFor = {Exception.class})
