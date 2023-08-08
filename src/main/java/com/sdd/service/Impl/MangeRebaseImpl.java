@@ -454,7 +454,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
         String budgetAllocationAuthGroupIdDHQ = HelperUtils.getAuthorityGroupId();
         String universalAuthGroupForRebase = HelperUtils.getAuthorityGroupId();
         String authGroupIdRHQtoDHQsameR = HelperUtils.getAuthorityGroupId();
-
         if (hrDataCheck == null) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS", HttpStatus.OK.value());
