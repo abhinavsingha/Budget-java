@@ -2402,7 +2402,7 @@ public class MangeReportImpl implements MangeReportService {
                             CgUnit selfUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
                             unitList.add(selfUnit);
 
-                            for (int p = 0; p < unitDataList.size(); p++) {
+                            for (int p = 0; p < unitList.size(); p++) {
                                 List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(p).getUnit());
                                 cdaData.addAll(cdaTransData);
                             }
@@ -2800,7 +2800,9 @@ public class MangeReportImpl implements MangeReportService {
 
             }
 
-        } else {
+        }
+
+        else {
 
             if (cdaReportRequest.getReportType() == null || cdaReportRequest.getReportType().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REPORT TYPE CAN NOT BE BLANK");
@@ -2931,7 +2933,10 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
 
-            } else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
+            }
+
+
+            else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
 
                 if (cdaReportRequest.getUnitId() == null || cdaReportRequest.getUnitId().isEmpty()) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT ID CAN NOT BE BLANK");
@@ -2975,6 +2980,11 @@ public class MangeReportImpl implements MangeReportService {
                 cdaReportList.add(cdaReportResponse);
                 allCdaData.put("Sub Head", cdaReportList);
 
+                List<CgUnit> unitDataList = cgUnitRepository.findByBudGroupUnitLike("%" + cdaReportRequest.getUnitId() + "%");
+                List<CgUnit> unitList = unitDataList.stream().filter(e -> !e.getUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                CgUnit selfUnit = cgUnitRepository.findByUnit(cdaReportRequest.getUnitId());
+                unitList.add(selfUnit);
+
                 for (int i = 0; i < subHeadsData.size(); i++) {
                     cdaReportList = new ArrayList<>();
                     cdaReportResponse = new CDAReportResponse();
@@ -2987,13 +2997,11 @@ public class MangeReportImpl implements MangeReportService {
                         for (int k = 0; k < cdaParkingTotalList.size(); k++) {
 
                             List<CdaParkingTrans> cdaData = new ArrayList<>();
-                            List<CgUnit> unitDataList = cgUnitRepository.findByBudGroupUnitLike("%" + cdaReportRequest.getUnitId() + "%");
-                            List<CgUnit> unitList = unitDataList.stream().filter(e -> !e.getUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
-                            CgUnit selfUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
-                            unitList.add(selfUnit);
 
-                            for (int p = 0; p < unitDataList.size(); p++) {
-                                cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(p).getUnit()));
+
+                            for (int p = 0; p < unitList.size(); p++) {
+                                List<CdaParkingTrans> cdaDataMain =cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(p).getUnit());
+                                cdaData.addAll(cdaDataMain);
                             }
 
                             double amount = 0;
@@ -3208,7 +3216,7 @@ public class MangeReportImpl implements MangeReportService {
                             CgUnit selfUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
                             unitList.add(selfUnit);
 
-                            for (int p = 0; p < unitDataList.size(); p++) {
+                            for (int p = 0; p < unitList.size(); p++) {
                                 List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(p).getUnit());
                                 cdaData.addAll(cdaTransData);
                             }
@@ -3799,7 +3807,7 @@ public class MangeReportImpl implements MangeReportService {
                             CgUnit selfUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
                             unitList.add(selfUnit);
 
-                            for (int p = 0; p < unitDataList.size(); p++) {
+                            for (int p = 0; p < unitList.size(); p++) {
                                 cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(p).getUnit()));
                             }
 
