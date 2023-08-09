@@ -2403,7 +2403,7 @@ public class MangeReportImpl implements MangeReportService {
                             unitList.add(selfUnit);
 
                             for (int p = 0; p < unitList.size(); p++) {
-                                List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(p).getUnit());
+                                List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitList.get(p).getUnit());
                                 cdaData.addAll(cdaTransData);
                             }
                         }
@@ -3000,7 +3000,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
                             for (int p = 0; p < unitList.size(); p++) {
-                                List<CdaParkingTrans> cdaDataMain =cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(p).getUnit());
+                                List<CdaParkingTrans> cdaDataMain =cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitList.get(p).getUnit());
                                 cdaData.addAll(cdaDataMain);
                             }
 
@@ -3217,7 +3217,7 @@ public class MangeReportImpl implements MangeReportService {
                             unitList.add(selfUnit);
 
                             for (int p = 0; p < unitList.size(); p++) {
-                                List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(p).getUnit());
+                                List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitList.get(p).getUnit());
                                 cdaData.addAll(cdaTransData);
                             }
                             List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), hrData.getUnitId());
@@ -3808,7 +3808,7 @@ public class MangeReportImpl implements MangeReportService {
                             unitList.add(selfUnit);
 
                             for (int p = 0; p < unitList.size(); p++) {
-                                cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitDataList.get(p).getUnit()));
+                                cdaData.addAll(cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitList.get(p).getUnit()));
                             }
 
 
