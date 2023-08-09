@@ -126,7 +126,7 @@ public class PdfGenaratorUtilMain {
 
         Paragraph paragraphs = new Paragraph();
         Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-        paragraphs.add(new Chunk("RECIPT REPORT " + "( " + hrData.getUnit().toUpperCase() + " )", boldFont));
+        paragraphs.add(new Chunk("RECEIPT REPORT " + "( " + hrData.getUnit().toUpperCase() + " )", boldFont));
         paragraphs.setAlignment(Paragraph.ALIGN_CENTER);
         document.add(paragraphs);
         document.add(new Paragraph("\n"));
