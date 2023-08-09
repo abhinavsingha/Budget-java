@@ -8485,7 +8485,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getUnitRebaseReport(String fromDate, String toDate) {
+    public ApiResponse<List<FilePathResponse>> getUnitRebaseReport(String fromDate, String toDate,String unitid) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -8505,6 +8505,11 @@ public class MangeReportImpl implements MangeReportService {
         if (toDate == null) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "TO DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+
+        if (unitid == null) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "UNIT ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
         if (hrDataList.size() == 0) {
@@ -8547,7 +8552,7 @@ public class MangeReportImpl implements MangeReportService {
         LocalDateTime localDateTime = LocalDateTime.of(resultDt, LocalTime.MIDNIGHT);
         Timestamp toDateFormate = Timestamp.valueOf(localDateTime);
 
-        List<String> groupUnitId = budgetRebaseRepository.findAuthGroupRebaseUnit();
+        List<String> groupUnitId = budgetRebaseRepository.findAuthGroupRebaseUnit(unitid);
         if (groupUnitId.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "DATA NOT FOUND FROM DB", HttpStatus.OK.value());
@@ -8816,7 +8821,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getUnitRebaseReportDoc(String fromDate, String toDate) {
+    public ApiResponse<List<FilePathResponse>> getUnitRebaseReportDoc(String fromDate, String toDate,String unitid) {
         List<UnitRebaseReportResponce> responce = new ArrayList<UnitRebaseReportResponce>();
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
         String token = headerUtils.getTokeFromHeader();
@@ -8839,6 +8844,10 @@ public class MangeReportImpl implements MangeReportService {
         if (toDate == null) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "TO DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (unitid == null) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "UNIT ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
         List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrDataCheck.getUnitId(), "1");
         if (hrDataList.size() == 0) {
@@ -9124,7 +9133,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseReportExcel(String fromDate, String toDate) {
+    public ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseReportExcel(String fromDate, String toDate,String unitid) {
         List<UnitRebaseReportResponce> responce = new ArrayList<UnitRebaseReportResponce>();
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -9146,6 +9155,10 @@ public class MangeReportImpl implements MangeReportService {
         if (toDate == null) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
             }, "TO DATE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (unitid == null) {
+            return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
+            }, "UNIT ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
 
         List<String> groupUnitId = budgetRebaseRepository.findAuthGroupRebaseUnit();

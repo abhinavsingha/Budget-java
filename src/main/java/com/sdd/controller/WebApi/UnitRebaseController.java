@@ -80,4 +80,9 @@ public class UnitRebaseController {
         return new ResponseEntity<>(mangeRebaseService.getUnitRebaseNotificationData(authGrpId), HttpStatus.OK);
     }
 
+    @GetMapping("/getIsShipCgUnit")
+    public ResponseEntity<ApiResponse<List<CgUnitResponse>>> getIsShipCgUnit() {
+        return new ResponseEntity<>(mangeRebaseService.getIsShipCgUnit(), HttpStatus.OK);
+    }
+
 }

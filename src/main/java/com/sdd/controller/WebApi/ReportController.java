@@ -231,19 +231,19 @@ public class ReportController {
     }
 
     //  UNIT REBASE ALLOCATION REPORT
-    @GetMapping("/getUnitRebaseReport/{fromDate}/{toDate}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitRebaseReport(@PathVariable(value = "fromDate") String fromDate, @PathVariable(value = "toDate") String toDate) {
-        return new ResponseEntity<>(mangeReportService.getUnitRebaseReport(fromDate, toDate), HttpStatus.OK);
+    @GetMapping("/getUnitRebaseReport/{fromDate}/{toDate}/{unitid}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitRebaseReport(@PathVariable(value = "fromDate") String fromDate, @PathVariable(value = "toDate") String toDate, @PathVariable(value = "unitid") String unitid) {
+        return new ResponseEntity<>(mangeReportService.getUnitRebaseReport(fromDate, toDate,unitid), HttpStatus.OK);
     }
 
-    @GetMapping("/getUnitRebaseReportDoc/{fromDate}/{toDate}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitRebaseReportDoc(@PathVariable(value = "fromDate") String fromDate, @PathVariable(value = "toDate") String toDate) {
-        return new ResponseEntity<>(mangeReportService.getUnitRebaseReportDoc(fromDate, toDate), HttpStatus.OK);
+    @GetMapping("/getUnitRebaseReportDoc/{fromDate}/{toDate}/{unitid}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitRebaseReportDoc(@PathVariable(value = "fromDate") String fromDate, @PathVariable(value = "toDate") String toDate, @PathVariable(value = "unitid") String unitid) {
+        return new ResponseEntity<>(mangeReportService.getUnitRebaseReportDoc(fromDate, toDate,unitid), HttpStatus.OK);
     }
 
-    @GetMapping("/getUnitRebaseReportExcel/{fromDate}/{toDate}")
-    public ResponseEntity<ApiResponse<List<UnitRebaseReportResponce>>> getUnitRebaseReportExcel(@PathVariable(value = "fromDate") String fromDate, @PathVariable(value = "toDate") String toDate) {
-        return new ResponseEntity<>(mangeReportService.getUnitRebaseReportExcel(fromDate, toDate), HttpStatus.OK);
+    @GetMapping("/getUnitRebaseReportExcel/{fromDate}/{toDate}/{unitid}")
+    public ResponseEntity<ApiResponse<List<UnitRebaseReportResponce>>> getUnitRebaseReportExcel(@PathVariable(value = "fromDate") String fromDate, @PathVariable(value = "toDate") String toDate, @PathVariable(value = "unitid") String unitid) {
+        return new ResponseEntity<>(mangeReportService.getUnitRebaseReportExcel(fromDate, toDate,unitid), HttpStatus.OK);
     }
 
     @GetMapping("/getUnitRebaseDataAuthGrId/{authGrpId}")

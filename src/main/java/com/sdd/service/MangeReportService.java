@@ -92,9 +92,9 @@ public interface MangeReportService {
 
 
  //  UNIT REBASE ALLOCATION REPORT
-    ApiResponse<List<FilePathResponse>> getUnitRebaseReport(String fromDate, String toDate);
-    ApiResponse<List<FilePathResponse>> getUnitRebaseReportDoc(String fromDate, String toDate);
-    ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseReportExcel(String fromDate, String toDate);
+    ApiResponse<List<FilePathResponse>> getUnitRebaseReport(String fromDate, String toDate,String unitid);
+    ApiResponse<List<FilePathResponse>> getUnitRebaseReportDoc(String fromDate, String toDate,String unitid);
+    ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseReportExcel(String fromDate, String toDate,String unitid);
 
     ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseDataAuthGrId(String authGrpId);
 

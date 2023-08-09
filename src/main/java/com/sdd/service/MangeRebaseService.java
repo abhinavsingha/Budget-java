@@ -30,6 +30,8 @@ public interface MangeRebaseService {
 
 	ApiResponse<List<CgUnitResponse>> getAllIsShipCgUnitData();
 
+	ApiResponse<List<CgUnitResponse>> getIsShipCgUnit();
+
 	ApiResponse<List<RebaseNotificationResp>> getUnitRebaseNotificationData(String authGrpId);
 
 
