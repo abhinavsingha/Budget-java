@@ -1123,19 +1123,86 @@ public class DashboardServiceImpl implements DashBoardService {
                     sumExp += expAmnt;
                     sumBal += sumCdaRemainingBal;
                 }
+            }
+            double alocAmntsHd=0.0;
+            double expHd=0.0;
+            double rmCdaHd=0.0;
+            if(headunit==true){
+                //.........Here adding headunit...self.
+                String cbD = "";
+                Timestamp lastCvDate;
+                List<BudgetAllocation> budgetAllocToUnits = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, hrData.getUnitId(), finYearId, allocationTypeId, "0", "0", "Approved");
+                AmountUnit alloc = amountUnitRepository.findByAmountTypeId(budgetAllocToUnits.get(0).getAmountType());
+                double allocAmntUnit = alloc.getAmount();
+                double alocAmnts = Double.parseDouble(budgetAllocToUnits.get(0).getAllocationAmount());
+                double alocAmnt = alocAmnts * allocAmntUnit / reqAmount;
 
+                List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, allocationTypeId, "0", "0");
+                double totalExpAmount = 0.0;
+                if (expenditure.size() > 0) {
+                    for (ContigentBill bill : expenditure) {
+                        totalExpAmount += Double.parseDouble(bill.getCbAmount());
+                        if (bill.getCbDate() != null) {
+                            lastCvDate = bill.getCbDate();
+                            SimpleDateFormat id = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                            SimpleDateFormat od = new SimpleDateFormat("dd-MMMM-yyyy");
+                            Date dateC = id.parse(lastCvDate.toString());
+                            cbD = od.format(dateC);
+                        } else
+                            cbD = "";
+                    }
+                }
+
+                double remCdaBal = 0.0;
+                List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, hrData.getUnitId(), allocationTypeId, "0");
+                if (cdaDetail.size() > 0) {
+                    for (int k = 0; k < cdaDetail.size(); k++) {
+                        AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(0).getAmountType());
+                        double cdaUnit = hdamtUnit.getAmount();
+                        if (cdaDetail.get(k).getRemainingCdaAmount() == null) {
+                            remCdaBal=0.0;
+                        }else{
+                            double remCd=Double.parseDouble(cdaDetail.get(k).getRemainingCdaAmount());
+                            remCdaBal += remCd * cdaUnit;
+                        }
+                    }
+                }
+                CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
+
+                alocAmntsHd=(remCdaBal+totalExpAmount)/reqAmount;
+                expHd=totalExpAmount/reqAmount;
+                rmCdaHd=remCdaBal/reqAmount;
+
+                double perAmnt = 0.0;
+                if (alocAmntsHd != 0) {
+                    perAmnt = (expHd * 100) / alocAmntsHd;
+                } else {
+                    perAmnt = 0.0;
+                }
+
+                GrTotalObj subResp = new GrTotalObj();
+                subResp.setUnitName(cgUnit.getDescr());
+                subResp.setFinYear(budgetFinancialYear.getFinYear());
+                subResp.setAllocType(allockData.getAllocDesc());
+                subResp.setAmountIn(hdamtUnits.getAmountType());
+                subResp.setAllocatedAmount(String.format("%1$0,1.4f", alocAmntsHd));
+                subResp.setExpenditureAmount(String.format("%1$0,1.4f", totalExpAmount));
+                subResp.setBalAmount(String.format("%1$0,1.4f", rmCdaHd));
+                subResp.setPerAmount(String.format("%1$0,1.2f", perAmnt));
+                subResp.setLastCBDate(cbD);
+                grResp.add(subResp);
 
             }
             double grPer = 0.0;
-            if (sumAlloc != 0) {
-                grPer = (sumExp * 100) / sumAlloc;
+            if ((sumAlloc+alocAmntsHd) != 0) {
+                grPer = ((sumExp+expHd) * 100) / sumAlloc;
             } else {
                 grPer = 0.0;
             }
             obj.setGrTotalObj(grResp);
-            obj.setSumAlloc(ConverterUtils.addDecimalPoint(sumAlloc + ""));
-            obj.setSumExp(ConverterUtils.addDecimalPoint(sumExp + ""));
-            obj.setSumBal(ConverterUtils.addDecimalPoint(sumBal + ""));
+            obj.setSumAlloc(ConverterUtils.addDecimalPoint((sumAlloc+alocAmntsHd) + ""));
+            obj.setSumExp(ConverterUtils.addDecimalPoint((sumExp+expHd) + ""));
+            obj.setSumBal(ConverterUtils.addDecimalPoint((sumBal+rmCdaHd) + ""));
             obj.setPerBal(ConverterUtils.addDecimal2Point(grPer + ""));
             resp.add(obj);
 
