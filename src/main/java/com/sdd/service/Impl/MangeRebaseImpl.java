@@ -2440,7 +2440,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         }
 
                     } else {
-                        // .....................CREATE BUDGET RECEIPT....FOR TO DHQ..............................
+                        // .....................CREATE BUDGET RECIPT....FOR TO DHQ..............................
                         BudgetAllocation budgetAllocationRecipt = new BudgetAllocation();
                         budgetAllocationRecipt.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                         budgetAllocationRecipt.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
@@ -3376,7 +3376,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                         }
                     } else {
-                        // .....................CREATE BUDGET RECEIPT..FOR RHQ................................
+                        // .....................CREATE BUDGET RECIPT..FOR RHQ................................
                         BudgetAllocationDetails budgetRecipt = new BudgetAllocationDetails();
                         budgetRecipt.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                         budgetRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
@@ -3458,7 +3458,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         }
 
                     } else {
-                        // .....................CREATE BUDGET RECEIPT.....FOR RHQ.............................
+                        // .....................CREATE BUDGET RECIPT.....FOR RHQ.............................
                         BudgetAllocation budgetAllocationRecipt = new BudgetAllocation();
                         budgetAllocationRecipt.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                         budgetAllocationRecipt.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
@@ -3678,7 +3678,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 //
                         }
                     } else {
-                        // .....................CREATE BUDGET RECEIPT..FOR RHQ................................
+                        // .....................CREATE BUDGET RECIPT..FOR RHQ................................
                         BudgetAllocationDetails budgetRecipt = new BudgetAllocationDetails();
                         budgetRecipt.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                         budgetRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
@@ -3762,7 +3762,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                     } else {
 
-                        // .....................CREATE BUDGET RECEIPT..FOR RHQ................................
+                        // .....................CREATE BUDGET RECIPT..FOR RHQ................................
                         BudgetAllocation budgetAllocationReciptMain = new BudgetAllocation();
                         budgetAllocationReciptMain.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                         budgetAllocationReciptMain.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
@@ -4177,7 +4177,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 BudgetAllocationDetails saveData11 = budgetAllocationDetailsRepository.save(allocDatatails);
                             }
                         } else {
-                            // .....................CREATE BUDGET RECEIPT..FOR TO DHQ................................
+                            // .....................CREATE BUDGET RECIPT..FOR TO DHQ................................
                             BudgetAllocationDetails budgetAllocationDetailsRecipt = new BudgetAllocationDetails();
                             budgetAllocationDetailsRecipt.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                             budgetAllocationDetailsRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
@@ -4256,7 +4256,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             }
 
                         } else {
-                            // .....................CREATE BUDGET RECEIPT....FOR TO DHQ..............................
+                            // .....................CREATE BUDGET RECIPT....FOR TO DHQ..............................
                             BudgetAllocation budgetAllocationRecipt = new BudgetAllocation();
                             budgetAllocationRecipt.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                             budgetAllocationRecipt.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
@@ -4594,7 +4594,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         }
 
                     } else {
-                        // .....................CREATE BUDGET RECEIPT..FOR TO DHQ................................
+                        // .....................CREATE BUDGET RECIPT..FOR TO DHQ................................
                         BudgetAllocationDetails budgetAllocationDetailsRecipt = new BudgetAllocationDetails();
                         budgetAllocationDetailsRecipt.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                         budgetAllocationDetailsRecipt.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
@@ -4690,7 +4690,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
 
                     } else {
-                        // .....................CREATE BUDGET RECEIPT....FOR TO DHQ..............................
+                        // .....................CREATE BUDGET RECIPT....FOR TO DHQ..............................
                         BudgetAllocation budgetAllocationRecipt = new BudgetAllocation();
                         budgetAllocationRecipt.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                         budgetAllocationRecipt.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
