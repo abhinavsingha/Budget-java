@@ -2080,8 +2080,8 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), cdaData.get(m).getBudgetHeadId(), cdaData.get(m).getAllocTypeId(), "Approved", "0", "0");
                 double allocationAmountMain = 0;
                 for (Integer g = 0; g < budgetAllocationsDetalis.size(); g++) {
-                    AmountUnit amountUnitMain = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(m).getAmountType());
-                    allocationAmountMain = allocationAmountMain + (Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount()) * amountUnitMain.getAmount());
+                    AmountUnit amountUnitMain = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(g).getAmountType());
+                    allocationAmountMain = allocationAmountMain + (Double.parseDouble(budgetAllocationsDetalis.get(g).getAllocationAmount()) * amountUnitMain.getAmount());
                 }
 
                 allocationGrandTotal = allocationGrandTotal + (allocationAmountMain) / Double.parseDouble(amountUnit.getAmount().toString());
@@ -2218,8 +2218,8 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), cdaData.get(m).getBudgetHeadId(), cdaData.get(m).getAllocTypeId(), "Approved", "0", "0");
                 double allocationAmountMain = 0;
                 for (Integer g = 0; g < budgetAllocationsDetalis.size(); g++) {
-                    AmountUnit amountUnitMain = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(m).getAmountType());
-                    allocationAmountMain = allocationAmountMain + (Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount()) * amountUnitMain.getAmount());
+                    AmountUnit amountUnitMain = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(g).getAmountType());
+                    allocationAmountMain = allocationAmountMain + (Double.parseDouble(budgetAllocationsDetalis.get(g).getAllocationAmount()) * amountUnitMain.getAmount());
                 }
 
                 allocationGrandTotal = allocationGrandTotal + (allocationAmountMain) / Double.parseDouble(amountUnit.getAmount().toString());
