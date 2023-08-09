@@ -6498,7 +6498,7 @@ public class MangeReportImpl implements MangeReportService {
 
                 String totSum1 = ConverterUtils.addDecimalPoint(sum + "");
                 String totSum2 = ConverterUtils.addDecimalPoint(reSum + "");
-                double totSum = Double.parseDouble(totSum1 + totSum2);
+                double totSum = Double.parseDouble(totSum1) + Double.parseDouble(totSum2);
 
                 if (count != 0) {
                     PdfPCell cell20 = new PdfPCell(new Phrase(" TOTAL", cellFont));
@@ -6771,7 +6771,7 @@ public class MangeReportImpl implements MangeReportService {
 
                 String totSum1 = ConverterUtils.addDecimalPoint(sum + "");
                 String totSum2 = ConverterUtils.addDecimalPoint(reSum + "");
-                double totSum = Double.parseDouble(totSum1 + totSum2);
+                double totSum = Double.parseDouble(totSum1) + Double.parseDouble(totSum2);
 
                 if (count != 0) {
                     XWPFTable table222 = document.createTable(1, 4);
