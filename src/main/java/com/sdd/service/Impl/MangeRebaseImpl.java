@@ -1684,7 +1684,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetAllocationMain.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                         budgetAllocationMain.setAllocationTypeId(req.getUnitRebaseRequests().get(k).getAllocationTypeId());
                         budgetAllocationMain.setAllocationAmount(ConverterUtils.addDecimalPoint(req.getUnitRebaseRequests().get(k).getAllocAmount()));
-                        budgetAllocationMain.setUnallocatedAmount("");
+                        budgetAllocationMain.setUnallocatedAmount("0");
                         budgetAllocationMain.setRevisedAmount("0");
                         budgetAllocationMain.setUserId(hrDataCheck.getPid());
                         budgetAllocationMain.setStatus("Approved");

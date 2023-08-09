@@ -33,6 +33,10 @@ public interface BudgetRebaseRepository extends JpaRepository<BudgetRebase, Stri
 
     List<BudgetRebase> findByAuthGrpId(String authGrId);
 
+    @Query(value ="select ALLOC_FROM_UNIT,REBASE_UNIT_ID,TO_HEAD_UNIT_ID from budgetrebase where REBASE_UNIT_ID=:unitId",nativeQuery = true)
+    List<String> findByAuthorityunit(String unitId);
+
+
 
 
 
