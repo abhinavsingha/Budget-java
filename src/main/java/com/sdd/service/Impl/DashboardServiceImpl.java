@@ -960,15 +960,15 @@ public class DashboardServiceImpl implements DashBoardService {
         AmountUnit hdamtUnits = amountUnitRepository.findByAmountTypeId(amounttypeId);
         double reqAmount = hdamtUnits.getAmount();
         try {
-            String loginUnitId = "";
+/*            String loginUnitId = "";
             if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
                 loginUnitId = "000225";
             } else {
                 loginUnitId = hrData.getUnitId();
-            }
+            }*/
 
             boolean headunit;
-            List<CgUnit> subUnit = cgUnitRepository.findBySubUnitOrderByDescrAsc(loginUnitId);
+            List<CgUnit> subUnit = cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
             if (subUnit.size() == 0) {
                 headunit = false;
             } else {
