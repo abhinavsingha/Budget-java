@@ -31,7 +31,7 @@ public class DocxGenaratorUtil {
 
 
     @SuppressWarnings("rawtypes")
-    public void createDocAllocation(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse,HrData hrData) throws Exception {
+    public void createDocAllocation(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse, HrData hrData) throws Exception {
 
         try {
 
@@ -44,7 +44,7 @@ public class DocxGenaratorUtil {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText("ALLOCATION REPORT " +"( "+hrData.getUnit().toUpperCase()+" )");
+            headingRun.setText("ALLOCATION REPORT " + "( " + hrData.getUnit().toUpperCase() + " )");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
@@ -150,7 +150,7 @@ public class DocxGenaratorUtil {
 
 
     @SuppressWarnings("rawtypes")
-    public void createDocRecipt(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse,HrData hrData) throws Exception {
+    public void createDocRecipt(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse, HrData hrData) throws Exception {
 
         try {
 
@@ -162,7 +162,7 @@ public class DocxGenaratorUtil {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText("RECIEPT REPORT " +"( "+hrData.getUnit().toUpperCase()+" )");
+            headingRun.setText("RECIEPT REPORT " + "( " + hrData.getUnit().toUpperCase() + " )");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
@@ -173,9 +173,6 @@ public class DocxGenaratorUtil {
             table.setWidth("100%");
 //                XWPFParagraph para = document.createParagraph();
 //                XWPFRun run = para.createRun();
-
-
-
 
 
             XWPFTableRow tableRowOne = table.getRow(0);
@@ -295,14 +292,12 @@ public class DocxGenaratorUtil {
             headingParagraph.setAlignment(ParagraphAlignment.CENTER);
             headingParagraph.setStyle("Heading1");
             XWPFRun headingRun = headingParagraph.createRun();
-            headingRun.setText("RECEIPT REPORT " +"( "+hrData.getUnit().toUpperCase()+" )");
+            headingRun.setText("RECEIPT REPORT " + "( " + hrData.getUnit().toUpperCase() + " )");
             headingRun.setBold(true);
             headingRun.setFontSize(16);
 
             XWPFParagraph spacingParagraphss = document.createParagraph();
             spacingParagraphss.setSpacingAfter(20);
-
-
 
 
             String key = "";
@@ -435,7 +430,7 @@ public class DocxGenaratorUtil {
     }
 
 
-    public void createCdaMainReportDoc(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, HashMap<String, String> coloumWiseAmount,HrData hrData) throws Exception {
+    public void createCdaMainReportDoc(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, HashMap<String, String> coloumWiseAmount, HrData hrData) throws Exception {
 
         try {
 
@@ -475,7 +470,6 @@ public class DocxGenaratorUtil {
 //                    boldText(paragraphtableRowOne1.createRun(), 10, ConverterUtils.addDecimalPoint(tabData1.get(i).getName()), true);
 //                }
 //            }
-
 
 
             String reOrCapital = "";
@@ -587,13 +581,34 @@ public class DocxGenaratorUtil {
                     normalText(paragraph11.createRun(), 10, tabData, false);
                     ih++;
                 }
+            }
 
 
+            double grandAllTotal = 0;
+            for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
+                String key = entry.getKey();
+
+                try {
+                    if (!key.equalsIgnoreCase("Sub Head")) {
+                        List<CDAReportResponse> tabData = entry.getValue();
+                        for (Integer i = 0; i < tabData.size(); i++) {
+                            Boolean isNumber = ConverterUtils.isNumber(tabData.get(i).getName() + "");
+                            if (isNumber) {
+                                grandAllTotal = grandAllTotal + Double.parseDouble(tabData.get(i).getName());
+                            }else{
+                                grandAllTotal = grandAllTotal + Double.parseDouble(tabData.get(i).getName());
+                            }
+                        }
+                    }
+
+                } catch (Exception e) {
+
+                }
             }
 
 
             XWPFParagraph paragraph11 = tableRow11.getCell(ih + 1).addParagraph();
-            normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint(grandTotal + ""), false);
+            normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint((grandAllTotal/2) + ""), false);
 
 
             document.write(out);
@@ -606,15 +621,13 @@ public class DocxGenaratorUtil {
     }
 
 
-    public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, double allocationGrandTotal,HrData hrData) throws Exception {
+    public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, double allocationGrandTotal, HrData hrData) throws Exception {
 
         try {
 
             XWPFDocument document = new XWPFDocument();
             FileOutputStream out = new FileOutputStream(new File(path));
             String reOrCapital = "";
-
-
 
 
             if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
@@ -628,7 +641,7 @@ public class DocxGenaratorUtil {
 
             mainParagraph = document.createParagraph();
             mainParagraph.setAlignment(ParagraphAlignment.CENTER);
-            boldText(mainParagraph.createRun(), 17, "\n" + "RESERVE FUND " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() +" "+"( "+hrData.getUnit().toUpperCase()+" )", true);
+            boldText(mainParagraph.createRun(), 17, "\n" + "RESERVE FUND " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() + " " + "( " + hrData.getUnit().toUpperCase() + " )", true);
             mainParagraph.createRun().addBreak();
 
 

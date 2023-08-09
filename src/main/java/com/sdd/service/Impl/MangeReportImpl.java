@@ -2077,17 +2077,19 @@ public class MangeReportImpl implements MangeReportService {
                 grandTotal = grandTotal + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                 amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
 
-                List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), cdaData.get(m).getBudgetHeadId(), cdaData.get(m).getAllocTypeId(), "Approved", "0", "0");
-                double allocationAmountMain = 0;
-                for (Integer g = 0; g < budgetAllocationsDetalis.size(); g++) {
-                    AmountUnit amountUnitMain = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(g).getAmountType());
-                    allocationAmountMain = allocationAmountMain + (Double.parseDouble(budgetAllocationsDetalis.get(g).getAllocationAmount()) * amountUnitMain.getAmount());
-                }
-
-                allocationGrandTotal = allocationGrandTotal + (allocationAmountMain) / Double.parseDouble(amountUnit.getAmount().toString());
-                allocationAmount = allocationAmount + (allocationAmountMain) / Double.parseDouble(amountUnit.getAmount().toString());
 
             }
+
+            List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), subHead.getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "Approved", "0", "0");
+            double allocationAmountMain = 0;
+            for (Integer g = 0; g < budgetAllocationsDetalis.size(); g++) {
+                AmountUnit amountUnitMain = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(g).getAmountType());
+                allocationAmountMain = allocationAmountMain + (Double.parseDouble(budgetAllocationsDetalis.get(g).getAllocationAmount()) * amountUnitMain.getAmount());
+            }
+
+            allocationGrandTotal = allocationGrandTotal + (allocationAmountMain) / Double.parseDouble(amountUnit.getAmount().toString());
+            allocationAmount = allocationAmount + (allocationAmountMain) / Double.parseDouble(amountUnit.getAmount().toString());
+
 
             if (allocationAmount == 0 || allocationAmount <= 0) {
                 continue;
@@ -2107,8 +2109,6 @@ public class MangeReportImpl implements MangeReportService {
 
 
         try {
-
-
             File folder = new File(HelperUtils.LASTFOLDERPATH);
             if (!folder.exists()) {
                 folder.mkdirs();
@@ -2214,18 +2214,22 @@ public class MangeReportImpl implements MangeReportService {
                 AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
                 grandTotal = grandTotal + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                 amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
-
-                List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), cdaData.get(m).getBudgetHeadId(), cdaData.get(m).getAllocTypeId(), "Approved", "0", "0");
-                double allocationAmountMain = 0;
-                for (Integer g = 0; g < budgetAllocationsDetalis.size(); g++) {
-                    AmountUnit amountUnitMain = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(g).getAmountType());
-                    allocationAmountMain = allocationAmountMain + (Double.parseDouble(budgetAllocationsDetalis.get(g).getAllocationAmount()) * amountUnitMain.getAmount());
-                }
-
-                allocationGrandTotal = allocationGrandTotal + (allocationAmountMain) / Double.parseDouble(amountUnit.getAmount().toString());
-                allocationAmount = allocationAmount + (allocationAmountMain) / Double.parseDouble(amountUnit.getAmount().toString());
-
             }
+
+
+
+
+
+            List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), subHead.getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "Approved", "0", "0");
+            double allocationAmountMain = 0;
+            for (Integer g = 0; g < budgetAllocationsDetalis.size(); g++) {
+                AmountUnit amountUnitMain = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(g).getAmountType());
+                allocationAmountMain = allocationAmountMain + (Double.parseDouble(budgetAllocationsDetalis.get(g).getAllocationAmount()) * amountUnitMain.getAmount());
+            }
+
+            allocationGrandTotal = allocationGrandTotal + (allocationAmountMain) / Double.parseDouble(amountUnit.getAmount().toString());
+            allocationAmount = allocationAmount + (allocationAmountMain) / Double.parseDouble(amountUnit.getAmount().toString());
+
 
             if (allocationAmount == 0 || allocationAmount <= 0) {
                 continue;
@@ -2419,7 +2423,9 @@ public class MangeReportImpl implements MangeReportService {
                                     expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                 }
                             }
-                            amount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                            double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+
+                            amount = amount + expAmount;
 
                             if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                 amount = amount;
@@ -2526,8 +2532,9 @@ public class MangeReportImpl implements MangeReportService {
                                         expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                     }
                                 }
-                                amount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                                double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
+                                amount = amount + expAmount;
 
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                     amount = amount;
@@ -2632,7 +2639,9 @@ public class MangeReportImpl implements MangeReportService {
                                         expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                     }
                                 }
-                                amount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                                double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+
+                                amount = amount + expAmount;
 
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                     amount = amount;
@@ -2738,8 +2747,9 @@ public class MangeReportImpl implements MangeReportService {
                                     expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                 }
                             }
-                            amount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                            double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
+                            amount = amount + expAmount;
 
                             if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                 amount = amount;
@@ -2875,7 +2885,9 @@ public class MangeReportImpl implements MangeReportService {
                                     expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                 }
                             }
-                            amount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                            double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+
+                            amount = amount + expAmount;
 
                             if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                 amount = amount;
@@ -3016,8 +3028,9 @@ public class MangeReportImpl implements MangeReportService {
                                         expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                     }
                                 }
-                                amount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                              double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
+                                amount = amount + expAmount;
 
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                     amount = 0;
@@ -3239,7 +3252,10 @@ public class MangeReportImpl implements MangeReportService {
                                     expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                 }
                             }
-                            amount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                            double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+
+                            amount = amount + expAmount;
+
 
                             if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                 amount = amount;
@@ -3347,8 +3363,9 @@ public class MangeReportImpl implements MangeReportService {
                                         expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                     }
                                 }
-                                amount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                                double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
+                                amount = amount + expAmount;
 
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                     amount = amount;
@@ -3452,7 +3469,10 @@ public class MangeReportImpl implements MangeReportService {
                                         expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                     }
                                 }
-                                amount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                                double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+
+                                amount = amount + expAmount;
+
 
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                     amount = amount;
@@ -3557,8 +3577,9 @@ public class MangeReportImpl implements MangeReportService {
                                     expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                 }
                             }
-                            amount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                            double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
+                            amount = amount + expAmount;
 
                             if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                 amount = amount;
@@ -3689,7 +3710,9 @@ public class MangeReportImpl implements MangeReportService {
                                     expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                 }
                             }
-                            amount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                            double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+
+                            amount = amount + expAmount;
 
                             if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                 amount = amount;
@@ -3824,8 +3847,9 @@ public class MangeReportImpl implements MangeReportService {
                                         expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                     }
                                 }
-                                amount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                                double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
+                                amount = amount + expAmount;
 
                                 if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                     amount = amount;

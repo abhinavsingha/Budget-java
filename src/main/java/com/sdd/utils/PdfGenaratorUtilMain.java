@@ -22,7 +22,7 @@ public class PdfGenaratorUtilMain {
     private static final String UTF_8 = "UTF-8";
 
     @SuppressWarnings("rawtypes")
-    public void createPdfAllocation(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse,HrData hrData) throws Exception {
+    public void createPdfAllocation(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse, HrData hrData) throws Exception {
 
         Document document = new Document();
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
@@ -37,7 +37,7 @@ public class PdfGenaratorUtilMain {
 
         Paragraph paragraphs = new Paragraph();
         Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-        paragraphs.add(new Chunk("ALLOCATION REPORT "+"( "+hrData.getUnit().toUpperCase()+" )", boldFont));
+        paragraphs.add(new Chunk("ALLOCATION REPORT " + "( " + hrData.getUnit().toUpperCase() + " )", boldFont));
         paragraphs.setAlignment(Paragraph.ALIGN_CENTER);
         document.add(paragraphs);
         document.add(new Paragraph("\n"));
@@ -111,7 +111,7 @@ public class PdfGenaratorUtilMain {
 
 
     @SuppressWarnings("rawtypes")
-    public void createPdfRecipt(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse,HrData hrData) throws Exception {
+    public void createPdfRecipt(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse, HrData hrData) throws Exception {
 
         Document document = new Document();
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
@@ -126,7 +126,7 @@ public class PdfGenaratorUtilMain {
 
         Paragraph paragraphs = new Paragraph();
         Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-        paragraphs.add(new Chunk("RECIPT REPORT "+"( "+hrData.getUnit().toUpperCase()+" )", boldFont));
+        paragraphs.add(new Chunk("RECIPT REPORT " + "( " + hrData.getUnit().toUpperCase() + " )", boldFont));
         paragraphs.setAlignment(Paragraph.ALIGN_CENTER);
         document.add(paragraphs);
         document.add(new Paragraph("\n"));
@@ -221,7 +221,7 @@ public class PdfGenaratorUtilMain {
 
         Paragraph paragraphs = new Paragraph();
         Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-        paragraphs.add(new Chunk("RECEIPT REPORT "+"( "+hrData.getUnit().toUpperCase()+" )", boldFont));
+        paragraphs.add(new Chunk("RECEIPT REPORT " + "( " + hrData.getUnit().toUpperCase() + " )", boldFont));
         paragraphs.setAlignment(Paragraph.ALIGN_CENTER);
         document.add(paragraphs);
         document.add(new Paragraph("\n"));
@@ -313,7 +313,7 @@ public class PdfGenaratorUtilMain {
 
     }
 
-    public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, HashMap<String, String> coloumWiseAmount, FilePathResponse filePathResponse,HrData hrData) throws Exception {
+    public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, HashMap<String, String> coloumWiseAmount, FilePathResponse filePathResponse, HrData hrData) throws Exception {
 
 
         Document document = new Document(PageSize.A4.rotate());
@@ -383,6 +383,8 @@ public class PdfGenaratorUtilMain {
                 }
             }
         }
+
+
         table.addCell(boldText("Grand Total", 7, 20f));
 
         for (Map.Entry<String, String> entry : coloumWiseAmount.entrySet()) {
@@ -394,11 +396,31 @@ public class PdfGenaratorUtilMain {
             } else {
                 table.addCell(boldText(ConverterUtils.addDecimalPoint(tabData), 7, 20f));
             }
+        }
 
+
+        double grandAllTotal = 0;
+        try {
+            for (Map.Entry<String, List<CDAReportResponse>> entry : map.entrySet()) {
+                String key = entry.getKey();
+
+                if (!key.equalsIgnoreCase("Sub Head")) {
+                    List<CDAReportResponse> tabData = entry.getValue();
+                    for (Integer i = 0; i < tabData.size(); i++) {
+                        Boolean isNumber = ConverterUtils.isNumber(tabData.get(i).getName() + "");
+                        if (isNumber) {
+                            grandAllTotal = grandAllTotal + Double.parseDouble(tabData.get(i).getName());
+                        }else{
+                            grandAllTotal = grandAllTotal + Double.parseDouble(tabData.get(i).getName());
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
 
         }
 
-        table.addCell(boldText(ConverterUtils.addDecimalPoint(grandTotal + ""), 7, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+        table.addCell(boldText(ConverterUtils.addDecimalPoint((grandAllTotal/2) + ""), 7, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
 
 
         int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
@@ -417,7 +439,7 @@ public class PdfGenaratorUtilMain {
 
     }
 
-    public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, double allocationGrandTotal, FilePathResponse filePathResponse,HrData hrData) throws Exception {
+    public void createReserveFundnReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, double allocationGrandTotal, FilePathResponse filePathResponse, HrData hrData) throws Exception {
 
 
         Document document = new Document(PageSize.A4);
@@ -427,7 +449,7 @@ public class PdfGenaratorUtilMain {
 
 
         Font font = new Font(Font.FontFamily.COURIER, 15, Font.BOLD);
-        Chunk header = new Chunk("\n" + "RESERVE FUND " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() + " "+"( "+hrData.getUnit().toUpperCase()+" )"+"\n" + "\n", font);
+        Chunk header = new Chunk("\n" + "RESERVE FUND " + cadSubReport.getAllocationType() + " " + cadSubReport.getFinYear() + " " + "( " + hrData.getUnit().toUpperCase() + " )" + "\n" + "\n", font);
         Paragraph preface = new Paragraph();
         preface.setAlignment(Element.ALIGN_CENTER);
         preface.add(header);

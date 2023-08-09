@@ -692,7 +692,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             BudgetAllocation allocData = selftAllocSieze.get(i);
             rebaseUnitAllocFromU = allocData.getFromUnit();
             allocData.setIsFlag("1");
-            allocData.setIsTYpe("REBASE");
+            allocData.setIsTYpe("REBASEM");
             allocData.setIsBudgetRevision("1");
             allocData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             budgetAllocationRepository.save(allocData);
@@ -703,7 +703,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
         for (Integer i = 0; i < selfAllocDetailSieze.size(); i++) {
             BudgetAllocationDetails allocDatatails = selfAllocDetailSieze.get(i);
             allocDatatails.setIsDelete("1");
-            allocDatatails.setIsTYpe("REBASE");
+            allocDatatails.setIsTYpe("REBASEM");
             allocDatatails.setIsBudgetRevision("1");
             allocDatatails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetailsRepository.save(allocDatatails);
