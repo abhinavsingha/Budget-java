@@ -8624,6 +8624,25 @@ public class MangeReportImpl implements MangeReportService {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
                     }
 
+                    CgUnit frmHdUnits=cgUnitRepository.findByUnit(rebaseData.get(0).getAllocFromUnit());
+                    String frmHdUnit=frmHdUnits.getBudGroupUnit();
+                    CgUnit toHdUnits=cgUnitRepository.findByUnit(rebaseData.get(0).getToHeadUnitId());
+                    String toHdUnit=toHdUnits.getBudGroupUnit();
+                    String toFrmHdUnit=frmHdUnit+","+toHdUnit;
+
+                    List<String> heaAuthHdUnit=budgetRebaseRepository.findByAuthorityunit(rebaseData.get(0).getRebaseUnitId());
+                    String org=heaAuthHdUnit.get(0);
+                    String adding=org+","+toFrmHdUnit;
+                    heaAuthHdUnit.set(0, adding);
+
+                    boolean exists = Arrays.stream(heaAuthHdUnit.get(0).split(","))
+                            .anyMatch(value -> value.equals(hrData.getUnitId()));
+                    if (exists) {
+                        System.out.println("The Login Unit exists in Rebase Chain.");
+                    } else {
+                        continue;
+                    }
+
                     AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(rebaseData.get(0).getAmountType());
                     double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
                     String amountIn = amountObj.getAmountType().toUpperCase();
@@ -8874,7 +8893,7 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
-        List<String> groupUnitId = budgetRebaseRepository.findAuthGroupRebaseUnit();
+        List<String> groupUnitId = budgetRebaseRepository.findAuthGroupRebaseUnit(unitid);
         if (groupUnitId.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "DATA NOT FOUND FROM DB", HttpStatus.OK.value());
@@ -8931,6 +8950,24 @@ public class MangeReportImpl implements MangeReportService {
 
                     if (rebaseData.size() <= 0) {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
+                    }
+                    CgUnit frmHdUnits=cgUnitRepository.findByUnit(rebaseData.get(0).getAllocFromUnit());
+                    String frmHdUnit=frmHdUnits.getBudGroupUnit();
+                    CgUnit toHdUnits=cgUnitRepository.findByUnit(rebaseData.get(0).getToHeadUnitId());
+                    String toHdUnit=toHdUnits.getBudGroupUnit();
+                    String toFrmHdUnit=frmHdUnit+","+toHdUnit;
+
+                    List<String> heaAuthHdUnit=budgetRebaseRepository.findByAuthorityunit(rebaseData.get(0).getRebaseUnitId());
+                    String org=heaAuthHdUnit.get(0);
+                    String adding=org+","+toFrmHdUnit;
+                    heaAuthHdUnit.set(0, adding);
+
+                    boolean exists = Arrays.stream(heaAuthHdUnit.get(0).split(","))
+                            .anyMatch(value -> value.equals(hrDataCheck.getUnitId()));
+                    if (exists) {
+                        System.out.println("The Login Unit exists in Rebase Chain.");
+                    } else {
+                        continue;
                     }
 
                     String inputDateStr = String.valueOf(rebaseData.get(0).getCreatedOn());
@@ -9169,7 +9206,7 @@ public class MangeReportImpl implements MangeReportService {
             }, "UNIT ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
         }
 
-        List<String> groupUnitId = budgetRebaseRepository.findAuthGroupRebaseUnit();
+        List<String> groupUnitId = budgetRebaseRepository.findAuthGroupRebaseUnit(unitid);
         if (groupUnitId.size() <= 0) {
             return ResponseUtils.createFailureResponse(responce, new TypeReference<List<UnitRebaseReportResponce>>() {
             }, "DATA NOT FOUND FROM DB", HttpStatus.OK.value());
@@ -9222,6 +9259,25 @@ public class MangeReportImpl implements MangeReportService {
                     if (rebaseData.size() <= 0) {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
                     }
+                    CgUnit frmHdUnits=cgUnitRepository.findByUnit(rebaseData.get(0).getAllocFromUnit());
+                    String frmHdUnit=frmHdUnits.getBudGroupUnit();
+                    CgUnit toHdUnits=cgUnitRepository.findByUnit(rebaseData.get(0).getToHeadUnitId());
+                    String toHdUnit=toHdUnits.getBudGroupUnit();
+                    String toFrmHdUnit=frmHdUnit+","+toHdUnit;
+
+                    List<String> heaAuthHdUnit=budgetRebaseRepository.findByAuthorityunit(rebaseData.get(0).getRebaseUnitId());
+                    String org=heaAuthHdUnit.get(0);
+                    String adding=org+","+toFrmHdUnit;
+                    heaAuthHdUnit.set(0, adding);
+
+                    boolean exists = Arrays.stream(heaAuthHdUnit.get(0).split(","))
+                            .anyMatch(value -> value.equals(hrDataCheck.getUnitId()));
+                    if (exists) {
+                        System.out.println("The Login Unit exists in Rebase Chain.");
+                    } else {
+                        continue;
+                    }
+
                     UnitRebaseReportResponce rebase = new UnitRebaseReportResponce();
                     CgUnit unitN = cgUnitRepository.findByUnit(rebaseData.get(0).getRebaseUnitId());
                     CgStation toS = cgStationRepository.findByStationId(rebaseData.get(0).getToStationId());
