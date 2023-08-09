@@ -453,6 +453,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
         String budgetAllocationAuthGroupIdDHQ = HelperUtils.getAuthorityGroupId();
         String universalAuthGroupForRebase = HelperUtils.getAuthorityGroupId();
         String authGroupIdRHQtoDHQsameR = HelperUtils.getAuthorityGroupId();
+        String authGroupIdRHQtoDHQsameRegion = HelperUtils.getAuthorityGroupId();
         if (hrDataCheck == null) {
             return ResponseUtils.createFailureResponse(defaultResponse, new TypeReference<DefaultResponse>() {
             }, "YOU ARE NOT AUTHORIZED TO UPDATE USER STATUS", HttpStatus.OK.value());
@@ -2298,7 +2299,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                     List<BudgetAllocationDetails> toDhqDtl = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(toHdUnitId, req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0", "0");
                     List<BudgetAllocationDetails> toDhqDtlS = toDhqDtl.stream().filter(e -> e.getStatus().equalsIgnoreCase("Approved")).collect(Collectors.toList());
 //                    String reciptAuthGroupId = HelperUtils.getAuthorityGroupId();
-                    String authGroupIdRHQtoDHQsameRegion = HelperUtils.getAuthorityGroupId();
+
 
                     if (toDhqDtlS.size() > 0) {
                         for (Integer i = 0; i < toDhqDtlS.size(); i++) {
