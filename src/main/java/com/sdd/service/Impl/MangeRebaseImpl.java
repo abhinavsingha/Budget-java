@@ -2219,8 +2219,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             unloAmnt = shipAllocAmount / AmtUnit;
                             frmHead = alloc.getFromUnit();
                             allocAmt = Double.parseDouble(alloc.getAllocationAmount());
-                            alloc.setIsFlag("1");
-                            alloc.setIsBudgetRevision("1");
+                            alloc.setIsFlag("0");
+                            alloc.setIsBudgetRevision("0");
                             alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             alloc.setAllocationAmount((allocAmt - unloAmnt) + "");
                             BudgetAllocation saveData11 = budgetAllocationRepository.save(alloc);
