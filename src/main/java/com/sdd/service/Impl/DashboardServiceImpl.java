@@ -960,12 +960,6 @@ public class DashboardServiceImpl implements DashBoardService {
         AmountUnit hdamtUnits = amountUnitRepository.findByAmountTypeId(amounttypeId);
         double reqAmount = hdamtUnits.getAmount();
         try {
-/*            String loginUnitId = "";
-            if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
-                loginUnitId = "000225";
-            } else {
-                loginUnitId = hrData.getUnitId();
-            }*/
 
             boolean headunit;
             List<CgUnit> subUnit = cgUnitRepository.findByBudGroupUnitLike("%" + hrData.getUnitId() + "%");
@@ -980,10 +974,10 @@ public class DashboardServiceImpl implements DashBoardService {
             } else {
                 budgetAllocToUnit = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, hrData.getUnitId(), finYearId, allocationTypeId, "0", "0", "Approved");
             }
-            if (headunit == true) {
+/*            if (headunit == true) {
                 List<BudgetAllocation> budgetAllocToUnits = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, hrData.getUnitId(), finYearId, allocationTypeId, "0", "0", "Approved");
                 budgetAllocToUnit.addAll(budgetAllocToUnits);
-            }
+            }*/
             double sumAlloc = 0.0;
             double sumExp = 0.0;
             double sumBal = 0.0;
@@ -1082,13 +1076,17 @@ public class DashboardServiceImpl implements DashBoardService {
                     }
                     double expAmount = (totalExpAmount+totalbill) / reqAmount;
 
-                    double expAmnt=0.0;
-                    double alocAmnt = 0.0;
-                    double sumCdaRemainingBal=0.0;
+                    //double expAmnt=0.0;
+                    //double alocAmnt = 0.0;
+                    //double sumCdaRemainingBal=0.0;
                     AmountUnit alloc = amountUnitRepository.findByAmountTypeId(budgetAllocToUnit.get(j).getAmountType());
                     double allocAmntUnit = alloc.getAmount();
+                    double alocAmnts = Double.parseDouble(budgetAllocToUnit.get(j).getAllocationAmount());
+                    double alocAmnt = alocAmnts * allocAmntUnit / reqAmount;
+                    double expAmnt=expAmount;
+                    double sumCdaRemainingBal=sumCdaRemaining;
 
-                    if (headunit == true && hrData.getUnitId().equalsIgnoreCase(uid)) {
+/*                    if (headunit == true && hrData.getUnitId().equalsIgnoreCase(uid)) {
                         expAmnt=totalExpAmount/ reqAmount;
                         alocAmnt = cdaRmingAmunt + (totalExpAmount/ reqAmount);
                         sumCdaRemainingBal=cdaRmingAmunt;
@@ -1099,7 +1097,7 @@ public class DashboardServiceImpl implements DashBoardService {
                         alocAmnt = alocAmnts * allocAmntUnit / reqAmount;
                         expAmnt=expAmount;
                         sumCdaRemainingBal=sumCdaRemaining;
-                    }
+                    }*/
 
                     double perAmnt = 0.0;
                     if (alocAmnt != 0) {
@@ -1125,6 +1123,8 @@ public class DashboardServiceImpl implements DashBoardService {
                     sumExp += expAmnt;
                     sumBal += sumCdaRemainingBal;
                 }
+
+
             }
             double grPer = 0.0;
             if (sumAlloc != 0) {
