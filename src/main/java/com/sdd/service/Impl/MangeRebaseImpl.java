@@ -841,15 +841,11 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         afterRebaseNotification.setIsBgcg("RR");
                         afterRebaseNotification.setIsRevision(0);
                         afterRebaseNotification.setIsRebase("1");
-
                         mangeInboxOutBoxRepository.save(afterRebaseNotification);
                     }
-
-
                 } else {
                     // Checking Ship is not Direct Under RHQ so, Ship is under DHQ
                     String rhqUnit = "";
-
                     ///............................RHQ DEDUCTED ALLOCATION BAL FROM DHQ .............................
                     List<BudgetAllocationDetails> frmHdUnitDtl = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(frmUnit, req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0", "0");
                     List<BudgetAllocationDetails> frmHdUnitDtls = frmHdUnitDtl.stream().filter(e -> e.getStatus().equalsIgnoreCase("Approved")).collect(Collectors.toList());
@@ -883,10 +879,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         alloc.setIsBudgetRevision("0");
                         alloc.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                         BudgetAllocation saveData11 = budgetAllocationRepository.save(alloc);
-
                     }
-
-
 
 //                    List<CdaParkingTrans> frmHdUnitCda = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), frmUnit, req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0");
 //
@@ -944,8 +937,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         afterRebaseNotification.setIsRebase("1");
                         mangeInboxOutBoxRepository.save(afterRebaseNotification);
                     }
-
-
                     ///............................DBUDGET DEDUCTED ALLOCATION BAL FROM RHQ..................................
 
                     List<BudgetAllocationDetails> frmRhqDtl = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevision(rhqUnit, req.getFinYear(), req.getUnitRebaseRequests().get(k).getBudgetHeadId(), req.getUnitRebaseRequests().get(k).getAllocationTypeId(), "0", "0");
