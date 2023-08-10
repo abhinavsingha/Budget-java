@@ -974,14 +974,20 @@ public class DashboardServiceImpl implements DashBoardService {
             if (budgetAllocToUnit.size() > 0) {
                 for (int j = 0; j < budgetAllocToUnit.size(); j++) {
                     String uid = budgetAllocToUnit.get(j).getToUnit();
+                    if(uid.equalsIgnoreCase("000225")){
+                        continue;
+                    }
                     List<CgUnit> unitList1 = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
-                    List<CgUnit> unitList = unitList1.stream().filter(e -> !e.getUnit().equalsIgnoreCase(uid)).collect(Collectors.toList());
+                    List<CgUnit> unitList = unitList1.stream().filter(e -> !e.getUnit().equalsIgnoreCase(uid)  ).collect(Collectors.toList());
 
 //                    double totalCdaSub = 0.0;
                     double remCdaBalSub = 0.0;
                     //double rqUnitSub = 0.0;
                     for (CgUnit unitS : unitList) {
                         String subUnits = unitS.getUnit();
+                        if(subUnits.equalsIgnoreCase("000225")){
+                            continue;
+                        }
                         List<CdaParkingTrans> cdaDetailSub = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, subUnits, allocationTypeId, "0");
                         for (int k = 0; k < cdaDetailSub.size(); k++) {
                             AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetailSub.get(0).getAmountType());
@@ -1005,6 +1011,9 @@ public class DashboardServiceImpl implements DashBoardService {
 
                     double remCdaBal = 0.0;
                     //double cdaUnit = 0.0;
+                    if(uid.equalsIgnoreCase("000225")){
+                        continue;
+                    }
                     List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, uid, allocationTypeId, "0");
                     if (cdaDetail.size() > 0) {
                         for (int k = 0; k < cdaDetail.size(); k++) {
@@ -1028,6 +1037,9 @@ public class DashboardServiceImpl implements DashBoardService {
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
                             String subUnits = unitss.getUnit();
+                            if(subUnits.equalsIgnoreCase("000225")){
+                                continue;
+                            }
                             List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnits, finYearId, subHeadId, allocationTypeId, "0");
 
                             if (expenditure.size() > 0) {
@@ -1046,6 +1058,9 @@ public class DashboardServiceImpl implements DashBoardService {
                                 totalbill += totalAmount;
                             }
                         }
+                    }
+                    if(uid.equalsIgnoreCase("000225")){
+                        continue;
                     }
                     List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(uid, finYearId, subHeadId, allocationTypeId, "0", "0");
                     double totalExpAmount = 0.0;
@@ -1086,6 +1101,7 @@ public class DashboardServiceImpl implements DashBoardService {
                         expAmnt=expAmount;
                         sumCdaRemainingBal=sumCdaRemaining;
                     }*/
+
 
                     double perAmnt = 0.0;
                     if (alocAmnt != 0) {
@@ -1183,7 +1199,7 @@ public class DashboardServiceImpl implements DashBoardService {
             }
             double grPer = 0.0;
             if ((sumAlloc + alocAmntsHd) != 0) {
-                grPer = ((sumExp + expHd) * 100) / sumAlloc;
+                grPer = ((sumExp + expHd) * 100) / (sumAlloc+ alocAmntsHd);
             } else {
                 grPer = 0.0;
             }
