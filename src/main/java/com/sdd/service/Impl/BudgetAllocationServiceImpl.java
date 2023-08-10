@@ -1707,32 +1707,30 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             }
 
 
-            if (!(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId().equalsIgnoreCase(hrData.getUnitId()))) {
-
-
-                List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), "0",
-                        budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
-
-                if (cdaData.size() > 0) {
-                    double lowestUnitCDARemeingAmount = 0;
-                    for (Integer x = 0; x < cdaData.size(); x++) {
-
-                        CdaParkingTrans cdaParkingTrans = cdaData.get(x);
-                        AmountUnit amountUnitCda = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
-
-                        lowestUnitCDARemeingAmount = lowestUnitCDARemeingAmount + (Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * amountUnitCda.getAmount());
-                    }
-
-                    BudgetAllocationSubRequest revisonDataMain = budgetAllocationSaveRequestList.getBudgetRequest().get(i);
-                    AmountUnit amountUnitRequered = amountUnitRepository.findByAmountTypeId(revisonDataMain.getAmountTypeId());
-
-                    double actualRivisionAmount = Double.parseDouble(revisonDataMain.getRevisedAmount()) * amountUnitRequered.getAmount();
-
-                    if (actualRivisionAmount > lowestUnitCDARemeingAmount) {
-                        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REMAINING CDA  AMOUNT NOT ENOUGH");
-                    }
-                }
-            }
+//            if (!(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId().equalsIgnoreCase(hrData.getUnitId()))) {
+//                List<CdaParkingTrans> cdaData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), "0",
+//                        budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
+//
+//                if (cdaData.size() > 0) {
+//                    double lowestUnitCDARemeingAmount = 0;
+//                    for (Integer x = 0; x < cdaData.size(); x++) {
+//
+//                        CdaParkingTrans cdaParkingTrans = cdaData.get(x);
+//                        AmountUnit amountUnitCda = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+//
+//                        lowestUnitCDARemeingAmount = lowestUnitCDARemeingAmount + (Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * amountUnitCda.getAmount());
+//                    }
+//
+//                    BudgetAllocationSubRequest revisonDataMain = budgetAllocationSaveRequestList.getBudgetRequest().get(i);
+//                    AmountUnit amountUnitRequered = amountUnitRepository.findByAmountTypeId(revisonDataMain.getAmountTypeId());
+//
+//                    double actualRivisionAmount = Double.parseDouble(revisonDataMain.getRevisedAmount()) * amountUnitRequered.getAmount();
+//
+//                    if (actualRivisionAmount > lowestUnitCDARemeingAmount) {
+//                        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REMAINING CDA  AMOUNT NOT ENOUGH");
+//                    }
+//                }
+//            }
 
 
             List<BudgetAllocationDetails> checkBudgetRevisionExist = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "Pending", "0", "1");

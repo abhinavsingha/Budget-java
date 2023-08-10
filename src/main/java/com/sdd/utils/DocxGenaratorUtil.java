@@ -600,7 +600,6 @@ public class DocxGenaratorUtil {
                             }
                         }
                     }
-
                 } catch (Exception e) {
 
                 }
