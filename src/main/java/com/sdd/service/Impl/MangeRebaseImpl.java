@@ -1096,7 +1096,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             if (allocAmt == 0) {
                                 if (count == 0) {
                                     MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
-                                    mangeInboxOutboxReciptMsg.setIsRebase("0");
+                                    mangeInboxOutboxReciptMsg.setIsRebase("1");
                                     mangeInboxOutboxReciptMsg.setMangeInboxId(HelperUtils.getMangeInboxId());
                                     mangeInboxOutboxReciptMsg.setRemarks("Budget Receipt");
                                     mangeInboxOutboxReciptMsg.setCreatedOn(HelperUtils.getCurrentTimeStamp());
@@ -1181,7 +1181,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                         if (count == 0) {
                             MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
-                            mangeInboxOutboxReciptMsg.setIsRebase("0");
+                            mangeInboxOutboxReciptMsg.setIsRebase("1");
                             mangeInboxOutboxReciptMsg.setMangeInboxId(HelperUtils.getMangeInboxId());
                             mangeInboxOutboxReciptMsg.setRemarks("Budget Receipt");
                             mangeInboxOutboxReciptMsg.setCreatedOn(HelperUtils.getCurrentTimeStamp());
@@ -1404,7 +1404,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             if (allocAmt == 0) {
                                 if (count == 0) {
                                     MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
-                                    mangeInboxOutboxReciptMsg.setIsRebase("0");
+                                    mangeInboxOutboxReciptMsg.setIsRebase("1");
                                     mangeInboxOutboxReciptMsg.setMangeInboxId(HelperUtils.getMangeInboxId());
                                     mangeInboxOutboxReciptMsg.setRemarks("Budget Receipt");
                                     mangeInboxOutboxReciptMsg.setCreatedOn(HelperUtils.getCurrentTimeStamp());
@@ -1495,7 +1495,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                         if (count == 0) {
                             MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
-                            mangeInboxOutboxReciptMsg.setIsRebase("0");
+                            mangeInboxOutboxReciptMsg.setIsRebase("1");
                             mangeInboxOutboxReciptMsg.setMangeInboxId(HelperUtils.getMangeInboxId());
                             mangeInboxOutboxReciptMsg.setRemarks("Budget Receipt");
                             mangeInboxOutboxReciptMsg.setCreatedOn(HelperUtils.getCurrentTimeStamp());
@@ -1604,7 +1604,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             if (allocAmt == 0) {
                                 if (count == 0) {
                                     MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
-                                    mangeInboxOutboxReciptMsg.setIsRebase("0");
+                                    mangeInboxOutboxReciptMsg.setIsRebase("1");
                                     mangeInboxOutboxReciptMsg.setMangeInboxId(HelperUtils.getMangeInboxId());
                                     mangeInboxOutboxReciptMsg.setRemarks("Budget Receipt");
                                     mangeInboxOutboxReciptMsg.setCreatedOn(HelperUtils.getCurrentTimeStamp());
@@ -1692,7 +1692,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                         if (count == 0) {
                             MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
-                            mangeInboxOutboxReciptMsg.setIsRebase("0");
+                            mangeInboxOutboxReciptMsg.setIsRebase("1");
                             mangeInboxOutboxReciptMsg.setMangeInboxId(HelperUtils.getMangeInboxId());
                             mangeInboxOutboxReciptMsg.setRemarks("Budget Receipt");
                             mangeInboxOutboxReciptMsg.setCreatedOn(HelperUtils.getCurrentTimeStamp());
@@ -1923,7 +1923,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                                 if (allocAmt0 == 0) {
                                     if (count == 0) {
                                         MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
-                                        mangeInboxOutboxReciptMsg.setIsRebase("0");
+                                        mangeInboxOutboxReciptMsg.setIsRebase("1");
                                         mangeInboxOutboxReciptMsg.setMangeInboxId(HelperUtils.getMangeInboxId());
                                         mangeInboxOutboxReciptMsg.setRemarks("Budget Receipt");
                                         mangeInboxOutboxReciptMsg.setCreatedOn(HelperUtils.getCurrentTimeStamp());
@@ -2007,7 +2007,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                             if (count == 0) {
                                 MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
-                                mangeInboxOutboxReciptMsg.setIsRebase("0");
+                                mangeInboxOutboxReciptMsg.setIsRebase("1");
                                 mangeInboxOutboxReciptMsg.setMangeInboxId(HelperUtils.getMangeInboxId());
                                 mangeInboxOutboxReciptMsg.setRemarks("Budget Receipt");
                                 mangeInboxOutboxReciptMsg.setCreatedOn(HelperUtils.getCurrentTimeStamp());
@@ -2358,7 +2358,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             if (allocAmt0 == 0) {
                                 if (count == 0) {
                                     MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
-                                    mangeInboxOutboxReciptMsg.setIsRebase("0");
+                                    mangeInboxOutboxReciptMsg.setIsRebase("1");
                                     mangeInboxOutboxReciptMsg.setMangeInboxId(HelperUtils.getMangeInboxId());
                                     mangeInboxOutboxReciptMsg.setRemarks("Budget Receipt");
                                     mangeInboxOutboxReciptMsg.setCreatedOn(HelperUtils.getCurrentTimeStamp());
@@ -2473,7 +2473,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
                         if (count == 0) {
                             MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
-                            mangeInboxOutboxReciptMsg.setIsRebase("0");
+                            mangeInboxOutboxReciptMsg.setIsRebase("1");
                             mangeInboxOutboxReciptMsg.setMangeInboxId(HelperUtils.getMangeInboxId());
                             mangeInboxOutboxReciptMsg.setRemarks("Budget Receipt");
                             mangeInboxOutboxReciptMsg.setCreatedOn(HelperUtils.getCurrentTimeStamp());
@@ -2738,7 +2738,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
     public void notificationForReceipt(String toUnit, String frmUnit, String allocationTypeId, String authGroupId, String amount, String role,String pid) {
 
         MangeInboxOutbox mangeInboxOutboxReciptMsg = new MangeInboxOutbox();
-        mangeInboxOutboxReciptMsg.setIsRebase("0");
+        mangeInboxOutboxReciptMsg.setIsRebase("1");
         mangeInboxOutboxReciptMsg.setMangeInboxId(HelperUtils.getMangeInboxId());
         mangeInboxOutboxReciptMsg.setRemarks("Budget Receipt");
         mangeInboxOutboxReciptMsg.setCreatedOn(HelperUtils.getCurrentTimeStamp());
