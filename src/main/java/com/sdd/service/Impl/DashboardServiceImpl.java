@@ -586,14 +586,10 @@ public class DashboardServiceImpl implements DashBoardService {
 
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("AP")) {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
-                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-
                     inboxList.add(data);
 
                 } else {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
-                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-
                     outBoxList.add(data);
                 }
             }
@@ -616,11 +612,9 @@ public class DashboardServiceImpl implements DashBoardService {
 
                     if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
                         InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
-                        MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
                         inboxList.add(data);
                     } else {
                         InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
-                        MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
                         outBoxList.add(data);
                     }
                 }
@@ -636,11 +630,9 @@ public class DashboardServiceImpl implements DashBoardService {
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
-                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
                     inboxList.add(data);
                 } else {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
-                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
                     outBoxList.add(data);
                 }
             }
@@ -656,11 +648,9 @@ public class DashboardServiceImpl implements DashBoardService {
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("VE")) {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
-                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
                     inboxList.add(data);
                 } else {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
-                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
                     outBoxList.add(data);
                 }
             }
@@ -680,11 +670,9 @@ public class DashboardServiceImpl implements DashBoardService {
                     inboxList.add(data);
                 } else if (inboxOutboxesList.get(i).getStatus().equalsIgnoreCase("Approved") && inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
-                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
                     outBoxList.add(data);
                 } else {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
-                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
                     outBoxList.add(data);
                 }
             }
@@ -750,7 +738,7 @@ public class DashboardServiceImpl implements DashBoardService {
 
             List<BudgetHead> budgetHeadList = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHead);
             List<CgUnit> unitList1 = cgUnitRepository.findByBudGroupUnitLike("%" + unitId + "%");
-            List<CgUnit> unitList=unitList1.stream().filter(e->!e.getUnit().equalsIgnoreCase(unitId)).collect(Collectors.toList());
+            List<CgUnit> unitList = unitList1.stream().filter(e -> !e.getUnit().equalsIgnoreCase(unitId)).collect(Collectors.toList());
             DashBoardExprnditureResponse respn = new DashBoardExprnditureResponse();
             List<GrTotalObjResp> grResp = new ArrayList<GrTotalObjResp>();
             double sumAlloc = 0.0;
@@ -786,13 +774,13 @@ public class DashboardServiceImpl implements DashBoardService {
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
                             String subUnit = unitss.getUnit();
-                            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnit, finYearId, subHeadId,allocationTypeId, "0");
+                            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnit, finYearId, subHeadId, allocationTypeId, "0");
                             if (expenditure.size() > 0) {
                                 double totalAmount = 0.0;
                                 for (ContigentBill bill : expenditure) {
                                     totalAmount += Double.parseDouble(bill.getCbAmount());
-                                    if(bill.getCbDate()!=null){
-                                        lastCvDate=bill.getCbDate();
+                                    if (bill.getCbDate() != null) {
+                                        lastCvDate = bill.getCbDate();
                                         SimpleDateFormat id = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
                                         SimpleDateFormat od = new SimpleDateFormat("dd-MMMM-yyyy");
                                         Date dateC = null;
@@ -802,8 +790,8 @@ public class DashboardServiceImpl implements DashBoardService {
                                             throw new RuntimeException(ex);
                                         }
                                         cbD = od.format(dateC);
-                                    }else
-                                        cbD="";
+                                    } else
+                                        cbD = "";
                                 }
                                 totalbill += totalAmount;
                             }
@@ -836,9 +824,9 @@ public class DashboardServiceImpl implements DashBoardService {
                             AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(0).getAmountType());
                             double rqUnit = hdamtUnit.getAmount();
                             if (cdaDetail.get(j).getRemainingCdaAmount() == null) {
-                                remCdaBal=0.0;
-                            }else{
-                                double cdaBal=Double.parseDouble(cdaDetail.get(j).getRemainingCdaAmount());
+                                remCdaBal = 0.0;
+                            } else {
+                                double cdaBal = Double.parseDouble(cdaDetail.get(j).getRemainingCdaAmount());
                                 remCdaBal += cdaBal * rqUnit;
                             }
                         }
@@ -852,23 +840,23 @@ public class DashboardServiceImpl implements DashBoardService {
                         String subUnits = unitS.getUnit();
                         List<CdaParkingTrans> cdaDetailSub = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, subUnits, allocationTypeId, "0");
                         if (cdaDetailSub.size() > 0) {
-                            double cdaRmBal=0.0;
+                            double cdaRmBal = 0.0;
                             for (int k = 0; k < cdaDetailSub.size(); k++) {
                                 AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetailSub.get(0).getAmountType());
                                 double rqUnitSub = hdamtUnit.getAmount();
                                 if (cdaDetailSub.get(k).getRemainingCdaAmount() == null) {
-                                    cdaRmBal +=0.0;
-                                }else{
-                                    double cdaRm=Double.parseDouble(cdaDetailSub.get(k).getRemainingCdaAmount());
+                                    cdaRmBal += 0.0;
+                                } else {
+                                    double cdaRm = Double.parseDouble(cdaDetailSub.get(k).getRemainingCdaAmount());
                                     cdaRmBal += cdaRm * rqUnitSub;
                                 }
                             }
                             remCdaBalSub += cdaRmBal;
                         }
                     }
-                    double cdaRmingSub = remCdaBalSub/ reqAmount;
+                    double cdaRmingSub = remCdaBalSub / reqAmount;
 
-                    double sumCdaRmng=cdaRmingSub+cdaRmingSelf;
+                    double sumCdaRmng = cdaRmingSub + cdaRmingSelf;
 
                     dashBoardExprnditureResponse.setCgUnit(cgUnit);
                     dashBoardExprnditureResponse.setBudgetFinancialYear(budgetFinancialYear);
@@ -987,7 +975,7 @@ public class DashboardServiceImpl implements DashBoardService {
                 for (int j = 0; j < budgetAllocToUnit.size(); j++) {
                     String uid = budgetAllocToUnit.get(j).getToUnit();
                     List<CgUnit> unitList1 = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
-                    List<CgUnit> unitList=unitList1.stream().filter(e->!e.getUnit().equalsIgnoreCase(uid)).collect(Collectors.toList());
+                    List<CgUnit> unitList = unitList1.stream().filter(e -> !e.getUnit().equalsIgnoreCase(uid)).collect(Collectors.toList());
 
 //                    double totalCdaSub = 0.0;
                     double remCdaBalSub = 0.0;
@@ -1004,16 +992,16 @@ public class DashboardServiceImpl implements DashBoardService {
 //                                totalCdaSub += Double.parseDouble(cdaDetailSub.get(k).getTotalParkingAmount());
 //                            }
                             if (cdaDetailSub.get(k).getRemainingCdaAmount() == null) {
-                                remCdaBalSub=0.0;
-                            }else{
-                                double remcda=Double.parseDouble(cdaDetailSub.get(k).getRemainingCdaAmount());
+                                remCdaBalSub = 0.0;
+                            } else {
+                                double remcda = Double.parseDouble(cdaDetailSub.get(k).getRemainingCdaAmount());
                                 remCdaBalSub += remcda * rqUnitSub;
                             }
 
                         }
                     }
                     //double cdaTotalSub = totalCdaSub * rqUnitSub / reqAmount;
-                    double cdaRmingSub = remCdaBalSub/ reqAmount;
+                    double cdaRmingSub = remCdaBalSub / reqAmount;
 
                     double remCdaBal = 0.0;
                     //double cdaUnit = 0.0;
@@ -1024,23 +1012,23 @@ public class DashboardServiceImpl implements DashBoardService {
                             double cdaUnit = hdamtUnit.getAmount();
 
                             if (cdaDetail.get(k).getRemainingCdaAmount() == null) {
-                                remCdaBal=0.0;
-                            }else{
-                                double remCd=Double.parseDouble(cdaDetail.get(k).getRemainingCdaAmount());
+                                remCdaBal = 0.0;
+                            } else {
+                                double remCd = Double.parseDouble(cdaDetail.get(k).getRemainingCdaAmount());
                                 remCdaBal += remCd * cdaUnit;
                             }
                         }
                     }
-                    double cdaRmingAmunt = remCdaBal/ reqAmount;
+                    double cdaRmingAmunt = remCdaBal / reqAmount;
 
-                    double sumCdaRemaining=cdaRmingSub+cdaRmingAmunt;
+                    double sumCdaRemaining = cdaRmingSub + cdaRmingAmunt;
                     String cbD = "";
                     double totalbill = 0.0;
                     Timestamp lastCvDate;
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
                             String subUnits = unitss.getUnit();
-                            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnits, finYearId, subHeadId,allocationTypeId, "0");
+                            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnits, finYearId, subHeadId, allocationTypeId, "0");
 
                             if (expenditure.size() > 0) {
                                 double totalAmount = 0.0;
@@ -1074,7 +1062,7 @@ public class DashboardServiceImpl implements DashBoardService {
                                 cbD = "";
                         }
                     }
-                    double expAmount = (totalExpAmount+totalbill) / reqAmount;
+                    double expAmount = (totalExpAmount + totalbill) / reqAmount;
 
                     //double expAmnt=0.0;
                     //double alocAmnt = 0.0;
@@ -1083,8 +1071,8 @@ public class DashboardServiceImpl implements DashBoardService {
                     double allocAmntUnit = alloc.getAmount();
                     double alocAmnts = Double.parseDouble(budgetAllocToUnit.get(j).getAllocationAmount());
                     double alocAmnt = alocAmnts * allocAmntUnit / reqAmount;
-                    double expAmnt=expAmount;
-                    double sumCdaRemainingBal=sumCdaRemaining;
+                    double expAmnt = expAmount;
+                    double sumCdaRemainingBal = sumCdaRemaining;
 
 /*                    if (headunit == true && hrData.getUnitId().equalsIgnoreCase(uid)) {
                         expAmnt=totalExpAmount/ reqAmount;
@@ -1124,10 +1112,10 @@ public class DashboardServiceImpl implements DashBoardService {
                     sumBal += sumCdaRemainingBal;
                 }
             }
-            double alocAmntsHd=0.0;
-            double expHd=0.0;
-            double rmCdaHd=0.0;
-            if(headunit==true){
+            double alocAmntsHd = 0.0;
+            double expHd = 0.0;
+            double rmCdaHd = 0.0;
+            if (headunit == true) {
                 //.........Here adding headunit...self.
                 String cbD = "";
                 Timestamp lastCvDate;
@@ -1160,18 +1148,18 @@ public class DashboardServiceImpl implements DashBoardService {
                         AmountUnit hdamtUnit = amountUnitRepository.findByAmountTypeId(cdaDetail.get(0).getAmountType());
                         double cdaUnit = hdamtUnit.getAmount();
                         if (cdaDetail.get(k).getRemainingCdaAmount() == null) {
-                            remCdaBal=0.0;
-                        }else{
-                            double remCd=Double.parseDouble(cdaDetail.get(k).getRemainingCdaAmount());
+                            remCdaBal = 0.0;
+                        } else {
+                            double remCd = Double.parseDouble(cdaDetail.get(k).getRemainingCdaAmount());
                             remCdaBal += remCd * cdaUnit;
                         }
                     }
                 }
                 CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
 
-                alocAmntsHd=(remCdaBal+totalExpAmount)/reqAmount;
-                expHd=totalExpAmount/reqAmount;
-                rmCdaHd=remCdaBal/reqAmount;
+                alocAmntsHd = (remCdaBal + totalExpAmount) / reqAmount;
+                expHd = totalExpAmount / reqAmount;
+                rmCdaHd = remCdaBal / reqAmount;
 
                 double perAmnt = 0.0;
                 if (alocAmntsHd != 0) {
@@ -1194,15 +1182,15 @@ public class DashboardServiceImpl implements DashBoardService {
 
             }
             double grPer = 0.0;
-            if ((sumAlloc+alocAmntsHd) != 0) {
-                grPer = ((sumExp+expHd) * 100) / sumAlloc;
+            if ((sumAlloc + alocAmntsHd) != 0) {
+                grPer = ((sumExp + expHd) * 100) / sumAlloc;
             } else {
                 grPer = 0.0;
             }
             obj.setGrTotalObj(grResp);
-            obj.setSumAlloc(ConverterUtils.addDecimalPoint((sumAlloc+alocAmntsHd) + ""));
-            obj.setSumExp(ConverterUtils.addDecimalPoint((sumExp+expHd) + ""));
-            obj.setSumBal(ConverterUtils.addDecimalPoint((sumBal+rmCdaHd) + ""));
+            obj.setSumAlloc(ConverterUtils.addDecimalPoint((sumAlloc + alocAmntsHd) + ""));
+            obj.setSumExp(ConverterUtils.addDecimalPoint((sumExp + expHd) + ""));
+            obj.setSumBal(ConverterUtils.addDecimalPoint((sumBal + rmCdaHd) + ""));
             obj.setPerBal(ConverterUtils.addDecimal2Point(grPer + ""));
             resp.add(obj);
 

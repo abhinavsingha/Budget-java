@@ -410,19 +410,18 @@ public class PdfGenaratorUtilMain {
                         Boolean isNumber = ConverterUtils.isNumber(tabData.get(i).getName() + "");
                         if (isNumber) {
                             grandAllTotal = grandAllTotal + Double.parseDouble(ConverterUtils.addDecimalPoint(tabData.get(i).getName()));
-                        }else{
+                        } else {
                             grandAllTotal = grandAllTotal + Double.parseDouble(ConverterUtils.addDecimalPoint(tabData.get(i).getName()));
                         }
                     }
                 }
             }
         } catch (Exception e) {
-
         }
 
-        table.addCell(boldText(ConverterUtils.addDecimalPoint((grandAllTotal/2) + ""), 7, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
+        grandAllTotal = grandAllTotal / 2;
 
-
+        table.addCell(boldText(ConverterUtils.addDecimalPoint((grandAllTotal) + ""), 7, 20f)).setHorizontalAlignment(Element.ALIGN_RIGHT);
         int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
 
         Phrase phrase = new Phrase();
@@ -431,7 +430,6 @@ public class PdfGenaratorUtilMain {
         Paragraph paragraph = new Paragraph();
         paragraph.add(phrase);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
-
 
         document.add(preface);
         document.add(table);

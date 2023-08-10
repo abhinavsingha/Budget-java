@@ -2400,8 +2400,6 @@ public class MangeReportImpl implements MangeReportService {
                     for (int k = 0; k < cdaParkingTotalList.size(); k++) {
                         List<CdaParkingTrans> cdaData = new ArrayList<CdaParkingTrans>();
 
-
-
                             for (int p = 0; p < unitList.size(); p++) {
                                 List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitList.get(p).getUnit());
                                 cdaData.addAll(cdaTransData);
