@@ -594,9 +594,9 @@ public class DocxGenaratorUtil {
                         for (Integer i = 0; i < tabData.size(); i++) {
                             Boolean isNumber = ConverterUtils.isNumber(tabData.get(i).getName() + "");
                             if (isNumber) {
-                                grandAllTotal = grandAllTotal + Double.parseDouble(tabData.get(i).getName());
-                            }else{
-                                grandAllTotal = grandAllTotal + Double.parseDouble(tabData.get(i).getName());
+                                grandAllTotal = grandAllTotal + Double.parseDouble(ConverterUtils.addDecimalPoint(tabData.get(i).getName()));
+                            } else {
+                                grandAllTotal = grandAllTotal + Double.parseDouble(ConverterUtils.addDecimalPoint(tabData.get(i).getName()));
                             }
                         }
                     }
@@ -608,7 +608,7 @@ public class DocxGenaratorUtil {
 
 
             XWPFParagraph paragraph11 = tableRow11.getCell(ih + 1).addParagraph();
-            normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint((grandAllTotal/2) + ""), false);
+            normalText(paragraph11.createRun(), 10, ConverterUtils.addDecimalPoint((grandAllTotal / 2) + ""), false);
 
 
             document.write(out);
