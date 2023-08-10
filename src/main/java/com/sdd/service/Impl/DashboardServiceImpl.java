@@ -1040,7 +1040,7 @@ public class DashboardServiceImpl implements DashBoardService {
                             if(subUnits.equalsIgnoreCase("000225")){
                                 continue;
                             }
-                            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnits, finYearId, subHeadId, allocationTypeId, "0");
+                            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(subUnits, finYearId, subHeadId, allocationTypeId, "0", "0");
 
                             if (expenditure.size() > 0) {
                                 double totalAmount = 0.0;
