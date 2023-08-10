@@ -1041,7 +1041,6 @@ public class DashboardServiceImpl implements DashBoardService {
                                 continue;
                             }
                             List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(subUnits, finYearId, subHeadId, allocationTypeId, "0", "0");
-
                             if (expenditure.size() > 0) {
                                 double totalAmount = 0.0;
                                 for (ContigentBill bill : expenditure) {
@@ -1078,7 +1077,6 @@ public class DashboardServiceImpl implements DashBoardService {
                         }
                     }
                     double expAmount = (totalExpAmount + totalbill) / reqAmount;
-
                     //double expAmnt=0.0;
                     //double alocAmnt = 0.0;
                     //double sumCdaRemainingBal=0.0;
