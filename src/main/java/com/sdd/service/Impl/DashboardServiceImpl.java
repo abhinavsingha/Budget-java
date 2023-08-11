@@ -774,7 +774,7 @@ public class DashboardServiceImpl implements DashBoardService {
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
                             String subUnit = unitss.getUnit();
-                            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(subUnit, finYearId, subHeadId, allocationTypeId, "0");
+                            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(subUnit, finYearId, subHeadId, allocationTypeId, "0", "0");
                             if (expenditure.size() > 0) {
                                 double totalAmount = 0.0;
                                 for (ContigentBill bill : expenditure) {
