@@ -709,8 +709,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
             allocDatatails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetailsRepository.save(allocDatatails);
         }
-
-
         int count = 0;
         for (Integer k = 0; k < req.getUnitRebaseRequests().size(); k++) {
             AmountUnit amtObj = amountUnitRepository.findByAmountTypeId(req.getUnitRebaseRequests().get(k).getAmountType());

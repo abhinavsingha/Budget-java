@@ -16,8 +16,6 @@ import java.sql.Timestamp;
 @Setter
 
 public class CgUnitResponse {
-
-
     private String unit;
     private String descr;
     private String cgUnitShort;
