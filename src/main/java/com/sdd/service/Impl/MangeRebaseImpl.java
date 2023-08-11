@@ -526,6 +526,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
 
         CgUnit chekUnit = cgUnitRepository.findByUnit(req.getRebaseUnitId());
+        String shipType=chekUnit.getShipType();
         String subUnits = chekUnit.getSubUnit();
         CgStation frmS = cgStationRepository.findByStationName(req.getFrmStationId());
         if (frmS == null) {
@@ -538,14 +539,14 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
         String toRegion = toS.getRhqId();
         String tohdUnit = "";
-        if (toS.getDhqName() == null || toS.getDhqName().isEmpty()) {
+        if (toS.getDhqName() == null || toS.getDhqName().isEmpty() || shipType.equalsIgnoreCase("L")) {
             tohdUnit = toS.getRhqId();
         } else {
             tohdUnit = toS.getDhqName();
         }
         String frmRegion = frmS.getRhqId();
 //        String frmhdUnit = "";
-//        if (frmS.getDhqName() == null || frmS.getDhqName().isEmpty()) {
+//        if (frmS.getDhqName() == null || frmS.getDhqName().isEmpty() || shipType.equalsIgnoreCase("L")) {
 //            frmhdUnit = frmS.getRhqId();
 //        } else {
 //            frmhdUnit = frmS.getDhqName();

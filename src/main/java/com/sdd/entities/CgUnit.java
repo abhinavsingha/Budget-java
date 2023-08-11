@@ -64,4 +64,7 @@ public class CgUnit {
 
     @Column(name = "unit_dhq")
     private String unitDhq;
+
+    @Column(name = "ship_type")
+    private String shipType;
 }

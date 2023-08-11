@@ -30,4 +30,5 @@ public class CgUnitResponse {
     private Timestamp createdOn;
     private Timestamp updatedOn;
     private CgStation cgStation;
+    private String shipType;
 }
