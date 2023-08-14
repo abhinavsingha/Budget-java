@@ -414,7 +414,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
                 rebase.setLastCbDate(null);
                 rebase.setRemBal(String.valueOf(remCdaBal));
             }
-
             responce.add(rebase);
         }
         return ResponseUtils.createSuccessResponse(responce, new TypeReference<List<RebaseBudgetHistory>>() {
