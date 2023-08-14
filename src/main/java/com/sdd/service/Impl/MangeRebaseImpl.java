@@ -396,7 +396,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             rebase.setRemCdaBal(String.valueOf(remCdaBal));
             rebase.setCdaData(addRes);
             List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(unit, finYear, bHead, allocId, "0");
-            List<ContigentBill> expenditure = expenditure1.stream().filter(e -> e.getStatus().equalsIgnoreCase("Approved")).collect(Collectors.toList());
+            List<ContigentBill> expenditure = expenditure1.stream().filter(e -> e.getStatus().equalsIgnoreCase("Approved") && e.getIsFlag().equalsIgnoreCase("0")).collect(Collectors.toList());
             if (expenditure.size() > 0) {
                 double totalAmount = 0.0;
                 Date lastCbDate = null;
