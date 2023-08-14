@@ -601,7 +601,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             } else {
                 chekUnit.setUnitRhq(toS.getRhqId());
             }
-            if (toS.getDhqName() == null) {
+            if (toS.getDhqName() == null || shipType.equalsIgnoreCase("L")) {
                 chekUnit.setUnitDhq("");
             } else {
                 chekUnit.setUnitDhq(toS.getDhqName());
@@ -618,7 +618,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
             } else {
                 chekUnit.setUnitRhq(toS.getRhqId());
             }
-            if (toS.getDhqName() == null) {
+            if (toS.getDhqName() == null || shipType.equalsIgnoreCase("L")) {
                 chekUnit.setUnitDhq("");
             } else {
                 chekUnit.setUnitDhq(toS.getDhqName());
