@@ -4130,13 +4130,14 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (Integer i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
 
             BudgetAllocationDetails budgetAllocationDetails = budgetAllocationDetailsRepository.findByTransactionId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getTransactionId());
-            ;
             authGrouPid = budgetAllocationDetails.getAuthGroupId();
 
             budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmount()));
             budgetAllocationDetails.setStatus("Pending");
             budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetails.setIsDelete("0");
+            budgetAllocationDetails.setAmountType(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmountTypeId());
+
             budgetAllocationDetails.setUnallocatedAmount("0");
             budgetAllocationDetails.setIsTYpe("S");
             budgetAllocationDetails.setRevisedAmount("0.0000");
@@ -4410,6 +4411,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
         String type = "";
+        String amountType = "";
         String authGrouPid = "";
         String refTransID = HelperUtils.getBudgetAlloctionRefrensId();
 
@@ -4419,6 +4421,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             authGrouPid = budgetAllocationDetails.getAuthGroupId();
             budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()));
             budgetAllocationDetails.setStatus("Pending");
+
+            budgetAllocationDetails.setAmountType(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
+
             budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetails.setIsDelete("0");
             budgetAllocationDetails.setUnallocatedAmount("0");
@@ -4493,6 +4498,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
         mangeInboxOutbox.setStatus("Pending");
         mangeInboxOutbox.setState("AP");
+        mangeInboxOutbox.setAmount("AP");
         mangeInboxOutbox.setIsFlag("1");
         mangeInboxOutbox.setIsArchive("0");
         mangeInboxOutbox.setIsRevision(0);

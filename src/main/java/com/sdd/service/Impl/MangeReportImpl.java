@@ -491,7 +491,7 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setAmount(totalAmount + "");
 
 
-                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount())  + unallocated != 0) {
+                if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + unallocated != 0) {
                     reportMaindata.add(subModel);
                     hashMap.put(budgetHead.getMajorHead(), reportMaindata);
                 }
@@ -2217,9 +2217,6 @@ public class MangeReportImpl implements MangeReportService {
             }
 
 
-
-
-
             List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), subHead.getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "Approved", "0", "0");
             double allocationAmountMain = 0;
             for (Integer g = 0; g < budgetAllocationsDetalis.size(); g++) {
@@ -2400,10 +2397,15 @@ public class MangeReportImpl implements MangeReportService {
                     for (int k = 0; k < cdaParkingTotalList.size(); k++) {
                         List<CdaParkingTrans> cdaData = new ArrayList<CdaParkingTrans>();
 
-                            for (int p = 0; p < unitList.size(); p++) {
-                                List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitList.get(p).getUnit());
-                                cdaData.addAll(cdaTransData);
-                            }
+//                            for (int p = 0; p < unitList.size(); p++) {
+//                                List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitList.get(p).getUnit());
+//                                cdaData.addAll(cdaTransData);
+//                            }
+
+
+                        List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
+                        cdaData.addAll(cdaTransData);
+
 
                         double amount = 0;
                         for (int m = 0; m < cdaData.size(); m++) {
@@ -2416,7 +2418,7 @@ public class MangeReportImpl implements MangeReportService {
                                     expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                 }
                             }
-                            double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                            double expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
                             amount = amount + expAmount;
 
@@ -2525,7 +2527,7 @@ public class MangeReportImpl implements MangeReportService {
                                         expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                     }
                                 }
-                                double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                                double expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
                                 amount = amount + expAmount;
 
@@ -2632,7 +2634,7 @@ public class MangeReportImpl implements MangeReportService {
                                         expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                     }
                                 }
-                                double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                                double expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
                                 amount = amount + expAmount;
 
@@ -2740,7 +2742,7 @@ public class MangeReportImpl implements MangeReportService {
                                     expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                 }
                             }
-                            double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                            double expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
                             amount = amount + expAmount;
 
@@ -2803,9 +2805,7 @@ public class MangeReportImpl implements MangeReportService {
 
             }
 
-        }
-
-        else {
+        } else {
 
             if (cdaReportRequest.getReportType() == null || cdaReportRequest.getReportType().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REPORT TYPE CAN NOT BE BLANK");
@@ -2878,7 +2878,7 @@ public class MangeReportImpl implements MangeReportService {
                                     expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                 }
                             }
-                            double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                            double expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
                             amount = amount + expAmount;
 
@@ -2938,10 +2938,7 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
 
-            }
-
-
-            else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
+            } else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
 
                 if (cdaReportRequest.getUnitId() == null || cdaReportRequest.getUnitId().isEmpty()) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT ID CAN NOT BE BLANK");
@@ -3005,7 +3002,7 @@ public class MangeReportImpl implements MangeReportService {
 
 
                             for (int p = 0; p < unitList.size(); p++) {
-                                List<CdaParkingTrans> cdaDataMain =cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitList.get(p).getUnit());
+                                List<CdaParkingTrans> cdaDataMain = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitList.get(p).getUnit());
                                 cdaData.addAll(cdaDataMain);
                             }
 
@@ -3021,7 +3018,7 @@ public class MangeReportImpl implements MangeReportService {
                                         expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                     }
                                 }
-                              double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                                double expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
                                 amount = amount + expAmount;
 
@@ -3217,11 +3214,14 @@ public class MangeReportImpl implements MangeReportService {
                         List<CdaParkingTrans> cdaData = new ArrayList<CdaParkingTrans>();
 
 
-                            for (int p = 0; p < unitList.size(); p++) {
-                                List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitList.get(p).getUnit());
-                                cdaData.addAll(cdaTransData);
-                            }
+//                        for (int p = 0; p < unitList.size(); p++) {
+//                            List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitList.get(p).getUnit());
+//                            cdaData.addAll(cdaTransData);
+//                        }
 
+
+                        List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
+                        cdaData.addAll(cdaTransData);
 
                         double amount = 0;
 
@@ -3236,10 +3236,8 @@ public class MangeReportImpl implements MangeReportService {
                                     expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                 }
                             }
-                            double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
-
+                            double expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
                             amount = amount + expAmount;
-
 
                             if (cdaData.get(m).getRemainingCdaAmount() == null) {
                                 amount = amount;
@@ -3347,7 +3345,7 @@ public class MangeReportImpl implements MangeReportService {
                                         expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                     }
                                 }
-                                double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                                double expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
                                 amount = amount + expAmount;
 
@@ -3453,7 +3451,7 @@ public class MangeReportImpl implements MangeReportService {
                                         expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                     }
                                 }
-                                double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                                double expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
                                 amount = amount + expAmount;
 
@@ -3561,7 +3559,7 @@ public class MangeReportImpl implements MangeReportService {
                                     expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                 }
                             }
-                            double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                            double expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
                             amount = amount + expAmount;
 
@@ -3694,7 +3692,7 @@ public class MangeReportImpl implements MangeReportService {
                                     expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                 }
                             }
-                            double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                            double expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
                             amount = amount + expAmount;
 
@@ -3831,7 +3829,7 @@ public class MangeReportImpl implements MangeReportService {
                                         expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                     }
                                 }
-                                double  expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
+                                double expAmount = expCdaOrSubHeadWise / Double.parseDouble(amountUnit.getAmount().toString());
 
                                 amount = amount + expAmount;
 
@@ -8502,7 +8500,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getUnitRebaseReport(String fromDate, String toDate,String unitid) {
+    public ApiResponse<List<FilePathResponse>> getUnitRebaseReport(String fromDate, String toDate, String unitid) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -8633,15 +8631,15 @@ public class MangeReportImpl implements MangeReportService {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
                     }
 
-                    CgUnit frmHdUnits=cgUnitRepository.findByUnit(rebaseData.get(0).getAllocFromUnit());
-                    String frmHdUnit=frmHdUnits.getBudGroupUnit();
-                    CgUnit toHdUnits=cgUnitRepository.findByUnit(rebaseData.get(0).getToHeadUnitId());
-                    String toHdUnit=toHdUnits.getBudGroupUnit();
-                    String toFrmHdUnit=frmHdUnit+","+toHdUnit;
+                    CgUnit frmHdUnits = cgUnitRepository.findByUnit(rebaseData.get(0).getAllocFromUnit());
+                    String frmHdUnit = frmHdUnits.getBudGroupUnit();
+                    CgUnit toHdUnits = cgUnitRepository.findByUnit(rebaseData.get(0).getToHeadUnitId());
+                    String toHdUnit = toHdUnits.getBudGroupUnit();
+                    String toFrmHdUnit = frmHdUnit + "," + toHdUnit;
 
-                    List<String> heaAuthHdUnit=budgetRebaseRepository.findByAuthorityunit(rebaseData.get(0).getRebaseUnitId());
-                    String org=heaAuthHdUnit.get(0);
-                    String adding=org+","+toFrmHdUnit;
+                    List<String> heaAuthHdUnit = budgetRebaseRepository.findByAuthorityunit(rebaseData.get(0).getRebaseUnitId());
+                    String org = heaAuthHdUnit.get(0);
+                    String adding = org + "," + toFrmHdUnit;
                     heaAuthHdUnit.set(0, adding);
 
                     boolean exists = Arrays.stream(heaAuthHdUnit.get(0).split(","))
@@ -8857,7 +8855,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getUnitRebaseReportDoc(String fromDate, String toDate,String unitid) {
+    public ApiResponse<List<FilePathResponse>> getUnitRebaseReportDoc(String fromDate, String toDate, String unitid) {
         List<UnitRebaseReportResponce> responce = new ArrayList<UnitRebaseReportResponce>();
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
         String token = headerUtils.getTokeFromHeader();
@@ -8960,15 +8958,15 @@ public class MangeReportImpl implements MangeReportService {
                     if (rebaseData.size() <= 0) {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
                     }
-                    CgUnit frmHdUnits=cgUnitRepository.findByUnit(rebaseData.get(0).getAllocFromUnit());
-                    String frmHdUnit=frmHdUnits.getBudGroupUnit();
-                    CgUnit toHdUnits=cgUnitRepository.findByUnit(rebaseData.get(0).getToHeadUnitId());
-                    String toHdUnit=toHdUnits.getBudGroupUnit();
-                    String toFrmHdUnit=frmHdUnit+","+toHdUnit;
+                    CgUnit frmHdUnits = cgUnitRepository.findByUnit(rebaseData.get(0).getAllocFromUnit());
+                    String frmHdUnit = frmHdUnits.getBudGroupUnit();
+                    CgUnit toHdUnits = cgUnitRepository.findByUnit(rebaseData.get(0).getToHeadUnitId());
+                    String toHdUnit = toHdUnits.getBudGroupUnit();
+                    String toFrmHdUnit = frmHdUnit + "," + toHdUnit;
 
-                    List<String> heaAuthHdUnit=budgetRebaseRepository.findByAuthorityunit(rebaseData.get(0).getRebaseUnitId());
-                    String org=heaAuthHdUnit.get(0);
-                    String adding=org+","+toFrmHdUnit;
+                    List<String> heaAuthHdUnit = budgetRebaseRepository.findByAuthorityunit(rebaseData.get(0).getRebaseUnitId());
+                    String org = heaAuthHdUnit.get(0);
+                    String adding = org + "," + toFrmHdUnit;
                     heaAuthHdUnit.set(0, adding);
 
                     boolean exists = Arrays.stream(heaAuthHdUnit.get(0).split(","))
@@ -9187,7 +9185,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseReportExcel(String fromDate, String toDate,String unitid) {
+    public ApiResponse<List<UnitRebaseReportResponce>> getUnitRebaseReportExcel(String fromDate, String toDate, String unitid) {
         List<UnitRebaseReportResponce> responce = new ArrayList<UnitRebaseReportResponce>();
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -9268,15 +9266,15 @@ public class MangeReportImpl implements MangeReportService {
                     if (rebaseData.size() <= 0) {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
                     }
-                    CgUnit frmHdUnits=cgUnitRepository.findByUnit(rebaseData.get(0).getAllocFromUnit());
-                    String frmHdUnit=frmHdUnits.getBudGroupUnit();
-                    CgUnit toHdUnits=cgUnitRepository.findByUnit(rebaseData.get(0).getToHeadUnitId());
-                    String toHdUnit=toHdUnits.getBudGroupUnit();
-                    String toFrmHdUnit=frmHdUnit+","+toHdUnit;
+                    CgUnit frmHdUnits = cgUnitRepository.findByUnit(rebaseData.get(0).getAllocFromUnit());
+                    String frmHdUnit = frmHdUnits.getBudGroupUnit();
+                    CgUnit toHdUnits = cgUnitRepository.findByUnit(rebaseData.get(0).getToHeadUnitId());
+                    String toHdUnit = toHdUnits.getBudGroupUnit();
+                    String toFrmHdUnit = frmHdUnit + "," + toHdUnit;
 
-                    List<String> heaAuthHdUnit=budgetRebaseRepository.findByAuthorityunit(rebaseData.get(0).getRebaseUnitId());
-                    String org=heaAuthHdUnit.get(0);
-                    String adding=org+","+toFrmHdUnit;
+                    List<String> heaAuthHdUnit = budgetRebaseRepository.findByAuthorityunit(rebaseData.get(0).getRebaseUnitId());
+                    String org = heaAuthHdUnit.get(0);
+                    String adding = org + "," + toFrmHdUnit;
                     heaAuthHdUnit.set(0, adding);
 
                     boolean exists = Arrays.stream(heaAuthHdUnit.get(0).split(","))
