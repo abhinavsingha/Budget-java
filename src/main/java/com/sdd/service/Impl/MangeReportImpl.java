@@ -10483,15 +10483,16 @@ public class MangeReportImpl implements MangeReportService {
                     sumRE += reAmount;
 
                 }
-                total = sumExisting + sumRE;
+                double roundedD = Math.round(sumRE * 10000.0) / 10000.0;
+                total = sumExisting + roundedD;
                 double ss2 = 0.0;
-                String ss = String.valueOf(sumRE);
+                String ss = String.valueOf(roundedD);
                 if (ss.contains("-")) {
                     String ss1 = ss.replace("-", "");
                     ss2 = Double.parseDouble(ss1);
                 }
                 String sumExistingRound = ConverterUtils.addDecimalPoint(sumExisting + "");
-                String sumRERound = ConverterUtils.addDecimalPoint(sumRE + "");
+                String sumRERound = ConverterUtils.addDecimalPoint(roundedD + "");
                 String totalRound = ConverterUtils.addDecimalPoint(total + "");
                 String ss2Round = ConverterUtils.addDecimalPoint(ss2 + "");
 
@@ -10513,9 +10514,9 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(" ");
                     table.addCell(cell10);
                     table.addCell(cell20);
-                    if (sumRE < 0)
+                    if (roundedD < 0)
                         table.addCell(cell301);
-                    else if (sumRE > 0)
+                    else if (roundedD > 0)
                         table.addCell(cell302);
                     else
                         table.addCell(cell303);
@@ -10808,15 +10809,16 @@ public class MangeReportImpl implements MangeReportService {
                     sumRE += reAmount;
 
                 }
-                total = sumExisting + sumRE;
+                double roundedD = Math.round(sumRE * 10000.0) / 10000.0;
+                total = sumExisting + roundedD;
                 double ss2 = 0.0;
-                String ss = String.valueOf(sumRE);
+                String ss = String.valueOf(roundedD);
                 if (ss.contains("-")) {
                     String ss1 = ss.replace("-", "");
                     ss2 = Double.parseDouble(ss1);
                 }
                 String sumExistingRound = ConverterUtils.addDecimalPoint(sumExisting + "");
-                String sumRERound = ConverterUtils.addDecimalPoint(sumRE + "");
+                String sumRERound = ConverterUtils.addDecimalPoint(roundedD + "");
                 String totalRound = ConverterUtils.addDecimalPoint(total + "");
                 String ss2Round = ConverterUtils.addDecimalPoint(ss2 + "");
                 if (count != 0) {
@@ -10837,9 +10839,9 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(" ");
                     table.addCell(cell10);
                     table.addCell(cell20);
-                    if (sumRE < 0)
+                    if (roundedD < 0)
                         table.addCell(cell301);
-                    else if (sumRE > 0)
+                    else if (roundedD > 0)
                         table.addCell(cell302);
                     else
                         table.addCell(cell303);
@@ -11126,14 +11128,15 @@ public class MangeReportImpl implements MangeReportService {
                     sumRE += reAmount;
 
                 }
+                double roundedD = Math.round(sumRE * 10000.0) / 10000.0;
                 String roundedAmount = ConverterUtils.addDecimalPoint(sumExisting + "");
-                String roundedAmount1 = ConverterUtils.addDecimalPoint(sumRE + "");
+                //String roundedAmount1 = ConverterUtils.addDecimalPoint(roundedD + "");
 
                 double totSum1 = Double.parseDouble(roundedAmount);
-                double totSum2 = Double.parseDouble(roundedAmount1);
-                double totSum = totSum1 + totSum2;
+                //double totSum2 = Double.parseDouble(roundedAmount1);
+                double totSum = totSum1 + roundedD;
                 double ss2 = 0.0;
-                String ss = String.valueOf(sumRE);
+                String ss = String.valueOf(roundedD);
                 if (ss.contains("-")) {
                     String ss1 = ss.replace("-", "");
                     ss2 = Double.parseDouble(ss1);
@@ -11152,12 +11155,12 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne2222.createRun(), 12, ConverterUtils.addDecimalPoint(sumExisting + ""), true);
                     XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
                     paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
-                    if (sumRE < 0)
+                    if (roundedD < 0)
                         boldText(paragraphtableRowOne2233.createRun(), 12, "(-)" + ConverterUtils.addDecimalPoint(ss2 + ""), true);
-                    else if (sumRE > 0)
-                        boldText(paragraphtableRowOne2233.createRun(), 12, "(+)" + ConverterUtils.addDecimalPoint(sumRE + ""), true);
+                    else if (roundedD > 0)
+                        boldText(paragraphtableRowOne2233.createRun(), 12, "(+)" + ConverterUtils.addDecimalPoint(roundedD + ""), true);
                     else
-                        boldText(paragraphtableRowOne2233.createRun(), 12, ConverterUtils.addDecimalPoint(sumRE + ""), true);
+                        boldText(paragraphtableRowOne2233.createRun(), 12, ConverterUtils.addDecimalPoint(roundedD + ""), true);
                     XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
                     paragraphtableRowOne2244.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRowOne2244.createRun(), 12, ConverterUtils.addDecimalPoint(totSum + ""), true);
@@ -11166,8 +11169,8 @@ public class MangeReportImpl implements MangeReportService {
                     count = 0;
                 }
                 grTotalAlloc += sumExisting;
-                grTotalAddition += sumRE;
-                grTotalSum += (sumExisting + sumRE);
+                grTotalAddition += roundedD;
+                grTotalSum += (sumExisting + roundedD);
 //
             }
             XWPFTable table223 = document.createTable(1, 5);
@@ -11442,14 +11445,16 @@ public class MangeReportImpl implements MangeReportService {
                     sumRE += reAmount;
 
                 }
+                double roundedD = Math.round(sumRE * 10000.0) / 10000.0;
+
                 String roundedAmount = ConverterUtils.addDecimalPoint(sumExisting + "");
-                String roundedAmount1 = ConverterUtils.addDecimalPoint(sumRE + "");
+                //String roundedAmount1 = ConverterUtils.addDecimalPoint(roundedD + "");
 
                 double totSum1 = Double.parseDouble(roundedAmount);
-                double totSum2 = Double.parseDouble(roundedAmount);
-                double totSum = sumExisting + sumRE;
+                //double totSum2 = Double.parseDouble(roundedAmount);
+                double totSum = sumExisting + roundedD;
                 double ss2 = 0.0;
-                String ss = String.valueOf(sumRE);
+                String ss = String.valueOf(roundedD);
                 if (ss.contains("-")) {
                     String ss1 = ss.replace("-", "");
                     ss2 = Double.parseDouble(ss1);
@@ -11467,20 +11472,20 @@ public class MangeReportImpl implements MangeReportService {
                     boldText(paragraphtableRowOne2222.createRun(), 12, ConverterUtils.addDecimalPoint(sumExisting + ""), true);
                     XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
                     paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
-                    if (sumRE < 0)
+                    if (roundedD < 0)
                         boldText(paragraphtableRowOne2233.createRun(), 12, "(-)" + ConverterUtils.addDecimalPoint(ss2 + ""), true);
-                    else if (sumRE > 0)
-                        boldText(paragraphtableRowOne2233.createRun(), 12, "(+)" + ConverterUtils.addDecimalPoint(sumRE + ""), true);
+                    else if (roundedD > 0)
+                        boldText(paragraphtableRowOne2233.createRun(), 12, "(+)" + ConverterUtils.addDecimalPoint(roundedD + ""), true);
                     else
-                        boldText(paragraphtableRowOne2233.createRun(), 12, ConverterUtils.addDecimalPoint(sumRE + ""), true);
+                        boldText(paragraphtableRowOne2233.createRun(), 12, ConverterUtils.addDecimalPoint(roundedD + ""), true);
                     XWPFParagraph paragraphtableRowOne2244 = tableRowOne222.getCell(4).addParagraph();
                     paragraphtableRowOne2244.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRowOne2244.createRun(), 12, ConverterUtils.addDecimalPoint(totSum + ""), true);
                     count = 0;
                 }
                 grTotalAlloc += sumExisting;
-                grTotalAddition += sumRE;
-                grTotalSum += (sumExisting + sumRE);
+                grTotalAddition += roundedD;
+                grTotalSum += (sumExisting + roundedD);
 //
             }
             XWPFTable table223 = document.createTable(1, 5);
