@@ -41,9 +41,9 @@ public class MangeUserController {
 		return new ResponseEntity<>(mangeUserService.activateUser(pid), HttpStatus.OK);
 	}
 
-	@GetMapping("/deActivateUser/{pid}")
-	public ResponseEntity<ApiResponse<DefaultResponse>> deActivateUser(@PathVariable(value = "pid") String pid) {
-		return new ResponseEntity<>(mangeUserService.deActivateUser(pid), HttpStatus.OK);
+	@GetMapping("/deActivateUser/{pid}/{rollId}")
+	public ResponseEntity<ApiResponse<DefaultResponse>> deActivateUser(@PathVariable(value = "pid") String pid,@PathVariable(value = "rollId") String rollId) {
+		return new ResponseEntity<>(mangeUserService.deActivateUser(pid,rollId), HttpStatus.OK);
 	}
 
 

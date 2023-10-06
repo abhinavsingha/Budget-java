@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -351,7 +352,7 @@ public class MangeUserImpl implements MangeUserService {
 
     @Override
     @Transactional
-    public ApiResponse<DefaultResponse> deActivateUser(String pid) {
+    public ApiResponse<DefaultResponse> deActivateUser(String pid,String rollId) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -359,6 +360,10 @@ public class MangeUserImpl implements MangeUserService {
 
         if (pid == null || pid.isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "PID CAN NOT BE BLANK");
+        }
+
+        if (rollId == null || rollId.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ROLL ID CAN NOT BE BLANK");
         }
 
         HrData hrData = hrDataRepository.findByPidAndIsActive(pid, "1");
@@ -376,29 +381,34 @@ public class MangeUserImpl implements MangeUserService {
             }
 
             String[] newRoleIdData = hrData.getRoleId().split(",");
-            int newRoleId = 0;
-            for (int i = 0; i < newRoleIdData.length; i++) {
-                if (Integer.parseInt(newRoleIdData[i].trim()) > newRoleId) {
-                    newRoleId = Integer.parseInt(newRoleIdData[i]);
-                }
+            List<String> stringList = new ArrayList<>(Arrays.asList(newRoleIdData));
+            if (!stringList.contains(rollId)){
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "THIS ROLE IS NOT ASSIGNED TO THE USER");
+            }
+            stringList.remove(rollId);
+            String newRoll="";
+            for (String item: stringList) {
+                newRoll += item+",";
+            }
+            hrData.setRoleId(newRoll);
+            if (newRoll==null || newRoll.isEmpty()){
+                hrData.setIsActive("0");
             }
 
-
-            String[] testArray = hrDataCheck.getRoleId().split(",");
-            int max = 0;
-            for (int i = 0; i < testArray.length; i++) {
-                if (Integer.parseInt(testArray[i].trim()) > max) {
-                    max = Integer.parseInt(testArray[i]);
-                }
-            }
-            if (newRoleId >= max) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE THIS TASK");
-            }
+//            String[] testArray = hrDataCheck.getRoleId().split(",");
+//            int max = 0;
+//            for (int i = 0; i < testArray.length; i++) {
+//                if (Integer.parseInt(testArray[i].trim()) > max) {
+//                    max = Integer.parseInt(testArray[i]);
+//                }
+//            }
+//            if (newRoleId >= max) {
+//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE THIS TASK");
+//            }
         }
 
 
         DefaultResponse defaultResponse = new DefaultResponse();
-        hrData.setIsActive("0");
         defaultResponse.setMsg("User DeActivate successfully");
         hrDataRepository.save(hrData);
 
