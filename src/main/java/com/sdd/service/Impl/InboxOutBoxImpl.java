@@ -147,7 +147,6 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                             if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
                                 continue;
                             }
-
                             List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
                             if (cdaParkingList.size() > 0) {
                                 data.setIsCda(isCda);
@@ -177,6 +176,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                     data.setType(mangeInboxOutbox.getType());
                     data.setStatus(mangeInboxOutbox.getStatus());
                     data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+
                     if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
                         List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(mangeInboxOutbox.getGroupId(), hrDataCheck.getUnitId());
                         Boolean isCda = true;
@@ -187,7 +187,6 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                             if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
                                 continue;
                             }
-
                             List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
                             if (cdaParkingList.size() > 0) {
                                 data.setIsCda(isCda);
