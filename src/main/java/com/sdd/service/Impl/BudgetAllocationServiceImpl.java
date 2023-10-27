@@ -94,7 +94,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
 
     public ApiResponse<List<BudgetFinancialYear>> getBudgetFinYear() {
         String token = headerUtils.getTokeFromHeader();
@@ -111,7 +111,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<AllocationType>> getAllocationAllData() {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -128,7 +128,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<AllocationType>> getAllocationByFinYear(String finyear) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -147,7 +147,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<DefaultResponse> updateAllocation(AllocationType allocationType) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -183,7 +183,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<AllocationType>> getAllocationType() {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -211,7 +211,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<BudgetHead>> getSubHeadsData() {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -234,7 +234,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<BudgetHeadResponse>> getSubHeadListWithAmount(BudgetHeadRequest budgetHeadRequest) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -298,7 +298,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<BudgetResponseWithToken> getSubHeads() {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -336,7 +336,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<CgUnitResponse>> getCgUnitData() {
 
         List<CgUnitResponse> cgUnitResponseList = new ArrayList<CgUnitResponse>();
@@ -393,7 +393,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<CgUnitResponse>> getCgUnitWithoutMOD() {
 
         List<CgUnitResponse> cgUnitResponseList = new ArrayList<CgUnitResponse>();
@@ -446,7 +446,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<CgUnitResponse>> getCgUnitDataForBudgetRecipt() {
         List<CgUnitResponse> cgUnitResponseList = new ArrayList<CgUnitResponse>();
 
@@ -517,7 +517,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<BudgetAllocationResponse> budgetAllocationReport(BudgetAllocationReportRequest budgetAllocationReportRequest) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -594,7 +594,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<BudgetHead>> getSubHeadsDataByMajorHead(BudgetHeadRequest majorHead) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -626,7 +626,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<BudgetAllocationSaveResponse> updateBudgetAllocationSubHeadWise(BudgetAllocationUpdateRequest budgetAllocationSaveRequestList) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -787,7 +787,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<BudgetAllocationSaveResponse> updateBudgetAllocationUnitWise(BudgetAllocationUpdateRequest budgetAllocationSaveRequestList) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -834,7 +834,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<BudgetAllocationResponse> getBudgetAllocationData() {
 
         List<BudgetAllocationSubResponse> budgetAllocationList = new ArrayList<BudgetAllocationSubResponse>();
@@ -900,7 +900,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<BudgetAllocationResponse> getBudgetAllocationDataGroupId(String groupId) {
         List<BudgetAllocationSubResponse> budgetAllocationList = new ArrayList<BudgetAllocationSubResponse>();
 
@@ -924,9 +924,14 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
             BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
-            if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
-                continue;
+
+            if (!budgetAllocationSubReport.getStatus().equalsIgnoreCase("Rejected")) {
+                if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                    continue;
+                }
             }
+
+
             BudgetAllocationSubResponse budgetAllocationReport = new BudgetAllocationSubResponse();
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
             budgetAllocationReport.setAllocationId(budgetAllocationSubReport.getAllocationId());
@@ -973,7 +978,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setSubHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(budgetAllocationSubReport.getSubHead()));
 
 
-            List<CdaParkingCrAndDr> cdaCrDrTransData = parkingCrAndDrRepository.findByTransactionIdAndIsFlagAndIsRevision(budgetAllocationSubReport.getAllocationId(), "0", 0);
+            List<CdaParkingCrAndDr> cdaCrDrTransData = parkingCrAndDrRepository.findByTransactionIdAndIsFlagAndIsRevision(budgetAllocationSubReport.getTransactionId(), "0", 0);
             if (cdaCrDrTransData.size() > 0) {
                 List<CdaParkingCrAndDrResponse> data = new ArrayList<>();
                 for (Integer m = 0; m < cdaCrDrTransData.size(); m++) {
@@ -1063,7 +1068,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<BudgetAllocationResponse> getAllSubHeadList() {
         List<BudgetAllocationSubResponse> budgetAllocationList = new ArrayList<BudgetAllocationSubResponse>();
 
@@ -1172,6 +1177,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
             List<CdaParkingTrans> cdaParkingList11 = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(), "0", allocationType.get(0).getAllocTypeId(), budgetAllocationSubReport.getToUnit());
+            if(cdaParkingList11.size() == 0){
+
+                cdaParkingList11 = cdaParkingList11;
+            }
+
             List<CdaParkingCrAndDrResponse> data = new ArrayList<>();
             for (Integer m = 0; m < cdaParkingList11.size(); m++) {
                 CdaParkingTrans cdaParkingCrAndDr = cdaParkingList11.get(m);
@@ -1208,7 +1218,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<BudgetAllocationResponse> getAllRevisionGroupId(String groupId) {
         List<BudgetAllocationSubResponse> budgetAllocationList = new ArrayList<BudgetAllocationSubResponse>();
 
@@ -1315,7 +1325,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<BudgetAllocationResponse> getApprovedBudgetData() {
         List<BudgetAllocationSubResponse> budgetAllocationList = new ArrayList<BudgetAllocationSubResponse>();
 
@@ -1870,7 +1880,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<SubHeadVotedOrChargedType>> getSubHeadType() {
 
         String token = headerUtils.getTokeFromHeader();
@@ -1888,7 +1898,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<BudgetAllocationResponse> getAllGroupIdAndUnitId(String groupId) {
         List<BudgetAllocationSubResponse> budgetAllocationList = new ArrayList<BudgetAllocationSubResponse>();
 
@@ -2063,7 +2073,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<BudgetAllocationResponse> getAllGroupIdAndUnitIdRevisionCase(String groupId) {
         List<BudgetAllocationSubResponse> budgetAllocationList = new ArrayList<BudgetAllocationSubResponse>();
 
@@ -2257,7 +2267,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<BudgetReviResp>> getBudgetRevisionData(BudgetReviReq budgetRivRequest) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -2350,13 +2360,13 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     List<CgUnit> unitSubList = cgUnitRepository.findBySubUnitOrderByDescrAsc(unit.get(i).getUnit());
                     for (Integer w = 0; w < unitSubList.size(); w++) {
 
-                        List<BudgetAllocation> reData1 = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus( unitSubList.get(w).getUnit(),unit.get(i).getUnit(), budgetAllocation.getFinYear(), budgetAllocation.getSubHead(), budgetAllocation.getAllocationTypeId(), "0", "0", "Approved");
+                        List<BudgetAllocation> reData1 = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(unitSubList.get(w).getUnit(), unit.get(i).getUnit(), budgetAllocation.getFinYear(), budgetAllocation.getSubHead(), budgetAllocation.getAllocationTypeId(), "0", "0", "Approved");
                         for (Integer q = 0; q < reData1.size(); q++) {
                             AmountUnit subAmountType = amountUnitRepository.findByAmountTypeId(reData1.get(q).getAmountType());
                             totalAllocation = totalAllocation + (Double.parseDouble(reData1.get(q).getAllocationAmount()) * subAmountType.getAmount());
                         }
                     }
-                    res.setRemainingAmount(ConverterUtils.addDecimalPoint(Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount()) - ((totalAllocation+expendure)/amountType.getAmount()) + ""));
+                    res.setRemainingAmount(ConverterUtils.addDecimalPoint(Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount()) - ((totalAllocation + expendure) / amountType.getAmount()) + ""));
                 }
 
                 res.setCdaTransData(data);
@@ -2429,7 +2439,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public ApiResponse<BudgetAllocationSaveResponse> approveBudgetOrReject(BudgetApproveRequest budgetApproveRequest) {
+    public ApiResponse<BudgetAllocationSaveResponse> budgetApprove(BudgetApproveRequest budgetApproveRequest) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -2445,69 +2455,18 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             if (budgetApproveRequest.getTransactionId() == null || budgetApproveRequest.getTransactionId().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO TRANSACTION ID ID");
             }
-
         }
 
 
         if (budgetApproveRequest.getStatus() == null || budgetApproveRequest.getStatus().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "STATUS CAN NOT BE BLANK");
         }
-//
-        if (budgetApproveRequest.getCdaParkingId() == null || budgetApproveRequest.getCdaParkingId().isEmpty() || budgetApproveRequest.getCdaParkingId().size() == 0) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA LIST CAN NOT BE BLANK");
-        }
 
-
-        for (Integer i = 0; i < budgetApproveRequest.getCdaParkingId().size(); i++) {
-
-            if (budgetApproveRequest.getCdaParkingId().get(i).getCdacrDrId() == null || budgetApproveRequest.getCdaParkingId().get(i).getCdacrDrId().isEmpty()) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA CRDR ID CAN NOT BE BLANK");
-            }
-
-            CdaParkingCrAndDr cdaParkingTrans = parkingCrAndDrRepository.findByCdaCrdrIdAndIsFlagAndIsRevision(budgetApproveRequest.getCdaParkingId().get(i).getCdacrDrId(), "0", 0);
-            if (cdaParkingTrans == null) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CDA PARKING ID.");
-            }
-
-            if (budgetApproveRequest.getCdaParkingId().get(i).getAllocatedAmountType() == null || budgetApproveRequest.getCdaParkingId().get(i).getAllocatedAmountType().isEmpty()) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT TYPE CAN NOT BE BLANK");
-            }
-
-            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetApproveRequest.getCdaParkingId().get(i).getAllocatedAmountType());
-            if (amountUnit == null) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AMOUNT TYPE ID.CDA");
-            }
-
-
-            if (budgetApproveRequest.getCdaParkingId().get(i).getAllocatedAmount() == null || budgetApproveRequest.getCdaParkingId().get(i).getAllocatedAmount().isEmpty()) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT CAN NOT BE BLANK");
-            }
-
-//
-//            if (budgetApproveRequest.getCdaParkingId().get(i).getCdaAmount() == null || budgetApproveRequest.getCdaParkingId().get(i).getCdaAmount().isEmpty()) {
-//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA AMOUNT CAN NOT BE BLANK");
-//            }
-
-        }
-//
 
         List<BudgetAllocationDetails> allocationDetails = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(budgetApproveRequest.getAuthGroupId(), "0", "0");
         if (allocationDetails.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO AUTH GROUP ID");
         }
-
-//        for (Integer i = 0; i < allocationDetails.size(); i++) {
-//
-//            if (allocationDetails.get(i).getStatus().equalsIgnoreCase("Pending")) {
-//
-//            } else {
-//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "APPROVED BUDGET  BILL CAN NOT BE UPDATED");
-//            }
-//
-//            if (allocationDetails.get(i).getIsDelete().equalsIgnoreCase("1")) {
-//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA ALREADY DELETED");
-//            }
-//        }
 
 
         if (budgetApproveRequest.getStatus().contains("Rejected") || budgetApproveRequest.getStatus().contains("Approved")) {
@@ -2535,58 +2494,174 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             allocationData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetailsRepository.save(allocationData);
 
-            if (budgetApproveRequest.getStatus().equalsIgnoreCase("Approved")) {
 
-                BudgetAllocation budgetAllocation = new BudgetAllocation();
-                budgetAllocation.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
-                budgetAllocation.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
-                budgetAllocation.setIsFlag("0");
-                budgetAllocation.setIsTYpe(allocationDetails.get(i).getIsTYpe());
-                budgetAllocation.setIsBudgetRevision("0");
-                budgetAllocation.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-                budgetAllocation.setRefTransId(allocationDetails.get(i).getRefTransactionId());
-                budgetAllocation.setFinYear(allocationDetails.get(i).getFinYear());
-                budgetAllocation.setToUnit(allocationDetails.get(i).getToUnit());
-                budgetAllocation.setFromUnit(hrData.getUnitId());
-                budgetAllocation.setSubHead(allocationDetails.get(i).getSubHead());
-                budgetAllocation.setAllocationTypeId(allocationDetails.get(i).getAllocTypeId());
-                budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationDetails.get(i).getAllocationAmount()));
-                budgetAllocation.setUnallocatedAmount("0");
-                budgetAllocation.setRevisedAmount("0");
-                budgetAllocation.setUserId(allocationDetails.get(i).getUserId());
-                budgetAllocation.setStatus("Pending");
-                budgetAllocation.setAmountType(allocationDetails.get(i).getAmountType());
-                budgetAllocation.setAuthGroupId(allocationDetails.get(i).getAuthGroupId());
+            BudgetAllocation budgetAllocation = new BudgetAllocation();
+            budgetAllocation.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
+            budgetAllocation.setUpdatedDate(HelperUtils.getCurrentTimeStamp());
+            budgetAllocation.setIsFlag("0");
+            budgetAllocation.setIsTYpe(allocationDetails.get(i).getIsTYpe());
+            budgetAllocation.setIsBudgetRevision("0");
+            budgetAllocation.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            budgetAllocation.setRefTransId(allocationDetails.get(i).getRefTransactionId());
+            budgetAllocation.setFinYear(allocationDetails.get(i).getFinYear());
+            budgetAllocation.setToUnit(allocationDetails.get(i).getToUnit());
+            budgetAllocation.setFromUnit(hrData.getUnitId());
+            budgetAllocation.setSubHead(allocationDetails.get(i).getSubHead());
+            budgetAllocation.setAllocationTypeId(allocationDetails.get(i).getAllocTypeId());
+            budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationDetails.get(i).getAllocationAmount()));
+            budgetAllocation.setUnallocatedAmount("0");
+            budgetAllocation.setRevisedAmount("0");
+            budgetAllocation.setUserId(allocationDetails.get(i).getUserId());
+            budgetAllocation.setStatus("Pending");
+            budgetAllocation.setAmountType(allocationDetails.get(i).getAmountType());
+            budgetAllocation.setAuthGroupId(allocationDetails.get(i).getAuthGroupId());
 
-                budgetAllocationRepository.save(budgetAllocation);
+            budgetAllocationRepository.save(budgetAllocation);
 
-            } else {
-                BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.getFinYear());
+        }
 
-                List<CdaParkingCrAndDr> cdaCrDrTransData = parkingCrAndDrRepository.findByTransactionIdAndIsFlagAndIsRevision(allocationDetails.get(i).getTransactionId(), "0", 0);
-                for (Integer t = 0; t < cdaCrDrTransData.size(); t++) {
 
-                    List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(finYear.getSerialNo(), allocationData.getSubHead(), cdaCrDrTransData.get(t).getGinNo(), "0", allocationData.getAllocTypeId(), hrData.getUnitId());
+        List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(budgetApproveRequest.getAuthGroupId(), hrData.getUnitId());
+        if (mangeInboxOutboxList.size() > 0) {
+            for (Integer m = 0; m < mangeInboxOutboxList.size(); m++) {
 
-                    for (Integer x = 0; x < cdaParkingTransList.size(); x++) {
+                try {
+                    MangeInboxOutbox mangeInboxOutbox = mangeInboxOutboxList.get(m);
 
-                        CdaParkingTrans cdaParkingTrans = cdaParkingTransList.get(x);
+                    String toUnit = mangeInboxOutbox.getToUnit();
+                    String fromUnit = mangeInboxOutbox.getFromUnit();
+                    mangeInboxOutbox.setFromUnit(toUnit);
+                    mangeInboxOutbox.setToUnit(fromUnit);
+                    mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                    mangeInboxOutbox.setStatus(budgetApproveRequest.getStatus());
+                    mangeInboxOutbox.setState("CR");
+                    mangeInboxOutbox.setIsApproved("0");
+                    mangeInboxOutbox.setIsArchive("0");
+                    mangeInboxOutbox.setIsFlag("0");
 
-                        AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+                    mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+                } catch (Exception e) {
 
-                        double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
-
-                        AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(allocationData.getAmountType());
-                        double parkingAmount = Double.parseDouble(cdaCrDrTransData.get(t).getAmount()) * amountUnit.getAmount();
-
-                        double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
-                        cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
-                        cdaParkingTransRepository.save(cdaParkingTrans);
-
-                    }
                 }
-
             }
+        }
+
+
+        BudgetAllocationSaveResponse response = new BudgetAllocationSaveResponse();
+        response.setMsg("Data " + budgetApproveRequest.getStatus() + " Successfully");
+        return ResponseUtils.createSuccessResponse(response, new TypeReference<BudgetAllocationSaveResponse>() {
+        });
+    }
+
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public ApiResponse<BudgetAllocationSaveResponse> budgetReject(BudgetApproveRequest budgetApproveRequest) {
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE BUDGET ALLOCATION");
+        }
+
+        if (budgetApproveRequest.getAuthGroupId() == null || budgetApproveRequest.getAuthGroupId().isEmpty()) {
+
+            if (budgetApproveRequest.getTransactionId() == null || budgetApproveRequest.getTransactionId().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO TRANSACTION ID ID");
+            }
+        }
+
+
+        if (budgetApproveRequest.getStatus() == null || budgetApproveRequest.getStatus().isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "STATUS CAN NOT BE BLANK");
+        }
+
+        if (budgetApproveRequest.getCdaParkingId() == null || budgetApproveRequest.getCdaParkingId().isEmpty() || budgetApproveRequest.getCdaParkingId().size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA LIST CAN NOT BE BLANK");
+        }
+
+
+        for (Integer i = 0; i < budgetApproveRequest.getCdaParkingId().size(); i++) {
+
+            if (budgetApproveRequest.getCdaParkingId().get(i).getCdacrDrId() == null || budgetApproveRequest.getCdaParkingId().get(i).getCdacrDrId().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA CRDR ID CAN NOT BE BLANK");
+            }
+            CdaParkingCrAndDr cdaParkingTrans = parkingCrAndDrRepository.findByCdaCrdrIdAndIsFlagAndIsRevision(budgetApproveRequest.getCdaParkingId().get(i).getCdacrDrId(), "0", 0);
+            if (cdaParkingTrans == null) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CDA PARKING ID.");
+            }
+            if (budgetApproveRequest.getCdaParkingId().get(i).getAllocatedAmountType() == null || budgetApproveRequest.getCdaParkingId().get(i).getAllocatedAmountType().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT TYPE CAN NOT BE BLANK");
+            }
+
+            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetApproveRequest.getCdaParkingId().get(i).getAllocatedAmountType());
+            if (amountUnit == null) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AMOUNT TYPE ID.CDA");
+            }
+            if (budgetApproveRequest.getCdaParkingId().get(i).getAllocatedAmount() == null || budgetApproveRequest.getCdaParkingId().get(i).getAllocatedAmount().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT CAN NOT BE BLANK");
+            }
+        }
+//
+
+        List<BudgetAllocationDetails> allocationDetails = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(budgetApproveRequest.getAuthGroupId(), "0", "0");
+        if (allocationDetails.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO AUTH GROUP ID");
+        }
+
+
+        if (budgetApproveRequest.getStatus().contains("Rejected") || budgetApproveRequest.getStatus().contains("Approved")) {
+        } else {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID STATUS");
+        }
+
+        if (budgetApproveRequest.getStatus().equalsIgnoreCase("Rejected")) {
+            if (budgetApproveRequest.getRemarks() == null || budgetApproveRequest.getRemarks().isEmpty()) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REMARK CAN NOT BE BLANK");
+            }
+        }
+
+
+        String status = "";
+
+        for (Integer i = 0; i < allocationDetails.size(); i++) {
+
+
+            BudgetAllocationDetails allocationData = allocationDetails.get(i);
+            status = budgetApproveRequest.getStatus();
+            allocationData.setReturnRemarks(budgetApproveRequest.getRemarks());
+            allocationData.setStatus(budgetApproveRequest.getStatus());
+            allocationData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            budgetAllocationDetailsRepository.save(allocationData);
+
+            BudgetFinancialYear finYear = budgetFinancialYearRepository.findBySerialNo(allocationData.getFinYear());
+
+            List<CdaParkingCrAndDr> cdaCrDrTransData = parkingCrAndDrRepository.findByTransactionIdAndIsFlagAndIsRevision(allocationDetails.get(i).getTransactionId(), "0", 0);
+            for (Integer t = 0; t < cdaCrDrTransData.size(); t++) {
+
+                List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(finYear.getSerialNo(), allocationData.getSubHead(), cdaCrDrTransData.get(t).getGinNo(), "0", allocationData.getAllocTypeId(), hrData.getUnitId());
+
+                for (Integer x = 0; x < cdaParkingTransList.size(); x++) {
+
+                    CdaParkingTrans cdaParkingTrans = cdaParkingTransList.get(x);
+
+                    AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+
+                    double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+
+                    AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(allocationData.getAmountType());
+                    double parkingAmount = Double.parseDouble(cdaCrDrTransData.get(t).getAmount()) * amountUnit.getAmount();
+
+                    double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
+                    cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                    cdaParkingTransRepository.save(cdaParkingTrans);
+
+                }
+            }
+
         }
 
 
@@ -2912,25 +2987,19 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
-
-
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE BUDGET ALLOCATION");
         }
 
-
         if (budgetApproveRequest.getStatus() == null || budgetApproveRequest.getStatus().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "STATUS CAN NOT BE BLANK");
         }
-
         if (budgetApproveRequest.getAuthGroupId() == null || budgetApproveRequest.getAuthGroupId().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO AUTH GROUP ID");
         }
 
 
         List<BudgetAllocationDetails> allocationDetails = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(budgetApproveRequest.getAuthGroupId(), "0");
-
-
         if (allocationDetails.size() == 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TO AUTH GROUP ID");
         }
@@ -3010,7 +3079,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<AvilableFundResponse> findAvailableAmount(GetAmountRequest budgetHeadId) {
         AvilableFundResponse response = new AvilableFundResponse();
         String token = headerUtils.getTokeFromHeader();
@@ -3105,7 +3174,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<AvilableFundResponse> getAvailableFundCB(GetAmountRequest budgetHeadId) {
         AvilableFundResponse response = new AvilableFundResponse();
         String token = headerUtils.getTokeFromHeader();
@@ -3208,7 +3277,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<AvilableFundResponse> getAvailableFundData() {
         AvilableFundResponse response = new AvilableFundResponse();
         String token = headerUtils.getTokeFromHeader();
@@ -3299,7 +3368,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<AvilableFundResponse> getAvailableFundFindByUnitIdAndFinYearId(GetAvilableFundRequest getAvilableFundRequest) {
         AvilableFundResponse response = new AvilableFundResponse();
         String token = headerUtils.getTokeFromHeader();
@@ -4538,7 +4607,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<FindBudgetResponse>> findBudgetAllocationFinYearAndUnit(FindBudgetRequest findBudgetRequest) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -4597,7 +4666,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<BudgetRevisionResponse>> getBudgetRevisionData(BudgetAllocationReportRequest budgetAllocationReportRequest) {
 
 
@@ -4680,7 +4749,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<BudgetAllocationSaveResponse> saveBudgetRevisonData(BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -4855,7 +4924,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<CgUnitResponse>> getCgUnitDataWithPurposeCode() {
         List<CgUnitResponse> cgUnitResponseList = new ArrayList<CgUnitResponse>();
         String token = headerUtils.getTokeFromHeader();
@@ -5648,7 +5717,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<CgUnitResponse>> getAllCgUnitData() {
 
         List<CgUnitResponse> cgUnitResponseList = new ArrayList<CgUnitResponse>();

@@ -62,6 +62,12 @@ public class InboxOutboxController {
     }
 
 
+    @GetMapping("/moveToArchive/{msgId}")
+    public ResponseEntity<ApiResponse<ArchivedResponse>> moveToArchive(@PathVariable(value = "msgId") String msgId) {
+        return new ResponseEntity<>(inboxOutBoxService.moveToArchive(msgId), HttpStatus.OK);
+    }
+
+
 //    @PostMapping("/updateMsgStatus")
 //    public ResponseEntity<ApiResponse<ArchivedResponse>> updateMsgStatus(@RequestBody InboxOutboxStatusRequest inboxOutboxStatusRequest) {
 //        return new ResponseEntity<>(inboxOutBoxService.updateMsgStatus(inboxOutboxStatusRequest), HttpStatus.OK);

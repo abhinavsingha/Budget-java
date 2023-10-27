@@ -1520,7 +1520,7 @@ public class MangeReportImpl implements MangeReportService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND.");
         }
 
-        String fileName = "ContingentBill" + hrData.getUnit() + cbData.getCbId() + System.currentTimeMillis();
+        String fileName = "ContingentBill" + hrData.getUnitId() + cbData.getCbId() + System.currentTimeMillis();
 
 
         double allocationAmount = 0;

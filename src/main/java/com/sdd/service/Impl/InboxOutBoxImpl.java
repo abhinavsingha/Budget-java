@@ -720,4 +720,29 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         });
     }
 
+
+    @Override
+    public ApiResponse<ArchivedResponse> moveToArchive(String msgId) {
+        ArchivedResponse responce = new ArchivedResponse();
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+        if (msgId == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "GROUP ID CAN NOT BE BLANK OR EMPTY");
+        }
+
+        MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByMangeInboxId(msgId);
+        if (mangeInboxOutbox != null) {
+            mangeInboxOutbox.setIsArchive("1");
+            mangeInboxOutbox.setStatus("Fully Approved");
+            mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+        }
+
+        return ResponseUtils.createSuccessResponse(responce, new TypeReference<ArchivedResponse>() {
+        });
+    }
+
 }

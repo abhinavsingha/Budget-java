@@ -98,12 +98,6 @@ public class ContingentServiceImpl implements ContingentService {
 
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CONTINGENT BILL ENTRY");
-        } else {
-            if (hrData.getRoleId().contains(HelperUtils.CBCREATER)) {
-
-            } else {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CONTINGENT BILL ENTRY");
-            }
         }
 
         ContingentSaveResponse contingentSaveResponse = new ContingentSaveResponse();
@@ -459,12 +453,6 @@ public class ContingentServiceImpl implements ContingentService {
 
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO UPDATE CONTINGENT BILL ENTRY");
-        } else {
-            if (hrData.getRoleId().contains(HelperUtils.CBCREATER)) {
-
-            } else {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO UPDATE CONTINGENT BILL ENTRY");
-            }
         }
 
 
@@ -860,7 +848,7 @@ public class ContingentServiceImpl implements ContingentService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<ContingentBillResponse>> getContingentBill() {
 
         ArrayList<ContingentBillResponse> contingentBillListData = new ArrayList<ContingentBillResponse>();
@@ -966,7 +954,7 @@ public class ContingentServiceImpl implements ContingentService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<ContingentBillResponse>> getContingentBillGroupId(String groupId) {
 
         ArrayList<ContingentBillResponse> contingentBillListData = new ArrayList<ContingentBillResponse>();
@@ -1132,12 +1120,6 @@ public class ContingentServiceImpl implements ContingentService {
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO APPROVE CB");
-        } else {
-            if (hrData.getRoleId().contains(HelperUtils.CBAPPROVER)) {
-
-            } else {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO APPROVE APPROVE CB");
-            }
         }
 
         if (approveContigentBillRequest.getGroupId() == null || approveContigentBillRequest.getGroupId().isEmpty()) {
@@ -1268,12 +1250,6 @@ public class ContingentServiceImpl implements ContingentService {
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO APPROVE CB");
-        } else {
-            if (hrData.getRoleId().contains(HelperUtils.CBAPPROVER)) {
-
-            } else {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO APPROVE APPROVE CB");
-            }
         }
 
         if (approveContigentBillRequest.getGroupId() == null || approveContigentBillRequest.getGroupId().isEmpty()) {
@@ -1347,12 +1323,6 @@ public class ContingentServiceImpl implements ContingentService {
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO APPROVE CB");
-        } else {
-            if (hrData.getRoleId().contains(HelperUtils.CBAPPROVER)) {
-
-            } else {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO APPROVE APPROVE CB");
-            }
         }
 
         if (approveContigentBillRequest.getGroupId() == null || approveContigentBillRequest.getGroupId().isEmpty()) {

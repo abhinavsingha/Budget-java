@@ -622,7 +622,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<BudgetReciptListResponse> getBudgetRecipt() {
 
 
@@ -713,7 +713,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<AllBudgetRevisionResponse> getBudgetReciptFilter(BudgetReciptSaveRequest
                                                                                 budgetReciptSaveRequest) {
         AllBudgetRevisionResponse budgetAllocationResponse = new AllBudgetRevisionResponse();
@@ -825,7 +825,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<CgUnit> getModData() {
 
         CgUnit cgUnit = cgUnitRepository.findByUnit("000000");
@@ -834,7 +834,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<CdaParking>> getAllCda() {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);

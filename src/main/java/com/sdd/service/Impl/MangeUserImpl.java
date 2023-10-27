@@ -41,7 +41,7 @@ public class MangeUserImpl implements MangeUserService {
     private HeaderUtils headerUtils;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<DefaultResponse> addUser(HrData hrData) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -256,7 +256,7 @@ public class MangeUserImpl implements MangeUserService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<DefaultResponse> removeUser(String pid) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -291,7 +291,7 @@ public class MangeUserImpl implements MangeUserService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<DefaultResponse> activateUser(String pid) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -351,7 +351,7 @@ public class MangeUserImpl implements MangeUserService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<DefaultResponse> deActivateUser(String pid,String rollId) {
 
         String token = headerUtils.getTokeFromHeader();
@@ -419,7 +419,7 @@ public class MangeUserImpl implements MangeUserService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<DefaultResponse> removeRole(HrData hrDataRequest) {
 
         String token = headerUtils.getTokeFromHeader();

@@ -56,7 +56,9 @@ public interface BudgetAllocationService {
 
 	ApiResponse<BudgetAllocationSaveResponse>  budgetDelete(BudgetDeleteRequest budgetDeleteRequest);
 
-	ApiResponse<BudgetAllocationSaveResponse> approveBudgetOrReject(BudgetApproveRequest budgetApproveRequest);
+	ApiResponse<BudgetAllocationSaveResponse> budgetApprove(BudgetApproveRequest budgetApproveRequest);
+
+	ApiResponse<BudgetAllocationSaveResponse> budgetReject(BudgetApproveRequest budgetApproveRequest);
 
 	ApiResponse<List<BudgetRevisionResponse>>  getBudgetRevisionData(BudgetAllocationReportRequest budgetAllocationReportRequest);
 

@@ -73,7 +73,7 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<UplaodMainFormDocumentsResponse> fileUplaod(MultipartFile file) throws IOException {
 
 
@@ -132,7 +132,7 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<FileUpload> getFilePath(String fileId) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);

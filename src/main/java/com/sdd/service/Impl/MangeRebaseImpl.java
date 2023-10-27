@@ -97,7 +97,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<DefaultResponse> saveRebaes(MangeRebaseRequest mangeRebaseRequest) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -216,7 +216,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<CgStation>> getAllStation() {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -233,7 +233,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<CgUnitResponse>> getAllUnit() {
         List<CgUnitResponse> responce = new ArrayList<CgUnitResponse>();
         String token = headerUtils.getTokeFromHeader();
@@ -272,7 +272,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<BudgetFinancialYear>> getAllBudgetFinYr() {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -289,7 +289,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<RebaseBudgetHistory>> getAllUnitRebaseData(String finYear, String unit) {
         List<RebaseBudgetHistory> responce = new ArrayList<RebaseBudgetHistory>();
 
@@ -421,7 +421,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<CgStation> getAllStationById(String stationId) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -4882,7 +4882,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
 */
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<CgUnitResponse>> getAllIsShipCgUnitData() {
 
         List<CgUnitResponse> cgUnitResponseList = new ArrayList<CgUnitResponse>();
@@ -4927,7 +4927,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<CgUnitResponse>> getIsShipCgUnit() {
 
         List<CgUnitResponse> cgUnitResponseList = new ArrayList<CgUnitResponse>();

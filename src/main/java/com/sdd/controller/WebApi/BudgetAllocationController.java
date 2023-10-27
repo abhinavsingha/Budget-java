@@ -199,9 +199,14 @@ public class BudgetAllocationController {
     }
 
 
-    @PostMapping("/approveBudgetOrReject")
+    @PostMapping("/budgetApprove")
     public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> approveBudget(@RequestBody BudgetApproveRequest budgetApproveRequest) {
-        return new ResponseEntity<>(budgetAllocationService.approveBudgetOrReject(budgetApproveRequest), HttpStatus.OK);
+        return new ResponseEntity<>(budgetAllocationService.budgetApprove(budgetApproveRequest), HttpStatus.OK);
+    }
+
+    @PostMapping("/budgetReject")
+    public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> budgetReject(@RequestBody BudgetApproveRequest budgetApproveRequest) {
+        return new ResponseEntity<>(budgetAllocationService.budgetReject(budgetApproveRequest), HttpStatus.OK);
     }
 
 

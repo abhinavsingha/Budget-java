@@ -22,4 +22,5 @@ public interface InboxOutBoxService {
 //	ApiResponse<ArchivedResponse> updateMsgStatus(InboxOutboxStatusRequest inboxOutboxStatusRequest);
 
 	ApiResponse<ArchivedResponse> updateMsgStatusMain(String msgId);
+	ApiResponse<ArchivedResponse> moveToArchive(String msgId);
 }
