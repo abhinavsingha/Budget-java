@@ -4773,7 +4773,7 @@ public class MangeReportImpl implements MangeReportService {
 
             PdfPTable table = new PdfPTable(4);
             table.setWidthPercentage(100);
-            PdfPCell cell10 = new PdfPCell(new Phrase("S.L", cellFont));
+            PdfPCell cell10 = new PdfPCell(new Phrase("SERIAL NO", cellFont));
             PdfPCell cell20 = new PdfPCell(new Phrase("UNIT", cellFont));
             PdfPCell cell30 = new PdfPCell(new Phrase("ALLOCATION TYPE", cellFont));
             PdfPCell cell40 = new PdfPCell(new Phrase("AMOUNT : (₹ IN " + amountIn + ")", cellFont));
