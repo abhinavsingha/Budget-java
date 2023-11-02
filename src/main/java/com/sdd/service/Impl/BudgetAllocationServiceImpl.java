@@ -3489,6 +3489,18 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             }
         }
 
+        boolean isAmountExits = true;
+        for (Integer i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
+
+            double amount = Double.parseDouble(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmount());
+            if(amount > 0) {
+                isAmountExits = false;
+            }
+        }
+        if(isAmountExits) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ATLEAST ADD ONE NON ZERO ALLOCATION ENTRY");
+        }
+
         for (Integer i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
 
 
@@ -3771,6 +3783,19 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY ALLOCATED " + cgUnit.getDescr() + " . CAN NOT ASSIGN AGAIN");
             }
+        }
+
+
+        boolean isAmountExits = true;
+        for (Integer i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
+
+            double amount = Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount());
+            if(amount > 0) {
+                isAmountExits = false;
+            }
+        }
+        if(isAmountExits) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ATLEAST ADD ONE NON ZERO ALLOCATION ENTRY");
         }
 
 
