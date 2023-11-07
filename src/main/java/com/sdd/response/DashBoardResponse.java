@@ -17,6 +17,7 @@ public class DashBoardResponse {
   String Inbox;
   String approved;
   String archived;
+  String rejectedBillCount;
 
   SubHeadWiseExpenditueResponse subHeadWiseExpenditure;
   UnitWiseExpenditueResponse unitWiseExpenditure;

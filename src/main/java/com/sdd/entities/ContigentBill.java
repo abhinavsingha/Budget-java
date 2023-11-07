@@ -106,4 +106,8 @@ public class ContigentBill {
     @Column(name = "IS_UPDATED")
     private String isUpdate;
 
+
+
+    
+
 }

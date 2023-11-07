@@ -1060,6 +1060,32 @@ public class ContingentServiceImpl implements ContingentService {
         });
     }
 
+
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public ApiResponse<List<ContingentBillResponse>> getCountRejectedBil() {
+
+        ArrayList<ContingentBillResponse> contingentBillListData = new ArrayList<ContingentBillResponse>();
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.");
+        }
+
+
+        List<ContigentBill> cbData = contigentBillRepository.findByCbUnitIdAndStatus(hrData.getUnitId(),"Rejected");
+        if (cbData.size() <= 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND.");
+        }
+
+
+        return ResponseUtils.createSuccessResponse(contingentBillListData, new TypeReference<List<ContingentBillResponse>>() {
+        });
+    }
+
     @Override
     public ApiResponse<ContigentSectionResp> getMaxSectionNumber(MaxNumberRequest budgetHeadId) {
         ContigentSectionResp contingentBillListData = new ContigentSectionResp();

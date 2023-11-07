@@ -102,6 +102,8 @@ public class DashboardServiceImpl implements DashBoardService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.");
             }
         }
+        List<ContigentBill> cbData = contigentBillRepository.findByCbUnitIdAndStatus(hrDataCheck.getUnitId(),"Rejected");
+        dashBoardResponse.setRejectedBillCount(""+cbData.size());
 
 
         HradataResponse hradataResponse = new HradataResponse();
@@ -199,7 +201,8 @@ public class DashboardServiceImpl implements DashBoardService {
                     outBoxList.add(data);
                 }
             }
-        } else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
+        }
+        else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
 
             List<String> dataIscgBg = new ArrayList<>();
             dataIscgBg.add("BG");
@@ -225,7 +228,8 @@ public class DashboardServiceImpl implements DashBoardService {
                     }
                 }
             }
-        } else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
+        }
+        else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
             inboxOutboxesList =
                     mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
                             hrDataCheck.getUnitId(), "CB", "0", "0");
@@ -243,7 +247,8 @@ public class DashboardServiceImpl implements DashBoardService {
 
                 } else {
                     MangeInboxOutbox data = inboxOutboxesList.get(i);
-                    outBoxList.add(data);
+                   outBoxList.add(data);
+
                 }
             }
         } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
@@ -284,7 +289,9 @@ public class DashboardServiceImpl implements DashBoardService {
                     outBoxList.add(data);
                 } else {
                     MangeInboxOutbox data = inboxOutboxesList.get(i);
-                    outBoxList.add(data);
+                    if(!inboxOutboxesList.get(i).getStatus().equalsIgnoreCase("Rejected")){
+                        outBoxList.add(data);
+                    }
                 }
             }
         }
@@ -504,6 +511,10 @@ public class DashboardServiceImpl implements DashBoardService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
         }
 
+
+        List<ContigentBill> cbData = contigentBillRepository.findByCbUnitIdAndStatus(hrDataCheck.getUnitId(),"Rejected");
+        dashBoardResponse.setRejectedBillCount(""+cbData.size());
+
         HradataResponse hradataResponse = new HradataResponse();
 
         if (hrDataCheck == null) {
@@ -677,7 +688,9 @@ public class DashboardServiceImpl implements DashBoardService {
                     outBoxList.add(data);
                 } else {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
-                    outBoxList.add(data);
+                    if(!inboxOutboxesList.get(i).getStatus().equalsIgnoreCase("Rejected")){
+                        outBoxList.add(data);
+                    }
                 }
             }
         }
