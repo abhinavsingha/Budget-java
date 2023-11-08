@@ -693,23 +693,23 @@ public class PdfGenaratorUtilMain {
         phraseFooter.add(counterSigner);
 
 
-        PdfPTable tables11 = new PdfPTable(4);
+        PdfPTable tables11 = new PdfPTable(3);
         tables11.setWidthPercentage(100);
 
         PdfPCell cell10011 = new PdfPCell(new Phrase(hrData.getUnit()));
         PdfPCell cell20011 = new PdfPCell(new Phrase(""));
-        PdfPCell cell30011 = new PdfPCell(new Phrase(""));
+        //PdfPCell cell30011 = new PdfPCell(new Phrase(""));
         PdfPCell cell40011 = new PdfPCell(new Phrase(cbReportResponse.getApprover().getFullName() + " \n" + cbReportResponse.getApprover().getRank()));
 
         cell10011.setBorder(0);
         cell20011.setBorder(0);
-        cell30011.setBorder(0);
+        //cell30011.setBorder(0);
         cell40011.setBorder(0);
         cell40011.setPadding(20);
 
         tables11.addCell(cell10011);
         tables11.addCell(cell20011);
-        tables11.addCell(cell30011);
+        //tables11.addCell(cell30011);
         tables11.addCell(cell40011);
 
         phraseFooter.add(tables11);
