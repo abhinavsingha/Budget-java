@@ -222,44 +222,77 @@ public class BudgetAllocationController {
     }
 
 
-    @PostMapping("/getBudgetRevisionData")
+    @PostMapping("/getBudgetRevisionData11")
     public ResponseEntity<ApiResponse<List<BudgetReviResp>>> getBudgetRevisionData(@RequestBody BudgetReviReq budgetRivRequest) {
         return new ResponseEntity<>(budgetAllocationService.getBudgetRevisionData(budgetRivRequest), HttpStatus.OK);
     }
 
 
-    @PostMapping("/saveBudgetRevision")
+
+    @PostMapping("/saveBudgetRevision11")
     public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> saveBudgetRevision(@RequestBody BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList) {
         return new ResponseEntity<>(budgetAllocationService.saveBudgetRevision(budgetAllocationSaveRequestList), HttpStatus.OK);
     }
 
 
-    @PostMapping("/approveRevisionBudgetOrReject")
+    @PostMapping("/approveRevisionBudgetOrReject11")
     public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> approveRevisionBudgetOrReject(@RequestBody BudgetApproveRequest budgetApproveRequest) {
         return new ResponseEntity<>(budgetAllocationService.approveRivisonBudgetOrReject(budgetApproveRequest), HttpStatus.OK);
     }
 
 
-    @PostMapping("/saveAuthDataRevision")
+
+    @PostMapping("/getBudgetRevisionData333")
+    public ResponseEntity<ApiResponse<List<BudgetReviResp>>> getBudgetRevisionData33(@RequestBody BudgetReviReq budgetRivRequest) {
+        return new ResponseEntity<>(budgetAllocationService.getBudgetRevisionData33(budgetRivRequest), HttpStatus.OK);
+    }
+
+    @PostMapping("/getBudgetRevisionData3")
+    public ResponseEntity<ApiResponse<List<BudgetReviResp>>> getBudgetRevisionData3(@RequestBody BudgetReviReq budgetRivRequest) {
+        return new ResponseEntity<>(budgetAllocationService.getBudgetRevisionData3(budgetRivRequest), HttpStatus.OK);
+    }
+
+
+    @PostMapping("/approveRevisionBudgetOrReject3")
+    public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> approveRevisionBudgetOrReject3(@RequestBody BudgetApproveRequest budgetApproveRequest) {
+        return new ResponseEntity<>(budgetAllocationService.approveRivisonBudgetOrReject3(budgetApproveRequest), HttpStatus.OK);
+    }
+
+
+    @PostMapping("/saveBudgetRevision3")
+    public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> saveBudgetRevision3(@RequestBody BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList) {
+        return new ResponseEntity<>(budgetAllocationService.saveBudgetRevision3(budgetAllocationSaveRequestList), HttpStatus.OK);
+    }
+
+
+    @PostMapping("/saveAuthDataRevision3")
+    public ResponseEntity<ApiResponse<DefaultResponse>> saveAuthDataRevision3(@RequestBody AuthRequest authRequest) {
+        return new ResponseEntity<>(budgetAllocationService.saveAuthDataRevision3(authRequest), HttpStatus.OK);
+    }
+
+
+
+
+    @PostMapping("/saveAuthDataRevision11")
     public ResponseEntity<ApiResponse<DefaultResponse>> saveAuthDataRevision(@RequestBody AuthRequest authRequest) {
         return new ResponseEntity<>(budgetAllocationService.saveAuthDataRevision(authRequest), HttpStatus.OK);
     }
 
 
 
-    @PostMapping("/saveBudgetRevision2")
+    @PostMapping("/saveBudgetRevision22")
     public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> saveBudgetRevision2(@RequestBody BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList) {
         return new ResponseEntity<>(budgetAllocationService.saveBudgetRevision2(budgetAllocationSaveRequestList), HttpStatus.OK);
     }
 
 
-    @PostMapping("/approveRevisionBudgetOrReject2")
+    @PostMapping("/approveRevisionBudgetOrReject22")
     public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> approveRevisionBudgetOrReject2(@RequestBody BudgetApproveRequest budgetApproveRequest) {
-        return new ResponseEntity<>(budgetAllocationService.approveRivisonBudgetOrReject2(budgetApproveRequest), HttpStatus.OK);
+        return new ResponseEntity<>(budgetAllocationService.approveRivisonBudgetOrReject3(budgetApproveRequest), HttpStatus.OK);
     }
 
 
-    @PostMapping("/saveAuthDataRevision2")
+    @PostMapping("/saveAuthDataRevision22")
     public ResponseEntity<ApiResponse<DefaultResponse>> saveAuthDataRevision2(@RequestBody AuthRequest authRequest) {
         return new ResponseEntity<>(budgetAllocationService.saveAuthDataRevision2(authRequest), HttpStatus.OK);
     }

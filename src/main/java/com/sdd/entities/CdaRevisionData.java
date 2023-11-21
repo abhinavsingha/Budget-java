@@ -68,5 +68,9 @@ public class CdaRevisionData {
     private String remainingAmount;
 
 
+    @Column(name = "IS_AUTO_ASSIGN_ALLOCATION")
+    private String isAutoAssignAllocation;
+
+
 
 }

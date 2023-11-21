@@ -70,6 +70,10 @@ public interface BudgetAllocationService {
 
 	ApiResponse<List<BudgetReviResp>>  getBudgetRevisionData(BudgetReviReq budgetRivRequest);
 
+	ApiResponse<List<BudgetReviResp>>  getBudgetRevisionData33(BudgetReviReq budgetRivRequest);
+
+	ApiResponse<List<BudgetReviResp>>  getBudgetRevisionData3(BudgetReviReq budgetRivRequest);
+
 	ApiResponse<BudgetAllocationResponse> getApprovedBudgetData();
 
 	ApiResponse<BudgetAllocationSaveResponse> saveBudgetRevision(BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList);
@@ -88,6 +92,8 @@ public interface BudgetAllocationService {
 
 	ApiResponse<BudgetAllocationSaveResponse> approveRivisonBudgetOrReject(BudgetApproveRequest budgetApproveRequest);
 
+	ApiResponse<BudgetAllocationSaveResponse> approveRivisonBudgetOrReject3(BudgetApproveRequest budgetApproveRequest);
+
 	ApiResponse<DefaultResponse> saveAuthDataRevision(AuthRequest authRequest);
 
 
@@ -95,7 +101,11 @@ public interface BudgetAllocationService {
 
 	ApiResponse<DefaultResponse> saveAuthDataRevision2(AuthRequest authRequest);
 
+	ApiResponse<DefaultResponse> saveAuthDataRevision3(AuthRequest authRequest);
+
 	ApiResponse<BudgetAllocationSaveResponse> saveBudgetRevision2(BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList);
+
+	ApiResponse<BudgetAllocationSaveResponse> saveBudgetRevision3(BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList);
 
 	ApiResponse<BudgetAllocationSaveResponse> approveRivisonBudgetOrReject2(BudgetApproveRequest budgetApproveRequest);
 
