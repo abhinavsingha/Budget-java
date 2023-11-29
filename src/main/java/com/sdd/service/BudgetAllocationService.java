@@ -10,6 +10,7 @@ public interface BudgetAllocationService {
 
 
 	ApiResponse<AvilableFundResponse> findAvailableAmount(GetAmountRequest budgetHeadId);
+
 	ApiResponse<AvilableFundResponse> getAvailableFundCB(GetAmountRequest budgetHeadId);
 
 	ApiResponse<AvilableFundResponse> getAvailableFundData();

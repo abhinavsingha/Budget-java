@@ -18,6 +18,7 @@ public class AvilableFundResponse {
 //   String fundallocated;
    AmountUnit amountUnit;
    String previousAllocation;
+   String cbAllocationAMount;
    String unallocatedAmount;
    String unitName;
 
