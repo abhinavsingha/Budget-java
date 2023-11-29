@@ -6571,7 +6571,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     budgetAllocation.setToUnit(revisionData.get(z).getToUnitId());
                     budgetAllocation.setFromUnit(hrData.getUnitId());
                     budgetAllocation.setSubHead(revisionData.get(z).getBudgetHeadId());
-                    budgetAllocation.setIsTYpe("REVISION0");
+                    budgetAllocation.setIsTYpe("REVISION");
                     budgetAllocation.setAllocationTypeId(revisionData.get(z).getAllocTypeId());
                     budgetAllocation.setIsBudgetRevision("0");
                     budgetAllocation.setUnallocatedAmount("0");
@@ -6614,7 +6614,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(unitList.get(d).getUnit(), revisionData.get(z).getFinYearId(), revisionData.get(z).getBudgetHeadId(), revisionData.get(z).getAllocTypeId(), "Approved", "0", "0");
                             for (Integer y = 0; y < budgetAllocationDetailsList.size(); y++) {
                                 BudgetAllocationDetails budgetAllocationRevision = budgetAllocationDetailsList.get(y);
-                                budgetAllocationRevision.setIsTYpe("REVISION1");
+                                budgetAllocationRevision.setIsTYpe("REVISION");
                                 budgetAllocationRevision.setAllocationAmount("0");
                                 budgetAllocationDetailsRepository.save(budgetAllocationRevision);
                             }
@@ -6623,6 +6623,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             for (Integer y = 0; y < dataBudget.size(); y++) {
                                 BudgetAllocation budgetAllocationRevision = dataBudget.get(y);
                                 budgetAllocationRevision.setAllocationAmount("0");
+                                budgetAllocationRevision.setIsTYpe("REVISION1");
                                 budgetAllocationRepository.save(budgetAllocationRevision);
                             }
 
@@ -6662,7 +6663,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                   for (Integer y = 0; y < budgetAllocationDetailsList.size(); y++) {
                       BudgetAllocationDetails budgetAllocationRevision = budgetAllocationDetailsList.get(y);
                       budgetAllocationRevision.setIsBudgetRevision("1");
-                      budgetAllocationRevision.setIsTYpe("REVISION");
+                      budgetAllocationRevision.setIsTYpe("REVISION1");
                       budgetAllocationRevision.setIsDelete("1");
                       budgetAllocationDetailsRepository.save(budgetAllocationRevision);
                   }
@@ -6672,7 +6673,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                       BudgetAllocation budgetAllocationRevision = dataBudget.get(y);
                       budgetAllocationRevision.setIsBudgetRevision("1");
                       budgetAllocationRevision.setIsFlag("1");
-                      budgetAllocationRevision.setIsTYpe("REVISION2");
+                      budgetAllocationRevision.setIsTYpe("REVISION1");
                       budgetAllocationRepository.save(budgetAllocationRevision);
 
                   }
@@ -6711,7 +6712,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                   budgetAllocation.setUnallocatedAmount("0");
                   budgetAllocation.setUnallocatedAmount("0.0000");
                   budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(revisionRemainingAmountSend.get(v).getAmount() + ""));
-                  budgetAllocation.setRevisedAmount("0");
+                  budgetAllocation.setRevisedAmount(ConverterUtils.addDecimalPoint(revisionRemainingAmountSend.get(v).getAmount() + ""));
                   budgetAllocation.setUserId(hrData.getPid());
                   budgetAllocation.setStatus("Approved");
                   budgetAllocation.setAmountType(revisionRemainingAmountSend.get(v).getAmountType());

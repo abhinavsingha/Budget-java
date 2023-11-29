@@ -132,12 +132,6 @@ public class CdaParkingImpl implements CdaParkingService {
             }
 
 
-            AmountUnit allocationAmountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType());
-            totalAmount = (Double.parseDouble(ConverterUtils.addDecimalPoint(budgetAllocation.getAllocationAmount())) + Double.parseDouble(ConverterUtils.addDecimalPoint(budgetAllocation.getRevisedAmount()))) * allocationAmountUnit.getAmount();
-
-            String fourDigitsAmount = ConverterUtils.addDecimalPoint(totalAmount + "");
-            totalAmount = Double.parseDouble(fourDigitsAmount);
-
             cadTotalAmount = cadTotalAmount + Double.parseDouble(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()) * amountUnit.getAmount();
 
 
@@ -337,16 +331,7 @@ public class CdaParkingImpl implements CdaParkingService {
             }
 
 
-            AmountUnit allocationAmountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType());
-            totalAmount = (Double.parseDouble(ConverterUtils.addDecimalPoint(budgetAllocation.getAllocationAmount())) + Double.parseDouble(ConverterUtils.addDecimalPoint(budgetAllocation.getRevisedAmount()))) * allocationAmountUnit.getAmount();
-
             cadTotalAmount = cadTotalAmount + Double.parseDouble(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()) * amountUnit.getAmount();
-
-
-//            List<BudgetAllocationDetails> budgetAllocationDetailsLists = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(cdaRequest.getCdaRequest().get(i).getAuthGroupId(), "0");
-//            if (budgetAllocationDetailsLists.size() == 0) {
-//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AUTH GROUP ID");
-//            }
 
             CdaParking ginNumber = cdaParkingRepository.findByGinNo(cdaRequest.getCdaRequest().get(i).getGinNo());
             if (ginNumber == null) {
@@ -658,8 +643,6 @@ public class CdaParkingImpl implements CdaParkingService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AMOUNT TYPE ID");
             }
 
-            AmountUnit allocationAmountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType());
-            totalAmount = (Double.parseDouble(budgetAllocation.getAllocationAmount()) + Double.parseDouble(budgetAllocation.getRevisedAmount())) * allocationAmountUnit.getAmount();
             cadTotalAmount = cadTotalAmount + Double.parseDouble(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()) * amountUnit.getAmount();
 
 
