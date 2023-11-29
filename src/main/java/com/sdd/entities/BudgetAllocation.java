@@ -46,14 +46,15 @@ public class BudgetAllocation {
     @Column(name = "PREV_ALLOC_AMOUNT")
     private String prevAllocAmount;
 
+    @Column(name = "PREV_INITIAL" ,columnDefinition = "varchar(255) default 0")
+    private String prevInitial;
+
     @Column(name = "UNALLOCATED_AMOUNT")
     private String unallocatedAmount;
 
     @Column(name = "ALLOCATION_TYPE_ID")
     private String allocationTypeId;
 
-//    @Column(name = "BALANCE_AMOUNT")
-//    private String balanceAmount;
 
     @Column(name = "REVISED_AMOUNT")
     private String revisedAmount;

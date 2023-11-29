@@ -50,6 +50,9 @@ public class BudgetAllocationDetails {
     @Column(name = "PREV_ALLOC_AMOUNT")
     private String prevAllocAmount;
 
+    @Column(name = "PREV_INITIAL" ,columnDefinition = "varchar(255) default 0")
+    private String prevInitial;
+
     @Column(name = "AUTH_GROUP_ID")
     private String authGroupId;
 
