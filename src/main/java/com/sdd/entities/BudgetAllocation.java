@@ -43,6 +43,9 @@ public class BudgetAllocation {
     @Column(name = "ALLOCATION_AMOUNT")
     private String allocationAmount;
 
+    @Column(name = "PREV_ALLOC_AMOUNT")
+    private String prevAllocAmount;
+
     @Column(name = "UNALLOCATED_AMOUNT")
     private String unallocatedAmount;
 

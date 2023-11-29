@@ -47,6 +47,8 @@ public class BudgetAllocationDetails {
     @Column(name = "ALLOCATION_AMOUNT")
     private String allocationAmount;
 
+    @Column(name = "PREV_ALLOC_AMOUNT")
+    private String prevAllocAmount;
 
     @Column(name = "AUTH_GROUP_ID")
     private String authGroupId;
