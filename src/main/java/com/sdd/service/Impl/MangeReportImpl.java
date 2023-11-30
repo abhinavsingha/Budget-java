@@ -12010,20 +12010,20 @@ public class MangeReportImpl implements MangeReportService {
                 grTotalAddition += Double.parseDouble(sumRERound);
                 grTotalSum += (Double.parseDouble(sumExistingRound) + Double.parseDouble(sumRERound));
 
-            PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-            PdfPCell cell01 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAlloc + ""), cellFont));
-            PdfPCell cell02 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAddition + ""), cellFont));
-            PdfPCell cell03 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAlloc + grTotalAddition + ""), cellFont));
-            cell00.setPadding(12);
-            cell01.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-            cell02.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-            cell03.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-
-            table.addCell(" ");
-            table.addCell(cell00);
-            table.addCell(cell01);
-            table.addCell(cell02);
-            table.addCell(cell03);
+//            PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
+//            PdfPCell cell01 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAlloc + ""), cellFont));
+//            PdfPCell cell02 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAddition + ""), cellFont));
+//            PdfPCell cell03 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(grTotalAlloc + grTotalAddition + ""), cellFont));
+//            cell00.setPadding(12);
+//            cell01.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+//            cell02.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+//            cell03.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+//
+//            table.addCell(" ");
+//            table.addCell(cell00);
+//            table.addCell(cell01);
+//            table.addCell(cell02);
+//            table.addCell(cell03);
 
             document.add(table);
 
