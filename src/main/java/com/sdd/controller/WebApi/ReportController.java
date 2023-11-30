@@ -288,7 +288,10 @@ public class ReportController {
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getRevisedAllocationAprReportDoc(@PathVariable(value = "authGroupId") String authGroupId) {
         return new ResponseEntity<>(mangeReportService.getRevisedAllocationAprReportDoc(authGroupId), HttpStatus.OK);
     }
-
+    @GetMapping("/getRevisedAllocationReportPdf/{authGroupId}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getRevisedAllocationReportPdf(@PathVariable(value = "authGroupId") String authGroupId) {
+        return new ResponseEntity<>(mangeReportService.getRevisedAllocationReportPdf(authGroupId), HttpStatus.OK);
+    }
 
 
 }
