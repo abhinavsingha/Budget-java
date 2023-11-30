@@ -1064,6 +1064,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
                         budgetRecipt.setToUnit(toHdUnitId);
                         budgetRecipt.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                         budgetRecipt.setStatus("Approved");
+                        budgetRecipt.setPrevInitial("0");
+                        budgetRecipt.setPrevAllocAmount("0");
                         budgetRecipt.setIsTYpe("REBASE");
                         budgetRecipt.setUnallocatedAmount("0");
                         budgetRecipt.setIsBudgetRevision("0");
@@ -1893,6 +1895,8 @@ public class MangeRebaseImpl implements MangeRebaseService {
                             budgetAllocationDetailsRecipt.setToUnit(toHdUnitId);
                             budgetAllocationDetailsRecipt.setSubHead(req.getUnitRebaseRequests().get(k).getBudgetHeadId());
                             budgetAllocationDetailsRecipt.setStatus("Approved");
+                            budgetAllocationDetailsRecipt.setPrevInitial("0");
+                            budgetAllocationDetailsRecipt.setPrevAllocAmount("0");
                             budgetAllocationDetailsRecipt.setIsTYpe("REBASE");
                             budgetAllocationDetailsRecipt.setUnallocatedAmount("0");
                             budgetAllocationDetailsRecipt.setIsBudgetRevision("0");
