@@ -127,7 +127,7 @@ public class MangeReportImpl implements MangeReportService {
     private CgStationRepository cgStationRepository;
 
     @Autowired
-    private CdaRevisionDataRepo cdaRevisionDataRepo;
+    private BudgetRevisionRepository cdaRevisionDataRepo;
 
 
     @Override

@@ -13,4 +13,6 @@ public interface BudgetRevisionRepository extends JpaRepository<CdaRevisionData,
     List<CdaRevisionData> findByAuthGroupId(String authGroupId);
     List<CdaRevisionData> findByAuthGroupIdAndIsAutoAssignAllocation(String authGroupId,String isAutoAssignAllocation);
     List<CdaRevisionData> findByAuthGroupIdAndToUnitId(String authGroupId,String unitId);
+
+    List<CdaRevisionData> findByAuthGroupIdAndIsSelfAndIsAutoAssignAllocationAndIsFlag(String authGroupId, String s, String s1, String s2);
 }
