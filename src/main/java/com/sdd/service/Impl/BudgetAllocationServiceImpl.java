@@ -7025,15 +7025,18 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                         budgetAllocationRevision.setIsBudgetRevision("1");
                         budgetAllocationRevision.setIsFlag("1");
 
-                        budgetAllocationRevision.setPrevAllocAmount(budgetAllocationRevision.getAllocationAmount() + "");
-                        budgetAllocationRevision.setAllocationAmount(totalAmount + "");
-
                         AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationRevision.getAmountType());
                         if (budgetAllocationRevision.getPrevInitial().equalsIgnoreCase("1")) {
                             allocationAmount = allocationAmount + Double.parseDouble(budgetAllocationRevision.getPrevAllocAmount()) * amountUnit.getAmount();
                         } else {
                             allocationAmount = allocationAmount + Double.parseDouble(budgetAllocationRevision.getAllocationAmount()) * amountUnit.getAmount();
                         }
+
+
+                        budgetAllocationRevision.setPrevAllocAmount(budgetAllocationRevision.getAllocationAmount() + "");
+                        budgetAllocationRevision.setAllocationAmount(totalAmount + "");
+
+
 
                         budgetAllocationRepository.save(budgetAllocationRevision);
                     }
