@@ -293,5 +293,10 @@ public class ReportController {
         return new ResponseEntity<>(mangeReportService.getRevisedAllocationReportPdf(authGroupId), HttpStatus.OK);
     }
 
+    @GetMapping("/getRevisionReportExcel/{finYearId}/{allocationType}/{amountTypeId}/{majorHd}")
+    public ResponseEntity<ApiResponse<List<RivisionReportResp>>> getRevisionReportExcel(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "majorHd") String majorHd) {
+        return new ResponseEntity<>(mangeReportService.getRevisionReportExcel(finYearId, allocationType, amountTypeId,majorHd), HttpStatus.OK);
+    }
+
 
 }

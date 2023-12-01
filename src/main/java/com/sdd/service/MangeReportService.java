@@ -114,6 +114,8 @@ public interface MangeReportService {
     ApiResponse<List<FilePathResponse>> getRevisedAllocationAprReportDoc(String authGroupId);
 
     ApiResponse<List<FilePathResponse>> getRevisedAllocationReportPdf(String authGroupId);
+    ApiResponse<List<RivisionReportResp>> getRevisionReportExcel(String finYearId, String allocationType, String amountTypeId,String majorHd);
+
 
 }
 

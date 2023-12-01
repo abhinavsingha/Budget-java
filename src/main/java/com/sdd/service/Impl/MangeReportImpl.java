@@ -12064,6 +12064,150 @@ public class MangeReportImpl implements MangeReportService {
         });
     }
 
+    @Override
+    public ApiResponse<List<RivisionReportResp>> getRevisionReportExcel(String finYearId, String allocationType, String amountTypeId, String majorHd) {
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        String frmUnit = hrData.getUnitId();
+        List<RivisionReportResp> dtoList = new ArrayList<RivisionReportResp>();
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+        if (finYearId == null || finYearId.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
+            }, "FINANCIAL YEAR CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (allocationType == null || allocationType.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
+            }, "ALLOCATION TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (amountTypeId == null || amountTypeId.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
+            }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (majorHd == null || majorHd.isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
+        AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
+        double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
+        String amountIn = amountObj.getAmountType();
+
+        AllocationType allockData = allocationRepository.findByAllocTypeId(allocationType);
+        String allocType = allockData.getAllocType().toUpperCase();
+        BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
+
+        String bHeadType = "";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(majorHd);
+        if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
+            bHeadType = "REVENUE OBJECT HEAD";
+        } else
+            bHeadType = "CAPITAL DETAILED HEAD";
+        List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
+        if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
+            }, bHeadType + " " + "RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        List<BudgetAllocation> check = budgetAllocationRepository.findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(frmUnit, finYearId, allocationType, "0");
+        List<BudgetAllocation> checks = check.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+       // List<BudgetAllocation> checks = mrge.stream().filter(e -> Double.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
+        if (checks.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
+            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+
+        try {
+
+            int i = 1;
+            double newTotalAlloc;
+            double prevAllocAmount;
+            double amountUnit;
+            double reAmount;
+            double s2 = 0.0;
+            for (String val : rowData) {
+                String subHeadId = val;
+                List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0", "0", "Approved");
+                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                //List<BudgetAllocation> reportDetails1 = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+                //List<BudgetAllocation> reportDetails = reportDetails1.stream().filter(e -> Double.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
+
+                BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
+
+                for (Integer r = 0; r < reportDetails.size(); r++) {
+
+                    AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(reportDetails.get(r).getAmountType());
+                    if (amountTypeObj == null) {
+                        return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
+                        }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                    }
+                    amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
+
+                    newTotalAlloc = Double.valueOf(reportDetails.get(r).getAllocationAmount());
+                    prevAllocAmount=Double.valueOf(reportDetails.get(r).getPrevAllocAmount());
+
+                    double preAllocAmnt = prevAllocAmount * amountUnit / reqAmount;
+
+                    double newToltalAllocAmnt= newTotalAlloc * amountUnit / reqAmount;
+
+                    reAmount = newToltalAllocAmnt - preAllocAmnt;
+                    String s = String.valueOf(reAmount);
+                    if (s.contains("-")) {
+                        String s1 = s.replace("-", "");
+                        s2 = Double.parseDouble(s1);
+                    }
+                    CgUnit unitN = cgUnitRepository.findByUnit(reportDetails.get(r).getToUnit());
+
+                    RivisionReportResp res = new RivisionReportResp();
+                    res.setFinYear(findyr.getFinYear());
+                    res.setAmountIn(amountIn);
+                    res.setAllocationType(allocType);
+                    if (r == 0) {
+                        res.setBudgetHead(bHead.getSubHeadDescr());
+                    } else {
+                        res.setBudgetHead("");
+                    }
+                    res.setUnitName(unitN.getDescr());
+                    res.setAllocationAmount(String.format("%1$0,1.4f", new BigDecimal(preAllocAmnt)));
+                    if (reAmount < 0)
+                        res.setAdditionalAmount("(-)" + String.format("%1$0,1.4f", new BigDecimal(s2)));
+                    else if (reAmount > 0)
+                        res.setAdditionalAmount("(+)" + String.format("%1$0,1.4f", new BigDecimal(reAmount)));
+                    else
+                        res.setAdditionalAmount(String.format("%1$0,1.4f", new BigDecimal(reAmount)));
+
+                    res.setTotalAmount(String.format("%1$0,1.4f", new BigDecimal(newToltalAllocAmnt)));
+
+                    dtoList.add(res);
+                }
+            }
+
+        } catch (Exception e) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
+        }
+        return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<RivisionReportResp>>() {
+        });
+    }
 
     public static void generatePdf(String htmlContent, String outputPdfFile) throws Exception {
         ITextRenderer renderer = new ITextRenderer();
