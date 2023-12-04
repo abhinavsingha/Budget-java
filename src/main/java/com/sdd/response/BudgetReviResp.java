@@ -15,6 +15,7 @@ public class BudgetReviResp {
     private CgUnit unit;
     private String allocationAmount;
     private String expenditureAmount;
+    private String selfExpenditureAmount;
     private AmountUnit amountType;
     private String status;
     private String revisedAmount;
