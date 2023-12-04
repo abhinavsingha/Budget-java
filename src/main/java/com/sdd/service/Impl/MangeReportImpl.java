@@ -5869,7 +5869,7 @@ public class MangeReportImpl implements MangeReportService {
             PdfPCell cell1 = new PdfPCell(new Phrase(bHeadType, cellFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("UNIT", cellFont));
             PdfPCell cell3 = new PdfPCell(new Phrase("ALLOCATION AMOUNT", cellFont));
-            PdfPCell cell4 = new PdfPCell(new Phrase("ADDITIONAL AMOUNT", cellFont));
+            PdfPCell cell4 = new PdfPCell(new Phrase("ADDITIONAL/WITHDRAWAL AMOUNT", cellFont));
             PdfPCell cell5 = new PdfPCell(new Phrase("REVISED AMOUNT", cellFont));
             cell1.setPadding(10);
             cell2.setPadding(10);
@@ -5892,14 +5892,14 @@ public class MangeReportImpl implements MangeReportService {
             double amount = 0.0;
             double amountUnit;
             double finAmount;
-            double prevAllocAmount;
+            double prevAllocAmount=0.0;
             double oldAllocAmount=0.0;
             double reAmount;
             double s2 = 0.0;
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetails = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0", "0", "Approved");
-                //List<BudgetAllocation> reportDetails1 = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+                //List<BudgetAllocation> reportDetails = reportDetailss.stream().filter(e -> (Double.valueOf(e.getAllocationAmount()) != 0) && (Double.valueOf(e.getPrevAllocAmount()) != 0) || Double.valueOf(e.getAllocationAmount()) != 0) && (e.getPrevAllocAmount() !=null)).collect(Collectors.toList());
                 //List<BudgetAllocation> reportDetails = reportDetails1.stream().filter(e -> Double.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
                 if (reportDetails.size() <= 0) {
                     continue;
@@ -5918,8 +5918,20 @@ public class MangeReportImpl implements MangeReportService {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
-                    amount = Double.valueOf(row.getAllocationAmount());
-                    prevAllocAmount=Double.valueOf(row.getPrevAllocAmount());
+                    if(row.getPrevAllocAmount() ==null ){
+                        prevAllocAmount=0.0;
+                    }else{
+                        prevAllocAmount=Double.valueOf(row.getPrevAllocAmount());
+                    }
+                    if(row.getAllocationAmount() ==null ){
+                        amount=0.0;
+                    }else {
+                        amount = Double.valueOf(row.getAllocationAmount());
+                    }
+
+                    if(amount==0 && prevAllocAmount==0){
+                        continue;
+                    }
 
 
                     oldAllocAmount = prevAllocAmount * amountUnit / reqAmount;
@@ -6169,11 +6181,11 @@ public class MangeReportImpl implements MangeReportService {
             XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
             boldText(paragraphtableRowOne1.createRun(), 12, "UNIT ", true);
             XWPFParagraph paragraphtableRowOne2 = tableRowOne.getCell(2).addParagraph();
-            boldText(paragraphtableRowOne2.createRun(), 12, "ALLOCATION", true);
+            boldText(paragraphtableRowOne2.createRun(), 12, "ALLOCATION AMOUNT", true);
             XWPFParagraph paragraphtableRowOne3 = tableRowOne.getCell(3).addParagraph();
-            boldText(paragraphtableRowOne3.createRun(), 12, "ADDITIONAL", true);
+            boldText(paragraphtableRowOne3.createRun(), 12, "ADDITIONAL/WITHDRAWAL AMOUNT", true);
             XWPFParagraph paragraphtableRowOne4 = tableRowOne.getCell(4).addParagraph();
-            boldText(paragraphtableRowOne4.createRun(), 12, "REVISED", true);
+            boldText(paragraphtableRowOne4.createRun(), 12, "REVISED AMOUNT", true);
 
 
             int i = 1;
@@ -6216,9 +6228,20 @@ public class MangeReportImpl implements MangeReportService {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
-                    amount = Double.parseDouble(reportDetails.get(r).getAllocationAmount());
-                    prevAllocAmount=Double.valueOf(reportDetails.get(r).getPrevAllocAmount());
+                    if(reportDetails.get(r).getPrevAllocAmount() ==null ){
+                        prevAllocAmount=0.0;
+                    }else{
+                        prevAllocAmount=Double.valueOf(reportDetails.get(r).getPrevAllocAmount());
+                    }
+                    if(reportDetails.get(r).getAllocationAmount() ==null ){
+                        amount=0.0;
+                    }else {
+                        amount = Double.valueOf(reportDetails.get(r).getAllocationAmount());
+                    }
 
+                    if(amount==0 && prevAllocAmount==0){
+                        continue;
+                    }
 
                     oldAllocAmount = prevAllocAmount * amountUnit / reqAmount;
                     finAmount = amount * amountUnit / reqAmount;
@@ -12147,8 +12170,8 @@ public class MangeReportImpl implements MangeReportService {
             for (String val : rowData) {
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetail = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0", "0", "Approved");
-                List<BudgetAllocation> reportDetails = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
-                //List<BudgetAllocation> reportDetails1 = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetailss = reportDetail.stream().filter(e -> !e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+                List<BudgetAllocation> reportDetails = reportDetailss.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0 && Double.valueOf(e.getPrevAllocAmount()) != 0 ).collect(Collectors.toList());
                 //List<BudgetAllocation> reportDetails = reportDetails1.stream().filter(e -> Double.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
 
                 BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
@@ -12162,8 +12185,20 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
 
-                    newTotalAlloc = Double.valueOf(reportDetails.get(r).getAllocationAmount());
-                    prevAllocAmount=Double.valueOf(reportDetails.get(r).getPrevAllocAmount());
+                    if(reportDetails.get(r).getPrevAllocAmount() ==null ){
+                        prevAllocAmount=0.0;
+                    }else{
+                        prevAllocAmount=Double.valueOf(reportDetails.get(r).getPrevAllocAmount());
+                    }
+                    if(reportDetails.get(r).getAllocationAmount() ==null ){
+                        newTotalAlloc=0.0;
+                    }else {
+                        newTotalAlloc = Double.valueOf(reportDetails.get(r).getAllocationAmount());
+                    }
+
+                    if(newTotalAlloc==0 && prevAllocAmount==0){
+                        continue;
+                    }
 
                     double preAllocAmnt = prevAllocAmount * amountUnit / reqAmount;
 
