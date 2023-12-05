@@ -11501,12 +11501,12 @@ public class MangeReportImpl implements MangeReportService {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
-        String hrunitId = "";
-        if (hrData.getUnitId().equalsIgnoreCase("001321")) {
-            hrunitId = "000225";
-        } else {
-            hrunitId = hrData.getUnitId();
-        }
+//        String hrunitId = "";
+//        if (hrData.getUnitId().equalsIgnoreCase("001321")) {
+//            hrunitId = "000225";
+//        } else {
+//            hrunitId = hrData.getUnitId();
+//        }
 
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
         if (hrData == null) {
@@ -11533,22 +11533,31 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
-        boolean HEADUNITID;
-        List<CgUnit> hdunit = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrunitId);
-        if (hdunit.size() > 0) {
-            HEADUNITID = true;
-        } else {
-            HEADUNITID = false;
+
+        List<CdaRevisionData> checks= new ArrayList<>();
+        List<CdaRevisionData> check = cdaRevisionDataRepo.findByAuthGroupIdAndIsSelfAndIsAutoAssignAllocationAndIsFlag(authGroupId,"0","0","0");
+        List<CdaRevisionData> checkss=check.stream().filter(e -> e.getToUnitId().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
+
+        boolean flag =false;
+        for(CdaRevisionData data:check){
+            if((data.getToUnitId().equalsIgnoreCase(hrData.getUnitId())) && (data.getIsSelf().equalsIgnoreCase("0")))
+            {
+                flag=true;
+            }
         }
-        //List<BudgetAllocation> check = budgetAllocationRepository.findByAuthGroupId(authGroupId);
-        //List<BudgetAllocation> checks = check.stream().filter(e -> Double.valueOf(e.getRevisedAmount()) != 0).collect(Collectors.toList());
-        List<CdaRevisionData> checks = cdaRevisionDataRepo.findByAuthGroupIdAndIsSelfAndIsAutoAssignAllocationAndIsFlag(authGroupId,"0","0","0");
-        int sz=checks.size();
+
+        if(flag == true){
+            checks.addAll(checkss);
+        }else{
+            checks.addAll(check);
+        }
 
         if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
+
+        int sz=checks.size();
 
         String subHd = checks.get(0).getBudgetHeadId();
         String bHeadType = "";
@@ -11569,12 +11578,7 @@ public class MangeReportImpl implements MangeReportService {
         AllocationType allockData = allocationRepository.findByAllocTypeId(allocationType);
         String allocType = allockData.getAllocType();
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
-//
-//        List<String> rowData = budgetAllocationRepository.findSubHeadByAuthGroupIds(authGroupId);
-//        if (rowData.size() <= 0) {
-//            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-//            }, "RECORD NOT FOUNDS", HttpStatus.OK.value());
-//        }
+
 
         String amtType = "";
         String names = approveName;
@@ -11825,12 +11829,29 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
+        List<CdaRevisionData> check= new ArrayList<>();
+        List<CdaRevisionData> checks = cdaRevisionDataRepo.findByAuthGroupIdAndIsSelfAndIsAutoAssignAllocationAndIsFlag(authGroupId,"0","0","0");
+        List<CdaRevisionData> checkss=checks.stream().filter(e -> e.getToUnitId().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
 
-        List<CdaRevisionData> check = cdaRevisionDataRepo.findByAuthGroupIdAndIsSelfAndIsAutoAssignAllocationAndIsFlag(authGroupId,"0","0","0");
+        boolean flag =false;
+        for(CdaRevisionData data:checks){
+            if((data.getToUnitId().equalsIgnoreCase(hrData.getUnitId())) && (data.getIsSelf().equalsIgnoreCase("0")))
+            {
+                flag=true;
+            }
+        }
+
+        if(flag == true){
+            check.addAll(checkss);
+        }else{
+            check.addAll(checks);
+        }
+
         if (check.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
         }
+
         String subHd = check.get(0).getBudgetHeadId();
         String bHeadType = "";
         BudgetHead bHeadids = subHeadRepository.findByBudgetCodeId(subHd);
