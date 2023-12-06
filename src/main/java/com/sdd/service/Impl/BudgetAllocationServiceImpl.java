@@ -7142,7 +7142,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                         budgetAllocationRevision.setPrevAllocAmount(budgetAllocationRevision.getAllocationAmount() + "");
                         budgetAllocationRevision.setAllocationAmount(totalAmount + "");
 
-
                         budgetAllocationRepository.save(budgetAllocationRevision);
                     }
 
