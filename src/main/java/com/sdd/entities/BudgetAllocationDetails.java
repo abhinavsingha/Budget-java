@@ -86,8 +86,8 @@ public class BudgetAllocationDetails {
     @Column(name = "REVISED_AMOUNT")
     private String revisedAmount;
 
-    @Column(name = "REVISION_BY")
-    private String revisionBy;
+//    @Column(name = "REVISION_BY")
+//    private String revisionBy;
 
     @Column(name = "IS_BUDGET_REVISION")
     private String isBudgetRevision;
