@@ -10701,12 +10701,6 @@ public class MangeReportImpl implements MangeReportService {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
-//        String hrunitId = "";
-//        if (hrData.getUnitId().equalsIgnoreCase("001321")) {
-//            hrunitId = "000225";
-//        } else {
-//            hrunitId = hrData.getUnitId();
-//        }
 
         List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
         if (hrData == null) {
@@ -10753,8 +10747,7 @@ public class MangeReportImpl implements MangeReportService {
         }
 
         if (checks.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+            return getRivisionReceiptReportDoc(authGroupId);
         }
 
         int sz=checks.size();
@@ -11048,8 +11041,8 @@ public class MangeReportImpl implements MangeReportService {
         }
 
         if (check.size() <= 0) {
-            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+
+            return getRivisionReceiptReportPdf(authGroupId);
         }
 
         String subHd = check.get(0).getBudgetHeadId();
@@ -11335,25 +11328,8 @@ public class MangeReportImpl implements MangeReportService {
                 approveRank = findHrData.getRank();
             }
         }
-
-        List<CdaRevisionData> checks= new ArrayList<>();
-        List<CdaRevisionData> check = cdaRevisionDataRepo.findByAuthGroupIdAndIsSelfAndIsAutoAssignAllocationAndIsFlag(authGroupId,"0","0","0");
-        List<CdaRevisionData> checkss=check.stream().filter(e -> e.getToUnitId().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
-
-        boolean flag =false;
-        for(CdaRevisionData data:check){
-            if((data.getToUnitId().equalsIgnoreCase(hrData.getUnitId())) && (data.getIsSelf().equalsIgnoreCase("0")))
-            {
-                flag=true;
-            }
-        }
-
-        if(flag == true){
-            checks.addAll(checkss);
-        }else{
-            checks.addAll(check);
-        }
-
+        List<BudgetAllocation> check = budgetAllocationRepository.findByAuthGroupId(authGroupId);
+        List<BudgetAllocation> checks=check.stream().filter(e-> e.getToUnit().equalsIgnoreCase(hrData.getUnitId())).collect(Collectors.toList());
         if (checks.size() <= 0) {
             return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
             }, "RECORD NOT FOUND", HttpStatus.OK.value());
@@ -11361,7 +11337,7 @@ public class MangeReportImpl implements MangeReportService {
 
         int sz=checks.size();
 
-        String subHd = checks.get(0).getBudgetHeadId();
+        String subHd = checks.get(0).getSubHead();
         String bHeadType = "";
         BudgetHead bHeadids = subHeadRepository.findByBudgetCodeId(subHd);
         if (bHeadids.getRemark().equalsIgnoreCase("REVENUE")) {
@@ -11369,8 +11345,8 @@ public class MangeReportImpl implements MangeReportService {
         } else
             bHeadType = "CAPITAL DETAILED HEAD";
 
-        String allocationType = checks.get(0).getAllocTypeId();
-        String finYearId = checks.get(0).getFinYearId();
+        String allocationType = checks.get(0).getAllocationTypeId();
+        String finYearId = checks.get(0).getFinYear();
         String amountTypeId = checks.get(0).getAmountType();
 
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
@@ -11457,24 +11433,24 @@ public class MangeReportImpl implements MangeReportService {
             double total = 0;
             for (Integer r = 0; r < checks.size(); r++) {
                 amount = Double.valueOf(checks.get(r).getAllocationAmount());
-                revisedAmount = Double.valueOf(checks.get(r).getAmount());
+                revisedAmount = Double.valueOf(checks.get(r).getRevisedAmount());
 
                 AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(checks.get(r).getAmountType());
                 if (amountTypeObj == null) {
                     return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                     }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                 }
-                BudgetHead bHead = subHeadRepository.findByBudgetCodeId(checks.get(r).getBudgetHeadId());
+                BudgetHead bHead = subHeadRepository.findByBudgetCodeId(checks.get(r).getSubHead());
                 amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
-                finAmount = amount;
                 reAmount = revisedAmount;
+                finAmount = amount - reAmount;
                 String s = String.valueOf(reAmount);
-                double newAllocAmount = finAmount + reAmount;
+                double newAllocAmount = amount;
                 if (s.contains("-")) {
                     String s1 = s.replace("-", "");
                     s2 = Double.parseDouble(s1);
                 }
-                CgUnit unitN = cgUnitRepository.findByUnit(checks.get(r).getToUnitId());
+                CgUnit unitN = cgUnitRepository.findByUnit(checks.get(r).getToUnit());
                 XWPFTableRow tableRowOne111 = table11.getRow(r);
                 XWPFParagraph paragraphtableRowOne11 = tableRowOne111.getCell(0).addParagraph();
                 boldText(paragraphtableRowOne11.createRun(), 10, bHead.getSubHeadDescr(), false);
