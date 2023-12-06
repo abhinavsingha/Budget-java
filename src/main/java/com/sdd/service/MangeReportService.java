@@ -60,6 +60,13 @@ public interface MangeReportService {
 
 
 //  UNIT WISE ALLOCATION REPORT
+    ApiResponse<List<FilePathResponse>> getUnitWiseAllocationReport1(UnitWiseAllocationReport reportRequest);
+    ApiResponse<List<FilePathResponse>> getUnitWiseAllocationReportDoc1(UnitWiseAllocationReport reportRequest);
+    ApiResponse<List<BeReportResp>> getUnitWiseAllocationReportExcel1(UnitWiseAllocationReport reportRequest);
+
+
+
+//  UNIT WISE ALLOCATION REPORT
     ApiResponse<List<FilePathResponse>> getUnitWiseAllocationReport(UnitWiseAllocationReport reportRequest);
     ApiResponse<List<FilePathResponse>> getUnitWiseAllocationReportDoc(UnitWiseAllocationReport reportRequest);
     ApiResponse<List<BeReportResp>> getUnitWiseAllocationReportExcel(UnitWiseAllocationReport reportRequest);

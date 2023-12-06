@@ -929,9 +929,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
 
 
-            if (budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1")) {
+            if(budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1") ){
 
-            } else {
+            }else{
                 if (!budgetAllocationSubReport.getStatus().equalsIgnoreCase("Rejected")) {
                     if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
                         continue;
@@ -2159,13 +2159,15 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(i);
 
-            if (budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1")) {
+            if(budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1") ){
 
-            } else {
+            }else{
                 if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
                     continue;
                 }
             }
+
+
 
 
             BudgetAllocationSubResponse budgetAllocationReport = new BudgetAllocationSubResponse();

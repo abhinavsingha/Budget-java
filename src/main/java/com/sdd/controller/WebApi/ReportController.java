@@ -136,19 +136,43 @@ public class ReportController {
 
     //  UNIT WISE ALLOCATION REPORT
     @PostMapping("/getUnitWiseAllocationReport")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitWiseAllocationReport(@RequestBody UnitWiseAllocationReport reportRequest) {
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitWiseAllocationReport1(@RequestBody UnitWiseAllocationReport reportRequest) {
         return new ResponseEntity<>(mangeReportService.getUnitWiseAllocationReport(reportRequest), HttpStatus.OK);
     }
 
     @PostMapping("/getUnitWiseAllocationReportDoc")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitWiseAllocationReportDoc(@RequestBody UnitWiseAllocationReport reportRequest) {
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitWiseAllocationReportDoc1(@RequestBody UnitWiseAllocationReport reportRequest) {
         return new ResponseEntity<>(mangeReportService.getUnitWiseAllocationReportDoc(reportRequest), HttpStatus.OK);
     }
 
     @PostMapping("/getUnitWiseAllocationReportExcel")
-    public ResponseEntity<ApiResponse<List<BeReportResp>>> getUnitWiseAllocationReportExcel(@RequestBody UnitWiseAllocationReport reportRequest) {
+    public ResponseEntity<ApiResponse<List<BeReportResp>>> getUnitWiseAllocationReportExcel1(@RequestBody UnitWiseAllocationReport reportRequest) {
         return new ResponseEntity<>(mangeReportService.getUnitWiseAllocationReportExcel(reportRequest), HttpStatus.OK);
     }
+
+
+
+
+    //  UNIT WISE ALLOCATION REPORT
+    @PostMapping("/getUnitWiseAllocationReport1")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitWiseAllocationReportOldAllocation(@RequestBody UnitWiseAllocationReport reportRequest) {
+        return new ResponseEntity<>(mangeReportService.getUnitWiseAllocationReport(reportRequest), HttpStatus.OK);
+    }
+
+    @PostMapping("/getUnitWiseAllocationReportDoc1")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getUnitWiseAllocationReportDocOldAllocation(@RequestBody UnitWiseAllocationReport reportRequest) {
+        return new ResponseEntity<>(mangeReportService.getUnitWiseAllocationReportDoc(reportRequest), HttpStatus.OK);
+    }
+
+    @PostMapping("/getUnitWiseAllocationReportExcel1")
+    public ResponseEntity<ApiResponse<List<BeReportResp>>> getUnitWiseAllocationReportExcelOldAllocation(@RequestBody UnitWiseAllocationReport reportRequest) {
+        return new ResponseEntity<>(mangeReportService.getUnitWiseAllocationReportExcel(reportRequest), HttpStatus.OK);
+    }
+
+
+
+
+
 
     //  SUBHEAD WISE ALLOCATION REPORT
     @PostMapping("/getSubHeadWiseAllocationReport")

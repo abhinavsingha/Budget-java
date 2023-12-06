@@ -4134,7 +4134,7 @@ public class MangeReportImpl implements MangeReportService {
 
     //  UNIT WISE ALLOCATION REPORT
     @Override
-    public ApiResponse<List<FilePathResponse>> getUnitWiseAllocationReport(UnitWiseAllocationReport reportRequest) {
+    public ApiResponse<List<FilePathResponse>> getUnitWiseAllocationReport1(UnitWiseAllocationReport reportRequest) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -4355,7 +4355,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<FilePathResponse>> getUnitWiseAllocationReportDoc(UnitWiseAllocationReport reportRequest) {
+    public ApiResponse<List<FilePathResponse>> getUnitWiseAllocationReportDoc1(UnitWiseAllocationReport reportRequest) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -4559,7 +4559,7 @@ public class MangeReportImpl implements MangeReportService {
     }
 
     @Override
-    public ApiResponse<List<BeReportResp>> getUnitWiseAllocationReportExcel(UnitWiseAllocationReport reportRequest) {
+    public ApiResponse<List<BeReportResp>> getUnitWiseAllocationReportExcel1(UnitWiseAllocationReport reportRequest) {
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -4651,6 +4651,547 @@ public class MangeReportImpl implements MangeReportService {
                 finAmount = amount * amountUnit / reqAmount;
                 BudgetHead bHead = subHeadRepository.findByBudgetCodeId(budgetAllocationsDetalis.get(k).getSubHead());
                 AllocationType type = allocationRepository.findByAllocTypeId(budgetAllocationsDetalis.get(k).getAllocationTypeId());
+
+                BeReportResp resp = new BeReportResp();
+                resp.setFinYear(findyr.getFinYear());
+                resp.setAllocationType(type.getAllocDesc().toUpperCase());
+                resp.setAmountIn(amountIn);
+                resp.setBudgetHead(bHead.getSubHeadDescr());
+                resp.setUnitName(subUnit.getDescr());
+                resp.setAllocationAmount(String.format("%1$0,1.4f", new BigDecimal(finAmount)));
+
+                count++;
+                sum += finAmount;
+                dtoList.add(resp);
+
+            }
+        } catch (Exception e) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
+        }
+        return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<BeReportResp>>() {
+        });
+    }
+
+    //  UNIT WISE ALLOCATION REPORT
+    @Override
+    public ApiResponse<List<FilePathResponse>> getUnitWiseAllocationReport(UnitWiseAllocationReport reportRequest) {
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+        CgUnit subUnit = cgUnitRepository.findByUnit(reportRequest.getUnitId());
+
+        BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(reportRequest.getFinYearId());
+
+        if (reportRequest.getUnitId() == null || reportRequest.getUnitId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "UNIT ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (reportRequest.getFinYearId() == null || reportRequest.getFinYearId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "FINANCIAL YEAR CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (reportRequest.getAmountTypeId() == null || reportRequest.getAmountTypeId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (reportRequest.getAllocationTypeId() == null || reportRequest.getAllocationTypeId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "ALLOCATION TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (reportRequest.getMajorHd() == null || reportRequest.getMajorHd().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+        String bHeadType = "";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(reportRequest.getMajorHd());
+        if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
+            bHeadType = "REVENUE OBJECT HEAD";
+        } else
+            bHeadType = rowDatas0.get(0).getRemark() + " " + "DETAILED" + " " + "HEAD";
+        List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
+        if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+
+        AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(reportRequest.getAmountTypeId());
+        double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
+        String amountIn = amountObj.getAmountType().toUpperCase();
+//        List<BudgetAllocationDetails> budgetAllocationsDetalis1 = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "0", "0", "Approved");
+        List<BudgetAllocationDetails> budgetAllocationsDetalis1 = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(), "Approved", "0", "0");
+        List<BudgetAllocationDetails> budgetAllocationsDetalis2 = budgetAllocationsDetalis1.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocationDetails> budgetAllocationsDetalis3 = budgetAllocationsDetalis2.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
+        List<BudgetAllocationDetails> budgetAllocationsDetalis = budgetAllocationsDetalis3.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        if (budgetAllocationsDetalis.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        String amtType = budgetAllocationsDetalis.get(0).getAmountType();
+        String names = approveName;
+        String unitName = hrData.getUnit();
+        String rank = approveRank;
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formattedDateTime = now.format(formatter);
+        try {
+            Document document = new Document(PageSize.A4);
+
+            File folder = new File(HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String timemilisec = String.valueOf(System.currentTimeMillis());
+            String path = folder.getAbsolutePath() + "/" + "UnitWise_Allocation" + timemilisec + ".pdf";
+            PdfWriter.getInstance(document, new FileOutputStream(new File(path)));
+
+            document.open();
+
+            Paragraph paragraph = new Paragraph();
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+            paragraph.add(new Chunk("UNIT WISE ALLOCATION REPORT", boldFont));
+            paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(paragraph);
+            document.add(new Paragraph("\n"));
+
+            PdfPTable table1 = new PdfPTable(2);
+            table1.setWidthPercentage(100);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
+            PdfPCell cell1 = new PdfPCell(new Phrase("FINANCIAL YEAR : " + findyr.getFinYear(), cellFont));
+            cell1.setPadding(15);
+            PdfPCell cell2 = new PdfPCell(new Phrase("UNIT :" + subUnit.getDescr(), cellFont));
+            cell2.setPadding(15);
+            table1.addCell(cell1);
+            table1.addCell(cell2);
+            document.add(table1);
+
+            PdfPTable table = new PdfPTable(4);
+            table.setWidthPercentage(100);
+            Font cellFont1 = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
+            PdfPCell cell01 = new PdfPCell(new Phrase("S.L", cellFont1));
+            PdfPCell cell02 = new PdfPCell(new Phrase(bHeadType, cellFont1));
+            PdfPCell cell03 = new PdfPCell(new Phrase("ALLOCATION TYPE", cellFont1));
+            PdfPCell cell04 = new PdfPCell(new Phrase("AMOUNT : (₹ IN " + amountIn + ")", cellFont1));
+            cell01.setPadding(10);
+            cell02.setPadding(10);
+            cell03.setPadding(10);
+            cell04.setPadding(10);
+
+
+            table.addCell(cell01);
+            table.addCell(cell02);
+            table.addCell(cell03);
+            table.addCell(cell04);
+
+
+            int i = 1;
+            String finyear = "";
+            String unit = "";
+            double amount;
+            double amountUnit;
+            double finAmount;
+            double sum = 0.0;
+            for (BudgetAllocationDetails row : budgetAllocationsDetalis) {
+                finyear = findyr.getFinYear();
+                amount = Double.parseDouble(row.getAllocationAmount());
+                AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
+                if (amountTypeObj == null) {
+                    return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+                    }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                }
+                amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
+                finAmount = amount * amountUnit / reqAmount;
+                BudgetHead bHead = subHeadRepository.findByBudgetCodeId(row.getSubHead());
+                AllocationType type = allocationRepository.findByAllocTypeId(row.getAllocTypeId());
+
+                PdfPCell cellaa = new PdfPCell(new Phrase(String.valueOf(i)));
+                PdfPCell cellbb = new PdfPCell(new Phrase(bHead.getSubHeadDescr()));
+                PdfPCell cellcc = new PdfPCell(new Phrase(type.getAllocDesc().toUpperCase()));
+                PdfPCell celldd = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(finAmount))));
+
+                cellaa.setPadding(8);
+                cellbb.setPadding(8);
+                cellcc.setPadding(8);
+                celldd.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+
+                table.addCell(cellaa);
+                table.addCell(cellbb);
+                table.addCell(cellcc);
+                table.addCell(celldd);
+
+                i++;
+                sum += finAmount;
+            }
+            Font cellFont2 = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
+            PdfPCell cell20 = new PdfPCell(new Phrase("TOTAL", cellFont2));
+            PdfPCell cell21 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(sum + ""), cellFont2));
+            cell20.setPadding(10);
+            cell21.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+
+            table.addCell(cell20);
+            table.addCell("");
+            table.addCell("");
+            table.addCell(cell21);
+
+            document.add(table);
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n"));
+
+            PdfPTable tables1 = new PdfPTable(4);
+            tables1.setWidthPercentage(100);
+
+            PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
+            PdfPCell cell200 = new PdfPCell(new Phrase(""));
+            PdfPCell cell300 = new PdfPCell(new Phrase(""));
+            PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
+
+            cell100.setBorder(0);
+            cell200.setBorder(0);
+            cell300.setBorder(0);
+            cell400.setBorder(0);
+            cell400.setPadding(20);
+
+            tables1.addCell(cell100);
+            tables1.addCell(cell200);
+            tables1.addCell(cell300);
+            tables1.addCell(cell400);
+            document.add(tables1);
+
+            document.close();
+            FilePathResponse dto = new FilePathResponse();
+            dto.setPath(HelperUtils.FILEPATH + "UnitWise_Allocation" + timemilisec + ".pdf");
+            dto.setFileName("UnitWise_Allocation" + timemilisec + ".pdf");
+            dtoList.add(dto);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+        });
+    }
+
+    @Override
+    public ApiResponse<List<FilePathResponse>> getUnitWiseAllocationReportDoc(UnitWiseAllocationReport reportRequest) {
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        List<FilePathResponse> dtoList = new ArrayList<FilePathResponse>();
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+
+        if (reportRequest.getUnitId() == null || reportRequest.getUnitId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "UNIT ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (reportRequest.getFinYearId() == null || reportRequest.getFinYearId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "FINANCIAL YEAR CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (reportRequest.getAmountTypeId() == null || reportRequest.getAmountTypeId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (reportRequest.getAllocationTypeId() == null || reportRequest.getAllocationTypeId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "ALLOCATION TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (reportRequest.getMajorHd() == null || reportRequest.getMajorHd().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+
+        String bHeadType = "";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(reportRequest.getMajorHd());
+        if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
+            bHeadType = "REVENUE OBJECT HEAD";
+        } else
+            bHeadType = rowDatas0.get(0).getRemark() + " " + "DETAILED" + " " + "HEAD";
+        List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
+        if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+
+
+        CgUnit subUnit = cgUnitRepository.findByUnit(reportRequest.getUnitId());
+        BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(reportRequest.getFinYearId());
+        AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(reportRequest.getAmountTypeId());
+        double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
+        String amountIn = amountObj.getAmountType();
+        List<BudgetAllocationDetails> budgetAllocationsDetalis1 = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(),"Approved", "0", "0" );
+        List<BudgetAllocationDetails> budgetAllocationsDetalis2 = budgetAllocationsDetalis1.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocationDetails> budgetAllocationsDetalis3 = budgetAllocationsDetalis2.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
+        List<BudgetAllocationDetails> budgetAllocationsDetalis = budgetAllocationsDetalis3.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        if (budgetAllocationsDetalis.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        int size = budgetAllocationsDetalis.size();
+        try {
+            XWPFDocument document = new XWPFDocument();
+            XWPFParagraph headingParagraph = document.createParagraph();
+            headingParagraph.setAlignment(ParagraphAlignment.CENTER);
+            headingParagraph.setStyle("Heading1");
+            XWPFRun headingRun = headingParagraph.createRun();
+            headingRun.setText("UNIT WISE ALLOCATION REPORT");
+            headingRun.setBold(true);
+            headingRun.setFontSize(16);
+
+            XWPFParagraph spacingParagraphss = document.createParagraph();
+            spacingParagraphss.setSpacingAfter(20);
+
+            File folder = new File(HelperUtils.LASTFOLDERPATH);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String timemilisec = String.valueOf(System.currentTimeMillis());
+            String path = folder.getAbsolutePath() + "/" + "UnitWise_Allocation_Report" + timemilisec + ".docx";
+            FileOutputStream out = new FileOutputStream(new File(path));
+
+            XWPFTable table = document.createTable(1, 2);
+            table.setWidth("100%");
+            XWPFTableRow tableRowOne = table.getRow(0);
+            XWPFParagraph paragraphtableRowOne = tableRowOne.getCell(0).addParagraph();
+            boldText(paragraphtableRowOne.createRun(), 12, "FINANCIAL YEAR : " + findyr.getFinYear(), true);
+            XWPFParagraph paragraphtableRowOne1 = tableRowOne.getCell(1).addParagraph();
+            boldText(paragraphtableRowOne1.createRun(), 12, "UNIT : " + subUnit.getDescr(), true);
+
+            XWPFParagraph spacingParagraph = document.createParagraph();
+            spacingParagraph.setSpacingAfter(02);
+
+            XWPFTable table1 = document.createTable(size + 1, 4);
+            table1.setWidth("100%");
+            XWPFTableRow tableRow = table1.getRow(0);
+            XWPFParagraph paragraphtableRow0 = tableRow.getCell(0).addParagraph();
+            boldText(paragraphtableRow0.createRun(), 12, "SERIAL NO", true);
+            XWPFParagraph paragraphtableRow1 = tableRow.getCell(1).addParagraph();
+            boldText(paragraphtableRow1.createRun(), 12, bHeadType, true);
+            XWPFParagraph paragraphtableRow2 = tableRow.getCell(2).addParagraph();
+            boldText(paragraphtableRow2.createRun(), 12, "ALLOCATION TYPE", true);
+            XWPFParagraph paragraphtableRow3 = tableRow.getCell(3).addParagraph();
+            boldText(paragraphtableRow3.createRun(), 12, "ALLOCATION AMOUNT : (₹ IN " + amountIn + ")", true);
+
+            int count = 1;
+            double amount;
+            double amountUnit;
+            double finAmount;
+            double sum = 0.0;
+            for (Integer k = 0; k < budgetAllocationsDetalis.size(); k++) {
+                amount = Double.parseDouble(budgetAllocationsDetalis.get(k).getAllocationAmount());
+                AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(k).getAmountType());
+                if (amountTypeObj == null) {
+                    return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+                    }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                }
+                amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
+                finAmount = amount * amountUnit / reqAmount;
+                BudgetHead bHead = subHeadRepository.findByBudgetCodeId(budgetAllocationsDetalis.get(k).getSubHead());
+                AllocationType type = allocationRepository.findByAllocTypeId(budgetAllocationsDetalis.get(k).getAllocTypeId());
+
+                XWPFTableRow tableRows = table1.getRow(k + 1);
+                XWPFParagraph paragraphtableRow01 = tableRows.getCell(0).addParagraph();
+                boldText(paragraphtableRow01.createRun(), 10, Integer.toString(count), false);
+
+                XWPFParagraph paragraphtableRow11 = tableRows.getCell(1).addParagraph();
+                boldText(paragraphtableRow11.createRun(), 10, bHead.getSubHeadDescr(), false);
+
+                XWPFParagraph paragraphtableRow21 = tableRows.getCell(2).addParagraph();
+                boldText(paragraphtableRow21.createRun(), 10, type.getAllocDesc().toUpperCase(), false);
+
+                XWPFParagraph paragraphtableRow31 = tableRows.getCell(3).addParagraph();
+                paragraphtableRow31.setAlignment(ParagraphAlignment.RIGHT);
+                boldText(paragraphtableRow31.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
+                count++;
+                sum += finAmount;
+
+            }
+
+            XWPFTable table222 = document.createTable(1, 4);
+            table222.setWidth("100%");
+            XWPFTableRow tableRowOne222 = table222.getRow(0);
+            XWPFParagraph paragraphtableRowOne222 = tableRowOne222.getCell(0).addParagraph();
+            boldText(paragraphtableRowOne222.createRun(), 12, "TOTAL", true);
+            XWPFParagraph paragraphtableRowOne1222 = tableRowOne222.getCell(1).addParagraph();
+            boldText(paragraphtableRowOne1222.createRun(), 12, "", true);
+            XWPFParagraph paragraphtableRowOne2222 = tableRowOne222.getCell(2).addParagraph();
+            boldText(paragraphtableRowOne2222.createRun(), 12, "", true);
+            XWPFParagraph paragraphtableRowOne2233 = tableRowOne222.getCell(3).addParagraph();
+            paragraphtableRowOne2233.setAlignment(ParagraphAlignment.RIGHT);
+            boldText(paragraphtableRowOne2233.createRun(), 12, ConverterUtils.addDecimalPoint(sum + ""), true);
+
+            String names = approveName;
+            String unitName = hrData.getUnit();
+            String rank = approveRank;
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String formattedDateTime = now.format(formatter);
+            XWPFParagraph mainParagraph = document.createParagraph();
+            mainParagraph = document.createParagraph();
+            mainParagraph.createRun().addBreak();
+            mainParagraph = document.createParagraph();
+            boldText(mainParagraph.createRun(), 10, formattedDateTime + "", true);
+            mainParagraph = document.createParagraph();
+            normalText(mainParagraph.createRun(), 10, names + "", true);
+            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
+            mainParagraph = document.createParagraph();
+            normalText(mainParagraph.createRun(), 10, rank + "", true);
+            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
+            mainParagraph = document.createParagraph();
+            normalText(mainParagraph.createRun(), 10, unitName + "", true);
+            mainParagraph.setAlignment(ParagraphAlignment.RIGHT);
+            document.write(out);
+            out.close();
+            document.close();
+            FilePathResponse dto = new FilePathResponse();
+            dto.setPath(HelperUtils.FILEPATH + "UnitWise_Allocation_Report" + timemilisec + ".docx");
+            dto.setFileName("UnitWise_Allocation_Report" + timemilisec + ".docx");
+            dtoList.add(dto);
+        } catch (Exception e) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Error occurred");
+        }
+        return ResponseUtils.createSuccessResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+        });
+    }
+
+    @Override
+    public ApiResponse<List<BeReportResp>> getUnitWiseAllocationReportExcel(UnitWiseAllocationReport reportRequest) {
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        List<BeReportResp> dtoList = new ArrayList<BeReportResp>();
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+
+        if (reportRequest.getUnitId() == null || reportRequest.getUnitId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
+            }, "UNIT ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (reportRequest.getFinYearId() == null || reportRequest.getFinYearId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
+            }, "FINANCIAL YEAR CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (reportRequest.getAmountTypeId() == null || reportRequest.getAmountTypeId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
+            }, "AMOUNT TYPE CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (reportRequest.getAllocationTypeId() == null || reportRequest.getAllocationTypeId().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
+            }, "ALLOCATION TYPE ID CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        if (reportRequest.getMajorHd() == null || reportRequest.getMajorHd().isEmpty()) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
+            }, "MAJOR HEAD CAN NOT BE NULL OR EMPTY", HttpStatus.OK.value());
+        }
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.size() == 0) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+        String approverPId = "";
+        String approveName = "";
+        String approveRank = "";
+
+        for (Integer k = 0; k < hrDataList.size(); k++) {
+            HrData findHrData = hrDataList.get(k);
+            if (findHrData.getRoleId().contains(HelperUtils.BUDGETAPPROVER)) {
+                approverPId = findHrData.getPid();
+                approveName = findHrData.getFullName();
+                approveRank = findHrData.getRank();
+            }
+        }
+        String bHeadType = "";
+        List<BudgetHead> rowDatas0 = subHeadRepository.findByMajorHeadOrderBySerialNumberAsc(reportRequest.getMajorHd());
+        if (rowDatas0.get(0).getRemark().equalsIgnoreCase("REVENUE")) {
+            bHeadType = "DETAILED OBJECT HEAD";
+        } else
+            bHeadType = "DETAILED" + " " + rowDatas0.get(0).getRemark() + " " + "HEAD";
+        List<String> rowDatas = rowDatas0.stream().map(BudgetHead::getBudgetCodeId).collect(Collectors.toList());
+        List<String> rowData = rowDatas.stream().sorted(Comparator.comparing(str -> str.substring(str.length() - 2))).collect(Collectors.toList());
+        if (rowData.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
+            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        CgUnit subUnit = cgUnitRepository.findByUnit(reportRequest.getUnitId());
+        BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(reportRequest.getFinYearId());
+        AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(reportRequest.getAmountTypeId());
+        double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
+        String amountIn = amountObj.getAmountType();
+        List<BudgetAllocationDetails> budgetAllocationsDetalis1 = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(reportRequest.getUnitId(), reportRequest.getFinYearId(), reportRequest.getAllocationTypeId(),"Approved", "0", "0");
+        List<BudgetAllocationDetails> budgetAllocationsDetalis2 = budgetAllocationsDetalis1.stream().filter(data -> rowData.contains(data.getSubHead())).collect(Collectors.toList());
+        List<BudgetAllocationDetails> budgetAllocationsDetalis3 = budgetAllocationsDetalis2.stream().sorted(Comparator.comparing(data -> data.getSubHead().substring(data.getSubHead().length() - 2))).collect(Collectors.toList());
+        List<BudgetAllocationDetails> budgetAllocationsDetalis = budgetAllocationsDetalis3.stream().filter(e -> Double.valueOf(e.getAllocationAmount()) != 0).collect(Collectors.toList());
+        if (budgetAllocationsDetalis.size() <= 0) {
+            return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
+            }, "RECORD NOT FOUND", HttpStatus.OK.value());
+        }
+        int size = budgetAllocationsDetalis.size();
+        try {
+
+            int count = 1;
+            double amount;
+            double amountUnit;
+            double finAmount;
+            double sum = 0.0;
+            for (Integer k = 0; k < budgetAllocationsDetalis.size(); k++) {
+                amount = Double.parseDouble(budgetAllocationsDetalis.get(k).getAllocationAmount());
+                AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(k).getAmountType());
+                if (amountTypeObj == null) {
+                    return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<BeReportResp>>() {
+                    }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                }
+                amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
+                finAmount = amount * amountUnit / reqAmount;
+                BudgetHead bHead = subHeadRepository.findByBudgetCodeId(budgetAllocationsDetalis.get(k).getSubHead());
+                AllocationType type = allocationRepository.findByAllocTypeId(budgetAllocationsDetalis.get(k).getAllocTypeId());
 
                 BeReportResp resp = new BeReportResp();
                 resp.setFinYear(findyr.getFinYear());
