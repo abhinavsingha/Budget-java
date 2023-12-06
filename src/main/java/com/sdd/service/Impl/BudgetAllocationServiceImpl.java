@@ -1961,6 +1961,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             if (!(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getIsAutoAssignAllocation().equalsIgnoreCase("1"))) {
 
+                CgUnit HeadU=cgUnitRepository.findByUnit(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
+                String FromHeadUnit=HeadU.getSubUnit();
+
                 BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
                 budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()));
                 budgetAllocationDetails.setRevisedAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRevisedAmount()));
@@ -1968,7 +1971,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
                 budgetAllocationDetails.setAllocTypeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId());
                 budgetAllocationDetails.setFinYear(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId());
-                budgetAllocationDetails.setFromUnit(hrData.getUnitId());
+                budgetAllocationDetails.setFromUnit(FromHeadUnit);
                 budgetAllocationDetails.setToUnit(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
                 budgetAllocationDetails.setSubHead(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId());
                 budgetAllocationDetails.setStatus("Pending");
@@ -1979,6 +1982,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 budgetAllocationDetails.setIsDelete("0");
                 budgetAllocationDetails.setIsTYpe("R");
                 budgetAllocationDetails.setIsBudgetRevision("1");
+                budgetAllocationDetails.setRevisionBy(hrData.getUnitId());
                 budgetAllocationDetails.setRefTransactionId(refTransID);
                 budgetAllocationDetails.setUserId(hrData.getPid());
                 budgetAllocationDetails.setAmountType(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
