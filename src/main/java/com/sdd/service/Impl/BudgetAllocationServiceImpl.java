@@ -950,6 +950,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setRefTransactionId(budgetAllocationSubReport.getRefTransactionId());
             budgetAllocationReport.setUserId(budgetAllocationSubReport.getUserId());
             budgetAllocationReport.setIsTYpe(budgetAllocationSubReport.getIsTYpe());
+            budgetAllocationReport.setIsBudgetRevision(budgetAllocationSubReport.getIsBudgetRevision());
+            budgetAllocationReport.setIsFlag(budgetAllocationSubReport.getIsDelete());
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
             budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
