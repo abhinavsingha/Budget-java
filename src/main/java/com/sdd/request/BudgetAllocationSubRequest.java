@@ -18,6 +18,7 @@ public class BudgetAllocationSubRequest {
     private String isAutoAssignAllocation ;
     private String remark;
     private String revisedAmount;
+
     private String allocationTypeId;
     private String beAllocationTypeId;
     private String amountTypeId;
@@ -25,4 +26,6 @@ public class BudgetAllocationSubRequest {
 
     private List<CdaTransAllocationRequest> cdaParkingId;
 
+//  Only Use for revisedAmount
+    private String revisedAmountMain;
 }

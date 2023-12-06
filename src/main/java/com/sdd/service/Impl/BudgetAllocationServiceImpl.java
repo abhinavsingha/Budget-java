@@ -2012,6 +2012,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                         cdaRevisionData.setAllocTypeId(revisonData.getAllocationTypeId());
                         cdaRevisionData.setAuthGroupId(authGrouPid);
                         cdaRevisionData.setIsFlag("0");
+                        cdaRevisionData.setReviserAmount(revisonData.getRevisedAmountMain());
                         cdaRevisionData.setAllocationAmount(revisonData.getAmount());
                         cdaRevisionData.setAmountType(revisonData.getAmountTypeId());
                         cdaRevisionData.setCdaTransId(cdaParkingTrans.getCdaParkingId());
@@ -2034,6 +2035,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                         cdaRevisionData.setAuthGroupId(authGrouPid);
                         cdaRevisionData.setIsFlag("0");
                         cdaRevisionData.setAmount(revisonData.getRevisedAmount());
+                        cdaRevisionData.setReviserAmount(revisonData.getRevisedAmountMain());
                         cdaRevisionData.setAllocationAmount(revisonData.getAmount());
                         cdaRevisionData.setAmountType(revisonData.getAmountTypeId());
                         cdaRevisionData.setCdaTransId(cdaParkingTrans.getCdaParkingId());
@@ -2061,6 +2063,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 cdaRevisionData.setAllocTypeId(revisonData.getAllocationTypeId());
                 cdaRevisionData.setAuthGroupId(authGrouPid);
                 cdaRevisionData.setIsFlag("0");
+                cdaRevisionData.setReviserAmount(revisonData.getRevisedAmountMain());
                 cdaRevisionData.setIsAutoAssignAllocation(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getIsAutoAssignAllocation());
                 cdaRevisionData.setAmountType(revisonData.getAmountTypeId());
                 cdaRevisionData.setRemainingAmount(revisonData.getRemainingAmount());
@@ -7355,7 +7358,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     budgetAllocation.setUnallocatedAmount("0");
                     budgetAllocation.setUnallocatedAmount("0.0000");
                     budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(revisionRemainingAmountSend.get(v).getAmount() + ""));
-                    budgetAllocation.setRevisedAmount(ConverterUtils.addDecimalPoint(revisionRemainingAmountSend.get(v).getAmount() + ""));
+                    budgetAllocation.setRevisedAmount(ConverterUtils.addDecimalPoint(revisionRemainingAmountSend.get(v).getReviserAmount() + ""));
                     budgetAllocation.setUserId(hrData.getPid());
                     budgetAllocation.setStatus("Approved");
                     budgetAllocation.setPrevInitial("1");

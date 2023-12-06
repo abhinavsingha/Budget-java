@@ -35,6 +35,9 @@ public class CdaRevisionData {
     @Column(name = "AMOUNT")
     private String amount;
 
+    @Column(name = "REVISED_AMOUNT")
+    private String reviserAmount;
+
     @Column(name = "CREATED_ON")
     private Timestamp createdOn;
 
