@@ -919,21 +919,25 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
         List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupId(groupId);
-        if (budgetAllocations.size() == 0) {
-            budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "1");
-        }
+//        if (budgetAllocations.size() == 0) {
+//            budgetAllocations = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(groupId, "1");
+//        }
 
 
         for (Integer i = 0; i < budgetAllocations.size(); i++) {
 
             BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
 
-            if (!budgetAllocationSubReport.getStatus().equalsIgnoreCase("Rejected")) {
-                if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
-                    continue;
+
+            if (budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1")) {
+
+            } else {
+                if (!budgetAllocationSubReport.getStatus().equalsIgnoreCase("Rejected")) {
+                    if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                        continue;
+                    }
                 }
             }
-
 
             BudgetAllocationSubResponse budgetAllocationReport = new BudgetAllocationSubResponse();
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
@@ -2155,8 +2159,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(i);
 
-            if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
-                continue;
+            if (budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1")) {
+
+            } else {
+                if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                    continue;
+                }
             }
 
 
@@ -7208,9 +7216,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             BudgetAllocationDetails budgetAllocationRevision = budgetAllocationDetailsList.get(y);
                             budgetAllocationRevision.setIsTYpe("REVISION");
                             budgetAllocationRevision.setPrevInitial("1");
-                            budgetAllocationRevision.setPrevAllocAmount(budgetAllocationRevision.getAllocationAmount() + "");
+//                            budgetAllocationRevision.setPrevAllocAmount(budgetAllocationRevision.getAllocationAmount() + "");
 
-                            budgetAllocationRevision.setAllocationAmount("0");
+//                            budgetAllocationRevision.setAllocationAmount("0");
                             budgetAllocationDetailsRepository.save(budgetAllocationRevision);
 
 
@@ -7307,8 +7315,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                         budgetAllocationRevision.setIsDelete("1");
 
                         budgetAllocationRevision.setPrevInitial("1");
-                        budgetAllocationRevision.setPrevAllocAmount(budgetAllocationRevision.getAllocationAmount() + "");
-                        budgetAllocationRevision.setAllocationAmount(revisionRemainingAmountSend.get(v).getAmount() + "");
+//                        budgetAllocationRevision.setPrevAllocAmount(budgetAllocationRevision.getAllocationAmount() + "");
+//                        budgetAllocationRevision.setAllocationAmount(revisionRemainingAmountSend.get(v).getAmount() + "");
 
                         budgetAllocationDetailsRepository.save(budgetAllocationRevision);
                     }
