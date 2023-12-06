@@ -193,10 +193,15 @@ public class ReportController {
         return new ResponseEntity<>(mangeReportService.getREAllocationReportDoc(finYearId, allocationType, amountTypeId,majorHd), HttpStatus.OK);
     }
 
-    @GetMapping("/getREAllocationReportExcel/{finYearId}/{allocationType}/{amountTypeId}/{majorHd}")
+    @GetMapping("/getRevisionReportExcel/{finYearId}/{allocationType}/{amountTypeId}/{majorHd}")
+    public ResponseEntity<ApiResponse<List<RivisionReportResp>>> getRevisionReportExcel(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "majorHd") String majorHd) {
+        return new ResponseEntity<>(mangeReportService.getRevisionReportExcel(finYearId, allocationType, amountTypeId,majorHd), HttpStatus.OK);
+    }
+
+/*    @GetMapping("/getREAllocationReportExcel/{finYearId}/{allocationType}/{amountTypeId}/{majorHd}")
     public ResponseEntity<ApiResponse<List<RivisionReportResp>>> getREAllocationReportExcel(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "majorHd") String majorHd) {
         return new ResponseEntity<>(mangeReportService.getREAllocationReportExcel(finYearId, allocationType, amountTypeId,majorHd), HttpStatus.OK);
-    }
+    }*/
 
     //  BEandRE ALLOCATION REPORT
     @GetMapping("/getBEREAllocationReport/{finYearId}/{allocationTypeBE}/{allocationTypeRE}/{amountTypeId}/{majorHd}")
@@ -268,22 +273,7 @@ public class ReportController {
     }
 
 
-    //  REVISED ALLOCATION REPORT
-    @GetMapping("/getRevisedAllocationReport/{authGroupId}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getRevisedAllocationReport(@PathVariable(value = "authGroupId") String authGroupId) {
-        return new ResponseEntity<>(mangeReportService.getRevisedAllocationReport(authGroupId), HttpStatus.OK);
-    }
-
-    @GetMapping("/getRevisedAllocationAprReport/{authGroupId}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getRevisedAllocationAprReport(@PathVariable(value = "authGroupId") String authGroupId) {
-        return new ResponseEntity<>(mangeReportService.getRevisedAllocationAprReport(authGroupId), HttpStatus.OK);
-    }
-
-    @GetMapping("/getRevisedAllocationReportDoc/{authGroupId}")
-    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getRevisedAllocationReportDoc(@PathVariable(value = "authGroupId") String authGroupId) {
-        return new ResponseEntity<>(mangeReportService.getRevisedAllocationReportDoc(authGroupId), HttpStatus.OK);
-    }
-
+    //  REVISED ALLOCATION REPORT AUTHGROUP
     @GetMapping("/getRevisedAllocationAprReportDoc/{authGroupId}")
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getRevisedAllocationAprReportDoc(@PathVariable(value = "authGroupId") String authGroupId) {
         return new ResponseEntity<>(mangeReportService.getRevisedAllocationAprReportDoc(authGroupId), HttpStatus.OK);
@@ -293,10 +283,31 @@ public class ReportController {
         return new ResponseEntity<>(mangeReportService.getRevisedAllocationReportPdf(authGroupId), HttpStatus.OK);
     }
 
-    @GetMapping("/getRevisionReportExcel/{finYearId}/{allocationType}/{amountTypeId}/{majorHd}")
-    public ResponseEntity<ApiResponse<List<RivisionReportResp>>> getRevisionReportExcel(@PathVariable(value = "finYearId") String finYearId, @PathVariable(value = "allocationType") String allocationType, @PathVariable(value = "amountTypeId") String amountTypeId, @PathVariable(value = "majorHd") String majorHd) {
-        return new ResponseEntity<>(mangeReportService.getRevisionReportExcel(finYearId, allocationType, amountTypeId,majorHd), HttpStatus.OK);
+    //  REVISED RIVISION RECEIPT REPORT AUTHGROUP
+
+    @GetMapping("/getRivisionReceiptReportDoc/{authGroupId}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getRivisionReceiptReportDoc(@PathVariable(value = "authGroupId") String authGroupId) {
+        return new ResponseEntity<>(mangeReportService.getRivisionReceiptReportDoc(authGroupId), HttpStatus.OK);
     }
+    @GetMapping("/getRivisionReceiptReportPdf/{authGroupId}")
+    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getRivisionReceiptReportPdf(@PathVariable(value = "authGroupId") String authGroupId) {
+        return new ResponseEntity<>(mangeReportService.getRivisionReceiptReportPdf(authGroupId), HttpStatus.OK);
+    }
+
+//    @GetMapping("/getRevisedAllocationReport/{authGroupId}")
+//    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getRevisedAllocationReport(@PathVariable(value = "authGroupId") String authGroupId) {
+//        return new ResponseEntity<>(mangeReportService.getRevisedAllocationReport(authGroupId), HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/getRevisedAllocationAprReport/{authGroupId}")
+//    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getRevisedAllocationAprReport(@PathVariable(value = "authGroupId") String authGroupId) {
+//        return new ResponseEntity<>(mangeReportService.getRevisedAllocationAprReport(authGroupId), HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/getRevisedAllocationReportDoc/{authGroupId}")
+//    public ResponseEntity<ApiResponse<List<FilePathResponse>>> getRevisedAllocationReportDoc(@PathVariable(value = "authGroupId") String authGroupId) {
+//        return new ResponseEntity<>(mangeReportService.getRevisedAllocationReportDoc(authGroupId), HttpStatus.OK);
+//    }
 
 
 }

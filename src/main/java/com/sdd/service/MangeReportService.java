@@ -77,7 +77,9 @@ public interface MangeReportService {
 //  RE ALLOCATION REPORT
     ApiResponse<List<FilePathResponse>> getREAllocationReport(String finYearId, String allocationType, String amountTypeId,String majorHd);
     ApiResponse<List<FilePathResponse>> getREAllocationReportDoc(String finYearId, String allocationType, String amountTypeId,String majorHd);
-    ApiResponse<List<RivisionReportResp>> getREAllocationReportExcel(String finYearId, String allocationType, String amountTypeId,String majorHd);
+    ApiResponse<List<RivisionReportResp>> getRevisionReportExcel(String finYearId, String allocationType, String amountTypeId,String majorHd);
+
+   // ApiResponse<List<RivisionReportResp>> getREAllocationReportExcel(String finYearId, String allocationType, String amountTypeId,String majorHd);
 
 //  BEandRE ALLOCATION REPORT
     ApiResponse<List<FilePathResponse>> getBEREAllocationReport(String finYearId, String allocationTypeBE, String allocationTypeRE, String amountTypeId,String majorHd);
@@ -105,16 +107,20 @@ public interface MangeReportService {
     ApiResponse<List<MAResponceReport>> getMAAllocationReportExcel(String finYearId, String allocationTypeBE, String allocationTypeRE,String allocationTypeMA, String amountTypeId,String majorHd);
 
 
-    //  REVISED ALLOCATION REPORT
-    ApiResponse<List<FilePathResponse>> getRevisedAllocationReport(String authGroupId);
-
-    ApiResponse<List<FilePathResponse>> getRevisedAllocationAprReport(String authGroupId);
-
-    ApiResponse<List<FilePathResponse>> getRevisedAllocationReportDoc(String authGroupId);
+    //  REVISED ALLOCATION REPORT AUTHGROUP
     ApiResponse<List<FilePathResponse>> getRevisedAllocationAprReportDoc(String authGroupId);
-
     ApiResponse<List<FilePathResponse>> getRevisedAllocationReportPdf(String authGroupId);
-    ApiResponse<List<RivisionReportResp>> getRevisionReportExcel(String finYearId, String allocationType, String amountTypeId,String majorHd);
+
+    //  REVISED RIVISION RECEIPT REPORT AUTHGROUP
+
+    ApiResponse<List<FilePathResponse>> getRivisionReceiptReportDoc(String authGroupId);
+    ApiResponse<List<FilePathResponse>> getRivisionReceiptReportPdf(String authGroupId);
+
+//    ApiResponse<List<FilePathResponse>> getRevisedAllocationReport(String authGroupId);
+//
+//    ApiResponse<List<FilePathResponse>> getRevisedAllocationAprReport(String authGroupId);
+//
+//    ApiResponse<List<FilePathResponse>> getRevisedAllocationReportDoc(String authGroupId);
 
 
 }
