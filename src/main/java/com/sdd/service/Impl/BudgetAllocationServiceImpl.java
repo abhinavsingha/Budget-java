@@ -929,9 +929,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
 
 
-            if(budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1") ){
+            if (budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1")) {
 
-            }else{
+            } else {
                 if (!budgetAllocationSubReport.getStatus().equalsIgnoreCase("Rejected")) {
                     if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
                         continue;
@@ -2161,15 +2161,13 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(i);
 
-            if(budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1") ){
+            if (budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1")) {
 
-            }else{
+            } else {
                 if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
                     continue;
                 }
             }
-
-
 
 
             BudgetAllocationSubResponse budgetAllocationReport = new BudgetAllocationSubResponse();
@@ -7141,17 +7139,18 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                         BudgetAllocation budgetAllocationRevision = data.get(y);
                         budgetAllocationRevision.setIsBudgetRevision("1");
                         budgetAllocationRevision.setIsFlag("1");
+                        budgetAllocationRevision.setRevisedAmount(revisionData.get(z).getReviserAmount());
 
-                        AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationRevision.getAmountType());
-                        if (budgetAllocationRevision.getPrevInitial().equalsIgnoreCase("1")) {
-                            allocationAmount = allocationAmount + Double.parseDouble(budgetAllocationRevision.getPrevAllocAmount()) * amountUnit.getAmount();
-                        } else {
-                            allocationAmount = allocationAmount + Double.parseDouble(budgetAllocationRevision.getAllocationAmount()) * amountUnit.getAmount();
-                        }
-
-
-                        budgetAllocationRevision.setPrevAllocAmount(budgetAllocationRevision.getAllocationAmount() + "");
-                        budgetAllocationRevision.setAllocationAmount(totalAmount + "");
+//                        AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationRevision.getAmountType());
+//                        if (budgetAllocationRevision.getPrevInitial().equalsIgnoreCase("1")) {
+//                            allocationAmount = allocationAmount + Double.parseDouble(budgetAllocationRevision.getPrevAllocAmount()) * amountUnit.getAmount();
+//                        } else {
+//                            allocationAmount = allocationAmount + Double.parseDouble(budgetAllocationRevision.getAllocationAmount()) * amountUnit.getAmount();
+//                        }
+//
+//
+//                        budgetAllocationRevision.setPrevAllocAmount(budgetAllocationRevision.getAllocationAmount() + "");
+//                        budgetAllocationRevision.setAllocationAmount(totalAmount + "");
 
                         budgetAllocationRepository.save(budgetAllocationRevision);
                     }
@@ -7233,8 +7232,102 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     }
 
 
+//                  Budget Revised All Unit Jisko diya gya hai
+
+                    String currentUnitId = revisionData.get(z).getToUnitId();
+                    List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + currentUnitId + "%");
+                    unitList.add(cgUnitRepository.findByUnit(currentUnitId));
+
+                    for (Integer d = 0; d < unitList.size(); d++) {
+
+                        if (unitList.get(d).getUnit().equalsIgnoreCase(revisionData.get(z).getToUnitId())) {
+                            continue;
+                        }
+
+                        List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(unitList.get(d).getUnit(), revisionData.get(z).getFinYearId(), revisionData.get(z).getBudgetHeadId(), revisionData.get(z).getAllocTypeId(), "Approved", "0", "0");
+                        for (Integer y = 0; y < budgetAllocationDetailsList.size(); y++) {
+                            BudgetAllocationDetails budgetAllocationRevision = budgetAllocationDetailsList.get(y);
+                            budgetAllocationRevision.setIsTYpe("REVISION");
+                            budgetAllocationRevision.setPrevInitial("1");
+//                            budgetAllocationRevision.setPrevAllocAmount(budgetAllocationRevision.getAllocationAmount() + "");
+
+//                            budgetAllocationRevision.setAllocationAmount("0");
+                            budgetAllocationDetailsRepository.save(budgetAllocationRevision);
+
+
+                        }
+
+                        List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(unitList.get(d).getUnit(), revisionData.get(z).getFinYearId(), revisionData.get(z).getBudgetHeadId(), revisionData.get(z).getAllocTypeId(), "Approved", "0", "0");
+                        for (Integer y = 0; y < dataBudget.size(); y++) {
+                            BudgetAllocation budgetAllocationRevision = dataBudget.get(y);
+                            budgetAllocationRevision.setIsTYpe("REVISION1");
+
+                            if (budgetAllocationRevision.getPrevInitial().equalsIgnoreCase("1")) {
+                            } else {
+                                budgetAllocationRevision.setPrevAllocAmount(budgetAllocationRevision.getAllocationAmount() + "");
+                            }
+
+                            budgetAllocationRevision.setPrevInitial("1");
+                            budgetAllocationRevision.setAllocationAmount("0");
+                            budgetAllocationRepository.save(budgetAllocationRevision);
+
+
+                            List<MangeInboxOutbox> checkMsgAlreadySendOrNot = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(mainOnlyViewAuthGroup, unitList.get(d).getUnit());
+
+                            if (checkMsgAlreadySendOrNot.size() == 0) {
+                                MangeInboxOutbox mangeInboxOutbox11 = new MangeInboxOutbox();
+
+                                BudgetHead budgetHead11 = subHeadRepository.findByBudgetCodeId(budgetAllocationRevision.getSubHead());
+                                mangeInboxOutbox11.setMangeInboxId(HelperUtils.getMangeInboxId());
+                                mangeInboxOutbox11.setRemarks("Budget Revised");
+                                mangeInboxOutbox11.setIsRebase("0");
+                                mangeInboxOutbox11.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+                                mangeInboxOutbox11.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                                mangeInboxOutbox11.setToUnit(unitList.get(d).getUnit());
+                                mangeInboxOutbox11.setType("In " + budgetHead11.getSubHeadDescr() + " head budget revised by your head unit");
+                                mangeInboxOutbox11.setGroupId(mainOnlyViewAuthGroup);
+                                mangeInboxOutbox11.setIsRebase("0");
+                                mangeInboxOutbox11.setFromUnit(hrData.getUnitId());
+                                mangeInboxOutbox11.setRoleId(hrData.getRoleId());
+                                mangeInboxOutbox11.setCreaterpId(hrData.getPid());
+                                mangeInboxOutbox11.setApproverpId("");
+                                mangeInboxOutbox11.setStatus("Fully Approved");
+                                mangeInboxOutbox11.setAllocationType("");
+                                mangeInboxOutbox11.setIsFlag("1");
+                                mangeInboxOutbox11.setIsArchive("0");
+                                mangeInboxOutbox11.setIsApproved("0");
+                                mangeInboxOutbox11.setIsBgcg("UR");
+                                mangeInboxOutbox11.setState("CR");
+                                mangeInboxOutbox11.setIsRevision(1);
+
+                                mangeInboxOutBoxRepository.save(mangeInboxOutbox11);
+                            }
+
+
+                        }
+
+                        List<CdaParkingTrans> cdaParkingTransList11 = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(revisionData.get(z).getFinYearId(), revisionData.get(z).getBudgetHeadId(), unitList.get(d).getUnit(), revisionData.get(z).getAllocTypeId(), "0");
+
+                        for (Integer k = 0; k < cdaParkingTransList11.size(); k++) {
+                            CdaParkingTrans cdaParkingTrans = cdaParkingTransList11.get(k);
+                            cdaParkingTrans.setIsFlag("1");
+                            cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                            cdaParkingTransRepository.save(cdaParkingTrans);
+                        }
+
+                        List<CdaParkingCrAndDr> cdaParkingCrAndDr11 = parkingCrAndDrRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitIdAndIsRevision(revisionData.get(z).getFinYearId(), revisionData.get(z).getBudgetHeadId(), "0", revisionData.get(z).getAllocTypeId(), unitList.get(d).getUnit(), 0);
+                        for (Integer q = 0; q < cdaParkingCrAndDr11.size(); q++) {
+                            CdaParkingCrAndDr cddata = cdaParkingCrAndDr11.get(q);
+                            cddata.setIsFlag("1");
+                            cddata.setIsRevision(1);
+                            parkingCrAndDrRepository.save(cddata);
+                        }
+                    }
+
+
                 } else {
 
+                    //               Budget Revised All Unit Jisko Kata gya hai
                     String currentUnitId = revisionData.get(z).getToUnitId();
                     List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + currentUnitId + "%");
                     unitList.add(cgUnitRepository.findByUnit(currentUnitId));
