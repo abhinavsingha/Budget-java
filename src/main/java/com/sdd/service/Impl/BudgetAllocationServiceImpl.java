@@ -7184,8 +7184,35 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     budgetAllocation.setAmountType(revisionData.get(z).getAmountType());
                     budgetAllocation.setAuthGroupId(revisionData.get(z).getAuthGroupId());
 
-
                     budgetAllocationRepository.save(budgetAllocation);
+
+                    MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
+                    BudgetHead budgetHead = subHeadRepository.findByBudgetCodeId(budgetAllocation.getSubHead());
+                    mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
+                    mangeInboxOutbox.setRemarks("Budget Revised");
+                    mangeInboxOutbox.setIsRebase("0");
+                    mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+                    mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                    mangeInboxOutbox.setToUnit(budgetAllocation.getToUnit());
+                    mangeInboxOutbox.setType("In " + budgetHead.getSubHeadDescr() + " head budget revised by your head unit");
+                    mangeInboxOutbox.setGroupId(mainOnlyViewAuthGroup);
+                    mangeInboxOutbox.setIsRebase("0");
+                    mangeInboxOutbox.setFromUnit(hrData.getUnitId());
+                    mangeInboxOutbox.setRoleId(hrData.getRoleId());
+                    mangeInboxOutbox.setCreaterpId(hrData.getPid());
+                    mangeInboxOutbox.setApproverpId("");
+                    mangeInboxOutbox.setStatus("Fully Approved");
+                    mangeInboxOutbox.setAllocationType("");
+                    mangeInboxOutbox.setIsFlag("1");
+                    mangeInboxOutbox.setIsArchive("0");
+                    mangeInboxOutbox.setIsApproved("0");
+                    mangeInboxOutbox.setIsBgcg("UR");
+                    mangeInboxOutbox.setState("CR");
+                    mangeInboxOutbox.setIsRevision(1);
+
+                    mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+
+
                     budgetAllocationsListData.add(budgetAllocation);
 
                     List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(revisionData.get(z).getFinYearId(), revisionData.get(z).getBudgetHeadId(), revisionData.get(z).getToUnitId(), revisionData.get(z).getAllocTypeId(), "0");
