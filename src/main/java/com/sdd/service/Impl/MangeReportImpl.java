@@ -6831,10 +6831,10 @@ public class MangeReportImpl implements MangeReportService {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
-                    if(row.getPrevAllocAmount() ==null ){
+                    if(row.getRevisedAmount() ==null ){
                         prevAllocAmount=0.0;
                     }else{
-                        prevAllocAmount=Double.valueOf(row.getPrevAllocAmount());
+                        prevAllocAmount=Double.valueOf(row.getRevisedAmount());
                     }
                     if(row.getAllocationAmount() ==null ){
                         amount=0.0;
@@ -6849,7 +6849,8 @@ public class MangeReportImpl implements MangeReportService {
 
                     oldAllocAmount = prevAllocAmount * amountUnit / reqAmount;
                     finAmount = amount * amountUnit / reqAmount;
-                    reAmount = finAmount - oldAllocAmount;
+                    reAmount =oldAllocAmount;
+                    double oldAlloc=finAmount - reAmount;
 
                     String s = String.valueOf(reAmount);
                     if (s.contains("-")) {
@@ -6861,7 +6862,7 @@ public class MangeReportImpl implements MangeReportService {
 
                     PdfPCell cella1 = new PdfPCell(new Phrase(bHead.getSubHeadDescr()));
                     PdfPCell cella2 = new PdfPCell(new Phrase(unitN.getDescr()));
-                    PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(oldAllocAmount))));
+                    PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(oldAlloc))));
                     PdfPCell cella4 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", new BigDecimal(s2))));
                     PdfPCell cella5 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", new BigDecimal(reAmount))));
                     PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(reAmount))));
@@ -6889,7 +6890,7 @@ public class MangeReportImpl implements MangeReportService {
                         table.addCell(cella6);
                     table.addCell(cella7);
                     count++;
-                    sumExisting += oldAllocAmount;
+                    sumExisting += oldAlloc;
                     sumRE += reAmount;
                 }
                 String sumExisting1 = ConverterUtils.addDecimalPoint(sumExisting + "");
@@ -7152,10 +7153,10 @@ public class MangeReportImpl implements MangeReportService {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
-                    if(reportDetails.get(r).getPrevAllocAmount() ==null ){
+                    if(reportDetails.get(r).getRevisedAmount() ==null ){
                         prevAllocAmount=0.0;
                     }else{
-                        prevAllocAmount=Double.valueOf(reportDetails.get(r).getPrevAllocAmount());
+                        prevAllocAmount=Double.valueOf(reportDetails.get(r).getRevisedAmount());
                     }
                     if(reportDetails.get(r).getAllocationAmount() ==null ){
                         amount=0.0;
@@ -7169,7 +7170,8 @@ public class MangeReportImpl implements MangeReportService {
 
                     oldAllocAmount = prevAllocAmount * amountUnit / reqAmount;
                     finAmount = amount * amountUnit / reqAmount;
-                    reAmount = finAmount - oldAllocAmount;
+                    reAmount = oldAllocAmount;
+                    double oldAlloc=finAmount - reAmount;
 
                     String s = String.valueOf(reAmount);
                     if (s.contains("-")) {
@@ -7191,7 +7193,7 @@ public class MangeReportImpl implements MangeReportService {
 
                     XWPFParagraph paragraphtableRow21 = tableRowOne111.getCell(2).addParagraph();
                     paragraphtableRow21.setAlignment(ParagraphAlignment.RIGHT);
-                    boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(oldAllocAmount)), false);
+                    boldText(paragraphtableRow21.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(oldAlloc)), false);
 
                     XWPFParagraph paragraphtableRow31 = tableRowOne111.getCell(3).addParagraph();
                     paragraphtableRow31.setAlignment(ParagraphAlignment.RIGHT);
@@ -7206,7 +7208,7 @@ public class MangeReportImpl implements MangeReportService {
                     paragraphtableRow41.setAlignment(ParagraphAlignment.RIGHT);
                     boldText(paragraphtableRow41.createRun(), 10, String.format("%1$0,1.4f", new BigDecimal(finAmount)), false);
 
-                    sumExisting += oldAllocAmount;
+                    sumExisting += oldAlloc;
                     sumRE += reAmount;
 
                 }
@@ -7400,10 +7402,10 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
 
-                    if(reportDetails.get(r).getPrevAllocAmount() ==null ){
+                    if(reportDetails.get(r).getRevisedAmount() ==null ){
                         prevAllocAmount=0.0;
                     }else{
-                        prevAllocAmount=Double.valueOf(reportDetails.get(r).getPrevAllocAmount());
+                        prevAllocAmount=Double.valueOf(reportDetails.get(r).getRevisedAmount());
                     }
                     if(reportDetails.get(r).getAllocationAmount() ==null ){
                         newTotalAlloc=0.0;
@@ -7419,7 +7421,9 @@ public class MangeReportImpl implements MangeReportService {
 
                     double newToltalAllocAmnt= newTotalAlloc * amountUnit / reqAmount;
 
-                    reAmount = newToltalAllocAmnt - preAllocAmnt;
+                    double oldAlloc=newToltalAllocAmnt - preAllocAmnt;
+
+                    reAmount = preAllocAmnt;
                     String s = String.valueOf(reAmount);
                     if (s.contains("-")) {
                         String s1 = s.replace("-", "");
@@ -7439,7 +7443,7 @@ public class MangeReportImpl implements MangeReportService {
                         res.setBudgetHead("");
                     }
                     res.setUnitName(unitN.getDescr());
-                    res.setAllocationAmount(String.format("%1$0,1.4f", new BigDecimal(preAllocAmnt)));
+                    res.setAllocationAmount(String.format("%1$0,1.4f", new BigDecimal(oldAlloc)));
                     if (reAmount < 0)
                         res.setAdditionalAmount("(-)" + String.format("%1$0,1.4f", new BigDecimal(s2)));
                     else if (reAmount > 0)
