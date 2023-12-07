@@ -6942,6 +6942,7 @@ public class MangeReportImpl implements MangeReportService {
             cell03.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 
             table.addCell(" ");
+
             table.addCell(cell00);
             table.addCell(cell01);
             table.addCell(cell02);
