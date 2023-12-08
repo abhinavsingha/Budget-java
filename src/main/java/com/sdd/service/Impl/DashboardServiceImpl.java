@@ -619,6 +619,7 @@ public class DashboardServiceImpl implements DashBoardService {
             dataIscgBg.add("BG");
             dataIscgBg.add("BR");
             dataIscgBg.add("RR");
+            dataIscgBg.add("UR");
 
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
 

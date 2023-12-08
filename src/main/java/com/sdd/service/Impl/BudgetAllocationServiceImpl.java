@@ -929,7 +929,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
 
 
-            if (budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1")) {
+            if (budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1") || budgetAllocationSubReport.getPrevInitial().equalsIgnoreCase("1")) {
 
             } else {
                 if (!budgetAllocationSubReport.getStatus().equalsIgnoreCase("Rejected")) {
@@ -2161,7 +2161,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(i);
 
-            if (budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1")) {
+            if (budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1") || budgetAllocationSubReport.getPrevInitial().equalsIgnoreCase("1")) {
 
             } else {
                 if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
@@ -7182,8 +7182,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     budgetAllocation.setPrevAllocAmount(mainAmountRemening + "");
                     budgetAllocation.setAmountType(revisionData.get(z).getAmountType());
                     budgetAllocation.setAuthGroupId(revisionData.get(z).getAuthGroupId());
-
                     budgetAllocationRepository.save(budgetAllocation);
+
 
                     MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
                     BudgetHead budgetHead = subHeadRepository.findByBudgetCodeId(budgetAllocation.getSubHead());
