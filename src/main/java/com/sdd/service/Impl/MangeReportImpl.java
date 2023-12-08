@@ -7125,7 +7125,7 @@ public class MangeReportImpl implements MangeReportService {
                 List<BudgetAllocation> reportDetails = new ArrayList<>();
                 for(BudgetAllocation data :reportDetailss){
                     double alloc= Double.parseDouble(data.getAllocationAmount());
-                    double preAlloc= Double.parseDouble(data.getPrevAllocAmount());
+                    double preAlloc= Double.parseDouble(data.getRevisedAmount());
                     if(alloc ==0 && preAlloc ==0){
 
                     }else{
