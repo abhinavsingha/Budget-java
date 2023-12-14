@@ -148,8 +148,6 @@ public class BudgetAllocationController {
         return new ResponseEntity<>(budgetAllocationService.getBudgetAllocationDataGroupId(groupId), HttpStatus.OK);
     }
 
-
-
     @GetMapping("/getAllGroupIdAndUnitId/{groupId}")
     public ResponseEntity<ApiResponse<BudgetAllocationResponse>> getAllGroupIdAndUnitId(@PathVariable("groupId") String groupId) {
         return new ResponseEntity<>(budgetAllocationService.getAllGroupIdAndUnitId(groupId), HttpStatus.OK);

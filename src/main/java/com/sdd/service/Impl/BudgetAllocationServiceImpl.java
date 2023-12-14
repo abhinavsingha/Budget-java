@@ -928,11 +928,14 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             BudgetAllocationDetails budgetAllocationSubReport = budgetAllocations.get(i);
 
-
-            if (budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1") || budgetAllocationSubReport.getPrevInitial().equalsIgnoreCase("1")) {
-
+            if (budgetAllocationSubReport.getPrevInitial() == null) {
+                if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                    continue;
+                }
             } else {
-                if (!budgetAllocationSubReport.getStatus().equalsIgnoreCase("Rejected")) {
+                if (budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1") || budgetAllocationSubReport.getPrevInitial().equalsIgnoreCase("1")) {
+
+                } else {
                     if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
                         continue;
                     }
@@ -2046,6 +2049,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                         cdaRevisionData.setAmountType(revisonData.getAmountTypeId());
                         cdaRevisionData.setCdaTransId(cdaParkingTrans.getCdaParkingId());
                         cdaRevisionData.setIsSelf("1");
+                        cdaRevisionData.setIsComplete("0");
                         cdaRevisionData.setIsAutoAssignAllocation(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getIsAutoAssignAllocation());
                         cdaRevisionData.setRemainingAmount(revisonData.getRemainingAmount());
                         budgetRevisionRepository.save(cdaRevisionData);
@@ -2075,6 +2079,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 cdaRevisionData.setRemainingAmount(revisonData.getRemainingAmount());
                 cdaRevisionData.setCdaTransId(null);
                 cdaRevisionData.setIsSelf("0");
+                cdaRevisionData.setIsComplete("0");
 
                 budgetRevisionRepository.save(cdaRevisionData);
             }
@@ -2161,14 +2166,19 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(i);
 
-            if (budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1") || budgetAllocationSubReport.getPrevInitial().equalsIgnoreCase("1")) {
-
-            } else {
+            if (budgetAllocationSubReport.getPrevInitial() == null) {
                 if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
                     continue;
                 }
-            }
+            } else {
+                if (budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1") || budgetAllocationSubReport.getPrevInitial().equalsIgnoreCase("1")) {
 
+                } else {
+                    if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                        continue;
+                    }
+                }
+            }
 
             BudgetAllocationSubResponse budgetAllocationReport = new BudgetAllocationSubResponse();
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getCreatedOn());
@@ -3244,6 +3254,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationDetails.get(i).getAllocationAmount()));
             budgetAllocation.setUnallocatedAmount("0");
             budgetAllocation.setRevisedAmount("0");
+            budgetAllocation.setPrevAllocAmount("0");
+            budgetAllocation.setPrevInitial("0");
             budgetAllocation.setUserId(allocationDetails.get(i).getUserId());
             budgetAllocation.setStatus("Pending");
             budgetAllocation.setAmountType(allocationDetails.get(i).getAmountType());
@@ -7103,6 +7115,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         for (Integer z = 0; z < revisionData.size(); z++) {
 
+            if(revisionData.get(z).getIsComplete() != null){
+                if(revisionData.get(z).getIsComplete().equalsIgnoreCase("1")){
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ACTION ALREADY PERFORMED.");
+                }
+            }
+
             if (revisionData.get(z).getToUnitId().equalsIgnoreCase(hrData.getUnitId())) {
 
                 CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingId(revisionData.get(z).getCdaTransId());
@@ -7418,12 +7436,24 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     }
                 }
             }
+
+            CdaRevisionData cdaRevisionData = revisionData.get(z);
+            cdaRevisionData.setIsComplete("1");
+            budgetRevisionRepository.save(cdaRevisionData);
         }
 
 
         ArrayList<String> unitList = new ArrayList<>();
         List<CdaRevisionData> revisionRemainingAmountSend = budgetRevisionRepository.findByAuthGroupIdAndIsAutoAssignAllocation(authRequest.getAuthGroupId(), "1");
         for (Integer v = 0; v < revisionRemainingAmountSend.size(); v++) {
+
+
+            if(revisionRemainingAmountSend.get(v).getIsComplete() != null){
+                if(revisionRemainingAmountSend.get(v).getIsComplete().equalsIgnoreCase("1")){
+                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ACTION ALREADY PERFORMED.");
+                }
+            }
+
 
             if (revisionRemainingAmountSend.get(v).getCdaTransId() == null) {
 
@@ -7559,7 +7589,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             }
 
-
+            CdaRevisionData cdaRevisionData = revisionRemainingAmountSend.get(v);
+            cdaRevisionData.setIsComplete("1");
+            budgetRevisionRepository.save(cdaRevisionData);
         }
 
         Authority authority = new Authority();

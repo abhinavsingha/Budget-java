@@ -54,6 +54,10 @@ public class CdaRevisionData {
     private String isFlag;
 
 
+    @Column(name = "isComplete" ,columnDefinition = "varchar(255) default 0")
+    private String isComplete;
+
+
     @Column(name = "AMOUNT_TYPE")
     private String amountType;
 
