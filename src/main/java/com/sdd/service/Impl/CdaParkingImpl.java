@@ -645,11 +645,11 @@ public class CdaParkingImpl implements CdaParkingService {
 
             cadTotalAmount = cadTotalAmount + Double.parseDouble(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()) * amountUnit.getAmount();
 
-
-            List<BudgetAllocationDetails> budgetAllocationDetailsLists = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(cdaRequest.getAuthGroupId(), "0", "0");
-            if (budgetAllocationDetailsLists.size() == 0) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AUTH GROUP ID");
-            }
+//
+//            List<BudgetAllocationDetails> budgetAllocationDetailsLists = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(cdaRequest.getAuthGroupId(), "0", "0");
+//            if (budgetAllocationDetailsLists.size() == 0) {
+//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AUTH GROUP ID");
+//            }
 
             CdaParking ginNumber = cdaParkingRepository.findByGinNo(cdaRequest.getCdaRequest().get(i).getGinNo());
             if (ginNumber == null) {
@@ -810,7 +810,12 @@ public class CdaParkingImpl implements CdaParkingService {
 
 
         HashMap<String, CdaParkingTransSubResponse> subHeadData = new LinkedHashMap<>();
-
+//        try {
+//                Thread.sleep(10000);
+//        }
+//        catch (Exception e) {
+//            System.out.println(e);
+//        }
 
         List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(), cdaRequest.getAllocationTypeId(), "0", "0", hrData.getUnitId());
 
