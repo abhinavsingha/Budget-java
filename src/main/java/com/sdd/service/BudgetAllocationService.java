@@ -105,6 +105,7 @@ public interface BudgetAllocationService {
 	ApiResponse<DefaultResponse> saveAuthDataRevision3(AuthRequest authRequest);
 
 	ApiResponse<DefaultResponse> saveAuthDataRevision33(AuthRequest authRequest);
+	ApiResponse<DefaultResponse> saveAuthDataRevisionSaveCbAsAllocation(AuthRequest authRequest);
 
 	ApiResponse<BudgetAllocationSaveResponse> saveBudgetRevision2(BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList);
 

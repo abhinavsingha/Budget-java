@@ -31,7 +31,6 @@ public class MangeInboxOutbox {
     @Column(name = "REMARKS")
     private String remarks;
 
-
     @Column(name = "status")
     private String status;
 
@@ -76,7 +75,6 @@ public class MangeInboxOutbox {
 
     @Column(name = "IS_APPROVED")
     private String isApproved;
-
 
     @Column(name = "IS_REBASE")
     private String isRebase;

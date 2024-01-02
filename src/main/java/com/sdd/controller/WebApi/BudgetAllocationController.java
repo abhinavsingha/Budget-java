@@ -281,6 +281,13 @@ public class BudgetAllocationController {
 
 
 
+    @PostMapping("/saveAuthDataRevisionSaveCbAsAllocation")
+    public ResponseEntity<ApiResponse<DefaultResponse>> saveAuthDataRevisionSaveCbAsAllocation(@RequestBody AuthRequest authRequest) {
+        return new ResponseEntity<>(budgetAllocationService.saveAuthDataRevisionSaveCbAsAllocation(authRequest), HttpStatus.OK);
+    }
+
+
+
     @PostMapping("/saveBudgetRevision22")
     public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> saveBudgetRevision2(@RequestBody BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList) {
         return new ResponseEntity<>(budgetAllocationService.saveBudgetRevision2(budgetAllocationSaveRequestList), HttpStatus.OK);

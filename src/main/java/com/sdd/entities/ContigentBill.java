@@ -8,8 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.transaction.Transactional;
-import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
@@ -107,7 +105,15 @@ public class ContigentBill {
     private String isUpdate;
 
 
+    @Column(name = "CREATED_BY")
+    private String createdBy;
 
-    
+    @Column(name = "VERIFIED_BY")
+    private String verifiedBy;
+
+    @Column(name = "APPROVED_BY")
+    private String approved_by;
+
+
 
 }

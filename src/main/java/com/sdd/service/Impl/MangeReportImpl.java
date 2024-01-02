@@ -2397,14 +2397,9 @@ public class MangeReportImpl implements MangeReportService {
                 unitList.add(selfUnit);
 
                 if (cdaParkingTotalList.size() > 0) {
+
                     for (int k = 0; k < cdaParkingTotalList.size(); k++) {
                         List<CdaParkingTrans> cdaData = new ArrayList<CdaParkingTrans>();
-
-//                            for (int p = 0; p < unitList.size(); p++) {
-//                                List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitList.get(p).getUnit());
-//                                cdaData.addAll(cdaTransData);
-//                            }
-
 
                         List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
                         cdaData.addAll(cdaTransData);
@@ -2444,11 +2439,13 @@ public class MangeReportImpl implements MangeReportService {
                         } else {
                             coloumWiseAmount.put(ginWiseData.getCdaName(), amount + "");
                         }
+
                         totalAmount = totalAmount + amount;
                         cdaReportResponse = new CDAReportResponse();
                         cdaReportResponse.setName(ConverterUtils.addDecimalPoint(amount + ""));
                         cdaReportList.add(cdaReportResponse);
                     }
+
                 } else {
                     cdaReportResponse = new CDAReportResponse();
                     cdaReportResponse.setName("0");
@@ -2522,11 +2519,6 @@ public class MangeReportImpl implements MangeReportService {
                             List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId(), unitList.get(p).getUnit());
                             cdaData.addAll(cdaTransData);
                         }
-
-
-//                        List<CdaParkingTrans> cdaTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeId(cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaParkingTotalList.get(k).getGinNo(), "0", cdaReportRequest.getAllocationTypeId());
-//                        cdaData.addAll(cdaTransData);
-
 
                         double amount = 0;
                         for (int m = 0; m < cdaData.size(); m++) {

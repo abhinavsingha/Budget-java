@@ -13,7 +13,9 @@ public interface MangeInboxOutBoxRepository extends JpaRepository<MangeInboxOutb
 
 
     List<MangeInboxOutbox> findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(String toUnit, String isBgOrCg, String isArchived, String isApproved);
+    List<MangeInboxOutbox> findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDescAndCreaterpId(String toUnit, String isBgOrCg, String isArchived, String isApproved, String createdId);
     List<MangeInboxOutbox> findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(String toUnit,String isCgBg, String isApproved);
+    List<MangeInboxOutbox> findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDescAndCreaterpId(String toUnit,String isCgBg, String isApproved, String createdId);
     List<MangeInboxOutbox> findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(String toUnit,String isCgBg,  String isArchvied);
 
 

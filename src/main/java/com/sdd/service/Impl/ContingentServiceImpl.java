@@ -343,6 +343,7 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBill.setOnAccountOf(contingentBillSaveRequest.getOnAccountOf());
             contigentBill.setAuthorityDetails(contingentBillSaveRequest.getAuthorityDetails());
             contigentBill.setInvoiceUploadId(contingentBillSaveRequest.getInvoiceUploadId());
+            contigentBill.setCreatedBy(hrData.getPid());
 
 
             double allocationAmount = 0;
@@ -741,7 +742,7 @@ public class ContingentServiceImpl implements ContingentService {
 
             List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
             contigentBill.setAllocationTypeId(allocationType.get(0).getAllocTypeId());
-
+            contigentBill.setCreatedBy(hrData.getPid());
             contigentBill.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             contigentBill.setInvoiceNO(contingentBillSaveRequest.getInvoiceNo());
             contigentBill.setInvoiceDate(contingentBillSaveRequest.getInvoiceDate());
@@ -912,7 +913,7 @@ public class ContingentServiceImpl implements ContingentService {
 
 
             List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), contigentBill.getBudgetHeadID(), contigentBill.getAllocationTypeId(), "Approved", "0", "0");
-           double allocationAmount  = 0;
+            double allocationAmount = 0;
             for (Integer m = 0; m < budgetAllocationsDetalis.size(); m++) {
 
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(m).getAmountType());
@@ -934,13 +935,11 @@ public class ContingentServiceImpl implements ContingentService {
 
                 if (cdaTransData != null) {
                     cgUnitResponse.setRemainingAmount(ConverterUtils.addDecimalPoint(cdaTransData.getRemainingCdaAmount()));
-                    cgUnitResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationAmount+""));
+                    cgUnitResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
                     cgUnitResponse.setAmountTypeMain(amountUnitRepository.findByAmountTypeId(cdaTransData.getAmountType()));
                     data.add(cgUnitResponse);
                 }
             }
-
-
 
 
             contingentBill.setCdaData(data);
@@ -1026,7 +1025,7 @@ public class ContingentServiceImpl implements ContingentService {
             List<CdaParkingCrAndDr> cdaCrDrTransData = parkingCrAndDrRepository.findByTransactionIdAndIsFlagAndIsRevision(contigentBill.getCbId(), "0", 0);
 
             List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), contigentBill.getBudgetHeadID(), contigentBill.getAllocationTypeId(), "Approved", "0", "0");
-            double allocationAmount  = 0;
+            double allocationAmount = 0;
             for (Integer m = 0; m < budgetAllocationsDetalis.size(); m++) {
 
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationsDetalis.get(m).getAmountType());
@@ -1045,7 +1044,7 @@ public class ContingentServiceImpl implements ContingentService {
 
                 CdaParkingTrans cdaTransData = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(cdaParkingCrAndDr.getCdaParkingTrans(), "0");
                 cgUnitResponse.setRemainingAmount(ConverterUtils.addDecimalPoint(cdaTransData.getRemainingCdaAmount()));
-                cgUnitResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(""+allocationAmount));
+                cgUnitResponse.setAllocationAmount(ConverterUtils.addDecimalPoint("" + allocationAmount));
                 cgUnitResponse.setAmountTypeMain(amountUnitRepository.findByAmountTypeId(cdaTransData.getAmountType()));
 
                 data.add(cgUnitResponse);
@@ -1059,7 +1058,6 @@ public class ContingentServiceImpl implements ContingentService {
         return ResponseUtils.createSuccessResponse(contingentBillListData, new TypeReference<List<ContingentBillResponse>>() {
         });
     }
-
 
 
     @Override
@@ -1076,7 +1074,7 @@ public class ContingentServiceImpl implements ContingentService {
         }
 
 
-        List<ContigentBill> cbData = contigentBillRepository.findByCbUnitIdAndStatus(hrData.getUnitId(),"Rejected");
+        List<ContigentBill> cbData = contigentBillRepository.findByCbUnitIdAndStatus(hrData.getUnitId(), "Rejected");
         if (cbData.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND.");
         }
@@ -1194,6 +1192,7 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBill.setStatus(approveContigentBillRequest.getStatus());
             contigentBill.setRemarks(approveContigentBillRequest.getRemarks());
             contigentBill.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            contigentBill.setApproved_by(hrData.getPid());
             status = approveContigentBillRequest.getStatus();
             if (status.equalsIgnoreCase("Rejected") || status.equalsIgnoreCase("Reject")) {
                 contigentBill.setIsFlag("1");
@@ -1372,11 +1371,6 @@ public class ContingentServiceImpl implements ContingentService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA CRDR ID CAN NOT BE BLANK");
             }
 
-//            CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingId(approveContigentBillRequest.getCdaParkingId().get(i).getCdaParkingId());
-//            if (cdaParkingTrans == null) {
-//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CDA PARKING ID.");
-//            }
-
             if (approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount() == null || approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB AMOUNT CAN NOT BE BLANK");
             }
@@ -1392,14 +1386,13 @@ public class ContingentServiceImpl implements ContingentService {
             contigentBill.setRemarks(approveContigentBillRequest.getRemarks());
             contigentBill.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             status = approveContigentBillRequest.getStatus();
+            contigentBill.setVerifiedBy(hrData.getPid());
             if (status.equalsIgnoreCase("Rejected") || status.equalsIgnoreCase("Reject")) {
                 contigentBill.setIsFlag("1");
             } else {
                 contigentBill.setIsFlag("0");
             }
             contigentBillRepository.save(contigentBill);
-
-
         }
 
 

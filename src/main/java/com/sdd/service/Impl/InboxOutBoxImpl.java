@@ -203,7 +203,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                 }
 
             }
-        } else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
+        }
+        else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
 //            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG", "0", "0");
 
             List<String> dataIscgBg = new ArrayList<>();
@@ -309,7 +310,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                 }
 
             }
-        } else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
+        }
+        else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
             approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
             archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
 

@@ -232,65 +232,65 @@ public class DashboardServiceImpl implements DashBoardService {
         }
         else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
             inboxOutboxesList =
-                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
-                            hrDataCheck.getUnitId(), "CB", "0", "0");
+                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDescAndCreaterpId(
+                            hrDataCheck.getUnitId(), "CB", "0", "0",hrDataCheck.getPid());
 
 
-            arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
-            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDescAndCreaterpId(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
+            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDescAndCreaterpId(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
 
 
-            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+            for (MangeInboxOutbox mangeInboxOutbox : inboxOutboxesList) {
 
-                if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
-                    MangeInboxOutbox data = inboxOutboxesList.get(i);
+                if (mangeInboxOutbox.getState().equalsIgnoreCase("CR")) {
+                    MangeInboxOutbox data = mangeInboxOutbox;
                     inboxList.add(data);
 
                 } else {
-                    MangeInboxOutbox data = inboxOutboxesList.get(i);
-                   outBoxList.add(data);
+                    MangeInboxOutbox data = mangeInboxOutbox;
+                    outBoxList.add(data);
 
                 }
             }
         } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
 
-            arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
-            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDescAndCreaterpId(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
+            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDescAndCreaterpId(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
 
             inboxOutboxesList =
-                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
-                            hrDataCheck.getUnitId(), "CB", "0", "0");
-            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDescAndCreaterpId(
+                            hrDataCheck.getUnitId(), "CB", "0", "0",hrDataCheck.getPid());
+            for (MangeInboxOutbox mangeInboxOutbox : inboxOutboxesList) {
 
-                if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("VE")) {
-                    MangeInboxOutbox data = inboxOutboxesList.get(i);
+                if (mangeInboxOutbox.getState().equalsIgnoreCase("VE")) {
+                    MangeInboxOutbox data = mangeInboxOutbox;
                     inboxList.add(data);
 
                 } else {
-                    MangeInboxOutbox data = inboxOutboxesList.get(i);
+                    MangeInboxOutbox data = mangeInboxOutbox;
                     outBoxList.add(data);
                 }
             }
         } else if (getCurrentRole.contains(HelperUtils.CBAPPROVER)) {
 
-            arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
-            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDescAndCreaterpId(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
+            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDescAndCreaterpId(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
 
             inboxOutboxesList =
-                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
-                            hrDataCheck.getUnitId(), "CB", "0", "0");
-            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDescAndCreaterpId(
+                            hrDataCheck.getUnitId(), "CB", "0", "0",hrDataCheck.getPid());
+            for (MangeInboxOutbox mangeInboxOutbox : inboxOutboxesList) {
 
-                if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("AP")) {
-                    MangeInboxOutbox data = inboxOutboxesList.get(i);
+                if (mangeInboxOutbox.getState().equalsIgnoreCase("AP")) {
+                    MangeInboxOutbox data = mangeInboxOutbox;
                     inboxList.add(data);
 
-                } else if (inboxOutboxesList.get(i).getStatus().equalsIgnoreCase("Approved") && inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
-                    MangeInboxOutbox data = inboxOutboxesList.get(i);
+                } else if (mangeInboxOutbox.getStatus().equalsIgnoreCase("Approved") && mangeInboxOutbox.getState().equalsIgnoreCase("CR")) {
+                    MangeInboxOutbox data = mangeInboxOutbox;
                     outBoxList.add(data);
                 } else {
-                    MangeInboxOutbox data = inboxOutboxesList.get(i);
-                    if(!inboxOutboxesList.get(i).getStatus().equalsIgnoreCase("Rejected")){
+                    MangeInboxOutbox data = mangeInboxOutbox;
+                    if (!mangeInboxOutbox.getStatus().equalsIgnoreCase("Rejected")) {
                         outBoxList.add(data);
                     }
                 }
@@ -305,114 +305,20 @@ public class DashboardServiceImpl implements DashBoardService {
                 budgetAllocationRepository.findByToUnitAndIsFlagAndIsBudgetRevision(
                         hrDataCheck.getUnitId(), "0", "0");
 
-        for (int i = 0; i < budgetAllocation.size(); i++) {
+        for (BudgetAllocation allocation : budgetAllocation) {
 
             BudgetHead budgetHeadId =
-                    subHeadRepository.findByBudgetCodeId(budgetAllocation.get(i).getSubHead());
+                    subHeadRepository.findByBudgetCodeId(allocation.getSubHead());
             if (budgetHeadId == null) {
                 throw new SDDException(
                         HttpStatus.UNAUTHORIZED.value(), "INVALID SUB HEAD TYPE ID.CONTACT YOUR ADMINISTRATOR");
             }
 
-            CgUnit cgToUnitData = cgUnitRepository.findByUnit(budgetAllocation.get(i).getToUnit());
+            CgUnit cgToUnitData = cgUnitRepository.findByUnit(allocation.getToUnit());
 
             cgunitData.put(cgToUnitData.getUnit(), cgToUnitData);
             subHeadData.put(budgetHeadId.getSubHeadTypeId(), budgetHeadId);
         }
-
-//        UnitWiseExpenditueResponse unitWiseExpenditueResponse = new UnitWiseExpenditueResponse();
-//        List<String> unit = new ArrayList<String>();
-//        List<String> unitByAllocationAmount = new ArrayList<String>();
-//        List<String> unitByExpendureAmount = new ArrayList<String>();
-//
-//        for (Map.Entry<String, CgUnit> entry : cgunitData.entrySet()) {
-//            CgUnit unitData = entry.getValue();
-//
-//            List<BudgetAllocation> budgetAllocationList =
-//                    budgetAllocationRepository.findByToUnitAndFinYearAndIsFlagAndIsBudgetRevision(
-//                            unitData.getUnit(), "01", "0", "0");
-//            double allocationAmount = 0;
-//            for (int i = 0; i < budgetAllocationList.size(); i++) {
-//                allocationAmount =
-//                        allocationAmount
-//                                + Double.parseDouble(budgetAllocationList.get(i).getAllocationAmount());
-//            }
-//
-//            double expenditure = 0;
-//            List<ContigentBill> cbExpendure =
-//                    contigentBillRepository.findByCbUnitIdAndIsFlagAndIsUpdate(unitData.getUnit(), "0", "0");
-//
-//            for (Integer i = 0; i < cbExpendure.size(); i++) {
-//                expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
-//            }
-//
-//            unit.add(unitData.getCgUnitShort());
-//            unitByAllocationAmount.add(allocationAmount + "");
-//            unitByExpendureAmount.add(expenditure + "");
-//        }
-//
-//        unitWiseExpenditueResponse.setUnitWise(unit);
-//        unitWiseExpenditueResponse.setExpenditureUnit(unitByExpendureAmount);
-//        unitWiseExpenditueResponse.setAllocatedUnit(unitByAllocationAmount);
-//
-//
-//        List<String> subHeadWise = new ArrayList<String>();
-
-//        SubHeadWiseExpenditueResponse subHeadWiseExpenditueResponse =
-//                new SubHeadWiseExpenditueResponse();
-//        List<String> subhead = new ArrayList<String>();
-//        List<String> allocatedSubHead = new ArrayList<String>();
-//        List<String> expenditureSubHead = new ArrayList<String>();
-//
-//        for (Map.Entry<String, BudgetHead> entry : subHeadData.entrySet()) {
-//            String key = entry.getKey();
-//            BudgetHead subHeadD = entry.getValue();
-//
-//            List<BudgetAllocation> budgetAllocationList =
-//                    budgetAllocationRepository.findByToUnitAndFinYearAndIsFlagAndIsBudgetRevision(
-//                            hrDataCheck.getUnit(), "01", "1", "0");
-//            double allocationAmount = 0;
-//            for (int i = 0; i < budgetAllocationList.size(); i++) {
-//                allocationAmount =
-//                        allocationAmount
-//                                + Double.parseDouble(budgetAllocationList.get(i).getAllocationAmount());
-//            }
-//
-//            double expenditure = 0;
-//            List<ContigentBill> cbExpendure =
-//                    contigentBillRepository.findByBudgetHeadIDAndIsFlagAndIsUpdate(subHeadD.getBudgetCodeId(), "0", "0");
-//
-//            for (Integer i = 0; i < cbExpendure.size(); i++) {
-//                expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
-//            }
-//
-////            subHeadWise.add(subHeadD.getSubheadShort());
-//            allocatedSubHead.add(allocationAmount + "");
-//            expenditureSubHead.add(expenditure + "");
-//        }
-
-//        subHeadWiseExpenditueResponse.setSubhead(subHeadWise);
-//        subHeadWiseExpenditueResponse.setAllocatedSubHead(allocatedSubHead);
-//        subHeadWiseExpenditueResponse.setExpenditureSubHead(expenditureSubHead);
-
-//        dashBoardResponse.setSubHeadWiseExpenditure(subHeadWiseExpenditueResponse);
-
-//        List<DashBoardSubResponse> dashBoardList = new ArrayList<DashBoardSubResponse>();
-//        for (int i = 0; i < budgetList.size(); i++) {
-//            DashBoardSubResponse dashBoardData = new DashBoardSubResponse();
-//
-//            dashBoardData.setLastCBDate(budgetList.get(i).getAllocationDate());
-//            dashBoardData.setAllocatedAmount(budgetList.get(i).getAllocationAmount());
-//            dashBoardData.setFinancialYearId(
-//                    budgetFinancialYearRepository.findBySerialNo(budgetList.get(i).getFinYear()));
-//            dashBoardData.setSubHead(
-//                    subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(
-//                            budgetList.get(i).getSubHead()));
-//            dashBoardData.setUnit(cgUnitRepository.findByUnit(budgetList.get(i).getToUnit()));
-//            dashBoardData.setStatus(budgetList.get(i).getStatus());
-//            dashBoardData.setAuthGroupId(budgetList.get(i).getAuthGroupId());
-//            dashBoardList.add(dashBoardData);
-//        }
 
         dashBoardResponse.setInbox(inboxList.size() + "");
         dashBoardResponse.setApproved(arrpovedLis.size() + "");
@@ -597,12 +503,9 @@ public class DashboardServiceImpl implements DashBoardService {
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
 
 
-//            inboxOutboxesList =
-//                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
-//                            hrDataCheck.getUnitId(), "BG", "0", "0");
-            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+            for (MangeInboxOutbox mangeInboxOutbox : inboxOutboxesList) {
 
-                if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("AP")) {
+                if (mangeInboxOutbox.getState().equalsIgnoreCase("AP")) {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                     inboxList.add(data);
 
@@ -624,10 +527,10 @@ public class DashboardServiceImpl implements DashBoardService {
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
 
 
-            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
-                if (inboxOutboxesList.get(i).getToUnit().equalsIgnoreCase(hrDataCheck.getUnitId())) {
+            for (MangeInboxOutbox mangeInboxOutbox : inboxOutboxesList) {
+                if (mangeInboxOutbox.getToUnit().equalsIgnoreCase(hrDataCheck.getUnitId())) {
 
-                    if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
+                    if (mangeInboxOutbox.getState().equalsIgnoreCase("CR")) {
                         InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                         inboxList.add(data);
                     } else {
@@ -637,13 +540,13 @@ public class DashboardServiceImpl implements DashBoardService {
                 }
             }
         } else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
-            approvedboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
-            archiveboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            approvedboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDescAndCreaterpId(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
+            archiveboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDescAndCreaterpId(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
 
 
             inboxOutboxesList =
-                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
-                            hrDataCheck.getUnitId(), "CB", "0", "0");
+                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDescAndCreaterpId(
+                            hrDataCheck.getUnitId(), "CB", "0", "0",hrDataCheck.getPid());
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
@@ -655,13 +558,13 @@ public class DashboardServiceImpl implements DashBoardService {
             }
         } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
 
-            approvedboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
-            archiveboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            approvedboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDescAndCreaterpId(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
+            archiveboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDescAndCreaterpId(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
 
 
             inboxOutboxesList =
-                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
-                            hrDataCheck.getUnitId(), "CB", "0", "0");
+                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDescAndCreaterpId(
+                            hrDataCheck.getUnitId(), "CB", "0", "0",hrDataCheck.getPid());
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("VE")) {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
@@ -673,13 +576,13 @@ public class DashboardServiceImpl implements DashBoardService {
             }
         } else if (getCurrentRole.contains(HelperUtils.CBAPPROVER)) {
 
-            approvedboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
-            archiveboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            approvedboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDescAndCreaterpId(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
+            archiveboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDescAndCreaterpId(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
 
 
             inboxOutboxesList =
-                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
-                            hrDataCheck.getUnitId(), "CB", "0", "0");
+                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDescAndCreaterpId(
+                            hrDataCheck.getUnitId(), "CB", "0", "0",hrDataCheck.getPid());
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("AP")) {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();

@@ -32,6 +32,7 @@ public interface ContigentBillRepository extends JpaRepository<ContigentBill, Lo
   List<ContigentBill> findByAuthGroupIdAndIsFlag(String groupId, String isFlag);
   List<ContigentBill> findByAuthGroupId(String groupId);
   List<ContigentBill> findByCbUnitIdAndStatus(String groupId,String status);
+  List<ContigentBill> findByCbUnitIdAndStatusAndCreatedBy(String groupId,String status,String createdBy);
 
   List<ContigentBill> findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsFlagAndIsUpdateOrderByCbDateDesc(
           String cgUnits, String finYear, String budgetHeadID,String isFlag,String isupdate);
