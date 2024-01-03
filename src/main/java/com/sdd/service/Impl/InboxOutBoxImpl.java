@@ -316,7 +316,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
 
 
-            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "0", "0");
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "0", "0",hrDataCheck.getPid());
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
 
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
