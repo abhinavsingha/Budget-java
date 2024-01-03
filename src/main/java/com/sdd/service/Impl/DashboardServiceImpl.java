@@ -563,8 +563,8 @@ public class DashboardServiceImpl implements DashBoardService {
 
 
             inboxOutboxesList =
-                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc(
-                            hrDataCheck.getUnitId(), "CB", "0", "0",hrDataCheck.getPid());
+                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
+                            hrDataCheck.getUnitId(), "CB", "0", "0");
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("VE")) {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
@@ -581,8 +581,8 @@ public class DashboardServiceImpl implements DashBoardService {
 
 
             inboxOutboxesList =
-                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc(
-                            hrDataCheck.getUnitId(), "CB", "0", "0",hrDataCheck.getPid());
+                    mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
+                            hrDataCheck.getUnitId(), "CB", "0", "0");
             for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
                 if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("AP")) {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
