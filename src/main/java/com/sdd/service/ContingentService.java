@@ -2,9 +2,6 @@ package com.sdd.service;
 
 import com.sdd.request.*;
 import com.sdd.response.*;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

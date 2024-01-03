@@ -3,11 +3,9 @@ package com.sdd.utils;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.sdd.entities.HrData;
-import com.sdd.exception.SDDException;
 import com.sdd.response.CDAReportResponse;
 import com.sdd.response.CDAReportSubResponse;
 import com.sdd.response.CbReportResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import com.sdd.response.FilePathResponse;
 
@@ -17,7 +15,7 @@ import java.util.*;
 import java.util.List;
 
 @Component
-public class PdfGenaratorUtilMain {
+public class PdfGeneratorUtilMain {
 
     private static final String UTF_8 = "UTF-8";
 

@@ -26,14 +26,12 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.w3c.tidy.Tidy;
 import org.xhtmlrenderer.pdf.ITextRenderer;
-import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -112,7 +110,7 @@ public class MangeReportImpl implements MangeReportService {
     private PdfGenaratorUtil pdfGenaratorUtil;
 
     @Autowired
-    private PdfGenaratorUtilMain pdfGenaratorUtilMain;
+    private PdfGeneratorUtilMain pdfGenaratorUtilMain;
 
     @Autowired
     private DocxGenaratorUtil docxGenaratorUtil;
@@ -2406,12 +2404,12 @@ public class MangeReportImpl implements MangeReportService {
 
 
                         double amount = 0;
-                        for (int m = 0; m < cdaData.size(); m++) {
-                            List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
+                        for (CdaParkingTrans cdaDatum : cdaData) {
+                            List<ContigentBill> contingentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaDatum.getUnitId());
 
                             double expCdaOrSubHeadWise = 0;
-                            for (int t = 0; t < contigentBills.size(); t++) {
-                                CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByTransactionIdAndGinNoAndIsFlagAndIsRevision(contigentBills.get(t).getCbId(), cdaData.get(m).getGinNo(), "0", 0);
+                            for (ContigentBill contigentBill : contingentBills) {
+                                CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByTransactionIdAndGinNoAndIsFlagAndIsRevision(contigentBill.getCbId(), cdaDatum.getGinNo(), "0", 0);
                                 if (cdaParkingCrAndDr != null) {
                                     expCdaOrSubHeadWise = expCdaOrSubHeadWise + Double.parseDouble(cdaParkingCrAndDr.getAmount());
                                 }
@@ -2420,11 +2418,11 @@ public class MangeReportImpl implements MangeReportService {
 
                             amount = amount + expAmount;
 
-                            if (cdaData.get(m).getRemainingCdaAmount() == null) {
+                            if (cdaDatum.getRemainingCdaAmount() == null) {
                                 amount = amount;
                             } else {
-                                AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaData.get(m).getAmountType());
-                                amount = amount + (Double.parseDouble(cdaData.get(m).getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
+                                AmountUnit cdaAMount = amountUnitRepository.findByAmountTypeId(cdaDatum.getAmountType());
+                                amount = amount + (Double.parseDouble(cdaDatum.getRemainingCdaAmount()) * Double.parseDouble(cdaAMount.getAmount().toString())) / Double.parseDouble(amountUnit.getAmount().toString());
                                 grandTotal = grandTotal + amount;
                             }
                         }

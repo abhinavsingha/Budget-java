@@ -1,11 +1,10 @@
 package com.sdd.entities.repository;
 
 
-import com.sdd.entities.CdaParking;
+
 import com.sdd.entities.MangeInboxOutbox;
-import com.sdd.entities.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+
 
 import java.util.List;
 
