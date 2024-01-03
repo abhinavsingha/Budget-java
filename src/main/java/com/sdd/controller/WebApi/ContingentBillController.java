@@ -79,4 +79,9 @@ public class ContingentBillController {
         return new ResponseEntity<>(contingentService.updateFinalStatus(approveContigentBillRequest), HttpStatus.OK);
     }
 
+
+    @PostMapping("/transferCbBill")
+    public ResponseEntity<ApiResponse<ContingentSaveResponse>> transferCbBill(@RequestBody TransferCbBill transferCbBill) {
+        return new ResponseEntity<>(contingentService.transferCbBill(transferCbBill), HttpStatus.OK);
+    }
 }

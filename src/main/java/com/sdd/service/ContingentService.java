@@ -16,6 +16,7 @@ public interface ContingentService {
 
 
     ApiResponse<ContingentSaveResponse> saveContingentBill(ArrayList<ContingentBillSaveRequest> budgetAllocationReportRequest);
+    ApiResponse<ContingentSaveResponse> transferCbBill(TransferCbBill transferCbBill);
 
     ApiResponse<ContingentSaveResponse> updateContingentBill(ArrayList<ContingentBillSaveRequest> contingentBillSaveRequest);
 

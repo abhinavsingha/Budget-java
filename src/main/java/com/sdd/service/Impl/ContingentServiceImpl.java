@@ -447,6 +447,64 @@ public class ContingentServiceImpl implements ContingentService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
+    public ApiResponse<ContingentSaveResponse> transferCbBill(TransferCbBill transferCbBill) {
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CONTINGENT BILL ENTRY");
+        }
+
+        ContingentSaveResponse contingentSaveResponse = new ContingentSaveResponse();
+
+        List<HrData> hrDataList = hrDataRepository.findByUnitIdAndIsActive(hrData.getUnitId(), "1");
+        if (hrDataList.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
+        }
+
+
+
+        List<MangeInboxOutbox> findNewCbBill =  mangeInboxOutBoxRepository.findByCreaterpIdAndToUnit(transferCbBill.getNewUserId(),hrData.getUnitId());
+        List<MangeInboxOutbox> findOldCbBill =  mangeInboxOutBoxRepository.findByCreaterpIdAndToUnit(transferCbBill.getOldUserId(),hrData.getUnitId());
+
+        if (findOldCbBill.isEmpty()) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO BILL FOUND FOR CURRENT USER.");
+        }
+
+
+
+//        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
+//        MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
+//        mangeInboxOutbox.setIsRebase("0");
+//        mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
+//        mangeInboxOutbox.setRemarks("Contingent Bill");
+//        mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+//        mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+//        mangeInboxOutbox.setToUnit(toUnitId);
+//        mangeInboxOutbox.setStatus("Pending");
+//        mangeInboxOutbox.setType(cgUnit.getDescr());
+//        mangeInboxOutbox.setGroupId(authGroupId);
+//        mangeInboxOutbox.setFromUnit(toUnitId);
+//        mangeInboxOutbox.setRoleId(hrData.getRoleId());
+//        mangeInboxOutbox.setCreaterpId(hrData.getPid());
+//        mangeInboxOutbox.setIsFlag("1");
+//        mangeInboxOutbox.setIsArchive("0");
+//        mangeInboxOutbox.setIsApproved("0");
+//        mangeInboxOutbox.setState("VE");
+//        mangeInboxOutbox.setIsBgcg("CB");
+//        mangeInboxOutbox.setIsRevision(0);
+//        mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+
+
+        contingentSaveResponse.setMsg("Data Save Successfully");
+
+        return ResponseUtils.createSuccessResponse(contingentSaveResponse, new TypeReference<ContingentSaveResponse>() {
+        });
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<ContingentSaveResponse> updateContingentBill(ArrayList<ContingentBillSaveRequest> contingentBillSaveRequestList) {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
