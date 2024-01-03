@@ -5,10 +5,7 @@ import com.sdd.entities.CdaParking;
 import com.sdd.request.CDAReportRequest;
 import com.sdd.request.CDARequest;
 import com.sdd.request.CDARequestReBase;
-import com.sdd.response.ApiResponse;
-import com.sdd.response.CdaParkingTransResponse;
-import com.sdd.response.DefaultResponse;
-import com.sdd.response.ReabseCdaParkingResponse;
+import com.sdd.response.*;
 import com.sdd.service.CdaParkingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +34,11 @@ public class CdaParkingController {
 	@GetMapping("/getCdaData/{groupId}")
 	public ResponseEntity<ApiResponse<CdaParkingTransResponse>> getCdaData(@PathVariable("groupId") String groupId) {
 		return new ResponseEntity<>(cdaParkingService.getCdaData(groupId), HttpStatus.OK);
+	}
+
+	@GetMapping("/getCdaHistoryData/{groupId}")
+	public ResponseEntity<ApiResponse<List<CdaParkingHistoryDto>>> getCdaHistoryData(@PathVariable("groupId") String groupId) {
+		return new ResponseEntity<>(cdaParkingService.getCdaHistoryData(groupId), HttpStatus.OK);
 	}
 
 	@PostMapping("/getCdaDataList")

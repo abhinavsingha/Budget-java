@@ -80,6 +80,9 @@ public class HelperUtils {
     public static String getAuthorityGroupId() {
         return "AGU_ID" + ConverterUtils.getRandomTimeStamp();
     }
+    public static String getUpdateCDAId() {
+        return "UP_CDA" + ConverterUtils.getRandomTimeStamp();
+    }
 
     public static String getContigentId() {
         return "CB_ID" + ConverterUtils.getRandomTimeStamp();

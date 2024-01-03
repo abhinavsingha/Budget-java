@@ -68,11 +68,5 @@ public class InboxOutboxController {
     }
 
 
-//    @PostMapping("/updateMsgStatus")
-//    public ResponseEntity<ApiResponse<ArchivedResponse>> updateMsgStatus(@RequestBody InboxOutboxStatusRequest inboxOutboxStatusRequest) {
-//        return new ResponseEntity<>(inboxOutBoxService.updateMsgStatus(inboxOutboxStatusRequest), HttpStatus.OK);
-//    }
-
-
 
 }

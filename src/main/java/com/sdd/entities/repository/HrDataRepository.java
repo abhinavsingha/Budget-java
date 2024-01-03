@@ -10,9 +10,6 @@ import java.util.List;
 
 public interface HrDataRepository extends JpaRepository<HrData, String> {
 
-    //    HrData findByName(String name);
-    //    HrData findByOffEmail(String email);
-
 
     HrData findByUserNameAndIsActive(String userName,String isActive);
 
@@ -24,4 +21,6 @@ public interface HrDataRepository extends JpaRepository<HrData, String> {
 
 //    List<HrData> findByUnitId(String unitId);
     List<HrData> findByUnitIdAndIsActive(String unitId,String isActive);
+
+    HrData findByUserName(String updatedBy);
 }

@@ -212,6 +212,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             dataIscgBg.add("BR");
             dataIscgBg.add("RR");
             dataIscgBg.add("UR");
+            dataIscgBg.add("CDA");
 
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
 
@@ -219,13 +220,13 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
 
 
-            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+            for (MangeInboxOutbox inboxOutbox : inboxOutboxesList) {
 
-                if (inboxOutboxesList.get(i).getToUnit().equalsIgnoreCase(hrDataCheck.getUnitId())) {
+                if (inboxOutbox.getToUnit().equalsIgnoreCase(hrDataCheck.getUnitId())) {
 
-                    if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
+                    if (inboxOutbox.getState().equalsIgnoreCase("CR")) {
                         InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
-                        MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+                        MangeInboxOutbox mangeInboxOutbox = inboxOutbox;
                         data.setGroupId(mangeInboxOutbox.getGroupId());
                         data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
                         data.setRemarks(mangeInboxOutbox.getRemarks());
@@ -267,7 +268,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
                     } else {
                         InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
-                        MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+                        MangeInboxOutbox mangeInboxOutbox = inboxOutbox;
                         data.setGroupId(mangeInboxOutbox.getGroupId());
                         data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
                         data.setRemarks(mangeInboxOutbox.getRemarks());
