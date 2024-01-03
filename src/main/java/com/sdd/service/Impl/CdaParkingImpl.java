@@ -823,20 +823,23 @@ public class CdaParkingImpl implements CdaParkingService {
         }
 
         if (!hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+            String subHead = "";
             for (CdaParkingUpdateHistory cdaParkingUpdateHistory : cdaParkingUpdateHistoryList) {
+                subHead = cdaParkingUpdateHistory.getSubHead();
                 cdaUpdateHistoryRepository.save(cdaParkingUpdateHistory);
             }
 
+            BudgetHead budgetHead = subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(subHead);
 
             MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
             mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
-            mangeInboxOutbox.setRemarks("CDA update by " + hrData.getUnit());
+            mangeInboxOutbox.setRemarks("CDA update by " + hrData.getUnit() + " in " + budgetHead.getSubHeadDescr());
             mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
             mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             mangeInboxOutbox.setToUnit(HelperUtils.HEADUNITID);
             mangeInboxOutbox.setFromUnit(hrData.getUnitId());
             mangeInboxOutbox.setGroupId(cdaUpdateAuthGroupId);
-            mangeInboxOutbox.setType("CDA update by " + hrData.getUnit());
+            mangeInboxOutbox.setType("CDA update by " + hrData.getUnit() + " in " + budgetHead.getSubHeadDescr());
             mangeInboxOutbox.setRoleId(hrData.getRoleId());
             mangeInboxOutbox.setCreaterpId(hrData.getPid());
             mangeInboxOutbox.setState("CR");
