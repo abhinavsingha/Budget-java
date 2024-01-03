@@ -453,25 +453,6 @@ public class DocxGenaratorUtil {
             }
 
 
-//            XWPFHeader header = document.createHeader(HeaderFooterType.DEFAULT);
-//            XWPFTable table11 = header.createTable(1,0);
-//            XWPFTableRow tableRowOne11 = table11.getRow(0);
-//            XWPFParagraph paragraphtableRowOne99 = tableRowOne11.addNewTableCell().addParagraph();
-//            boldText(paragraphtableRowOne99.createRun(), 10, "object", true);
-//
-//            for (Integer i = 0; i < tabData1.size(); i++) {
-//                Boolean isNumber = ConverterUtils.isNumber(tabData1.get(i).getName() + "");
-//                if (isNumber) {
-//                    XWPFParagraph paragraphtableRowOne1 = tableRowOne11.addNewTableCell().addParagraph();
-//                    boldText(paragraphtableRowOne1.createRun(), 10, ConverterUtils.addDecimalPoint(tabData1.get(i).getName()), true);
-//                    paragraphtableRowOne1.setAlignment(ParagraphAlignment.RIGHT);
-//                } else {
-//                    XWPFParagraph paragraphtableRowOne1 = tableRowOne11.addNewTableCell().addParagraph();
-//                    boldText(paragraphtableRowOne1.createRun(), 10, ConverterUtils.addDecimalPoint(tabData1.get(i).getName()), true);
-//                }
-//            }
-
-
             String reOrCapital = "";
             if (cadSubReport.getMajorHead().equalsIgnoreCase("2037")) {
                 reOrCapital = "REVENUE";
@@ -495,7 +476,7 @@ public class DocxGenaratorUtil {
 
             mainParagraph = document.createParagraph();
             mainParagraph.setAlignment(ParagraphAlignment.CENTER);
-            boldText(mainParagraph.createRun(), 20, reOrCapital, true);
+            boldText(mainParagraph.createRun(), 20, reOrCapital+" ("+hrData.getUnit()+") " , true);
             mainParagraph.createRun().addBreak();
 
 
