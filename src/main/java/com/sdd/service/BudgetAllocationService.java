@@ -61,15 +61,10 @@ public interface BudgetAllocationService {
 
 	ApiResponse<BudgetAllocationSaveResponse> budgetReject(BudgetApproveRequest budgetApproveRequest);
 
-	ApiResponse<List<BudgetRevisionResponse>>  getBudgetRevisionData(BudgetAllocationReportRequest budgetAllocationReportRequest);
-
-	ApiResponse<BudgetAllocationSaveResponse> saveBudgetRevisonData(BudgetAllocationSaveUnitRequest budgetAllocationSaveUnitRequest);
-
 	ApiResponse<List<CgUnitResponse>> getCgUnitDataWithPurposeCode();
 
 	ApiResponse<DefaultResponse> saveAuthData(AuthRequest authRequest);
 
-	ApiResponse<List<BudgetReviResp>>  getBudgetRevisionData(BudgetReviReq budgetRivRequest);
 
 	ApiResponse<List<BudgetReviResp>>  getBudgetRevisionData33(BudgetReviReq budgetRivRequest);
 
@@ -77,7 +72,6 @@ public interface BudgetAllocationService {
 
 	ApiResponse<BudgetAllocationResponse> getApprovedBudgetData();
 
-	ApiResponse<BudgetAllocationSaveResponse> saveBudgetRevision(BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList);
 
 	ApiResponse<List<SubHeadVotedOrChargedType>> getSubHeadType();
 
@@ -91,29 +85,15 @@ public interface BudgetAllocationService {
 
 	ApiResponse<BudgetAllocationResponse> getAllRevisionGroupId(String groupId);
 
-	ApiResponse<BudgetAllocationSaveResponse> approveRivisonBudgetOrReject(BudgetApproveRequest budgetApproveRequest);
 
 	ApiResponse<BudgetAllocationSaveResponse> approveRivisonBudgetOrReject3(BudgetApproveRequest budgetApproveRequest);
 
 	ApiResponse<DefaultResponse> saveAuthDataRevision(AuthRequest authRequest);
 
-
-
-
-	ApiResponse<DefaultResponse> saveAuthDataRevision2(AuthRequest authRequest);
-
-	ApiResponse<DefaultResponse> saveAuthDataRevision3(AuthRequest authRequest);
-
-	ApiResponse<DefaultResponse> saveAuthDataRevision33(AuthRequest authRequest);
 	ApiResponse<DefaultResponse> saveAuthDataRevisionSaveCbAsAllocation(AuthRequest authRequest);
 
-	ApiResponse<BudgetAllocationSaveResponse> saveBudgetRevision2(BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList);
 
 	ApiResponse<BudgetAllocationSaveResponse> saveBudgetRevision3(BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList);
-
-	ApiResponse<BudgetAllocationSaveResponse> approveRivisonBudgetOrReject2(BudgetApproveRequest budgetApproveRequest);
-
-
 
 
 	ApiResponse<List<CgUnitResponse>> getAllCgUnitData();
