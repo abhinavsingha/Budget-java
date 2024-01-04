@@ -698,7 +698,7 @@ public class DashboardServiceImpl implements DashBoardService {
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
                             String subUnit = unitss.getUnit();
-                            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(subUnit, finYearId, subHeadId, allocationTypeId, "0", "0");
+                            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(subUnit, finYearId, subHeadId, "0", "0");
                             if (expenditure.size() > 0) {
                                 double totalAmount = 0.0;
                                 for (ContigentBill bill : expenditure) {
@@ -721,7 +721,7 @@ public class DashboardServiceImpl implements DashBoardService {
                             }
                         }
                     }
-                    List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(unitId, finYearId, subHeadId, allocationTypeId, "0", "0");
+                    List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(unitId, finYearId, subHeadId, "0", "0");
                     double totalAmount = 0.0;
                     if (expenditure.size() > 0) {
                         for (ContigentBill bill : expenditure) {
@@ -964,7 +964,7 @@ public class DashboardServiceImpl implements DashBoardService {
                             if(subUnits.equalsIgnoreCase("000225")){
                                 continue;
                             }
-                            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(subUnits, finYearId, subHeadId, allocationTypeId, "0", "0");
+                            List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(subUnits, finYearId, subHeadId, "0", "0");
                             if (expenditure.size() > 0) {
                                 double totalAmount = 0.0;
                                 for (ContigentBill bill : expenditure) {
@@ -985,7 +985,7 @@ public class DashboardServiceImpl implements DashBoardService {
                     if(uid.equalsIgnoreCase("000225")){
                         continue;
                     }
-                    List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(uid, finYearId, subHeadId, allocationTypeId, "0", "0");
+                    List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(uid, finYearId, subHeadId, "0", "0");
                     double totalExpAmount = 0.0;
                     if (expenditure.size() > 0) {
                         for (ContigentBill bill : expenditure) {
@@ -1063,7 +1063,7 @@ public class DashboardServiceImpl implements DashBoardService {
                 double alocAmnts = Double.parseDouble(budgetAllocToUnits.get(0).getAllocationAmount());
                 double alocAmnt = alocAmnts * allocAmntUnit / reqAmount;
 
-                List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, allocationTypeId, "0", "0");
+                List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, "0", "0");
                 double totalExpAmount = 0.0;
                 if (expenditure.size() > 0) {
                     for (ContigentBill bill : expenditure) {

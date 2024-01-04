@@ -915,7 +915,7 @@ public class CdaParkingImpl implements CdaParkingService {
 //            System.out.println(e);
 //        }
 
-        List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(), cdaRequest.getAllocationTypeId(), "0", "0", hrData.getUnitId());
+        List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(),"0", "0", hrData.getUnitId());
 
 
         for (Integer i = 0; i < contigentBills.size(); i++) {
@@ -1023,7 +1023,7 @@ public class CdaParkingImpl implements CdaParkingService {
         HashMap<String, CdaParkingTransSubResponse> subHeadData = new LinkedHashMap<>();
 
 
-        List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(), cdaRequest.getAllocationTypeId(), "0", "0", hrData.getUnitId());
+        List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(), "0", "0", hrData.getUnitId());
 
         double totalBill = 0;
         for (Integer i = 0; i < contigentBills.size(); i++) {

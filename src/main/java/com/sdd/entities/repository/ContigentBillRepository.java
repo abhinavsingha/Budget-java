@@ -23,11 +23,14 @@ public interface ContigentBillRepository extends JpaRepository<ContigentBill, Lo
   ContigentBill findByCbId(String contingentBilId);
   ContigentBill findByCbUnitIdAndSectionNumberAndBudgetHeadID(String contingentBilId,String billNo,String budgetHeadId);
   List<ContigentBill> findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdate(String unitId, String finYear, String subHead, String isUpdate);
-  List<ContigentBill> findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(String unitId, String finYear, String subHead,String allocTypeId, String isUpdate);
+//  List<ContigentBill> findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(String unitId, String finYear, String subHead,String allocTypeId, String isUpdate);
+
+
   List<ContigentBill> findByCbUnitId(String cbUnitId);
   List<ContigentBill> findByCbUnitIdAndCreatedBy(String cbUnitId,String createrId);
   List<ContigentBill> findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdate(String cbUnitId, String budgetHeadId, String isFlag, String isUpdate);
-  List<ContigentBill> findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdateAndAllocationTypeIdAndFinYear(String cbUnitId, String budgetHeadId, String isFlag, String isUpdate, String allocationTypeId, String finYear);
+//  List<ContigentBill> findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdateAndAllocationTypeIdAndFinYear(String cbUnitId, String budgetHeadId, String isFlag, String isUpdate, String allocationTypeId, String finYear);
+
   List<ContigentBill> findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdateAndFinYear(String cbUnitId, String budgetHeadId, String isFlag, String isUpdate,  String finYear);
 
   List<ContigentBill> findByAuthGroupIdAndIsFlag(String groupId, String isFlag);
@@ -38,11 +41,20 @@ public interface ContigentBillRepository extends JpaRepository<ContigentBill, Lo
   List<ContigentBill> findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsFlagAndIsUpdateOrderByCbDateDesc(
           String cgUnits, String finYear, String budgetHeadID,String isFlag,String isupdate);
 
-  List<ContigentBill> findByAllocationTypeIdAndCbUnitIdAndFinYear(String allocationId, String unitId, String finYear);
-  List<ContigentBill> findByAllocationTypeIdAndCbUnitIdAndFinYearAndBudgetHeadID(String allocationId, String unitId, String finYear, String budgetHeadId);
+//  List<ContigentBill> findByAllocationTypeIdAndCbUnitIdAndFinYear(String allocationId, String unitId, String finYear);
+  List<ContigentBill> findByCbUnitIdAndFinYear(String unitId, String finYear);
 
-  List<ContigentBill> findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(String unitId, String finYear, String subHead,String allocTypeId, String isUpdate,String isFlag);
-  List<ContigentBill> findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(String finYear,String subHead,String allocTypeId, String isUpdate,String isFlag,String unitId);
+
+//  List<ContigentBill> findByAllocationTypeIdAndCbUnitIdAndFinYearAndBudgetHeadID(String allocationId, String unitId, String finYear, String budgetHeadId);
+  List<ContigentBill> findByCbUnitIdAndFinYearAndBudgetHeadID(String unitId, String finYear, String budgetHeadId);
+
+
+  List<ContigentBill> findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(String unitId, String finYear, String subHead, String isUpdate,String isFlag);
+//  List<ContigentBill> findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(String unitId, String finYear, String subHead,String allocTypeId, String isUpdate,String isFlag);
+
+
+  List<ContigentBill> findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(String finYear,String subHead, String isUpdate,String isFlag,String unitId);
+//  List<ContigentBill> findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(String finYear,String subHead,String allocTypeId, String isUpdate,String isFlag,String unitId);
 
 
 }

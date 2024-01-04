@@ -1582,7 +1582,7 @@ public class MangeReportImpl implements MangeReportService {
 
         double progressiveAmount = 0;
         String sectionNumber = cbData.getSectionNumber();
-        List<ContigentBill> totalContigentBill = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdateAndAllocationTypeIdAndFinYear(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0", allocationType.get(0).getAllocTypeId(), cbData.getFinYear());
+        List<ContigentBill> totalContigentBill = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdateAndFinYear(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0", cbData.getFinYear());
 //        List<CdaParkingTrans> cdaAmountList123123 = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(cbData.getFinYear(), cbData.getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
 
         if (totalContigentBill.size() == 0) {
@@ -1611,7 +1611,7 @@ public class MangeReportImpl implements MangeReportService {
 
         }
 
-        List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(cbData.getCbUnitId(), cbData.getFinYear(), cbData.getBudgetHeadID(), cbData.getAllocationTypeId(), "0", "0");
+        List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(cbData.getCbUnitId(), cbData.getFinYear(), cbData.getBudgetHeadID(),  "0", "0");
 
         double totalBill = 0;
         for (Integer k = 0; k < subHeadContigentBill.size(); k++) {
@@ -1735,7 +1735,7 @@ public class MangeReportImpl implements MangeReportService {
 
         double progressiveAmount = 0;
         String sectionNumber = cbData.getSectionNumber();
-        List<ContigentBill> totalContigentBill = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdateAndAllocationTypeIdAndFinYear(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0", allocationType.get(0).getAllocTypeId(), cbData.getFinYear());
+        List<ContigentBill> totalContigentBill = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdateAndFinYear(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0",  cbData.getFinYear());
 //        List<CdaParkingTrans> cdaAmountList123123 = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cbData.getFinYear(), cbData.getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
 
         if (totalContigentBill.size() == 0) {
@@ -1770,7 +1770,7 @@ public class MangeReportImpl implements MangeReportService {
             balanceAmount = balanceAmount + (Double.parseDouble(cdaAmountList.get(k).getRemainingCdaAmount()) * amountUnit.getAmount());
         }
 
-        List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(cbData.getCbUnitId(), cbData.getFinYear(), cbData.getBudgetHeadID(), cbData.getAllocationTypeId(), "0", "0");
+        List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(cbData.getCbUnitId(), cbData.getFinYear(), cbData.getBudgetHeadID(), "0", "0");
 
         double totalBill = 0;
         for (Integer k = 0; k < subHeadContigentBill.size(); k++) {
@@ -2405,7 +2405,7 @@ public class MangeReportImpl implements MangeReportService {
 
                         double amount = 0;
                         for (CdaParkingTrans cdaDatum : cdaData) {
-                            List<ContigentBill> contingentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaDatum.getUnitId());
+                            List<ContigentBill> contingentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), "0", "0", cdaDatum.getUnitId());
 
                             double expCdaOrSubHeadWise = 0;
                             for (ContigentBill contigentBill : contingentBills) {
@@ -2520,7 +2520,7 @@ public class MangeReportImpl implements MangeReportService {
 
                         double amount = 0;
                         for (int m = 0; m < cdaData.size(); m++) {
-                            List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
+                            List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), "0", "0", cdaData.get(m).getUnitId());
 
                             double expCdaOrSubHeadWise = 0;
                             for (int t = 0; t < contigentBills.size(); t++) {
@@ -2628,7 +2628,7 @@ public class MangeReportImpl implements MangeReportService {
 
                             double amount = 0;
                             for (int m = 0; m < cdaData.size(); m++) {
-                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
+                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), "0", "0", cdaData.get(m).getUnitId());
 
                                 double expCdaOrSubHeadWise = 0;
                                 for (int t = 0; t < contigentBills.size(); t++) {
@@ -2735,7 +2735,7 @@ public class MangeReportImpl implements MangeReportService {
 
                             double amount = 0;
                             for (int m = 0; m < cdaData.size(); m++) {
-                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
+                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), "0", "0", cdaData.get(m).getUnitId());
 
                                 double expCdaOrSubHeadWise = 0;
                                 for (int t = 0; t < contigentBills.size(); t++) {
@@ -2842,7 +2842,7 @@ public class MangeReportImpl implements MangeReportService {
 //                        List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
                         double amount = 0;
                         for (int m = 0; m < cdaData.size(); m++) {
-                            List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
+                            List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), "0", "0", cdaData.get(m).getUnitId());
 
 
                             double expCdaOrSubHeadWise = 0;
@@ -2978,7 +2978,7 @@ public class MangeReportImpl implements MangeReportService {
 
                         double amount = 0;
                         for (int m = 0; m < cdaData.size(); m++) {
-                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
+                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), "0", "0");
 
 
                             double expCdaOrSubHeadWise = 0;
@@ -3119,7 +3119,7 @@ public class MangeReportImpl implements MangeReportService {
                             double amount = 0;
                             for (int m = 0; m < cdaData.size(); m++) {
 
-                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
+                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), "0", "0", cdaData.get(m).getUnitId());
 
                                 double expCdaOrSubHeadWise = 0;
                                 for (int t = 0; t < contigentBills.size(); t++) {
@@ -3337,7 +3337,7 @@ public class MangeReportImpl implements MangeReportService {
 
                         for (int m = 0; m < cdaData.size(); m++) {
 
-                            List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
+                            List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), "0", "0", cdaData.get(m).getUnitId());
 
                             double expCdaOrSubHeadWise = 0;
                             for (int t = 0; t < contigentBills.size(); t++) {
@@ -3454,7 +3454,7 @@ public class MangeReportImpl implements MangeReportService {
 
                         double amount = 0;
                         for (int m = 0; m < cdaData.size(); m++) {
-                            List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
+                            List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), "0", "0", cdaData.get(m).getUnitId());
 
                             double expCdaOrSubHeadWise = 0;
                             for (int t = 0; t < contigentBills.size(); t++) {
@@ -3563,7 +3563,7 @@ public class MangeReportImpl implements MangeReportService {
 
                             double amount = 0;
                             for (int m = 0; m < cdaData.size(); m++) {
-                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
+                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(),  "0", "0", cdaData.get(m).getUnitId());
 
                                 double expCdaOrSubHeadWise = 0;
                                 for (int t = 0; t < contigentBills.size(); t++) {
@@ -3669,7 +3669,7 @@ public class MangeReportImpl implements MangeReportService {
 
                             double amount = 0;
                             for (int m = 0; m < cdaData.size(); m++) {
-                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
+                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), "0", "0", cdaData.get(m).getUnitId());
 
                                 double expCdaOrSubHeadWise = 0;
                                 for (int t = 0; t < contigentBills.size(); t++) {
@@ -3776,7 +3776,7 @@ public class MangeReportImpl implements MangeReportService {
 //                        List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
                         double amount = 0;
                         for (int m = 0; m < cdaData.size(); m++) {
-                            List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
+                            List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), "0", "0", cdaData.get(m).getUnitId());
 
 
                             double expCdaOrSubHeadWise = 0;
@@ -3910,7 +3910,7 @@ public class MangeReportImpl implements MangeReportService {
 
                         double amount = 0;
                         for (int m = 0; m < cdaData.size(); m++) {
-                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0");
+                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(hrData.getUnitId(), cdaReportRequest.getFinancialYearId(), subHead.getBudgetCodeId(), "0", "0");
 
                             double expCdaOrSubHeadWise = 0;
                             for (int t = 0; t < contigentBills.size(); t++) {
@@ -4047,7 +4047,7 @@ public class MangeReportImpl implements MangeReportService {
                             double amount = 0;
                             for (int m = 0; m < cdaData.size(); m++) {
 
-                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), cdaReportRequest.getAllocationTypeId(), "0", "0", cdaData.get(m).getUnitId());
+                                List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaReportRequest.getFinancialYearId(), subHeadsData.get(i).getBudgetCodeId(), "0", "0", cdaData.get(m).getUnitId());
 
                                 double expCdaOrSubHeadWise = 0;
                                 for (int t = 0; t < contigentBills.size(); t++) {
@@ -8554,7 +8554,7 @@ public class MangeReportImpl implements MangeReportService {
                         UnitName = unitN.getDescr();
                         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
 
-                        List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, allocationType, "0", "0");
+                        List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, "0", "0");
                         List<ContigentBill> expenditure = expenditure1.stream()
                                 .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                         double totalAmount = 0.0;
@@ -8662,7 +8662,7 @@ public class MangeReportImpl implements MangeReportService {
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
                             String subUnit = unitss.getUnit();
-                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(subUnit, finYearId, subHeadId, allocationType, "0", "0");
+                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(subUnit, finYearId, subHeadId, "0", "0");
                             List<ContigentBill> expenditure = expenditure1.stream()
                                     .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                             if (expenditure.size() > 0) {
@@ -8677,7 +8677,7 @@ public class MangeReportImpl implements MangeReportService {
                         String cbAmount = decimalFormat.format(totalbill);
                         eAmount = Double.parseDouble(cbAmount);
                     }
-                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(uid, finYearId, subHeadId, allocationType, "0", "0");
+                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(uid, finYearId, subHeadId, "0", "0");
                     List<ContigentBill> expenditure = expenditure1.stream()
                             .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                     double totalAmount = 0.0;
@@ -8742,7 +8742,7 @@ public class MangeReportImpl implements MangeReportService {
                 double exAmount = 0.0;
                 if (listOfSubUnit1.size() == 0) {
                 } else {
-                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, allocationType, "0", "0");
+                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, "0", "0");
                     List<ContigentBill> expenditure = expenditure1.stream()
                             .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                     double selfExp = 0.0;
@@ -9113,7 +9113,7 @@ public class MangeReportImpl implements MangeReportService {
                         CgUnit unitN = cgUnitRepository.findByUnit(hrDetails.get(0).getToUnit());
                         UnitName = unitN.getDescr();
                         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
-                        List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, allocationType, "0", "0");
+                        List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, "0", "0");
                         List<ContigentBill> expenditure = expenditure1.stream()
                                 .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                         double totalAmount = 0.0;
@@ -9236,7 +9236,7 @@ public class MangeReportImpl implements MangeReportService {
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
                             String subUnit = unitss.getUnit();
-                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(subUnit, finYearId, subHeadId, allocationType, "0", "0");
+                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(subUnit, finYearId, subHeadId, "0", "0");
 
                             List<ContigentBill> expenditure = expenditure1.stream()
                                     .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
@@ -9252,7 +9252,7 @@ public class MangeReportImpl implements MangeReportService {
                         String cbAmount = decimalFormat.format(totalbill);
                         eAmount = Double.parseDouble(cbAmount);
                     }
-                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(uid, finYearId, subHeadId, allocationType, "0", "0");
+                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(uid, finYearId, subHeadId, "0", "0");
 
                     List<ContigentBill> expenditure = expenditure1.stream()
                             .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
@@ -9326,7 +9326,7 @@ public class MangeReportImpl implements MangeReportService {
                 if (listOfSubUnit1.size() == 0) {
 
                 } else {
-                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, allocationType, "0", "0");
+                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, "0", "0");
                     List<ContigentBill> expenditure = expenditure1.stream()
                             .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                     double selfExp = 0.0;
@@ -9646,7 +9646,7 @@ public class MangeReportImpl implements MangeReportService {
                         CgUnit unitN = cgUnitRepository.findByUnit(hrDetails.get(0).getToUnit());
                         UnitName = unitN.getDescr();
                         BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
-                        List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, allocationType, "0", "0");
+                        List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, "0", "0");
                         List<ContigentBill> expenditure = expenditure1.stream()
                                 .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                         double totalAmount = 0.0;
@@ -9719,7 +9719,7 @@ public class MangeReportImpl implements MangeReportService {
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
                             String subUnit = unitss.getUnit();
-                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(subUnit, finYearId, subHeadId, allocationType, "0", "0");
+                            List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(subUnit, finYearId, subHeadId, "0", "0");
 
                             List<ContigentBill> expenditure = expenditure1.stream()
                                     .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
@@ -9736,7 +9736,7 @@ public class MangeReportImpl implements MangeReportService {
                         eAmount = Double.parseDouble(cbAmount);
                     }
 
-                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(uid, finYearId, subHeadId, allocationType, "0", "0");
+                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(uid, finYearId, subHeadId, "0", "0");
 
                     List<ContigentBill> expenditure = expenditure1.stream()
                             .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
@@ -9790,7 +9790,7 @@ public class MangeReportImpl implements MangeReportService {
                 double exAmount = 0.0;
                 if (listOfSubUnit1.size() == 0) {
                 } else {
-                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, allocationType, "0", "0");
+                    List<ContigentBill> expenditure1 = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(hrData.getUnitId(), finYearId, subHeadId, "0", "0");
                     List<ContigentBill> expenditure = expenditure1.stream()
                             .filter(e -> e.getCbDate().after(fromDateFormate) && e.getCbDate().before(toDateFormate)).collect(Collectors.toList());
                     double selfExp = 0.0;

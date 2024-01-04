@@ -325,7 +325,7 @@ public class ContingentServiceImpl implements ContingentService {
                 allocationAmount = allocationAmount + (Double.parseDouble(parkingTrans.getRemainingCdaAmount()) * amountUnit.getAmount());
             }
 
-            List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(contingentBillSaveRequest.getUnit(), contingentBillSaveRequest.getBudgetFinancialYearId(), contingentBillSaveRequest.getBudgetHeadId(), allocationType.get(0).getAllocTypeId(), "0", "0");
+            List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(contingentBillSaveRequest.getUnit(), contingentBillSaveRequest.getBudgetFinancialYearId(), contingentBillSaveRequest.getBudgetHeadId(),"0", "0");
 
             double totalBill = 0;
             for (ContigentBill bill : subHeadContigentBill) {
@@ -783,7 +783,7 @@ public class ContingentServiceImpl implements ContingentService {
                 allocationAmount = allocationAmount + (Double.parseDouble(parkingTrans.getRemainingCdaAmount()) * amountUnit.getAmount());
             }
 
-            List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdateAndIsFlag(contingentBillSaveRequest.getUnit(), contingentBillSaveRequest.getBudgetFinancialYearId(), contingentBillSaveRequest.getBudgetHeadId(), allocationType.get(0).getAllocTypeId(), "0", "0");
+            List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(contingentBillSaveRequest.getUnit(), contingentBillSaveRequest.getBudgetFinancialYearId(), contingentBillSaveRequest.getBudgetHeadId(),  "0", "0");
 
             double totalBill = 0;
             for (ContigentBill bill : subHeadContigentBill) {
@@ -1133,7 +1133,7 @@ public class ContingentServiceImpl implements ContingentService {
         }
 
         int maxNumber = 1;
-        List<ContigentBill> masNumberList = contigentBillRepository.findByAllocationTypeIdAndCbUnitIdAndFinYearAndBudgetHeadID(allocationType.get(0).getAllocTypeId(), hrData.getUnitId(), budgetFinancialYear.getSerialNo(), budgetHeadId.getBudgetId());
+        List<ContigentBill> masNumberList = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadID( hrData.getUnitId(), budgetFinancialYear.getSerialNo(), budgetHeadId.getBudgetId());
         if (masNumberList.isEmpty()) {
             contingentBillListData.setSectionNumber("1");
         } else {
