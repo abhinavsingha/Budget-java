@@ -9306,7 +9306,6 @@ public class MangeReportImpl implements MangeReportService {
                         String cbAmount = decimalFormat.format(totalAmount);
                         eAmount = Double.parseDouble(cbAmount);
                     }
-
                     eAmount = totalAmount + totalbill;
 
                     if (finAmount != 0)
