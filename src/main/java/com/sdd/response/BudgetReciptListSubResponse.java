@@ -35,6 +35,7 @@ public class BudgetReciptListSubResponse {
     private Timestamp updatedOn;
     private String unallocatedAmount;
     private String isCdaParked;
+    List<CdaParkingTrans> cdaParkingListData;
 
 
 }

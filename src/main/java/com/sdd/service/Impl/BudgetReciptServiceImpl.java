@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.*;
 
 @Service
@@ -460,7 +461,6 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
 
         List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getBudgetHeadId(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
-
         if (!cdaParkingList.isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA ALREADY PARKED.CAN NOT UPDATE AFTER CDA PARKING");
         }
@@ -471,26 +471,50 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         }
 
 
-        List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(HelperUtils.HEADUNITID, budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getBudgetHeadId(), budgetReciptSaveRequest.getAllocationTypeId(), "Approved", "0", "0");
-        for (BudgetAllocationDetails budgetAllocationDetails : budgetAllocationDetailsList) {
-            budgetAllocationDetails.setAllocationAmount(budgetReciptSaveRequest.getAllocationAmount());
-            budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-            budgetAllocationDetailsRepository.save(budgetAllocationDetails);
-        }
-
-
         List<BudgetAllocation> budgetAllocationData = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(HelperUtils.HEADUNITID, budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getBudgetHeadId(), budgetReciptSaveRequest.getAllocationTypeId(), "Approved", "0", "0");
         if (budgetAllocationData.isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND");
         }
 
 
-        String refTransID = "";
-        String authGroupId = "";
+        List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(HelperUtils.HEADUNITID, budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getBudgetHeadId(), budgetReciptSaveRequest.getAllocationTypeId(), "Approved", "0", "0");
+
+        for (BudgetAllocationDetails budgetAllocationDetails : budgetAllocationDetailsList) {
+            budgetAllocationDetails.setIsDelete("1");
+            budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            budgetAllocationDetailsRepository.save(budgetAllocationDetails);
+
+
+
+            BudgetAllocationDetails newData = new BudgetAllocationDetails();
+            BeanUtils.copyProperties(budgetAllocationDetails, newData);
+            newData.setTransactionId(HelperUtils.getBudgetAllocationTypeId());
+            newData.setAllocationAmount(budgetReciptSaveRequest.getAllocationAmount());
+            newData.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            newData.setIsDelete("0");
+            newData.setIsTYpe("Receipt Alter");
+            newData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            budgetAllocationDetailsRepository.save(newData);
+
+
+        }
         for (BudgetAllocation budgetAllocationDatum : budgetAllocationData) {
-            budgetAllocationDatum.setAllocationAmount(budgetReciptSaveRequest.getAllocationAmount());
             budgetAllocationDatum.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            budgetAllocationDatum.setIsFlag("1");
             budgetAllocationRepository.save(budgetAllocationDatum);
+
+
+
+            BudgetAllocation newData = new BudgetAllocation();
+            BeanUtils.copyProperties(budgetAllocationDatum, newData);
+            newData.setIsFlag("0");
+            newData.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
+            newData.setAllocationAmount(budgetReciptSaveRequest.getAllocationAmount());
+            newData.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            newData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            newData.setIsTYpe("Receipt Alter");
+            budgetAllocationRepository.save(newData);
+
         }
 
         List<AuthorityTableResponse> authorityTableList = new ArrayList<AuthorityTableResponse>();
@@ -523,12 +547,14 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             budgetAllocationReport.setAllocTypeId(allocationRepository.findByAllocTypeId(budgetAllocationSubReport.getAllocTypeId()));
             budgetAllocationReport.setSubHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(budgetAllocationSubReport.getSubHead()));
 
-            List<CdaParkingTrans> cdaParkingListData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndIsFlag(budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(), hrData.getUnitId(), "0");
+            List<CdaParkingTrans> cdaParkingListData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(), "0", budgetAllocationSubReport.getAllocTypeId(), hrData.getUnitId());
+//            List<CdaParkingTrans> cdaParkingListData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndIsFlag(budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(), hrData.getUnitId(), "0");
             if (!cdaParkingListData.isEmpty()) {
                 budgetAllocationReport.setIsCdaParked("1");
             } else {
                 budgetAllocationReport.setIsCdaParked("0");
             }
+            budgetAllocationReport.setCdaParkingListData(cdaParkingListData);
 
             List<Authority> authoritiesList = authorityRepository.findByAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
             if (!authoritiesList.isEmpty()) {
@@ -546,7 +572,6 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
             budgetAllocationReport.setAuthList(authorityTableList);
             budgetAllocationList.add(budgetAllocationReport);
-
         }
 
         budgetAllocationResponse.setBudgetResponseist(budgetAllocationList);
@@ -568,8 +593,6 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE BUDGET ALLOCATION");
-        } else {
-
         }
 
         List<AuthorityTableResponse> authorityTableList = new ArrayList<AuthorityTableResponse>();
@@ -603,12 +626,20 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             budgetAllocationReport.setSubHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(budgetAllocationSubReport.getSubHead()));
 
 
-            List<CdaParkingTrans> cdaParkingListData = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getTransactionId(), "0");
+//            List<CdaParkingTrans> cdaParkingListData = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getTransactionId(), "0");
+//            if (!cdaParkingListData.isEmpty()) {
+//                budgetAllocationReport.setIsCdaParked("1");
+//            } else {
+//                budgetAllocationReport.setIsCdaParked("0");
+//            }
+
+            List<CdaParkingTrans> cdaParkingListData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(), "0", budgetAllocationSubReport.getAllocTypeId(), hrData.getUnitId());
             if (!cdaParkingListData.isEmpty()) {
                 budgetAllocationReport.setIsCdaParked("1");
             } else {
                 budgetAllocationReport.setIsCdaParked("0");
             }
+            budgetAllocationReport.setCdaParkingListData(cdaParkingListData);
 
 
             List<Authority> authoritiesList = authorityRepository.findByAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
@@ -718,7 +749,6 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         }
 
 
-
         List<BudgetRecioptDemoResponse> budgetMainDataResponse = new ArrayList<BudgetRecioptDemoResponse>();
 
         for (BudgetRecioptDemoResponse budgetListDatum : budgetListData) {
@@ -759,7 +789,6 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE BUDGET RECEIPT");
         }
         List<CdaParking> totalCdaParkingAmount = new ArrayList<>();
-
 
 
         CdaParking cdaParking = new CdaParking();
