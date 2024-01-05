@@ -3,6 +3,7 @@ package com.sdd.service;
 import com.sdd.entities.CdaParking;
 import com.sdd.request.CDARequest;
 import com.sdd.request.CDARequestReBase;
+import com.sdd.request.CdaAndAllocationDataRequest;
 import com.sdd.response.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public interface CdaParkingService {
 	ApiResponse<CdaParkingTransResponse> getAllCdaData(CDARequest cdaRequest);
 
 	ApiResponse<ReabseCdaParkingResponse> getOldCdaDataForRebase(CDARequestReBase cdaRequest);
+	ApiResponse<CdaAndAllocationDataResponse> getAllBillCdaAndAllocationSummery(CdaAndAllocationDataRequest cdaAndAllocationDataRequest);
 
 	ApiResponse<ReabseCdaParkingResponse> getCheckExpForUnit(CDARequestReBase cdaRequest);
 

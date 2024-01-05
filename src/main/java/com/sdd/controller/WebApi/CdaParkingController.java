@@ -5,6 +5,7 @@ import com.sdd.entities.CdaParking;
 import com.sdd.request.CDAReportRequest;
 import com.sdd.request.CDARequest;
 import com.sdd.request.CDARequestReBase;
+import com.sdd.request.CdaAndAllocationDataRequest;
 import com.sdd.response.*;
 import com.sdd.service.CdaParkingService;
 import lombok.extern.slf4j.Slf4j;
@@ -62,6 +63,16 @@ public class CdaParkingController {
 	public ResponseEntity<ApiResponse<ReabseCdaParkingResponse>> getOldCdaDataForRebase(@RequestBody CDARequestReBase cdaRequest) {
 		return new ResponseEntity<>(cdaParkingService.getOldCdaDataForRebase(cdaRequest), HttpStatus.OK);
 	}
+
+
+
+	@PostMapping("/getAllBillCdaAndAllocationSummery")
+	public ResponseEntity<ApiResponse<CdaAndAllocationDataResponse>> getAllBillCdaAndAllocationSummery(@RequestBody CdaAndAllocationDataRequest cdaAndAllocationDataRequest) {
+		return new ResponseEntity<>(cdaParkingService.getAllBillCdaAndAllocationSummery(cdaAndAllocationDataRequest), HttpStatus.OK);
+	}
+
+
+
 
 	@PostMapping("/getCheckExpForUnit")
 	public ResponseEntity<ApiResponse<ReabseCdaParkingResponse>> getCheckExpForUnit(@RequestBody CDARequestReBase cdaRequest) {

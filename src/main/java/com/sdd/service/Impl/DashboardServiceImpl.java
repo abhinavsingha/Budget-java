@@ -353,7 +353,7 @@ public class DashboardServiceImpl implements DashBoardService {
             }
         }
         String allRole = roleId + "," + roledata;
-        hrDataCheck.setRoleId(allRole);
+        hrDataCheck.setRoleId(allRole.trim());
         hrDataRepository.save(hrDataCheck);
 
         UiResponse uiData = new UiResponse();
