@@ -8540,7 +8540,11 @@ public class MangeReportImpl implements MangeReportService {
                 if (reportDetail.size() <= 0) {
 
                     String UnitName = "";
-                    List<BudgetAllocation> hrDetails = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, hrData.getUnitId(), finYearId, allocationType, "0", "0", "Approved");
+                    //List<BudgetAllocation> hrDetails = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, hrData.getUnitId(), finYearId, allocationType, "0", "0", "Approved");
+                    List<BudgetAllocation> hrDetails1 = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndStatusOrderByCreatedOnAsc(subHeadId, hrData.getUnitId(), finYearId, allocationType,  "Approved");
+                    List<BudgetAllocation> filterDateWise = hrDetails1.stream().filter(e -> e.getCreatedOn().before(toDateFormate)).collect(Collectors.toList());
+                    List<BudgetAllocation> hrDetails=new ArrayList<>();
+                    hrDetails.add(filterDateWise.get(filterDateWise.size() -1));
                     if (hrDetails.size() > 0) {
                         double hrAllocAmount = Double.parseDouble(hrDetails.get(0).getAllocationAmount());
                         AmountUnit hrAmount = amountUnitRepository.findByAmountTypeId(hrDetails.get(0).getAmountType());
@@ -8624,7 +8628,11 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     continue;
                 }
-                List<BudgetAllocation> hrDetails = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, hrUnit, finYearId, allocationType, "0", "0", "Approved");
+                //List<BudgetAllocation> hrDetails = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, hrUnit, finYearId, allocationType, "0", "0", "Approved");
+                List<BudgetAllocation> hrDetails11 = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusOrderByCreatedOnAsc(hrUnit, finYearId, subHeadId, allocationType, "Approved");
+                List<BudgetAllocation> filterDateWise = hrDetails11.stream().filter(e -> e.getCreatedOn().before(toDateFormate)).collect(Collectors.toList());
+                List<BudgetAllocation> hrDetails=new ArrayList<>();
+                hrDetails.add(filterDateWise.get(filterDateWise.size() -1));
                 if (hrDetails.size() > 0) {
                     double hrAllocAmount = Double.parseDouble(hrDetails.get(0).getAllocationAmount());
                     AmountUnit hrAmount = amountUnitRepository.findByAmountTypeId(hrDetails.get(0).getAmountType());
@@ -8644,8 +8652,13 @@ public class MangeReportImpl implements MangeReportService {
 
                 for (BudgetAllocation row : reportDetail) {
 
-                    amount = Double.parseDouble(row.getAllocationAmount());
-                    AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
+                    List<BudgetAllocation> unitDetail = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusOrderByCreatedOnAsc(row.getToUnit(), finYearId, subHeadId, allocationType, "Approved");
+                    List<BudgetAllocation> filterData = unitDetail.stream().filter(e -> e.getCreatedOn().before(toDateFormate)).collect(Collectors.toList());
+                    List<BudgetAllocation> unitDetails=new ArrayList<>();
+                    unitDetails.add(filterData.get(filterData.size() -1));
+
+                    amount = Double.parseDouble(unitDetails.get(0).getAllocationAmount());
+                    AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(unitDetails.get(0).getAmountType());
                     if (amountTypeObj == null) {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
