@@ -1152,7 +1152,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             double expAmount = 0;
             for (CgUnit cgUnit : subUnitList) {
                 List<BudgetAllocation> budgetAllocationListASD = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlag(budgetAllocationSubReport.getSubHead(), cgUnit.getUnit(), budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getAllocationTypeId(), "0", "0");
-                List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(cgUnit.getUnit(), budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(),  "0", "0");
+                List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(cgUnit.getUnit(), budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(), "0", "0");
 
                 for (ContigentBill contigentBill : contigentBills) {
                     expAmount = expAmount + Double.parseDouble(contigentBill.getCbAmount());
@@ -1370,7 +1370,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         return ResponseUtils.createSuccessResponse(budgetAllocationResponse, new TypeReference<BudgetAllocationResponse>() {
         });
     }
-
 
 
     @Override
@@ -1667,22 +1666,14 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
-//      ABhi Termrealy hai
-//        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(groupId, hrData.getUnitId());
 
         for (BudgetAllocation budgetAllocationSubReport : budgetAllocations) {
 
-            if (budgetAllocationSubReport.getPrevInitial() == null) {
+            if (budgetAllocationSubReport.getIsFlag().equalsIgnoreCase("1") || budgetAllocationSubReport.getPrevInitial().equalsIgnoreCase("1")) {
+                continue;
+            } else {
                 if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
                     continue;
-                }
-            } else {
-                if (budgetAllocationSubReport.getIsBudgetRevision().equalsIgnoreCase("1") || budgetAllocationSubReport.getPrevInitial().equalsIgnoreCase("1")) {
-
-                } else {
-                    if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
-                        continue;
-                    }
                 }
             }
 
@@ -2799,8 +2790,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
 
-
-
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<BudgetAllocationSaveResponse> approveRivisonBudgetOrReject3(BudgetApproveRequest budgetApproveRequest) {
@@ -2896,8 +2885,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         return ResponseUtils.createSuccessResponse(response, new TypeReference<BudgetAllocationSaveResponse>() {
         });
     }
-
-
 
 
     @Override
@@ -4323,7 +4310,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
 
-
         String authGrouPid = "";
         for (int i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
 
@@ -4473,7 +4459,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         return ResponseUtils.createSuccessResponse(findBudgetResponse, new TypeReference<List<FindBudgetResponse>>() {
         });
     }
-
 
 
     @Override
@@ -4956,8 +4941,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
     }
 
 
-
-
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<DefaultResponse> saveAuthDataRevisionSaveCbAsAllocation(AuthRequest authRequest) {
@@ -5255,7 +5238,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                         List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Approved", "0", "0");
                         double expAmount = 0;
                         if (!dataBudget.isEmpty()) {
-                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(cgUnit.getUnit(), dataBudget.get(0).getFinYear(), dataBudget.get(0).getSubHead(),"0", "0");
+                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(cgUnit.getUnit(), dataBudget.get(0).getFinYear(), dataBudget.get(0).getSubHead(), "0", "0");
                             for (ContigentBill contigentBill : contigentBills) {
                                 expAmount = expAmount + Double.parseDouble(contigentBill.getCbAmount());
                             }

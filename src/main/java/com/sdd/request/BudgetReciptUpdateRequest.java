@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -17,6 +18,8 @@ public class BudgetReciptUpdateRequest {
     private String budgetHeadId;
     private String allocationAmount;
 
+    private String alterAmount;
 
+    private List<CdaSubRequest> cdaRequest;
 
 }
