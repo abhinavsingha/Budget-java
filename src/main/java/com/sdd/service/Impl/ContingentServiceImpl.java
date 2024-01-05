@@ -17,9 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -64,6 +66,9 @@ public class ContingentServiceImpl implements ContingentService {
 
     @Autowired
     MangeInboxOutBoxRepository mangeInboxOutBoxRepository;
+
+    @Autowired
+    TransferBCbBillRepository transferBCbBillRepository;
 
     @Autowired
     AuthorityRepository authorityRepository;
@@ -323,7 +328,7 @@ public class ContingentServiceImpl implements ContingentService {
                 allocationAmount = allocationAmount + (Double.parseDouble(parkingTrans.getRemainingCdaAmount()) * amountUnit.getAmount());
             }
 
-            List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(contingentBillSaveRequest.getUnit(), contingentBillSaveRequest.getBudgetFinancialYearId(), contingentBillSaveRequest.getBudgetHeadId(),"0", "0");
+            List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(contingentBillSaveRequest.getUnit(), contingentBillSaveRequest.getBudgetFinancialYearId(), contingentBillSaveRequest.getBudgetHeadId(), "0", "0");
 
             double totalBill = 0;
             for (ContigentBill bill : subHeadContigentBill) {
@@ -431,17 +436,62 @@ public class ContingentServiceImpl implements ContingentService {
         if (hrDataList.isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO ROLE ASSIGN FOR THIS UNIT.");
         }
-
-
-
-        List<MangeInboxOutbox> findNewCbBill =  mangeInboxOutBoxRepository.findByCreaterpIdAndToUnit(transferCbBill.getNewUserId(),hrData.getUnitId());
-        List<MangeInboxOutbox> findOldCbBill =  mangeInboxOutBoxRepository.findByCreaterpIdAndToUnit(transferCbBill.getOldUserId(),hrData.getUnitId());
-
-        if (findOldCbBill.isEmpty()) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO BILL FOUND FOR CURRENT USER.");
+        if (transferCbBill.getOldUserId().equalsIgnoreCase(transferCbBill.getNewUserId())) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NEW USER OR OLD USER CAN NOT BE SAME.");
         }
 
-        contingentSaveResponse.setMsg("Data Save Successfully");
+        HrData oldUser = hrDataRepository.findByPid(transferCbBill.getOldUserId());
+        if (oldUser == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO USER FIND FOR THIS OLD PID.");
+        }
+
+        HrData newUser = hrDataRepository.findByPid(transferCbBill.getNewUserId());
+        if (newUser == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO USER FIND FOR THIS NEW PID.");
+        }
+
+        List<MangeInboxOutbox> findNewCbBill = mangeInboxOutBoxRepository.findByCreaterpIdAndToUnit(transferCbBill.getNewUserId(), hrData.getUnitId());
+        List<MangeInboxOutbox> findOldCbBill = mangeInboxOutBoxRepository.findByCreaterpIdAndToUnit(transferCbBill.getOldUserId(), hrData.getUnitId());
+
+        if (!findOldCbBill.isEmpty()) {
+            for (MangeInboxOutbox mangeInboxOutbox : findOldCbBill) {
+
+                mangeInboxOutbox.setCreaterpId(transferCbBill.getNewUserId());
+                mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+
+
+                TransferContingentBillHistory transferContingentBillHistory = new TransferContingentBillHistory();
+                transferContingentBillHistory.setCbId(HelperUtils.getTransferBillId());
+                transferContingentBillHistory.setCbNo(mangeInboxOutbox.getGroupId());
+                transferContingentBillHistory.setOldUserId(transferCbBill.getOldUserId());
+                transferContingentBillHistory.setNewUserPid(transferCbBill.getNewUserId());
+                transferContingentBillHistory.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+                transferContingentBillHistory.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                transferContingentBillHistory.setRemarks("CB Transfer");
+                transferBCbBillRepository.save(transferContingentBillHistory);
+
+
+            }
+            contingentSaveResponse.setMsg("CB BILL TRANSFER AND USER DEACTIVATED SUCCESSFULLY");
+        } else {
+            contingentSaveResponse.setMsg("NO BILL FOUND AND USER ROLE DEACTIVATED SUCCESSFULLY");
+        }
+
+        if (!hrData.getRoleId().contains(HelperUtils.CBCREATER)) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "USER DID NOT ASSIGN CB CREATE ROLE. PLEASE CONTACT ADMINISTER");
+        }
+
+        String[] newRoleIdData = oldUser.getRoleId().split(",");
+        List<String> list = new ArrayList<String>(Arrays.asList(newRoleIdData));
+        list.remove(HelperUtils.CBCREATER);
+
+        String newRoleId = "";
+        for (String newRoleIdDatum : list) {
+            newRoleId = newRoleIdDatum + "," + newRoleId;
+        }
+        oldUser.setRoleId(newRoleId);
+        hrDataRepository.save(oldUser);
 
         return ResponseUtils.createSuccessResponse(contingentSaveResponse, new TypeReference<ContingentSaveResponse>() {
         });
@@ -755,7 +805,7 @@ public class ContingentServiceImpl implements ContingentService {
                 allocationAmount = allocationAmount + (Double.parseDouble(parkingTrans.getRemainingCdaAmount()) * amountUnit.getAmount());
             }
 
-            List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(contingentBillSaveRequest.getUnit(), contingentBillSaveRequest.getBudgetFinancialYearId(), contingentBillSaveRequest.getBudgetHeadId(),  "0", "0");
+            List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(contingentBillSaveRequest.getUnit(), contingentBillSaveRequest.getBudgetFinancialYearId(), contingentBillSaveRequest.getBudgetHeadId(), "0", "0");
 
             double totalBill = 0;
             for (ContigentBill bill : subHeadContigentBill) {
@@ -854,7 +904,7 @@ public class ContingentServiceImpl implements ContingentService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.");
         }
 
-        List<ContigentBill> cbData = contigentBillRepository.findByCbUnitIdAndCreatedBy(hrData.getUnitId(),hrData.getPid());
+        List<ContigentBill> cbData = contigentBillRepository.findByCbUnitIdAndCreatedBy(hrData.getUnitId(), hrData.getPid());
         if (cbData.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO DATA FOUND.");
         }
@@ -1101,7 +1151,7 @@ public class ContingentServiceImpl implements ContingentService {
         }
 
         int maxNumber = 1;
-        List<ContigentBill> masNumberList = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadID( hrData.getUnitId(), budgetFinancialYear.getSerialNo(), budgetHeadId.getBudgetId());
+        List<ContigentBill> masNumberList = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadID(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), budgetHeadId.getBudgetId());
         if (masNumberList.isEmpty()) {
             contingentBillListData.setSectionNumber("1");
         } else {

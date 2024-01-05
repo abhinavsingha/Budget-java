@@ -394,17 +394,6 @@ public class MangeUserImpl implements MangeUserService {
             if (newRoll==null || newRoll.isEmpty()){
                 hrData.setIsActive("0");
             }
-
-//            String[] testArray = hrDataCheck.getRoleId().split(",");
-//            int max = 0;
-//            for (int i = 0; i < testArray.length; i++) {
-//                if (Integer.parseInt(testArray[i].trim()) > max) {
-//                    max = Integer.parseInt(testArray[i]);
-//                }
-//            }
-//            if (newRoleId >= max) {
-//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE THIS TASK");
-//            }
         }
 
 

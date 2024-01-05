@@ -40,6 +40,10 @@ public class HelperUtils {
         return "IN_ID" + ConverterUtils.getRandomTimeStamp();
     }
 
+    public static String getTransferBillId() {
+        return "TRANS_ID" + ConverterUtils.getRandomTimeStamp();
+    }
+
     public static Timestamp getCurrentTimeStamp() {
         return new Timestamp(new Date().getTime());
     }

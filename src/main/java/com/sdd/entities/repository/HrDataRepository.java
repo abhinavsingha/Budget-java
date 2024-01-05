@@ -23,4 +23,5 @@ public interface HrDataRepository extends JpaRepository<HrData, String> {
     List<HrData> findByUnitIdAndIsActive(String unitId,String isActive);
 
     HrData findByUserName(String updatedBy);
+    HrData findByPid(String pid);
 }
