@@ -607,8 +607,6 @@ public class CdaParkingImpl implements CdaParkingService {
     }
 
 
-
-
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<CdaParking>> getCdaUnitList() {
@@ -907,7 +905,7 @@ public class CdaParkingImpl implements CdaParkingService {
 
 
         HashMap<String, CdaParkingTransSubResponse> subHeadData = new LinkedHashMap<>();
-        List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(),"0", "0", hrData.getUnitId());
+        List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(), "0", "0", hrData.getUnitId());
 
 
         for (ContigentBill contigentBill : contigentBills) {
@@ -985,9 +983,6 @@ public class CdaParkingImpl implements CdaParkingService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "FINANCIAL ID CAN NOT BE BLANK");
         }
 
-        if (cdaRequest.getAllocationTypeId() == null || cdaRequest.getAllocationTypeId().isEmpty()) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION TYPE ID CAN NOT BE BLANK");
-        }
 
         if (cdaRequest.getAmountType() == null || cdaRequest.getAmountType().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "AMOUNT TYPE ID CAN NOT BE BLANK");
@@ -1003,17 +998,23 @@ public class CdaParkingImpl implements CdaParkingService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID FINANCIAL YEAR ID");
         }
 
-        AllocationType allocationType = allocationRepository.findByAllocTypeId(cdaRequest.getAllocationTypeId());
-        if (allocationType == null) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
-        }
 
+        String currentUnitId = hrData.getUnitId();
+        List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + currentUnitId + "%");
+        unitList.remove(cgUnitRepository.findByUnit(currentUnitId));
+        List<BudgetAllocation> budgetAllocationData = new ArrayList<BudgetAllocation>();
+        for (CgUnit cgUnit : unitList) {
+            List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndStatusAndIsFlagAndIsBudgetRevision(cgUnit.getUnit(), cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(), "Approved", "0", "0");
+            budgetAllocationData.addAll(dataBudget);
+
+        }
+        mainResponse.setBudgetAllocationData(budgetAllocationData);
 
         HashMap<String, CdaParkingTransSubResponse> subHeadData = new LinkedHashMap<>();
-        List<ContigentBill> contigentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(),"0", "0", hrData.getUnitId());
+        List<ContigentBill> contingentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(), "0", "0", hrData.getUnitId());
 
 
-        for (ContigentBill contigentBill : contigentBills) {
+        for (ContigentBill contigentBill : contingentBills) {
             List<CdaParkingCrAndDr> cdaParkingCrAndDrsList = parkingCrAndDrRepository.findByTransactionIdAndIsFlag(contigentBill.getCbId(), "0");
 
 

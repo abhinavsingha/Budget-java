@@ -23,6 +23,7 @@ public interface CdaParkingService {
 	ApiResponse<CdaParkingTransResponse> getAllCdaData(CDARequest cdaRequest);
 
 	ApiResponse<ReabseCdaParkingResponse> getOldCdaDataForRebase(CDARequestReBase cdaRequest);
+
 	ApiResponse<CdaAndAllocationDataResponse> getAllBillCdaAndAllocationSummery(CdaAndAllocationDataRequest cdaAndAllocationDataRequest);
 
 	ApiResponse<ReabseCdaParkingResponse> getCheckExpForUnit(CDARequestReBase cdaRequest);

@@ -217,26 +217,26 @@ public class BudgetAllocationController {
     }
 
 
+//
+//    @PostMapping("/getBudgetRevisionData33")
+//    public ResponseEntity<ApiResponse<List<BudgetReviResp>>> getBudgetRevisionData33(@RequestBody BudgetReviReq budgetRivRequest) {
+//        return new ResponseEntity<>(budgetAllocationService.getBudgetRevisionData33(budgetRivRequest), HttpStatus.OK);
+//    }
 
-    @PostMapping("/getBudgetRevisionData33")
-    public ResponseEntity<ApiResponse<List<BudgetReviResp>>> getBudgetRevisionData33(@RequestBody BudgetReviReq budgetRivRequest) {
-        return new ResponseEntity<>(budgetAllocationService.getBudgetRevisionData33(budgetRivRequest), HttpStatus.OK);
-    }
-
-    @PostMapping("/getBudgetRevisionData3")
-    public ResponseEntity<ApiResponse<List<BudgetReviResp>>> getBudgetRevisionData3(@RequestBody BudgetReviReq budgetRivRequest) {
+    @PostMapping("/getBudgetRevisionData")
+    public ResponseEntity<ApiResponse<List<BudgetReviResp>>> getBudgetRevisionData(@RequestBody BudgetReviReq budgetRivRequest) {
         return new ResponseEntity<>(budgetAllocationService.getBudgetRevisionData3(budgetRivRequest), HttpStatus.OK);
     }
 
 
-    @PostMapping("/approveRevisionBudgetOrReject3")
-    public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> approveRevisionBudgetOrReject3(@RequestBody BudgetApproveRequest budgetApproveRequest) {
+    @PostMapping("/approveRevisionBudgetOrReject")
+    public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> approveRevisionBudgetOrReject(@RequestBody BudgetApproveRequest budgetApproveRequest) {
         return new ResponseEntity<>(budgetAllocationService.approveRivisonBudgetOrReject3(budgetApproveRequest), HttpStatus.OK);
     }
 
 
-    @PostMapping("/saveBudgetRevision3")
-    public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> saveBudgetRevision3(@RequestBody BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList) {
+    @PostMapping("/saveBudgetRevision")
+    public ResponseEntity<ApiResponse<BudgetAllocationSaveResponse>> saveBudgetRevision(@RequestBody BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList) {
         return new ResponseEntity<>(budgetAllocationService.saveBudgetRevision3(budgetAllocationSaveRequestList), HttpStatus.OK);
     }
 
