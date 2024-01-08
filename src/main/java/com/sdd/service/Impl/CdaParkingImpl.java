@@ -998,13 +998,17 @@ public class CdaParkingImpl implements CdaParkingService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID FINANCIAL YEAR ID");
         }
 
+        AllocationType allocationType = allocationRepository.findByAllocTypeId(cdaRequest.getAllocationTypeId());
+        if (allocationType == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
+        }
 
         String currentUnitId = hrData.getUnitId();
         List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + currentUnitId + "%");
         unitList.remove(cgUnitRepository.findByUnit(currentUnitId));
         List<BudgetAllocation> budgetAllocationData = new ArrayList<BudgetAllocation>();
         for (CgUnit cgUnit : unitList) {
-            List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndStatusAndIsFlagAndIsBudgetRevision(cgUnit.getUnit(), cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(), "Approved", "0", "0");
+            List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(cgUnit.getUnit(), cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(),cdaRequest.getAllocationTypeId(), "Approved", "0", "0");
             budgetAllocationData.addAll(dataBudget);
 
         }

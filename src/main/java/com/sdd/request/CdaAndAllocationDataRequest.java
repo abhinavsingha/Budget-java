@@ -12,5 +12,6 @@ public class CdaAndAllocationDataRequest {
     private String financialYearId;
     private String budgetHeadId;
     private String amountType;
+    private String allocationTypeId;
 
 }
