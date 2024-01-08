@@ -502,6 +502,8 @@ public class CdaParkingImpl implements CdaParkingService {
     @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<CdaParkingHistoryDto>> getCdaHistoryData(String groupId) {
         List<CdaParkingHistoryDto> mainResponse = new ArrayList<CdaParkingHistoryDto>();
+        List<CdaParkingHistoryDto> oldCda = new ArrayList<CdaParkingHistoryDto>();
+        List<CdaParkingHistoryDto> newCda = new ArrayList<CdaParkingHistoryDto>();
 
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
@@ -513,24 +515,31 @@ public class CdaParkingImpl implements CdaParkingService {
 
         List<CdaParkingUpdateHistory> cdaParkingUpdateHistoryList = cdaUpdateHistoryRepository.findByAuthGroupId(groupId);
 
-        for (Integer i = 0; i < cdaParkingUpdateHistoryList.size(); i++) {
+        for (CdaParkingUpdateHistory cdaParkingUpdateHistory : cdaParkingUpdateHistoryList) {
 
             CdaParkingHistoryDto cdaParkingTransResponse = new CdaParkingHistoryDto();
 
-            cdaParkingTransResponse.setCdaParkingUpdateId(cdaParkingUpdateHistoryList.get(i).getCdaParkingUpdateId());
-            cdaParkingTransResponse.setOldAmount(cdaParkingUpdateHistoryList.get(i).getOldAmount());
-            cdaParkingTransResponse.setOldGinNo(cdaParkingRepository.findByGinNo(cdaParkingUpdateHistoryList.get(i).getOldGinNo()));
-            cdaParkingTransResponse.setNewAmount(cdaParkingUpdateHistoryList.get(i).getNewAmount());
-            cdaParkingTransResponse.setNewGinNo(cdaParkingRepository.findByGinNo(cdaParkingUpdateHistoryList.get(i).getNewGinNo()));
-            cdaParkingTransResponse.setUnitId(cgUnitRepository.findByUnit(cdaParkingUpdateHistoryList.get(i).getUnitId()));
-            cdaParkingTransResponse.setAuthGroupId(cdaParkingUpdateHistoryList.get(i).getAuthGroupId());
-            cdaParkingTransResponse.setCreatedOn(cdaParkingUpdateHistoryList.get(i).getCreatedOn() + "");
-            cdaParkingTransResponse.setUpdatedOn(cdaParkingUpdateHistoryList.get(i).getUpdatedOn() + "");
-            cdaParkingTransResponse.setUpdatedBy(hrDataRepository.findByUserName(cdaParkingUpdateHistoryList.get(i).getUpdatedBy()));
-            cdaParkingTransResponse.setAmountType(amountUnitRepository.findByAmountTypeId(cdaParkingUpdateHistoryList.get(i).getAmountType()));
-            cdaParkingTransResponse.setSubHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(cdaParkingUpdateHistoryList.get(i).getSubHead()));
+            cdaParkingTransResponse.setCdaParkingUpdateId(cdaParkingUpdateHistory.getCdaParkingUpdateId());
+            cdaParkingTransResponse.setOldAmount(cdaParkingUpdateHistory.getOldAmount());
+            cdaParkingTransResponse.setOldGinNo(cdaParkingRepository.findByGinNo(cdaParkingUpdateHistory.getOldGinNo()));
+            cdaParkingTransResponse.setNewAmount(cdaParkingUpdateHistory.getNewAmount());
+            cdaParkingTransResponse.setNewGinNo(cdaParkingRepository.findByGinNo(cdaParkingUpdateHistory.getNewGinNo()));
+            cdaParkingTransResponse.setUnitId(cgUnitRepository.findByUnit(cdaParkingUpdateHistory.getUnitId()));
+            cdaParkingTransResponse.setAuthGroupId(cdaParkingUpdateHistory.getAuthGroupId());
+            cdaParkingTransResponse.setCreatedOn(cdaParkingUpdateHistory.getCreatedOn() + "");
+            cdaParkingTransResponse.setUpdatedOn(cdaParkingUpdateHistory.getUpdatedOn() + "");
+            cdaParkingTransResponse.setUpdatedBy(hrDataRepository.findByUserName(cdaParkingUpdateHistory.getUpdatedBy()));
+            cdaParkingTransResponse.setAmountType(amountUnitRepository.findByAmountTypeId(cdaParkingUpdateHistory.getAmountType()));
+            cdaParkingTransResponse.setSubHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(cdaParkingUpdateHistory.getSubHead()));
+
+            if (cdaParkingUpdateHistory.getNewGinNo() == null || cdaParkingUpdateHistory.getNewAmount() == null) {
+                newCda.add(cdaParkingTransResponse);
+            } else {
+                oldCda.add(cdaParkingTransResponse);
+            }
 
             mainResponse.add(cdaParkingTransResponse);
+
         }
 
         return ResponseUtils.createSuccessResponse(mainResponse, new TypeReference<List<CdaParkingHistoryDto>>() {
@@ -1008,7 +1017,7 @@ public class CdaParkingImpl implements CdaParkingService {
         unitList.remove(cgUnitRepository.findByUnit(currentUnitId));
         List<BudgetAllocation> budgetAllocationData = new ArrayList<BudgetAllocation>();
         for (CgUnit cgUnit : unitList) {
-            List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(cgUnit.getUnit(), cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(),cdaRequest.getAllocationTypeId(), "Approved", "0", "0");
+            List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(cgUnit.getUnit(), cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(), cdaRequest.getAllocationTypeId(), "Approved", "0", "0");
             budgetAllocationData.addAll(dataBudget);
 
         }
