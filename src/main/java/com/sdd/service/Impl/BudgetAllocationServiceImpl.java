@@ -5043,7 +5043,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     List<BudgetAllocation> data = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(revisionDatum.getToUnitId(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Approved", "0", "0");
                     for (BudgetAllocation budgetAllocationRevision : data) {
                         budgetAllocationRevision.setIsBudgetRevision("1");
-                        budgetAllocationRevision.setIsFlag("1");
                         budgetAllocationRevision.setRevisedAmount(revisionDatum.getReviserAmount());
                         budgetAllocationRepository.save(budgetAllocationRevision);
                     }
@@ -5123,97 +5122,97 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 //                  Budget Revised All Unit Jisko diya gya hai
 
-                    String currentUnitId = revisionDatum.getToUnitId();
-                    List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + currentUnitId + "%");
-                    unitList.add(cgUnitRepository.findByUnit(currentUnitId));
-
-                    for (CgUnit cgUnit : unitList) {
-
-                        if (cgUnit.getUnit().equalsIgnoreCase(revisionDatum.getToUnitId())) {
-                            continue;
-                        }
-
-                        List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Approved", "0", "0");
-                        for (BudgetAllocationDetails budgetAllocationRevision : budgetAllocationDetailsList) {
-                            budgetAllocationRevision.setIsTYpe("REVISION");
-                            budgetAllocationRevision.setPrevInitial("1");
-                            budgetAllocationDetailsRepository.save(budgetAllocationRevision);
-                        }
-
-
-                        List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Approved", "0", "0");
-                        double expAmount = 0;
-                        if (!dataBudget.isEmpty()) {
-                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(cgUnit.getUnit(), dataBudget.get(0).getFinYear(), dataBudget.get(0).getSubHead(), "0", "0");
-                            for (ContigentBill contigentBill : contigentBills) {
-                                expAmount = expAmount + Double.parseDouble(contigentBill.getCbAmount());
-                            }
-                        }
-
-
-                        for (BudgetAllocation budgetAllocationRevision : dataBudget) {
-                            budgetAllocationRevision.setIsTYpe("REVISION1");
-
-                            if (budgetAllocationRevision.getPrevInitial().equalsIgnoreCase("1")) {
-                            } else {
-                                budgetAllocationRevision.setPrevAllocAmount(budgetAllocationRevision.getAllocationAmount() + "");
-                            }
-
-                            budgetAllocationRevision.setAllocationAmount("" + expAmount);
-                            budgetAllocationRevision.setPrevInitial("1");
-                            budgetAllocationRevision.setAllocationAmount("0");
-                            budgetAllocationRepository.save(budgetAllocationRevision);
-
-
-                            List<MangeInboxOutbox> checkMsgAlreadySendOrNot = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(mainOnlyViewAuthGroup, cgUnit.getUnit());
-
-                            if (checkMsgAlreadySendOrNot.isEmpty()) {
-                                MangeInboxOutbox mangeInboxOutbox11 = new MangeInboxOutbox();
-
-                                BudgetHead budgetHead11 = subHeadRepository.findByBudgetCodeId(budgetAllocationRevision.getSubHead());
-                                mangeInboxOutbox11.setMangeInboxId(HelperUtils.getMangeInboxId());
-                                mangeInboxOutbox11.setRemarks("Budget Revised");
-                                mangeInboxOutbox11.setIsRebase("0");
-                                mangeInboxOutbox11.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-                                mangeInboxOutbox11.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                                mangeInboxOutbox11.setToUnit(cgUnit.getUnit());
-                                mangeInboxOutbox11.setType("In " + budgetHead11.getSubHeadDescr() + " head budget revised by your head unit");
-                                mangeInboxOutbox11.setGroupId(mainOnlyViewAuthGroup);
-                                mangeInboxOutbox11.setIsRebase("0");
-                                mangeInboxOutbox11.setFromUnit(hrData.getUnitId());
-                                mangeInboxOutbox11.setRoleId(hrData.getRoleId());
-                                mangeInboxOutbox11.setCreaterpId(hrData.getPid());
-                                mangeInboxOutbox11.setApproverpId("");
-                                mangeInboxOutbox11.setStatus("Fully Approved");
-                                mangeInboxOutbox11.setAllocationType("");
-                                mangeInboxOutbox11.setIsFlag("1");
-                                mangeInboxOutbox11.setIsArchive("0");
-                                mangeInboxOutbox11.setIsApproved("0");
-                                mangeInboxOutbox11.setIsBgcg("UR");
-                                mangeInboxOutbox11.setState("CR");
-                                mangeInboxOutbox11.setIsRevision(1);
-
-                                mangeInboxOutBoxRepository.save(mangeInboxOutbox11);
-                            }
-
-
-                        }
-
-                        List<CdaParkingTrans> cdaParkingTransList11 = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), cgUnit.getUnit(), revisionDatum.getAllocTypeId(), "0");
-
-                        for (CdaParkingTrans cdaParkingTrans : cdaParkingTransList11) {
-                            cdaParkingTrans.setIsFlag("1");
-                            cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                            cdaParkingTransRepository.save(cdaParkingTrans);
-                        }
-
-                        List<CdaParkingCrAndDr> cdaParkingCrAndDr11 = parkingCrAndDrRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitIdAndIsRevision(revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), "0", revisionDatum.getAllocTypeId(), cgUnit.getUnit(), 0);
-                        for (CdaParkingCrAndDr cddata : cdaParkingCrAndDr11) {
-                            cddata.setIsFlag("1");
-                            cddata.setIsRevision(1);
-                            parkingCrAndDrRepository.save(cddata);
-                        }
-                    }
+//                    String currentUnitId = revisionDatum.getToUnitId();
+//                    List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + currentUnitId + "%");
+//                    unitList.add(cgUnitRepository.findByUnit(currentUnitId));
+//
+//                    for (CgUnit cgUnit : unitList) {
+//
+//                        if (cgUnit.getUnit().equalsIgnoreCase(revisionDatum.getToUnitId())) {
+//                            continue;
+//                        }
+//
+//                        List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Approved", "0", "0");
+//                        for (BudgetAllocationDetails budgetAllocationRevision : budgetAllocationDetailsList) {
+//                            budgetAllocationRevision.setIsTYpe("REVISION");
+//                            budgetAllocationRevision.setPrevInitial("1");
+//                            budgetAllocationDetailsRepository.save(budgetAllocationRevision);
+//                        }
+//
+//
+//                        List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Approved", "0", "0");
+//                        double expAmount = 0;
+//                        if (!dataBudget.isEmpty()) {
+//                            List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(cgUnit.getUnit(), dataBudget.get(0).getFinYear(), dataBudget.get(0).getSubHead(), "0", "0");
+//                            for (ContigentBill contigentBill : contigentBills) {
+//                                expAmount = expAmount + Double.parseDouble(contigentBill.getCbAmount());
+//                            }
+//                        }
+//
+//
+//                        for (BudgetAllocation budgetAllocationRevision : dataBudget) {
+//                            budgetAllocationRevision.setIsTYpe("REVISION1");
+//
+//                            if (budgetAllocationRevision.getPrevInitial().equalsIgnoreCase("1")) {
+//                            } else {
+//                                budgetAllocationRevision.setPrevAllocAmount(budgetAllocationRevision.getAllocationAmount() + "");
+//                            }
+//
+//                            budgetAllocationRevision.setAllocationAmount("" + expAmount);
+//                            budgetAllocationRevision.setPrevInitial("1");
+//                            budgetAllocationRevision.setAllocationAmount("0");
+//                            budgetAllocationRepository.save(budgetAllocationRevision);
+//
+//
+//                            List<MangeInboxOutbox> checkMsgAlreadySendOrNot = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(mainOnlyViewAuthGroup, cgUnit.getUnit());
+//
+//                            if (checkMsgAlreadySendOrNot.isEmpty()) {
+//                                MangeInboxOutbox mangeInboxOutbox11 = new MangeInboxOutbox();
+//
+//                                BudgetHead budgetHead11 = subHeadRepository.findByBudgetCodeId(budgetAllocationRevision.getSubHead());
+//                                mangeInboxOutbox11.setMangeInboxId(HelperUtils.getMangeInboxId());
+//                                mangeInboxOutbox11.setRemarks("Budget Revised");
+//                                mangeInboxOutbox11.setIsRebase("0");
+//                                mangeInboxOutbox11.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+//                                mangeInboxOutbox11.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+//                                mangeInboxOutbox11.setToUnit(cgUnit.getUnit());
+//                                mangeInboxOutbox11.setType("In " + budgetHead11.getSubHeadDescr() + " head budget revised by your head unit");
+//                                mangeInboxOutbox11.setGroupId(mainOnlyViewAuthGroup);
+//                                mangeInboxOutbox11.setIsRebase("0");
+//                                mangeInboxOutbox11.setFromUnit(hrData.getUnitId());
+//                                mangeInboxOutbox11.setRoleId(hrData.getRoleId());
+//                                mangeInboxOutbox11.setCreaterpId(hrData.getPid());
+//                                mangeInboxOutbox11.setApproverpId("");
+//                                mangeInboxOutbox11.setStatus("Fully Approved");
+//                                mangeInboxOutbox11.setAllocationType("");
+//                                mangeInboxOutbox11.setIsFlag("1");
+//                                mangeInboxOutbox11.setIsArchive("0");
+//                                mangeInboxOutbox11.setIsApproved("0");
+//                                mangeInboxOutbox11.setIsBgcg("UR");
+//                                mangeInboxOutbox11.setState("CR");
+//                                mangeInboxOutbox11.setIsRevision(1);
+//
+//                                mangeInboxOutBoxRepository.save(mangeInboxOutbox11);
+//                            }
+//
+//
+//                        }
+//
+//                        List<CdaParkingTrans> cdaParkingTransList11 = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), cgUnit.getUnit(), revisionDatum.getAllocTypeId(), "0");
+//
+//                        for (CdaParkingTrans cdaParkingTrans : cdaParkingTransList11) {
+//                            cdaParkingTrans.setIsFlag("1");
+//                            cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+//                            cdaParkingTransRepository.save(cdaParkingTrans);
+//                        }
+//
+//                        List<CdaParkingCrAndDr> cdaParkingCrAndDr11 = parkingCrAndDrRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitIdAndIsRevision(revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), "0", revisionDatum.getAllocTypeId(), cgUnit.getUnit(), 0);
+//                        for (CdaParkingCrAndDr cddata : cdaParkingCrAndDr11) {
+//                            cddata.setIsFlag("1");
+//                            cddata.setIsRevision(1);
+//                            parkingCrAndDrRepository.save(cddata);
+//                        }
+//                    }
 
 
                 } else {
@@ -5230,9 +5229,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                         for (BudgetAllocationDetails budgetAllocationRevision : budgetAllocationDetailsList) {
                             budgetAllocationRevision.setIsTYpe("REVISION");
                             budgetAllocationRevision.setPrevInitial("1");
+                            budgetAllocationRevision.setIsBudgetRevision("1");
                             budgetAllocationDetailsRepository.save(budgetAllocationRevision);
-
-
                         }
 
                         List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Approved", "0", "0");
@@ -5246,15 +5244,23 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                         for (BudgetAllocation budgetAllocationRevision : dataBudget) {
                             budgetAllocationRevision.setIsTYpe("REVISION");
+                            budgetAllocationRevision.setIsBudgetRevision("1");
+                            budgetAllocationRepository.save(budgetAllocationRevision) ;
+                        }
 
-                            if (budgetAllocationRevision.getPrevInitial().equalsIgnoreCase("1")) {
-                            } else {
-                                budgetAllocationRevision.setPrevAllocAmount(budgetAllocationRevision.getAllocationAmount() + "");
-                            }
 
-                            budgetAllocationRevision.setPrevInitial("1");
-                            budgetAllocationRevision.setAllocationAmount("0");
+                        for (BudgetAllocation budgetAllocationRevision : dataBudget) {
+                            budgetAllocationRevision.setIsTYpe("REVISION");
+//
+//                            if (budgetAllocationRevision.getPrevInitial().equalsIgnoreCase("1")) {
+//                            } else {
+//                                budgetAllocationRevision.setPrevAllocAmount(budgetAllocationRevision.getAllocationAmount() + "");
+//                            }
+//                            budgetAllocationRevision.setPrevInitial("1");
                             budgetAllocationRevision.setAllocationAmount("" + expAmount);
+                            budgetAllocationRevision.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
+                            budgetAllocationRevision.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+                            budgetAllocationRevision.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             BudgetAllocation saveBudgetData = budgetAllocationRepository.save(budgetAllocationRevision);
 
 
@@ -5288,9 +5294,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                                 mangeInboxOutBoxRepository.save(mangeInboxOutbox);
                             }
-
-
                         }
+
 
                         List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), cgUnit.getUnit(), revisionDatum.getAllocTypeId(), "0");
                         for (CdaParkingTrans cdaParkingTrans : cdaParkingTransList) {
