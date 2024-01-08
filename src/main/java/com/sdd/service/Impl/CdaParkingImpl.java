@@ -547,6 +547,56 @@ public class CdaParkingImpl implements CdaParkingService {
 
     }
 
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public ApiResponse<CdaHistoryResponse> getCdaHistoryData1(String groupId) {
+        CdaHistoryResponse mainResponse = new CdaHistoryResponse();
+        List<CdaParkingHistoryDto> oldCda = new ArrayList<CdaParkingHistoryDto>();
+        List<CdaParkingHistoryDto> newCda = new ArrayList<CdaParkingHistoryDto>();
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CDA PARKING");
+        }
+
+        List<CdaParkingUpdateHistory> cdaParkingUpdateHistoryList = cdaUpdateHistoryRepository.findByAuthGroupId(groupId);
+
+        for (CdaParkingUpdateHistory cdaParkingUpdateHistory : cdaParkingUpdateHistoryList) {
+
+            CdaParkingHistoryDto cdaParkingTransResponse = new CdaParkingHistoryDto();
+
+            cdaParkingTransResponse.setCdaParkingUpdateId(cdaParkingUpdateHistory.getCdaParkingUpdateId());
+            cdaParkingTransResponse.setOldAmount(cdaParkingUpdateHistory.getOldAmount());
+            cdaParkingTransResponse.setOldGinNo(cdaParkingRepository.findByGinNo(cdaParkingUpdateHistory.getOldGinNo()));
+            cdaParkingTransResponse.setNewAmount(cdaParkingUpdateHistory.getNewAmount());
+            cdaParkingTransResponse.setNewGinNo(cdaParkingRepository.findByGinNo(cdaParkingUpdateHistory.getNewGinNo()));
+            cdaParkingTransResponse.setUnitId(cgUnitRepository.findByUnit(cdaParkingUpdateHistory.getUnitId()));
+            cdaParkingTransResponse.setAuthGroupId(cdaParkingUpdateHistory.getAuthGroupId());
+            cdaParkingTransResponse.setCreatedOn(cdaParkingUpdateHistory.getCreatedOn() + "");
+            cdaParkingTransResponse.setUpdatedOn(cdaParkingUpdateHistory.getUpdatedOn() + "");
+            cdaParkingTransResponse.setUpdatedBy(hrDataRepository.findByUserName(cdaParkingUpdateHistory.getUpdatedBy()));
+            cdaParkingTransResponse.setAmountType(amountUnitRepository.findByAmountTypeId(cdaParkingUpdateHistory.getAmountType()));
+            cdaParkingTransResponse.setSubHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(cdaParkingUpdateHistory.getSubHead()));
+
+            if (cdaParkingUpdateHistory.getNewGinNo() == null || cdaParkingUpdateHistory.getNewAmount() == null) {
+                newCda.add(cdaParkingTransResponse);
+            } else {
+                oldCda.add(cdaParkingTransResponse);
+            }
+
+
+
+        }
+        mainResponse.setNewCda(newCda);
+        mainResponse.setOldCda(oldCda);
+        return ResponseUtils.createSuccessResponse(mainResponse, new TypeReference<CdaHistoryResponse>() {
+        });
+
+    }
+
 
     @Override
     @Transactional(rollbackFor = {Exception.class})

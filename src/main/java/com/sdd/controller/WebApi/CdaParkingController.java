@@ -37,9 +37,14 @@ public class CdaParkingController {
 		return new ResponseEntity<>(cdaParkingService.getCdaData(groupId), HttpStatus.OK);
 	}
 
+//	@GetMapping("/getCdaHistoryData/{groupId}")
+//	public ResponseEntity<ApiResponse<List<CdaParkingHistoryDto>>> getCdaHistoryData(@PathVariable("groupId") String groupId) {
+//		return new ResponseEntity<>(cdaParkingService.getCdaHistoryData(groupId), HttpStatus.OK);
+//	}
+
 	@GetMapping("/getCdaHistoryData/{groupId}")
-	public ResponseEntity<ApiResponse<List<CdaParkingHistoryDto>>> getCdaHistoryData(@PathVariable("groupId") String groupId) {
-		return new ResponseEntity<>(cdaParkingService.getCdaHistoryData(groupId), HttpStatus.OK);
+	public ResponseEntity<ApiResponse<CdaHistoryResponse>> getCdaHistoryDat1a(@PathVariable("groupId") String groupId) {
+		return new ResponseEntity<>(cdaParkingService.getCdaHistoryData1(groupId), HttpStatus.OK);
 	}
 
 	@PostMapping("/getCdaDataList")
