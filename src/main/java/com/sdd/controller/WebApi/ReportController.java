@@ -1,6 +1,4 @@
 package com.sdd.controller.WebApi;
-
-
 import com.sdd.request.CDAReportRequest;
 import com.sdd.request.ReportRequest;
 import com.sdd.request.SubHeadWiseAllocationReportReq;
@@ -29,13 +27,10 @@ public class ReportController {
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getAllocationReport(@PathVariable("authgroupId") String authgroupId) {
         return new ResponseEntity<>(mangeReportService.getAllocationReport(authgroupId), HttpStatus.OK);
     }
-
     @GetMapping("/getAllocationReportDoc/{authgroupId}")
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getAllocationReportDoc(@PathVariable("authgroupId") String authgroupId) {
         return new ResponseEntity<>(mangeReportService.getAllocationReportDoc(authgroupId), HttpStatus.OK);
     }
-
-
     @GetMapping("/getReceiptReport/{authgroupId}")
     public ResponseEntity<ApiResponse<List<FilePathResponse>>> getReceiptReport(@PathVariable("authgroupId") String authgroupId) {
         return new ResponseEntity<>(mangeReportService.getReceiptReport(authgroupId), HttpStatus.OK);
