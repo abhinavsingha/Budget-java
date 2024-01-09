@@ -126,19 +126,8 @@ public class CdaParkingImpl implements CdaParkingService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AMOUNT TYPE ID");
             }
 
-            BudgetAllocation budgetAllocation = budgetAllocationRepository.findByAllocationId(cdaRequest.getCdaRequest().get(i).getTransactionId());
-            if (budgetAllocation == null) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TRANSACTION ID");
-            }
-
-
             cadTotalAmount = cadTotalAmount + Double.parseDouble(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()) * amountUnit.getAmount();
 
-
-            List<BudgetAllocationDetails> budgetAllocationDetailsLists = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDelete(cdaRequest.getCdaRequest().get(i).getAuthGroupId(), "0");
-            if (budgetAllocationDetailsLists.size() == 0) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID AUTH GROUP ID");
-            }
 
             CdaParking ginNumber = cdaParkingRepository.findByGinNo(cdaRequest.getCdaRequest().get(i).getGinNo());
             if (ginNumber == null) {
@@ -158,16 +147,16 @@ public class CdaParkingImpl implements CdaParkingService {
 
 
             List<CdaParkingTrans> cdaParkingTransListData = cdaParkingTransRepository.findByTransactionId(cdaRequest.getCdaRequest().get(i).getTransactionId());
-            if (cdaParkingTransListData.size() > 0) {
+            if (!cdaParkingTransListData.isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA DATA ALREADY SAVE OR REVISED ALLOCATION.");
             }
 
         }
 
 
-        for (Integer b = 0; b < cdaRequest.getCdaRequest().size(); b++) {
+        for (int b = 0; b < cdaRequest.getCdaRequest().size(); b++) {
             List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByAuthGroupIdAndTransactionIdAndIsFlag(cdaRequest.getCdaRequest().get(b).getAuthGroupId(), cdaRequest.getCdaRequest().get(b).getTransactionId(), "0");
-            if (cdaParkingTransList.size() > 0) {
+            if (!cdaParkingTransList.isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA ALREADY SAVE.YOU CAN NOT CHANGE NOW.");
             }
         }
@@ -181,7 +170,7 @@ public class CdaParkingImpl implements CdaParkingService {
 
         String groupId = "";
 
-        for (Integer i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
+        for (int i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
             CdaParkingTrans cdaParkingTrans = new CdaParkingTrans();
 
             cdaParkingTrans.setCdaParkingId(HelperUtils.getCdaId());
