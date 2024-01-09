@@ -65,13 +65,13 @@ public interface BudgetAllocationService {
 
 	ApiResponse<DefaultResponse> saveAuthData(AuthRequest authRequest);
 
-
 	ApiResponse<List<BudgetReviResp>>  getBudgetRevisionData33(BudgetReviReq budgetRivRequest);
 
 	ApiResponse<List<BudgetReviResp>>  getBudgetRevisionData3(BudgetReviReq budgetRivRequest);
 
 	ApiResponse<BudgetAllocationResponse> getApprovedBudgetData();
 
+	ApiResponse<List<CgUnit>> getUnderUnits();
 
 	ApiResponse<List<SubHeadVotedOrChargedType>> getSubHeadType();
 
@@ -85,20 +85,16 @@ public interface BudgetAllocationService {
 
 	ApiResponse<BudgetAllocationResponse> getAllRevisionGroupId(String groupId);
 
-
 	ApiResponse<BudgetAllocationSaveResponse> approveRivisonBudgetOrReject3(BudgetApproveRequest budgetApproveRequest);
-
-	ApiResponse<DefaultResponse> saveAuthDataRevision(AuthRequest authRequest);
 
 	ApiResponse<DefaultResponse> saveAuthDataRevisionSaveCbAsAllocation(AuthRequest authRequest);
 
-
 	ApiResponse<BudgetAllocationSaveResponse> saveBudgetRevision3(BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList);
-
 
 	ApiResponse<List<CgUnitResponse>> getAllCgUnitData();
 
 	ApiResponse<List<AllocationType>> getAllocationByFinYear(String finyear);
 
 	ApiResponse<DefaultResponse>  updateAllocation(AllocationType allocationType);
+
 }

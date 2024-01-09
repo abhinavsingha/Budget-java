@@ -54,8 +54,6 @@ public class CdaParkingTrans {
     @Column(name = "isFlag")
     private String isFlag;
 
-    @Column(name = "remark")
-    private String remark;
 
     @Column(name = "TRANSACTION_ID")
     private String transactionId;

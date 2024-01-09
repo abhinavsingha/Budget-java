@@ -210,6 +210,7 @@ public class DashboardServiceImpl implements DashBoardService {
             dataIscgBg.add("RR");
             dataIscgBg.add("UR");
             dataIscgBg.add("CDA");
+            dataIscgBg.add("SBG");
 //            inboxOutboxesList = mangeInboxOutBoxRepository.findByInboxDataForAllRole(hrDataCheck.getUnitId(), "0", "0", "BG", "BR");
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
 
@@ -431,8 +432,8 @@ public class DashboardServiceImpl implements DashBoardService {
             String[] getRoleData = "113".split(",");
 
             List<Role> setAllRole = new ArrayList<>();
-            for (Integer n = 0; n < getRoleData.length; n++) {
-                Role getRole = roleRepository.findByRoleId(getRoleData[n]);
+            for (String getRoleDatum : getRoleData) {
+                Role getRole = roleRepository.findByRoleId(getRoleDatum);
                 if (getRole == null) {
                     getRole = roleRepository.findByRoleId("113");
                 }
@@ -453,8 +454,8 @@ public class DashboardServiceImpl implements DashBoardService {
                 getRoleData = hrDataCheck.getRoleId().split(",");
             }
             List<Role> setAllRole = new ArrayList<>();
-            for (Integer n = 0; n < getRoleData.length; n++) {
-                Role getRole = roleRepository.findByRoleId(getRoleData[n]);
+            for (String getRoleDatum : getRoleData) {
+                Role getRole = roleRepository.findByRoleId(getRoleDatum);
                 if (getRole == null) {
                     getRole = roleRepository.findByRoleId("113");
                 }
@@ -465,7 +466,7 @@ public class DashboardServiceImpl implements DashBoardService {
 
 
         List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
-        if (allocationType.size() > 0) {
+        if (!allocationType.isEmpty()) {
             dashBoardResponse.setAllocationType(allocationType.get(0));
         }
 
@@ -501,17 +502,16 @@ public class DashboardServiceImpl implements DashBoardService {
             dataIscgBg.add("BG");
             dataIscgBg.add("BR");
             dataIscgBg.add("RR");
+
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
 
 
             for (MangeInboxOutbox mangeInboxOutbox : inboxOutboxesList) {
-
+                InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                 if (mangeInboxOutbox.getState().equalsIgnoreCase("AP")) {
-                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                     inboxList.add(data);
 
                 } else {
-                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                     outBoxList.add(data);
                 }
             }
@@ -525,18 +525,18 @@ public class DashboardServiceImpl implements DashBoardService {
             dataIscgBg.add("RR");
             dataIscgBg.add("UR");
             dataIscgBg.add("CDA");
+            dataIscgBg.add("SBG");
+
 
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
-
 
             for (MangeInboxOutbox mangeInboxOutbox : inboxOutboxesList) {
                 if (mangeInboxOutbox.getToUnit().equalsIgnoreCase(hrDataCheck.getUnitId())) {
 
+                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                     if (mangeInboxOutbox.getState().equalsIgnoreCase("CR")) {
-                        InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                         inboxList.add(data);
                     } else {
-                        InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                         outBoxList.add(data);
                     }
                 }
@@ -549,12 +549,11 @@ public class DashboardServiceImpl implements DashBoardService {
             inboxOutboxesList =
                     mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc(
                             hrDataCheck.getUnitId(), "CB", "0", "0",hrDataCheck.getPid());
-            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
-                if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
-                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+            for (MangeInboxOutbox mangeInboxOutbox : inboxOutboxesList) {
+                InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+                if (mangeInboxOutbox.getState().equalsIgnoreCase("CR")) {
                     inboxList.add(data);
                 } else {
-                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                     outBoxList.add(data);
                 }
             }
@@ -567,12 +566,11 @@ public class DashboardServiceImpl implements DashBoardService {
             inboxOutboxesList =
                     mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
                             hrDataCheck.getUnitId(), "CB", "0", "0");
-            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
-                if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("VE")) {
-                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+            for (MangeInboxOutbox mangeInboxOutbox : inboxOutboxesList) {
+                InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+                if (mangeInboxOutbox.getState().equalsIgnoreCase("VE")) {
                     inboxList.add(data);
                 } else {
-                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                     outBoxList.add(data);
                 }
             }
