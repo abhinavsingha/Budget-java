@@ -16,6 +16,7 @@ public class CdaAndAllocationDataResponse {
 
 
     HashMap<String, CdaParkingTransSubResponse> subHeadData;
+    double totalExpWithAllocation ;
     List<BudgetAllocation> budgetAllocationData;
 
 

@@ -1011,6 +1011,7 @@ public class CdaParkingImpl implements CdaParkingService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
         }
 
+        double totalExpWithAllocation = 0;
         String currentUnitId = hrData.getUnitId();
         List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + currentUnitId + "%");
         unitList.remove(cgUnitRepository.findByUnit(currentUnitId));
@@ -1021,7 +1022,9 @@ public class CdaParkingImpl implements CdaParkingService {
             for (BudgetAllocation budgetAllocation : dataBudget) {
                 double allocationAMount = Double.parseDouble(budgetAllocation.getAllocationAmount());
                 if (allocationAMount > 0) {
+                    AmountUnit amountUnit1 = amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType());
                     budgetAllocationData.add(budgetAllocation);
+                    totalExpWithAllocation = totalExpWithAllocation + (allocationAMount * amountUnit1.getAmount());
                 }
             }
         }
@@ -1029,7 +1032,6 @@ public class CdaParkingImpl implements CdaParkingService {
 
         HashMap<String, CdaParkingTransSubResponse> subHeadData = new LinkedHashMap<>();
         List<ContigentBill> contingentBills = contigentBillRepository.findByFinYearAndBudgetHeadIDAndIsUpdateAndIsFlagAndCbUnitId(cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(), "0", "0", hrData.getUnitId());
-
 
         for (ContigentBill contigentBill : contingentBills) {
             List<CdaParkingCrAndDr> cdaParkingCrAndDrsList = parkingCrAndDrRepository.findByTransactionIdAndIsFlag(contigentBill.getCbId(), "0");
@@ -1042,10 +1044,8 @@ public class CdaParkingImpl implements CdaParkingService {
 
                     double totalBillAmount = Double.parseDouble(cdaParkingCrAndDrs.getAmount()) / amountUnit.getAmount();
 
-
                     double totalParking = Double.parseDouble(cdaParkingTransSubResponses.getTotalParkingAmount());
                     double totalRemenig = Double.parseDouble(cdaParkingTransSubResponses.getRemainingCdaAmount());
-
 
                     cdaParkingTransSubResponses.setTotalParkingAmount(ConverterUtils.addDecimalPoint(totalBillAmount + totalParking + ""));
                     cdaParkingTransSubResponses.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(totalBillAmount + totalRemenig + ""));
@@ -1081,6 +1081,7 @@ public class CdaParkingImpl implements CdaParkingService {
         }
 
         mainResponse.setSubHeadData(subHeadData);
+        mainResponse.setTotalExpWithAllocation(totalExpWithAllocation);
         return ResponseUtils.createSuccessResponse(mainResponse, new TypeReference<CdaAndAllocationDataResponse>() {
         });
     }
