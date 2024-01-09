@@ -14,6 +14,7 @@ public interface CdaParkingCrAndDrRepository extends JpaRepository<CdaParkingCrA
     List<CdaParkingCrAndDr> findByAuthGroupId(String authGroupId);
     List<CdaParkingCrAndDr> findByTransactionIdAndIsFlagAndIsRevision(String authGroupId,  String s,  Integer isRevision);
     List<CdaParkingCrAndDr> findByTransactionIdAndIsFlag(String transId,String isFlag);
+    List<CdaParkingCrAndDr> findByTransactionId(String transId);
     CdaParkingCrAndDr findByTransactionIdAndGinNoAndIsFlagAndIsRevision(String authGroupId, String ginNo,  String s,  Integer isRevision);
     CdaParkingCrAndDr findByCdaCrdrIdAndIsFlagAndIsRevision(String authGroupId,  String s,  Integer isRevision);
 
