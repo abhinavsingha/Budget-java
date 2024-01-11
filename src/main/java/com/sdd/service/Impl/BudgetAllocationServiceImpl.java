@@ -2444,7 +2444,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
 
-//                    List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationsDetali.getAllocationId(), "0");
+//                    List<CdaParkingTrans> cdaParkingTrans1 = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationsDetali.getAllocationId(), "0");
                     List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), element.getUnit(), budgetRivRequest.getAllocTypeId(), "0");
                     if (!cdaParkingTrans.isEmpty()) {
                         for (CdaParkingTrans cdaParkingCrAndDr : cdaParkingTrans) {
@@ -4795,7 +4795,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     double totalAmount = Double.parseDouble(revisionDatum.getRemainingAmount()) + Double.parseDouble(revisionDatum.getAmount());
                     double revisedAmount = Double.parseDouble(revisionDatum.getAmount());
 
-                    double allocationAmount = 0;
                     List<BudgetAllocation> data = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(revisionDatum.getToUnitId(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Approved", "0", "0");
                     for (BudgetAllocation budgetAllocationRevision : data) {
                         budgetAllocationRevision.setIsBudgetRevision("1");
