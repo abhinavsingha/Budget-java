@@ -542,7 +542,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
         if (budgetReciptSaveRequest.getAlterAmount() != null) {
             double alterAmount = Double.parseDouble(budgetReciptSaveRequest.getAlterAmount()) * amountUnit.getAmount();
-            if (alterAmount > rememningAmount) {
+            if (alterAmount+rememningAmount < 0) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NOT HAVE ENOUGH BALANCE TO UPDATE CDA.");
             }
         }
