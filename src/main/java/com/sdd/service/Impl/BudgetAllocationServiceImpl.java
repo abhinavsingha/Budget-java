@@ -2356,7 +2356,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     List<CdaFilterData> data = new ArrayList<>();
                     double totalRemening = 0;
 
-                    List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationsDetali.getAllocationId(), "0");
+//                    List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationsDetali.getAllocationId(), "0");
+                    List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), element.getUnit(), budgetRivRequest.getAllocTypeId(), "0");
+
                     if (!cdaParkingTrans.isEmpty()) {
                         for (CdaParkingTrans cdaParkingCrAndDr : cdaParkingTrans) {
                             CdaFilterData cgUnitResponse = new CdaFilterData();
@@ -2371,7 +2373,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                     } else {
                         double totalAllocation = 0;
-                        BudgetAllocation budgetAllocation = budgetAllocationsDetali;
                         List<CgUnit> unitSubList = cgUnitRepository.findBySubUnitOrderByDescrAsc(element.getUnit());
                         for (int w = 0; w < unitSubList.size(); w++) {
 
@@ -2441,7 +2442,10 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     List<CdaFilterData> data = new ArrayList<>();
                     double totalRemening = 0;
 
-                    List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationsDetali.getAllocationId(), "0");
+
+
+//                    List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationsDetali.getAllocationId(), "0");
+                    List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), element.getUnit(), budgetRivRequest.getAllocTypeId(), "0");
                     if (!cdaParkingTrans.isEmpty()) {
                         for (CdaParkingTrans cdaParkingCrAndDr : cdaParkingTrans) {
                             CdaFilterData cgUnitResponse = new CdaFilterData();
@@ -2456,7 +2460,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                     } else {
                         double totalAllocation = 0;
-                        BudgetAllocation budgetAllocation = budgetAllocationsDetali;
                         List<CgUnit> unitSubList = cgUnitRepository.findBySubUnitOrderByDescrAsc(element.getUnit());
                         for (int w = 0; w < unitSubList.size(); w++) {
 
