@@ -247,12 +247,14 @@ public class ContingentServiceImpl implements ContingentService {
         String approverCbPId = "";
         String veriferCbPId = "";
         for (HrData findHrData : hrDataList) {
-            if (findHrData.getRoleId().contains(HelperUtils.CBVERIFER)) {
-                veriferCbPId = findHrData.getPid();
-            }
+            if (findHrData.getRoleId()!= null){
+                if (findHrData.getRoleId().contains(HelperUtils.CBVERIFER)) {
+                    veriferCbPId = findHrData.getPid();
+                }
             if (findHrData.getRoleId().contains(HelperUtils.CBAPPROVER)) {
                 approverCbPId = findHrData.getPid();
             }
+        }
         }
 
         if (approverCbPId.isEmpty()) {

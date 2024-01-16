@@ -1835,12 +1835,14 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         }
 
         for (BudgetAllocation budgetAllocationSubReport : budgetAllocations) {
+            BudgetAllocationSubResponse budgetAllocationReport = new BudgetAllocationSubResponse();
+            if (budgetAllocationSubReport.getIsTYpe().equalsIgnoreCase("AFTER REVISION")){
 
-            if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+            } else if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
                 continue;
             }
 
-            BudgetAllocationSubResponse budgetAllocationReport = new BudgetAllocationSubResponse();
+
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getCreatedOn());
             budgetAllocationReport.setAllocationId(budgetAllocationSubReport.getAllocationId());
             budgetAllocationReport.setTransactionId(budgetAllocationSubReport.getAllocationId());
@@ -5042,16 +5044,16 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             }
 
                         }
+                        List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), cgUnit.getUnit(), revisionDatum.getAllocTypeId(), "0");
+                        for (CdaParkingTrans cdaParkingTrans : cdaParkingTransList) {
+                            cdaParkingTrans.setIsFlag("1");
+                            cdaParkingTrans.setRemarks("REVISION");
+                            cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                            CdaParkingTrans cdaSaveData = cdaParkingTransRepository.save(cdaParkingTrans);
 
+                        }
                         if (expAmount > 0) {
-                            List<CdaParkingTrans> cdaParkingTransList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), cgUnit.getUnit(), revisionDatum.getAllocTypeId(), "0");
-                            for (CdaParkingTrans cdaParkingTrans : cdaParkingTransList) {
-                                cdaParkingTrans.setIsFlag("1");
-                                cdaParkingTrans.setRemarks("REVISION");
-                                cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                                CdaParkingTrans cdaSaveData = cdaParkingTransRepository.save(cdaParkingTrans);
 
-                            }
 
                             for (ContigentBill contigentBill : cbDataList) {
 
@@ -5107,11 +5109,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         List<CdaRevisionData> revisionRemainingAmountSend = budgetRevisionRepository.findByAuthGroupIdAndIsAutoAssignAllocation(authRequest.getAuthGroupId(), "1");
         for (int v = 0; v < revisionRemainingAmountSend.size(); v++) {
 
-            if (revisionRemainingAmountSend.get(v).getIsComplete() != null) {
-                if (revisionRemainingAmountSend.get(v).getIsComplete().equalsIgnoreCase("1")) {
-                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REVISION ALREADY PERFORMED.");
-                }
-            }
+//            if (revisionRemainingAmountSend.get(v).getIsComplete() != null) {
+//                if (revisionRemainingAmountSend.get(v).getIsComplete().equalsIgnoreCase("1")) {
+//                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REVISION ALREADY PERFORMED.");
+//                }
+//            }  by deepak
 
             if (revisionRemainingAmountSend.get(v).getCdaTransId() == null) {
 
@@ -5134,7 +5136,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 double totalRemainingAmountAfterCbBill = ((revisedAmount * amountUnitData.getAmount())) / revisionAmountType.getAmount();
 
 
-                if (revisedAmount > 0) {
+                //if (revisedAmount > 0) {
 
                     List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(revisionRemainingAmountSend.get(v).getToUnitId(), revisionRemainingAmountSend.get(v).getFinYearId(), revisionRemainingAmountSend.get(v).getBudgetHeadId(), revisionRemainingAmountSend.get(v).getAllocTypeId(), "Approved", "0", "0");
                     for (BudgetAllocationDetails budgetAllocationRevision : budgetAllocationDetailsList) {
@@ -5229,7 +5231,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                 }
 
-            }
+            //}
 
             CdaRevisionData cdaRevisionData = revisionRemainingAmountSend.get(v);
             cdaRevisionData.setIsComplete("1");
