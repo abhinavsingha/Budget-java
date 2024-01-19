@@ -1005,7 +1005,11 @@ public class CdaParkingImpl implements CdaParkingService {
         List<CgUnit> unitList = cgUnitRepository.findByBudGroupUnitLike("%" + currentUnitId + "%");
         unitList.remove(cgUnitRepository.findByUnit(currentUnitId));
         List<BudgetAllocation> budgetAllocationData = new ArrayList<BudgetAllocation>();
-
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
         for (CgUnit cgUnit : unitList) {
             List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(cgUnit.getUnit(), hrData.getUnitId(), cdaRequest.getFinancialYearId(), cdaRequest.getBudgetHeadId(), cdaRequest.getAllocationTypeId(), "0", "0", "Approved");
             for (BudgetAllocation budgetAllocation : dataBudget) {

@@ -193,10 +193,37 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         }
 
 
-        AllocationType saveAllocationTypeMain = allocationRepository.findByAllocDescAndIsFlagAndFinYearAndMajorMinerHeadAndSubHeadType(budgetReciptSaveRequest.getAllocationType(), "1", budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getMajorMinerHead(), budgetReciptSaveRequest.getSubHeadType());
-        if (saveAllocationTypeMain != null) {
+//        AllocationType saveAllocationTypeMain = allocationRepository.findByAllocDescAndIsFlagAndFinYearAndMajorMinerHeadAndSubHeadType(budgetReciptSaveRequest.getAllocationType(), "1", budgetReciptSaveRequest.getBudgetFinancialYearId(), budgetReciptSaveRequest.getMajorMinerHead(), budgetReciptSaveRequest.getSubHeadType());
+        AllocationType saveAllocationTypeMainCheck = allocationRepository.findByAllocDescAndIsFlagAndFinYear(budgetReciptSaveRequest.getAllocationType(), "1", budgetReciptSaveRequest.getBudgetFinancialYearId());
+        Map<String, String> findData = new HashMap<String, String>();
+
+        if (saveAllocationTypeMainCheck.getSubHeadType().equalsIgnoreCase(budgetReciptSaveRequest.getSubHeadType())) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION NAME ALREADY USE.PLEASE CHANGE");
+        } else if (saveAllocationTypeMainCheck.getMajorMinerHead().equalsIgnoreCase(budgetReciptSaveRequest.getMajorMinerHead())) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION NAME ALREADY USE.PLEASE CHANGE");
+        } else {
+            List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAllocationTypeIdAndToUnit(saveAllocationTypeMainCheck.getAllocTypeId(), "001321");
+            for (Integer i = 0; i < budgetAllocations.size(); i++) {
+                BudgetHead budgetHead = subHeadRepository.findByBudgetCodeId(budgetAllocations.get(i).getSubHead());
+                findData.put(budgetHead.getSubHeadTypeId(), budgetHead.getSubHeadTypeId());
+            }
         }
+
+        for (Map.Entry<String, String> entry : findData.entrySet()) {
+            String key = entry.getKey();
+            String tab = "";
+
+            if (key.equalsIgnoreCase("01")) {
+                tab = "Charged";
+            } else if (key.equalsIgnoreCase("02")) {
+                tab = "Voted";
+            }
+
+            if (saveAllocationTypeMainCheck.getSubHeadType().equalsIgnoreCase(tab)) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION NAME ALREADY USE.PLEASE CHANGE");
+            }
+        }
+
 
         AllocationType saveAllocationType = allocationRepository.findByAllocDescAndIsFlagAndFinYear(budgetReciptSaveRequest.getAllocationType(), "1", budgetReciptSaveRequest.getBudgetFinancialYearId());
 
@@ -542,7 +569,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
 
         if (budgetReciptSaveRequest.getAlterAmount() != null) {
             double alterAmount = Double.parseDouble(budgetReciptSaveRequest.getAlterAmount()) * amountUnit.getAmount();
-            if (alterAmount+rememningAmount < 0) {
+            if (alterAmount + rememningAmount < 0) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NOT HAVE ENOUGH BALANCE TO UPDATE CDA.");
             }
         }
