@@ -33,4 +33,5 @@ public interface MangeInboxOutBoxRepository extends JpaRepository<MangeInboxOutb
     List<MangeInboxOutbox> findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(String rebaseUnitId,String isArchv,String isApprov,List<String> cgUnits);
 
 
+    List<MangeInboxOutbox> findByRemarks(String remarks);
 }
