@@ -2589,10 +2589,10 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (BudgetAllocationDetails allocationData : allocationDetails) {
 
             status = budgetApproveRequest.getStatus();
-            allocationData.setReturnRemarks(budgetApproveRequest.getRemarks());
-            allocationData.setStatus(budgetApproveRequest.getStatus());
-            allocationData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-            budgetAllocationDetailsRepository.save(allocationData);
+//            allocationData.setReturnRemarks(budgetApproveRequest.getRemarks());
+//            allocationData.setStatus(budgetApproveRequest.getStatus());
+//            allocationData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+//            budgetAllocationDetailsRepository.save(allocationData);
 
 
             BudgetAllocation budgetAllocation = new BudgetAllocation();
@@ -4598,14 +4598,27 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         authorityRepository.save(authority);
 
 
-        List<BudgetAllocation> budgetAllocationsList = budgetAllocationRepository.findByAuthGroupIdAndIsFlagAndIsBudgetRevision(authRequest.getAuthGroupId(), "0", "0");
 
+        List<BudgetAllocationDetails> allocationDetails = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(budgetApproveRequest.getAuthGroupId(), "0", "0");
+        for (BudgetAllocationDetails allocationData : allocationDetails) {
+            allocationData.setStatus("Approved");
+            allocationData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            budgetAllocationDetailsRepository.save(allocationData);
+
+        }
+
+
+        List<BudgetAllocation> budgetAllocationsList = budgetAllocationRepository.findByAuthGroupIdAndIsFlagAndIsBudgetRevision(authRequest.getAuthGroupId(), "0", "0");
         for (BudgetAllocation budgetAllocationData : budgetAllocationsList) {
 
             budgetAllocationData.setStatus("Approved");
             budgetAllocationRepository.save(budgetAllocationData);
 
         }
+
+
+
+
 
 
         List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(authRequest.getAuthGroupId(), hrDataCheck.getUnitId());
