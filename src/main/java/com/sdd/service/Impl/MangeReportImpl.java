@@ -952,7 +952,7 @@ public class MangeReportImpl implements MangeReportService {
 
         List<BudgetAllocation> budgetAllocationReport = new ArrayList<BudgetAllocation>();
 
-        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitOrderByCreatedOnAsc(authGroupId, hrData.getUnitId());
+        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsFlag(authGroupId, hrData.getUnitId(),"0");//(authGroupId, hrData.getUnitId());
 
 
         if (budgetAllocationReport.size() <= 0) {
@@ -1105,7 +1105,7 @@ public class MangeReportImpl implements MangeReportService {
         HashMap<String, List<ReportSubModel>> hashMap = new LinkedHashMap<>();
         List<BudgetAllocation> budgetAllocationReport = new ArrayList<BudgetAllocation>();
 
-        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitOrderByCreatedOnAsc(authGroupId, hrData.getUnitId());
+        budgetAllocationReport = budgetAllocationRepository.findByAuthGroupIdAndToUnitAndIsFlag(authGroupId, hrData.getUnitId(),"0");
 
         if (budgetAllocationReport.size() <= 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
