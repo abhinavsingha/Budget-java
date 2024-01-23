@@ -314,8 +314,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             }
         }
         else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
-            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
-            archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
+            archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
 
 
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "0", "0",hrDataCheck.getPid());
@@ -475,14 +475,10 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
 
                         outBoxList.add(data);
                     }
-
-
-
                 }
 
             }
         }
-
 
         List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
         if (allocationType.size() > 0) {

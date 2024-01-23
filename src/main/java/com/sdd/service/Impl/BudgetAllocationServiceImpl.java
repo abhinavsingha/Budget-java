@@ -4599,7 +4599,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
 
-        List<BudgetAllocationDetails> allocationDetails = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(budgetApproveRequest.getAuthGroupId(), "0", "0");
+        List<BudgetAllocationDetails> allocationDetails = budgetAllocationDetailsRepository.findByAuthGroupIdAndIsDeleteAndIsBudgetRevision(authRequest.getAuthGroupId(), "0", "0");
         for (BudgetAllocationDetails allocationData : allocationDetails) {
             allocationData.setStatus("Approved");
             allocationData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());

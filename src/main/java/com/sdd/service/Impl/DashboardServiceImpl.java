@@ -239,7 +239,7 @@ public class DashboardServiceImpl implements DashBoardService {
 
 
             arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
-            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
+            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
 
 
             for (MangeInboxOutbox mangeInboxOutbox : inboxOutboxesList) {
@@ -256,9 +256,11 @@ public class DashboardServiceImpl implements DashBoardService {
             }
         } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
 
-            arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
-            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
-
+            arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));//,hrDataCheck.getPid()
+            //findByToUnitAndIsBgcgAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc
+            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            ///AndCreaterpId  ,   ,hrDataCheck.getPid()    remove pid as per abhinav
+            //findByToUnitAndIsBgcgAndIsArchiveAndCreaterpIdOrderByCreatedOnDesc
             inboxOutboxesList =
                     mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
                             hrDataCheck.getUnitId(), "CB", "0", "0");
@@ -275,9 +277,10 @@ public class DashboardServiceImpl implements DashBoardService {
             }
         } else if (getCurrentRole.contains(HelperUtils.CBAPPROVER)) {
 
-            arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
-            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
-
+            arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));//,hrDataCheck.getPid()
+        //findByToUnitAndIsBgcgAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc
+            archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));//,hrDataCheck.getPid()
+//findByToUnitAndIsBgcgAndIsArchiveAndCreaterpIdOrderByCreatedOnDesc
             inboxOutboxesList =
                     mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(
                             hrDataCheck.getUnitId(), "CB", "0", "0");
@@ -542,8 +545,8 @@ public class DashboardServiceImpl implements DashBoardService {
                 }
             }
         } else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
-            approvedboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
-            archiveboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            approvedboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
+            archiveboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
 
 
             inboxOutboxesList =
@@ -560,7 +563,7 @@ public class DashboardServiceImpl implements DashBoardService {
         } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
 
             approvedboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
-            archiveboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            archiveboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
 
 
             inboxOutboxesList =
@@ -577,7 +580,7 @@ public class DashboardServiceImpl implements DashBoardService {
         } else if (getCurrentRole.contains(HelperUtils.CBAPPROVER)) {
 
             approvedboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
-            archiveboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+            archiveboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
 
 
             inboxOutboxesList =
