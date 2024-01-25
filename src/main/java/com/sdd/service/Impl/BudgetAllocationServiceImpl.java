@@ -1476,9 +1476,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         String type = "";
         String refTransID = HelperUtils.getBudgetAlloctionRefrensId();
 
-//        for (int i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
-//
-//            if (!(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getIsAutoAssignAllocation().equalsIgnoreCase("1"))) {
+        for (int i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
+
+            if (!(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getIsAutoAssignAllocation().equalsIgnoreCase("1"))) {
 //
 //                BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
 //                budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()));
@@ -1502,11 +1502,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 //                budgetAllocationDetails.setUserId(hrData.getPid());
 //                budgetAllocationDetails.setAmountType(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
 //                budgetAllocationDetails.setTransactionId(HelperUtils.getTransId());
-//                type = budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId();
+                type = budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId();
 //                budgetAllocationDetailsRepository.save(budgetAllocationDetails);
 //
-//            }
-//        }
+            }
+        }
 
 
         for (int i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
