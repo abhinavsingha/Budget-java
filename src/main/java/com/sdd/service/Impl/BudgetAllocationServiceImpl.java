@@ -1479,32 +1479,32 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (int i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
 
             if (!(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getIsAutoAssignAllocation().equalsIgnoreCase("1"))) {
-//
-//                BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
-//                budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()));
-//                budgetAllocationDetails.setRevisedAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRevisedAmount()));
-//                budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
-//                budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
-//                budgetAllocationDetails.setAllocTypeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId());
-//                budgetAllocationDetails.setFinYear(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId());
-//                budgetAllocationDetails.setFromUnit(hrData.getUnitId());
-//                budgetAllocationDetails.setToUnit(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
-//                budgetAllocationDetails.setSubHead(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId());
-//                budgetAllocationDetails.setStatus("Pending");
-//                budgetAllocationDetails.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-//                budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-//                budgetAllocationDetails.setAuthGroupId(authGrouPid);
-//                budgetAllocationDetails.setRemarks(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRemark());
-//                budgetAllocationDetails.setIsDelete("0");
-//                budgetAllocationDetails.setIsTYpe("R");
-//                budgetAllocationDetails.setIsBudgetRevision("1");
-//                budgetAllocationDetails.setRefTransactionId(refTransID);
-//                budgetAllocationDetails.setUserId(hrData.getPid());
-//                budgetAllocationDetails.setAmountType(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
-//                budgetAllocationDetails.setTransactionId(HelperUtils.getTransId());
-                type = budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId();
-//                budgetAllocationDetailsRepository.save(budgetAllocationDetails);
-//
+
+                BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
+                budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()));
+                budgetAllocationDetails.setRevisedAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRevisedAmount()));
+                budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
+                budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
+                budgetAllocationDetails.setAllocTypeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId());
+                budgetAllocationDetails.setFinYear(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId());
+                budgetAllocationDetails.setFromUnit(hrData.getUnitId());
+                budgetAllocationDetails.setToUnit(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
+                budgetAllocationDetails.setSubHead(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId());
+                budgetAllocationDetails.setStatus("Pending");
+                budgetAllocationDetails.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+                budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                budgetAllocationDetails.setAuthGroupId(authGrouPid);
+                budgetAllocationDetails.setRemarks(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRemark());
+                budgetAllocationDetails.setIsDelete("0");
+                budgetAllocationDetails.setIsTYpe("R");
+                budgetAllocationDetails.setIsBudgetRevision("1");
+                budgetAllocationDetails.setRefTransactionId(refTransID);
+                budgetAllocationDetails.setUserId(hrData.getPid());
+                budgetAllocationDetails.setAmountType(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
+                budgetAllocationDetails.setTransactionId(HelperUtils.getTransId());
+                  type = budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId();
+                budgetAllocationDetailsRepository.save(budgetAllocationDetails);
+
             }
         }
 
