@@ -213,6 +213,44 @@ public class CdaParkingImpl implements CdaParkingService {
         }
 
 
+
+
+        if (!hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+            String subHead = "";
+            for (int i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
+                subHead =  cdaRequest.getCdaRequest().get(i).getBudgetHeadId();
+            }
+
+            BudgetHead budgetHead = subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(subHead);
+
+            MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
+            mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
+            mangeInboxOutbox.setRemarks("CDA added by " + hrData.getUnit() + " in " + budgetHead.getSubHeadDescr());
+            mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            mangeInboxOutbox.setToUnit(HelperUtils.HEADUNITID);
+            mangeInboxOutbox.setFromUnit(hrData.getUnitId());
+            mangeInboxOutbox.setGroupId(groupId);
+            mangeInboxOutbox.setType("CDA added by " + hrData.getUnit() + " in " + budgetHead.getSubHeadDescr());
+            mangeInboxOutbox.setRoleId(hrData.getRoleId());
+            mangeInboxOutbox.setCreaterpId(hrData.getPid());
+            mangeInboxOutbox.setState("CR");
+            mangeInboxOutbox.setApproverpId(hrData.getPid());
+            mangeInboxOutbox.setIsFlag("1");
+            mangeInboxOutbox.setIsArchive("0");
+            mangeInboxOutbox.setIsRebase("0");
+            mangeInboxOutbox.setIsApproved("0");
+            mangeInboxOutbox.setIsRevision(0);
+            mangeInboxOutbox.setStatus("Fully Approved");
+            mangeInboxOutbox.setIsBgcg("CDAI");
+
+            mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+
+        }
+
+
+
+
         boolean allCda = true;
         List<MangeInboxOutbox> inboxOutboxList = mangeInboxOutBoxRepository.findByGroupIdAndToUnit(groupId, hrData.getUnitId());
         if (inboxOutboxList.size() > 0) {

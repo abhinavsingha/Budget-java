@@ -214,6 +214,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             dataIscgBg.add("UR");
             dataIscgBg.add("CDA");
             dataIscgBg.add("SBG");
+            dataIscgBg.add("CDAI");
 
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
 

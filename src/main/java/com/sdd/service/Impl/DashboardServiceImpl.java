@@ -211,6 +211,7 @@ public class DashboardServiceImpl implements DashBoardService {
             dataIscgBg.add("UR");
             dataIscgBg.add("CDA");
             dataIscgBg.add("SBG");
+            dataIscgBg.add("CDAI");
 //            inboxOutboxesList = mangeInboxOutBoxRepository.findByInboxDataForAllRole(hrDataCheck.getUnitId(), "0", "0", "BG", "BR");
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
 
@@ -529,6 +530,7 @@ public class DashboardServiceImpl implements DashBoardService {
             dataIscgBg.add("UR");
             dataIscgBg.add("CDA");
             dataIscgBg.add("SBG");
+            dataIscgBg.add("CDAI");
 
 
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
