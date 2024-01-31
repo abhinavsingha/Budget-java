@@ -36,6 +36,10 @@ public class CdaParkingController {
 	public ResponseEntity<ApiResponse<CdaParkingTransResponse>> getCdaData(@PathVariable("groupId") String groupId) {
 		return new ResponseEntity<>(cdaParkingService.getCdaData(groupId), HttpStatus.OK);
 	}
+	@GetMapping("/getCdaDataunitwise/{groupId}/{unitId}")// change by deewan
+	public ResponseEntity<ApiResponse<CdaParkingTransResponse>> getCdaDatawithunit(@PathVariable("groupId") String groupId,@PathVariable(value = "unitId") String unitId) {
+		return new ResponseEntity<>(cdaParkingService.getCdaDataunit(groupId,unitId), HttpStatus.OK);
+	}
 
 
 	@GetMapping("/getCdaHistoryData/{groupId}")

@@ -523,6 +523,44 @@ public class CdaParkingImpl implements CdaParkingService {
         });
 
     }
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public ApiResponse<CdaParkingTransResponse> getCdaDataunit(String groupId,String unitId) {
+        CdaParkingTransResponse mainResponse = new CdaParkingTransResponse();
+
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if (hrData == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CDA PARKING");
+        }
+        List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByAuthGroupIdAndIsFlagAndUnitId(groupId, "0",unitId);
+        List<CdaParkingTransSubResponse> cdaParkingTransList = new ArrayList<CdaParkingTransSubResponse>();
+
+        for (Integer i = 0; i < cdaParkingTrans.size(); i++) {
+            CdaParkingTransSubResponse cdaParkingTransResponse = new CdaParkingTransSubResponse();
+            cdaParkingTransResponse.setCdaParkingId(cdaParkingTrans.get(i).getAuthGroupId());
+            cdaParkingTransResponse.setFinYearId(budgetFinancialYearRepository.findBySerialNo(cdaParkingTrans.get(i).getFinYearId()));
+            cdaParkingTransResponse.setBudgetHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(cdaParkingTrans.get(i).getBudgetHeadId()));
+            cdaParkingTransResponse.setRemarks(cdaParkingTrans.get(i).getRemarks());
+            cdaParkingTransResponse.setGinNo(cdaParkingRepository.findByGinNo(cdaParkingTrans.get(i).getGinNo()));
+            cdaParkingTransResponse.setRemainingCdaAmount(cdaParkingTrans.get(i).getRemainingCdaAmount());
+            cdaParkingTransResponse.setUpdatedOn(cdaParkingTrans.get(i).getUpdatedOn());
+            cdaParkingTransResponse.setUnitId(cdaParkingTrans.get(i).getUnitId());
+            cdaParkingTransResponse.setTransactionId(cdaParkingTrans.get(i).getTransactionId());
+            cdaParkingTransResponse.setAmountUnit(amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(i).getAmountType()));
+            cdaParkingTransResponse.setCreatedOn(cdaParkingTrans.get(i).getCreatedOn());
+            cdaParkingTransResponse.setAuthGroupId(cdaParkingTrans.get(i).getAuthGroupId());
+            cdaParkingTransList.add(cdaParkingTransResponse);
+        }
+
+
+        mainResponse.setCdaParking(cdaParkingTransList);
+        return ResponseUtils.createSuccessResponse(mainResponse, new TypeReference<CdaParkingTransResponse>() {
+        });
+
+    }
 
 
     @Override
