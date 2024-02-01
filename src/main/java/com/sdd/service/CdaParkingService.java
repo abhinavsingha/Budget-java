@@ -19,7 +19,7 @@ public interface CdaParkingService {
 	ApiResponse<CdaParkingTransResponse> getCdaData(String groupId);
 	ApiResponse<CdaParkingTransResponse> getCdaDataunit(String groupId,String unitId);
 
-	ApiResponse<CdaHistoryResponse> getCdaHistoryData(String groupId);
+	ApiResponse<CdaHistoryResponse> getCdaHistoryData(String groupId,String unitId);
 
 	ApiResponse<CdaParkingTransResponse> getAllCdaData(CDARequest cdaRequest);
 

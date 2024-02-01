@@ -565,7 +565,7 @@ public class CdaParkingImpl implements CdaParkingService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public ApiResponse<CdaHistoryResponse> getCdaHistoryData(String groupId) {
+    public ApiResponse<CdaHistoryResponse> getCdaHistoryData(String groupId,String unitId) {
         CdaHistoryResponse mainResponse = new CdaHistoryResponse();
         List<CdaParkingHistoryDto> oldCda = new ArrayList<CdaParkingHistoryDto>();
         List<CdaParkingHistoryDto> newCda = new ArrayList<CdaParkingHistoryDto>();
@@ -578,7 +578,7 @@ public class CdaParkingImpl implements CdaParkingService {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CDA PARKING");
         }
 
-        List<CdaParkingUpdateHistory> cdaParkingUpdateHistoryList = cdaUpdateHistoryRepository.findByAuthGroupId(groupId);
+        List<CdaParkingUpdateHistory> cdaParkingUpdateHistoryList = cdaUpdateHistoryRepository.findByAuthGroupIdAndUnitId(groupId,unitId);
 
         for (CdaParkingUpdateHistory cdaParkingUpdateHistory : cdaParkingUpdateHistoryList) {
 

@@ -38,9 +38,10 @@ public class CdaParkingController {
 	}
 
 
-	@GetMapping("/getCdaHistoryData/{groupId}")
-	public ResponseEntity<ApiResponse<CdaHistoryResponse>> getCdaHistoryDat1a(@PathVariable("groupId") String groupId) {
-		return new ResponseEntity<>(cdaParkingService.getCdaHistoryData(groupId), HttpStatus.OK);
+	@GetMapping("/getCdaHistoryData/{groupId}/{unitId}")
+	/// add unit id in existing api because data is duplicate  added by deewan
+	public ResponseEntity<ApiResponse<CdaHistoryResponse>> getCdaHistoryDat1a(@PathVariable("groupId") String groupId,@PathVariable(value = "unitId") String unitId) {
+		return new ResponseEntity<>(cdaParkingService.getCdaHistoryData(groupId,unitId), HttpStatus.OK);
 	}
 	@GetMapping("/getCdaDataunitwise/{groupId}/{unitId}")// change by deewan
 	public ResponseEntity<ApiResponse<CdaParkingTransResponse>> getCdaDatawithunit(@PathVariable("groupId") String groupId,@PathVariable(value = "unitId") String unitId) {

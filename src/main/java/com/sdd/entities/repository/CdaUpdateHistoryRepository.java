@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface CdaUpdateHistoryRepository extends JpaRepository<CdaParkingUpdateHistory, Long> {
 
-    List<CdaParkingUpdateHistory> findByAuthGroupId(String groupId);
+    List<CdaParkingUpdateHistory> findByAuthGroupIdAndUnitId(String groupId,String unitId);
 }
