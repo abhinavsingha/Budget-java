@@ -3380,7 +3380,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             }
 
             if (allocationAmount > remainingCdaParkingAmount) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT IS GREATER THAN CDA REMAINING AMOUNT");
+                CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId());
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT IS GREATER THAN CDA REMAINING AMOUNT FOR " +cgUnit.getDescr());
             }
 
         }
@@ -3400,7 +3401,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             double allocationAmount = Double.parseDouble(budgetAllocationSubRequest.getAmount()) * amountUnit.getAmount();
 
             if (totalCbAmount > allocationAmount) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT IS SMALLER THAN CDA UNIT EXPENDITURE AMOUNT");
+                CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationSubRequest.getToUnitId());
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT IS SMALLER THAN CDA UNIT EXPENDITURE AMOUNT FOR " + cgUnit.getDescr());
             }
         }
 

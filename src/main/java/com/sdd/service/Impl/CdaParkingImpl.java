@@ -711,8 +711,6 @@ public class CdaParkingImpl implements CdaParkingService {
         String budgetHedaid = "";
         double cadTotalAmount = 0;
 
-
-        double totalAmount = 0;
         for (Integer i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
 
 
