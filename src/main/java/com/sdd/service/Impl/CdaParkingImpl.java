@@ -204,6 +204,7 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             cdaParkingCrAndDr.setAllocTypeId(saveCdaData.getAllocTypeId());
             cdaParkingCrAndDr.setIsFlag("0");
+            cdaParkingCrAndDr.setRemark("NEW CDA");
             cdaParkingCrAndDr.setTransactionId(saveCdaData.getTransactionId());
             cdaParkingCrAndDr.setAmountType(saveCdaData.getAmountType());
             cdaParkingCrAndDr.setIsRevision(0);
