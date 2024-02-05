@@ -86,7 +86,7 @@ public class CdaParkingImpl implements CdaParkingService {
 
         double cadTotalAmount = 0;
         double totalAmount = 0;
-        for (Integer i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
+        for (int i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
 
 
             if (cdaRequest.getCdaRequest().get(i).getBudgetFinancialYearId() == null || cdaRequest.getCdaRequest().get(i).getBudgetFinancialYearId().isEmpty()) {
@@ -128,7 +128,6 @@ public class CdaParkingImpl implements CdaParkingService {
 
             cadTotalAmount = cadTotalAmount + Double.parseDouble(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()) * amountUnit.getAmount();
 
-
             CdaParking ginNumber = cdaParkingRepository.findByGinNo(cdaRequest.getCdaRequest().get(i).getGinNo());
             if (ginNumber == null) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID GIN NUMBER.");
@@ -139,12 +138,10 @@ public class CdaParkingImpl implements CdaParkingService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID FINANCIAL YEAR ID");
             }
 
-
             AllocationType allocationType = allocationRepository.findByAllocTypeId(cdaRequest.getCdaRequest().get(i).getAllocationTypeID());
             if (allocationType == null) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE ID");
             }
-
 
             List<CdaParkingTrans> cdaParkingTransListData = cdaParkingTransRepository.findByTransactionId(cdaRequest.getCdaRequest().get(i).getTransactionId());
             if (!cdaParkingTransListData.isEmpty()) {
@@ -181,6 +178,7 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingTrans.setGinNo(cdaRequest.getCdaRequest().get(i).getGinNo());
             cdaParkingTrans.setUnitId(hrData.getUnitId());
             cdaParkingTrans.setIsFlag("0");
+            cdaParkingTrans.setRemarks("NEW CDA");
             cdaParkingTrans.setAmountType(cdaRequest.getCdaRequest().get(i).getAmountTypeId());
             cdaParkingTrans.setTransactionId(cdaRequest.getCdaRequest().get(i).getTransactionId());
             cdaParkingTrans.setAllocTypeId(cdaRequest.getCdaRequest().get(i).getAllocationTypeID());
@@ -274,9 +272,8 @@ public class CdaParkingImpl implements CdaParkingService {
             }
         }
 
-        if (allCda && inboxOutboxList.size() > 0) {
-            for (Integer m = 0; m < inboxOutboxList.size(); m++) {
-                MangeInboxOutbox inboxData = inboxOutboxList.get(m);
+        if (allCda && !inboxOutboxList.isEmpty()) {
+            for (MangeInboxOutbox inboxData : inboxOutboxList) {
                 inboxData.setIsApproved("1");
                 inboxData.setIsFlag("1");
                 mangeInboxOutBoxRepository.save(inboxData);
