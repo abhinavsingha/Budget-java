@@ -102,7 +102,7 @@ public class ConverterUtils {
 
     public static String addDecimalPoint(String number) {
         try {
-            if (number == null) {
+            if (number == null || number.equalsIgnoreCase("")) {
                 return "0.0000";
             }
 
@@ -114,6 +114,7 @@ public class ConverterUtils {
                 dat23 = dat23 + ".0000";
             }
             String amoumt11 = String.format("%.4f", Double.parseDouble(dat23));
+            if(amoumt11.equalsIgnoreCase("-0.0000")) return "0.0000";
             return amoumt11;
         } catch (Exception e) {
             return number;
