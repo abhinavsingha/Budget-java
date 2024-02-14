@@ -2367,7 +2367,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             cgUnitResponse.setGinNo(cdaParkingRepository.findByGinNo(cdaParkingCrAndDr.getGinNo()));
                             AmountUnit cdaAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingCrAndDr.getAmountType());
                             cgUnitResponse.setAmountType(cdaAmountUnit);
-
+                            cgUnitResponse.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(cdaParkingCrAndDr.getRemainingCdaAmount()));
                             totalRemening = totalRemening + (Double.parseDouble(cdaParkingCrAndDr.getRemainingCdaAmount()) * cdaAmountUnit.getAmount());
                             data.add(cgUnitResponse);
                         }
@@ -2453,6 +2453,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             cgUnitResponse.setGinNo(cdaParkingRepository.findByGinNo(cdaParkingCrAndDr.getGinNo()));
                             AmountUnit cdaAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingCrAndDr.getAmountType());
                             cgUnitResponse.setAmountType(cdaAmountUnit);
+                            cgUnitResponse.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(cdaParkingCrAndDr.getRemainingCdaAmount()));
 
                             totalRemening = totalRemening + (Double.parseDouble(cdaParkingCrAndDr.getRemainingCdaAmount()) * cdaAmountUnit.getAmount());
                             data.add(cgUnitResponse);
