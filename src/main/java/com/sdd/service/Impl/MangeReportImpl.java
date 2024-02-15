@@ -8649,10 +8649,10 @@ public class MangeReportImpl implements MangeReportService {
                 double expsum = 0.0;
                 double percentagesum = 0.0;
                 double amount = 0.0;
-                double amountUnit;
-                double finAmount;
+                double amountUnit= 0.0;
+                double finAmount= 0.0;
                 double eAmount = 0.0;
-                double expnAmount;
+                double expnAmount= 0.0;
                 double allAmount = 0.0;
 
                 for (BudgetAllocation row : reportDetail) {
@@ -8663,14 +8663,17 @@ public class MangeReportImpl implements MangeReportService {
                     if(filterData.size() >0){
                         unitDetails.add(filterData.get(filterData.size() -1));
                     }
+                    if(unitDetails.size()>0){
+                        amount = Double.parseDouble(unitDetails.get(0).getAllocationAmount());
+                        AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(unitDetails.get(0).getAmountType());
 
-                    amount = Double.parseDouble(unitDetails.get(0).getAllocationAmount());
-                    AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(unitDetails.get(0).getAmountType());
+
                     if (amountTypeObj == null) {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
+                    }
                     finAmount = amount * amountUnit / reqAmount;
                     String uid = row.getToUnit();
                     //List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
@@ -9245,20 +9248,21 @@ public class MangeReportImpl implements MangeReportService {
                 double expsum = 0;
                 double percentagesum = 0;
                 double amount = 0.0;
-                double amountUnit;
-                double finAmount;
+                double amountUnit= 0.0;
+                double finAmount= 0.0;
                 double eAmount = 0.0;
-                double expnAmount;
+                double expnAmount= 0.0;
                 double allAmount = 0.0;
 
                 for (Integer r = 0; r < reportDetail.size(); r++) {
-
+                    String uid = reportDetail.get(r).getToUnit();
                     List<BudgetAllocation> unitDetail = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusOrderByCreatedOnAsc(reportDetail.get(r).getToUnit(), finYearId, subHeadId, allocationType, "Approved");
                     List<BudgetAllocation> filterData = unitDetail.stream().filter(e -> e.getCreatedOn().before(toDateFormate)).collect(Collectors.toList());
                     List<BudgetAllocation> unitDetails=new ArrayList<>();
                     if(filterData.size() >0){
                         unitDetails.add(filterData.get(filterData.size() -1));
                     }
+                    if(unitDetails.size() >0){
 
                     amount = Double.parseDouble(unitDetails.get(0).getAllocationAmount());
                     AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(unitDetails.get(0).getAmountType());
@@ -9266,8 +9270,9 @@ public class MangeReportImpl implements MangeReportService {
                         return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
                         }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
                     }
-                    String uid = reportDetail.get(r).getToUnit();
+
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
+                    }
                     finAmount = amount * amountUnit / reqAmount;
                     //List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
                     List<CgUnit> unitList1 = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
@@ -9749,28 +9754,30 @@ public class MangeReportImpl implements MangeReportService {
                 double expsum = 0;
                 double percentagesum = 0;
                 double amount = 0.0;
-                double amountUnit;
-                double finAmount;
+                double amountUnit= 0.0;
+                double finAmount= 0.0;
                 double eAmount = 0.0;
-                double expnAmount;
+                double expnAmount= 0.0;
                 double allAmount = 0.0;
 
                 for (Integer r = 0; r < reportDetails.size(); r++) {
 
                     FerSubResponse subResp = new FerSubResponse();
-
+                    String uid = reportDetails.get(r).getToUnit();
                     List<BudgetAllocation> unitDetail = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusOrderByCreatedOnAsc(reportDetails.get(r).getToUnit(), finYearId, subHeadId, allocationType, "Approved");
                     List<BudgetAllocation> filterData = unitDetail.stream().filter(e -> e.getCreatedOn().before(toDateFormate)).collect(Collectors.toList());
                     List<BudgetAllocation> unitDetails=new ArrayList<>();
                     if(filterData.size() >0){
                         unitDetails.add(filterData.get(filterData.size() -1));
                     }
+                    if(unitDetails.size() >0){
 
                     amount = Double.valueOf(unitDetails.get(0).getAllocationAmount());
                     AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(unitDetails.get(0).getAmountType());
 
-                    String uid = reportDetails.get(r).getToUnit();
+
                     amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
+                    }
                     finAmount = amount * amountUnit / reqAmount;
                     //List<CgUnit> unitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(uid);
                     List<CgUnit> unitList1 = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
