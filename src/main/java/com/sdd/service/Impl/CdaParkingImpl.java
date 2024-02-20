@@ -13,11 +13,14 @@ import com.sdd.service.CdaParkingService;
 import com.sdd.utils.ConverterUtils;
 import com.sdd.utils.HelperUtils;
 import com.sdd.utils.ResponseUtils;
+
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.*;
 
 @Service
@@ -689,7 +692,7 @@ public class CdaParkingImpl implements CdaParkingService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public ApiResponse<DefaultResponse> updateCdaParkingData(CDARequest cdaRequest) {
+    public ApiResponse<DefaultResponse> updateCdaParkingData(CDARequest cdaRequest) throws  Exception{
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
@@ -809,7 +812,9 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParking.setIsFlag("1");
             cdaParking.setRemarks("CDA UPDATE");
             cdaParkingTransRepository.save(cdaParking);
-
+//if(true){
+//    throw  new ServiceException("abbinav throw");
+//}
 
             CdaParkingUpdateHistory cdaParkingUpdateHistory = new CdaParkingUpdateHistory();
             cdaParkingUpdateHistory.setCdaParkingUpdateId(HelperUtils.getUpdateCDAId());
@@ -850,8 +855,16 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingTrans.setTransactionId(cdaRequest.getCdaRequest().get(i).getTransactionId());
             cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()));
             cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            cdaParkingTrans.setRemarks("CDA UPDATE for is flag 0");
+//            try{
+//                int l=1/0;
+//            }catch(Exception ex){
+//                return ResponseUtils.createSuccessResponse(defaultResponse, new TypeReference<DefaultResponse>() {
+//                });
+//            }
 
             CdaParkingTrans saveCdaData = cdaParkingTransRepository.save(cdaParkingTrans);
+
 
             CdaParkingUpdateHistory cdaParkingUpdateHistory = new CdaParkingUpdateHistory();
             cdaParkingUpdateHistory.setCdaParkingUpdateId(HelperUtils.getUpdateCDAId());

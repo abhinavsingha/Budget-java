@@ -31,6 +31,6 @@ public interface CdaParkingService {
 
 	ApiResponse<List<CdaParking>> getCdaUnitList();
 
-	ApiResponse<DefaultResponse> updateCdaParkingData(CDARequest cdaRequest);
+	ApiResponse<DefaultResponse> updateCdaParkingData(CDARequest cdaRequest) throws Exception;
 
 }

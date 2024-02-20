@@ -86,7 +86,7 @@ public class CdaParkingController {
 
 
 	@PostMapping("/updateCda")
-	public ResponseEntity<ApiResponse<DefaultResponse>> updateCdaParkingData(@RequestBody CDARequest cdaRequest) {
+	public ResponseEntity<ApiResponse<DefaultResponse>> updateCdaParkingData(@RequestBody CDARequest cdaRequest) throws Exception {
 		return new ResponseEntity<>(cdaParkingService.updateCdaParkingData(cdaRequest), HttpStatus.OK);
 	}
 
