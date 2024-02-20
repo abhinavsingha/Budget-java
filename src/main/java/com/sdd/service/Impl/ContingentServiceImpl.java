@@ -1251,15 +1251,40 @@ public class ContingentServiceImpl implements ContingentService {
                 CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByCdaCrdrIdAndIsFlagAndIsRevision(approveContigentBillRequest.getCdaParkingId().get(i).getCdacrDrId(), "0", 0);
 
                 CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(cdaParkingCrAndDr.getCdaParkingTrans(), "0");
-                AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+//                AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+//
+//                double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+//
+//                double parkingAmount = Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount());
+//
+//                double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
+//                cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+//                cdaParkingTransRepository.save(cdaParkingTrans);
 
-                double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+                List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
 
-                double parkingAmount = Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount());
+                if(cdaParkingTrans.getAllocTypeId().equalsIgnoreCase(allocationType.get(0).getAllocTypeId())){
+                    AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+                    double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
 
-                double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
-                cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
-                cdaParkingTransRepository.save(cdaParkingTrans);
+                    double parkingAmount = Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount());
+
+                    double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
+                    cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                    cdaParkingTransRepository.save(cdaParkingTrans);
+                }else {
+
+                    CdaParkingTrans cdaParkingTransCurrent = cdaParkingTransRepository.findByAllocTypeIdAndBudgetHeadIdAndFinYearIdAndGinNoAndUnitId(allocationType.get(0).getAllocTypeId(),cdaParkingTrans.getBudgetHeadId(),cdaParkingTrans.getFinYearId(),cdaParkingTrans.getGinNo(),cdaParkingTrans.getUnitId());
+
+                    AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTransCurrent.getAmountType());
+                    double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTransCurrent.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+                    double parkingAmount = Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount());
+
+                    double returnAmount = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
+                    cdaParkingTransCurrent.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(returnAmount + ""));
+                    cdaParkingTransRepository.save(cdaParkingTransCurrent);
+                }
+
             }
 
         }
@@ -1437,15 +1462,31 @@ public class ContingentServiceImpl implements ContingentService {
                 CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByCdaCrdrIdAndIsFlagAndIsRevision(approveContigentBillRequest.getCdaParkingId().get(i).getCdacrDrId(), "0", 0);
 
                 CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(cdaParkingCrAndDr.getCdaParkingTrans(), "0");
-                AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
 
-                double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+                //String allocationTypeId=cdaParkingTrans.getAllocTypeId();
+                List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
 
-                double parkingAmount = Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount());
+                if(cdaParkingTrans.getAllocTypeId().equalsIgnoreCase(allocationType.get(0).getAllocTypeId())){
+                    AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+                    double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
 
-                double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
-                cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
-                cdaParkingTransRepository.save(cdaParkingTrans);
+                    double parkingAmount = Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount());
+
+                    double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
+                    cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                    cdaParkingTransRepository.save(cdaParkingTrans);
+                }else {
+
+                    CdaParkingTrans cdaParkingTransCurrent = cdaParkingTransRepository.findByAllocTypeIdAndBudgetHeadIdAndFinYearIdAndGinNoAndUnitId(allocationType.get(0).getAllocTypeId(),cdaParkingTrans.getBudgetHeadId(),cdaParkingTrans.getFinYearId(),cdaParkingTrans.getGinNo(),cdaParkingTrans.getUnitId());
+
+                    AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTransCurrent.getAmountType());
+                    double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTransCurrent.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+                    double parkingAmount = Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount());
+
+                    double returnAmount = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
+                    cdaParkingTransCurrent.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(returnAmount + ""));
+                    cdaParkingTransRepository.save(cdaParkingTransCurrent);
+                }
             }
         }
 

@@ -30,6 +30,12 @@ public interface CdaParkingTransRepository extends JpaRepository<CdaParkingTrans
 
     CdaParkingTrans findByCdaParkingId(String cdaParkingId);
 
+
+    CdaParkingTrans findByAllocTypeIdAndBudgetHeadIdAndFinYearIdAndGinNoAndUnitId(String allocationType,
+                                                                                  String budgetHeadId,String finYear,String gin,String unitId);
+
+
+
     List<CdaParkingTrans> findByAuthGroupIdAndBudgetHeadIdAndIsFlag(String authGroupId, String budgetHedaId, String isFlag);
 
     List<CdaParkingTrans> findByAuthGroupIdAndTransactionIdAndIsFlag(String authGroupId, String transId, String isFlag);
