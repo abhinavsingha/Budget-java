@@ -584,11 +584,10 @@ public class CdaParkingImpl implements CdaParkingService {
         for (CdaParkingUpdateHistory cdaParkingUpdateHistory : cdaParkingUpdateHistoryList) {
 
             CdaParkingHistoryDto cdaParkingTransResponse = new CdaParkingHistoryDto();
-
             cdaParkingTransResponse.setCdaParkingUpdateId(cdaParkingUpdateHistory.getCdaParkingUpdateId());
-            cdaParkingTransResponse.setOldAmount(cdaParkingUpdateHistory.getOldAmount());
+            cdaParkingTransResponse.setOldAmount(ConverterUtils.addDecimalPoint(cdaParkingUpdateHistory.getOldAmount() + ""));//round off added by deewan
             cdaParkingTransResponse.setOldGinNo(cdaParkingRepository.findByGinNo(cdaParkingUpdateHistory.getOldGinNo()));
-            cdaParkingTransResponse.setNewAmount(cdaParkingUpdateHistory.getNewAmount());
+            cdaParkingTransResponse.setNewAmount(ConverterUtils.addDecimalPoint(cdaParkingUpdateHistory.getNewAmount()+""));//round off added by deewan
             cdaParkingTransResponse.setNewGinNo(cdaParkingRepository.findByGinNo(cdaParkingUpdateHistory.getNewGinNo()));
             cdaParkingTransResponse.setUnitId(cgUnitRepository.findByUnit(cdaParkingUpdateHistory.getUnitId()));
             cdaParkingTransResponse.setAuthGroupId(cdaParkingUpdateHistory.getAuthGroupId());
