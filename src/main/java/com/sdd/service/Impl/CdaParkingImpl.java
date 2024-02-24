@@ -23,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.SQLException;
 import java.util.*;
 
+import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
+
 @Service
 public class CdaParkingImpl implements CdaParkingService {
 
@@ -175,7 +177,8 @@ public class CdaParkingImpl implements CdaParkingService {
 
             cdaParkingTrans.setCdaParkingId(HelperUtils.getCdaId());
             cdaParkingTrans.setFinYearId(cdaRequest.getCdaRequest().get(i).getBudgetFinancialYearId());
-            cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()));
+            //cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()));
+            cdaParkingTrans.setRemainingCdaAmount(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount());
             cdaParkingTrans.setBudgetHeadId(cdaRequest.getCdaRequest().get(i).getBudgetHeadId());
             cdaParkingTrans.setRemarks(cdaRequest.getCdaRequest().get(i).getRemark());
             cdaParkingTrans.setGinNo(cdaRequest.getCdaRequest().get(i).getGinNo());
@@ -406,7 +409,8 @@ public class CdaParkingImpl implements CdaParkingService {
 
             cdaParkingTrans.setCdaParkingId(HelperUtils.getCdaId());
             cdaParkingTrans.setFinYearId(cdaRequest.getCdaRequest().get(i).getBudgetFinancialYearId());
-            cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()));
+            //cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()));
+            cdaParkingTrans.setRemainingCdaAmount(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount());
             cdaParkingTrans.setBudgetHeadId(cdaRequest.getCdaRequest().get(i).getBudgetHeadId());
             cdaParkingTrans.setRemarks(cdaRequest.getCdaRequest().get(i).getRemark());
             cdaParkingTrans.setGinNo(cdaRequest.getCdaRequest().get(i).getGinNo());
@@ -785,6 +789,8 @@ public class CdaParkingImpl implements CdaParkingService {
         List<CdaParkingTrans> cdaParkingTransData = cdaParkingTransRepository.findByAuthGroupIdAndBudgetHeadIdAndIsFlag(cdaRequest.getAuthGroupId(), budgetHedaid, "0");
         List<CdaParkingCrAndDr> cdaParkingIsCrDr = parkingCrAndDrRepository.findByAuthGroupIdAndBudgetHeadIdAndIsFlagAndIsRevision(cdaRequest.getAuthGroupId(), budgetHedaid, "0", 0);
 
+        LOGGER.info("This is an info message 1");
+        //LOGGER.error("This is an error message");
 
         List<CgUnit> unitDataList = new ArrayList<>();
         if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
@@ -793,28 +799,25 @@ public class CdaParkingImpl implements CdaParkingService {
             unitDataList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnit());
         }
 
-
+        LOGGER.info("This is an info message 2");
         for (CgUnit cgUnit : unitDataList) {
 
             for (int i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
                 CdaSubRequest cdaSubRequest = cdaRequest.getCdaRequest().get(i);
                 List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(cgUnit.getUnit(), cdaSubRequest.getBudgetFinancialYearId(), cdaSubRequest.getBudgetHeadId(), cdaSubRequest.getAllocationTypeID(), "0", "0", "Pending");
                 if (budgetAllocationDetailsList.size() > 0) {
+                    LOGGER.info("This is an info message 3");
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALLOCATION OR BUDGET REVISION IS PENDING.AFTER COMPLETE U CAN CHANGE.");
                 }
             }
         }
 
-
+        LOGGER.info("This is an info message 4");
         String cdaUpdateAuthGroupId = HelperUtils.getAuthorityGroupId();
         for (CdaParkingTrans cdaParking : cdaParkingTransData) {
             cdaParking.setIsFlag("1");
             cdaParking.setRemarks("CDA UPDATE");
             cdaParkingTransRepository.save(cdaParking);
-//if(true){
-//    throw  new ServiceException("abbinav throw");
-//}
-
             CdaParkingUpdateHistory cdaParkingUpdateHistory = new CdaParkingUpdateHistory();
             cdaParkingUpdateHistory.setCdaParkingUpdateId(HelperUtils.getUpdateCDAId());
             cdaParkingUpdateHistory.setOldAmount(cdaParking.getRemainingCdaAmount());
@@ -827,12 +830,13 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingUpdateHistory.setUpdatedBy(hrData.getPid());
             cdaParkingUpdateHistory.setSubHead(cdaParking.getBudgetHeadId());
             cdaParkingUpdateHistoryList.add(cdaParkingUpdateHistory);
-
+            LOGGER.info("This is an info message 5");
         }
 
         for (CdaParkingCrAndDr cdaParking : cdaParkingIsCrDr) {
             cdaParking.setIsFlag("1");
             parkingCrAndDrRepository.save(cdaParking);
+            LOGGER.info("This is an info message 6");
         }
 
 
@@ -855,12 +859,7 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()));
             cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             cdaParkingTrans.setRemarks("CDA UPDATE for is flag 0");
-//            try{
-//                int l=1/0;
-//            }catch(Exception ex){
-//                return ResponseUtils.createSuccessResponse(defaultResponse, new TypeReference<DefaultResponse>() {
-//                });
-//            }
+            LOGGER.info("This is an info message 7");
 
             CdaParkingTrans saveCdaData = cdaParkingTransRepository.save(cdaParkingTrans);
 
@@ -896,6 +895,7 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingCrAndDr.setAmountType(saveCdaData.getAmountType());
 
             parkingCrAndDrRepository.save(cdaParkingCrAndDr);
+            LOGGER.info("This is an info message 8");
 
         }
 
@@ -930,6 +930,7 @@ public class CdaParkingImpl implements CdaParkingService {
             mangeInboxOutbox.setIsBgcg("CDA");
 
             mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+            LOGGER.info("This is an info message 9");
 
         }
 
