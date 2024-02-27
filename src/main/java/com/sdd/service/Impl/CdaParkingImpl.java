@@ -919,15 +919,12 @@ public class CdaParkingImpl implements CdaParkingService {
                 mangeInboxOutBoxRepository.save(mangeInboxOutbox);
 
             }
-
         }
-
 
         List<CdaParkingTrans> newCdaEntry = cdaParkingTransRepository.findByAuthGroupIdAndIsFlag(authGroupId, "0");
         if (newCdaEntry.isEmpty()) {
             checkCdaInsertOrNot(cdaRequest, authGroupId, hrData, cdaUpdateAuthGroupId, cdaParkingUpdateHistoryList);
         }
-
     }
 
 

@@ -65,6 +65,8 @@ public class ContingentBillController {
     public ResponseEntity<ApiResponse<List<ContingentBillResponse>>> getCbReport(@PathVariable("groupId") String groupId) {
         return new ResponseEntity<>(contingentService.getContingentBillGroupId(groupId), HttpStatus.OK);
     }
+
+
     @GetMapping("/getCountRejectedBil")
     public ResponseEntity<ApiResponse<List<ContingentBillResponse>>> getCountRejectedBil() {
         return new ResponseEntity<>(contingentService.getCountRejectedBil(), HttpStatus.OK);

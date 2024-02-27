@@ -814,7 +814,7 @@ public class ContingentServiceImpl implements ContingentService {
                 totalBill = totalBill + Double.parseDouble(bill.getCbAmount());
             }
             allocationAmount = allocationAmount + totalBill;
-            contigentBill.setAllocatedAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
+//            contigentBill.setAllocatedAmount(ConverterUtils.addDecimalPoint(allocationAmount + ""));
 
 
             ContigentBill saveData = contigentBillRepository.save(contigentBill);
