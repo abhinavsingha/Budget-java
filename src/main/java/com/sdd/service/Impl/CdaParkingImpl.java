@@ -890,7 +890,7 @@ public class CdaParkingImpl implements CdaParkingService {
                 String subHead = "";
                 for (CdaParkingUpdateHistory cdaParkingUpdateHistoryData : cdaParkingUpdateHistoryList) {
                     subHead = cdaParkingUpdateHistoryData.getSubHead();
-                    cdaUpdateHistoryRepository.save(cdaParkingUpdateHistory);
+                    cdaUpdateHistoryRepository.save(cdaParkingUpdateHistoryData);
                 }
 
 
