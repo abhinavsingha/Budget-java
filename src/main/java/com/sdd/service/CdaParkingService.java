@@ -17,7 +17,8 @@ public interface CdaParkingService {
 	ApiResponse<DefaultResponse> saveCdaParkingDataForRebase(CDARequest cdaRequest);
 
 	ApiResponse<CdaParkingTransResponse> getCdaData(String groupId);
-	ApiResponse<CdaParkingTransResponse> getCdaDataunit(String groupId,String unitId);
+
+	ApiResponse<CdaParkingTransResponse> getCdaDataUnit(String groupId,String unitId);
 
 	ApiResponse<CdaHistoryResponse> getCdaHistoryData(String groupId,String unitId);
 
