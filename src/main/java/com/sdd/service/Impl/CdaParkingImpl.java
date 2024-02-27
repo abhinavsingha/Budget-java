@@ -783,8 +783,8 @@ public class CdaParkingImpl implements CdaParkingService {
         }
 
 
-        List<CdaParkingTrans> cdaParkingTransData = cdaParkingTransRepository.findByAuthGroupIdAndBudgetHeadIdAndIsFlag(cdaRequest.getAuthGroupId(), budgetHedaid, "0");
-        List<CdaParkingCrAndDr> cdaParkingIsCrDr = parkingCrAndDrRepository.findByAuthGroupIdAndBudgetHeadIdAndIsFlagAndIsRevision(cdaRequest.getAuthGroupId(), budgetHedaid, "0", 0);
+        List<CdaParkingTrans> cdaParkingTransData = cdaParkingTransRepository.findByAuthGroupIdAndBudgetHeadId(cdaRequest.getAuthGroupId(), budgetHedaid);
+        List<CdaParkingCrAndDr> cdaParkingIsCrDr = parkingCrAndDrRepository.findByAuthGroupIdAndBudgetHeadId(cdaRequest.getAuthGroupId(), budgetHedaid);
 
 //        LOGGER.info("This is an info message 1");
 //        //LOGGER.error("This is an error message");
