@@ -690,13 +690,13 @@ public class CdaParkingImpl implements CdaParkingService {
         });
     }
 
-    @Override
+
     @Transactional(rollbackFor = {Exception.class})
-    public ApiResponse<DefaultResponse> updateCdaParkingData(CDARequest cdaRequest) throws Exception {
+    public ApiResponse<DefaultResponse> updateCdaParkingData(CDARequest cdaRequest) throws  Exception{
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
-
+        ArrayList<CdaParkingUpdateHistory> cdaParkingUpdateHistoryList = new ArrayList<CdaParkingUpdateHistory>();
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CDA PARKING");
         }
@@ -712,7 +712,7 @@ public class CdaParkingImpl implements CdaParkingService {
         String budgetHedaid = "";
         double cadTotalAmount = 0;
 
-        for (int i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
+        for (Integer i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
 
 
             if (cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount() == null || cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount().isEmpty()) {
@@ -772,7 +772,7 @@ public class CdaParkingImpl implements CdaParkingService {
             }
 
             List<AllocationType> allocationTypeCurrent = allocationRepository.findByIsFlag("1");
-            if (allocationTypeCurrent.isEmpty()) {
+            if (allocationTypeCurrent.size() == 0) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID ALLOCATION TYPE.00L");
             }
 
@@ -786,18 +786,34 @@ public class CdaParkingImpl implements CdaParkingService {
         List<CdaParkingTrans> cdaParkingTransData = cdaParkingTransRepository.findByAuthGroupIdAndBudgetHeadIdAndIsFlag(cdaRequest.getAuthGroupId(), budgetHedaid, "0");
         List<CdaParkingCrAndDr> cdaParkingIsCrDr = parkingCrAndDrRepository.findByAuthGroupIdAndBudgetHeadIdAndIsFlagAndIsRevision(cdaRequest.getAuthGroupId(), budgetHedaid, "0", 0);
 
+//        LOGGER.info("This is an info message 1");
+//        //LOGGER.error("This is an error message");
+//
+//        List<CgUnit> unitDataList = new ArrayList<>();
+//        if (hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+//            unitDataList = cgUnitRepository.findBySubUnitOrderByDescrAsc("000225");
+//        } else {
+//            unitDataList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnit());
+//        }
+//
+//        for (CgUnit cgUnit : unitDataList) {
+//
+//            for (int i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
+//                CdaSubRequest cdaSubRequest = cdaRequest.getCdaRequest().get(i);
+//                List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(cgUnit.getUnit(), cdaSubRequest.getBudgetFinancialYearId(), cdaSubRequest.getBudgetHeadId(), cdaSubRequest.getAllocationTypeID(), "0", "0", "Pending");
+//                if (budgetAllocationDetailsList.size() > 0) {
+//                    LOGGER.info("This is an info message 3");
+//                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALLOCATION OR BUDGET REVISION IS PENDING.AFTER COMPLETE U CAN CHANGE.");
+//                }
+//            }
+//        }
 
 
         String cdaUpdateAuthGroupId = HelperUtils.getAuthorityGroupId();
-        ArrayList<CdaParkingUpdateHistory> cdaParkingUpdateHistoryList = new ArrayList<CdaParkingUpdateHistory>();
-
-
         for (CdaParkingTrans cdaParking : cdaParkingTransData) {
             cdaParking.setIsFlag("1");
             cdaParking.setRemarks("CDA UPDATE");
             cdaParkingTransRepository.save(cdaParking);
-
-
             CdaParkingUpdateHistory cdaParkingUpdateHistory = new CdaParkingUpdateHistory();
             cdaParkingUpdateHistory.setCdaParkingUpdateId(HelperUtils.getUpdateCDAId());
             cdaParkingUpdateHistory.setOldAmount(cdaParking.getRemainingCdaAmount());
@@ -809,20 +825,105 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingUpdateHistory.setAmountType(cdaParking.getAmountType());
             cdaParkingUpdateHistory.setUpdatedBy(hrData.getPid());
             cdaParkingUpdateHistory.setSubHead(cdaParking.getBudgetHeadId());
-
             cdaParkingUpdateHistoryList.add(cdaParkingUpdateHistory);
         }
 
         for (CdaParkingCrAndDr cdaParking : cdaParkingIsCrDr) {
             cdaParking.setIsFlag("1");
             parkingCrAndDrRepository.save(cdaParking);
-
         }
 
 
-        String authGroupId = HelperUtils.getCdaId();
-        checkCdaInsertOrNot(cdaRequest.getCdaRequest(), authGroupId, hrData, cdaUpdateAuthGroupId, cdaParkingUpdateHistoryList);
+        String authGroupId = HelperUtils.getAuthorityGroupId();
+        for (int i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
 
+            CdaParkingTrans cdaParkingTrans = new CdaParkingTrans();
+            cdaParkingTrans.setCdaParkingId(HelperUtils.getCdaId());
+            cdaParkingTrans.setFinYearId(cdaRequest.getCdaRequest().get(i).getBudgetFinancialYearId());
+            cdaParkingTrans.setBudgetHeadId(cdaRequest.getCdaRequest().get(i).getBudgetHeadId());
+            cdaParkingTrans.setRemarks(cdaRequest.getCdaRequest().get(i).getRemark());
+            cdaParkingTrans.setGinNo(cdaRequest.getCdaRequest().get(i).getGinNo());
+            cdaParkingTrans.setUnitId(hrData.getUnitId());
+            cdaParkingTrans.setIsFlag("0");
+            cdaParkingTrans.setAmountType(cdaRequest.getCdaRequest().get(i).getAmountTypeId());
+            cdaParkingTrans.setAllocTypeId(cdaRequest.getCdaRequest().get(i).getAllocationTypeID());
+            cdaParkingTrans.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            cdaParkingTrans.setAuthGroupId(authGroupId);
+            cdaParkingTrans.setTransactionId(cdaRequest.getCdaRequest().get(i).getTransactionId());
+            cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()));
+            cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            cdaParkingTrans.setRemarks("CDA UPDATE for is flag 0");
+
+            CdaParkingTrans saveCdaData = cdaParkingTransRepository.save(cdaParkingTrans);
+
+
+            CdaParkingUpdateHistory cdaParkingUpdateHistory = new CdaParkingUpdateHistory();
+            cdaParkingUpdateHistory.setCdaParkingUpdateId(HelperUtils.getUpdateCDAId());
+            cdaParkingUpdateHistory.setNewAmount(saveCdaData.getRemainingCdaAmount());
+            cdaParkingUpdateHistory.setNewGinNo(saveCdaData.getGinNo());
+            cdaParkingUpdateHistory.setUnitId(hrData.getUnitId());
+            cdaParkingUpdateHistory.setAuthGroupId(cdaUpdateAuthGroupId);
+            cdaParkingUpdateHistory.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            cdaParkingUpdateHistory.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            cdaParkingUpdateHistory.setAmountType(saveCdaData.getAmountType());
+            cdaParkingUpdateHistory.setUpdatedBy(hrData.getPid());
+            cdaParkingUpdateHistory.setSubHead(saveCdaData.getBudgetHeadId());
+            cdaParkingUpdateHistoryList.add(cdaParkingUpdateHistory);
+
+            CdaParkingCrAndDr cdaParkingCrAndDr = new CdaParkingCrAndDr();
+            cdaParkingCrAndDr.setCdaCrdrId(HelperUtils.getCdaCrDrId());
+            cdaParkingCrAndDr.setFinYearId(saveCdaData.getFinYearId());
+            cdaParkingCrAndDr.setBudgetHeadId(saveCdaData.getBudgetHeadId());
+            cdaParkingCrAndDr.setGinNo(saveCdaData.getGinNo());
+            cdaParkingCrAndDr.setUnitId(saveCdaData.getUnitId());
+            cdaParkingCrAndDr.setAuthGroupId(authGroupId);
+            cdaParkingCrAndDr.setAmount(saveCdaData.getRemainingCdaAmount());
+            cdaParkingCrAndDr.setIscrdr("CR");
+            cdaParkingCrAndDr.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            cdaParkingCrAndDr.setAllocTypeId(cdaRequest.getCdaRequest().get(i).getAmountTypeId());
+            cdaParkingCrAndDr.setIsFlag("0");
+            cdaParkingCrAndDr.setIsRevision(0);
+            cdaParkingCrAndDr.setTransactionId(saveCdaData.getTransactionId());
+            cdaParkingCrAndDr.setAmountType(saveCdaData.getAmountType());
+
+            parkingCrAndDrRepository.save(cdaParkingCrAndDr);
+
+        }
+
+        if (!hrData.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID)) {
+            String subHead = "";
+            for (CdaParkingUpdateHistory cdaParkingUpdateHistory : cdaParkingUpdateHistoryList) {
+                subHead = cdaParkingUpdateHistory.getSubHead();
+                cdaUpdateHistoryRepository.save(cdaParkingUpdateHistory);
+            }
+
+            BudgetHead budgetHead = subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(subHead);
+
+            MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
+            mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
+            mangeInboxOutbox.setRemarks("CDA update by " + hrData.getUnit() + " in " + budgetHead.getSubHeadDescr());
+            mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+            mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+            mangeInboxOutbox.setToUnit(HelperUtils.HEADUNITID);
+            mangeInboxOutbox.setFromUnit(hrData.getUnitId());
+            mangeInboxOutbox.setGroupId(cdaUpdateAuthGroupId);
+            mangeInboxOutbox.setType("CDA update by " + hrData.getUnit() + " in " + budgetHead.getSubHeadDescr());
+            mangeInboxOutbox.setRoleId(hrData.getRoleId());
+            mangeInboxOutbox.setCreaterpId(hrData.getPid());
+            mangeInboxOutbox.setState("CR");
+            mangeInboxOutbox.setApproverpId(hrData.getPid());
+            mangeInboxOutbox.setIsFlag("1");
+            mangeInboxOutbox.setIsArchive("0");
+            mangeInboxOutbox.setIsRebase("0");
+            mangeInboxOutbox.setIsApproved("0");
+            mangeInboxOutbox.setIsRevision(0);
+            mangeInboxOutbox.setStatus("Fully Approved");
+            mangeInboxOutbox.setIsBgcg("CDA");
+
+            mangeInboxOutBoxRepository.save(mangeInboxOutbox);
+
+        }
 
         defaultResponse.setMsg("CDA data update successfully");
         return ResponseUtils.createSuccessResponse(defaultResponse, new TypeReference<DefaultResponse>() {
