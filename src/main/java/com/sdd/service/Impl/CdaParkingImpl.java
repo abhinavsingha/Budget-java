@@ -537,7 +537,7 @@ public class CdaParkingImpl implements CdaParkingService {
         if (hrData == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "YOU ARE NOT AUTHORIZED TO CREATE CDA PARKING");
         }
-        List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByAuthGroupIdAndIsFlagAndUnitId(groupId, "0", unitId);
+        List<CdaParkingTrans> cdaParkingTrans = cdaParkingTransRepository.findByAuthGroupIdAndUnitId(groupId, unitId);
         List<CdaParkingTransSubResponse> cdaParkingTransList = new ArrayList<CdaParkingTransSubResponse>();
 
         for (Integer i = 0; i < cdaParkingTrans.size(); i++) {
