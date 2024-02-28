@@ -783,8 +783,27 @@ public class CdaParkingImpl implements CdaParkingService {
         }
 
 
-        List<CdaParkingTrans> cdaParkingTransData = cdaParkingTransRepository.findByAuthGroupIdAndBudgetHeadId(cdaRequest.getAuthGroupId(), budgetHedaid);
-        List<CdaParkingCrAndDr> cdaParkingIsCrDr = parkingCrAndDrRepository.findByAuthGroupIdAndBudgetHeadId(cdaRequest.getAuthGroupId(), budgetHedaid);
+
+        String finYaerId = "";
+        String allocationTypeId = "";
+        String budgetHeadId = "";
+
+        for (Integer i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
+
+            finYaerId = cdaRequest.getCdaRequest().get(i).getBudgetFinancialYearId();
+            allocationTypeId = cdaRequest.getCdaRequest().get(i).getAllocationTypeID();
+            budgetHeadId = cdaRequest.getCdaRequest().get(i).getBudgetHeadId();
+
+
+        }
+        List<CdaParkingTrans> cdaParkingTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(finYaerId,budgetHeadId,"0",allocationTypeId, hrData.getUnitId());
+        List<CdaParkingCrAndDr> cdaParkingIsCrDr = parkingCrAndDrRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitIdAndIsRevision(finYaerId, budgetHedaid,"0",allocationTypeId, hrData.getUnitId(), 0);
+
+//        List<CdaParkingTrans> cdaParkingTransData = cdaParkingTransRepository.findByAuthGroupIdAndBudgetHeadId(cdaRequest.getAuthGroupId(), budgetHedaid);
+//        List<CdaParkingCrAndDr> cdaParkingIsCrDr = parkingCrAndDrRepository.findByAuthGroupIdAndBudgetHeadId(cdaRequest.getAuthGroupId(), budgetHedaid);
+
+
+
 
 //        LOGGER.info("This is an info message 1");
 //        //LOGGER.error("This is an error message");
