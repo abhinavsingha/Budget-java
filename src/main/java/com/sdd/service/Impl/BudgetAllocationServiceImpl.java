@@ -2941,7 +2941,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTran.getAmountType());
                 balanceAmount = balanceAmount + Double.parseDouble(cdaParkingTran.getRemainingCdaAmount());
             }
-            response.setFundAvailable(ConverterUtils.addDecimalPoint(balanceAmount + ""));
+            response.setFundAvailable(balanceAmount+"");//remove round off   by deewan ConverterUtils.addDecimalPoint(
             response.setAmountUnit(amountUnit);
         }
 
@@ -2955,10 +2955,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             AmountUnit subAmountType = amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType());
             totalAllocationT = totalAllocationT + (Double.parseDouble(budgetAllocation.getAllocationAmount()) * subAmountType.getAmount());
         }
-
         response.setCbAllocationAMount(totalAllocationT + "");
-
-
         List<ContigentBill> cbExpendure = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdate(budgetHeadId.getUnitId(), budgetHeadId.getBudgetHeadId(), "0", "0");
         if (cbExpendure.isEmpty()) {
             response.setExpenditure("0.0000");
@@ -2967,7 +2964,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             for (ContigentBill contigentBill : cbExpendure) {
                 expenditure = expenditure + Double.parseDouble(contigentBill.getCbAmount());
             }
-            response.setExpenditure(ConverterUtils.addDecimalPoint(expenditure + ""));
+            response.setExpenditure(expenditure+"");//remove round off 29/02/24 by deevan
         }
 
         List<CdaFilterData> data = new ArrayList<>();
