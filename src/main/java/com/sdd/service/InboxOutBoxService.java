@@ -13,6 +13,12 @@ public interface InboxOutBoxService {
 
 	ApiResponse<InboxOutBoxResponse> getInboxList();
 
+
+	ApiResponse<InboxOutBoxResponse> getInboxListMain();
+	ApiResponse<InboxOutBoxResponse> getOutboxListMain();
+	ApiResponse<InboxOutBoxResponse> getApprovedListMain();
+	ApiResponse<InboxOutBoxResponse> getArchivedListMain();
+
 	ApiResponse<List<InboxOutBoxResponse>> getOutBoxList();
 
 	ApiResponse<InboxOutBoxResponse> readMessage(String msgId);

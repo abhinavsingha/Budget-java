@@ -31,6 +31,35 @@ public class InboxOutboxController {
         return new ResponseEntity<>(inboxOutBoxService.getInboxList(), HttpStatus.OK);
     }
 
+
+
+
+    @GetMapping("/getInboxListMain")
+    public ResponseEntity<ApiResponse<InboxOutBoxResponse>> getInboxListMain() {
+        return new ResponseEntity<>(inboxOutBoxService.getInboxListMain(), HttpStatus.OK);
+    }
+
+
+    @GetMapping("/getOutBoxListMain")
+    public ResponseEntity<ApiResponse<InboxOutBoxResponse>> getOutboxListMain() {
+        return new ResponseEntity<>(inboxOutBoxService.getOutboxListMain(), HttpStatus.OK);
+    }
+
+    @GetMapping("/getArchiveListMain")
+    public ResponseEntity<ApiResponse<InboxOutBoxResponse>> getArchivedListMain() {
+        return new ResponseEntity<>(inboxOutBoxService.getArchivedListMain(), HttpStatus.OK);
+    }
+
+    @GetMapping("/getApprovedListMain")
+    public ResponseEntity<ApiResponse<InboxOutBoxResponse>> getApprovedListMain() {
+        return new ResponseEntity<>(inboxOutBoxService.getApprovedListMain(), HttpStatus.OK);
+    }
+
+
+
+
+
+
     @GetMapping("/getOutBoxList")
     public ResponseEntity<ApiResponse<List<InboxOutBoxResponse>>> getOutBoxList() {
         return new ResponseEntity<>(inboxOutBoxService.getOutBoxList(), HttpStatus.OK);

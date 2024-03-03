@@ -598,6 +598,820 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         });
     }
 
+
+
+
+
+
+
+
+
+    @Override
+    public ApiResponse<InboxOutBoxResponse> getInboxListMain() {
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN .LOGIN AGAIN");
+        }
+
+        InboxOutBoxResponse inboxOutBoxResponse = new InboxOutBoxResponse();
+        List<InboxOutBoxSubResponse> inboxList = new ArrayList<InboxOutBoxSubResponse>();
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+
+
+        List<MangeInboxOutbox> inboxOutboxesList = new ArrayList<MangeInboxOutbox>();
+
+        String getCurrentRole = "";
+        try {
+            getCurrentRole = hrDataCheck.getRoleId().split(",")[0];
+        } catch (Exception e) {
+
+        }
+
+        if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER)) {
+
+            List<String> dataIscgBg = new ArrayList<>();
+            dataIscgBg.add("BG");
+            dataIscgBg.add("BR");
+            dataIscgBg.add("RR");
+
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
+
+
+            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+
+                if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("AP")) {
+                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+                    data.setGroupId(mangeInboxOutbox.getGroupId());
+                    data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+                    data.setRemarks(mangeInboxOutbox.getRemarks());
+                    data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                    data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                    data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                    data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+                    data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setType(mangeInboxOutbox.getType());
+                    data.setIsRevision(mangeInboxOutbox.getIsRevision());
+                    data.setStatus(mangeInboxOutbox.getStatus());
+                    data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+
+                    if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
+                        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(mangeInboxOutbox.getGroupId(), hrDataCheck.getUnitId());
+                        Boolean isCda = true;
+                        for (Integer m = 0; m < budgetAllocations.size(); m++) {
+
+                            BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
+
+                            if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                                continue;
+                            }
+                            List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
+                            if (cdaParkingList.size() > 0) {
+                                data.setIsCda(isCda);
+                            } else {
+                                isCda = false;
+                                data.setIsCda(isCda);
+                            }
+                            data.setBudgetAllocation(budgetAllocationSubReport);
+                        }
+                        data.setIsCda(isCda);
+
+                    }
+                    inboxList.add(data);
+
+                }
+
+            }
+        }
+        else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
+
+            List<String> dataIscgBg = new ArrayList<>();
+            dataIscgBg.add("BG");
+            dataIscgBg.add("BR");
+            dataIscgBg.add("RR");
+            dataIscgBg.add("UR");
+            dataIscgBg.add("CDA");
+            dataIscgBg.add("SBG");
+            dataIscgBg.add("CDAI");
+
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
+
+
+            for (MangeInboxOutbox inboxOutbox : inboxOutboxesList) {
+
+                if (inboxOutbox.getToUnit().equalsIgnoreCase(hrDataCheck.getUnitId())) {
+
+                    if (inboxOutbox.getState().equalsIgnoreCase("CR")) {
+                        InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+                        MangeInboxOutbox mangeInboxOutbox = inboxOutbox;
+                        data.setGroupId(mangeInboxOutbox.getGroupId());
+                        data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+                        data.setRemarks(mangeInboxOutbox.getRemarks());
+                        data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                        data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                        data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                        data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+                        data.setAmount(mangeInboxOutbox.getAmount());
+                        data.setType(mangeInboxOutbox.getType());
+                        data.setIsRebase(mangeInboxOutbox.getIsRebase());
+                        data.setIsRevision(mangeInboxOutbox.getIsRevision());
+                        data.setStatus(mangeInboxOutbox.getStatus());
+                        data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+
+                        if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
+
+                            List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(mangeInboxOutbox.getGroupId(), hrDataCheck.getUnitId());
+                            Boolean isCda = true;
+                            for (Integer m = 0; m < budgetAllocations.size(); m++) {
+
+                                BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
+
+                                if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                                    continue;
+                                }
+
+                                List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
+                                if (cdaParkingList.size() > 0) {
+                                    data.setIsCda(isCda);
+                                } else {
+                                    isCda = false;
+                                    data.setIsCda(isCda);
+                                }
+                                data.setBudgetAllocation(budgetAllocationSubReport);
+                            }
+                            data.setIsCda(isCda);
+                        }
+                        inboxList.add(data);
+
+                    }
+
+                }
+
+            }
+        }
+        else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
+
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "0", "0",hrDataCheck.getPid());
+            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+
+                if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
+                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+                    data.setGroupId(mangeInboxOutbox.getGroupId());
+                    data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+                    data.setRemarks(mangeInboxOutbox.getRemarks());
+                    data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                    data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                    data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                    data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+                    data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setIsRebase(mangeInboxOutbox.getIsRebase());
+                    data.setIsRevision(mangeInboxOutbox.getIsRevision());
+                    data.setType(mangeInboxOutbox.getType());
+                    data.setStatus(mangeInboxOutbox.getStatus());
+                    data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+
+                    inboxList.add(data);
+
+                }
+
+            }
+        } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
+
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "0", "0");
+            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+
+                if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("VE")) {
+                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+                    data.setGroupId(mangeInboxOutbox.getGroupId());
+                    data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+                    data.setRemarks(mangeInboxOutbox.getRemarks());
+                    data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                    data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                    data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                    data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+                    data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setType(mangeInboxOutbox.getType());
+                    data.setIsRebase(mangeInboxOutbox.getIsRebase());
+                    data.setIsRevision(mangeInboxOutbox.getIsRevision());
+                    data.setStatus(mangeInboxOutbox.getStatus());
+                    data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+
+                    inboxList.add(data);
+
+                }
+
+            }
+        } else if (getCurrentRole.contains(HelperUtils.CBAPPROVER)) {
+
+
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "0", "0");
+            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+
+                if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("AP")) {
+                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+                    data.setGroupId(mangeInboxOutbox.getGroupId());
+                    data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+                    data.setRemarks(mangeInboxOutbox.getRemarks());
+                    data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                    data.setIsRevision(mangeInboxOutbox.getIsRevision());
+                    data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                    data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                    data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+                    data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setType(mangeInboxOutbox.getType());
+                    data.setIsRebase(mangeInboxOutbox.getIsRebase());
+                    data.setStatus(mangeInboxOutbox.getStatus());
+                    data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+
+                    inboxList.add(data);
+
+                }
+
+            }
+        }
+
+        List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
+        if (allocationType.size() > 0) {
+            inboxOutBoxResponse.setAllocationType(allocationType.get(0));
+        }
+
+        CurrntStateType stateList1 = currentStateRepository.findByTypeAndIsFlag("FINYEAR", "1");
+        if (stateList1 == null) {
+            BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo("01");
+            inboxOutBoxResponse.setBudgetFinancialYear(budgetFinancialYear);
+        } else {
+            BudgetFinancialYear budgetFinancialYear =
+                    budgetFinancialYearRepository.findBySerialNo(stateList1.getStateId());
+            inboxOutBoxResponse.setBudgetFinancialYear(budgetFinancialYear);
+        }
+
+        inboxOutBoxResponse.setInboxList(inboxList);
+
+        return ResponseUtils.createSuccessResponse(inboxOutBoxResponse, new TypeReference<InboxOutBoxResponse>() {
+        });
+    }
+
+
+
+    @Override
+    public ApiResponse<InboxOutBoxResponse> getOutboxListMain() {
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN .LOGIN AGAIN");
+        }
+
+        InboxOutBoxResponse inboxOutBoxResponse = new InboxOutBoxResponse();
+
+        List<InboxOutBoxSubResponse> outBoxList = new ArrayList<InboxOutBoxSubResponse>();
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+
+
+        List<MangeInboxOutbox> inboxOutboxesList = new ArrayList<MangeInboxOutbox>();
+        List<MangeInboxOutbox> archiveMain = new ArrayList<MangeInboxOutbox>();
+        List<MangeInboxOutbox> approvedMain = new ArrayList<MangeInboxOutbox>();
+
+        String getCurrentRole = "";
+        try {
+            getCurrentRole = hrDataCheck.getRoleId().split(",")[0];
+        } catch (Exception e) {
+
+        }
+
+        if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER)) {
+
+            List<String> dataIscgBg = new ArrayList<>();
+            dataIscgBg.add("BG");
+            dataIscgBg.add("BR");
+            dataIscgBg.add("RR");
+
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
+
+
+            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+
+                if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("AP")) {
+
+                } else {
+                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+                    data.setGroupId(mangeInboxOutbox.getGroupId());
+                    data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+                    data.setRemarks(mangeInboxOutbox.getRemarks());
+                    data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                    data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                    data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                    data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+                    data.setIsRebase(mangeInboxOutbox.getIsRebase());
+                    data.setIsRevision(mangeInboxOutbox.getIsRevision());
+                    data.setType(mangeInboxOutbox.getType());
+                    data.setStatus(mangeInboxOutbox.getStatus());
+                    data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+
+                    if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
+                        List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(mangeInboxOutbox.getGroupId(), hrDataCheck.getUnitId());
+                        Boolean isCda = true;
+                        for (Integer m = 0; m < budgetAllocations.size(); m++) {
+
+                            BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
+
+                            if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                                continue;
+                            }
+                            List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
+                            if (cdaParkingList.size() > 0) {
+                                data.setIsCda(isCda);
+                            } else {
+                                isCda = false;
+                                data.setIsCda(isCda);
+                            }
+                            data.setBudgetAllocation(budgetAllocationSubReport);
+                        }
+                        data.setIsCda(isCda);
+                    }
+                    outBoxList.add(data);
+                }
+
+            }
+        }
+        else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
+//            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG", "0", "0");
+
+            List<String> dataIscgBg = new ArrayList<>();
+            dataIscgBg.add("BG");
+            dataIscgBg.add("BR");
+            dataIscgBg.add("RR");
+            dataIscgBg.add("UR");
+            dataIscgBg.add("CDA");
+            dataIscgBg.add("SBG");
+            dataIscgBg.add("CDAI");
+
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
+
+
+            for (MangeInboxOutbox inboxOutbox : inboxOutboxesList) {
+
+                if (inboxOutbox.getToUnit().equalsIgnoreCase(hrDataCheck.getUnitId())) {
+
+                    if (inboxOutbox.getState().equalsIgnoreCase("CR")) {
+
+
+                    } else {
+                        InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+                        MangeInboxOutbox mangeInboxOutbox = inboxOutbox;
+                        data.setGroupId(mangeInboxOutbox.getGroupId());
+                        data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+                        data.setRemarks(mangeInboxOutbox.getRemarks());
+                        data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                        data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                        data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                        data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+                        data.setAmount(mangeInboxOutbox.getAmount());
+                        data.setType(mangeInboxOutbox.getType());
+                        data.setIsRebase(mangeInboxOutbox.getIsRebase());
+                        data.setIsRevision(mangeInboxOutbox.getIsRevision());
+                        data.setStatus(mangeInboxOutbox.getStatus());
+
+                        if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
+
+                            List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(mangeInboxOutbox.getGroupId(), hrDataCheck.getUnitId());
+                            Boolean isCda = true;
+                            for (Integer m = 0; m < budgetAllocations.size(); m++) {
+
+                                BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
+
+                                if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                                    continue;
+                                }
+
+                                List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
+                                if (cdaParkingList.size() > 0) {
+                                    data.setIsCda(isCda);
+                                } else {
+                                    isCda = false;
+                                    data.setIsCda(isCda);
+                                }
+                                data.setBudgetAllocation(budgetAllocationSubReport);
+                            }
+                            data.setIsCda(isCda);
+                        }
+                        outBoxList.add(data);
+                    }
+
+                }
+
+            }
+        }
+        else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
+
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "0", "0",hrDataCheck.getPid());
+            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+
+                if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
+
+
+                } else {
+                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+                    data.setGroupId(mangeInboxOutbox.getGroupId());
+                    data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+                    data.setRemarks(mangeInboxOutbox.getRemarks());
+                    data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                    data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                    data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                    data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+                    data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setType(mangeInboxOutbox.getType());
+                    data.setIsRebase(mangeInboxOutbox.getIsRebase());
+                    data.setIsRevision(mangeInboxOutbox.getIsRevision());
+                    data.setStatus(mangeInboxOutbox.getStatus());
+                    data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+
+                    outBoxList.add(data);
+                }
+
+            }
+        } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
+
+
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "0", "0");
+            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+
+                if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("VE")) {
+
+
+                } else {
+                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+                    data.setGroupId(mangeInboxOutbox.getGroupId());
+                    data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+                    data.setRemarks(mangeInboxOutbox.getRemarks());
+                    data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                    data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                    data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                    data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+                    data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setIsRebase(mangeInboxOutbox.getIsRebase());
+                    data.setIsRevision(mangeInboxOutbox.getIsRevision());
+                    data.setType(mangeInboxOutbox.getType());
+                    data.setStatus(mangeInboxOutbox.getStatus());
+                    data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+
+                    outBoxList.add(data);
+                }
+
+            }
+        } else if (getCurrentRole.contains(HelperUtils.CBAPPROVER)) {
+
+
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "0", "0");
+            for (Integer i = 0; i < inboxOutboxesList.size(); i++) {
+
+                if (inboxOutboxesList.get(i).getState().equalsIgnoreCase("AP")) {
+
+
+                } else if (inboxOutboxesList.get(i).getStatus().equalsIgnoreCase("Approved") && inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
+                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+                    data.setGroupId(mangeInboxOutbox.getGroupId());
+                    data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+                    data.setRemarks(mangeInboxOutbox.getRemarks());
+                    data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                    data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                    data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                    data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+                    data.setAmount(mangeInboxOutbox.getAmount());
+                    data.setIsRebase(mangeInboxOutbox.getIsRebase());
+                    data.setType(mangeInboxOutbox.getType());
+                    data.setIsRevision(mangeInboxOutbox.getIsRevision());
+                    data.setStatus(mangeInboxOutbox.getStatus());
+                    data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+
+                    outBoxList.add(data);
+                } else {
+                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+
+                    if(!mangeInboxOutbox.getStatus().equalsIgnoreCase("Rejected")){
+                        data.setGroupId(mangeInboxOutbox.getGroupId());
+                        data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+                        data.setRemarks(mangeInboxOutbox.getRemarks());
+                        data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+                        data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+                        data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+                        data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+                        data.setAmount(mangeInboxOutbox.getAmount());
+                        data.setType(mangeInboxOutbox.getType());
+                        data.setIsRebase(mangeInboxOutbox.getIsRebase());
+                        data.setIsRevision(mangeInboxOutbox.getIsRevision());
+                        data.setStatus(mangeInboxOutbox.getStatus());
+                        data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+
+                        outBoxList.add(data);
+                    }
+                }
+
+            }
+        }
+
+        List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
+        if (allocationType.size() > 0) {
+            inboxOutBoxResponse.setAllocationType(allocationType.get(0));
+        }
+
+        CurrntStateType stateList1 = currentStateRepository.findByTypeAndIsFlag("FINYEAR", "1");
+        if (stateList1 == null) {
+            BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo("01");
+            inboxOutBoxResponse.setBudgetFinancialYear(budgetFinancialYear);
+        } else {
+            BudgetFinancialYear budgetFinancialYear =
+                    budgetFinancialYearRepository.findBySerialNo(stateList1.getStateId());
+            inboxOutBoxResponse.setBudgetFinancialYear(budgetFinancialYear);
+        }
+
+
+
+        inboxOutBoxResponse.setOutList(outBoxList);
+
+
+        return ResponseUtils.createSuccessResponse(inboxOutBoxResponse, new TypeReference<InboxOutBoxResponse>() {
+        });
+    }
+
+
+    @Override
+    public ApiResponse<InboxOutBoxResponse> getApprovedListMain() {
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN .LOGIN AGAIN");
+        }
+
+        InboxOutBoxResponse inboxOutBoxResponse = new InboxOutBoxResponse();
+
+        List<InboxOutBoxSubResponse> approvedList = new ArrayList<InboxOutBoxSubResponse>();
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+
+
+        List<MangeInboxOutbox> inboxOutboxesList = new ArrayList<MangeInboxOutbox>();
+        List<MangeInboxOutbox> archiveMain = new ArrayList<MangeInboxOutbox>();
+        List<MangeInboxOutbox> approvedMain = new ArrayList<MangeInboxOutbox>();
+
+        String getCurrentRole = "";
+        try {
+            getCurrentRole = hrDataCheck.getRoleId().split(",")[0];
+        } catch (Exception e) {
+
+        }
+
+        if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER)) {
+            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
+
+
+            List<String> dataIscgBg = new ArrayList<>();
+            dataIscgBg.add("BG");
+            dataIscgBg.add("BR");
+            dataIscgBg.add("RR");
+
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
+
+        }
+        else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
+//            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "BG", "0", "0");
+
+            List<String> dataIscgBg = new ArrayList<>();
+            dataIscgBg.add("BG");
+            dataIscgBg.add("BR");
+            dataIscgBg.add("RR");
+            dataIscgBg.add("UR");
+            dataIscgBg.add("CDA");
+            dataIscgBg.add("SBG");
+            dataIscgBg.add("CDAI");
+
+            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
+
+            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
+
+        }
+        else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
+            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
+
+        } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
+            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+
+        } else if (getCurrentRole.contains(HelperUtils.CBAPPROVER)) {
+            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+
+        }
+
+        List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
+        if (allocationType.size() > 0) {
+            inboxOutBoxResponse.setAllocationType(allocationType.get(0));
+        }
+
+        CurrntStateType stateList1 = currentStateRepository.findByTypeAndIsFlag("FINYEAR", "1");
+        if (stateList1 == null) {
+            BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo("01");
+            inboxOutBoxResponse.setBudgetFinancialYear(budgetFinancialYear);
+        } else {
+            BudgetFinancialYear budgetFinancialYear =
+                    budgetFinancialYearRepository.findBySerialNo(stateList1.getStateId());
+            inboxOutBoxResponse.setBudgetFinancialYear(budgetFinancialYear);
+        }
+
+
+        for (Integer i = 0; i < approvedMain.size(); i++) {
+            InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+            MangeInboxOutbox mangeInboxOutbox = approvedMain.get(i);
+
+
+            data.setGroupId(mangeInboxOutbox.getGroupId());
+            data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+            data.setRemarks(mangeInboxOutbox.getRemarks());
+            data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+            data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+            data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+            data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+            data.setAmount(mangeInboxOutbox.getAmount());
+            data.setType(mangeInboxOutbox.getType());
+            data.setIsRebase(mangeInboxOutbox.getIsRebase());
+            data.setIsRevision(mangeInboxOutbox.getIsRevision());
+            data.setStatus(mangeInboxOutbox.getStatus());
+            data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+            if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
+
+
+                List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(mangeInboxOutbox.getGroupId(), hrDataCheck.getUnitId());
+
+                Boolean isCda = true;
+                for (Integer m = 0; m < budgetAllocations.size(); m++) {
+
+                    BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
+
+                    if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                        continue;
+                    }
+
+                    List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
+                    if (cdaParkingList.size() > 0) {
+                        data.setIsCda(isCda);
+                    } else {
+                        isCda = false;
+                        data.setIsCda(isCda);
+                    }
+                    data.setBudgetAllocation(budgetAllocationSubReport);
+                }
+
+                data.setIsCda(isCda);
+            }
+            approvedList.add(data);
+        }
+
+        inboxOutBoxResponse.setApprovedList(approvedList);
+
+
+        return ResponseUtils.createSuccessResponse(inboxOutBoxResponse, new TypeReference<InboxOutBoxResponse>() {
+        });
+    }
+
+
+    @Override
+    public ApiResponse<InboxOutBoxResponse> getArchivedListMain() {
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN .LOGIN AGAIN");
+        }
+
+        InboxOutBoxResponse inboxOutBoxResponse = new InboxOutBoxResponse();
+        List<InboxOutBoxSubResponse> archivedList = new ArrayList<InboxOutBoxSubResponse>();
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.LOGIN AGAIN");
+        }
+
+
+        List<MangeInboxOutbox> inboxOutboxesList = new ArrayList<MangeInboxOutbox>();
+        List<MangeInboxOutbox> archiveMain = new ArrayList<MangeInboxOutbox>();
+        List<MangeInboxOutbox> approvedMain = new ArrayList<MangeInboxOutbox>();
+
+        String getCurrentRole = "";
+        try {
+            getCurrentRole = hrDataCheck.getRoleId().split(",")[0];
+        } catch (Exception e) {
+
+        }
+
+        if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER)) {
+            archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
+
+        }
+        else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
+
+            archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
+
+        }
+        else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
+            archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveAndCreaterpIdOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1",hrDataCheck.getPid()));
+
+        } else if (getCurrentRole.contains(HelperUtils.CBVERIFER)) {
+            archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+
+        } else if (getCurrentRole.contains(HelperUtils.CBAPPROVER)) {
+            archiveMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsBgcgAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "CB", "1"));
+        }
+
+        List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
+        if (allocationType.size() > 0) {
+            inboxOutBoxResponse.setAllocationType(allocationType.get(0));
+        }
+
+        CurrntStateType stateList1 = currentStateRepository.findByTypeAndIsFlag("FINYEAR", "1");
+        if (stateList1 == null) {
+            BudgetFinancialYear budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo("01");
+            inboxOutBoxResponse.setBudgetFinancialYear(budgetFinancialYear);
+        } else {
+            BudgetFinancialYear budgetFinancialYear =
+                    budgetFinancialYearRepository.findBySerialNo(stateList1.getStateId());
+            inboxOutBoxResponse.setBudgetFinancialYear(budgetFinancialYear);
+        }
+
+
+
+        for (Integer i = 0; i < archiveMain.size(); i++) {
+            InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+            MangeInboxOutbox mangeInboxOutbox = archiveMain.get(i);
+
+            data.setGroupId(mangeInboxOutbox.getGroupId());
+            data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+            data.setRemarks(mangeInboxOutbox.getRemarks());
+            data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+            data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+            data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+            data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+            data.setAmount(mangeInboxOutbox.getAmount());
+            data.setIsRevision(mangeInboxOutbox.getIsRevision());
+            data.setType(mangeInboxOutbox.getType());
+            data.setIsRebase(mangeInboxOutbox.getIsRebase());
+            data.setStatus(mangeInboxOutbox.getStatus());
+            data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+            if (mangeInboxOutbox.getIsBgcg().equalsIgnoreCase("BR")) {
+
+                List<BudgetAllocation> budgetAllocations = budgetAllocationRepository.findByAuthGroupIdAndToUnit(mangeInboxOutbox.getGroupId(), hrDataCheck.getUnitId());
+                Boolean isCda = true;
+                for (Integer m = 0; m < budgetAllocations.size(); m++) {
+
+                    BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
+
+                    if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
+                        continue;
+                    }
+
+                    List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getAllocationId(), "0");
+                    if (cdaParkingList.size() > 0) {
+                        data.setIsCda(isCda);
+                    } else {
+                        isCda = false;
+                        data.setIsCda(isCda);
+                    }
+                    data.setBudgetAllocation(budgetAllocationSubReport);
+                }
+                data.setIsCda(isCda);
+            }
+            archivedList.add(data);
+        }
+
+        inboxOutBoxResponse.setArchivedList(archivedList);
+
+
+        return ResponseUtils.createSuccessResponse(inboxOutBoxResponse, new TypeReference<InboxOutBoxResponse>() {
+        });
+    }
+
+
+
+
+
+
+
+
     @Override
     public ApiResponse<List<InboxOutBoxResponse>> getOutBoxList() {
         String token = headerUtils.getTokeFromHeader();

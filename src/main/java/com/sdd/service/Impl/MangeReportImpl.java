@@ -1523,7 +1523,6 @@ public class MangeReportImpl implements MangeReportService {
 
         String fileName = "ContingentBill" + hrData.getUnitId() + cbData.getCbId() + System.currentTimeMillis();
 
-
         double allocationAmount = 0;
         double balanceAmount = 0;
 
@@ -1552,16 +1551,6 @@ public class MangeReportImpl implements MangeReportService {
         }
 
 
-//        double expenditure = 0;
-//        List<ContigentBill> cbExpendure = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdate(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0");
-//        if (cbExpendure.size() == 0) {
-//
-//        } else {
-//            expenditure = 0;
-//            for (Integer i = 0; i < cbExpendure.size(); i++) {
-//                expenditure = expenditure + Double.parseDouble(cbExpendure.get(i).getCbAmount());
-//            }
-//        }
 
         List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
         if (allocationType.size() == 0) {
@@ -1583,7 +1572,6 @@ public class MangeReportImpl implements MangeReportService {
         double progressiveAmount = 0;
         String sectionNumber = cbData.getSectionNumber();
         List<ContigentBill> totalContigentBill = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdateAndFinYear(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0", cbData.getFinYear());
-//        List<CdaParkingTrans> cdaAmountList123123 = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(cbData.getFinYear(), cbData.getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
 
         if (totalContigentBill.size() == 0) {
             progressiveAmount = 0;
@@ -1603,19 +1591,19 @@ public class MangeReportImpl implements MangeReportService {
 
 
         List<CdaParkingTrans> cdaAmountList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(cbData.getFinYear(), cbData.getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
-        for (Integer k = 0; k < cdaAmountList.size(); k++) {
+        for (CdaParkingTrans cdaParkingTrans : cdaAmountList) {
 
-            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaAmountList.get(k).getAmountType());
-            balanceAmount = balanceAmount + (Double.parseDouble(cdaAmountList.get(k).getRemainingCdaAmount()) * amountUnit.getAmount());
-            allocationAmount = allocationAmount + (Double.parseDouble(cdaAmountList.get(k).getRemainingCdaAmount()) * amountUnit.getAmount());
+            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+            balanceAmount = balanceAmount + (Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * amountUnit.getAmount());
+            allocationAmount = allocationAmount + (Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * amountUnit.getAmount());
 
         }
 
         List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(cbData.getCbUnitId(), cbData.getFinYear(), cbData.getBudgetHeadID(),  "0", "0");
 
         double totalBill = 0;
-        for (Integer k = 0; k < subHeadContigentBill.size(); k++) {
-            totalBill = totalBill + Double.parseDouble(subHeadContigentBill.get(k).getCbAmount());
+        for (ContigentBill contigentBill : subHeadContigentBill) {
+            totalBill = totalBill + Double.parseDouble(contigentBill.getCbAmount());
         }
         allocationAmount = allocationAmount + totalBill;
 

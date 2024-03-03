@@ -121,6 +121,12 @@ public class ConverterUtils {
         }
     }
 
+
+
+
+
+
+
     public static String addDecimal2Point(String number) {
         try {
             if (number == null) {

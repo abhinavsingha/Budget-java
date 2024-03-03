@@ -53,4 +53,7 @@ public class CdaParkingUpdateHistory {
     @Column(name = "SUB_HEAD")
     private String subHead;
 
+    @Column(name = "REMARK")
+    private String remark;
+
 }

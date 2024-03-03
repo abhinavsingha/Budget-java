@@ -1342,7 +1342,7 @@ public class ContingentServiceImpl implements ContingentService {
 
                     } else {
 
-                        CdaParkingTrans  cdaParkingTransMain = cdaParkingPreviewsData.get(0);
+                        CdaParkingTrans cdaParkingTransMain = cdaParkingPreviewsData.get(0);
 
                         AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingPreviewsData.get(0).getAmountType());
                         double remainingCdaParkingAmount = Double.parseDouble(cdaParkingPreviewsData.get(0).getRemainingCdaAmount()) * cadAmountUnit.getAmount();
@@ -1369,7 +1369,21 @@ public class ContingentServiceImpl implements ContingentService {
             for (int i = 0; i < approveContigentBillRequest.getCdaParkingId().size(); i++) {
                 CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByCdaCrdrIdAndIsFlagAndIsRevision(approveContigentBillRequest.getCdaParkingId().get(i).getCdacrDrId(), "0", 0);
                 cdaParkingCrAndDr.setIsFlag("1");
+                cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                cdaParkingCrAndDr.setRemark("REJECT CB BILL");
+
                 parkingCrAndDrRepository.save(cdaParkingCrAndDr);
+            }
+
+            for (ContigentBill contigintBillData : cbData) {
+                List<CdaParkingCrAndDr> cdaParkingCrAndDrsList = parkingCrAndDrRepository.findByTransactionIdAndIsFlag(contigintBillData.getCbId(), "0");
+
+                for (CdaParkingCrAndDr cdaParkingCrAndDr : cdaParkingCrAndDrsList) {
+                    cdaParkingCrAndDr.setIsFlag("1");
+                    cdaParkingCrAndDr.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                    cdaParkingCrAndDr.setRemark("REJECT CB BILL");
+                    parkingCrAndDrRepository.save(cdaParkingCrAndDr);
+                }
             }
         }
 
@@ -1632,7 +1646,7 @@ public class ContingentServiceImpl implements ContingentService {
 
                     } else {
 
-                        CdaParkingTrans  cdaParkingTransMain = cdaParkingPreviewsData.get(0);
+                        CdaParkingTrans cdaParkingTransMain = cdaParkingPreviewsData.get(0);
 
                         AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingPreviewsData.get(0).getAmountType());
                         double remainingCdaParkingAmount = Double.parseDouble(cdaParkingPreviewsData.get(0).getRemainingCdaAmount()) * cadAmountUnit.getAmount();
@@ -1660,6 +1674,17 @@ public class ContingentServiceImpl implements ContingentService {
                 cdaParkingCrAndDr.setIsFlag("1");
                 parkingCrAndDrRepository.save(cdaParkingCrAndDr);
             }
+
+
+            for (ContigentBill contigintBillData : cbData) {
+                List<CdaParkingCrAndDr> cdaParkingCrAndDrsList = parkingCrAndDrRepository.findByTransactionIdAndIsFlag(contigintBillData.getCbId(), "0");
+
+                for (CdaParkingCrAndDr cdaParkingCrAndDr : cdaParkingCrAndDrsList) {
+                    cdaParkingCrAndDr.setIsFlag("1");
+                    parkingCrAndDrRepository.save(cdaParkingCrAndDr);
+                }
+            }
+
 
         }
 
