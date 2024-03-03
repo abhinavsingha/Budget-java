@@ -639,6 +639,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             dataIscgBg.add("BR");
             dataIscgBg.add("RR");
 
+
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
 
 
@@ -698,6 +699,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             dataIscgBg.add("CDA");
             dataIscgBg.add("SBG");
             dataIscgBg.add("CDAI");
+            dataIscgBg.add("BGR");
 
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
 
