@@ -102,7 +102,8 @@ public class DashboardServiceImpl implements DashBoardService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN.");
             }
         }
-        List<ContigentBill> cbData = contigentBillRepository.findByCbUnitIdAndStatus(hrDataCheck.getUnitId(),"Rejected");
+
+        List<ContigentBill> cbData = contigentBillRepository.findByCbUnitIdAndStatusAndCreatedBy(hrDataCheck.getUnitId(),"Rejected",hrDataCheck.getPid());
         dashBoardResponse.setRejectedBillCount(""+cbData.size());
 
 

@@ -438,4 +438,33 @@ public class ConverterUtils {
     }
 
 
+    public static double addDoubleValue(double value) {
+
+        long factor = (long) Math.pow(10, 7);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
+    }
+
+//    public static String addDecimalPoint(String number) {
+//        try {
+//            if (number == null || number.equalsIgnoreCase("")) {
+//                return "0.0000";
+//            }
+//
+//            String amoumt = String.format("%.4f", Double.parseDouble(number));
+//            DecimalFormat df = new DecimalFormat("#.####");
+//            String dat23 = df.format(Double.parseDouble(amoumt));
+//
+//            if (!(dat23.contains("."))) {
+//                dat23 = dat23 + ".0000";
+//            }
+//            String amoumt11 = String.format("%.4f", Double.parseDouble(dat23));
+//            if(amoumt11.equalsIgnoreCase("-0.0000")) return "0.0000";
+//            return amoumt11;
+//        } catch (Exception e) {
+//            return number;
+//        }
+    //}
+
 }

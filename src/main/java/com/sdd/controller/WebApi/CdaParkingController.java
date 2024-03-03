@@ -77,6 +77,11 @@ public class CdaParkingController {
 		return new ResponseEntity<>(cdaParkingService.getAllBillCdaAndAllocationSummery(cdaAndAllocationDataRequest), HttpStatus.OK);
 	}
 
+	@PostMapping("/getAllBillCdaAndAllocationSummeryunit")//add other unit  by deevan 1-Mar-2024
+	public ResponseEntity<ApiResponse<CdaAndAllocationDataResponse>> getAllBillCdaAndAllocationSummeryunit(@RequestBody CdaAndAllocationDataRequest cdaAndAllocationDataRequest) {
+		return new ResponseEntity<>(cdaParkingService.getAllBillCdaAndAllocationSummeryunit(cdaAndAllocationDataRequest), HttpStatus.OK);
+	}
+
 
 
 	@PostMapping("/getCheckExpForUnit")

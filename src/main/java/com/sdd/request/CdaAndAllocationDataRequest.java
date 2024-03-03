@@ -13,5 +13,7 @@ public class CdaAndAllocationDataRequest {
     private String budgetHeadId;
     private String amountType;
     private String allocationTypeId;
+    private String unitId;
+
 
 }
