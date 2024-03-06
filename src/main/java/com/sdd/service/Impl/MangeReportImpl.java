@@ -1590,22 +1590,23 @@ public class MangeReportImpl implements MangeReportService {
         cbReportResponse.setCurrentBillAmount(String.format("%.2f", Double.parseDouble(cbData.getCbAmount())));
 
 
-        List<CdaParkingTrans> cdaAmountList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(cbData.getFinYear(), cbData.getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
-        for (CdaParkingTrans cdaParkingTrans : cdaAmountList) {
+//        List<CdaParkingTrans> cdaAmountList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(cbData.getFinYear(), cbData.getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
+//        for (CdaParkingTrans cdaParkingTrans : cdaAmountList) {
+//
+//            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+//            balanceAmount = balanceAmount + (Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * amountUnit.getAmount());
+//           // allocationAmount = allocationAmount + (Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * amountUnit.getAmount());
+//
+//        }
 
-            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
-            balanceAmount = balanceAmount + (Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * amountUnit.getAmount());
-            allocationAmount = allocationAmount + (Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * amountUnit.getAmount());
-
-        }
-
-        List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(cbData.getCbUnitId(), cbData.getFinYear(), cbData.getBudgetHeadID(),  "0", "0");
-
-        double totalBill = 0;
-        for (ContigentBill contigentBill : subHeadContigentBill) {
-            totalBill = totalBill + Double.parseDouble(contigentBill.getCbAmount());
-        }
-        allocationAmount = allocationAmount + totalBill;
+//        List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(cbData.getCbUnitId(), cbData.getFinYear(), cbData.getBudgetHeadID(),  "0", "0");
+//
+//        double totalBill = 0;
+//        for (ContigentBill contigentBill : subHeadContigentBill) {
+//            totalBill = totalBill + Double.parseDouble(contigentBill.getCbAmount());
+//        }
+        //allocationAmount = allocationAmount + totalBill;
+         allocationAmount  = Double.parseDouble(cbData.getAllocatedAmount());
 
 
         cbReportResponse.setAllocatedAmount(String.format("%.2f", allocationAmount));
@@ -1751,20 +1752,21 @@ public class MangeReportImpl implements MangeReportService {
         }
 
 
-        List<CdaParkingTrans> cdaAmountList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(cbData.getFinYear(), cbData.getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
-        for (Integer k = 0; k < cdaAmountList.size(); k++) {
+//        List<CdaParkingTrans> cdaAmountList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(cbData.getFinYear(), cbData.getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
+//        for (Integer k = 0; k < cdaAmountList.size(); k++) {
+//
+//            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaAmountList.get(k).getAmountType());
+//            //balanceAmount = balanceAmount + (Double.parseDouble(cdaAmountList.get(k).getRemainingCdaAmount()) * amountUnit.getAmount());
+//        }
 
-            AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaAmountList.get(k).getAmountType());
-            balanceAmount = balanceAmount + (Double.parseDouble(cdaAmountList.get(k).getRemainingCdaAmount()) * amountUnit.getAmount());
-        }
-
-        List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(cbData.getCbUnitId(), cbData.getFinYear(), cbData.getBudgetHeadID(), "0", "0");
-
-        double totalBill = 0;
-        for (Integer k = 0; k < subHeadContigentBill.size(); k++) {
-            totalBill = totalBill + Double.parseDouble(subHeadContigentBill.get(k).getCbAmount());
-        }
-        allocationAmount = allocationAmount + totalBill;
+//        List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(cbData.getCbUnitId(), cbData.getFinYear(), cbData.getBudgetHeadID(), "0", "0");
+//
+//        double totalBill = 0;
+//        for (Integer k = 0; k < subHeadContigentBill.size(); k++) {
+//            totalBill = totalBill + Double.parseDouble(subHeadContigentBill.get(k).getCbAmount());
+//        }
+        //allocationAmount = allocationAmount + totalBill;
+        allocationAmount  = Double.parseDouble(cbData.getAllocatedAmount());
 
 
         cbReportResponse.setAllocatedAmount(String.format("%.2f", allocationAmount));
