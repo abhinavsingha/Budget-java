@@ -26,3 +26,8 @@ public class AppConf implements WebMvcConfigurer {
     registry.addResourceHandler("some/path/*.html").addResourceLocations("/public/");
   }
 }
+//registry
+//        .addMapping("/**")
+//        .allowedOrigins("http://localhost:4200")
+//        .allowedOriginPatterns("*")
+//        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
