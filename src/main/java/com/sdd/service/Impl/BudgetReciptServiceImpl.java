@@ -776,10 +776,28 @@ public ApiResponse<BudgetReciptListResponse> getBudgetRecipt() {
     List<AuthorityTableResponse> authorityTableList = new ArrayList<AuthorityTableResponse>();
     BudgetReciptListResponse budgetAllocationResponse = new BudgetReciptListResponse();
     List<BudgetReciptListSubResponse> budgetAllocationList = new ArrayList<BudgetReciptListSubResponse>();
-    List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDeleteAndIsBudgetRevision("000000", "0", "0");
 
 
-    for (BudgetAllocationDetails budgetAllocationSubReport : budgetAllocations) {
+
+
+    List<BudgetFinancialYear> budgetFinancialYearList = budgetFinancialYearRepository.findAllByOrderByFinYearDesc();
+
+
+//    List<BudgetAllocationDetails> budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDeleteAndIsBudgetRevision("000000", "0", "0");
+
+
+    List<BudgetAllocationDetails> budgetAllocations = new ArrayList<>();
+for(BudgetFinancialYear budgetFinancialYear: budgetFinancialYearList) {
+    budgetAllocations = budgetAllocationDetailsRepository.findByFromUnitAndIsDeleteAndIsBudgetRevisionAndFinYear("000000", "0", "0", budgetFinancialYear.getSerialNo());
+    List<BudgetReciptListSubResponse> asd = getBudgetAllocationListDataByFinYearLocal(budgetAllocations,  hrData);
+    budgetAllocationList.addAll(asd);
+}
+
+
+
+
+
+    /*for (BudgetAllocationDetails budgetAllocationSubReport : budgetAllocations) {
 
         BudgetReciptListSubResponse budgetAllocationReport = new BudgetReciptListSubResponse();
         budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
@@ -843,7 +861,8 @@ public ApiResponse<BudgetReciptListResponse> getBudgetRecipt() {
         public int compare(BudgetReciptListSubResponse v1, BudgetReciptListSubResponse v2) {
             return v1.getSubHead().getSerialNumber().compareTo(v2.getSubHead().getSerialNumber());
         }
-    });
+    });*/
+
 
     budgetAllocationResponse.setBudgetResponseist(budgetAllocationList);
 
@@ -851,6 +870,80 @@ public ApiResponse<BudgetReciptListResponse> getBudgetRecipt() {
     return ResponseUtils.createSuccessResponse(budgetAllocationResponse, new TypeReference<BudgetReciptListResponse>() {
     });
 }
+
+
+    List<BudgetReciptListSubResponse> getBudgetAllocationListDataByFinYearLocal(List<BudgetAllocationDetails> budgetAllocations, HrData hrData) {
+        List<BudgetReciptListSubResponse> budgetAllocationList = new ArrayList<BudgetReciptListSubResponse>();
+        List<AuthorityTableResponse> authorityTableList = new ArrayList<AuthorityTableResponse>();
+        for (BudgetAllocationDetails budgetAllocationSubReport : budgetAllocations) {
+
+            BudgetReciptListSubResponse budgetAllocationReport = new BudgetReciptListSubResponse();
+            budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
+            budgetAllocationReport.setAllocationId(budgetAllocationSubReport.getAllocationId());
+            budgetAllocationReport.setTransactionId(budgetAllocationSubReport.getTransactionId());
+            budgetAllocationReport.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSubReport.getAllocationAmount()));
+            budgetAllocationReport.setStatus(budgetAllocationSubReport.getStatus());
+            budgetAllocationReport.setPurposeCode(budgetAllocationSubReport.getPurposeCode());
+            budgetAllocationReport.setRemarks(budgetAllocationSubReport.getRemarks());
+            budgetAllocationReport.setRefTransactionId(budgetAllocationSubReport.getRefTransactionId());
+            budgetAllocationReport.setUserId(budgetAllocationSubReport.getUserId());
+            budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getAllocationDate());
+            budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
+            budgetAllocationReport.setCreatedOn(budgetAllocationSubReport.getCreatedOn());
+            budgetAllocationReport.setUpdatedOn(budgetAllocationSubReport.getUpdatedOn());
+            budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
+            budgetAllocationReport.setAmountUnit(amountUnitRepository.findByAmountTypeId(budgetAllocationSubReport.getAmountType()));
+            budgetAllocationReport.setFinYear(budgetFinancialYearRepository.findBySerialNo(budgetAllocationSubReport.getFinYear()));
+            budgetAllocationReport.setToUnit(cgUnitRepository.findByUnit(budgetAllocationSubReport.getToUnit()));
+            budgetAllocationReport.setFromUnit(cgUnitRepository.findByUnit(budgetAllocationSubReport.getFromUnit()));
+            budgetAllocationReport.setAllocTypeId(allocationRepository.findByAllocTypeId(budgetAllocationSubReport.getAllocTypeId()));
+            budgetAllocationReport.setSubHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(budgetAllocationSubReport.getSubHead()));
+
+
+//            List<CdaParkingTrans> cdaParkingListData = cdaParkingTransRepository.findByTransactionIdAndIsFlag(budgetAllocationSubReport.getTransactionId(), "0");
+//            if (!cdaParkingListData.isEmpty()) {
+//                budgetAllocationReport.setIsCdaParked("1");
+//            } else {
+//                budgetAllocationReport.setIsCdaParked("0");
+//            }
+
+            List<CdaParkingTrans> cdaParkingListData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(), "0", budgetAllocationSubReport.getAllocTypeId(), hrData.getUnitId());
+            if (!cdaParkingListData.isEmpty()) {
+                budgetAllocationReport.setIsCdaParked("1");
+            } else {
+                budgetAllocationReport.setIsCdaParked("0");
+            }
+            budgetAllocationReport.setCdaParkingListData(cdaParkingListData);
+
+
+            List<Authority> authoritiesList = authorityRepository.findByAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
+            if (!authoritiesList.isEmpty()) {
+
+                for (Authority authority : authoritiesList) {
+                    AuthorityTableResponse authorityTableResponse = new AuthorityTableResponse();
+                    BeanUtils.copyProperties(authority, authorityTableResponse);
+                    authorityTableList.clear();
+                    authorityTableList.add(authorityTableResponse);
+
+                    FileUpload fileUploadData = fileUploadRepository.findByUploadID(authority.getDocId());
+                    authorityTableResponse.setDocId(fileUploadData);
+                }
+            }
+
+            budgetAllocationReport.setAuthList(authorityTableList);
+            budgetAllocationList.add(budgetAllocationReport);
+
+        }
+
+        Collections.sort(budgetAllocationList, new Comparator<BudgetReciptListSubResponse>() {
+            public int compare(BudgetReciptListSubResponse v1, BudgetReciptListSubResponse v2) {
+                return v1.getSubHead().getSerialNumber().compareTo(v2.getSubHead().getSerialNumber());
+            }
+        });
+
+        return budgetAllocationList;
+    }
+
 
 @Override
 @Transactional(rollbackFor = {Exception.class})

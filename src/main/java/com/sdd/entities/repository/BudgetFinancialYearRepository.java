@@ -13,5 +13,5 @@ public interface BudgetFinancialYearRepository extends JpaRepository<BudgetFinan
     BudgetFinancialYear findBySerialNo(String serialNo);
 
     List<BudgetFinancialYear> findAllByOrderByFinYearAsc();
-
+    List<BudgetFinancialYear> findAllByOrderByFinYearDesc();
 }
