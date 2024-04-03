@@ -1041,6 +1041,7 @@ public class DashboardServiceImpl implements DashBoardService {
                     CgUnit cgUnit = cgUnitRepository.findByUnit(uid);
                     GrTotalObj subResp = new GrTotalObj();
                     subResp.setUnitName(cgUnit.getDescr());
+                    subResp.setUnitNameShort(cgUnit.getCgUnitShort());
                     subResp.setFinYear(budgetFinancialYear.getFinYear());
                     subResp.setAllocType(allockData.getAllocDesc());
                     subResp.setAmountIn(hdamtUnits.getAmountType());
@@ -1114,6 +1115,8 @@ public class DashboardServiceImpl implements DashBoardService {
 
                 GrTotalObj subResp = new GrTotalObj();
                 subResp.setUnitName(cgUnit.getDescr());
+                subResp.setUnitNameShort(cgUnit.getCgUnitShort());
+
                 subResp.setFinYear(budgetFinancialYear.getFinYear());
                 subResp.setAllocType(allockData.getAllocDesc());
                 subResp.setAmountIn(hdamtUnits.getAmountType());

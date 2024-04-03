@@ -27,4 +27,5 @@ public class GrTotalObj {
     String perAmount;
 
     String lastCBDate;
+    String unitNameShort;
 }
