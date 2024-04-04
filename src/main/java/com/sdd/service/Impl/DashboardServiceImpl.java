@@ -1065,6 +1065,11 @@ public class DashboardServiceImpl implements DashBoardService {
                 String cbD = "";
                 Timestamp lastCvDate;
                 List<BudgetAllocation> budgetAllocToUnits = budgetAllocationRepository.findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, hrData.getUnitId(), finYearId, allocationTypeId, "0", "0", "Approved");
+                if(budgetAllocToUnits.isEmpty()){
+                    return ResponseUtils.createFailureResponse(resp, new TypeReference<List<SubHeadWiseExpResp>>() {
+                    }, "No data found", HttpStatus.OK.value());
+
+                }
                 AmountUnit alloc = amountUnitRepository.findByAmountTypeId(budgetAllocToUnits.get(0).getAmountType());
                 double allocAmntUnit = alloc.getAmount();
                 double alocAmnts = Double.parseDouble(budgetAllocToUnits.get(0).getAllocationAmount());
