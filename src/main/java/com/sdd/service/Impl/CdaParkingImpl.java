@@ -673,7 +673,8 @@ public class CdaParkingImpl implements CdaParkingService {
         }
 
         List<CdaParkingUpdateHistory> cdaParkingUpdateHistoryList = cdaUpdateHistoryRepository.findByAuthGroupIdAndUnitId(groupId, unitId);
-
+        Double sumOldData=0.0;
+        Double sumNewData=0.0;
         for (CdaParkingUpdateHistory cdaParkingUpdateHistory : cdaParkingUpdateHistoryList) {
 
             CdaParkingHistoryDto cdaParkingTransResponse = new CdaParkingHistoryDto();
@@ -691,13 +692,17 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingTransResponse.setSubHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(cdaParkingUpdateHistory.getSubHead()));
 
             if (cdaParkingUpdateHistory.getNewGinNo() == null || cdaParkingUpdateHistory.getNewAmount() == null) {
+                sumOldData+=Double.parseDouble(cdaParkingTransResponse.getOldAmount());
                 oldCda.add(cdaParkingTransResponse);
             } else {
                 newCda.add(cdaParkingTransResponse);
+                sumNewData+=Double.parseDouble(cdaParkingTransResponse.getNewAmount());
             }
         }
         mainResponse.setNewCda(newCda);
         mainResponse.setOldCda(oldCda);
+        mainResponse.setNewDataSum(sumNewData);
+        mainResponse.setOldDataSum(sumOldData);
         return ResponseUtils.createSuccessResponse(mainResponse, new TypeReference<CdaHistoryResponse>() {
         });
 
