@@ -493,6 +493,10 @@ public class ContingentServiceImpl implements ContingentService {
             newRoleId = newRoleIdDatum + "," + newRoleId;
         }
         oldUser.setRoleId(newRoleId);
+        if (newRoleId==null || newRoleId.equalsIgnoreCase("")||newRoleId.isEmpty()){
+            oldUser.setIsActive("0");
+        }
+
         hrDataRepository.save(oldUser);
 
         return ResponseUtils.createSuccessResponse(contingentSaveResponse, new TypeReference<ContingentSaveResponse>() {
