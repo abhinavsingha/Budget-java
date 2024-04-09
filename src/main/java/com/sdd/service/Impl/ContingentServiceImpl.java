@@ -481,7 +481,7 @@ public class ContingentServiceImpl implements ContingentService {
             contingentSaveResponse.setMsg("NO BILL FOUND AND USER ROLE DEACTIVATED SUCCESSFULLY");
         }
 
-        if (!hrData.getRoleId().contains(HelperUtils.CBCREATER)) {
+        if (!hrData.getRoleId().contains(HelperUtils.UNITADMIN)) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "USER DID NOT ASSIGN CB CREATE ROLE. PLEASE CONTACT ADMINISTER");
         }
 
