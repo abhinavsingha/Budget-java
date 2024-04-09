@@ -2954,8 +2954,21 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             AmountUnit subAmountType = amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType());
             totalAllocationT = totalAllocationT + (Double.parseDouble(budgetAllocation.getAllocationAmount()) * subAmountType.getAmount());
         }
+
+        BudgetFinancialYear budgetFinancialYear;
+        CurrntStateType stateList1 = currentStateRepository.findByTypeAndIsFlag("FINYEAR", "1");
+        if (stateList1 == null) {
+            budgetFinancialYear = budgetFinancialYearRepository.findBySerialNo("01");
+
+        } else {
+            budgetFinancialYear =
+                    budgetFinancialYearRepository.findBySerialNo(stateList1.getStateId());
+
+        }
+
+
         response.setCbAllocationAMount(totalAllocationT + "");
-        List<ContigentBill> cbExpendure = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdate(budgetHeadId.getUnitId(), budgetHeadId.getBudgetHeadId(), "0", "0");
+        List<ContigentBill> cbExpendure = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdateAndFinYear(budgetHeadId.getUnitId(), budgetHeadId.getBudgetHeadId(), "0", "0",budgetFinancialYear.getSerialNo());
         if (cbExpendure.isEmpty()) {
             response.setExpenditure("0.0000");
         } else {
