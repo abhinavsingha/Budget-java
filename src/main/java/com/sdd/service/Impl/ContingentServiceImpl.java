@@ -167,6 +167,7 @@ public class ContingentServiceImpl implements ContingentService {
             ConverterUtils.checkDateIsvalidOrNor(contingentBillSaveRequest.getInvoiceDate());
             ConverterUtils.checkDateIsvalidOrNor(contingentBillSaveRequest.getDocUploadDate());
 
+
             for (int j = 0; j < contingentBillSaveRequest.getAuthList().size(); j++) {
 
                 FileUpload fileUpload = fileUploadRepository.findByUploadID(contingentBillSaveRequest.getAuthList().get(j).getAuthDocId());
@@ -220,11 +221,11 @@ public class ContingentServiceImpl implements ContingentService {
         for (ContingentBillSaveRequest billSaveRequest : contingentBillSaveRequestList) {
 
             int sectionNumber = Integer.parseInt(billSaveRequest.getSectionNumber());
-            ContigentBill lastContigentBill = contigentBillRepository.findByCbUnitIdAndSectionNumberAndBudgetHeadID(hrData.getUnitId(), sectionNumber - 1 + "", billSaveRequest.getBudgetHeadId());
+            ContigentBill lastContigentBill = contigentBillRepository.findByCbUnitIdAndSectionNumberAndBudgetHeadIDAndFinYear(hrData.getUnitId(), sectionNumber - 1 + "", billSaveRequest.getBudgetHeadId(),billSaveRequest.getBudgetFinancialYearId());
 
-            ContigentBill checkExistingData = contigentBillRepository.findByCbUnitIdAndSectionNumberAndBudgetHeadID(hrData.getUnitId(), sectionNumber + "", billSaveRequest.getBudgetHeadId());
+            ContigentBill checkExistingData = contigentBillRepository.findByCbUnitIdAndSectionNumberAndBudgetHeadIDAndFinYear(hrData.getUnitId(), sectionNumber + "", billSaveRequest.getBudgetHeadId(),billSaveRequest.getBudgetFinancialYearId());
             if (checkExistingData != null) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA ALREADY FOUND THIS SECTION NUMBER");
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA ALREADY FOUND THIS SANCTION NUMBER");
             }
 
             if (lastContigentBill != null) {
