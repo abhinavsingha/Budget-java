@@ -14,14 +14,11 @@ public interface HrDataRepository extends JpaRepository<HrData, String> {
     HrData findByUserNameAndIsActive(String userName,String isActive);
 
     List<HrData> findByIsActive(String isActive);
-
-
     HrData findByPidAndIsActive(String userName,String isActive);
 
 
 //    List<HrData> findByUnitId(String unitId);
     List<HrData> findByUnitIdAndIsActive(String unitId,String isActive);
-
     HrData findByUserName(String updatedBy);
     HrData findByPid(String pid);
 }

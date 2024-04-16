@@ -18,9 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class MangeUserImpl implements MangeUserService {
@@ -207,7 +205,7 @@ public class MangeUserImpl implements MangeUserService {
 //            CgUnit cgUnit = cgUnitRepository.findByUnit(hrDataCheck.getUnitId());
             getAllRole = hrDataRepository.findByUnitIdAndIsActive(hrDataCheck.getUnitId(), "1");
         }
-
+        Collections.sort(getAllRole,Comparator.comparing(HrData::getCreatedOn).reversed());
 
         for (Integer i = 0; i < getAllRole.size(); i++) {
             HrData data = getAllRole.get(i);
