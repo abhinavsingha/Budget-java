@@ -163,8 +163,12 @@ public class MangeUserImpl implements MangeUserService {
             }
         }
 
+       if(existingHrData!=null){
+           hrData.setCreatedOn(existingHrData.getCreatedOn());
+       }else{
+           hrData.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+       }
 
-        hrData.setCreatedOn(HelperUtils.getCurrentTimeStamp());
         hrData.setRoleId(roleData);
         hrData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
         hrData.setIsActive("1");
