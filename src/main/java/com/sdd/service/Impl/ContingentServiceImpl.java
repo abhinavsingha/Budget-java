@@ -490,14 +490,19 @@ public class ContingentServiceImpl implements ContingentService {
         list.remove(HelperUtils.CBCREATER);
 
         String newRoleId = "";
-        for (String newRoleIdDatum : list) {
+
+
+        for(int i=list.size()-1;i>=0 ;i--){
+            String newRoleIdDatum=list.get(i);
             newRoleId = newRoleIdDatum + "," + newRoleId;
         }
+//        for (String newRoleIdDatum : list) {
+//            newRoleId = newRoleIdDatum + "," + newRoleId;
+//        }
         oldUser.setRoleId(newRoleId);
         if (newRoleId==null || newRoleId.equalsIgnoreCase("")||newRoleId.isEmpty()){
             oldUser.setIsActive("0");
         }
-
         hrDataRepository.save(oldUser);
 
         return ResponseUtils.createSuccessResponse(contingentSaveResponse, new TypeReference<ContingentSaveResponse>() {
