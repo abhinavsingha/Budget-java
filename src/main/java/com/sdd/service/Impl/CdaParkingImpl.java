@@ -1100,7 +1100,7 @@ public class CdaParkingImpl implements CdaParkingService {
 
 
                     cdaParkingTransSubResponses.setTotalParkingAmount((totalBillAmount + totalParking + ""));
-                    cdaParkingTransSubResponses.setRemainingCdaAmount((totalBillAmount + totalRemenig + ""));
+                    cdaParkingTransSubResponses.setRemainingCdaAmount(ConverterUtils.addDoubleValue(totalBillAmount + totalRemenig) + "");
                     subHeadData.put(cdaName.getCdaName(), cdaParkingTransSubResponses);
 
 
@@ -1116,7 +1116,7 @@ public class CdaParkingImpl implements CdaParkingService {
                     cdaParkingTransResponse.setGinNo(cdaName);
                     cdaParkingTransResponse.setAllocationType(allocationRepository.findByAllocTypeId(cdaParkingCrAndDrs.getAllocTypeId()));
 
-                    cdaParkingTransResponse.setRemainingCdaAmount((totalBill + ""));
+                    cdaParkingTransResponse.setRemainingCdaAmount(ConverterUtils.addDoubleValue(totalBill) + "");
                     cdaParkingTransResponse.setTotalParkingAmount((totalBill + ""));
 
                     cdaParkingTransResponse.setUpdatedOn(cdaParkingCrAndDrs.getUpdatedOn());
@@ -1214,7 +1214,7 @@ public class CdaParkingImpl implements CdaParkingService {
                     double totalRemenig = Double.parseDouble(cdaParkingTransSubResponses.getRemainingCdaAmount());
 
                     cdaParkingTransSubResponses.setTotalParkingAmount((totalBillAmount + totalParking + ""));
-                    cdaParkingTransSubResponses.setRemainingCdaAmount((totalBillAmount + totalRemenig + ""));
+                    cdaParkingTransSubResponses.setRemainingCdaAmount(ConverterUtils.addDoubleValue(totalBillAmount + totalRemenig) + "");
                     subHeadData.put(cdaName.getCdaName(), cdaParkingTransSubResponses);
 
 
@@ -1230,7 +1230,7 @@ public class CdaParkingImpl implements CdaParkingService {
                     cdaParkingTransResponse.setGinNo(cdaName);
                     cdaParkingTransResponse.setAllocationType(allocationRepository.findByAllocTypeId(cdaParkingCrAndDrs.getAllocTypeId()));
 
-                    cdaParkingTransResponse.setRemainingCdaAmount((totalBill + ""));
+                    cdaParkingTransResponse.setRemainingCdaAmount((ConverterUtils.addDoubleValue(totalBill) + ""));
                     cdaParkingTransResponse.setTotalParkingAmount((totalBill + ""));
 
                     cdaParkingTransResponse.setUpdatedOn(cdaParkingCrAndDrs.getUpdatedOn());
@@ -1353,7 +1353,7 @@ public class CdaParkingImpl implements CdaParkingService {
                     cdaParkingTransResponse.setGinNo(cdaName);
                     cdaParkingTransResponse.setAllocationType(allocationRepository.findByAllocTypeId(cdaParkingCrAndDrs.getAllocTypeId()));
 
-                    cdaParkingTransResponse.setRemainingCdaAmount(totalBill + "");
+                    cdaParkingTransResponse.setRemainingCdaAmount(ConverterUtils.addDoubleValue(totalBill) + "");
                     cdaParkingTransResponse.setTotalParkingAmount(totalBill + "");
 
                     cdaParkingTransResponse.setUpdatedOn(cdaParkingCrAndDrs.getUpdatedOn());
@@ -1441,7 +1441,7 @@ public class CdaParkingImpl implements CdaParkingService {
 
                     totalBill = totalBill + totalBillAmount / amountUnit.getAmount();
                     cdaParkingTransSubResponses.setTotalParkingAmount((totalBill + ""));
-                    cdaParkingTransSubResponses.setRemainingCdaAmount((totalBill + ""));
+                    cdaParkingTransSubResponses.setRemainingCdaAmount(ConverterUtils.addDoubleValue(totalBill) + "");
                     subHeadData.put(cdaName.getCdaName(), cdaParkingTransSubResponses);
 
 
@@ -1457,7 +1457,7 @@ public class CdaParkingImpl implements CdaParkingService {
                     cdaParkingTransResponse.setGinNo(cdaName);
                     cdaParkingTransResponse.setAllocationType(allocationRepository.findByAllocTypeId(cdaParkingCrAndDrs.getAllocTypeId()));
 
-                    cdaParkingTransResponse.setRemainingCdaAmount((totalBill + ""));
+                    cdaParkingTransResponse.setRemainingCdaAmount((ConverterUtils.addDoubleValue(totalBill) + ""));
                     cdaParkingTransResponse.setTotalParkingAmount((totalBill + ""));
 
                     cdaParkingTransResponse.setUpdatedOn(cdaParkingCrAndDrs.getUpdatedOn());
