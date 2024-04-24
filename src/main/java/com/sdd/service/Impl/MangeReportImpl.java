@@ -1570,14 +1570,15 @@ public class MangeReportImpl implements MangeReportService {
 
 
         double progressiveAmount = 0;
-        String sectionNumber = cbData.getSectionNumber();
+        //String sectionNumber = cbData.getSectionNumber();
+        Timestamp createdDate = cbData.getCreatedOn();
         List<ContigentBill> totalContigentBill = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndIsFlagAndIsUpdateAndFinYear(hrData.getUnitId(), cbData.getBudgetHeadID(), "0", "0", cbData.getFinYear());
 
         if (totalContigentBill.size() == 0) {
             progressiveAmount = 0;
         } else {
             for (Integer i = 0; i < totalContigentBill.size(); i++) {
-                if (Integer.parseInt(sectionNumber) >= Integer.parseInt(totalContigentBill.get(i).getSectionNumber())) {
+                if (createdDate.compareTo(totalContigentBill.get(i).getCreatedOn())>=0 ) {
                     progressiveAmount = progressiveAmount + Double.parseDouble(totalContigentBill.get(i).getCbAmount());
                 }
             }
