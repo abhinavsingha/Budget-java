@@ -128,25 +128,38 @@ public class MangeUserImpl implements MangeUserService {
         String roleData = "";
 
         if (existingHrData != null) {
-            if (existingHrData.getRoleId() == null || existingHrData.getRoleId().isEmpty()) {
-                roleData = hrData.getRoleId();
+
+            if (!existingHrData.getUnitId().equalsIgnoreCase(hrData.getUnitId()) ) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "This user already active in unit:"+existingHrData.getUnit()+". First deactivate user.");
             } else {
-                if (existingHrData.getRoleId().contains(hrData.getRoleId())) {
-                    throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "THIS ROLE ALREADY ASSIGN");
-                }
 
-                if (existingHrData.getRoleId().endsWith(",")) {
-                    roleData = existingHrData.getRoleId() + hrData.getRoleId();
+                if (existingHrData.getRoleId() == null || existingHrData.getRoleId().isEmpty()) {
+                    roleData = hrData.getRoleId();
                 } else {
-                    roleData = existingHrData.getRoleId() + "," + hrData.getRoleId();
+                    if (existingHrData.getRoleId().contains(hrData.getRoleId())) {
+                        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "THIS ROLE ALREADY ASSIGN");
+                    }
+
+                    if (existingHrData.getRoleId().endsWith(",")) {
+                        roleData = existingHrData.getRoleId() + hrData.getRoleId();
+                    } else {
+                        roleData = existingHrData.getRoleId() + "," + hrData.getRoleId();
+                    }
+
+
+                    hrData.setPid(existingHrData.getPid());
                 }
-
-
-                hrData.setPid(existingHrData.getPid());
             }
         } else {
             roleData = hrData.getRoleId();
         }
+
+
+
+
+
+
+
 
         if (hrData.getRoleId().equalsIgnoreCase(HelperUtils.CBCREATER)) {
 
