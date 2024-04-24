@@ -894,6 +894,19 @@ public class CdaParkingImpl implements CdaParkingService {
         }
         List<CdaParkingTrans> cdaParkingTransData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(finYaerId, budgetHeadId, "0", allocationTypeId, hrData.getUnitId());
         List<CdaParkingCrAndDr> cdaParkingIsCrDr = parkingCrAndDrRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitIdAndIsRevision(finYaerId, budgetHedaid, "0", allocationTypeId, hrData.getUnitId(), 0);
+      ///
+       double dbRemaingAmt=0;
+        for (CdaParkingTrans cdaParking : cdaParkingTransData) {
+              dbRemaingAmt=  dbRemaingAmt+ConverterUtils.addDoubleValue(Double.parseDouble(cdaParking.getRemainingCdaAmount()));
+        }
+        double availableParkingAmt=0;
+        for (int i = 0; i < cdaRequest.getCdaRequest().size(); i++) {
+            availableParkingAmt=availableParkingAmt+ConverterUtils.addDoubleValue(Double.parseDouble(cdaRequest.getCdaRequest().get(i).getAvailableParkingAmount()));
+        }
+        if (dbRemaingAmt!=availableParkingAmt) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Please Check Parking Amount.");
+        }
+
 
 
         String cdaUpdateAuthGroupId = HelperUtils.getAuthorityGroupId();
