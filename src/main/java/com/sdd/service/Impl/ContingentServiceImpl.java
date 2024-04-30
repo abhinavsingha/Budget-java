@@ -231,7 +231,7 @@ public class ContingentServiceImpl implements ContingentService {
 //                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA ALREADY FOUND THIS SANCTION NUMBER");
 //            }
 
-            if (lastContigentBill != null) {
+            if (!lastContigentBill.isEmpty()) {
                 Timestamp lastCbDate = lastContigentBill.get(0).getCbDate();
                 Timestamp currentDate = ConverterUtils.convertDateTotimeStamp(billSaveRequest.getCbDate());
 
