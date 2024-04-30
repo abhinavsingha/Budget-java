@@ -20,9 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ContingentServiceImpl implements ContingentService {
@@ -220,16 +218,21 @@ public class ContingentServiceImpl implements ContingentService {
 
         for (ContingentBillSaveRequest billSaveRequest : contingentBillSaveRequestList) {
 
-            int sectionNumber = Integer.parseInt(billSaveRequest.getSectionNumber());
-            ContigentBill lastContigentBill = contigentBillRepository.findByCbUnitIdAndSectionNumberAndBudgetHeadIDAndFinYear(hrData.getUnitId(), sectionNumber - 1 + "", billSaveRequest.getBudgetHeadId(),billSaveRequest.getBudgetFinancialYearId());
+            //int sectionNumber = Integer.parseInt(billSaveRequest.getSectionNumber());
+            List<ContigentBill> lastContigentBill = contigentBillRepository.findByCbUnitIdAndBudgetHeadIDAndFinYear(hrData.getUnitId(), billSaveRequest.getBudgetHeadId(),billSaveRequest.getBudgetFinancialYearId());
+            Collections.sort(lastContigentBill, Comparator.comparing(ContigentBill::getCreatedOn).reversed());
 
-            ContigentBill checkExistingData = contigentBillRepository.findByCbUnitIdAndSectionNumberAndBudgetHeadIDAndFinYear(hrData.getUnitId(), sectionNumber + "", billSaveRequest.getBudgetHeadId(),billSaveRequest.getBudgetFinancialYearId());
+
+
+
+
+            //ContigentBill checkExistingData = contigentBillRepository.findByCbUnitIdAndSectionNumberAndBudgetHeadIDAndFinYear(hrData.getUnitId(), sectionNumber + "", billSaveRequest.getBudgetHeadId(),billSaveRequest.getBudgetFinancialYearId());
 //            if (checkExistingData != null) {
 //                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA ALREADY FOUND THIS SANCTION NUMBER");
 //            }
 
             if (lastContigentBill != null) {
-                Timestamp lastCbDate = lastContigentBill.getCbDate();
+                Timestamp lastCbDate = lastContigentBill.get(0).getCbDate();
                 Timestamp currentDate = ConverterUtils.convertDateTotimeStamp(billSaveRequest.getCbDate());
 
                 long dayDiffer = ConverterUtils.timeDifferTimeStamp(lastCbDate, currentDate);

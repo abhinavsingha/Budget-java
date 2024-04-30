@@ -22,7 +22,8 @@ public interface ContigentBillRepository extends JpaRepository<ContigentBill, Lo
   ContigentBill findByCbIdAndIsFlagAndIsUpdate(String contingentBilId, String isFlag, String isUpdate);
   ContigentBill findByCbId(String contingentBilId);
   ContigentBill findByCbUnitIdAndSectionNumberAndBudgetHeadID(String contingentBilId,String billNo,String budgetHeadId);
-  ContigentBill findByCbUnitIdAndSectionNumberAndBudgetHeadIDAndFinYear(String contingentBilId,String billNo,String budgetHeadId,String finYearId);
+
+  List<ContigentBill> findByCbUnitIdAndBudgetHeadIDAndFinYear(String contingentBilId,String budgetHeadId,String finYearId);
   List<ContigentBill> findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdate(String unitId, String finYear, String subHead, String isUpdate);
 //  List<ContigentBill> findByCbUnitIdAndFinYearAndBudgetHeadIDAndAllocationTypeIdAndIsUpdate(String unitId, String finYear, String subHead,String allocTypeId, String isUpdate);
 
