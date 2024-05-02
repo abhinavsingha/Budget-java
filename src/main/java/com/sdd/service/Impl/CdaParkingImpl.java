@@ -251,24 +251,34 @@ public class CdaParkingImpl implements CdaParkingService {
                     List<CdaParkingCrAndDr> cdaParkingCrAndDrsList = parkingCrAndDrRepository.findByTransactionIdAndIsFlag(contigintBillData.getCbId(), "0");
 
                     for (CdaParkingCrAndDr cdaParkingCrAndDr : cdaParkingCrAndDrsList) {
+                    boolean isFlag= false;
+                        for (int i = 0; i < cdaParkingUpdateHistoryList.size(); i++) {
+                            //String reuestginNo=cdaParkingUpdateHistoryList.get(i).getNewGinNo();
+                            // String crdrGinNo=cdaParkingCrAndDr.getGinNo();
 
-                        CdaParkingUpdateHistory cdaParkingUpdateHistory = new CdaParkingUpdateHistory();
-                        cdaParkingUpdateHistory.setCdaParkingUpdateId(HelperUtils.getUpdateCDAId());
-                        cdaParkingUpdateHistory.setNewAmount(ConverterUtils.convertStringNumber("" + (Double.parseDouble(cdaParkingCrAndDr.getAmount()) / amountUnit.getAmount())));
-                        cdaParkingUpdateHistory.setNewGinNo(cdaParkingCrAndDr.getGinNo());
-                        cdaParkingUpdateHistory.setUnitId(hrData.getUnitId());
-                        cdaParkingUpdateHistory.setAuthGroupId(cdaUpdateAuthGroupId);
-                        cdaParkingUpdateHistory.setCreatedOn(HelperUtils.getCurrentTimeStamp());
-                        cdaParkingUpdateHistory.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                        cdaParkingUpdateHistory.setAmountType(amountType);
-                        cdaParkingUpdateHistory.setUpdatedBy(hrData.getPid());
-                        cdaParkingUpdateHistory.setSubHead(cdaParkingCrAndDr.getBudgetHeadId());
-                        cdaParkingUpdateHistoryList.add(cdaParkingUpdateHistory);
-
+                            if(cdaParkingUpdateHistoryList.get(i).getNewGinNo().equalsIgnoreCase(cdaParkingCrAndDr.getGinNo())){
+                                isFlag=true;
+                                String newAmount=""+(Double.parseDouble(cdaParkingUpdateHistoryList.get(i).getNewAmount())+((Double.parseDouble(cdaParkingCrAndDr.getAmount())) / amountUnit.getAmount()));
+                                cdaParkingUpdateHistoryList.get(i).setNewAmount(newAmount);
+                            }
+                        }
+            if(!isFlag) {
+                 CdaParkingUpdateHistory cdaParkingUpdateHistory = new CdaParkingUpdateHistory();
+                 cdaParkingUpdateHistory.setCdaParkingUpdateId(HelperUtils.getUpdateCDAId());
+                 cdaParkingUpdateHistory.setNewAmount(ConverterUtils.convertStringNumber("" + (Double.parseDouble(cdaParkingCrAndDr.getAmount()) / amountUnit.getAmount())));
+                 cdaParkingUpdateHistory.setNewGinNo(cdaParkingCrAndDr.getGinNo());
+                 cdaParkingUpdateHistory.setUnitId(hrData.getUnitId());
+                 cdaParkingUpdateHistory.setAuthGroupId(cdaUpdateAuthGroupId);
+                 cdaParkingUpdateHistory.setCreatedOn(HelperUtils.getCurrentTimeStamp());
+                 cdaParkingUpdateHistory.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                 cdaParkingUpdateHistory.setAmountType(amountType);
+                 cdaParkingUpdateHistory.setUpdatedBy(hrData.getPid());
+                 cdaParkingUpdateHistory.setSubHead(cdaParkingCrAndDr.getBudgetHeadId());
+                cdaParkingUpdateHistoryList.add(cdaParkingUpdateHistory);
+                     }
                     }
                 }
             }
-
 //            ArrayList<CdaParkingUpdateHistory> cdaParkingUpdateHistoryfinal = new ArrayList<CdaParkingUpdateHistory>();
 //
 //
