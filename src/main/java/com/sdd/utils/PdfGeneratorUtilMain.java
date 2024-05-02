@@ -857,7 +857,7 @@ public class PdfGeneratorUtilMain {
             } else {
                 int x = (int) number;
                 System.out.println("X:" + x);
-                if (x > 20) {
+                if (x >= 20) {
                     int y = x / 10;
                     str = str + tens[y] + " ";
                     x = x % 10;
