@@ -8453,7 +8453,7 @@ public class MangeReportImpl implements MangeReportService {
             document.open();
             Paragraph paragraph = new Paragraph();
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            paragraph.add(new Chunk(type.getAllocDesc().toUpperCase() + " " + "FER  ALLOCATION REPORT " + " " + " " + "( " + hrData.getUnit().toUpperCase() + " )", boldFont));
+            paragraph.add(new Chunk(type.getAllocDesc().toUpperCase() + " " + "FER REPORT " + " " + " " + "( " + hrData.getUnit().toUpperCase() + " )", boldFont));
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
             document.add(new Paragraph("\n"));
