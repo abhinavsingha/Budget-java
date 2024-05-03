@@ -1171,7 +1171,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 BeanUtils.copyProperties(cdaParkingCrAndDr, cgUnitResponse);
                 cgUnitResponse.setGinNo(cdaParkingRepository.findByGinNo(cdaParkingCrAndDr.getGinNo()));
                 cgUnitResponse.setAmountType(amountUnitRepository.findByAmountTypeId(cdaParkingCrAndDr.getAmountType()));
-                cgUnitResponse.setRemainingAmount(ConverterUtils.addDecimalPoint(cdaParkingCrAndDr.getRemainingCdaAmount()));
+                cgUnitResponse.setRemainingAmount(cdaParkingCrAndDr.getRemainingCdaAmount());//ConverterUtils.addDecimalPoint(
 
                 data.add(cgUnitResponse);
             }
