@@ -1872,7 +1872,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
             List<CgUnit> subUnitList = cgUnitRepository.findBySubUnitOrderByDescrAsc(hrData.getUnitId());
-
+            double totalAllocationAmountCopy = 0;
             double totalAllocationAmount = 0;
             double expAmount = 0;
             for (int c = 0; c < subUnitList.size(); c++) {
@@ -1888,7 +1888,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     totalAllocationAmount = totalAllocationAmount + Double.parseDouble(budgetAllocation.getAllocationAmount()) * amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType()).getAmount();
                 }
             }
-
+            totalAllocationAmountCopy=totalAllocationAmount;
+            budgetAllocationReport.setTotalAllocationAmount(totalAllocationAmountCopy);//added by deewan add new key
             totalAllocationAmount = (expAmount + totalAllocationAmount) / amountUnitRepository.findByAmountTypeId(budgetAllocationSubReport.getAmountType()).getAmount();
 
             if (totalAllocationAmount == 0) {
@@ -1994,6 +1995,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         budgetAllocationResponse.setAuthList(authoritiesList);
         budgetAllocationResponse.setBudgetResponseist(budgetAllocationList);
+
+
 
 
         return ResponseUtils.createSuccessResponse(budgetAllocationResponse, new TypeReference<BudgetAllocationResponse>() {

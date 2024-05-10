@@ -44,7 +44,7 @@ public class BudgetAllocationSubResponse {
     private Timestamp createdOn;
     private Timestamp updatedOn;
     private String revisedAmount;
-
+    private double totalAllocationAmount;//addded by deevan 10/05/2024
     private String isCDAparking;
     private List<CdaParkingTrans> cdaList;
 
