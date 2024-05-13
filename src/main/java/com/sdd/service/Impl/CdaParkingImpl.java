@@ -205,7 +205,7 @@ public class CdaParkingImpl implements CdaParkingService {
             }
 
             cdaParkingUpdateHistory.setCdaParkingUpdateId(HelperUtils.getUpdateCDAId());
-            cdaParkingUpdateHistory.setNewAmount(saveCdaData.getRemainingCdaAmount());
+            cdaParkingUpdateHistory.setNewAmount(ConverterUtils.addDoubleValue(Double.parseDouble(saveCdaData.getRemainingCdaAmount()))+"");
             cdaParkingUpdateHistory.setNewGinNo(saveCdaData.getGinNo());
             cdaParkingUpdateHistory.setUnitId(hrData.getUnitId());
             cdaParkingUpdateHistory.setAuthGroupId(cdaUpdateAuthGroupId);
@@ -259,7 +259,7 @@ public class CdaParkingImpl implements CdaParkingService {
                             if(cdaParkingUpdateHistoryList.get(i).getNewGinNo().equalsIgnoreCase(cdaParkingCrAndDr.getGinNo())){
                                 isFlag=true;
                                 String newAmount=""+(Double.parseDouble(cdaParkingUpdateHistoryList.get(i).getNewAmount())+((Double.parseDouble(cdaParkingCrAndDr.getAmount())) / amountUnit.getAmount()));
-                                cdaParkingUpdateHistoryList.get(i).setNewAmount(newAmount);
+                                cdaParkingUpdateHistoryList.get(i).setNewAmount(ConverterUtils.addDoubleValue(Double.parseDouble(newAmount))+"");
                             }
                         }
             if(!isFlag) {
@@ -689,9 +689,14 @@ public class CdaParkingImpl implements CdaParkingService {
 
             CdaParkingHistoryDto cdaParkingTransResponse = new CdaParkingHistoryDto();
             cdaParkingTransResponse.setCdaParkingUpdateId(cdaParkingUpdateHistory.getCdaParkingUpdateId());
-            cdaParkingTransResponse.setOldAmount((cdaParkingUpdateHistory.getOldAmount() + ""));//round off added by deewan
+            if(cdaParkingUpdateHistory.getOldAmount()!=null){
+                cdaParkingTransResponse.setOldAmount((ConverterUtils.addDoubleValue(Double.parseDouble(cdaParkingUpdateHistory.getOldAmount())) + ""));//round off added by deewan
+            }
+
             cdaParkingTransResponse.setOldGinNo(cdaParkingRepository.findByGinNo(cdaParkingUpdateHistory.getOldGinNo()));
-            cdaParkingTransResponse.setNewAmount((cdaParkingUpdateHistory.getNewAmount() + ""));//round off added by deewan
+            if(cdaParkingUpdateHistory.getNewAmount()!=null) {
+                cdaParkingTransResponse.setNewAmount(ConverterUtils.addDoubleValue(Double.parseDouble(cdaParkingUpdateHistory.getNewAmount())) + "");//round off added by deewan
+            }
             cdaParkingTransResponse.setNewGinNo(cdaParkingRepository.findByGinNo(cdaParkingUpdateHistory.getNewGinNo()));
             cdaParkingTransResponse.setUnitId(cgUnitRepository.findByUnit(cdaParkingUpdateHistory.getUnitId()));
             cdaParkingTransResponse.setAuthGroupId(cdaParkingUpdateHistory.getAuthGroupId());
@@ -702,17 +707,17 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingTransResponse.setSubHead(subHeadRepository.findByBudgetCodeIdOrderBySerialNumberAsc(cdaParkingUpdateHistory.getSubHead()));
 
             if (cdaParkingUpdateHistory.getNewGinNo() == null || cdaParkingUpdateHistory.getNewAmount() == null) {
-                sumOldData+=Double.parseDouble(cdaParkingTransResponse.getOldAmount());
+                sumOldData=ConverterUtils.addDoubleValue(sumOldData)+ConverterUtils.addDoubleValue(Double.parseDouble(cdaParkingTransResponse.getOldAmount()));
                 oldCda.add(cdaParkingTransResponse);
             } else {
                 newCda.add(cdaParkingTransResponse);
-                sumNewData+=Double.parseDouble(cdaParkingTransResponse.getNewAmount());
+                sumNewData=ConverterUtils.addDoubleValue(sumNewData)+ConverterUtils.addDoubleValue(Double.parseDouble(cdaParkingTransResponse.getNewAmount()));
             }
         }
         mainResponse.setNewCda(newCda);
         mainResponse.setOldCda(oldCda);
-        mainResponse.setNewDataSum(sumNewData);
-        mainResponse.setOldDataSum(sumOldData);
+        mainResponse.setNewDataSum(ConverterUtils.addDoubleValue(sumNewData));
+        mainResponse.setOldDataSum(ConverterUtils.addDoubleValue(sumOldData));
         return ResponseUtils.createSuccessResponse(mainResponse, new TypeReference<CdaHistoryResponse>() {
         });
 
@@ -926,7 +931,7 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingTransRepository.save(cdaParking);
             CdaParkingUpdateHistory cdaParkingUpdateHistory = new CdaParkingUpdateHistory();
             cdaParkingUpdateHistory.setCdaParkingUpdateId(HelperUtils.getUpdateCDAId());
-            cdaParkingUpdateHistory.setOldAmount(cdaParking.getRemainingCdaAmount());
+            cdaParkingUpdateHistory.setOldAmount(ConverterUtils.addDoubleValue(Double.parseDouble(cdaParking.getRemainingCdaAmount()))+"");
             cdaParkingUpdateHistory.setOldGinNo(cdaParking.getGinNo());
             cdaParkingUpdateHistory.setUnitId(hrData.getUnitId());
             cdaParkingUpdateHistory.setAuthGroupId(cdaUpdateAuthGroupId);
@@ -969,7 +974,7 @@ public class CdaParkingImpl implements CdaParkingService {
 
             CdaParkingUpdateHistory cdaParkingUpdateHistory = new CdaParkingUpdateHistory();
             cdaParkingUpdateHistory.setCdaParkingUpdateId(HelperUtils.getUpdateCDAId());
-            cdaParkingUpdateHistory.setNewAmount(saveCdaData.getRemainingCdaAmount());
+            cdaParkingUpdateHistory.setNewAmount(ConverterUtils.addDoubleValue(Double.parseDouble(saveCdaData.getRemainingCdaAmount()))+"");
             cdaParkingUpdateHistory.setNewGinNo(saveCdaData.getGinNo());
             cdaParkingUpdateHistory.setUnitId(hrData.getUnitId());
             cdaParkingUpdateHistory.setAuthGroupId(cdaUpdateAuthGroupId);
