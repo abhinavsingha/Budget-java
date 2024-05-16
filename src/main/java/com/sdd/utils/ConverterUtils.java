@@ -468,7 +468,7 @@ public class ConverterUtils {
 
     public static double addDoubleValue(double value) {
 
-        long factor = (long) Math.pow(10, 7);
+        long factor = (long) Math.pow(10, 9);
         value = value * factor;
         long tmp = Math.round(value);
         return (double) tmp / factor;
@@ -494,5 +494,22 @@ public class ConverterUtils {
 //            return number;
 //        }
     //}
+
+    public static double doubleSum(double value1 ,double value2) {
+        long factor = (long) Math.pow(10, 9);
+         value1 = value1 * factor;
+         value2 = value2 * factor;
+        long value3=(long)(value1+value2);
+        return (double)value3/factor;
+    }
+
+    public static double doubleMinus(double value1 ,double value2) {
+        long factor = (long) Math.pow(10, 9);
+        value1 = value1 * factor;
+        value2 = value2 * factor;
+        long value3=(long)(value1-value2);
+        return (double)value3/factor;
+    }
+
 
 }
