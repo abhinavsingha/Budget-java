@@ -281,9 +281,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             for (BudgetAllocationDetails budgetAllocationDetails : budgetAllocationDetailsList) {
                 amountType = budgetAllocationDetails.getAmountType();
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(amountType);
-                amount = amount + Double.parseDouble(budgetAllocationDetails.getAllocationAmount()) * amountUnit.getAmount();
+                amount = ConverterUtils.doubleSum(amount , Double.parseDouble(budgetAllocationDetails.getAllocationAmount()) * amountUnit.getAmount());
             }
-            budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount + ""));
+            budgetHeadResponse.setTotalAmount(ConverterUtils.addDoubleValue(amount)+"");
             budgetListWithAmount.add(budgetHeadResponse);
         }
 
@@ -1145,18 +1145,18 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(cgUnit.getUnit(), budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(), "0", "0");
 
                 for (ContigentBill contigentBill : contigentBills) {
-                    expAmount = expAmount + Double.parseDouble(contigentBill.getCbAmount());
+                    expAmount = ConverterUtils.doubleSum(expAmount , Double.parseDouble(contigentBill.getCbAmount()));
                 }
                 for (BudgetAllocation budgetAllocation : budgetAllocationListASD) {
-                    totalAllocationAmount = totalAllocationAmount + Double.parseDouble(budgetAllocation.getAllocationAmount()) * amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType()).getAmount();
+                    totalAllocationAmount = ConverterUtils.doubleSum(totalAllocationAmount ,Double.parseDouble(budgetAllocation.getAllocationAmount()) * amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType()).getAmount());
                 }
             }
 
-            totalAllocationAmount = (expAmount + totalAllocationAmount) / amountUnitRepository.findByAmountTypeId(budgetAllocationSubReport.getAmountType()).getAmount();
+            totalAllocationAmount = ConverterUtils.doubleSum(expAmount , totalAllocationAmount / amountUnitRepository.findByAmountTypeId(budgetAllocationSubReport.getAmountType()).getAmount());
             if (totalAllocationAmount == 0) {
                 budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
             } else {
-                budgetAllocationReport.setUnallocatedAmount((Double.parseDouble(budgetAllocationSubReport.getUnallocatedAmount()) - totalAllocationAmount) + "");
+                budgetAllocationReport.setUnallocatedAmount((ConverterUtils.doubleMinus(Double.parseDouble(budgetAllocationSubReport.getUnallocatedAmount()) , totalAllocationAmount)) + "");
             }
 
 
@@ -1880,22 +1880,22 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(subUnitList.get(c).getUnit(), budgetAllocationSubReport.getFinYear(), budgetAllocationSubReport.getSubHead(), "0", "0");
 
                 for (ContigentBill contigentBill : contigentBills) {
-                    expAmount = expAmount + Double.parseDouble(contigentBill.getCbAmount());
+                    expAmount = ConverterUtils.doubleSum(expAmount , Double.parseDouble(contigentBill.getCbAmount()));
                 }
 
 
                 for (BudgetAllocation budgetAllocation : budgetAllocationListASD) {
-                    totalAllocationAmount = totalAllocationAmount + Double.parseDouble(budgetAllocation.getAllocationAmount()) * amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType()).getAmount();
+                    totalAllocationAmount = ConverterUtils.doubleSum(totalAllocationAmount , Double.parseDouble(budgetAllocation.getAllocationAmount()) * amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType()).getAmount());
                 }
             }
             totalAllocationAmountCopy=totalAllocationAmount;
             budgetAllocationReport.setTotalAllocationAmount(totalAllocationAmountCopy);//added by deewan add new key
-            totalAllocationAmount = (expAmount + totalAllocationAmount) / amountUnitRepository.findByAmountTypeId(budgetAllocationSubReport.getAmountType()).getAmount();
+            totalAllocationAmount = ConverterUtils.doubleSum(expAmount , totalAllocationAmount/ amountUnitRepository.findByAmountTypeId(budgetAllocationSubReport.getAmountType()).getAmount());
 
             if (totalAllocationAmount == 0) {
                 budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
             } else {
-                budgetAllocationReport.setUnallocatedAmount((Double.parseDouble(budgetAllocationSubReport.getUnallocatedAmount()) - totalAllocationAmount) + "");
+                budgetAllocationReport.setUnallocatedAmount((ConverterUtils.doubleMinus(Double.parseDouble(budgetAllocationSubReport.getUnallocatedAmount()) , totalAllocationAmount) )+ "");
             }
 
             try {
@@ -2083,7 +2083,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                         List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsFlagAndIsUpdateOrderByCbDateDesc(value.getUnit(), budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), "0", "0");
                         for (ContigentBill contigentBill : contigentBills) {
-                            expendure = expendure + Double.parseDouble(contigentBill.getCbAmount());
+                            expendure = ConverterUtils.doubleSum(expendure , Double.parseDouble(contigentBill.getCbAmount()));
                         }
 
                         List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(budgetAllocationsDetali.getFinYear(), budgetAllocationsDetali.getSubHead(), "0", budgetAllocationsDetali.getAllocationTypeId(), value.getUnit());
@@ -2092,9 +2092,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             for (CdaParkingTrans cdaParkingCrAndDr : cdaParkingList) {
                                 AmountUnit cdaAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingCrAndDr.getAmountType());
 
-                                avilabaleTotalAmount = avilabaleTotalAmount + (Double.parseDouble(cdaParkingCrAndDr.getRemainingCdaAmount()) * cdaAmountUnit.getAmount());
+                                avilabaleTotalAmount = ConverterUtils.doubleSum(avilabaleTotalAmount , (Double.parseDouble(cdaParkingCrAndDr.getRemainingCdaAmount()) * cdaAmountUnit.getAmount()));
                             }
-                            avilabaleAmount = avilabaleAmount + avilabaleTotalAmount / amountType.getAmount();
+                            avilabaleAmount = ConverterUtils.doubleSum(avilabaleAmount , avilabaleTotalAmount / amountType.getAmount());
                         } else {
                             double totalAllocation = 0;
 //                            List<BudgetAllocation> reData1 = budgetAllocationRepository.findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(currentUnitId, unit.get(i).getUnit(), budgetAllocationsDetalis.get(m).getFinYear(), budgetAllocationsDetalis.get(m).getSubHead(), budgetAllocationsDetalis.get(m).getAllocationTypeId(), "0", "0", "Approved");
@@ -2102,20 +2102,20 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                             for (BudgetAllocation budgetAllocation : reData1) {
                                 AmountUnit subAmountType = amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType());
-                                totalAllocation = totalAllocation + (Double.parseDouble(budgetAllocation.getAllocationAmount()) * subAmountType.getAmount());
+                                totalAllocation = ConverterUtils.doubleSum(totalAllocation , (Double.parseDouble(budgetAllocation.getAllocationAmount()) * subAmountType.getAmount()));
                             }
-                            avilabaleAmount = avilabaleAmount + ((totalAllocation) / amountType.getAmount());
+                            avilabaleAmount = ConverterUtils.doubleSum(avilabaleAmount , ((totalAllocation) / amountType.getAmount()));
                         }
                     }
 
-                    res.setRemainingAmount(ConverterUtils.addDecimalPoint((avilabaleAmount - expendure / amountType.getAmount()) + ""));
+                    res.setRemainingAmount((ConverterUtils.doubleMinus(avilabaleAmount , expendure / amountType.getAmount()) + ""));
                     res.setExpenditureAmount(expendure + "");
                     res.setStatus(budgetAllocationsDetali.getStatus());
                     res.setRevisedAmount(budgetAllocationsDetali.getRevisedAmount());
                     res.setFlag(budgetAllocationsDetali.getIsFlag());
 
 
-                    res.setAllocationAmount(avilabaleAmount + expendure / amountType.getAmount() + "");
+                    res.setAllocationAmount(ConverterUtils.doubleSum(avilabaleAmount , expendure / amountType.getAmount()) + "");
 
 
                     List<CdaFilterData> data = new ArrayList<>();
@@ -2130,7 +2130,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             AmountUnit cdaAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingCrAndDr.getAmountType());
                             cgUnitResponse.setAmountType(cdaAmountUnit);
 
-                            totalRemening = totalRemening + (Double.parseDouble(cdaParkingCrAndDr.getRemainingCdaAmount()) * cdaAmountUnit.getAmount());
+                            totalRemening = ConverterUtils.doubleSum(totalRemening , (Double.parseDouble(cdaParkingCrAndDr.getRemainingCdaAmount()) * cdaAmountUnit.getAmount()));
                             data.add(cgUnitResponse);
                         }
 
@@ -2144,7 +2144,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                             for (BudgetAllocation allocation : reData1) {
                                 AmountUnit subAmountType = amountUnitRepository.findByAmountTypeId(allocation.getAmountType());
-                                totalAllocation = totalAllocation + (Double.parseDouble(allocation.getAllocationAmount()) * subAmountType.getAmount());
+                                totalAllocation = ConverterUtils.doubleSum(totalAllocation , (Double.parseDouble(allocation.getAllocationAmount()) * subAmountType.getAmount()));
                             }
                         }
                     }
@@ -2179,7 +2179,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                         double avilabaleTotalAmount = 0;
                         List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsFlagAndIsUpdateOrderByCbDateDesc(value.getUnit(), budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), "0", "0");
                         for (ContigentBill contigentBill : contigentBills) {
-                            expendure = expendure + Double.parseDouble(contigentBill.getCbAmount());
+                            expendure = ConverterUtils.doubleSum(expendure , Double.parseDouble(contigentBill.getCbAmount()));
                         }
 
                         List<CdaParkingTrans> cdaParkingList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(budgetAllocationsDetali.getFinYear(), budgetAllocationsDetali.getSubHead(), "0", budgetAllocationsDetali.getAllocationTypeId(), value.getUnit());
@@ -2188,29 +2188,28 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             for (CdaParkingTrans cdaParkingCrAndDr : cdaParkingList) {
                                 AmountUnit cdaAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingCrAndDr.getAmountType());
 
-                                avilabaleTotalAmount = avilabaleTotalAmount + (Double.parseDouble(cdaParkingCrAndDr.getRemainingCdaAmount()) * cdaAmountUnit.getAmount());
+                                avilabaleTotalAmount = ConverterUtils.doubleSum(avilabaleTotalAmount , (Double.parseDouble(cdaParkingCrAndDr.getRemainingCdaAmount()) * cdaAmountUnit.getAmount()));
 
                             }
-                            avilabaleAmount = avilabaleAmount + avilabaleTotalAmount / amountType.getAmount();
+                            avilabaleAmount = ConverterUtils.doubleSum(avilabaleAmount , avilabaleTotalAmount / amountType.getAmount());
                         } else {
                             double totalAllocation = 0;
                             List<BudgetAllocation> reData1 = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(value.getUnit(), budgetAllocationsDetali.getFinYear(), budgetAllocationsDetali.getSubHead(), budgetAllocationsDetali.getAllocationTypeId(), "Approved", "0", "0");
 
                             for (BudgetAllocation budgetAllocation : reData1) {
                                 AmountUnit subAmountType = amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType());
-                                totalAllocation = totalAllocation + (Double.parseDouble(budgetAllocation.getAllocationAmount()) * subAmountType.getAmount());
+                                totalAllocation = ConverterUtils.doubleSum(totalAllocation , (Double.parseDouble(budgetAllocation.getAllocationAmount()) * subAmountType.getAmount()));
                             }
 //                        avilabaleAmount = avilabaleAmount + (Double.parseDouble(budgetAllocationsDetalis.get(m).getAllocationAmount()) - ((totalAllocation - expendure) / amountType.getAmount()));
-                            avilabaleAmount = avilabaleAmount + ((totalAllocation) / amountType.getAmount());
+                            avilabaleAmount = ConverterUtils.doubleSum(avilabaleAmount , ((totalAllocation) / amountType.getAmount()));
                         }
                     }
 
-                    res.setRemainingAmount(ConverterUtils.addDecimalPoint(avilabaleAmount - expendure / amountType.getAmount() + ""));
-                    res.setExpenditureAmount(expendure + "");
+                    res.setRemainingAmount( ConverterUtils.doubleMinus(avilabaleAmount , expendure / amountType.getAmount()) + "");                    res.setExpenditureAmount(expendure + "");
                     res.setStatus(budgetAllocationsDetali.getStatus());
                     res.setRevisedAmount(budgetAllocationsDetali.getRevisedAmount());
                     res.setFlag(budgetAllocationsDetali.getIsFlag());
-                    res.setAllocationAmount(((avilabaleAmount + expendure / amountType.getAmount())) + "");
+                    res.setAllocationAmount(((ConverterUtils.doubleSum(avilabaleAmount , expendure / amountType.getAmount()))) + "");
 
                     List<CdaFilterData> data = new ArrayList<>();
 
@@ -2225,7 +2224,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             AmountUnit cdaAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingCrAndDr.getAmountType());
                             cgUnitResponse.setAmountType(cdaAmountUnit);
 
-                            totalRemening = totalRemening + (Double.parseDouble(cdaParkingCrAndDr.getRemainingCdaAmount()) * cdaAmountUnit.getAmount());
+                            totalRemening = ConverterUtils.doubleSum(totalRemening , (Double.parseDouble(cdaParkingCrAndDr.getRemainingCdaAmount()) * cdaAmountUnit.getAmount()));
                             data.add(cgUnitResponse);
                         }
 
@@ -2238,7 +2237,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                             for (BudgetAllocation allocation : reData1) {
                                 AmountUnit subAmountType = amountUnitRepository.findByAmountTypeId(allocation.getAmountType());
-                                totalAllocation = totalAllocation + (Double.parseDouble(allocation.getAllocationAmount()) * subAmountType.getAmount());
+                                totalAllocation = ConverterUtils.doubleSum(totalAllocation , (Double.parseDouble(allocation.getAllocationAmount()) * subAmountType.getAmount()));
                             }
                         }
                     }
@@ -2327,13 +2326,13 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                     List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsFlagAndIsUpdateOrderByCbDateDesc(currentUnitId, budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), "0", "0");
                     for (ContigentBill contigentBill : contigentBills) {
-                        expendure = expendure + Double.parseDouble(contigentBill.getCbAmount());
+                        expendure = ConverterUtils.doubleSum(expendure , Double.parseDouble(contigentBill.getCbAmount()));
                     }
 
 
                     List<ContigentBill> selfContigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsFlagAndIsUpdateOrderByCbDateDesc(currentUnitId, budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), "0", "0");
                     for (int k = 0; k < selfContigentBills.size(); k++) {
-                        selfExpendure = selfExpendure + Double.parseDouble(contigentBills.get(k).getCbAmount());
+                        selfExpendure = ConverterUtils.doubleSum(selfExpendure , Double.parseDouble(contigentBills.get(k).getCbAmount()));
                     }
 
 
@@ -2342,12 +2341,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                     for (BudgetAllocation allocation : reData2) {
                         AmountUnit subAmountType = amountUnitRepository.findByAmountTypeId(allocation.getAmountType());
-                        totalAllocationT = totalAllocationT + (Double.parseDouble(allocation.getAllocationAmount()) * subAmountType.getAmount());
+                        totalAllocationT = ConverterUtils.doubleSum(totalAllocationT , (Double.parseDouble(allocation.getAllocationAmount()) * subAmountType.getAmount()));
                     }
-                    avilabaleAmount = avilabaleAmount + ((totalAllocationT) / amountType.getAmount());
+                    avilabaleAmount = ConverterUtils.doubleSum(avilabaleAmount , ((totalAllocationT) / amountType.getAmount()));
 
 
-                    res.setRemainingAmount(ConverterUtils.addDecimalPoint((avilabaleAmount - expendure / amountType.getAmount()) + ""));
+                    res.setRemainingAmount(ConverterUtils.doubleMinus(avilabaleAmount , expendure / amountType.getAmount()) + "");
                     res.setExpenditureAmount(expendure + "");
                     res.setSelfExpenditureAmount(selfExpendure + "");
                     res.setStatus(budgetAllocationsDetali.getStatus());
@@ -2370,7 +2369,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             AmountUnit cdaAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingCrAndDr.getAmountType());
                             cgUnitResponse.setAmountType(cdaAmountUnit);
                             cgUnitResponse.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(cdaParkingCrAndDr.getRemainingCdaAmount()));
-                            totalRemening = totalRemening + (Double.parseDouble(cdaParkingCrAndDr.getRemainingCdaAmount()) * cdaAmountUnit.getAmount());
+                            totalRemening = ConverterUtils.doubleSum(totalRemening , (Double.parseDouble(cdaParkingCrAndDr.getRemainingCdaAmount()) * cdaAmountUnit.getAmount()));
                             data.add(cgUnitResponse);
                         }
 
@@ -2383,7 +2382,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                             for (BudgetAllocation allocation : reData1) {
                                 AmountUnit subAmountType = amountUnitRepository.findByAmountTypeId(allocation.getAmountType());
-                                totalAllocation = totalAllocation + (Double.parseDouble(allocation.getAllocationAmount()) * subAmountType.getAmount());
+                                totalAllocation = ConverterUtils.doubleSum(totalAllocation , (Double.parseDouble(allocation.getAllocationAmount()) * subAmountType.getAmount()));
                             }
                         }
                     }
@@ -2412,14 +2411,14 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     for (CgUnit item : unitList) {
                         List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsFlagAndIsUpdateOrderByCbDateDesc(item.getUnit(), budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), "0", "0");
                         for (ContigentBill contigentBill : contigentBills) {
-                            expendure = expendure + Double.parseDouble(contigentBill.getCbAmount());
+                            expendure = ConverterUtils.doubleSum(expendure , Double.parseDouble(contigentBill.getCbAmount()));
                         }
                     }
 
 
                     List<ContigentBill> selfContigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsFlagAndIsUpdateOrderByCbDateDesc(currentUnitId, budgetRivRequest.getBudgetFinancialYearId(), budgetRivRequest.getSubHead(), "0", "0");
                     for (ContigentBill selfContigentBill : selfContigentBills) {
-                        selfExpendure = selfExpendure + Double.parseDouble(selfContigentBill.getCbAmount());
+                        selfExpendure = ConverterUtils.doubleSum(selfExpendure , Double.parseDouble(selfContigentBill.getCbAmount()));
                     }
 
 
@@ -2428,12 +2427,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                     for (BudgetAllocation value : reData2) {
                         AmountUnit subAmountType = amountUnitRepository.findByAmountTypeId(value.getAmountType());
-                        totalAllocationT = totalAllocationT + (Double.parseDouble(value.getAllocationAmount()) * subAmountType.getAmount());
+                        totalAllocationT = ConverterUtils.doubleSum(totalAllocationT , (Double.parseDouble(value.getAllocationAmount()) * subAmountType.getAmount()));
                     }
-                    avilabaleAmount = avilabaleAmount + ((totalAllocationT) / amountType.getAmount());
+                    avilabaleAmount = ConverterUtils.doubleSum(avilabaleAmount , ((totalAllocationT) / amountType.getAmount()));
 
 
-                    res.setRemainingAmount(ConverterUtils.addDecimalPoint((avilabaleAmount - expendure / amountType.getAmount()) + ""));
+                    res.setRemainingAmount(ConverterUtils.doubleMinus(avilabaleAmount , expendure / amountType.getAmount()) + "");
                     res.setExpenditureAmount(expendure + "");
                     res.setSelfExpenditureAmount(selfExpendure + "");
                     res.setStatus(budgetAllocationsDetali.getStatus());
@@ -2457,7 +2456,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             cgUnitResponse.setAmountType(cdaAmountUnit);
                             cgUnitResponse.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(cdaParkingCrAndDr.getRemainingCdaAmount()));
 
-                            totalRemening = totalRemening + (Double.parseDouble(cdaParkingCrAndDr.getRemainingCdaAmount()) * cdaAmountUnit.getAmount());
+                            totalRemening = ConverterUtils.doubleSum(totalRemening , (Double.parseDouble(cdaParkingCrAndDr.getRemainingCdaAmount()) * cdaAmountUnit.getAmount()));
                             data.add(cgUnitResponse);
                         }
 
@@ -2470,7 +2469,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                             for (BudgetAllocation allocation : reData1) {
                                 AmountUnit subAmountType = amountUnitRepository.findByAmountTypeId(allocation.getAmountType());
-                                totalAllocation = totalAllocation + (Double.parseDouble(allocation.getAllocationAmount()) * subAmountType.getAmount());
+                                totalAllocation = ConverterUtils.doubleSum(totalAllocation , (Double.parseDouble(allocation.getAllocationAmount()) * subAmountType.getAmount()));
                             }
                         }
                     }
@@ -2752,8 +2751,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(allocationData.getAmountType());
                     double parkingAmount = Double.parseDouble(cdaCrDrTransDatum.getAmount()) * amountUnit.getAmount();
 
-                    double bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
-                    cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                    double bakiPesa = ConverterUtils.doubleSum(remainingCdaParkingAmount , parkingAmount / cadAmountUnit.getAmount());
+                    cdaParkingTrans.setRemainingCdaAmount(bakiPesa + "");
                     cdaParkingTransRepository.save(cdaParkingTrans);
 
                 }
@@ -2941,7 +2940,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             double balanceAmount = 0;
             for (CdaParkingTrans cdaParkingTran : cdaParkingTrans) {
                 amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTran.getAmountType());
-                balanceAmount = balanceAmount + Double.parseDouble(cdaParkingTran.getRemainingCdaAmount());
+                balanceAmount = ConverterUtils.doubleSum(balanceAmount , Double.parseDouble(cdaParkingTran.getRemainingCdaAmount()));
             }
             response.setFundAvailable(balanceAmount + "");//remove round off   by deewan ConverterUtils.addDecimalPoint(
             response.setAmountUnit(amountUnit);
@@ -2955,7 +2954,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
         for (BudgetAllocation budgetAllocation : reData2) {
             AmountUnit subAmountType = amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType());
-            totalAllocationT = totalAllocationT + (Double.parseDouble(budgetAllocation.getAllocationAmount()) * subAmountType.getAmount());
+            totalAllocationT = ConverterUtils.doubleSum(totalAllocationT , (Double.parseDouble(budgetAllocation.getAllocationAmount()) * subAmountType.getAmount()));
         }
 
         BudgetFinancialYear budgetFinancialYear;
@@ -2977,7 +2976,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         } else {
             double expenditure = 0;
             for (ContigentBill contigentBill : cbExpendure) {
-                expenditure = expenditure + Double.parseDouble(contigentBill.getCbAmount());
+                expenditure = ConverterUtils.doubleSum(expenditure , Double.parseDouble(contigentBill.getCbAmount()));
             }
             response.setExpenditure(expenditure + "");//remove round off 29/02/24 by deevan
         }
@@ -3052,10 +3051,10 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             for (CdaParkingTrans cdaParkingTran : cdaParkingTrans) {
 
                 amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTran.getAmountType());
-                balanceAmount = balanceAmount + Double.parseDouble(cdaParkingTran.getRemainingCdaAmount());
+                balanceAmount = ConverterUtils.doubleSum(balanceAmount , Double.parseDouble(cdaParkingTran.getRemainingCdaAmount()));
 //                allocationAmount = allocationAmount + Double.parseDouble(cdaParkingTrans.get(i).getTotalParkingAmount());
             }
-            response.setFundAvailable(ConverterUtils.addDecimalPoint(balanceAmount + ""));
+            response.setFundAvailable(balanceAmount + "");
 //            response.setFundallocated(ConverterUtils.addDecimalPoint(allocationAmount + ""));
             response.setAmountUnit(amountUnit);
         }
@@ -3070,9 +3069,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         } else {
             double expenditure = 0;
             for (ContigentBill contigentBill : cbExpendure) {
-                expenditure = expenditure + Double.parseDouble(contigentBill.getCbAmount());
+                expenditure = ConverterUtils.doubleSum(expenditure , Double.parseDouble(contigentBill.getCbAmount()));
             }
-            response.setExpenditure(ConverterUtils.addDecimalPoint(expenditure + ""));
+            response.setExpenditure(expenditure + "");
         }
 
         List<CdaFilterData> data = new ArrayList<>();
@@ -3137,9 +3136,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             double allocationAmount = 0;
             response.setFundAvailable("0");
             for (CdaParkingTrans cdaParkingTran : cdaParkingTrans) {
-                allocationAmount = allocationAmount + Double.parseDouble(cdaParkingTran.getRemainingCdaAmount());
+                allocationAmount = ConverterUtils.doubleSum(allocationAmount , Double.parseDouble(cdaParkingTran.getRemainingCdaAmount()));
             }
-            response.setFundAvailable(ConverterUtils.addDecimalPoint(allocationAmount + ""));
+            response.setFundAvailable(allocationAmount + "");
         }
 
         response.setUnitName(cgUnitData.getCgUnitShort());
@@ -3157,9 +3156,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             double previousAmount = 0;
             response.setFundAvailable("0.0000");
             for (CdaParkingTrans parkingTrans : cdaParkingTransD) {
-                previousAmount = previousAmount + Double.parseDouble(parkingTrans.getRemainingCdaAmount());
+                previousAmount = ConverterUtils.doubleSum(previousAmount , Double.parseDouble(parkingTrans.getRemainingCdaAmount()));
             }
-            response.setFundAvailable(ConverterUtils.addDecimalPoint(previousAmount + ""));
+            response.setFundAvailable(previousAmount + "");
             response.setUnallocatedAmount("0.0000");
         }
 
@@ -3239,8 +3238,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                 response.setFundAvailable("0.0000");
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTran.getAmountType());
-                allocationAmount = allocationAmount + (Double.parseDouble(cdaParkingTran.getRemainingCdaAmount()) * amountUnit.getAmount());
-                response.setFundAvailable(ConverterUtils.addDecimalPoint(allocationAmount + ""));
+                allocationAmount = ConverterUtils.doubleSum(allocationAmount , (Double.parseDouble(cdaParkingTran.getRemainingCdaAmount()) * amountUnit.getAmount()));
+                response.setFundAvailable(allocationAmount + "");
 
             }
         }
@@ -3387,7 +3386,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
                 AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
-                remainingCdaParkingAmount = remainingCdaParkingAmount + remainingCdaParkingAmount + (Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount());
+                remainingCdaParkingAmount = ConverterUtils.doubleSum(ConverterUtils.doubleSum(remainingCdaParkingAmount , remainingCdaParkingAmount) , (Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount()));
                 allocationAmount = Double.parseDouble(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmount()) * amountUnit.getAmount();
 //                long allocationAmt= Math.round(allocationAmount);
 //                allocationAmount=(double)allocationAmt;
@@ -3412,7 +3411,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             double totalCbAmount = 0;
             for (ContigentBill contigentBill : contigentBills) {
-                totalCbAmount = totalCbAmount + Double.parseDouble(contigentBill.getCbAmount());
+                totalCbAmount = ConverterUtils.doubleSum(totalCbAmount , Double.parseDouble(contigentBill.getCbAmount()));
             }
 
             AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSubRequest.getAmountTypeId());
@@ -3524,7 +3523,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                    parkingAmount= (ConverterUtils.addDoubleValue(parkingAmount));
 
-                double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
+                double bakiPesa = ConverterUtils.doubleMinus(remainingCdaParkingAmount , parkingAmount) / cadAmountUnit.getAmount();
 
                 bakiPesa= (ConverterUtils.addDoubleValue(bakiPesa));
                 cdaParkingTrans.setRemainingCdaAmount(bakiPesa + "");
@@ -3665,7 +3664,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             for (int m = 0; m < budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().size(); m++) {
                 CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId(), "0");
                 AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
-                remainingCdaParkingAmount = remainingCdaParkingAmount + Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+                remainingCdaParkingAmount = ConverterUtils.doubleSum(remainingCdaParkingAmount , Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount());
                 allocationAmount = Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()) * amountUnit.getAmount();
             }
 
@@ -3712,7 +3711,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             double totalCbAmount = 0;
             for (ContigentBill contigentBill : contigentBills) {
-                totalCbAmount = totalCbAmount + Double.parseDouble(contigentBill.getCbAmount());
+                totalCbAmount = ConverterUtils.doubleSum(totalCbAmount ,Double.parseDouble(contigentBill.getCbAmount()));
             }
 
             AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSubRequest.getAmountTypeId());
@@ -3819,7 +3818,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
                 double parkingAmount = Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount()) * amountUnit.getAmount();
 
-                double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
+                double bakiPesa = ConverterUtils.doubleMinus(remainingCdaParkingAmount , parkingAmount) / cadAmountUnit.getAmount();
                 bakiPesa= (ConverterUtils.addDoubleValue(bakiPesa));
                 cdaParkingTrans.setRemainingCdaAmount(bakiPesa + "");
                 cdaParkingTransRepository.save(cdaParkingTrans);
@@ -3984,7 +3983,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
                 AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
-                remainingCdaParkingAmount = remainingCdaParkingAmount + remainingCdaParkingAmount + (Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount());
+                remainingCdaParkingAmount = ConverterUtils.doubleSum(ConverterUtils.doubleSum(remainingCdaParkingAmount , remainingCdaParkingAmount) , (Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount()));
                 allocationAmount = Double.parseDouble(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmount()) * amountUnit.getAmount();
 
             }
@@ -4004,7 +4003,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             double totalCbAmount = 0;
             for (ContigentBill contigentBill : contigentBills) {
-                totalCbAmount = totalCbAmount + Double.parseDouble(contigentBill.getCbAmount());
+                totalCbAmount = ConverterUtils.doubleSum(totalCbAmount , Double.parseDouble(contigentBill.getCbAmount()));
             }
 
             AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSubRequest.getAmountTypeId());
@@ -4123,7 +4122,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSaveRequest.getBudgetRequest().get(i).getAmountTypeId());
                 double parkingAmount = Double.parseDouble(budgetAllocationSaveRequest.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount()) * amountUnit.getAmount();
 
-                double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
+                double bakiPesa = ConverterUtils.doubleMinus(remainingCdaParkingAmount , parkingAmount) / cadAmountUnit.getAmount();
                 bakiPesa= (ConverterUtils.addDoubleValue(bakiPesa));
                 cdaParkingTrans.setRemainingCdaAmount(bakiPesa + "");
                 cdaParkingTransRepository.save(cdaParkingTrans);
@@ -4248,7 +4247,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             for (int m = 0; m < budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().size(); m++) {
                 CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaParkingId(), "0");
                 AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
-                remainingCdaParkingAmount = remainingCdaParkingAmount + Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+                remainingCdaParkingAmount = ConverterUtils.doubleSum(remainingCdaParkingAmount, Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount());
                 allocationAmount = Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()) * amountUnit.getAmount();
             }
 
@@ -4303,7 +4302,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             double totalCbAmount = 0;
             for (ContigentBill contigentBill : contigentBills) {
-                totalCbAmount = totalCbAmount + Double.parseDouble(contigentBill.getCbAmount());
+                totalCbAmount = ConverterUtils.doubleSum(totalCbAmount , Double.parseDouble(contigentBill.getCbAmount()));
             }
 
             AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSubRequest.getAmountTypeId());
@@ -4403,7 +4402,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmountTypeId());
                 double parkingAmount = Double.parseDouble(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getCdaParkingId().get(m).getCdaAmount()) * amountUnit.getAmount();
 
-                double bakiPesa = (remainingCdaParkingAmount - parkingAmount) / cadAmountUnit.getAmount();
+                double bakiPesa = ConverterUtils.doubleMinus(remainingCdaParkingAmount , parkingAmount) / cadAmountUnit.getAmount();
                 bakiPesa= (ConverterUtils.addDoubleValue(bakiPesa));
                 cdaParkingTrans.setRemainingCdaAmount(bakiPesa + "");
                 cdaParkingTransRepository.save(cdaParkingTrans);
@@ -4823,12 +4822,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                 double bakiPesa = 0;
                 if (parkingAmount < 0) {
-                    bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
+                    bakiPesa = (ConverterUtils.doubleSum(remainingCdaParkingAmount , parkingAmount)) / cadAmountUnit.getAmount();
                 } else {
-                    bakiPesa = (remainingCdaParkingAmount + parkingAmount) / cadAmountUnit.getAmount();
+                    bakiPesa = (ConverterUtils.doubleSum(remainingCdaParkingAmount , parkingAmount)) / cadAmountUnit.getAmount();
                 }
 
-                cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(String.valueOf(bakiPesa)));
+                cdaParkingTrans.setRemainingCdaAmount(String.valueOf(bakiPesa));
                 cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 cdaParkingTransRepository.save(cdaParkingTrans);
 
@@ -4839,7 +4838,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                     //   Budget Revised All Unit Jisko diya gya hai
 
-                    double totalAmount = Double.parseDouble(revisionDatum.getRemainingAmount()) + Double.parseDouble(revisionDatum.getAmount());
+                    double totalAmount = ConverterUtils.doubleSum(Double.parseDouble(revisionDatum.getRemainingAmount()) , Double.parseDouble(revisionDatum.getAmount()));
                     double revisedAmount = Double.parseDouble(revisionDatum.getAmount());
 
                     List<BudgetAllocation> data = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(revisionDatum.getToUnitId(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Approved", "0", "0");
@@ -4970,7 +4969,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                         if (!dataBudget.isEmpty()) {
                             List<ContigentBill> contigentBills = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), "0", "0");
                             for (ContigentBill contigentBill : contigentBills) {
-                                expAmount = expAmount + Double.parseDouble(contigentBill.getCbAmount());
+                                expAmount = ConverterUtils.doubleSum(expAmount , Double.parseDouble(contigentBill.getCbAmount()));
                                 cbDataList.add(contigentBill);
                             }
                         }
@@ -4986,7 +4985,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             List<ContigentBill> allContingentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(cgUnitExp.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), "0", "0");
                             if (!allContingentBill.isEmpty()) {
                                 for (ContigentBill contigentBill : allContingentBill) {
-                                    totalSelfOrLowerAmount = totalSelfOrLowerAmount + Double.parseDouble(contigentBill.getCbAmount());
+                                    totalSelfOrLowerAmount = ConverterUtils.doubleSum(totalSelfOrLowerAmount , Double.parseDouble(contigentBill.getCbAmount()));
                                 }
                             }
                         }
@@ -5000,7 +4999,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             BeanUtils.copyProperties(allocationDetailsList, budgetAllocationDetails);
 
                             AmountUnit allocationAmountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationDetails.getAmountType());
-                            double revisedAmount = ((Double.parseDouble(budgetAllocationDetails.getAllocationAmount()) * allocationAmountUnit.getAmount()) - totalSelfOrLowerAmount) / actualAmount.getAmount();
+                            double revisedAmount = ConverterUtils.doubleMinus((Double.parseDouble(budgetAllocationDetails.getAllocationAmount()) * allocationAmountUnit.getAmount()) , totalSelfOrLowerAmount) / actualAmount.getAmount();
 
                             budgetAllocationDetails.setAllocationAmount("" + ((totalSelfOrLowerAmount / actualAmount.getAmount())));
                             budgetAllocationDetails.setIsTYpe("AFTER REVISION");
@@ -5027,7 +5026,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
                             AmountUnit allocationAmountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType());
-                            double allocationAmount = ((Double.parseDouble(budgetAllocation.getAllocationAmount()) * allocationAmountUnit.getAmount()) - totalSelfOrLowerAmount) / actualAmount.getAmount();
+                            double allocationAmount = ConverterUtils.doubleMinus((Double.parseDouble(budgetAllocation.getAllocationAmount()) * allocationAmountUnit.getAmount()) , totalSelfOrLowerAmount) / actualAmount.getAmount();
 
                             budgetAllocation.setIsTYpe("AFTER REVISION");
                             budgetAllocation.setIsBudgetRevision("0");

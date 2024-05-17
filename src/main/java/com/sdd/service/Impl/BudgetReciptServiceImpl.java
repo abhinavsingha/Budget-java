@@ -322,7 +322,7 @@ public class BudgetReciptServiceImpl implements BudgetReciptService {
         budgetAllocationDetails.setUserId(hrData.getPid());
         budgetAllocationDetails.setAmountType(amountUnit.getAmountTypeId());
         budgetAllocationDetails.setTransactionId(HelperUtils.getBudgetAlloctionRefrensId());
-        amount = amount + Double.parseDouble(budgetReciptSaveRequest.getReceiptSubRequests().get(j).getAllocationAmount());
+        amount = ConverterUtils.doubleSum(amount , Double.parseDouble(budgetReciptSaveRequest.getReceiptSubRequests().get(j).getAllocationAmount()));
         budgetAllocationDetailsRepository.save(budgetAllocationDetails);
 
     }
@@ -577,7 +577,7 @@ public ApiResponse<ContingentSaveResponse> updateRecipetSave(BudgetReciptUpdateR
     double rememningAmount = 0;
     for (CdaParkingTrans cdaParkingTrans : cdaParkingList) {
         AmountUnit amountUnitData = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
-        rememningAmount = rememningAmount + (Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * amountUnitData.getAmount());
+        rememningAmount = ConverterUtils.doubleSum(rememningAmount ,(Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * amountUnitData.getAmount()));
     }
 
     AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetReciptSaveRequest.getAmountTypeId());
@@ -587,7 +587,7 @@ public ApiResponse<ContingentSaveResponse> updateRecipetSave(BudgetReciptUpdateR
 
     if (budgetReciptSaveRequest.getAlterAmount() != null) {
         double alterAmount = Double.parseDouble(budgetReciptSaveRequest.getAlterAmount()) * amountUnit.getAmount();
-        if (alterAmount + rememningAmount < 0) {
+        if (ConverterUtils.doubleSum(alterAmount , rememningAmount) < 0) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NOT HAVE ENOUGH BALANCE TO UPDATE CDA.");
         }
     }

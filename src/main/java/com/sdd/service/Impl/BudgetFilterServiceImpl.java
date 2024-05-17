@@ -151,10 +151,10 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
 //                List<BudgetAllocation> budgetAllocationDetailsList = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(budgetUnitWiseSubHeadFilter.getUnitId(), budgetUnitWiseSubHeadFilter.getFinYearId(), majorHedaData.get(i).getBudgetCodeId(), budgetUnitWiseSubHeadFilter.getAllocationType(), "Approved", "0", "0");
                 for (Integer m = 0; m < cdaParkingTrans.size(); m++) {
                     amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(m).getAmountType());
-                    amount = amount + Double.parseDouble(cdaParkingTrans.get(m).getRemainingCdaAmount());
+                    amount = ConverterUtils.doubleSum(amount , Double.parseDouble(cdaParkingTrans.get(m).getRemainingCdaAmount()));
                 }
 
-                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount + ""));
+                budgetHeadResponse.setTotalAmount(amount + "");
                 budgetHeadResponse.setAmountUnit(amountUnit);
                 List<CdaFilterData> cdaTransData = new ArrayList<CdaFilterData>();
                 for (Integer h = 0; h < cdaParkingTrans.size(); h++) {
@@ -213,9 +213,9 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
                 for (Integer m = 0; m < cdaParkingTrans.size(); m++) {
 
                     amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(m).getAmountType());
-                    amount = amount + Double.parseDouble(cdaParkingTrans.get(m).getRemainingCdaAmount());
+                    amount = ConverterUtils.doubleSum(amount , Double.parseDouble(cdaParkingTrans.get(m).getRemainingCdaAmount()));
                 }
-                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount + ""));
+                budgetHeadResponse.setTotalAmount(amount + "");
                 budgetHeadResponse.setAmountUnit(amountUnit);
                 List<CdaFilterData> cdaTransData = new ArrayList<CdaFilterData>();
                 for (Integer h = 0; h < cdaParkingTrans.size(); h++) {
@@ -298,10 +298,10 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
 
                 for (Integer m = 0; m < cdaParkingTrans.size(); m++) {
                     amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(m).getAmountType());
-                    amount = amount + Double.parseDouble(cdaParkingTrans.get(m).getRemainingCdaAmount());
+                    amount = ConverterUtils.doubleSum(amount , Double.parseDouble(cdaParkingTrans.get(m).getRemainingCdaAmount()));
                 }
 
-                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount + ""));
+                budgetHeadResponse.setTotalAmount(amount + "");
                 budgetHeadResponse.setAmountUnit(amountUnit);
                 List<CdaFilterData> cdaTransData = new ArrayList<CdaFilterData>();
                 for (Integer h = 0; h < cdaParkingTrans.size(); h++) {
@@ -358,9 +358,9 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
 
                 for (Integer m = 0; m < cdaParkingTrans.size(); m++) {
                     amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(m).getAmountType());
-                    amount = amount + Double.parseDouble(cdaParkingTrans.get(m).getRemainingCdaAmount());
+                    amount = ConverterUtils.doubleSum(amount , Double.parseDouble(cdaParkingTrans.get(m).getRemainingCdaAmount()));
                 }
-                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount + ""));
+                budgetHeadResponse.setTotalAmount(amount + "");
                 budgetHeadResponse.setAmountUnit(amountUnit);
 
                 List<CdaFilterData> cdaTransData = new ArrayList<CdaFilterData>();
@@ -453,10 +453,10 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
                 for (Integer m = 0; m < cdaParkingTrans.size(); m++) {
 
                     amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(m).getAmountType());
-                    amount = amount + Double.parseDouble(cdaParkingTrans.get(m).getRemainingCdaAmount());
+                    amount = ConverterUtils.doubleSum(amount , Double.parseDouble(cdaParkingTrans.get(m).getRemainingCdaAmount()));
                 }
 
-                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount + ""));
+                budgetHeadResponse.setTotalAmount(amount + "");
                 budgetHeadResponse.setAmountUnit(amountUnit);
                 List<CdaFilterData> cdaTransData = new ArrayList<CdaFilterData>();
                 for (Integer h = 0; h < cdaParkingTrans.size(); h++) {
@@ -514,10 +514,10 @@ public class BudgetFilterServiceImpl implements BudgetFilterService {
                 for (Integer m = 0; m < cdaParkingTrans.size(); m++) {
 
                     amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.get(m).getAmountType());
-                    amount = amount + Double.parseDouble(cdaParkingTrans.get(m).getRemainingCdaAmount());
+                    amount = ConverterUtils.doubleSum(amount , Double.parseDouble(cdaParkingTrans.get(m).getRemainingCdaAmount()));
                 }
 
-                budgetHeadResponse.setTotalAmount(ConverterUtils.addDecimalPoint(amount + ""));
+                budgetHeadResponse.setTotalAmount(amount + "");
                 budgetHeadResponse.setAmountUnit(amountUnit);
                 List<CdaFilterData> cdaTransData = new ArrayList<CdaFilterData>();
                 for (Integer h = 0; h < cdaParkingTrans.size(); h++) {
