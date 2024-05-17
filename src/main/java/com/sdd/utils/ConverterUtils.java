@@ -496,6 +496,9 @@ public class ConverterUtils {
     //}
 
     public static double doubleSum(double value1 ,double value2) {
+        if(value1/1000>0.99||value2/1000>0.99){
+            return doubleSumLong(value1,value2);
+        }
         long factor = (long) Math.pow(10, 9);
          value1 = value1 * factor;
          value2 = value2 * factor;
@@ -503,8 +506,26 @@ public class ConverterUtils {
         return (double)value3/factor;
     }
 
+    public static double doubleSumLong(double value1 ,double value2) {
+        long factor = (long) Math.pow(10,7);
+        value1 = value1 * factor;
+        value2 = value2 * factor;
+        long value3=(long)(value1+value2);
+        return (double)value3/factor;
+    }
+
     public static double doubleMinus(double value1 ,double value2) {
+        if(value1/1000>0.99||value2/1000>0.99){
+            return doubleMinusLong(value1,value2);
+        }
         long factor = (long) Math.pow(10, 9);
+        value1 = value1 * factor;
+        value2 = value2 * factor;
+        long value3=(long)(value1-value2);
+        return (double)value3/factor;
+    }
+public static double doubleMinusLong(double value1 ,double value2) {
+        long factor = (long) Math.pow(10, 7);
         value1 = value1 * factor;
         value2 = value2 * factor;
         long value3=(long)(value1-value2);
