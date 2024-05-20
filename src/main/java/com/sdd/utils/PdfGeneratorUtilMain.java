@@ -706,9 +706,10 @@ public class PdfGeneratorUtilMain {
         cell40011.setPadding(20);
 
         tables11.addCell(cell10011);
+        tables11.addCell(cell40011);
         tables11.addCell(cell20011);
         //tables11.addCell(cell30011);
-        tables11.addCell(cell40011);
+
 
         phraseFooter.add(tables11);
 

@@ -691,12 +691,12 @@ public class CdaParkingImpl implements CdaParkingService {
             CdaParkingHistoryDto cdaParkingTransResponse = new CdaParkingHistoryDto();
             cdaParkingTransResponse.setCdaParkingUpdateId(cdaParkingUpdateHistory.getCdaParkingUpdateId());
             if(cdaParkingUpdateHistory.getOldAmount()!=null){
-                cdaParkingTransResponse.setOldAmount((ConverterUtils.addDoubleValue(Double.parseDouble(cdaParkingUpdateHistory.getOldAmount())) + ""));//round off added by deewan
+                cdaParkingTransResponse.setOldAmount(new BigDecimal(ConverterUtils.addDoubleValue(Double.parseDouble(cdaParkingUpdateHistory.getOldAmount())) + "").toPlainString());//round off added by deewan
             }
 
             cdaParkingTransResponse.setOldGinNo(cdaParkingRepository.findByGinNo(cdaParkingUpdateHistory.getOldGinNo()));
             if(cdaParkingUpdateHistory.getNewAmount()!=null) {
-                cdaParkingTransResponse.setNewAmount(ConverterUtils.addDoubleValue(Double.parseDouble(cdaParkingUpdateHistory.getNewAmount())) + "");//round off added by deewan
+                cdaParkingTransResponse.setNewAmount(new BigDecimal(ConverterUtils.addDoubleValue(Double.parseDouble(cdaParkingUpdateHistory.getNewAmount())) + "").toPlainString());//round off added by deewan
             }
             cdaParkingTransResponse.setNewGinNo(cdaParkingRepository.findByGinNo(cdaParkingUpdateHistory.getNewGinNo()));
             cdaParkingTransResponse.setUnitId(cgUnitRepository.findByUnit(cdaParkingUpdateHistory.getUnitId()));
