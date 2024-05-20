@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -931,7 +932,7 @@ public class CdaParkingImpl implements CdaParkingService {
             cdaParkingTransRepository.save(cdaParking);
             CdaParkingUpdateHistory cdaParkingUpdateHistory = new CdaParkingUpdateHistory();
             cdaParkingUpdateHistory.setCdaParkingUpdateId(HelperUtils.getUpdateCDAId());
-            cdaParkingUpdateHistory.setOldAmount(ConverterUtils.addDoubleValue(Double.parseDouble(cdaParking.getRemainingCdaAmount()))+"");
+            cdaParkingUpdateHistory.setOldAmount(new BigDecimal(ConverterUtils.addDoubleValue(Double.parseDouble(cdaParking.getRemainingCdaAmount()))+"").toPlainString());
             cdaParkingUpdateHistory.setOldGinNo(cdaParking.getGinNo());
             cdaParkingUpdateHistory.setUnitId(hrData.getUnitId());
             cdaParkingUpdateHistory.setAuthGroupId(cdaUpdateAuthGroupId);
@@ -974,7 +975,7 @@ public class CdaParkingImpl implements CdaParkingService {
 
             CdaParkingUpdateHistory cdaParkingUpdateHistory = new CdaParkingUpdateHistory();
             cdaParkingUpdateHistory.setCdaParkingUpdateId(HelperUtils.getUpdateCDAId());
-            cdaParkingUpdateHistory.setNewAmount(ConverterUtils.addDoubleValue(Double.parseDouble(saveCdaData.getRemainingCdaAmount()))+"");
+            cdaParkingUpdateHistory.setNewAmount(new BigDecimal(ConverterUtils.addDoubleValue(Double.parseDouble(saveCdaData.getRemainingCdaAmount()))+"").toPlainString());
             cdaParkingUpdateHistory.setNewGinNo(saveCdaData.getGinNo());
             cdaParkingUpdateHistory.setUnitId(hrData.getUnitId());
             cdaParkingUpdateHistory.setAuthGroupId(cdaUpdateAuthGroupId);
