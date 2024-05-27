@@ -496,13 +496,15 @@ public class ConverterUtils {
     //}
 
     public static double doubleSum(double value1 ,double value2) {
-        if(value1/1000>0.99||value2/1000>0.99){
+        //System.out.println("in side double sum value1"+value1+"value2"+value2);
+        if(value1/10000>0.99||value2/10000>0.99){
             return doubleSumLong(value1,value2);
         }
         long factor = (long) Math.pow(10, 9);
          value1 = value1 * factor;
          value2 = value2 * factor;
         long value3=(long)(value1+value2);
+        //System.out.println("return val sum double"+(double)value3/factor);
         return (double)value3/factor;
     }
 
@@ -511,17 +513,21 @@ public class ConverterUtils {
         value1 = value1 * factor;
         value2 = value2 * factor;
         long value3=(long)(value1+value2);
+
+        //System.out.println("return sum long"+(double)value3/factor);
         return (double)value3/factor;
     }
 
     public static double doubleMinus(double value1 ,double value2) {
-        if(value1/1000>0.99||value2/1000>0.99){
+        ///System.out.println("in side doubleMinus value1:"+value1+"value2:"+value2);
+        if(value1/10000>0.99||value2/10000>0.99){
             return doubleMinusLong(value1,value2);
         }
         long factor = (long) Math.pow(10, 9);
         value1 = value1 * factor;
         value2 = value2 * factor;
         long value3=(long)(value1-value2);
+        //System.out.println("return val minus double"+(double)value3/factor);
         return (double)value3/factor;
     }
 public static double doubleMinusLong(double value1 ,double value2) {
@@ -529,6 +535,7 @@ public static double doubleMinusLong(double value1 ,double value2) {
         value1 = value1 * factor;
         value2 = value2 * factor;
         long value3=(long)(value1-value2);
+    ///System.out.println("return val minus long"+(double)value3/factor);
         return (double)value3/factor;
     }
 

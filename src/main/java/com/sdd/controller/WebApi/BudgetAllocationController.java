@@ -1,6 +1,7 @@
 package com.sdd.controller.WebApi;
 
 
+import com.sdd.Test;
 import com.sdd.entities.*;
 import com.sdd.request.*;
 import com.sdd.response.*;
@@ -52,6 +53,7 @@ public class BudgetAllocationController {
     public ResponseEntity<ApiResponse<DefaultResponse>> updateAllocation(@RequestBody AllocationType allocationType) {
         return new ResponseEntity<>(budgetAllocationService.updateAllocation(allocationType), HttpStatus.OK);
     }
+
 
     @GetMapping("/getAllocationType")
     public ResponseEntity<ApiResponse<List<AllocationType>>> getAllocationType() {
@@ -233,6 +235,11 @@ public class BudgetAllocationController {
         return new ResponseEntity<>(budgetAllocationService.getUnderUnits(), HttpStatus.OK);
     }
 
+
+    @GetMapping("/getAllunitdata")
+    public ResponseEntity<ApiResponse> getUnd() {
+        return new ResponseEntity<>(budgetAllocationService.getUnderU(), HttpStatus.OK);
+    }
 
 
 }
