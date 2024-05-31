@@ -96,6 +96,6 @@ public interface BudgetAllocationService {
 	ApiResponse<List<AllocationType>> getAllocationByFinYear(String finyear);
 
 	ApiResponse<DefaultResponse>  updateAllocation(AllocationType allocationType);
-	ApiResponse<DefaultResponse>  getUnderU();
+	ApiResponse<DefaultResponse>  getUnderU(String unitId);
 
 }

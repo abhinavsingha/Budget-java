@@ -236,9 +236,9 @@ public class BudgetAllocationController {
     }
 
 
-    @GetMapping("/getAllunitdata")
-    public ResponseEntity<ApiResponse> getUnd() {
-        return new ResponseEntity<>(budgetAllocationService.getUnderU(), HttpStatus.OK);
+    @GetMapping("/getAllunitdata/{unitId}")
+    public ResponseEntity<ApiResponse> getUnd(@PathVariable("unitId") String unitId) {
+        return new ResponseEntity<>(budgetAllocationService.getUnderU(unitId), HttpStatus.OK);
     }
 
 

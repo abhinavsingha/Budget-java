@@ -904,7 +904,7 @@ public class DashboardServiceImpl implements DashBoardService {
             if (budgetAllocToUnit.size() > 0) {
                 for (int j = 0; j < budgetAllocToUnit.size(); j++) {
                     String uid = budgetAllocToUnit.get(j).getToUnit();
-                    if(uid.equalsIgnoreCase("000225")){
+                    if(uid.equalsIgnoreCase("001321")){
                         continue;
                     }
                     List<CgUnit> unitList1 = cgUnitRepository.findByBudGroupUnitLike("%" + uid + "%");
@@ -915,7 +915,7 @@ public class DashboardServiceImpl implements DashBoardService {
                     //double rqUnitSub = 0.0;
                     for (CgUnit unitS : unitList) {
                         String subUnits = unitS.getUnit();
-                        if(subUnits.equalsIgnoreCase("000225")){
+                        if(subUnits.equalsIgnoreCase("001321")){
                             continue;
                         }
                         List<CdaParkingTrans> cdaDetailSub = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, subUnits, allocationTypeId, "0");
@@ -941,7 +941,7 @@ public class DashboardServiceImpl implements DashBoardService {
 
                     double remCdaBal = 0.0;
                     //double cdaUnit = 0.0;
-                    if(uid.equalsIgnoreCase("000225")){
+                    if(uid.equalsIgnoreCase("001321")){
                         continue;
                     }
                     List<CdaParkingTrans> cdaDetail = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndUnitIdAndAllocTypeIdAndIsFlag(finYearId, subHeadId, uid, allocationTypeId, "0");
@@ -967,7 +967,7 @@ public class DashboardServiceImpl implements DashBoardService {
                     if (unitList.size() > 0) {
                         for (CgUnit unitss : unitList) {
                             String subUnits = unitss.getUnit();
-                            if(subUnits.equalsIgnoreCase("000225")){
+                            if(subUnits.equalsIgnoreCase("001321")){
                                 continue;
                             }
                             List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(subUnits, finYearId, subHeadId, "0", "0");
@@ -988,7 +988,7 @@ public class DashboardServiceImpl implements DashBoardService {
                             }
                         }
                     }
-                    if(uid.equalsIgnoreCase("000225")){
+                    if(uid.equalsIgnoreCase("001321")){
                         continue;
                     }
                     List<ContigentBill> expenditure = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(uid, finYearId, subHeadId, "0", "0");
@@ -1126,7 +1126,7 @@ public class DashboardServiceImpl implements DashBoardService {
                 subResp.setAllocType(allockData.getAllocDesc());
                 subResp.setAmountIn(hdamtUnits.getAmountType());
                 subResp.setAllocatedAmount(String.format("%1$0,1.4f", alocAmntsHd));
-                subResp.setExpenditureAmount(String.format("%1$0,1.4f", totalExpAmount));
+                subResp.setExpenditureAmount(String.format("%1$0,1.4f", totalExpAmount/hdamtUnits.getAmount()));
                 subResp.setBalAmount(String.format("%1$0,1.4f", rmCdaHd));
                 subResp.setPerAmount(String.format("%1$0,1.2f", perAmnt));
                 subResp.setLastCBDate(cbD);
