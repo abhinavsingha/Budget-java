@@ -80,8 +80,7 @@ public class BudgetAllocationDetails {
     @Column(name = "REVISED_AMOUNT")
     private String revisedAmount;
 
-//    @Column(name = "REVISION_BY")
-//    private String revisionBy;
+
 
     @Column(name = "IS_BUDGET_REVISION")
     private String isBudgetRevision;
@@ -99,5 +98,9 @@ public class BudgetAllocationDetails {
 
     @Column(name = "UNALLOCATED_AMOUNT")
     private String unallocatedAmount;
+
+    //0 means is under processing and 1 is complete
+//    @Column(name = "isRevisionStatus" ,columnDefinition = "varchar(255) default 0")
+//    private String isRevisionStauts;
 
 }
