@@ -5447,7 +5447,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupId(budgetAllocationRevision.getAuthGroupId());
             for (MangeInboxOutbox mangeInboxOutbox : mangeInboxOutboxList) {
                 mangeInboxOutbox.setStatus("Rejected");
-                mangeInboxOutbox.setRemarks("Budget Revison");
                 mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 mangeInboxOutBoxRepository.save(mangeInboxOutbox);
             }
@@ -5458,7 +5457,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupId(budgetAllocationRevision.getAuthGroupId());
             for (MangeInboxOutbox mangeInboxOutbox : mangeInboxOutboxList) {
                 mangeInboxOutbox.setStatus("Rejected");
-                mangeInboxOutbox.setRemarks("Budget Revison");
                 mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 mangeInboxOutBoxRepository.save(mangeInboxOutbox);
             }
