@@ -12019,6 +12019,7 @@ public class MangeReportImpl implements MangeReportService {
         String allocationType = check.get(0).getAllocTypeId();
         String finYearId = check.get(0).getFinYearId();
         String amountTypeId = check.get(0).getAmountType();
+        Timestamp createdOn = check.get(0).getCreatedOn();
 
         AmountUnit amountObj = amountUnitRepository.findByAmountTypeId(amountTypeId);
         double reqAmount = Double.parseDouble(amountObj.getAmount() + "");
@@ -12032,10 +12033,11 @@ public class MangeReportImpl implements MangeReportService {
         String names = approveName;
         String unitName = hrData.getUnit();
         String rank = approveRank;
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String formattedDateTime = now.format(formatter);
-
+//        LocalDateTime now = LocalDateTime.now();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+//        String formattedDateTime = now.format(formatter);
+             SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+             String formattedDateTime=sdf.format(new Date(createdOn.getTime()));
         try {
             Document document = new Document(PageSize.A4);
 
@@ -12321,13 +12323,13 @@ public class MangeReportImpl implements MangeReportService {
         BudgetFinancialYear findyr = budgetFinancialYearRepository.findBySerialNo(finYearId);
 
 
-        String amtType = "";
-        String names = approveName;
-        String unitName = hrData.getUnit();
-        String rank = approveRank;
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String formattedDateTime = now.format(formatter);
+//        String amtType = "";
+//        String names = approveName;
+//        String unitName = hrData.getUnit();
+//        String rank = approveRank;
+//        LocalDateTime now = LocalDateTime.now();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+//        String formattedDateTime = now.format(formatter);
 
         try {
             XWPFDocument document = new XWPFDocument();
