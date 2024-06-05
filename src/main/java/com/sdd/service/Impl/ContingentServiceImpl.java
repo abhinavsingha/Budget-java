@@ -135,9 +135,9 @@ public class ContingentServiceImpl implements ContingentService {
             if (contingentBillSaveRequest.getProgressiveAmount() == null || contingentBillSaveRequest.getProgressiveAmount().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "PROGRESSIVE AMOUNT ID NOT BE BLANK");
             }
-            if (contingentBillSaveRequest.getRemark() == null || contingentBillSaveRequest.getRemark().isEmpty()) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REMARK CAN NOT BE BLANK");
-            }
+//            if (contingentBillSaveRequest.getRemark() == null || contingentBillSaveRequest.getRemark().isEmpty()) {
+//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REMARK CAN NOT BE BLANK");
+//            }
 
             if (contingentBillSaveRequest.getDocUploadDate() == null || contingentBillSaveRequest.getDocUploadDate().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DOCUMENT UPLOAD DATE CAN NOT BE BLANK");
@@ -594,9 +594,9 @@ public class ContingentServiceImpl implements ContingentService {
             }
 
 
-            if (contingentBillSaveRequest.getRemark() == null || contingentBillSaveRequest.getRemark().isEmpty()) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REMARK CAN NOT BE BLANK");
-            }
+//            if (contingentBillSaveRequest.getRemark() == null || contingentBillSaveRequest.getRemark().isEmpty()) {
+//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REMARK CAN NOT BE BLANK");
+//            }
 
             if (contingentBillSaveRequest.getInvoiceNo() == null || contingentBillSaveRequest.getInvoiceNo().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVOICE NUMBER NOT BE BLANK");

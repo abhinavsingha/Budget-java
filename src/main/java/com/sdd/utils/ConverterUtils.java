@@ -497,6 +497,12 @@ public class ConverterUtils {
 
     public static double doubleSum(double value1 ,double value2) {
         //System.out.println("in side double sum value1"+value1+"value2"+value2);
+
+        long max=(long) (9*Math.pow(10,11));
+        if(value1 >=max||value2>=max){
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Value exceeding limit please contact to D Budget");
+        }
+
         if(value1/10000>0.99||value2/10000>0.99){
             return doubleSumLong(value1,value2);
         }
@@ -520,6 +526,12 @@ public class ConverterUtils {
 
     public static double doubleMinus(double value1 ,double value2) {
         ///System.out.println("in side doubleMinus value1:"+value1+"value2:"+value2);
+
+
+        long max=(long) (9*Math.pow(10,11));
+        if(value1 >=max||value2>=max){
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Value exceeding limit please contact to D Budget");
+        }
         if(value1/10000>0.99||value2/10000>0.99){
             return doubleMinusLong(value1,value2);
         }
