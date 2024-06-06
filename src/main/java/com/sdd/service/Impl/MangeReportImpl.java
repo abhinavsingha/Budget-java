@@ -130,7 +130,7 @@ public class MangeReportImpl implements MangeReportService {
 
     @Override
     public ApiResponse<List<FilePathResponse>> getAllocationReport(String authGroupId) {
-
+        Timestamp date=new Timestamp(0);
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
@@ -160,7 +160,7 @@ public class MangeReportImpl implements MangeReportService {
 
         String key = "";
         for (Integer j = 0; j < budgetAllocationReport.size(); j++) {
-
+            date=budgetAllocationReport.get(j).getCreatedOn();
             BudgetHead budgetHead = subHeadRepository.findByBudgetCodeId(budgetAllocationReport.get(j).getSubHead());
             CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationReport.get(j).getToUnit());
             AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocationReport.get(j).getAmountType());
@@ -176,7 +176,6 @@ public class MangeReportImpl implements MangeReportService {
                 subModel.setBudgetHead(budgetHead);
                 subModel.setAmount(Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) + "");
                 subModel.setFinYear(budgetAllocationReport.get(j).getFinYear());
-
 
                 if (Double.parseDouble(budgetAllocationReport.get(j).getAllocationAmount()) + Double.parseDouble(budgetAllocationReport.get(j).getUnallocatedAmount()) != 0) {
                     reportMaindata.add(subModel);
@@ -243,6 +242,7 @@ public class MangeReportImpl implements MangeReportService {
         filePathResponse.setRemark(tabData.get(0).getRemark());
 
 
+
         filePathResponse.setSubHeadKey(key);
         if (key.equalsIgnoreCase("2037")) {
             filePathResponse.setRevenueOrCapital("REVENUE");
@@ -256,8 +256,12 @@ public class MangeReportImpl implements MangeReportService {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
+            SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+            String formattedDateTime=sdf.format(new Date(date.getTime()));
+
+
             String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-            pdfGenaratorUtilMain.createPdfAllocation(hashMap, filePath, filePathResponse, hrData);
+            pdfGenaratorUtilMain.createPdfAllocation(hashMap, filePath, filePathResponse, hrData,formattedDateTime);
             filePathResponse.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
             filePathResponse.setFileName(fileName);
             dtoList.add(filePathResponse);

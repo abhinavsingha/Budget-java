@@ -20,7 +20,7 @@ public class PdfGeneratorUtilMain {
     private static final String UTF_8 = "UTF-8";
 
     @SuppressWarnings("rawtypes")
-    public void createPdfAllocation(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse, HrData hrData) throws Exception {
+    public void createPdfAllocation(HashMap<String, List<ReportSubModel>> hashMap, String path, FilePathResponse filePathResponse, HrData hrData,String formattedDateTime) throws Exception {
 
         Document document = new Document();
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
@@ -92,18 +92,37 @@ public class PdfGeneratorUtilMain {
 
 
         int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
+        maxlength=ConverterUtils.getMaximumLength(maxlength,hrData.getUnit().length());
 
         Phrase phrase = new Phrase();
         Font font = new Font(Font.FontFamily.COURIER, 10, Font.BOLD);
-        Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(), maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(), maxlength)), font);
+        Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(), maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(), maxlength)+"\n" + ConverterUtils.addSpacaeInString(hrData.getUnit(), maxlength)), font);
         phrase.add(approverName);
         Paragraph paragraph = new Paragraph();
         paragraph.add(phrase);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
 
+        Phrase phrase1 = new Phrase();
+
+        Chunk date= new Chunk(formattedDateTime, font);
+        phrase1.add(date);
+        Paragraph paragraph1 = new Paragraph();
+        paragraph1.add(phrase1);
+
+        paragraph1.setAlignment(Element.ALIGN_LEFT);
         document.add(table);
+
+        document.add(paragraph1);
+
         document.add(paragraph);
         document.close();
+
+
+
+
+
+
+
 
     }
 
