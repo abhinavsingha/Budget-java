@@ -317,7 +317,7 @@ public class PdfGeneratorUtilMain {
 
         Phrase phrase = new Phrase();
         Font font = new Font(Font.FontFamily.COURIER, 10, Font.BOLD);
-        Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(), maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(), maxlength)), font);
+        Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(), maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(), maxlength)+ "\n" + ConverterUtils.addSpacaeInString(hrData.getUnit(), maxlength)), font);
         phrase.add(approverName);
         Paragraph paragraph = new Paragraph();
         paragraph.add(phrase);
@@ -325,6 +325,7 @@ public class PdfGeneratorUtilMain {
 
 
         document.add(table);
+        //add date code if they ask , but many sub head data is comming so which date i will add please explain
         document.add(paragraph);
         document.close();
 
@@ -536,15 +537,14 @@ public class PdfGeneratorUtilMain {
         int maxlength = ConverterUtils.getMaximumLength(filePathResponse.getApproveName().length(), (filePathResponse.getApproveRank()).length());
 
         Phrase phrase = new Phrase();
-        Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(), maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(), maxlength)), font);
+        Chunk approverName = new Chunk((ConverterUtils.addSpacaeInString(filePathResponse.getApproveName(), maxlength) + "\n" + ConverterUtils.addSpacaeInString(filePathResponse.getApproveRank(), maxlength) + "\n" + ConverterUtils.addSpacaeInString(hrData.getUnit(), maxlength)), font);
         phrase.add(approverName);
         Paragraph paragraph = new Paragraph();
         paragraph.add(phrase);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
-
-
         document.add(preface);
         document.add(table);
+        document.add(paragraph);
         document.close();
     }
 

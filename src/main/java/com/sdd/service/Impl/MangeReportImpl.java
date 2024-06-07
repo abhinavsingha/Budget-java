@@ -4846,22 +4846,22 @@ public class MangeReportImpl implements MangeReportService {
             document.add(new Paragraph("\n"));
             document.add(new Paragraph("\n"));
 
-            PdfPTable tables1 = new PdfPTable(4);
+            PdfPTable tables1 = new PdfPTable(3);
             tables1.setWidthPercentage(100);
 
             PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
-            PdfPCell cell200 = new PdfPCell(new Phrase(""));
+            //PdfPCell cell200 = new PdfPCell(new Phrase(""));
             PdfPCell cell300 = new PdfPCell(new Phrase(""));
             PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
 
             cell100.setBorder(0);
-            cell200.setBorder(0);
+            //cell200.setBorder(0);
             cell300.setBorder(0);
             cell400.setBorder(0);
             cell400.setPadding(20);
 
             tables1.addCell(cell100);
-            tables1.addCell(cell200);
+           // tables1.addCell(cell200);
             tables1.addCell(cell300);
             tables1.addCell(cell400);
             document.add(tables1);
@@ -5375,21 +5375,21 @@ public class MangeReportImpl implements MangeReportService {
             document.add(new Paragraph("\n"));
             document.add(new Paragraph("\n"));
 
-            PdfPTable tables1 = new PdfPTable(4);
+            PdfPTable tables1 = new PdfPTable(3);
             tables1.setWidthPercentage(100);
 
             PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
-            PdfPCell cell2000 = new PdfPCell(new Phrase(""));
+            //PdfPCell cell2000 = new PdfPCell(new Phrase(""));
             PdfPCell cell300 = new PdfPCell(new Phrase(""));
             PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
             cell100.setBorder(0);
-            cell2000.setBorder(0);
+            //cell2000.setBorder(0);
             cell300.setBorder(0);
             cell400.setBorder(0);
             cell400.setPadding(20);
 
             tables1.addCell(cell100);
-            tables1.addCell(cell2000);
+            //tables1.addCell(cell2000);
             tables1.addCell(cell300);
             tables1.addCell(cell400);
             document.add(tables1);
@@ -5899,22 +5899,22 @@ public class MangeReportImpl implements MangeReportService {
                 document.add(new Paragraph("\n"));
                 document.add(new Paragraph("\n"));
 
-                PdfPTable tables1 = new PdfPTable(4);
+                PdfPTable tables1 = new PdfPTable(3);
                 tables1.setWidthPercentage(100);
 
                 PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
-                PdfPCell cell200 = new PdfPCell(new Phrase(""));
+                //PdfPCell cell200 = new PdfPCell(new Phrase(""));
                 PdfPCell cell300 = new PdfPCell(new Phrase(""));
                 PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
 
                 cell100.setBorder(0);
-                cell200.setBorder(0);
+                //cell200.setBorder(0);
                 cell300.setBorder(0);
                 cell400.setBorder(0);
                 cell400.setPadding(20);
 
                 tables1.addCell(cell100);
-                tables1.addCell(cell200);
+               // tables1.addCell(cell200);
                 tables1.addCell(cell300);
                 tables1.addCell(cell400);
                 document.add(tables1);
@@ -6940,22 +6940,22 @@ public class MangeReportImpl implements MangeReportService {
             document.add(new Paragraph("\n"));
             document.add(new Paragraph("\n"));
 
-            PdfPTable tables1 = new PdfPTable(4);
+            PdfPTable tables1 = new PdfPTable(3);
             tables1.setWidthPercentage(100);
 
             PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
-            PdfPCell cell200 = new PdfPCell(new Phrase(""));
+           // PdfPCell cell200 = new PdfPCell(new Phrase(""));
             PdfPCell cell300 = new PdfPCell(new Phrase(""));
             PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
 
             cell100.setBorder(0);
-            cell200.setBorder(0);
+            //cell200.setBorder(0);
             cell300.setBorder(0);
             cell400.setBorder(0);
             cell400.setPadding(20);
 
             tables1.addCell(cell100);
-            tables1.addCell(cell200);
+           // tables1.addCell(cell200);
             tables1.addCell(cell300);
             tables1.addCell(cell400);
             document.add(tables1);
@@ -7853,22 +7853,22 @@ public class MangeReportImpl implements MangeReportService {
             document.add(new Paragraph("\n"));
             document.add(new Paragraph("\n"));
 
-            PdfPTable tables1 = new PdfPTable(4);
+            PdfPTable tables1 = new PdfPTable(3);
             tables1.setWidthPercentage(100);
 
             PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
-            PdfPCell cell200 = new PdfPCell(new Phrase(""));
+            //PdfPCell cell200 = new PdfPCell(new Phrase(""));
             PdfPCell cell300 = new PdfPCell(new Phrase(""));
             PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
 
             cell100.setBorder(0);
-            cell200.setBorder(0);
+            //cell200.setBorder(0);
             cell300.setBorder(0);
             cell400.setBorder(0);
             cell400.setPadding(20);
 
             tables1.addCell(cell100);
-            tables1.addCell(cell200);
+            //tables1.addCell(cell200);
             tables1.addCell(cell300);
             tables1.addCell(cell400);
             document.add(tables1);
@@ -8881,22 +8881,22 @@ public class MangeReportImpl implements MangeReportService {
             document.add(new Paragraph("\n"));
             document.add(new Paragraph("\n"));
 
-            PdfPTable tables1 = new PdfPTable(4);
+            PdfPTable tables1 = new PdfPTable(3);
             tables1.setWidthPercentage(100);
 
             PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
-            PdfPCell cell200 = new PdfPCell(new Phrase(""));
+            //PdfPCell cell200 = new PdfPCell(new Phrase(""));
             PdfPCell cell300 = new PdfPCell(new Phrase(""));
             PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
 
             cell100.setBorder(0);
-            cell200.setBorder(0);
+           // cell200.setBorder(0);
             cell300.setBorder(0);
             cell400.setBorder(0);
             cell400.setPadding(20);
 
             tables1.addCell(cell100);
-            tables1.addCell(cell200);
+            //tables1.addCell(cell200);
             tables1.addCell(cell300);
             tables1.addCell(cell400);
             document.add(tables1);
@@ -11111,21 +11111,21 @@ public class MangeReportImpl implements MangeReportService {
             document.add(new Paragraph("\n"));
             document.add(new Paragraph("\n"));
 
-            PdfPTable tables1 = new PdfPTable(4);
+            PdfPTable tables1 = new PdfPTable(3);
             tables1.setWidthPercentage(100);
 
             PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
-            PdfPCell cell200 = new PdfPCell(new Phrase(""));
+            //PdfPCell cell200 = new PdfPCell(new Phrase(""));
             PdfPCell cell300 = new PdfPCell(new Phrase(""));
             PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
             cell100.setBorder(0);
-            cell200.setBorder(0);
+           // cell200.setBorder(0);
             cell300.setBorder(0);
             cell400.setBorder(0);
             cell400.setPadding(20);
 
             tables1.addCell(cell100);
-            tables1.addCell(cell200);
+            //tables1.addCell(cell200);
             tables1.addCell(cell300);
             tables1.addCell(cell400);
             document.add(tables1);
@@ -12230,23 +12230,24 @@ public class MangeReportImpl implements MangeReportService {
             document.add(new Paragraph("\n"));
             document.add(new Paragraph("\n"));
 
-            PdfPTable tables1 = new PdfPTable(4);
+            PdfPTable tables1 = new PdfPTable(3);
             tables1.setWidthPercentage(100);
 
             PdfPCell cell100 = new PdfPCell(new Phrase(formattedDateTime));
-            PdfPCell cell200 = new PdfPCell(new Phrase(""));
-            PdfPCell cell300 = new PdfPCell(new Phrase(""));
+//            PdfPCell cell200 = new PdfPCell(new Phrase(""));
+          PdfPCell cell300 = new PdfPCell(new Phrase(""));
             PdfPCell cell400 = new PdfPCell(new Phrase(names + "\n" + rank + "\n" + unitName));
 
             cell100.setBorder(0);
-            cell200.setBorder(0);
+//            cell200.setBorder(0);
             cell300.setBorder(0);
             cell400.setBorder(0);
             cell400.setPadding(20);
-
+//            cell400.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             tables1.addCell(cell100);
-            tables1.addCell(cell200);
+//            tables1.addCell(cell200);
             tables1.addCell(cell300);
+
             tables1.addCell(cell400);
             document.add(tables1);
             document.close();
