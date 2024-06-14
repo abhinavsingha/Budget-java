@@ -13,6 +13,6 @@ public class CdaHistoryResponse {
 
     List<CdaParkingHistoryDto> oldCda ;
     List<CdaParkingHistoryDto> newCda ;
-    Double newDataSum;
-    Double oldDataSum;
+    String newDataSum;
+    String oldDataSum;
 }

@@ -495,23 +495,36 @@ public class ConverterUtils {
 //        }
     //}
 
+
+    public static double doubleSumHistory(double value1 ,double value2) {
+        BigDecimal bd1=BigDecimal.valueOf(value1);
+        BigDecimal bd2=BigDecimal.valueOf(value2);
+        BigDecimal result=bd1.add(bd2);
+        return result.doubleValue();
+    }
+
+
+
+
     public static double doubleSum(double value1 ,double value2) {
-        //System.out.println("in side double sum value1"+value1+"value2"+value2);
+        BigDecimal bd1=BigDecimal.valueOf(value1);
+        BigDecimal bd2=BigDecimal.valueOf(value2);
+        BigDecimal result=bd1.add(bd2);
+        return result.doubleValue();
 
-        long max=(long) (9*Math.pow(10,11));
-        if(value1 >=max||value2>=max){
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Value exceeding limit please contact to D Budget");
-        }
-
-        if(value1/10000>0.99||value2/10000>0.99){
-            return doubleSumLong(value1,value2);
-        }
-        long factor = (long) Math.pow(10, 9);
-         value1 = value1 * factor;
-         value2 = value2 * factor;
-        long value3=(long)(value1+value2);
-        //System.out.println("return val sum double"+(double)value3/factor);
-        return (double)value3/factor;
+//        long max=(long) (9*Math.pow(10,11));
+//        if(value1 >=max||value2>=max){
+//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Value exceeding limit please contact to D Budget");
+//        }
+//
+//        if(value1/10000>0.99||value2/10000>0.99){
+//            return doubleSumLong(value1,value2);
+//        }
+//        long factor = (long) Math.pow(10, 9);
+//         value1 = value1 * factor;
+//         value2 = value2 * factor;
+//        long value3=(long)(value1+value2);
+//        return (double)value3/factor;
     }
 
     public static double doubleSumLong(double value1 ,double value2) {
@@ -525,22 +538,26 @@ public class ConverterUtils {
     }
 
     public static double doubleMinus(double value1 ,double value2) {
-        ///System.out.println("in side doubleMinus value1:"+value1+"value2:"+value2);
 
 
-        long max=(long) (9*Math.pow(10,11));
-        if(value1 >=max||value2>=max){
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Value exceeding limit please contact to D Budget");
-        }
-        if(value1/10000>0.99||value2/10000>0.99){
-            return doubleMinusLong(value1,value2);
-        }
-        long factor = (long) Math.pow(10, 9);
-        value1 = value1 * factor;
-        value2 = value2 * factor;
-        long value3=(long)(value1-value2);
-        //System.out.println("return val minus double"+(double)value3/factor);
-        return (double)value3/factor;
+        BigDecimal bd1=BigDecimal.valueOf(value1);
+        BigDecimal bd2=BigDecimal.valueOf(value2);
+        BigDecimal result=bd1.subtract(bd2);
+        return result.doubleValue();
+
+//        long max=(long) (9*Math.pow(10,11));
+//        if(value1 >=max||value2>=max){
+//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Value exceeding limit please contact to D Budget");
+//        }
+//        if(value1/10000>0.99||value2/10000>0.99){
+//            return doubleMinusLong(value1,value2);
+//        }
+//        long factor = (long) Math.pow(10, 9);
+//        value1 = value1 * factor;
+//        value2 = value2 * factor;
+//        long value3=(long)(value1-value2);
+//        //System.out.println("return val minus double"+(double)value3/factor);
+//        return (double)value3/factor;
     }
 public static double doubleMinusLong(double value1 ,double value2) {
         long factor = (long) Math.pow(10, 7);

@@ -1178,13 +1178,13 @@ public class ContingentServiceImpl implements ContingentService {
         if (masNumberList.isEmpty()) {
             contingentBillListData.setSectionNumber("1");
         } else {
-//            for (ContigentBill contigentBill : masNumberList) {
-//
-//                int number = Integer.parseInt(contigentBill.getSectionNumber());
-//                if (number > maxNumber) {
-//                    maxNumber = number;
-//                }
-//            }
+//  //          for (ContigentBill contigentBill : masNumberList) {
+//      // pahle se babd tha
+//     //           int number = Integer.parseInt(contigentBill.getSectionNumber());
+//       //         if (number > maxNumber) {
+//       //             maxNumber = number;
+//      //          }
+//      //      }
             contingentBillListData.setSectionNumber((masNumberList.size() + 1) + "");
         }
 

@@ -717,8 +717,8 @@ public class CdaParkingImpl implements CdaParkingService {
         }
         mainResponse.setNewCda(newCda);
         mainResponse.setOldCda(oldCda);
-        mainResponse.setNewDataSum(ConverterUtils.addDoubleValue(sumNewData));
-        mainResponse.setOldDataSum(ConverterUtils.addDoubleValue(sumOldData));
+        mainResponse.setNewDataSum(new BigDecimal(String.valueOf(sumNewData)).toPlainString());
+        mainResponse.setOldDataSum(new BigDecimal(String.valueOf(sumOldData)).toPlainString());//ConverterUtils.addDoubleValue(
         return ResponseUtils.createSuccessResponse(mainResponse, new TypeReference<CdaHistoryResponse>() {
         });
 

@@ -1485,7 +1485,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                 BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
                 budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()));
-                budgetAllocationDetails.setRevisedAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRevisedAmount()));
+                budgetAllocationDetails.setRevisedAmount(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRevisedAmount());//ConverterUtils.addDecimalPoint();
                 budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                 budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
                 budgetAllocationDetails.setAllocTypeId(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId());
@@ -1848,7 +1848,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setAllocationDate(budgetAllocationSubReport.getCreatedOn());
             budgetAllocationReport.setAllocationId(budgetAllocationSubReport.getAllocationId());
             budgetAllocationReport.setTransactionId(budgetAllocationSubReport.getAllocationId());
-            budgetAllocationReport.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSubReport.getAllocationAmount()));
+            budgetAllocationReport.setAllocationAmount(new BigDecimal(String.valueOf(budgetAllocationSubReport.getAllocationAmount())).toPlainString());//ConverterUtils.addDecimalPoint(
             budgetAllocationReport.setStatus(budgetAllocationSubReport.getStatus());
             budgetAllocationReport.setRemarks(budgetAllocationSubReport.getStatus());
             budgetAllocationReport.setReturnRemarks(budgetAllocationSubReport.getReturnRemarks());
@@ -1859,12 +1859,12 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             budgetAllocationReport.setAuthGroupId(budgetAllocationSubReport.getAuthGroupId());
             budgetAllocationReport.setIsFlag(budgetAllocationSubReport.getIsFlag());
             budgetAllocationReport.setIsBudgetRevision(budgetAllocationSubReport.getIsBudgetRevision());
-            budgetAllocationReport.setUnallocatedAmount(budgetAllocationSubReport.getUnallocatedAmount());
+            budgetAllocationReport.setUnallocatedAmount(new BigDecimal(budgetAllocationSubReport.getUnallocatedAmount()).toPlainString());
 
             if (budgetAllocationSubReport.getRevisedAmount() == null) {
                 budgetAllocationReport.setRevisedAmount("0");
             } else {
-                budgetAllocationReport.setRevisedAmount(budgetAllocationSubReport.getRevisedAmount());
+                budgetAllocationReport.setRevisedAmount(new BigDecimal(budgetAllocationSubReport.getRevisedAmount()).toPlainString());
             }
 
 
@@ -1930,7 +1930,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                     CdaParkingTrans cdaTransData = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(cdaParkingCrAndDr.getCdaParkingTrans(), "0");
                     if (cdaTransData != null) {
-                        cgUnitResponse.setRemainingAmount(ConverterUtils.addDecimalPoint(cdaTransData.getRemainingCdaAmount()));
+                        cgUnitResponse.setRemainingAmount(cdaTransData.getRemainingCdaAmount());//ConverterUtils.addDecimalPoint(
 //                        cgUnitResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(cdaTransData.getTotalParkingAmount()));
                         cgUnitResponse.setAmountTypeMain(amountUnitRepository.findByAmountTypeId(cdaTransData.getAmountType()));
                     }
@@ -1948,7 +1948,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                     CdaParkingTrans cdaTransData = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(cdaParkingCrAndDr.getCdaParkingTrans(), "0");
                     if (cdaTransData != null) {
-                        cgUnitResponse.setRemainingAmount(ConverterUtils.addDecimalPoint(cdaTransData.getRemainingCdaAmount()));
+                        cgUnitResponse.setRemainingAmount(new BigDecimal(cdaTransData.getRemainingCdaAmount()).toPlainString());//ConverterUtils.addDecimalPoint(
 //                        cgUnitResponse.setAllocationAmount(ConverterUtils.addDecimalPoint(cdaTransData.getTotalParkingAmount()));
                         cgUnitResponse.setAmountTypeMain(amountUnitRepository.findByAmountTypeId(cdaTransData.getAmountType()));
                     }
@@ -4883,8 +4883,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     budgetAllocationDetails.setIsBudgetRevision("0");
                     budgetAllocationDetails.setUnallocatedAmount("0");
                     budgetAllocationDetails.setUnallocatedAmount("0.0000");
-                    budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(totalAmount + ""));
-                    budgetAllocationDetails.setRevisedAmount(ConverterUtils.addDecimalPoint(revisedAmount + ""));
+                    budgetAllocationDetails.setAllocationAmount(new BigDecimal((String.valueOf(totalAmount))).toPlainString());//ConverterUtils.addDecimalPoint(
+                    budgetAllocationDetails.setRevisedAmount(new BigDecimal(String.valueOf(revisedAmount)).toPlainString());//ConverterUtils.addDecimalPoint(
                     budgetAllocationDetails.setUserId(hrData.getPid());
                     budgetAllocationDetails.setStatus("Approved");
                     budgetAllocationDetails.setAmountType(revisionDatum.getAmountType());
@@ -4908,8 +4908,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     budgetAllocation.setIsBudgetRevision("0");
                     budgetAllocation.setUnallocatedAmount("0");
                     budgetAllocation.setUnallocatedAmount("0.0000");
-                    budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(totalAmount + ""));
-                    budgetAllocation.setRevisedAmount(ConverterUtils.addDecimalPoint(revisedAmount + ""));
+                    budgetAllocation.setAllocationAmount(new BigDecimal(String.valueOf(totalAmount)).toPlainString());//ConverterUtils.addDecimalPoint(
+                    budgetAllocation.setRevisedAmount(new BigDecimal(String.valueOf(revisedAmount)).toPlainString());//ConverterUtils.addDecimalPoint(
                     budgetAllocation.setUserId(hrData.getPid());
                     budgetAllocation.setStatus("Approved");
                     budgetAllocation.setAmountType(revisionDatum.getAmountType());
