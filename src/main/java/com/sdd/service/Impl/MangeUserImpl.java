@@ -41,7 +41,11 @@ public class MangeUserImpl implements MangeUserService {
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<DefaultResponse> addUser(HrData hrData) {
-
+//        HrData hrData1=hrData;
+        boolean flag=false;
+        if(hrData.getRoleId().equalsIgnoreCase(HelperUtils.UNITADMIN)) {
+            flag = true;
+        }
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
@@ -145,21 +149,12 @@ public class MangeUserImpl implements MangeUserService {
                     } else {
                         roleData = existingHrData.getRoleId() + "," + hrData.getRoleId();
                     }
-
-
                     hrData.setPid(existingHrData.getPid());
                 }
             }
         } else {
             roleData = hrData.getRoleId();
         }
-
-
-
-
-
-
-
 
         if (hrData.getRoleId().equalsIgnoreCase(HelperUtils.CBCREATER)) {
 
@@ -184,8 +179,13 @@ public class MangeUserImpl implements MangeUserService {
 
         hrData.setRoleId(roleData);
         hrData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-        hrData.setIsActive("1");
 
+        hrData.setIsActive("1");
+        if (flag) {
+            hrData.setAdminCreatedOn(HelperUtils.getCurrentTimeStamp());
+        }else{
+            hrData.setAdminCreatedOn(existingHrData.getAdminCreatedOn());
+        }
         hrDataRepository.save(hrData);
         defaultResponse.setMsg("Data save successfully");
         return ResponseUtils.createSuccessResponse(defaultResponse, new TypeReference<DefaultResponse>() {
@@ -218,53 +218,62 @@ public class MangeUserImpl implements MangeUserService {
 
         if (userRole.equalsIgnoreCase(HelperUtils.SYSTEMADMIN)) {
             getAllRole = hrDataRepository.findByIsActive("1");
-        } else if (userRole.equalsIgnoreCase(HelperUtils.UNITADMIN)) {
+        }
+        else if (userRole.equalsIgnoreCase(HelperUtils.UNITADMIN)) {
 //            CgUnit cgUnit = cgUnitRepository.findByUnit(hrDataCheck.getUnitId());
             getAllRole = hrDataRepository.findByUnitIdAndIsActive(hrDataCheck.getUnitId(), "1");
         }
-        Collections.sort(getAllRole,Comparator.comparing(HrData::getCreatedOn).reversed());
+            Collections.sort(getAllRole, Comparator.comparing(HrData::getCreatedOn).reversed());
 
-        for (Integer i = 0; i < getAllRole.size(); i++) {
-            HrData data = getAllRole.get(i);
-            HradataResponse mainFormData = new HradataResponse();
-            BeanUtils.copyProperties(data, mainFormData);
+            for (Integer i = 0; i < getAllRole.size(); i++) {
+                HrData data = getAllRole.get(i);
+                HradataResponse mainFormData = new HradataResponse();
+                BeanUtils.copyProperties(data, mainFormData);
 
-            List<Role> setAllRole = new ArrayList<>();
+                List<Role> setAllRole = new ArrayList<>();
 
-            if (data.getRoleId() == null || data.getRoleId().isEmpty() || data.getIsActive() == null || data.getIsActive().equalsIgnoreCase("0")) {
+                if (data.getRoleId() == null || data.getRoleId().isEmpty() || data.getIsActive() == null || data.getIsActive().equalsIgnoreCase("0")) {
 //                Role getRoleViewer = roleRepository.findByRoleId("113");
 //                setAllRole.add(getRoleViewer);
-            } else {
+                } else {
 
 
-                String[] getRoleData = data.getRoleId().split(",");
+                    String[] getRoleData = data.getRoleId().split(",");
 
-                for (Integer n = 0; n < getRoleData.length; n++) {
+                    for (Integer n = 0; n < getRoleData.length; n++) {
 
-                    if (userRole.equalsIgnoreCase(HelperUtils.SYSTEMADMIN)) {
-                        if (getRoleData[n].contains(HelperUtils.UNITADMIN)) {
-                            Role getRoleViewer = roleRepository.findByRoleId(HelperUtils.UNITADMIN);
-                            setAllRole.add(getRoleViewer);
+                        if (userRole.equalsIgnoreCase(HelperUtils.SYSTEMADMIN)) {
+                            if (getRoleData[n].contains(HelperUtils.UNITADMIN)) {
+                                Role getRoleViewer = roleRepository.findByRoleId(HelperUtils.UNITADMIN);
+                                setAllRole.add(getRoleViewer);
+                            }
+
+                        } else if (userRole.equalsIgnoreCase(HelperUtils.UNITADMIN)) {
+                            if (Integer.parseInt(HelperUtils.UNITADMIN) > Integer.parseInt(getRoleData[n])) {
+                                Role getRoleViewer = roleRepository.findByRoleId((getRoleData[n]));
+                                setAllRole.add(getRoleViewer);
+                            }
                         }
 
-                    } else if (userRole.equalsIgnoreCase(HelperUtils.UNITADMIN)) {
-                        if (Integer.parseInt(HelperUtils.UNITADMIN) > Integer.parseInt(getRoleData[n])) {
-                            Role getRoleViewer = roleRepository.findByRoleId((getRoleData[n]));
-                            setAllRole.add(getRoleViewer);
-                        }
                     }
                 }
-            }
 
-            if (setAllRole.size() > 0) {
-                mainFormData.setRole(setAllRole);
-                mainFormData.setToDate(ConverterUtils.conVertDateTimeFormat(data.getToDate()));
-                mainFormData.setFromDate(ConverterUtils.conVertDateTimeFormat(data.getFromDate()));
+                if (setAllRole.size() > 0) {
+                    mainFormData.setRole(setAllRole);
+                    mainFormData.setToDate(ConverterUtils.conVertDateTimeFormat(data.getToDate()));
+                    mainFormData.setFromDate(ConverterUtils.conVertDateTimeFormat(data.getFromDate()));
+                    //mainFormData.setAdminCreatedOn(data.getAdminCreatedOn());
+                    hrListData.add(mainFormData);
+                }
 
-                hrListData.add(mainFormData);
+
             }
+        if (userRole.equalsIgnoreCase(HelperUtils.SYSTEMADMIN)) {
+
+            Collections.sort(hrListData,Comparator.comparing(HradataResponse::getAdminCreatedOn).reversed());
 
         }
+
         return ResponseUtils.createSuccessResponse(hrListData, new TypeReference<List<HradataResponse>>() {
         });
 

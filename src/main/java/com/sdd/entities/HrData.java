@@ -78,6 +78,9 @@ public class HrData {
     @Column(name = "CREATED_ON")
     private Timestamp createdOn;
 
+    @Column(name = "Admin_CREATED_ON")
+    private Timestamp adminCreatedOn;
+
     @Column(name = "UPDATED_ON", nullable = false)
     private Timestamp updatedOn;
 

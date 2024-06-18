@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -27,6 +28,7 @@ public class HradataResponse {
     private String unitId;
     private String toDate;
     private String fromDate;
+    private Timestamp adminCreatedOn;
     private List<Role> role;
 
 }
