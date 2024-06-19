@@ -13,8 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
-
+import java.sql.Timestamp;
 @CrossOrigin
 @RestController
 @RequestMapping("/unitRebaseController")
@@ -84,5 +85,13 @@ public class UnitRebaseController {
     public ResponseEntity<ApiResponse<List<CgUnitResponse>>> getIsShipCgUnit() {
         return new ResponseEntity<>(mangeRebaseService.getIsShipCgUnit(), HttpStatus.OK);
     }
+
+
+
+    @GetMapping("/getIsShipRebaseUnits/{fromdate}/{todate}")
+    public ResponseEntity<ApiResponse<List<CgUnitResponse>>> getIsShipRebaseUnits(@PathVariable(value = "fromdate") String fromdate,@PathVariable(value = "todate") String todate) {
+        return new ResponseEntity<>(mangeRebaseService.getIsShipRebaseUnits(fromdate,todate), HttpStatus.OK);
+    }
+
 
 }

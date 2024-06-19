@@ -29,9 +29,11 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.sql.Timestamp;
 
 @Service
 public class MangeRebaseImpl implements MangeRebaseService {
@@ -59,6 +61,10 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
     @Autowired
     private HrDataRepository hrDataRepository;
+
+    @Autowired
+    private BudgetRebaseRepository  budgetRebase;
+
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -4928,6 +4934,33 @@ public class MangeRebaseImpl implements MangeRebaseService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
+    public ApiResponse<List<CgUnitResponse>> getIsShipRebaseUnits(String fdDate,String tDate) {
+        Timestamp fromDate = ConverterUtils.convertDateTotimeStamp(fdDate);
+        Timestamp toDate = ConverterUtils.convertDateTotimeStamp(tDate);
+        List<CgUnitResponse> cgUnitResponseList = new ArrayList<CgUnitResponse>();
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID SESSION.LOGIN AGAIN");
+        }
+        List<String> budgetRebaseUnits = budgetRebase.findDistinctRebaseUnitIdsByOccuranceDateBetween(fromDate, toDate);
+         if(budgetRebaseUnits.size()>0){
+            for(int l=0 ;l<budgetRebaseUnits.size();l++) {
+                CgUnit cgUnit = cgUnitRepository.findByUnit(budgetRebaseUnits.get(l));
+                CgUnitResponse unit=new CgUnitResponse();
+                unit.setCbUnit(cgUnit.getUnit());
+                unit.setDescr(cgUnit.getDescr());
+                cgUnitResponseList.add(unit);
+                }
+         }else{
+             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "No Rebase found for Particular Date Range");
+         }
+        return ResponseUtils.createSuccessResponse(cgUnitResponseList, new TypeReference<List<CgUnitResponse>>() {
+        });
+    }
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<List<CgUnitResponse>> getIsShipCgUnit() {
 
         List<CgUnitResponse> cgUnitResponseList = new ArrayList<CgUnitResponse>();
@@ -4942,7 +4975,7 @@ public class MangeRebaseImpl implements MangeRebaseService {
         if (cgUnit == null) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "USER UNIT IS INVALID.PLEASE CHECK");
         }
-        String unitIdHr = hrDataCheck.getUnitId();
+        // String unitIdHr = hrDataCheck.getUnitId();
         List<CgUnit> unitDataList1 = cgUnitRepository.findByIsShipOrderByDescrAsc("1");
 /*        List<CgUnit> unitDataList1;
         if(hrDataCheck.getUnitId().equalsIgnoreCase(HelperUtils.HEADUNITID))
@@ -4970,7 +5003,6 @@ public class MangeRebaseImpl implements MangeRebaseService {
         return ResponseUtils.createSuccessResponse(cgUnitResponseList, new TypeReference<List<CgUnitResponse>>() {
         });
     }
-
 
     @Override
     public ApiResponse<List<RebaseNotificationResp>> getUnitRebaseNotificationData(String authGrpId) {

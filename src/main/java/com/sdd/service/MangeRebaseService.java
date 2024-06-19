@@ -7,8 +7,9 @@ import com.sdd.request.RebaseBudgetHistory;
 import com.sdd.request.UnitRebaseSaveReq;
 import com.sdd.response.*;
 
+import java.util.Date;
 import java.util.List;
-
+import java.sql.Timestamp;
 
 public interface MangeRebaseService {
 
@@ -31,6 +32,7 @@ public interface MangeRebaseService {
 	ApiResponse<List<CgUnitResponse>> getAllIsShipCgUnitData();
 
 	ApiResponse<List<CgUnitResponse>> getIsShipCgUnit();
+	ApiResponse<List<CgUnitResponse>> getIsShipRebaseUnits(String fromdate,String todate);
 
 	ApiResponse<List<RebaseNotificationResp>> getUnitRebaseNotificationData(String authGrpId);
 

@@ -7,8 +7,12 @@ import com.sdd.entities.CgUnit;
 import com.sdd.entities.ContigentBill;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
+
+import java.sql.Timestamp;
 
 public interface BudgetRebaseRepository extends JpaRepository<BudgetRebase, String> {
 
@@ -40,6 +44,17 @@ public interface BudgetRebaseRepository extends JpaRepository<BudgetRebase, Stri
 
 
 
+//    @Query("SELECT DISTINCT rebase_unit_id FROM budgetrebase  WHERE OCCURANCE_DATE BETWEEN :fromDate AND :toDate")
+//    List<BudgetRebase> Datta123(@Param("fromDate") Timestamp fromDate, @Param("toDate") Timestamp toDate);
+//findDistinctRebaseUnitIdByOccuranceDateBetween
+//    @Query(value="SELECT DISTINCT rebase_unit_id FROM budgetrebase",nativeQuery = true)
 
+
+
+
+
+    @Query("SELECT DISTINCT br.rebaseUnitId FROM BudgetRebase br WHERE br.occuranceDate BETWEEN :fromDate AND :toDate")
+    List<String> findDistinctRebaseUnitIdsByOccuranceDateBetween(Timestamp fromDate, Timestamp toDate);
+    // List<BudgetRebase> findAll();
 
 }
