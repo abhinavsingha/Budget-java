@@ -1889,7 +1889,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
                 for (BudgetAllocation budgetAllocation : budgetAllocationListASD) {
-                    totalAllocationAmount = ConverterUtils.doubleSum(totalAllocationAmount , Double.parseDouble(budgetAllocation.getAllocationAmount()) * amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType()).getAmount());
+                   // totalAllocationAmount = ConverterUtils.doubleSum(totalAllocationAmount , Double.parseDouble(budgetAllocation.getAllocationAmount()) * amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType()).getAmount());
+                    totalAllocationAmount = ConverterUtils.doubleSum(totalAllocationAmount , (BigDecimal.valueOf(Double.parseDouble(budgetAllocation.getAllocationAmount())).multiply(BigDecimal.valueOf(amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType()).getAmount()))).doubleValue());
                 }
             }
             totalAllocationAmountCopy=totalAllocationAmount;
