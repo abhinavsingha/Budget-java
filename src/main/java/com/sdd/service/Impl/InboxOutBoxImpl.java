@@ -1563,7 +1563,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         MangeInboxOutbox mangeInboxOutbox = mangeInboxOutBoxRepository.findByMangeInboxId(msgId);
         if (mangeInboxOutbox != null) {
             mangeInboxOutbox.setIsArchive("1");
-            mangeInboxOutbox.setStatus("Fully Approved");
+            //mangeInboxOutbox.setStatus("Fully Approved");
             mangeInboxOutBoxRepository.save(mangeInboxOutbox);
         }
 
