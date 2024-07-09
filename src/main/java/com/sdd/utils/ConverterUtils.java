@@ -505,6 +505,18 @@ public class ConverterUtils {
 
 
 
+    public static double doubleMul(double value1 ,double value2) {
+        BigDecimal bd1=BigDecimal.valueOf(value1);
+        BigDecimal bd2=BigDecimal.valueOf(value2);
+        BigDecimal result=bd1.multiply(bd2);
+        return result.doubleValue();
+    }
+    public static double doubleDiv(double value1 ,double value2) {
+        BigDecimal bd1=BigDecimal.valueOf(value1);
+        BigDecimal bd2=BigDecimal.valueOf(value2);
+        BigDecimal result=bd1.divide(bd2);
+        return result.doubleValue();
+    }
 
     public static double doubleSum(double value1 ,double value2) {
         BigDecimal bd1=BigDecimal.valueOf(value1);
