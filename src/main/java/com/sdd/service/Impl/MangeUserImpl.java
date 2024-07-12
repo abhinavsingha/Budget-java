@@ -184,7 +184,9 @@ public class MangeUserImpl implements MangeUserService {
         if (flag) {
             hrData.setAdminCreatedOn(HelperUtils.getCurrentTimeStamp());
         }else{
-            hrData.setAdminCreatedOn(existingHrData.getAdminCreatedOn());
+            if(existingHrData!=null) {
+                hrData.setAdminCreatedOn(existingHrData.getAdminCreatedOn());
+            }
         }
         hrDataRepository.save(hrData);
         defaultResponse.setMsg("Data save successfully");
