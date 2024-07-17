@@ -76,6 +76,7 @@ public class ContingentServiceImpl implements ContingentService {
 
     @Autowired
     HrDataRepository hrDataRepository;
+    private List<CdaParkingCrAndDr> cdaCrDrTransData;
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
@@ -973,7 +974,7 @@ public class ContingentServiceImpl implements ContingentService {
 
             contingentBill.setAuthoritiesList(authoritiesList);
 
-            List<CdaParkingCrAndDr> cdaCrDrTransData = parkingCrAndDrRepository.findByTransactionIdAndIsFlagAndIsRevision(contigentBill.getCbId(), "0", 0);
+            List<CdaParkingCrAndDr>cdaCrDrTransData = parkingCrAndDrRepository.findByTransactionId(contigentBill.getCbId());
 
 
             List<BudgetAllocation> budgetAllocationsDetalis = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(hrData.getUnitId(), budgetFinancialYear.getSerialNo(), contigentBill.getBudgetHeadID(), contigentBill.getAllocationTypeId(), "Approved", "0", "0");
