@@ -4880,24 +4880,22 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     double totalAmount = ConverterUtils.doubleSum(Double.parseDouble(revisionDatum.getRemainingAmount()) , Double.parseDouble(revisionDatum.getAmount()));
                     double revisedAmount = Double.parseDouble(revisionDatum.getAmount());
 
-                    List<BudgetAllocation> data = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(revisionDatum.getToUnitId(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Pending", "0", "0");
+                    List<BudgetAllocation> data = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(revisionDatum.getToUnitId(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Approved", "0", "0");
                     for (BudgetAllocation budgetAllocationRevision : data) {
                         budgetAllocationRevision.setIsBudgetRevision("1");
                         budgetAllocationRevision.setIsFlag("1");
                         budgetAllocationRevision.setIsTYpe("REVISION");
-                        budgetAllocationRevision.setStatus("Rejected");
                         budgetAllocationRevision.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                         budgetAllocationRevision.setRevisedAmount(revisionDatum.getReviserAmount());
                         budgetAllocationRepository.save(budgetAllocationRevision);
                     }
 
 
-                    List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(revisionDatum.getToUnitId(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Pending", "0", "0");
+                    List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(revisionDatum.getToUnitId(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Approved", "0", "0");
                     for (BudgetAllocationDetails budgetAllocationDetails : budgetAllocationDetailsList) {
                         budgetAllocationDetails.setIsBudgetRevision("1");
                         budgetAllocationDetails.setRemarks("REVISION");
                         budgetAllocationDetails.setIsTYpe("REVISION");
-                        budgetAllocationDetails.setStatus("Rejected");
                         budgetAllocationDetails.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                         budgetAllocationDetailsRepository.save(budgetAllocationDetails);
                     }
@@ -4995,19 +4993,17 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 
 
-                        List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Pending", "0", "0");
+                        List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Approved", "0", "0");
                         for (BudgetAllocationDetails budgetAllocationRevision : budgetAllocationDetailsList) {
                             budgetAllocationRevision.setIsTYpe("REVISION");
-                            budgetAllocationRevision.setStatus("Rejected");
                             budgetAllocationRevision.setIsBudgetRevision("1");
                             budgetAllocationRevision.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             budgetAllocationDetailsRepository.save(budgetAllocationRevision);
                         }
 
-                        List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Pending", "0", "0");
+                        List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Approved", "0", "0");
                         for (BudgetAllocation budgetAllocationRevision1 : dataBudget) {
                             budgetAllocationRevision1.setIsTYpe("REVISION");
-                            budgetAllocationRevision1.setStatus("Rejected");
                             budgetAllocationRevision1.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                             budgetAllocationRevision1.setIsBudgetRevision("1");
                             budgetAllocationRevision1.setIsFlag("1");
@@ -5229,20 +5225,18 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                 CgUnit cgUnitadaat =  cgUnitRepository.findByUnit(revisionRemainingAmountSend.get(v).getToUnitId());
 
-                List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(revisionRemainingAmountSend.get(v).getToUnitId(), revisionRemainingAmountSend.get(v).getFinYearId(), revisionRemainingAmountSend.get(v).getBudgetHeadId(), revisionRemainingAmountSend.get(v).getAllocTypeId(), "Pending", "0", "0");
+                List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(revisionRemainingAmountSend.get(v).getToUnitId(), revisionRemainingAmountSend.get(v).getFinYearId(), revisionRemainingAmountSend.get(v).getBudgetHeadId(), revisionRemainingAmountSend.get(v).getAllocTypeId(), "Approved", "0", "0");
 
                 for (BudgetAllocationDetails budgetAllocationRevision : budgetAllocationDetailsList) {
                     budgetAllocationRevision.setIsBudgetRevision("1");
-                    budgetAllocationRevision.setStatus("Rejected");
                     budgetAllocationRevision.setIsTYpe("REVISION");
                     budgetAllocationDetailsRepository.save(budgetAllocationRevision);
                 }
 
-                List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(revisionRemainingAmountSend.get(v).getToUnitId(), revisionRemainingAmountSend.get(v).getFinYearId(), revisionRemainingAmountSend.get(v).getBudgetHeadId(), revisionRemainingAmountSend.get(v).getAllocTypeId(), "Pending", "0", "0");
+                List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(revisionRemainingAmountSend.get(v).getToUnitId(), revisionRemainingAmountSend.get(v).getFinYearId(), revisionRemainingAmountSend.get(v).getBudgetHeadId(), revisionRemainingAmountSend.get(v).getAllocTypeId(), "Approved", "0", "0");
                 for (BudgetAllocation budgetAllocationRevision : dataBudget) {
                     budgetAllocationRevision.setIsBudgetRevision("1");
                     budgetAllocationRevision.setIsFlag("1");
-                    budgetAllocationRevision.setStatus("Rejected");
                     budgetAllocationRevision.setIsTYpe("REVISION");
                     budgetAllocationRepository.save(budgetAllocationRevision);
                 }
@@ -5478,7 +5472,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
     public void rejectedAllPendingRevisionOrAllocation(CgUnit cgUnit,CdaRevisionData revisionDatum) {
 
-        List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Pending", "0", "1");
+        List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Approved", "0", "1");
         List<BudgetAllocationDetails> budgetAllocationDetailsList3 = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Pending", "0", "1");
         List<BudgetAllocationDetails> budgetAllocationDetailsList2 = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Pending", "0", "0");
 
@@ -5486,21 +5480,19 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         budgetAllocationDetailsList.addAll(budgetAllocationDetailsList3);
         for (BudgetAllocationDetails budgetAllocationRevision : budgetAllocationDetailsList) {
             budgetAllocationRevision.setIsTYpe("REVISION");
-            budgetAllocationRevision.setStatus("Rejected");
             budgetAllocationRevision.setIsBudgetRevision("1");
             budgetAllocationRevision.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
             budgetAllocationDetailsRepository.save(budgetAllocationRevision);
         }
 
 
-        List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Pending", "0", "1");
+        List<BudgetAllocation> dataBudget = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Approved", "0", "1");
         List<BudgetAllocation> dataBudget3 = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Pending", "0", "1");
         List<BudgetAllocation> dataBudget2 = budgetAllocationRepository.findByToUnitAndFinYearAndSubHeadAndAllocationTypeIdAndStatusAndIsFlagAndIsBudgetRevision(cgUnit.getUnit(), revisionDatum.getFinYearId(), revisionDatum.getBudgetHeadId(), revisionDatum.getAllocTypeId(), "Pending", "0", "0");
         dataBudget.addAll(dataBudget3);
         dataBudget.addAll(dataBudget2);
         for (BudgetAllocation budgetAllocationRevision : dataBudget) {
             budgetAllocationRevision.setIsBudgetRevision("1");
-            budgetAllocationRevision.setStatus("Rejected");
             budgetAllocationRevision.setIsTYpe("REVISION");
             budgetAllocationRepository.save(budgetAllocationRevision);
         }
@@ -5508,7 +5500,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (BudgetAllocationDetails budgetAllocationRevision : budgetAllocationDetailsList) {
             List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupId(budgetAllocationRevision.getAuthGroupId());
             for (MangeInboxOutbox mangeInboxOutbox : mangeInboxOutboxList) {
-                mangeInboxOutbox.setStatus("Rejected");
+//                mangeInboxOutbox.setStatus("Rejected");
                 mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 mangeInboxOutBoxRepository.save(mangeInboxOutbox);
             }
@@ -5518,14 +5510,11 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (BudgetAllocation budgetAllocationRevision : dataBudget) {
             List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupId(budgetAllocationRevision.getAuthGroupId());
             for (MangeInboxOutbox mangeInboxOutbox : mangeInboxOutboxList) {
-                mangeInboxOutbox.setStatus("Rejected");
+//                mangeInboxOutbox.setStatus("Rejected");
                 mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 mangeInboxOutBoxRepository.save(mangeInboxOutbox);
             }
         }
-
-
-
     }
 
 
@@ -5915,10 +5904,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             data.add(cgUnitResponse);
         }
         response.setCdaParkingTrans(data);
-
         return (response);
     }
-
 }
 
 
