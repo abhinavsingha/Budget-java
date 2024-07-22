@@ -4901,7 +4901,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     }
 
 
-                    if(totalAmount > 0) {
 
                         BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
                         budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
@@ -4971,7 +4970,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             parkingCrAndDrRepository.save(cdData);
                         }
 
-                    }
 
                 } else {
 
@@ -5076,7 +5074,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                             AmountUnit allocationAmountUnit = amountUnitRepository.findByAmountTypeId(budgetAllocation.getAmountType());
                             double allocationAmount = ConverterUtils.doubleMinus((Double.parseDouble(budgetAllocation.getAllocationAmount()) * allocationAmountUnit.getAmount()) , totalSelfOrLowerAmount) / actualAmount.getAmount();
 
-                            if(allocationAmount > 0){
 
                                 budgetAllocation.setIsTYpe("AFTER REVISION");
                                 budgetAllocation.setIsBudgetRevision("0");
@@ -5146,7 +5143,6 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                                 mangeInboxOutboxNotificationOnly.setState("CR");
                                 mangeInboxOutboxNotificationOnly.setIsRevision(1);
                                 mangeInboxOutBoxRepository.save(mangeInboxOutboxNotificationOnly);
-                            }
 
 
                         }
