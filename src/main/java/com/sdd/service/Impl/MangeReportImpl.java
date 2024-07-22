@@ -10031,8 +10031,8 @@ public class MangeReportImpl implements MangeReportService {
                     List<BudgetRebase> rebaseData1 = rebaseDatas.stream()
                             .filter(e -> e.getOccuranceDate().after(fromDateFormate) && e.getOccuranceDate().before(toDateFormate)).collect(Collectors.toList());
                     List<BudgetRebase> rebaseDatass = rebaseData1.stream().sorted(Comparator.comparing(data -> data.getBudgetHeadId().substring(data.getBudgetHeadId().length() - 2))).collect(Collectors.toList());
-                    List<BudgetRebase> rebaseData = rebaseDatass.stream().filter(e -> Double.valueOf(e.getAllocAmount()) != 0).collect(Collectors.toList());
-
+                    //List<BudgetRebase> rebaseData = rebaseDatass.stream().filter(e -> Double.valueOf(e.getAllocAmount()) != 0).collect(Collectors.toList());
+                    List<BudgetRebase> rebaseData = rebaseDatass;
                     if (rebaseData.size() <= 0) {
                         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "DATA NOT FOUND IN THIS DATE RANGE");
                     }

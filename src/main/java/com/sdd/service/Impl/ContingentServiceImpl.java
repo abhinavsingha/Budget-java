@@ -1237,10 +1237,10 @@ public class ContingentServiceImpl implements ContingentService {
         }
 
         List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
-        List<CdaParkingTrans> checkCdaParkingPreviewsData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cbData.get(0).getFinYear(), cbData.get(0).getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
-        if (checkCdaParkingPreviewsData.isEmpty()) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO CDA FOUND.PLEASE FILL CDA FIRST");
-        }
+//        List<CdaParkingTrans> checkCdaParkingPreviewsData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cbData.get(0).getFinYear(), cbData.get(0).getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
+//        if (checkCdaParkingPreviewsData.isEmpty()) {
+//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO CDA FOUND.PLEASE FILL CDA FIRST");
+//        }
 
 
         if (approveContigentBillRequest.getStatus().equalsIgnoreCase("Verified")) {
@@ -1555,10 +1555,10 @@ public class ContingentServiceImpl implements ContingentService {
 
 
         List<AllocationType> allocationType = allocationRepository.findByIsFlag("1");
-        List<CdaParkingTrans> checkCdaParkingPreviewsData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cbData.get(0).getFinYear(), cbData.get(0).getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
-        if (checkCdaParkingPreviewsData.isEmpty()) {
-            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO CDA FOUND.PLEASE FILL CDA FIRST");
-        }
+//        List<CdaParkingTrans> checkCdaParkingPreviewsData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAndAllocTypeIdAndUnitId(cbData.get(0).getFinYear(), cbData.get(0).getBudgetHeadID(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
+//        if (checkCdaParkingPreviewsData.isEmpty()) {
+//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "NO CDA FOUND.PLEASE FILL CDA FIRST");
+//        }
 
 
         String status = "";
