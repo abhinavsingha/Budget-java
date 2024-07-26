@@ -184,7 +184,14 @@ public class DashboardServiceImpl implements DashBoardService {
 
         if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER)) {
 
-            arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
+            //arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
+
+            List<String> dataIscgBg = new ArrayList<>();
+            dataIscgBg.add("BG");
+            dataIscgBg.add("BR");
+            dataIscgBg.add("RR");
+            arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0","1",dataIscgBg));
+
             archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
 
 
@@ -217,7 +224,9 @@ public class DashboardServiceImpl implements DashBoardService {
 //            inboxOutboxesList = mangeInboxOutBoxRepository.findByInboxDataForAllRole(hrDataCheck.getUnitId(), "0", "0", "BG", "BR");
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
 
-            arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
+            arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0","1",dataIscgBg));
+
+            //arrpovedLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
             archiveLis.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
 
 
@@ -501,13 +510,14 @@ public class DashboardServiceImpl implements DashBoardService {
 
         if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER)) {
 
-            approvedboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
+           // approvedboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
             archiveboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
 
             List<String> dataIscgBg = new ArrayList<>();
             dataIscgBg.add("BG");
             dataIscgBg.add("BR");
             dataIscgBg.add("RR");
+            approvedboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0","1",dataIscgBg));
 
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
 
@@ -522,7 +532,7 @@ public class DashboardServiceImpl implements DashBoardService {
                 }
             }
         } else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
-            approvedboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
+
             archiveboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
 
             List<String> dataIscgBg = new ArrayList<>();
@@ -534,7 +544,8 @@ public class DashboardServiceImpl implements DashBoardService {
             dataIscgBg.add("SBG");
             dataIscgBg.add("CDAI");
             dataIscgBg.add("BGR");
-
+            //approvedboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
+            approvedboxesList.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0","1",dataIscgBg));
 
             inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
 

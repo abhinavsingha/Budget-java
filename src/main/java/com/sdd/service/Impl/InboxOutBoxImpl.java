@@ -1171,8 +1171,8 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         }
 
 
-        List<MangeInboxOutbox> inboxOutboxesList = new ArrayList<MangeInboxOutbox>();
-        List<MangeInboxOutbox> archiveMain = new ArrayList<MangeInboxOutbox>();
+      //  List<MangeInboxOutbox> inboxOutboxesList = new ArrayList<MangeInboxOutbox>();
+       // List<MangeInboxOutbox> archiveMain = new ArrayList<MangeInboxOutbox>();
         List<MangeInboxOutbox> approvedMain = new ArrayList<MangeInboxOutbox>();
 
         String getCurrentRole = "";
@@ -1183,15 +1183,17 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         }
 
         if (getCurrentRole.contains(HelperUtils.BUDGETAPPROVER)) {
-            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
+
 
 
             List<String> dataIscgBg = new ArrayList<>();
             dataIscgBg.add("BG");
             dataIscgBg.add("BR");
             dataIscgBg.add("RR");
+           // approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
+            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0","1",dataIscgBg));
 
-            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
+            //inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
 
         }
         else if (getCurrentRole.contains(HelperUtils.BUDGETMANGER)) {
@@ -1206,9 +1208,10 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
             dataIscgBg.add("SBG");
             dataIscgBg.add("CDAI");
 
-            inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
+           // inboxOutboxesList = mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0", "0", dataIscgBg);
+            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsArchiveAndIsApprovedAndIsBgcgInOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "0","1",dataIscgBg));
 
-            approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
+            //approvedMain.addAll(mangeInboxOutBoxRepository.findByToUnitAndIsApprovedOrderByCreatedOnDesc(hrDataCheck.getUnitId(), "1"));
 
         }
         else if (getCurrentRole.contains(HelperUtils.CBCREATER)) {
