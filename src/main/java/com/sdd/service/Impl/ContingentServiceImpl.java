@@ -114,9 +114,9 @@ public class ContingentServiceImpl implements ContingentService {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID CB UNIT ID");
             }
 
-            if (contingentBillSaveRequest.getCbNumber() == null || contingentBillSaveRequest.getCbNumber().isEmpty()) {
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB NUMBER CAN NOT BE BLANK");
-            }
+//            if (contingentBillSaveRequest.getCbNumber() == null || contingentBillSaveRequest.getCbNumber().isEmpty()) {
+//                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CB NUMBER CAN NOT BE BLANK");
+//            }
 
             if (contingentBillSaveRequest.getSectionNumber() == null || contingentBillSaveRequest.getSectionNumber().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "SECTION NUMBER CAN NOT BE BLANK");
@@ -293,7 +293,7 @@ public class ContingentServiceImpl implements ContingentService {
             ContigentBill contigentBill = new ContigentBill();
 
             contigentBill.setCbId(HelperUtils.getContigentId());
-            contigentBill.setCbNo(contingentBillSaveRequest.getCbNumber());
+
             contigentBill.setCbAmount(ConverterUtils.addDecimalPoint(contingentBillSaveRequest.getCbAmount()));
             contigentBill.setCbDate(ConverterUtils.convertDateTotimeStamp(contingentBillSaveRequest.getCbDate()));
             contigentBill.setCbUnitId(contingentBillSaveRequest.getUnit());
@@ -343,8 +343,14 @@ public class ContingentServiceImpl implements ContingentService {
             }
             allocationAmount = ConverterUtils.doubleSum(allocationAmount , totalBill);
             contigentBill.setAllocatedAmount(allocationAmount + "");
+            CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
+            BudgetHead head= subHeadRepository.findByBudgetCodeId(contingentBillSaveRequestList.get(0).getBudgetHeadId());
 
+            String finYear=(budgetFinancialYearRepository.findBySerialNo(contingentBillSaveRequest.getBudgetFinancialYearId())).getFinYear();
+            List<ContigentBill>bills=contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadID(contigentBill.getCbUnitId(),contigentBill.getFinYear(),contigentBill.getBudgetHeadID());
+            String cbNo=cgUnit.getCgUnitShort()+"/CB/"+head.getSubheadShort()+'/'+(bills.size()+1)+'/'+finYear;
 
+            contigentBill.setCbNo(cbNo);
             ContigentBill saveData = contigentBillRepository.save(contigentBill);
 
 
@@ -398,7 +404,8 @@ public class ContingentServiceImpl implements ContingentService {
         }
 
 
-        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
+//        CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
+        BudgetHead head= subHeadRepository.findByBudgetCodeId(contingentBillSaveRequestList.get(0).getBudgetHeadId());
         MangeInboxOutbox mangeInboxOutbox = new MangeInboxOutbox();
         mangeInboxOutbox.setIsRebase("0");
         mangeInboxOutbox.setMangeInboxId(HelperUtils.getMangeInboxId());
@@ -407,7 +414,8 @@ public class ContingentServiceImpl implements ContingentService {
         mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
         mangeInboxOutbox.setToUnit(toUnitId);
         mangeInboxOutbox.setStatus("Pending");
-        mangeInboxOutbox.setType(cgUnit.getDescr());
+//        mangeInboxOutbox.setType(cgUnit.getDescr());
+        mangeInboxOutbox.setType(head.getSubHeadDescr());
         mangeInboxOutbox.setGroupId(authGroupId);
         mangeInboxOutbox.setFromUnit(toUnitId);
         mangeInboxOutbox.setRoleId(hrData.getRoleId());
