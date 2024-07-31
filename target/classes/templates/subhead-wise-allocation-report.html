@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"></meta>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+    <title>Sub Head Allocation Report</title>
+    <style>
+        .header {
+            text-align: center;
+        }
+        .bbtm{
+             border-bottom: 1px solid transparent !important;
+         }
+        .brtm{
+            border-right: 1px solid transparent !important;
+        }
+        .table {
+            display: flex;
+        }
+
+        .float {
+            float: right;
+
+        }
+
+        .auth {
+            padding-left: 72px;
+        }
+
+        .table2,
+        .the,
+        .them.themed {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+
+
+        .count {
+            text-align: center;
+            padding-top: 200px;
+        }
+
+        .table3 {
+            padding-top: 55px;
+        }
+
+        .tab {
+            padding-left: 85px;
+        }
+        .table4{
+            padding-top: 15px;
+        }
+        .wrap{
+            width:70%;
+            margin: 100px auto;
+        }
+        .sign {
+            float: right;
+            padding-right: 20px;
+            padding-top: 20px;
+            width:27%;
+        }
+        .sign ul li{
+            margin-bottom: 10px;
+        }
+        .count {
+            text-align: center;
+            padding-top: 200px;
+        }
+
+        .table3 {
+            padding-top: 55px;
+        }
+
+        .tab {
+            padding-left: 85px;
+        }
+        .table4{
+            padding-top: 15px;
+        }
+        .wrap{
+            width:70%;
+            margin: 100px auto;
+        }
+        .date {
+            float: left;
+            padding-left: 20px;
+            padding-top: 20px;
+            width:45%;
+        }
+
+        .count {
+            text-align: center;
+            padding-top: 200px;
+        }
+
+        .table3 {
+            padding-top: 55px;
+        }
+
+        .tab {
+            padding-left: 85px;
+        }
+        .table4{
+            padding-top: 15px;
+        }
+        .wrap{
+            width:70%;
+            margin: 100px auto;
+        }
+    </style>
+
+</head>
+
+
+<body>
+    <!--header-->
+    <div class="wrap">
+        <div class="header"> <strong>SUB HEAD WISE ALLOCATION REPORT</strong></div>
+
+        <table style="width:100%" class="table2">
+            <tbody>
+
+                    <tr>
+                        <td colspan="2" rowspan="2" height="60" align="center" valign="middle" class="the"><b>Financial Year : ${finYear_placeholder}</b></td>
+                        </tr>
+                    <tr>
+                        <td colspan="2" align="center" valign="middle" class="the"><b>Subhead:  ${subHd_placeholder}</b></td>
+                        </tr>
+                    <tr>
+                        <td style="border-right: 2px solid #000000" height="41" align="left" valign="middle" class="the"><b>S.L</b></td>
+                        <td class="the"><b>Unit</b></td>
+                        <td class="the"><b>Allocation Type</b></td>
+                        <td class="the"><b>Amount (in ${amountType_placeholder})</b></td>
+                    </tr>
+                ${data_placeholder}
+                    <tr>
+                        <td height="41" align="left" valign="middle" class="the brtm" style=" border-right: 1px solid transparent !important;"><b>Total</b></td>
+                        <td class="the brtm" style=" border-right: 1px solid transparent !important;"></td>
+                        <td class="the"></td>
+                        <td class="the"><b> ${total_placeholder}</b></td>
+                    </tr>
+
+
+            </tbody>
+            
+
+        </table>
+        <div class="sign">
+            <ul style="list-style: none; margin-top: 0;">
+                <li>${name_placeholder}</li>
+                <li>${unit_placeholder}</li>
+                <li>${rank_placeholder}</li>
+            </ul>
+
+        </div>
+        <div class="date">
+            Date-${date_placeholder}
+        </div>
+    </div>
+
+</body>
+
+</html>

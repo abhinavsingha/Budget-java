@@ -30,11 +30,11 @@ public class HrData {
     @Column(name = "fullName")
     private String fullName;
 
-    @Column(name = "rank")
-   private String rank;
+//    @Column(name = "rank")
+//   private String rank;
 
-//    @Column(name = "off_rank")
-//    private String rank;
+    @Column(name = "off_rank")
+    private String rank;
 
     @Column(name = "dob")
     private String dob;
