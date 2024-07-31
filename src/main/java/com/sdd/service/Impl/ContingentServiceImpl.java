@@ -1291,65 +1291,8 @@ public class ContingentServiceImpl implements ContingentService {
                 CdaParkingCrAndDr cdaParkingCrAndDr = parkingCrAndDrRepository.findByCdaCrdrIdAndIsFlagAndIsRevision(approveContigentBillRequest.getCdaParkingId().get(i).getCdacrDrId(), "0", 0);
                 CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingId(cdaParkingCrAndDr.getCdaParkingTrans());
 
-                if (cdaParkingTrans.getAllocTypeId().equalsIgnoreCase(allocationType.get(0).getAllocTypeId())) {
-
-                    if (cdaParkingTrans.getIsFlag().equalsIgnoreCase("1")) {
-
-                        List<CdaParkingTrans> cdaParkingPreviewsData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cbData.get(0).getFinYear(), cbData.get(0).getBudgetHeadID(), cdaParkingTrans.getGinNo(), "0", cdaParkingTrans.getAllocTypeId(), hrData.getUnitId());
-
-                        if (cdaParkingPreviewsData.isEmpty()) {
-
-                            CdaParkingTrans newCdaTrans = new CdaParkingTrans();
-                            BeanUtils.copyProperties(cdaParkingTrans, newCdaTrans);
-                            AmountUnit cdaAmountUnit = amountUnitRepository.findByAmountTypeId(amountTypeID);
-
-                            newCdaTrans.setAmountType(amountTypeID);
-                            newCdaTrans.setIsFlag("0");
-
-                            newCdaTrans.setRemainingCdaAmount("" + ConverterUtils.addDoubleValue(Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount()) / cdaAmountUnit.getAmount()));
-
-                            newCdaTrans.setRemarks("CDA CREATED.CB BILL REJECTED");
-
-                            cdaParkingTransRepository.save(newCdaTrans);
-
-
-                        } else {
-
-                            AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingPreviewsData.get(0).getAmountType());
-                            double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
-
-                            double parkingAmount = Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount());
-
-                            double bakiPesa = ConverterUtils.doubleSum(remainingCdaParkingAmount, parkingAmount) / cadAmountUnit.getAmount();
-                            //cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
-                            bakiPesa = (ConverterUtils.addDoubleValue(bakiPesa));
-                            cdaParkingTrans.setRemainingCdaAmount(bakiPesa + "");
-                            cdaParkingTransRepository.save(cdaParkingTrans);
-
-                        }
-
-
-                    } else {
-
-                        if (cdaParkingTrans.getAllocTypeId().equalsIgnoreCase(allocationType.get(0).getAllocTypeId())) {
-                            AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
-                            double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
-
-                            double parkingAmount = Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount());
-
-                            double bakiPesa = ConverterUtils.doubleSum(remainingCdaParkingAmount, parkingAmount) / cadAmountUnit.getAmount();
-                            //cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
-                            bakiPesa = (ConverterUtils.addDoubleValue(bakiPesa));
-                            cdaParkingTrans.setRemainingCdaAmount(bakiPesa + "");
-                            cdaParkingTransRepository.save(cdaParkingTrans);
-
-                        }
-                    }
-
-
-                } else {
-
-                    List<CdaParkingTrans> cdaParkingPreviewsData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cbData.get(0).getFinYear(), cbData.get(0).getBudgetHeadID(), cdaParkingTrans.getGinNo(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
+                if (cdaParkingTrans == null) {
+                    List<CdaParkingTrans> cdaParkingPreviewsData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cbData.get(0).getFinYear(), cbData.get(0).getBudgetHeadID(), cdaParkingCrAndDr.getGinNo(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
 
                     if (cdaParkingPreviewsData.isEmpty()) {
 
@@ -1381,13 +1324,112 @@ public class ContingentServiceImpl implements ContingentService {
                         double bakiPesa = ConverterUtils.doubleSum(remainingCdaParkingAmount, parkingAmount) / cadAmountUnit.getAmount();
                         bakiPesa = (ConverterUtils.addDoubleValue(bakiPesa));
                         cdaParkingTransMain.setRemainingCdaAmount(bakiPesa + "");
-                        //cdaParkingTransMain.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                        ///cdaParkingTransMain.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
                         cdaParkingTransMain.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                         cdaParkingTransMain.setRemarks("CDA UPDATE IF ALLOCATION IS DIFFERENT AND CB REJECT1");
                         cdaParkingTransRepository.save(cdaParkingTransMain);
 
                     }
+                } else {
 
+                    if (cdaParkingTrans.getAllocTypeId().equalsIgnoreCase(allocationType.get(0).getAllocTypeId())) {
+
+                        if (cdaParkingTrans.getIsFlag().equalsIgnoreCase("1")) {
+
+                            List<CdaParkingTrans> cdaParkingPreviewsData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cbData.get(0).getFinYear(), cbData.get(0).getBudgetHeadID(), cdaParkingTrans.getGinNo(), "0", cdaParkingTrans.getAllocTypeId(), hrData.getUnitId());
+
+                            if (cdaParkingPreviewsData.isEmpty()) {
+
+                                CdaParkingTrans newCdaTrans = new CdaParkingTrans();
+                                BeanUtils.copyProperties(cdaParkingTrans, newCdaTrans);
+                                AmountUnit cdaAmountUnit = amountUnitRepository.findByAmountTypeId(amountTypeID);
+
+                                newCdaTrans.setAmountType(amountTypeID);
+                                newCdaTrans.setIsFlag("0");
+
+                                newCdaTrans.setRemainingCdaAmount("" + ConverterUtils.addDoubleValue(Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount()) / cdaAmountUnit.getAmount()));
+
+                                newCdaTrans.setRemarks("CDA CREATED.CB BILL REJECTED");
+
+                                cdaParkingTransRepository.save(newCdaTrans);
+
+
+                            } else {
+
+                                AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingPreviewsData.get(0).getAmountType());
+                                double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+
+                                double parkingAmount = Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount());
+
+                                double bakiPesa = ConverterUtils.doubleSum(remainingCdaParkingAmount, parkingAmount) / cadAmountUnit.getAmount();
+                                //cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                                bakiPesa = (ConverterUtils.addDoubleValue(bakiPesa));
+                                cdaParkingTrans.setRemainingCdaAmount(bakiPesa + "");
+                                cdaParkingTransRepository.save(cdaParkingTrans);
+
+                            }
+
+
+                        } else {
+
+                            if (cdaParkingTrans.getAllocTypeId().equalsIgnoreCase(allocationType.get(0).getAllocTypeId())) {
+                                AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
+                                double remainingCdaParkingAmount = Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+
+                                double parkingAmount = Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount());
+
+                                double bakiPesa = ConverterUtils.doubleSum(remainingCdaParkingAmount, parkingAmount) / cadAmountUnit.getAmount();
+                                //cdaParkingTrans.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                                bakiPesa = (ConverterUtils.addDoubleValue(bakiPesa));
+                                cdaParkingTrans.setRemainingCdaAmount(bakiPesa + "");
+                                cdaParkingTransRepository.save(cdaParkingTrans);
+
+                            }
+                        }
+
+
+                    } else {
+
+                        List<CdaParkingTrans> cdaParkingPreviewsData = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndGinNoAndIsFlagAndAndAllocTypeIdAndUnitId(cbData.get(0).getFinYear(), cbData.get(0).getBudgetHeadID(), cdaParkingTrans.getGinNo(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
+
+                        if (cdaParkingPreviewsData.isEmpty()) {
+
+                            CdaParkingTrans newCdaTrans = new CdaParkingTrans();
+                            BeanUtils.copyProperties(cdaParkingTrans, newCdaTrans);
+                            AmountUnit cdaAmountUnit = amountUnitRepository.findByAmountTypeId(amountTypeID);
+
+                            newCdaTrans.setAmountType(amountTypeID);
+                            newCdaTrans.setIsFlag("0");
+                            cdaParkingTrans.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                            cdaParkingTrans.setRemarks("CDA UPDATE IF ALLOCATION IS DIFFERENT AND CB REJECT21");
+                            newCdaTrans.setAllocTypeId(allocationType.get(0).getAllocTypeId());
+
+                            newCdaTrans.setRemainingCdaAmount("" + ConverterUtils.addDoubleValue(Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount()) / cdaAmountUnit.getAmount()));
+                            newCdaTrans.setRemarks("CDA CREATED.CB BILL REJECTED");
+
+                            cdaParkingTransRepository.save(newCdaTrans);
+
+
+                        } else {
+
+                            CdaParkingTrans cdaParkingTransMain = cdaParkingPreviewsData.get(0);
+
+                            AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingPreviewsData.get(0).getAmountType());
+                            double remainingCdaParkingAmount = Double.parseDouble(cdaParkingPreviewsData.get(0).getRemainingCdaAmount()) * cadAmountUnit.getAmount();
+
+                            double parkingAmount = Double.parseDouble(approveContigentBillRequest.getCdaParkingId().get(i).getAllocatedAmount());
+
+                            double bakiPesa = ConverterUtils.doubleSum(remainingCdaParkingAmount, parkingAmount) / cadAmountUnit.getAmount();
+                            bakiPesa = (ConverterUtils.addDoubleValue(bakiPesa));
+                            cdaParkingTransMain.setRemainingCdaAmount(bakiPesa + "");
+                            //cdaParkingTransMain.setRemainingCdaAmount(ConverterUtils.addDecimalPoint(bakiPesa + ""));
+                            cdaParkingTransMain.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
+                            cdaParkingTransMain.setRemarks("CDA UPDATE IF ALLOCATION IS DIFFERENT AND CB REJECT1");
+                            cdaParkingTransRepository.save(cdaParkingTransMain);
+
+                        }
+
+                    }
                 }
 
             }
