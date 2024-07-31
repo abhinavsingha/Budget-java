@@ -92,6 +92,8 @@ public interface BudgetAllocationService {
 	ApiResponse<BudgetAllocationSaveResponse> saveBudgetRevision3(BudgetAllocationSaveUnitRequest budgetAllocationSaveRequestList);
 
 	ApiResponse<List<CgUnitResponse>> getAllCgUnitData();
+	ApiResponse<List<CgUnitResponse>> getAllCgUnitHierarchy();
+
 
 	ApiResponse<List<AllocationType>> getAllocationByFinYear(String finyear);
 

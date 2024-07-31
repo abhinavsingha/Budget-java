@@ -24,6 +24,7 @@ public interface CgUnitRepository extends JpaRepository<CgUnit, Long> {
 
 
   List<CgUnit> findByBudGroupUnitLike(String unitId);
+  List<CgUnit> findByBudGroupUnitLikeOrderByDescrAsc(String unitId);
 
   CgUnit findByStationId(String stationId);
 

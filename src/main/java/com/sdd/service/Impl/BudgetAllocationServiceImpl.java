@@ -5551,7 +5551,42 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         return ResponseUtils.createSuccessResponse(cgUnitResponseList, new TypeReference<List<CgUnitResponse>>() {
         });
     }
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public ApiResponse<List<CgUnitResponse>> getAllCgUnitHierarchy() {
 
+        List<CgUnitResponse> cgUnitResponseList = new ArrayList<CgUnitResponse>();
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+        if (hrDataCheck == null) {
+            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID SESSION.LOGIN AGAIN");
+        }
+        HrData hrData = hrDataRepository.findByPidAndIsActive(hrDataCheck.getPid(), "1");
+//        //CgUnit cgUnit = cgUnitRepository.findByUnit(hrData.getUnitId());
+//        if (cgUnit == null) {
+//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "USER UNIT IS INVALID.PLEASE CHECK");
+//        }
+        List<CgUnit> unitDataList = cgUnitRepository.findByBudGroupUnitLikeOrderByDescrAsc("%" +hrData.getUnitId()+ "%");
+
+//        if (unitDataList.size() <= 0) {
+//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT lIST NOT FOUND ");
+//        }
+        for (int n = 0; n < unitDataList.size(); n++) {
+            CgUnitResponse cgUnitResponse = new CgUnitResponse();
+            BeanUtils.copyProperties(unitDataList.get(n), cgUnitResponse);
+            CgStation cgStation = null;
+            if (unitDataList.get(n).getStationId() == null) {
+            } else {
+                cgStation = cgStationRepository.findByStationId(unitDataList.get(n).getStationId());
+            }
+            cgUnitResponse.setCgStation(cgStation);
+            cgUnitResponseList.add(cgUnitResponse);
+        }
+
+        return ResponseUtils.createSuccessResponse(cgUnitResponseList, new TypeReference<List<CgUnitResponse>>() {
+        });
+    }
 
     public List<CgUnit> removeDuplicates(List<CgUnit> dataList) {
         List<CgUnit> resultList = new ArrayList<CgUnit>();
