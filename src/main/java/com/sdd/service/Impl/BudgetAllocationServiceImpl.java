@@ -5476,6 +5476,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 try {
                     mangeInboxOutbox.setStatus("Fully Approved");
                     mangeInboxOutbox.setIsApproved("1");
+                    mangeInboxOutbox.setIsArchive("0");
                     mangeInboxOutBoxRepository.save(mangeInboxOutbox);
                 } catch (Exception e) {
 
