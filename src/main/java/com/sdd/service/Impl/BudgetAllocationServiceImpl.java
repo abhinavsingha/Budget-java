@@ -1485,7 +1485,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             if (!(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getIsAutoAssignAllocation().equalsIgnoreCase("1"))) {
 
                 BudgetAllocationDetails budgetAllocationDetails = new BudgetAllocationDetails();
-                budgetAllocationDetails.setAllocationAmount(ConverterUtils.addDecimalPoint(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount()));
+                budgetAllocationDetails.setAllocationAmount(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAmount());
                 budgetAllocationDetails.setRevisedAmount(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getRevisedAmount());//ConverterUtils.addDecimalPoint();
                 budgetAllocationDetails.setAllocationId(HelperUtils.getBudgetAllocationTypeId());
                 budgetAllocationDetails.setAllocationDate(HelperUtils.getCurrentTimeStamp());
@@ -2347,9 +2347,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                     for (BudgetAllocation allocation : reData2) {
                         AmountUnit subAmountType = amountUnitRepository.findByAmountTypeId(allocation.getAmountType());
-                        totalAllocationT = ConverterUtils.doubleSum(totalAllocationT , (Double.parseDouble(allocation.getAllocationAmount()) * subAmountType.getAmount()));
+                        totalAllocationT = ConverterUtils.doubleSum(totalAllocationT , ConverterUtils.doubleMul(Double.parseDouble(allocation.getAllocationAmount()) , subAmountType.getAmount()));
                     }
-                    avilabaleAmount = ConverterUtils.doubleSum(avilabaleAmount , ((totalAllocationT) / amountType.getAmount()));
+                    avilabaleAmount = ConverterUtils.doubleSum(avilabaleAmount , ConverterUtils.doubleDiv((totalAllocationT) , amountType.getAmount()));
 
 
                     res.setRemainingAmount(ConverterUtils.doubleMinus(avilabaleAmount , expendure / amountType.getAmount()) + "");
@@ -2433,9 +2433,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                     for (BudgetAllocation value : reData2) {
                         AmountUnit subAmountType = amountUnitRepository.findByAmountTypeId(value.getAmountType());
-                        totalAllocationT = ConverterUtils.doubleSum(totalAllocationT , (Double.parseDouble(value.getAllocationAmount()) * subAmountType.getAmount()));
+                        totalAllocationT = ConverterUtils.doubleSum(totalAllocationT , ConverterUtils.doubleMul(Double.parseDouble(value.getAllocationAmount()) , subAmountType.getAmount()));
                     }
-                    avilabaleAmount = ConverterUtils.doubleSum(avilabaleAmount , ((totalAllocationT) / amountType.getAmount()));
+                    avilabaleAmount = ConverterUtils.doubleSum(avilabaleAmount , ConverterUtils.doubleDiv((totalAllocationT) , amountType.getAmount()));
 
 
                     res.setRemainingAmount(ConverterUtils.doubleMinus(avilabaleAmount , expendure / amountType.getAmount()) + "");
@@ -5061,6 +5061,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                         }
 
 
+                        BudgetHead thisHead = subHeadRepository.findByBudgetCodeId(budgetHeadId);
 
                         for (BudgetAllocation createBudgetAllocationAfterRevision : dataBudget) {
 
@@ -5097,7 +5098,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                                     mangeInboxOutbox.setCreatedOn(HelperUtils.getCurrentTimeStamp());
                                     mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                                     mangeInboxOutbox.setToUnit(createBudgetAllocationAfterRevision.getToUnit());
-                                    mangeInboxOutbox.setType("Budget Receipt");
+                                    mangeInboxOutbox.setType(thisHead.getSubHeadDescr());
                                     mangeInboxOutbox.setGroupId(authGroupId);
                                     mangeInboxOutbox.setIsRebase("0");
                                     mangeInboxOutbox.setFromUnit(hrData.getUnitId());
@@ -5265,8 +5266,8 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     budgetAllocation.setAllocationTypeId(revisionRemainingAmountSend.get(v).getAllocTypeId());
                     budgetAllocation.setIsBudgetRevision("0");
                     budgetAllocation.setUnallocatedAmount("0.0000");
-                    budgetAllocation.setAllocationAmount(ConverterUtils.addDecimalPoint(totalRemainingAmountAfterCbBill + ""));
-                    budgetAllocation.setRevisedAmount(ConverterUtils.addDecimalPoint(revisionRemainingAmountSend.get(v).getReviserAmount() + ""));
+                    budgetAllocation.setAllocationAmount((totalRemainingAmountAfterCbBill + ""));
+                    budgetAllocation.setRevisedAmount((revisionRemainingAmountSend.get(v).getReviserAmount() + ""));
                     budgetAllocation.setUserId(hrData.getPid());
                     budgetAllocation.setStatus("Approved");
                     budgetAllocation.setAmountType(revisionRemainingAmountSend.get(v).getAmountType());
@@ -5326,7 +5327,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                     budgetAllocation.setIsBudgetRevision("0");
                     budgetAllocation.setUnallocatedAmount("0.0000");
                     budgetAllocation.setAllocationAmount("0.0000");
-                    budgetAllocation.setRevisedAmount(ConverterUtils.addDecimalPoint(revisionRemainingAmountSend.get(v).getReviserAmount() + ""));
+                    budgetAllocation.setRevisedAmount((revisionRemainingAmountSend.get(v).getReviserAmount() + ""));
                     budgetAllocation.setUserId(hrData.getPid());
                     budgetAllocation.setStatus("Approved");
                     budgetAllocation.setAmountType(revisionRemainingAmountSend.get(v).getAmountType());
