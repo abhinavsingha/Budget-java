@@ -5638,6 +5638,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 //            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "USER UNIT IS INVALID.PLEASE CHECK");
 //        }
         List<CgUnit> unitDataList = cgUnitRepository.findByBudGroupUnitLikeOrderByDescrAsc("%" +hrData.getUnitId()+ "%");
+        CgUnit unitDataListown = cgUnitRepository.findByUnit(hrData.getUnitId());
+        unitDataList.add(unitDataListown);
+
 
 //        if (unitDataList.size() <= 0) {
 //            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT lIST NOT FOUND ");
