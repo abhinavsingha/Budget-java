@@ -2271,6 +2271,7 @@ public class MangeReportImpl implements MangeReportService {
         HashMap<String, List<CDAReportResponse>> allCdaData = new LinkedHashMap<String, List<CDAReportResponse>>();
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        String unitwiseUnit="";
         HrData hrData = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
         FilePathResponse dtoList = new FilePathResponse();
         if (hrData == null) {
@@ -2459,7 +2460,7 @@ public class MangeReportImpl implements MangeReportService {
                     folder.mkdirs();
                 }
                 String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData);
+                pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData,unitwiseUnit);
                 dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                 dtoList.setFileName(fileName);
                 dtoList.setAllCdaData(allCdaData);
@@ -2572,7 +2573,7 @@ public class MangeReportImpl implements MangeReportService {
                     folder.mkdirs();
                 }
                 String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData);
+                pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData,unitwiseUnit);
                 dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                 dtoList.setFileName(fileName);
                 dtoList.setAllCdaData(allCdaData);
@@ -2682,7 +2683,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData,unitwiseUnit);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -2789,7 +2790,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData,unitwiseUnit);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -2897,7 +2898,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData,unitwiseUnit);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -2910,7 +2911,8 @@ public class MangeReportImpl implements MangeReportService {
 
             }
 
-        } else {
+        }
+        else {
 
             if (cdaReportRequest.getReportType() == null || cdaReportRequest.getReportType().isEmpty()) {
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "REPORT TYPE CAN NOT BE BLANK");
@@ -3032,7 +3034,7 @@ public class MangeReportImpl implements MangeReportService {
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
                     File file = new File(filePath);
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData,unitwiseUnit);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -3043,7 +3045,8 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
 
-            } else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
+            }
+            else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
 
                 if (cdaReportRequest.getUnitId() == null || cdaReportRequest.getUnitId().isEmpty()) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT ID CAN NOT BE BLANK");
@@ -3053,6 +3056,7 @@ public class MangeReportImpl implements MangeReportService {
                 if (cgUnit == null) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID UNIT ID");
                 }
+                unitwiseUnit=cgUnit.getCgUnitShort();
 
 
                 List<CDAReportResponse> cdaReportList = new ArrayList<>();
@@ -3169,7 +3173,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData);
+                    pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData,unitwiseUnit);
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                     dtoList.setFileName(fileName);
                     dtoList.setAllCdaData(allCdaData);
@@ -3202,7 +3206,7 @@ public class MangeReportImpl implements MangeReportService {
 
         String fileName = "CdaParkingReport" + hrData.getUnit() + System.currentTimeMillis();
         CDAReportSubResponse cadSubReport = new CDAReportSubResponse();
-
+        String unitwiseUnit="";
 
         if (cdaReportRequest.getCdaType() == null || cdaReportRequest.getCdaType().isEmpty()) {
             throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA TYPE ID CAN NOT BE BLANK");
@@ -3388,7 +3392,7 @@ public class MangeReportImpl implements MangeReportService {
                     folder.mkdirs();
                 }
                 String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData);
+                docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData,unitwiseUnit);
 
                 dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                 dtoList.setFileName(fileName);
@@ -3401,7 +3405,8 @@ public class MangeReportImpl implements MangeReportService {
                 throw new SDDException(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.toString());
             }
 
-        }  else if (cdaReportRequest.getCdaType().contains("123456") && !(hrData.getUnitId().contains(HelperUtils.HEADUNITID))) {
+        }
+        else if (cdaReportRequest.getCdaType().contains("123456") && !(hrData.getUnitId().contains(HelperUtils.HEADUNITID))) {
 
 
             List<CDAReportResponse> cdaReportList = new ArrayList<>();
@@ -3506,7 +3511,7 @@ public class MangeReportImpl implements MangeReportService {
                     folder.mkdirs();
                 }
                 String filePath = folder.getAbsolutePath() + "/" + fileName + ".pdf";
-                pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData);
+                pdfGenaratorUtilMain.createCdaMainReport(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, filePathResponse, hrData,"");
                 dtoList.setPath(HelperUtils.FILEPATH + fileName + ".pdf");
                 dtoList.setFileName(fileName);
                 dtoList.setAllCdaData(allCdaData);
@@ -3615,7 +3620,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData,unitwiseUnit);
 
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
@@ -3721,7 +3726,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData,unitwiseUnit);
 
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
@@ -3828,7 +3833,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData,unitwiseUnit);
 
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
@@ -3960,7 +3965,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData,unitwiseUnit);
 
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);
@@ -3973,7 +3978,8 @@ public class MangeReportImpl implements MangeReportService {
                 }
 
 
-            } else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
+            }
+            else if (cdaReportRequest.getReportType().equalsIgnoreCase("02")) {
 
                 if (cdaReportRequest.getUnitId() == null || cdaReportRequest.getUnitId().isEmpty()) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "UNIT ID CAN NOT BE BLANK");
@@ -3983,7 +3989,7 @@ public class MangeReportImpl implements MangeReportService {
                 if (cgUnit == null) {
                     throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID UNIT ID");
                 }
-
+                unitwiseUnit=cgUnit.getCgUnitShort();
 
                 List<CDAReportResponse> cdaReportList = new ArrayList<>();
                 CDAReportResponse cdaReportResponse = new CDAReportResponse();
@@ -4097,7 +4103,7 @@ public class MangeReportImpl implements MangeReportService {
                         folder.mkdirs();
                     }
                     String filePath = folder.getAbsolutePath() + "/" + fileName + ".docx";
-                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData);
+                    docxGenaratorUtil.createCdaMainReportDoc(allCdaData, cadSubReport, filePath, grandTotal, coloumWiseAmount, hrData,unitwiseUnit);
 
                     dtoList.setPath(HelperUtils.FILEPATH + fileName + ".docx");
                     dtoList.setFileName(fileName);

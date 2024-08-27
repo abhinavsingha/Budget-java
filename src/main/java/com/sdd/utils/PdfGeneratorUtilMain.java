@@ -331,7 +331,7 @@ public class PdfGeneratorUtilMain {
 
     }
 
-    public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, HashMap<String, String> coloumWiseAmount, FilePathResponse filePathResponse, HrData hrData) throws Exception {
+    public void createCdaMainReport(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, HashMap<String, String> coloumWiseAmount, FilePathResponse filePathResponse, HrData hrData,String unitWiseUnit) throws Exception {
 
 
         Document document = new Document(PageSize.A4.rotate());
@@ -359,9 +359,15 @@ public class PdfGeneratorUtilMain {
         } else {
             reOrCapital = "CAPITAL";
         }
+        if(!unitWiseUnit.isEmpty()) {
+            Chunk revenue = new Chunk(reOrCapital + " (" + hrData.getUnit() + ") > " + unitWiseUnit + "\n" + "\n", font);
+            preface.add(revenue);
+        }
+        else {
+            Chunk revenue = new Chunk(reOrCapital +" ("+hrData.getUnit()+") " + "\n" + "\n", font);
+            preface.add(revenue);
+        }
 
-        Chunk revenue = new Chunk(reOrCapital +" ("+hrData.getUnit()+") " + "\n" + "\n", font);
-        preface.add(revenue);
 
         Chunk thiredHead = new Chunk("Major Head " + cadSubReport.getMajorHead() + ", Sub Major Head 00, Minor Head " + cadSubReport.getMinorHead() + ") (In " + cadSubReport.getAmountType() + ")" + "\n" + "\n" + "\n" + "\n", font);
         preface.add(thiredHead);

@@ -418,7 +418,7 @@ public class DocxGenaratorUtil {
     }
 
 
-    public void createCdaMainReportDoc(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, HashMap<String, String> coloumWiseAmount, HrData hrData) throws Exception {
+    public void createCdaMainReportDoc(HashMap<String, List<CDAReportResponse>> map, CDAReportSubResponse cadSubReport, String path, double grandTotal, HashMap<String, String> coloumWiseAmount, HrData hrData, String unitWiseUnit) throws Exception {
 
         try {
 
@@ -461,7 +461,11 @@ public class DocxGenaratorUtil {
 
             mainParagraph = document.createParagraph();
             mainParagraph.setAlignment(ParagraphAlignment.CENTER);
-            boldText(mainParagraph.createRun(), 20, reOrCapital+" ("+hrData.getUnit()+") " , true);
+            if(!unitWiseUnit.isEmpty()){
+                boldText(mainParagraph.createRun(), 20, reOrCapital+" ("+hrData.getUnit()+") > "+unitWiseUnit , true);
+            }else{
+                boldText(mainParagraph.createRun(), 20, reOrCapital+" ("+hrData.getUnit()+") " , true);
+            }
             mainParagraph.createRun().addBreak();
 
             mainParagraph = document.createParagraph();
