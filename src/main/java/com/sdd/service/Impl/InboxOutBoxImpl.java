@@ -1102,28 +1102,29 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                     data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
 
                     outBoxList.add(data);
-                } else {
-                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
-                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
-
-                    if(!mangeInboxOutbox.getStatus().equalsIgnoreCase("Rejected")){
-                        data.setGroupId(mangeInboxOutbox.getGroupId());
-                        data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
-                        data.setRemarks(mangeInboxOutbox.getRemarks());
-                        data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
-                        data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
-                        data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
-                        data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
-                        data.setAmount(mangeInboxOutbox.getAmount());
-                        data.setType(mangeInboxOutbox.getType());
-                        data.setIsRebase(mangeInboxOutbox.getIsRebase());
-                        data.setIsRevision(mangeInboxOutbox.getIsRevision());
-                        data.setStatus(mangeInboxOutbox.getStatus());
-                        data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
-
-                        outBoxList.add(data);
-                    }
                 }
+//                else {
+//                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+//                    MangeInboxOutbox mangeInboxOutbox = inboxOutboxesList.get(i);
+//
+//                    if(!mangeInboxOutbox.getStatus().equalsIgnoreCase("Rejected")){
+//                        data.setGroupId(mangeInboxOutbox.getGroupId());
+//                        data.setMangeInboxId(mangeInboxOutbox.getMangeInboxId());
+//                        data.setRemarks(mangeInboxOutbox.getRemarks());
+//                        data.setIsBgOrCg(mangeInboxOutbox.getIsBgcg());
+//                        data.setToUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getToUnit()));
+//                        data.setFromUnit(cgUnitRepository.findByUnit(mangeInboxOutbox.getFromUnit()));
+//                        data.setCreatedOn(mangeInboxOutbox.getCreatedOn());
+//                        data.setAmount(mangeInboxOutbox.getAmount());
+//                        data.setType(mangeInboxOutbox.getType());
+//                        data.setIsRebase(mangeInboxOutbox.getIsRebase());
+//                        data.setIsRevision(mangeInboxOutbox.getIsRevision());
+//                        data.setStatus(mangeInboxOutbox.getStatus());
+//                        data.setAllocationType(allocationRepository.findByAllocTypeId(mangeInboxOutbox.getAllocationType()));
+//
+//                        outBoxList.add(data);
+//                    }
+//                }
 
             }
         }

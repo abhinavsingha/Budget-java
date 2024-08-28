@@ -305,12 +305,13 @@ public class DashboardServiceImpl implements DashBoardService {
                 } else if (mangeInboxOutbox.getStatus().equalsIgnoreCase("Approved") && mangeInboxOutbox.getState().equalsIgnoreCase("CR")) {
                     MangeInboxOutbox data = mangeInboxOutbox;
                     outBoxList.add(data);
-                } else {
-                    MangeInboxOutbox data = mangeInboxOutbox;
-                    if (!mangeInboxOutbox.getStatus().equalsIgnoreCase("Rejected")) {
-                        outBoxList.add(data);
-                    }
                 }
+//                else {
+//                    MangeInboxOutbox data = mangeInboxOutbox;
+//                    if (!mangeInboxOutbox.getStatus().equalsIgnoreCase("Rejected")) {
+//                        outBoxList.add(data);
+//                    }
+//                }
             }
         }
 
@@ -610,12 +611,13 @@ public class DashboardServiceImpl implements DashBoardService {
                 } else if (inboxOutboxesList.get(i).getStatus().equalsIgnoreCase("Approved") && inboxOutboxesList.get(i).getState().equalsIgnoreCase("CR")) {
                     InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
                     outBoxList.add(data);
-                } else {
-                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
-                    if(!inboxOutboxesList.get(i).getStatus().equalsIgnoreCase("Rejected")){
-                        outBoxList.add(data);
-                    }
                 }
+//                else {
+//                    InboxOutBoxSubResponse data = new InboxOutBoxSubResponse();
+//                    if(!inboxOutboxesList.get(i).getStatus().equalsIgnoreCase("Rejected")){
+//                        outBoxList.add(data);
+//                    }
+//                }
             }
         }
 
