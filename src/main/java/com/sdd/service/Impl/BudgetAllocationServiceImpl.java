@@ -2859,7 +2859,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
                 allocationData.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
                 budgetAllocationDetailsRepository.save(allocationData);
 
-            }///pura comment the maine abhinav ko sakhi man ke code open kiya
+            }///pura comment the maine abhinav ko sakshi man ke code open kiya
         }
 
 
@@ -3246,7 +3246,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
                 response.setFundAvailable("0.0000");
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTran.getAmountType());
-                allocationAmount = ConverterUtils.doubleSum(allocationAmount , (Double.parseDouble(cdaParkingTran.getRemainingCdaAmount()) * amountUnit.getAmount()));
+                allocationAmount = ConverterUtils.doubleSum(allocationAmount , ConverterUtils.doubleMul(Double.parseDouble(cdaParkingTran.getRemainingCdaAmount()) , amountUnit.getAmount()));
                 response.setFundAvailable(allocationAmount + "");
 
             }
