@@ -3296,7 +3296,9 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         dataIscgBg.add("Approved");
 
         for (int i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
-            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatusIn(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId(), "0", "0", dataIscgBg);
+            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndStatusIn(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId(), "0", dataIscgBg);
+           //List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatusIn(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId(), "0", "0", dataIscgBg);
+
             if (!budgetAllocationDetailsList.isEmpty()) {
                 CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId());
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY ALLOCATED " + cgUnit.getDescr() + " . CAN NOT ASSIGN AGAIN");
@@ -3599,7 +3601,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         dataIscgBg.add("Approved");
 
         for (int i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
-            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatusIn(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0", "0", dataIscgBg);
+            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndStatusIn(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0", dataIscgBg);
             if (!budgetAllocationDetailsList.isEmpty()) {
                 CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY ALLOCATED " + cgUnit.getDescr() + " . CAN NOT ASSIGN AGAIN");
@@ -3905,7 +3907,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         dataIscgBg.add("Approved");
 
         for (int i = 0; i < budgetAllocationSaveRequest.getBudgetRequest().size(); i++) {
-            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatusIn(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId(), "0", "0", dataIscgBg);
+            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndStatusIn(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequest.getBudgetRequest().get(i).getAllocationTypeId(), "0",  dataIscgBg);
             if (!budgetAllocationDetailsList.isEmpty()) {
                 CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationSaveRequest.getBudgetRequest().get(i).getToUnitId());
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY ALLOCATED " + cgUnit.getDescr() + " . CAN NOT ASSIGN AGAIN");
@@ -4187,7 +4189,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         dataIscgBg.add("Approved");
 
         for (int i = 0; i < budgetAllocationSaveRequestList.getBudgetRequest().size(); i++) {
-            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatusIn(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0", "0", dataIscgBg);
+            List<BudgetAllocationDetails> budgetAllocationDetailsList = budgetAllocationDetailsRepository.findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndStatusIn(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getBudgetFinanciaYearId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getSubHeadId(), budgetAllocationSaveRequestList.getBudgetRequest().get(i).getAllocationTypeId(), "0",  dataIscgBg);
             if (!budgetAllocationDetailsList.isEmpty()) {
                 CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationSaveRequestList.getBudgetRequest().get(i).getToUnitId());
                 throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "BUDGET ALREADY ALLOCATED " + cgUnit.getDescr() + " . CAN NOT ASSIGN AGAIN");

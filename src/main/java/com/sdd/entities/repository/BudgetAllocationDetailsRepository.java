@@ -28,7 +28,8 @@ public interface BudgetAllocationDetailsRepository extends JpaRepository<BudgetA
     List<BudgetAllocationDetails> findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(String unitId,String finYear,String subHeadId,String allocationType,String status,String isdelete,String isRivision);
     List<BudgetAllocationDetails> findByToUnitAndFinYearAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(String unitId,String finYear,String allocationType,String status,String isdelete,String isRivision);
     List<BudgetAllocationDetails> findByFromUnitAndFinYearAndSubHeadAndAllocTypeIdAndStatusAndIsDeleteAndIsBudgetRevision(String unitId,String finYear,String subHeadId,String allocationType,String status,String isdelete,String isRivision);
-    List<BudgetAllocationDetails> findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatusIn(String unitId,String finYear,String subHeadId,String allocationType,String isDelete,String isRivision,List<String> cgUnits);
+    List<BudgetAllocationDetails> findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndStatusIn(String unitId,String finYear,String subHeadId,String allocationType,String isDelete,List<String> cgUnits);
+    //List<BudgetAllocationDetails> findByToUnitAndFinYearAndSubHeadAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatusIn(String unitId,String finYear,String subHeadId,String allocationType,String isDelete,String isRivision,List<String> cgUnits);
     List<BudgetAllocationDetails> findByToUnitAndFinYearAndAllocTypeIdAndIsDeleteAndIsBudgetRevisionAndStatus(String unitId,String finYear,String allocationType,String isDelete,String isRivision,String status);
 
     @Query(
