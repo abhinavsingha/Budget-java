@@ -167,6 +167,7 @@ public class ContingentServiceImpl implements ContingentService {
             ConverterUtils.checkDateIsvalidOrNor(contingentBillSaveRequest.getDocUploadDate());
 
 
+
             for (int j = 0; j < contingentBillSaveRequest.getAuthList().size(); j++) {
 
                 FileUpload fileUpload = fileUploadRepository.findByUploadID(contingentBillSaveRequest.getAuthList().get(j).getAuthDocId());
@@ -188,7 +189,9 @@ public class ContingentServiceImpl implements ContingentService {
 
             }
 
-
+            if (contingentBillSaveRequest.getCdaParkingId().isEmpty()|| contingentBillSaveRequest.getCdaParkingId()==null) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "CDA Parking id not found please refresh and try again.");
+            }
             for (int m = 0; m < contingentBillSaveRequest.getCdaParkingId().size(); m++) {
                 CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(contingentBillSaveRequest.getCdaParkingId().get(m).getCdaParkingId(), "0");
                 if (cdaParkingTrans == null) {
