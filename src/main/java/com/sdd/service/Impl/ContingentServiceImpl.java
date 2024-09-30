@@ -332,7 +332,7 @@ public class ContingentServiceImpl implements ContingentService {
             List<CdaParkingTrans> cdaAmountList = cdaParkingTransRepository.findByFinYearIdAndBudgetHeadIdAndIsFlagAndAllocTypeIdAndUnitId(contingentBillSaveRequest.getBudgetFinancialYearId(), contingentBillSaveRequest.getBudgetHeadId(), "0", allocationType.get(0).getAllocTypeId(), hrData.getUnitId());
             for (CdaParkingTrans parkingTrans : cdaAmountList) {
                 AmountUnit amountUnit = amountUnitRepository.findByAmountTypeId(parkingTrans.getAmountType());
-                allocationAmount = ConverterUtils.doubleSum(allocationAmount, (Double.parseDouble(parkingTrans.getRemainingCdaAmount()) * amountUnit.getAmount()));
+                allocationAmount = ConverterUtils.doubleSum(allocationAmount, ConverterUtils.doubleMul(Double.parseDouble(parkingTrans.getRemainingCdaAmount()) , amountUnit.getAmount()));
             }
 
             List<ContigentBill> subHeadContigentBill = contigentBillRepository.findByCbUnitIdAndFinYearAndBudgetHeadIDAndIsUpdateAndIsFlag(contingentBillSaveRequest.getUnit(), contingentBillSaveRequest.getBudgetFinancialYearId(), contingentBillSaveRequest.getBudgetHeadId(), "0", "0");
