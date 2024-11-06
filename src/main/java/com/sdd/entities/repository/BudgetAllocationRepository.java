@@ -23,7 +23,12 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
     List<BudgetAllocation> findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(
             String toUnit, String finYear, String allocationTypeId, String isRevision);
 
+
+    List<BudgetAllocation> findByToUnitAndFinYearAndIsBudgetRevision(
+            String toUnit, String finYear, String isRevision);
+
     List<BudgetAllocation> findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(String unitId, String finYearId, String allocationTypeIdR, String s, String s1, String approved);
+    List<BudgetAllocation> findByToUnitAndFinYearAndIsBudgetRevisionAndIsFlagAndStatus(String unitId, String finYearId,   String s, String s1, String approved);
 
 
     List<BudgetAllocation> findByToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatusOrderByCreatedOnAsc(String unitId, String finYearId, String allocationTypeIdR, String s, String s1, String approved);
@@ -81,10 +86,12 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
             String budgetCodeId,
             String allocationType,
             String status);
-
-
     List<BudgetAllocation> findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevision(
             String frmUnit, String finYear, String allocationTypeId, String isRevision);
+
+
+
+
 
     List<BudgetAllocation> findByToUnitAndFromUnitAndFinYearAndSubHeadAndAllocationTypeIdAndIsBudgetRevision(
             String unitId,
@@ -120,6 +127,9 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
     List<BudgetAllocation> findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(
             String subHeadId,String frmUnit, String finYear, String allocationTypeId, String isRevision,String isFlag,String status);
 
+    List<BudgetAllocation> findBySubHeadAndFromUnitAndFinYearAndIsBudgetRevisionAndIsFlagAndStatus(
+            String subHeadId,String frmUnit, String finYear,  String isRevision,String isFlag,String status);
+
     List<BudgetAllocation> findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(
             String frmUnit, String finYear, String allocationTypeId, String isRevision,String isFlag,String status);
 
@@ -129,9 +139,9 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
     List<BudgetAllocation> findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(
             String subHeadId,String toUnit, String finYear, String allocationTypeId, String isRevision,String isFlag,String status);
 
+
     List<BudgetAllocation> findBySubHeadAndToUnitAndFinYearAndAllocationTypeIdAndStatusOrderByCreatedOnAsc(
             String subHeadId,String toUnit, String finYear, String allocationTypeId,String status);
-
 
     List<BudgetAllocation> findByAuthGroupId(String authGroupId);
 

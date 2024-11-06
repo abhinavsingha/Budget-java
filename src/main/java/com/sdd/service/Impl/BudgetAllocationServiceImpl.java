@@ -3429,7 +3429,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
             if (totalCbAmount > allocationAmount) {
                 CgUnit cgUnit = cgUnitRepository.findByUnit(budgetAllocationSubRequest.getToUnitId());
-                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT IS SMALLER THAN CDA UNIT EXPENDITURE AMOUNT FOR " + cgUnit.getDescr());
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "ALLOCATION AMOUNT IS SMALLER THAN CDA UNIT EXPENDITURE AMOUNT FOR " + cgUnit.getDescr()+" Expenditure Amount(INR):"+totalCbAmount);
             }
         }
 
