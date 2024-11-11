@@ -3,8 +3,10 @@ package com.sdd.entities.repository;
 import com.sdd.entities.AllocationType;
 import com.sdd.entities.BudgetAllocation;
 import com.sdd.entities.BudgetAllocationDetails;
+import com.sdd.entities.ContigentBill;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -129,6 +131,20 @@ public interface BudgetAllocationRepository extends JpaRepository<BudgetAllocati
 
     List<BudgetAllocation> findBySubHeadAndFromUnitAndFinYearAndIsBudgetRevisionAndIsFlagAndStatus(
             String subHeadId,String frmUnit, String finYear,  String isRevision,String isFlag,String status);
+
+    @Query(value = "SELECT a FROM BudgetAllocation a  WHERE a.fromUnit = :fromUnit AND " +
+            "a.allocationTypeId = :allocationTypeId  AND a.allocationAmount <> '0.0000'  AND a.status = :status " +
+            "AND a.createdOn = (  SELECT MIN(b.createdOn) FROM BudgetAllocation b  " +
+            "WHERE b.subHead = a.subHead  AND b.toUnit = a.toUnit " +
+            "AND b.fromUnit = :fromUnit  AND b.allocationTypeId = :allocationTypeId  AND b.allocationAmount <> '0.0000'   AND b.status = :status)")
+    List<BudgetAllocation> getAllocationReport(
+            @Param("fromUnit") String fromUnit,
+            @Param("allocationTypeId") String allocationTypeId,
+             @Param("status") String status
+    );
+
+
+
 
     List<BudgetAllocation> findByFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(
             String frmUnit, String finYear, String allocationTypeId, String isRevision,String isFlag,String status);
