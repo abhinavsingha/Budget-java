@@ -12,6 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Base64;
 import java.util.Map;
 
@@ -24,7 +31,9 @@ public class HeaderUtils {
   public static final String LEVEL = "level";
   @Autowired private HttpServletRequest httpServletRequest;
 
-  public String getTokeFromHeader() {
+  public String getTokeFromHeader()
+//          throws IOException {
+  {
 
     String tokenWithoutBearer = "";
     String token = httpServletRequest.getHeader("Authorization");
@@ -40,9 +49,36 @@ public class HeaderUtils {
     } catch (Exception e) {
       throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-03");
     }
+    https://icg.net.in/auth/realms/icgrms/protocol/openid-connect/token/introspect
+
+
+   // validateToken(tokenWithoutBearer);
+
+
+
+
 
     return tokenWithoutBearer;
   }
+//  public String getTokeFromHeader() {
+//
+//    String tokenWithoutBearer = "";
+//    String token = httpServletRequest.getHeader("Authorization");
+//    if (token == null) {
+//      throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-001");
+//    }
+//    if (!(token.contains("Bearer"))) {
+//      throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-002");
+//    }
+//    try {
+//      String[] tokenWithBearer = token.split(" ");
+//      tokenWithoutBearer = tokenWithBearer[1];
+//    } catch (Exception e) {
+//      throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-03");
+//    }
+//
+//    return tokenWithoutBearer;
+//  }
 
   public String getBothTokeFromHeader() {
 
@@ -89,4 +125,46 @@ public class HeaderUtils {
 
     return exampleData;
   }
+  public String validateToken(String tokenWithoutBearer) throws IOException {
+    String url = "https://icg.net.in/auth/realms/icgrms/protocol/openid-connect/token/introspect";
+    String token = tokenWithoutBearer;
+    String Authorization = "BASIC Auth";
+    String client_id = "budget";
+    String client_secret = "cKTyGSHisNKdDY7qEjKIA2eHZT3DtN3i";
+
+    URL obj = new URL(url);
+    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+    // Set the request method to POST
+    con.setRequestMethod("POST");
+
+    // Set the content type to x-www-form-urlencoded
+    con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+    // Enable output
+    con.setDoOutput(true);
+    // Build the request body
+    String urlParameters = "token=" + URLEncoder.encode(token, "UTF-8")+
+            "&Authorization=" + URLEncoder.encode(Authorization, "UTF-8")+
+            "&client_id=" + URLEncoder.encode(client_id, "UTF-8")+
+            "&client_secret=" + URLEncoder.encode(client_secret, "UTF-8");
+    // Send the request body
+    try (DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
+      wr.writeBytes(urlParameters);
+      wr.flush();
+    }
+    // Get the response code
+    int responseCode = con.getResponseCode();
+    System.out.println("Response Code : " + responseCode);
+    // Read the response
+    try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+      String inputLine;
+      StringBuilder response = new StringBuilder();
+      while ((inputLine = in.readLine()) != null) {
+        response.append(inputLine);
+      }
+      System.out.println("Response : " + response.toString());
+      return   response.toString();
+    }
+  }
+
 }
