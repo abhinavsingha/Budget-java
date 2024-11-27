@@ -1611,6 +1611,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         mangeInboxOutbox.setFromUnit(hrData.getUnitId());
         mangeInboxOutbox.setGroupId(authGrouPid);
         mangeInboxOutbox.setApproverpId("");
+        mangeInboxOutbox.setAllocationType(budgetAllocationSaveRequestList.getBudgetRequest().get(0).getAllocationTypeId());
         mangeInboxOutbox.setType(budgetHeadId.getSubHeadDescr());
         mangeInboxOutbox.setRoleId(hrData.getRoleId());
         mangeInboxOutbox.setCreaterpId(hrData.getPid());
@@ -5565,7 +5566,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
             List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupId(budgetAllocationRevision.getAuthGroupId());
             for (MangeInboxOutbox mangeInboxOutbox : mangeInboxOutboxList) {
                 mangeInboxOutbox.setUpdatedOn(HelperUtils.getCurrentTimeStamp());
-                if(budgetAllocationRevision.getStatus().equalsIgnoreCase("Pending")){
+                if(budgetAllocationRevision.getStatus().equalsIgnoreCase("Pending")&& !mangeInboxOutbox.getStatus().equalsIgnoreCase("Fully Approved")){
                     mangeInboxOutbox.setIsArchive("1");
                     mangeInboxOutbox.setStatus("Rejected");
                 }
@@ -5577,7 +5578,7 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
         for (BudgetAllocation budgetAllocationRevision : dataBudget) {
             List<MangeInboxOutbox> mangeInboxOutboxList = mangeInboxOutBoxRepository.findByGroupId(budgetAllocationRevision.getAuthGroupId());
             for (MangeInboxOutbox mangeInboxOutbox : mangeInboxOutboxList) {
-                if(budgetAllocationRevision.getStatus().equalsIgnoreCase("Pending")){
+                if(budgetAllocationRevision.getStatus().equalsIgnoreCase("Pending")&& !mangeInboxOutbox.getStatus().equalsIgnoreCase("Fully Approved")){
                     mangeInboxOutbox.setIsArchive("1");
                     mangeInboxOutbox.setStatus("Rejected");
                 }
