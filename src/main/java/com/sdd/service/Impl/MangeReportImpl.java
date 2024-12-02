@@ -6970,14 +6970,14 @@ public class MangeReportImpl implements MangeReportService {
                         BudgetAllocation alloc = filteredList.get(0);
                         allocAmt=new BigDecimal(alloc.getAllocationAmount());
                         if(!alloc.getAmountType().equalsIgnoreCase(amountObj.getAmountTypeId())){
-                            AmountUnit allocAmountType = amountUnitRepository.getById(alloc.getAmountType());
+                            AmountUnit allocAmountType = amountUnitRepository.findByAmountTypeId(alloc.getAmountType());
                             allocAmt=allocAmt.multiply(new BigDecimal(allocAmountType.getAmount())).divide(new BigDecimal(reqAmount));
                         }
 
                     }
                     if(!row.getAmountType().equalsIgnoreCase(amountObj.getAmountTypeId())){
-                        AmountUnit allocAmountType = amountUnitRepository.getById(row.getAmountType());
-                        revisedAmt=allocAmt.multiply(new BigDecimal(allocAmountType.getAmount())).divide(new BigDecimal(reqAmount));
+                        AmountUnit allocAmountType = amountUnitRepository.findByAmountTypeId(row.getAmountType());
+                        revisedAmt=revisedAmt.multiply(new BigDecimal(allocAmountType.getAmount())).divide(new BigDecimal(reqAmount));
                     }
 
                     BigDecimal revision = revisedAmt.subtract(allocAmt);
