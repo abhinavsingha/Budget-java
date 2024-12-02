@@ -29,6 +29,7 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
@@ -6921,20 +6922,30 @@ public class MangeReportImpl implements MangeReportService {
             table.addCell(cell4);
             table.addCell(cell5);
 
-            int i = 1;
-            String finyear = "";
-            String unit = "";
-            double grTotalAlloc = 0;
-            double grTotalAddition = 0;
-            double grTotalSum = 0;
-            double amount = 0.0;
-            double amountUnit;
-            double finAmount;
-            double prevAllocAmount=0.0;
-            double oldAllocAmount=0.0;
-            double reAmount;
-            double s2 = 0.0;
+//            int i = 1;
+//            String finyear = "";
+//            String unit = "";
+//            double grTotalAlloc = 0;
+//            double grTotalAddition = 0;
+//            double grTotalSum = 0;
+//            double amount = 0.0;
+//            double amountUnit;
+//            double finAmount;
+//            double prevAllocAmount=0.0;
+//            double oldAllocAmount=0.0;
+//            double reAmount;
+//            double s2 = 0.0;
+
+
+            List<BudgetAllocation> allocationList=budgetAllocationRepository.getAllocationReport(frmUnit,allocationType,"Approved");
+
+            BigDecimal grandTotalAlloc=new BigDecimal(0);
+            BigDecimal grandTotalRevision=new BigDecimal(0);
+            BigDecimal grandTotalRevisedAlloc=new BigDecimal(0);
             for (String val : rowData) {
+                BigDecimal totalAlloc=new BigDecimal(0);
+                BigDecimal totalRevision=new BigDecimal(0);
+                BigDecimal totalRevisedAlloc=new BigDecimal(0);
                 String subHeadId = val;
                 List<BudgetAllocation> reportDetails1 = budgetAllocationRepository.findBySubHeadAndFromUnitAndFinYearAndAllocationTypeIdAndIsBudgetRevisionAndIsFlagAndStatus(subHeadId, frmUnit, finYearId, allocationType, "0", "0", "Approved");
                 //List<BudgetAllocation> reportDetails = reportDetailss.stream().filter(e -> (Double.valueOf(e.getAllocationAmount()) != 0) && (Double.valueOf(e.getPrevAllocAmount()) != 0) || Double.valueOf(e.getAllocationAmount()) != 0) && (e.getPrevAllocAmount() !=null)).collect(Collectors.toList());
@@ -6945,53 +6956,79 @@ public class MangeReportImpl implements MangeReportService {
                 BudgetHead bHead = subHeadRepository.findByBudgetCodeId(subHeadId);
 
                 int count = 0;
-                double sumExisting = 0;
-                double sumRE = 0;
-                double total = 0;
+//                double sumExisting = 0;
+//                double sumRE = 0;
+//                double total = 0;
                 for (BudgetAllocation row : reportDetails) {
 
-                    AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
-                    if (amountTypeObj == null) {
-                        return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
-                        }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+                    List<BudgetAllocation> filteredList = allocationList.stream()
+                            .filter(alloc -> row.getToUnit().equals(alloc.getToUnit()) && alloc.getSubHead().equalsIgnoreCase(row.getSubHead()))
+                            .collect(Collectors.toList());
+                    BigDecimal allocAmt=new BigDecimal(0);
+                    BigDecimal revisedAmt=new BigDecimal(row.getAllocationAmount());
+                    if(filteredList.size()!=0){
+                        BudgetAllocation alloc = filteredList.get(0);
+                        allocAmt=new BigDecimal(alloc.getAllocationAmount());
+                        if(!alloc.getAmountType().equalsIgnoreCase(amountObj.getAmountTypeId())){
+                            AmountUnit allocAmountType = amountUnitRepository.getById(alloc.getAmountType());
+                            allocAmt=allocAmt.multiply(new BigDecimal(allocAmountType.getAmount())).divide(new BigDecimal(reqAmount));
+                        }
+
                     }
-                    amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
-                    if(row.getRevisedAmount() ==null ){
-                        prevAllocAmount=0.0;
-                    }else{
-                        prevAllocAmount=Double.valueOf(row.getRevisedAmount());
-                    }
-                    if(row.getAllocationAmount() ==null ){
-                        amount=0.0;
-                    }else {
-                        amount = Double.valueOf(row.getAllocationAmount());
+                    if(!row.getAmountType().equalsIgnoreCase(amountObj.getAmountTypeId())){
+                        AmountUnit allocAmountType = amountUnitRepository.getById(row.getAmountType());
+                        revisedAmt=allocAmt.multiply(new BigDecimal(allocAmountType.getAmount())).divide(new BigDecimal(reqAmount));
                     }
 
-                    if(amount==0 && prevAllocAmount==0){
-                        continue;
-                    }
+                    BigDecimal revision = revisedAmt.subtract(allocAmt);
+                    totalAlloc=totalAlloc.add(allocAmt);
+                    totalRevisedAlloc=totalRevisedAlloc.add(revisedAmt);
+                    totalRevision=totalRevision.add(revision);
 
 
-                    oldAllocAmount = prevAllocAmount * amountUnit / reqAmount;
-                    finAmount = amount * amountUnit / reqAmount;
-                    reAmount =oldAllocAmount;
-                    double oldAlloc=finAmount - reAmount;
 
-                    String s = String.valueOf(reAmount);
-                    if (s.contains("-")) {
-                        String s1 = s.replace("-", "");
-                        s2 = Double.parseDouble(s1);
-                    }
+//                    AmountUnit amountTypeObj = amountUnitRepository.findByAmountTypeId(row.getAmountType());
+//                    if (amountTypeObj == null) {
+//                        return ResponseUtils.createFailureResponse(dtoList, new TypeReference<List<FilePathResponse>>() {
+//                        }, "AMOUNT TYPE NOT FOUND FROM DB", HttpStatus.OK.value());
+//                    }
+//                    amountUnit = Double.parseDouble(amountTypeObj.getAmount() + "");
+//                    if(row.getRevisedAmount() ==null ){
+//                        prevAllocAmount=0.0;
+//                    }else{
+//                        prevAllocAmount=Double.valueOf(row.getRevisedAmount());
+//                    }
+//                    if(row.getAllocationAmount() ==null ){
+//                        amount=0.0;
+//                    }else {
+//                        amount = Double.valueOf(row.getAllocationAmount());
+//                    }
+//
+//                    if(amount==0 && prevAllocAmount==0){
+//                        continue;
+//                    }
+
+
+//                    oldAllocAmount = prevAllocAmount * amountUnit / reqAmount;
+//                    finAmount = amount * amountUnit / reqAmount;
+//                    reAmount =oldAllocAmount;
+//                    double oldAlloc=finAmount - reAmount;
+
+//                    String s = String.valueOf(reAmount);
+//                    if (s.contains("-")) {
+//                        String s1 = s.replace("-", "");
+//                        s2 = Double.parseDouble(s1);
+//                    }
 
                     CgUnit unitN = cgUnitRepository.findByUnit(row.getToUnit());
 
                     PdfPCell cella1 = new PdfPCell(new Phrase(bHead.getSubHeadDescr()));
                     PdfPCell cella2 = new PdfPCell(new Phrase(unitN.getDescr()));
-                    PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(oldAlloc))));
-                    PdfPCell cella4 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", new BigDecimal(s2))));
-                    PdfPCell cella5 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", new BigDecimal(reAmount))));
-                    PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(reAmount))));
-                    PdfPCell cella7 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", (new BigDecimal((Double.parseDouble(Double.toString(finAmount))))))));
+                    PdfPCell cella3 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", allocAmt)));
+                    PdfPCell cella4 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", revision.abs())));
+                    PdfPCell cella5 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", revision)));
+                    PdfPCell cella6 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", new BigDecimal(0))));
+                    PdfPCell cella7 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", revisedAmt)));
                     cella1.setPadding(8);
                     cella2.setPadding(8);
                     cella3.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -7007,34 +7044,36 @@ public class MangeReportImpl implements MangeReportService {
                         table.addCell("");
                     table.addCell(cella2);
                     table.addCell(cella3);
-                    if (reAmount < 0)
+                    if (revision.compareTo(BigDecimal.ZERO) < 0)
                         table.addCell(cella4);
-                    else if (reAmount > 0)
+                    else if (revision.compareTo(BigDecimal.ZERO) > 0)
                         table.addCell(cella5);
                     else
                         table.addCell(cella6);
                     table.addCell(cella7);
                     count++;
-                    sumExisting += oldAlloc;
-                    sumRE += reAmount;
-                }
-                String sumExisting1 = ConverterUtils.addDecimalPoint(sumExisting + "");
-                String sumRE1 = ConverterUtils.addDecimalPoint(sumRE + "");
 
-                double totSum = sumExisting + sumRE;
+
+//                    sumExisting += oldAlloc;
+//                    sumRE += reAmount;
+                }
+//                String sumExisting1 = ConverterUtils.addDecimalPoint(sumExisting + "");
+//                String sumRE1 = ConverterUtils.addDecimalPoint(sumRE + "");
+//
+//                double totSum = sumExisting + sumRE;
                 if (count != 0) {
-                    double ss2 = 0.0;
-                    String ss = Double.toString(sumRE);
-                    if (ss.contains("-")) {
-                        String ss1 = ss.replace("-", "");
-                        ss2 = Double.parseDouble(ss1);
-                    }
+//                    double ss2 = 0.0;
+//                    String ss = Double.toString(sumRE);
+//                    if (ss.contains("-")) {
+//                        String ss1 = ss.replace("-", "");
+//                        ss2 = Double.parseDouble(ss1);
+//                    }
                     PdfPCell cell10 = new PdfPCell(new Phrase("TOTAL", cellFont));
-                    PdfPCell cell20 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(sumExisting + ""), cellFont));
-                    PdfPCell cell301 = new PdfPCell(new Phrase("(-) " + ConverterUtils.addDecimalPoint(ss2 + ""), cellFont));
-                    PdfPCell cell302 = new PdfPCell(new Phrase("(+) " + ConverterUtils.addDecimalPoint(sumRE + ""), cellFont));
-                    PdfPCell cell303 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(sumRE + ""), cellFont));
-                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", totSum), cellFont));
+                    PdfPCell cell20 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", totalAlloc),cellFont));
+                    PdfPCell cell301 = new PdfPCell(new Phrase("(-) " + String.format("%1$0,1.4f", totalRevision.abs()),cellFont));
+                    PdfPCell cell302 = new PdfPCell(new Phrase("(+) " + String.format("%1$0,1.4f", totalRevision), cellFont));
+                    PdfPCell cell303 = new PdfPCell(new Phrase(ConverterUtils.addDecimalPoint(0 + ""), cellFont));
+                    PdfPCell cell40 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", totalRevisedAlloc), cellFont));
                     cell10.setPadding(10);
                     cell20.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                     cell301.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -7045,23 +7084,27 @@ public class MangeReportImpl implements MangeReportService {
                     table.addCell(" ");
                     table.addCell(cell10);
                     table.addCell(cell20);
-                    if (sumRE < 0)
+                    if (totalRevision.compareTo(BigDecimal.ZERO) < 0)
                         table.addCell(cell301);
-                    else if (sumRE > 0)
+                    else if (totalRevision.compareTo(BigDecimal.ZERO) > 0)
                         table.addCell(cell302);
                     else
                         table.addCell(cell303);
                     table.addCell(cell40);
                     count = 0;
                 }
-                grTotalAlloc += Double.parseDouble(sumExisting1);
-                grTotalAddition += Double.parseDouble(sumRE1);
+                grandTotalAlloc=grandTotalAlloc.add(totalAlloc);
+                grandTotalRevision=grandTotalRevision.add(totalRevision);
+                grandTotalRevisedAlloc=grandTotalRevisedAlloc.add(totalRevisedAlloc);
+
+//                grTotalAlloc += Double.parseDouble(sumExisting1);
+//                grTotalAddition += Double.parseDouble(sumRE1);
             }
 
             PdfPCell cell00 = new PdfPCell(new Phrase("GRAND TOTAL", cellFont));
-            PdfPCell cell01 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAlloc), cellFont));
-            PdfPCell cell02 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAddition), cellFont));
-            PdfPCell cell03 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grTotalAlloc + grTotalAddition), cellFont));
+            PdfPCell cell01 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grandTotalAlloc), cellFont));
+            PdfPCell cell02 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grandTotalRevision), cellFont));
+            PdfPCell cell03 = new PdfPCell(new Phrase(String.format("%1$0,1.4f", grandTotalRevisedAlloc), cellFont));
             cell00.setPadding(12);
             cell01.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell02.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
