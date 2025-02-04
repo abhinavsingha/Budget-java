@@ -56,8 +56,8 @@ public class HeaderUtils {
     https://icg.net.in/auth/realms/icgrms/protocol/openid-connect/token/introspect
 
     try {
-      String str= validateToken(token);
-      if (str.contains("true")) {
+      boolean flag= validateToken(token);
+      if (flag) {
         //System.out.println("Active: ");
 //        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Token not expired");
 //        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-004");
@@ -139,7 +139,7 @@ public class HeaderUtils {
 
     return exampleData;
   }
-  public static String validateToken(String tokenWithoutBearer) {
+  public static boolean validateToken(String tokenWithoutBearer) {
     StringBuilder response = new StringBuilder();
     try {
       String url = "https://icg.net.in/auth/realms/icgrms/protocol/openid-connect/token/introspect";
@@ -183,13 +183,14 @@ public class HeaderUtils {
         while ((inputLine = in.readLine()) != null) {
           response.append(inputLine);
         }
-        System.out.println("Response : " + response.toString());
+//                System.out.println("Response : " + response.toString());
       }
       ObjectMapper mapper = new ObjectMapper();
       JsonNode rootNode = mapper.readTree(String.valueOf(response));
       boolean isActive = rootNode.path("active").asBoolean();
-      //System.out.println("Active: " + isActive);
-      return response.toString();
+
+      System.out.println("Active: " + isActive);
+      return isActive;
     } catch (UnsupportedEncodingException e) {
       throw new RuntimeException(e);
     } catch (IOException e) {
