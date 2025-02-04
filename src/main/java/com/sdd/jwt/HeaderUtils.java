@@ -56,11 +56,11 @@ public class HeaderUtils {
     https://icg.net.in/auth/realms/icgrms/protocol/openid-connect/token/introspect
 
     try {
-      validateToken(token);
-      if (validateToken(token).equals("true")) {
+      String str= validateToken(token);
+      if (str.contains("true")) {
         //System.out.println("Active: ");
-        //throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Token not expired");
-        //throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-004");
+//        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Token not expired");
+//        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-004");
       } else {
       //  System.out.println("DeActive: ");
 
