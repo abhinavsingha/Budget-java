@@ -11,24 +11,28 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+
+
 public class main {
     public static void main(String[] args) {
-//        Test t=new Test();
-//        t.main();
+        String token="eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJnS1MwOGlfTkFvdWNqOUN3ZGdXcTFmcmhOSzdxc2RfVFhiU1hhOFhVbVEwIn0.eyJleHAiOjE3Mzg3NDA5ODksImlhdCI6MTczODc0MDg2OSwiYXV0aF90aW1lIjoxNzM4NzQwODU2LCJqdGkiOiI3YjRmNzUwMC0yYTU3LTRlZDAtODNhNi1kNTdlNDNlYjZhNzgiLCJpc3MiOiJodHRwOi8vaWNnLm5ldC5pbi9hdXRoL3JlYWxtcy9pY2dybXMiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiMjE5MWQwODgtMGMwYS00NDI5LTlmNjUtYzMwMGYwMzQwYjM5IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiYnVkZ2V0Iiwibm9uY2UiOiJjMDdjZDllNC01Mzg5LTQ2NGItOWU4Zi0xNTM2MzRhMWE3ZjMiLCJzZXNzaW9uX3N0YXRlIjoiMjdhNDJmZjItZTIzOC00MWYwLWE5ZjQtNDBiZTk1NTYxZWY5IiwiYWNyIjoiMCIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwczovL2ljZy5uZXQuaW4iXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtaWNncm1zIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJzaWQiOiIyN2E0MmZmMi1lMjM4LTQxZjAtYTlmNC00MGJlOTU1NjFlZjkiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJTaHJpb20gSCIsInByZWZlcnJlZF91c2VybmFtZSI6InNocmlvbS4wNDYxMSIsImdpdmVuX25hbWUiOiJTaHJpb20iLCJmYW1pbHlfbmFtZSI6IkgiLCJlbWFpbCI6InNocmlvbS4wNDYxMUBpY2cuZ292LmluIn0.cL43IeP_0GwFeki4oVO7PfB31_8_z__1jvQgVJzMROClLWeSY7derpfoMptF_gXiq2nqe-mGA4RBxtMJR4Yz3tgAj52OOzHHuUssAwlHFjPYsttFJJTa0fI6CmMd-1ODBOHY_uAH1XQM0S647HyyRhPTVNQ7Ya0lC7B7NMGIEo0eciuDmnRLsuwpa68SCYLt34xiZ3PVCBCHV5ns0I5qg3Fq9k1JeiWnQNhiWy5ImE6XRrpunwFYEO7qm7SS6F7TCrYnTwZJ2Hu73DxQuN9eMWYueXQ60-skMv9zwKIUrpy9I_3HCJrsuC0Jlam6Rf_j_vDddLmz_n8XKZKAOaC19A";
+        try {
+            boolean flag= validateToken123(token);
+            if (flag) {
+                System.out.println(flag);
+//        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Token not expired");
+//        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-004");
+            } else {
+                //  System.out.println("DeActive: ");
 
-//        String token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJnS1MwOGlfTkFvdWNqOUN3ZGdXcTFmcmhOSzdxc2RfVFhiU1hhOFhVbVEwIn0.eyJleHAiOjE3MzEzOTg5MjksImlhdCI6MTczMTM5ODYyOSwiYXV0aF90aW1lIjoxNzMxMzk4NjI4LCJqdGkiOiIwOGExYjM5ZC04NWQ0LTRhZjktOTVhNS01NjllM2Q4OWVjNjkiLCJpc3MiOiJodHRwOi8vaWNnLm5ldC5pbi9hdXRoL3JlYWxtcy9pY2dybXMiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiMjE5MWQwODgtMGMwYS00NDI5LTlmNjUtYzMwMGYwMzQwYjM5IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiY2didWRnZXQiLCJub25jZSI6IjJmOTk1NWQzLTJlMzgtNDZjMi1hOWI3LTVlNWZhYTEzMGQzNCIsInNlc3Npb25fc3RhdGUiOiIyY2UwZDE1Yi04NDBhLTQwMzktYTUzNi1hNjE4MjQ3OGIzZmMiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIioiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtaWNncm1zIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGljZ3NzbyBlbWFpbCBwcm9maWxlIGljZ3JtcyIsInNpZCI6IjJjZTBkMTViLTg0MGEtNDAzOS1hNTM2LWE2MTgyNDc4YjNmYyIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiYWRkcmVzcyI6e30sIm5hbWUiOiJTaHJpb20gSCIsInByZWZlcnJlZF91c2VybmFtZSI6InNocmlvbS4wNDYxMSIsImdpdmVuX25hbWUiOiJTaHJpb20iLCJmYW1pbHlfbmFtZSI6IkgiLCJlbWFpbCI6InNocmlvbS4wNDYxMUBpY2cuZ292LmluIn0.d7QhwLgTBPmRgjW4-jAap01AA2sqxvZ3WSzVINtauq0JmdalpfxMlWnfMuqAf_AGNPBpuPFPkXF6nPSu1WZ2c3ILdl_A17Kt_NKkktNjAtcobn9lprM3AoKxqsuCxw3XnTrFEWYREUiVwgpUwCYM_n96dI_vaFAVe4teq93n4hsGyf1QNZHYv8NCsAy-AJ7Bv_fw8w0ZbQkiL5fnHhvOAyPVd3kCm4Gm31pv1Qc9ocVJWCsV5Nm7MLgWiX93Oze34mWqnjyaHAc_myas2wdOnVDyVtjVEl4IV5GVGN9tabRljp3jp30up60gNdMbW1ebysmUEhQUIZqPR_BFDqg_KA";
-//        DefaultResponse defaultResponse = new DefaultResponse();
-//        validateToken(token);
-//        if(validateToken(token).equals("true")){
-//           // System.out.println("Active: ");
-//            //throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Token not expired");
-//            //defaultResponse.setMsg("Token  not expired");
-//        }else{
-//            //System.out.println("DeActive: ");
-//           // defaultResponse.setMsg("Token expired");
-//        }
-    }
-    public static String validateToken(String tokenWithoutBearer) {
+                throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-005");
+            }
+        }catch (Exception ed){
+            System.out.println(ed.getMessage());
+            ed.printStackTrace();
+        }
+}
+    public static boolean validateToken123(String tokenWithoutBearer) {
         StringBuilder response = new StringBuilder();
         try {
             String url = "https://icg.net.in/auth/realms/icgrms/protocol/openid-connect/token/introspect";
@@ -72,17 +76,17 @@ public class main {
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
                 }
-                System.out.println("Response : " + response.toString());
+//                System.out.println("Response : " + response.toString());
             }
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode rootNode = mapper.readTree(String.valueOf(response));
-                boolean isActive = rootNode.path("active").asBoolean();
-                //System.out.println("Active: " + isActive);
-            return response.toString();
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode rootNode = mapper.readTree(String.valueOf(response));
+            boolean isActive = rootNode.path("active").asBoolean();
+
+            System.out.println("Active: " + isActive);
+            return isActive;
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-}
+    }}
