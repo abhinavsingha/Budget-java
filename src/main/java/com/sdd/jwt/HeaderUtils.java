@@ -54,20 +54,22 @@ public class HeaderUtils {
       throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-03");
     }
     https://icg.net.in/auth/realms/icgrms/protocol/openid-connect/token/introspect
-
+    //System.out.println("token::"+tokenWithoutBearer);
     try {
-      boolean flag= validateToken(token);
+      boolean flag= validateToken(tokenWithoutBearer);
       if (flag) {
-        //System.out.println("Active: ");
+        //System.out.println("ifflag::"+flag);
 //        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Token not expired");
 //        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-004");
       } else {
       //  System.out.println("DeActive: ");
-
+       // System.out.println("elseflag::"+flag);
         throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-005");
       }
     }catch (Exception ed){
-
+      System.out.println(ed.getMessage());
+        ed.printStackTrace();
+      throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-006");
     }
     return tokenWithoutBearer;
   }
@@ -143,6 +145,7 @@ public class HeaderUtils {
     StringBuilder response = new StringBuilder();
     try {
       String url = "https://icg.net.in/auth/realms/icgrms/protocol/openid-connect/token/introspect";
+      //String url = "http://172.18.3.21:8080/auth/realms/icgrms/protocol/openid-connect/token/introspect";
       String token = tokenWithoutBearer;
       String Authorization = "BASIC Auth";
       String client_id = "budgetAPI";
