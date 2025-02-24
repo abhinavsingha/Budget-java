@@ -16,8 +16,8 @@ import javax.validation.constraints.Size;
 public class HrCodeRank {
     @Id
     @Size(max = 3)
-    @Column(name = "frank", length = 3)
-    private String frank;
+    @Column(name = "rank", length = 3)
+    private String rank;
 
     @Size(max = 3)
     @Column(name = "rank_bvk", length = 3)

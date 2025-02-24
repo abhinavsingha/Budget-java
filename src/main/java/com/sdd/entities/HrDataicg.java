@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "hr_dataicg")
+@Table(name = "hr_data")
 public class HrDataicg {
     @Id
     @Size(max = 4)
@@ -114,8 +114,8 @@ public class HrDataicg {
     private String pno;
 
     @Size(max = 3)
-    @Column(name = "frank", length = 3)
-    private String frank;
+    @Column(name = "rank", length = 3)
+    private String rank;
 
     @Size(max = 1)
     @Column(name = "resi_phone", length = 1)

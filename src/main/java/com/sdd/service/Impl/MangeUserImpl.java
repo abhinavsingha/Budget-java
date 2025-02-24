@@ -26,12 +26,16 @@ public class MangeUserImpl implements MangeUserService {
     @Autowired    
     RoleRepository roleRepository;
     @Autowired
-    HrDataicgRepository hrDataicgRepository;
+    HrcodeRankRepository hrcodeRankRepository;
     @Autowired    
     CgUnitRepository cgUnitRepository;
-
+    @Autowired
+    Hr_DataRepository hr_DataRepository;
     @Autowired    
     HrDataRepository hrDataRepository;
+
+    @Autowired
+    CgStationRepository cgStationRepository;
 
     @Autowired    
     private JwtUtils jwtUtils;
@@ -281,42 +285,40 @@ public class MangeUserImpl implements MangeUserService {
         });
 
     }
-
-
     @Override
     public ApiResponse<List<ICGHRDataResponse>> getAllICGUser() {
         List<ICGHRDataResponse> hrListData = new ArrayList<ICGHRDataResponse>();
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
-        List<HrDataicg> allUsers=hrDataicgRepository.findAll();
-        List<ICGHRDataResponse> responseList=new ArrayList<>();
-
+        List<HrDataicg> allUsers=hr_DataRepository.findAll();
+       // List<ICGHRDataResponse> responseList=new ArrayList<>();
         for(HrDataicg user:allUsers){
-            ICGHRDataResponse userResponse=new ICGHRDataResponse();
-            userResponse.setPid(user.getPid());
-            userResponse.setDob(String.valueOf(user.getDob()));
-            userResponse.setCadre(user.getCadre());
-            userResponse.setName(user.getNameDescr());
-            userResponse.setMobileNo(user.getMobileNo());
-            userResponse.setPno(user.getPno());
-            userResponse.setRank(user.getFrank());
-            userResponse.setJoiningDate(String.valueOf(user.getDoe()));
-            userResponse.setOffEmail(user.getOffEmail());
-            userResponse.setPressEmail(user.getPersEmail());
-            userResponse.setUnit(cgUnitRepository.findByUnit(user.getUnit()).getCgUnitShort());
-            userResponse.setUnitDate(String.valueOf(user.getUnitDt()));
-            userResponse.setStation(user.getStation());
-            userResponse.setStationDate(null);
-            userResponse.setUnitId(user.getUnit());
-            userResponse.setUsername(user.getUserName());
-            userResponse.setPid(user.getPid());
-            hrListData.add(userResponse);
+            CgUnit unit=cgUnitRepository.findByUnit(user.getUnit());
+            HrCodeRank rank=hrcodeRankRepository.findByRank(user.getRank());
+            CgStation station=cgStationRepository.findByStationId(user.getStation());
+            if(unit!=null&&rank!=null&&station!=null){
+                ICGHRDataResponse userResponse=new ICGHRDataResponse();
+                userResponse.setPid(user.getPid());
+                userResponse.setDob(String.valueOf(user.getDob()));
+                userResponse.setCadre(user.getCadre());
+                userResponse.setName(user.getNameDescr());
+                userResponse.setMobileNo(user.getMobileNo());
+                userResponse.setPno(user.getPno());
+                userResponse.setRank(rank.getDescr());
+                userResponse.setJoiningDate(String.valueOf(user.getDoe()));
+                userResponse.setOffEmail(user.getOffEmail());
+                userResponse.setPressEmail(user.getPersEmail());
+                userResponse.setUnit(unit.getCgUnitShort());
+                userResponse.setUnitDate(String.valueOf(user.getUnitDt()));
+                userResponse.setStation(station.getStationName());
+                userResponse.setStationDate(null);
+                userResponse.setUnitId(user.getUnit());
+                userResponse.setUsername(user.getUserName());
+                userResponse.setPid(user.getPid());
+                hrListData.add(userResponse);
+            }
+
         }
-
-
-
-
-
        // HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 //        if (hrDataCheck == null) {
 //            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID SESSION. LOGIN AGAIN");
@@ -325,19 +327,10 @@ public class MangeUserImpl implements MangeUserService {
 //        if (hrDataCheck == null) {
 //            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID SESSION. LOGIN AGAIN");
 //        }
-
-
-
-
 //        Collections.sort(hrListData,Comparator.comparing(HradataResponse::getAdminCreatedOn).reversed());
         return ResponseUtils.createSuccessResponse(hrListData, new TypeReference<List<ICGHRDataResponse>>() {
         });
-
     }
-
-
-
-
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<DefaultResponse> removeUser(String pid) {
