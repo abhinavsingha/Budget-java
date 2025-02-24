@@ -6,6 +6,7 @@ import com.sdd.request.UpdateRoleRequest;
 import com.sdd.response.ApiResponse;
 import com.sdd.response.DefaultResponse;
 import com.sdd.response.HradataResponse;
+import com.sdd.response.ICGHRDataResponse;
 import com.sdd.service.MangeUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,12 @@ public class MangeUserController {
 	@GetMapping("/getAllUser")
 	public ResponseEntity<ApiResponse<List<HradataResponse>>> getAllUser() {
 		return new ResponseEntity<>(mangeUserService.getAllUser(), HttpStatus.OK);
+	}
+
+
+	@GetMapping("/getAllICGHRdata")
+	public ResponseEntity<ApiResponse<List<ICGHRDataResponse>>> getAllICGUser() {
+		return new ResponseEntity<>(mangeUserService.getAllICGUser(), HttpStatus.OK);
 	}
 
 	@GetMapping("/removeUser/{pid}")

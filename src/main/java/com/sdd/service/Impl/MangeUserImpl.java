@@ -281,6 +281,33 @@ public class MangeUserImpl implements MangeUserService {
 
     }
 
+
+    @Override
+    public ApiResponse<List<ICGHRDataResponse>> getAllICGUser() {
+        List<ICGHRDataResponse> hrListData = new ArrayList<ICGHRDataResponse>();
+        String token = headerUtils.getTokeFromHeader();
+        TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+       // HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
+//        if (hrDataCheck == null) {
+//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID SESSION. LOGIN AGAIN");
+//        }
+//
+//        if (hrDataCheck == null) {
+//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID SESSION. LOGIN AGAIN");
+//        }
+
+
+
+
+//        Collections.sort(hrListData,Comparator.comparing(HradataResponse::getAdminCreatedOn).reversed());
+        return ResponseUtils.createSuccessResponse(hrListData, new TypeReference<List<ICGHRDataResponse>>() {
+        });
+
+    }
+
+
+
+
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<DefaultResponse> removeUser(String pid) {
