@@ -25,7 +25,8 @@ public class MangeUserImpl implements MangeUserService {
 
     @Autowired    
     RoleRepository roleRepository;
-
+    @Autowired
+    HrDataicgRepository hrDataicgRepository;
     @Autowired    
     CgUnitRepository cgUnitRepository;
 
@@ -287,6 +288,35 @@ public class MangeUserImpl implements MangeUserService {
         List<ICGHRDataResponse> hrListData = new ArrayList<ICGHRDataResponse>();
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
+        List<HrDataicg> allUsers=hrDataicgRepository.findAll();
+        List<ICGHRDataResponse> responseList=new ArrayList<>();
+
+        for(HrDataicg user:allUsers){
+            ICGHRDataResponse userResponse=new ICGHRDataResponse();
+            userResponse.setPid(user.getPid());
+            userResponse.setDob(String.valueOf(user.getDob()));
+            userResponse.setCadre(user.getCadre());
+            userResponse.setName(user.getNameDescr());
+            userResponse.setMobileNo(user.getMobileNo());
+            userResponse.setPno(user.getPno());
+            userResponse.setRank(user.getFrank());
+            userResponse.setJoiningDate(String.valueOf(user.getDoe()));
+            userResponse.setOffEmail(user.getOffEmail());
+            userResponse.setPressEmail(user.getPersEmail());
+            userResponse.setUnit(cgUnitRepository.findByUnit(user.getUnit()).getCgUnitShort());
+            userResponse.setUnitDate(String.valueOf(user.getUnitDt()));
+            userResponse.setStation(user.getStation());
+            userResponse.setStationDate(null);
+            userResponse.setUnitId(user.getUnit());
+            userResponse.setUsername(user.getUserName());
+            userResponse.setPid(user.getPid());
+            hrListData.add(userResponse);
+        }
+
+
+
+
+
        // HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
 //        if (hrDataCheck == null) {
 //            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID SESSION. LOGIN AGAIN");
