@@ -1314,9 +1314,9 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
         }
 
 
-        List<MangeInboxOutbox> inboxOutboxesList = new ArrayList<MangeInboxOutbox>();
+        //List<MangeInboxOutbox> inboxOutboxesList = new ArrayList<MangeInboxOutbox>();
         List<MangeInboxOutbox> archiveMain = new ArrayList<MangeInboxOutbox>();
-        List<MangeInboxOutbox> approvedMain = new ArrayList<MangeInboxOutbox>();
+        //List<MangeInboxOutbox> approvedMain = new ArrayList<MangeInboxOutbox>();
 
         String getCurrentRole = "";
         try {

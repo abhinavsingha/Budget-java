@@ -55,22 +55,19 @@ public class HeaderUtils {
     }
     https://icg.net.in/auth/realms/icgrms/protocol/openid-connect/token/introspect
     //System.out.println("token::"+tokenWithoutBearer);
-    try {
-      boolean flag= validateToken(tokenWithoutBearer);
-      if (flag) {
-        //System.out.println("ifflag::"+flag);
-//        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "Token not expired");
-//        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-004");
-      } else {
-      //  System.out.println("DeActive: ");
-       // System.out.println("elseflag::"+flag);
-        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-005");
-      }
-    }catch (Exception ed){
-      System.out.println(ed.getMessage());
-        ed.printStackTrace();
-      throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-006");
-    }
+//    try {
+//      boolean flag= validateToken(tokenWithoutBearer);
+//      if (flag) {
+//
+//      } else {
+//       // System.out.println("elseflag::"+flag);
+//        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-005");
+//      }
+//    }catch (Exception ed){
+//      System.out.println(ed.getMessage());
+//        ed.printStackTrace();
+//      throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-006");
+//    }
     return tokenWithoutBearer;
   }
 
