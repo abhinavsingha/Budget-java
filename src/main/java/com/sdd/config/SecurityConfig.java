@@ -1,57 +1,79 @@
 //package com.sdd.config;
 //
-//import lombok.RequiredArgsConstructor;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 //import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 //import org.springframework.security.web.SecurityFilterChain;
-//import org.springframework.web.cors.CorsConfiguration;
-//import org.springframework.web.cors.CorsConfigurationSource;
-//import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+//import org.springframework.security.web.firewall.HttpFirewall;
+//import org.springframework.security.web.firewall.StrictHttpFirewall;
 //
-//import java.util.ArrayList;
-//
-//
-//@RequiredArgsConstructor
-//@EnableWebSecurity
 //@Configuration
 //public class SecurityConfig {
+//
+////    @Bean
+////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+////        http.cors().and().csrf().disable();
+//////        http.csrf(csrf -> csrf.disable())  // Disable CSRF
+//////                .authorizeHttpRequests(auth -> auth
+//////                        .anyRequest().permitAll());  // Allow all requests
+////
+////        return http.build();
+////    }
+//
+//
+//
 //    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//                http.cors().and()  // Enable CORS
-//                .csrf().disable()  // Disable CSRF if not needed
-//                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-//                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()); // Allow all requests
-//        return http.build();
+//    public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+//        StrictHttpFirewall firewall = new StrictHttpFirewall();
+//        firewall.setAllowUrlEncodedSlash(true);  // Allow encoded slashes
+//        return firewall;
 //    }
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        try {
-//            ArrayList<String> origin=new ArrayList<>();
-//            origin.add("https://icg.net.in");
-//            //origin.add("*");
-//            configuration.setAllowedOrigins(origin); // Allow only this origin
 //
-//            ArrayList<String> method=new ArrayList<>();
-//            method.add("GET");
-//            method.add("POST");
-//            method.add("PUT");
-//            method.add("DELETE");
-//            method.add("OPTIONS");
-//            configuration.setAllowedMethods(method);
-//
-//            ArrayList<String> headers=new ArrayList<>();
-//            headers.add("*");
-//            configuration.setAllowedHeaders(headers);
-//
-//            configuration.setAllowCredentials(true);
-//            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//            source.registerCorsConfiguration("/**", configuration);
-//            return source;
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
+//    @Configuration
+//    @EnableWebSecurity
+//    public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+//        @Override
+//        protected void configure(HttpSecurity http) throws Exception {
+//            http.firewall(allowUrlEncodedSlashHttpFirewall())
+//                    .authorizeRequests()
+//                    .anyRequest().authenticated();
+//            // Apply the custom firewall
+//           // http.setSharedObject(HttpFirewall.class, allowUrlEncodedSlashHttpFirewall());
 //        }
 //    }
 //}
+
+package com.sdd.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable()) // Disable CSRF
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().authenticated()) // Require authentication for all requests
+                .formLogin(); // Enable default login form
+
+        return http.build();
+    }
+
+    @Bean
+    public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowUrlEncodedSlash(true);  // Allow encoded slashes
+        return firewall;
+    }
+}
