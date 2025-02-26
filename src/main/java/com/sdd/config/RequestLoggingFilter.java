@@ -14,7 +14,7 @@ public class RequestLoggingFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        System.out.println("Incoming Request URI: " + httpRequest.getRequestURI());
+        System.out.println("Incoming Request URI:" + httpRequest.getRequestURI());
         chain.doFilter(request, response);
     }
 }
