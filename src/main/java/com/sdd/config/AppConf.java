@@ -16,30 +16,14 @@ public class AppConf implements WebMvcConfigurer {
   @Override
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")
-            //.allowedOrigins("icg.net.in")
-            .allowedOrigins("https://icg.net.in")
+
+            .allowedOrigins("https://icg.net.in")//live
             .allowedMethods("GET", "POST", "PUT", "DELETE")
             .allowedHeaders("*")
             .allowCredentials(true);
   }
-
-//  @Override
-//  public void addCorsMappings(CorsRegistry registry) {
-//    registry
-//        .addMapping("/**")
-//        //.allowedOrigins("http://localhost:4200")
-//       //  .allowedOriginPatterns("*")
-//        .allowedOrigins("icg.net.in")
-//        .allowedMethods("GET", "POST");// "PUT", "DELETE", "OPTIONS"
-//  }
-
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.addResourceHandler("some/path/*.html").addResourceLocations("/public/");
   }
 }
-//registry
-//        .addMapping("/**")
-//        .allowedOrigins("http://localhost:4200")
-//        .allowedOriginPatterns("*")
-//        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");

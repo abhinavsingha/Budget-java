@@ -24,7 +24,7 @@ public class ICGHRDataResponse {
     private String station;
     private String stationDate;
     private String unitId;
-    private String username;
+    private String userName;
     private String pid;
 
 

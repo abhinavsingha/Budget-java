@@ -11,7 +11,7 @@ import java.io.IOException;
 public class HostValidationFilter extends OncePerRequestFilter {
     //private static final String ALLOWED_HOST = "icg.net.in";
     private static final String ALLOWED_HOST = "icg.net.in";
-    //private static final String ALLOWED_HOST = "http://localhost:4200";
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

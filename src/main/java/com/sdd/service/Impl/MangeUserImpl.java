@@ -1,6 +1,7 @@
 package com.sdd.service.Impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+//import com.sdd.config.DataBaseConnection;
 import com.sdd.entities.*;
 import com.sdd.entities.repository.*;
 import com.sdd.exception.SDDException;
@@ -12,12 +13,17 @@ import com.sdd.service.MangeUserService;
 import com.sdd.utils.ConverterUtils;
 import com.sdd.utils.HelperUtils;
 import com.sdd.utils.ResponseUtils;
+import oracle.jdbc.OracleTypes;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 @Service
@@ -291,46 +297,94 @@ public class MangeUserImpl implements MangeUserService {
         String token = headerUtils.getTokeFromHeader();
         TokenParseData currentLoggedInUser = headerUtils.getUserCurrentDetails(token);
         List<HrDataicg> allUsers=hr_DataRepository.findAll();
-       // List<ICGHRDataResponse> responseList=new ArrayList<>();
         for(HrDataicg user:allUsers){
-            CgUnit unit=cgUnitRepository.findByUnit(user.getUnit());
+//            CgUnit unit=cgUnitRepository.findByUnit(user.getUnit());
             HrCodeRank rank=hrcodeRankRepository.findByRank(user.getRank());
-            CgStation station=cgStationRepository.findByStationId(user.getStation());
-            if(unit!=null&&rank!=null&&station!=null){
+//            CgStation station=cgStationRepository.findByStationId(user.getStation());
+            if(rank!=null){
                 ICGHRDataResponse userResponse=new ICGHRDataResponse();
-                userResponse.setPid(user.getPid());
-                userResponse.setDob(String.valueOf(user.getDob()));
-                userResponse.setCadre(user.getCadre());
+               // userResponse.setPid(user.getPid());
+               // userResponse.setDob(String.valueOf(user.getDob()));
+               // userResponse.setCadre(user.getCadre());
                 userResponse.setName(user.getNameDescr());
-                userResponse.setMobileNo(user.getMobileNo());
+               // userResponse.setMobileNo(user.getMobileNo());
                 userResponse.setPno(user.getPno());
                 userResponse.setRank(rank.getDescr());
-                userResponse.setJoiningDate(String.valueOf(user.getDoe()));
-                userResponse.setOffEmail(user.getOffEmail());
-                userResponse.setPressEmail(user.getPersEmail());
-                userResponse.setUnit(unit.getCgUnitShort());
-                userResponse.setUnitDate(String.valueOf(user.getUnitDt()));
-                userResponse.setStation(station.getStationName());
-                userResponse.setStationDate(null);
-                userResponse.setUnitId(user.getUnit());
-                userResponse.setUsername(user.getUserName());
+               // userResponse.setJoiningDate(String.valueOf(user.getDoe()));
+               // userResponse.setOffEmail(user.getOffEmail());
+               // userResponse.setPressEmail(user.getPersEmail());
+//                userResponse.setUnit(unit.getCgUnitShort());
+                //userResponse.setUnit(null);
+               // userResponse.setUnitDate(String.valueOf(user.getUnitDt()));
+//                userResponse.setStation(station.getStationName());
+               // userResponse.setStation(null);
+               // userResponse.setStationDate(null);
+               // userResponse.setUnitId(user.getUnit());
+                userResponse.setUserName(user.getUserName());
                 userResponse.setPid(user.getPid());
                 hrListData.add(userResponse);
             }
-
         }
-       // HrData hrDataCheck = hrDataRepository.findByUserNameAndIsActive(currentLoggedInUser.getPreferred_username(), "1");
-//        if (hrDataCheck == null) {
-//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID SESSION. LOGIN AGAIN");
-//        }
-//
-//        if (hrDataCheck == null) {
-//            throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID SESSION. LOGIN AGAIN");
-//        }
-//        Collections.sort(hrListData,Comparator.comparing(HradataResponse::getAdminCreatedOn).reversed());
         return ResponseUtils.createSuccessResponse(hrListData, new TypeReference<List<ICGHRDataResponse>>() {
         });
     }
+//@Override
+//public ApiResponse<List<ICGHRDataResponse>> getAllICGUser() {
+//    List<ICGHRDataResponse> dashListRes = new ArrayList();
+//    Connection connection = DataBaseConnection.getConnection();
+//    CallableStatement callableStatement = null;
+//    ApiResponse var6;
+//    try {
+//
+//        String groupAdd = "{call PR_GET_ALL_USER_HRDATA(?,?)}";
+//        callableStatement = connection.prepareCall(groupAdd);
+//
+//        callableStatement.registerOutParameter(1 ,OracleTypes.CURSOR);
+//        callableStatement.registerOutParameter(2,OracleTypes.VARCHAR);
+//        callableStatement.executeQuery();
+//
+//        ResultSet rset = (ResultSet)callableStatement.getObject(2);
+//
+//        while(rset.next()) {
+//            ICGHRDataResponse dashRes = new ICGHRDataResponse();
+//            dashRes.setPno(rset.getString(1));
+//            dashRes.setCadre(rset.getString(2));
+//            dashRes.setName(rset.getString(3));
+//            dashRes.setRank(rset.getString(4));
+//            dashRes.setDob(rset.getString(5));
+//            dashRes.setJoiningDate(rset.getString(6));
+//            dashRes.setMobileNo(rset.getString(7));
+//            dashRes.setOffEmail(rset.getString(8));
+//            dashRes.setPressEmail(rset.getString(9));
+//            dashRes.setUnit(rset.getString(10));
+//            dashRes.setUnitId(rset.getString(11));
+//            dashRes.setUnitDate(rset.getString(12));
+//            dashRes.setStation(rset.getString(13));
+//            dashRes.setStationDate(rset.getString(14));
+//            dashRes.setPid(rset.getString(15));
+//            dashRes.setUserName(rset.getString(16));
+//            dashListRes.add(dashRes);
+//        }
+//        return ResponseUtils.createSuccessResponse(dashListRes, new TypeReference<List<ICGHRDataResponse>>() {
+//        });
+//    } catch (Exception var16) {
+//        var16.printStackTrace();
+//        var6 = ResponseUtils.createFailureResponse(dashListRes, new TypeReference<List<ICGHRDataResponse>>() {
+//        }, HttpStatus.BAD_REQUEST.getReasonPhrase(), HttpStatus.BAD_REQUEST.value());
+//    } finally {
+//        if (connection != null) {
+//            try {
+//                connection.close();
+//            } catch (SQLException var15) {
+//                throw new SDDException(HttpStatus.BAD_REQUEST.value(), "Connection not close");
+//            }
+//        }
+//
+//    }
+//    return var6;
+//}
+
+
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<DefaultResponse> removeUser(String pid) {

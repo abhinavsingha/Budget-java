@@ -732,7 +732,7 @@ public class InboxOutBoxImpl implements InboxOutBoxService {
                             for (Integer m = 0; m < budgetAllocations.size(); m++) {
 
                                 BudgetAllocation budgetAllocationSubReport = budgetAllocations.get(m);
-
+                                System.out.println("Amount:"+budgetAllocationSubReport.getAllocationAmount());
                                 if (Double.parseDouble(budgetAllocationSubReport.getAllocationAmount()) == 0) {
                                     continue;
                                 }
