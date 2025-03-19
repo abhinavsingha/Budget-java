@@ -208,7 +208,7 @@ public class ContingentServiceImpl implements ContingentService {
                 CdaParkingTrans cdaParkingTrans = cdaParkingTransRepository.findByCdaParkingIdAndIsFlag(contingentBillSaveRequest.getCdaParkingId().get(m).getCdaParkingId(), "0");
                 AmountUnit cadAmountUnit = amountUnitRepository.findByAmountTypeId(cdaParkingTrans.getAmountType());
 
-                remainingCdaParkingAmount = ConverterUtils.doubleSum(remainingCdaParkingAmount, Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()) * cadAmountUnit.getAmount());
+                remainingCdaParkingAmount = ConverterUtils.doubleSum(remainingCdaParkingAmount, ConverterUtils.doubleMul(Double.parseDouble(cdaParkingTrans.getRemainingCdaAmount()),cadAmountUnit.getAmount()));
                 parkingAmount = ConverterUtils.addDoubleValue(Double.parseDouble(contingentBillSaveRequest.getCdaParkingId().get(m).getCdaAmount()));
 
             }
