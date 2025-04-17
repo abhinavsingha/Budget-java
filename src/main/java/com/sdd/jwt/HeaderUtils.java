@@ -55,19 +55,19 @@ public class HeaderUtils {
     }
     https://icg.net.in/auth/realms/icgrms/protocol/openid-connect/token/introspect
     //System.out.println("token::"+tokenWithoutBearer);
-//    try {
-//      boolean flag= validateToken(tokenWithoutBearer);
-//      if (flag) {
-//
-//      } else {
-//       // System.out.println("elseflag::"+flag);
-//        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-005");
-//      }
-//    }catch (Exception ed){
-//      System.out.println(ed.getMessage());
-//        ed.printStackTrace();
-//      throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-006");
-//    }
+    try {
+      boolean flag= validateToken(tokenWithoutBearer);
+      if (flag) {
+
+      } else {
+        // System.out.println("elseflag::"+flag);
+        throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-005");
+      }
+    }catch (Exception ed){
+      System.out.println(ed.getMessage());
+      ed.printStackTrace();
+      throw new SDDException(HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-006");
+    }
     return tokenWithoutBearer;
   }
 
@@ -125,11 +125,11 @@ public class HeaderUtils {
       exampleData = gson.fromJson(claims.toString(), TokenParseData.class);
       if (exampleData == null) {
         throw new SDDException(
-            HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-003");
+                HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-003");
       }
       if (exampleData.getPreferred_username() == null) {
         throw new SDDException(
-            HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-005");
+                HttpStatus.UNAUTHORIZED.value(), "INVALID TOKEN. LOGIN AGAIN.IN-005");
       }
 
     } catch (Exception e) {

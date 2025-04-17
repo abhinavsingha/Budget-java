@@ -16,6 +16,8 @@ public class AppConf implements WebMvcConfigurer {
   @Override
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")
+//            .allowedOrigins("http://localhost:4200")
+//            .allowedOriginPatterns("*")
 
             .allowedOrigins("https://icg.net.in")//live
             .allowedMethods("GET", "POST", "PUT", "DELETE")
